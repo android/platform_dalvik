@@ -284,8 +284,12 @@ dvmMterpStdBail:
     ldr     sp, [r0, #offGlue_bailPtr]      @ sp<- saved SP
     mov     r0, r1                          @ return the changeInterp value
     add     sp, sp, #4                      @ un-align 64
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r4-r10,fp,pc}             @ restore 9 regs
-
+#else
+    ldmfd   sp!, {r4-r10,fp,lr}             @ restore 9 regs
+    bx      lr
+#endif
 
 /*
  * String references.
@@ -2650,7 +2654,12 @@ dalvik_inst:
     beq     .LOP_SGET_WIDE_resolve         @ yes, do resolve
 .LOP_SGET_WIDE_finish:
     mov     r1, rINST, lsr #8           @ r1<- AA
+#ifndef __ARM_ARCH_4__
     ldrd    r2, [r0, #offStaticField_value] @ r2/r3<- field value (aligned)
+#else
+    ldr     r2, [r0, #offStaticField_value]
+    ldr     r3, [r0, #(offStaticField_value+4)]
+#endif
     add     r1, rFP, r1, lsl #2         @ r1<- &fp[AA]
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     stmia   r1, {r2-r3}                 @ vAA/vAA+1<- r2/r3
@@ -2831,7 +2840,12 @@ dalvik_inst:
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     ldmia   r9, {r2-r3}                 @ r2/r3<- vAA/vAA+1
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
+#ifndef __ARM_ARCH_4__
     strd    r2, [r0, #offStaticField_value] @ field<- vAA/vAA+1
+#else
+    str     r2, [r0, #offStaticField_value] @ field<- vAA/vAA+1
+    str     r3, [r0, #(offStaticField_value+4)] @ field<- vAA/vAA+1
+#endif
     GOTO_OPCODE(ip)                     @ jump to next instruction
 
 /* ------------------------------ */
@@ -7461,7 +7475,13 @@ d2i_doconv:
     cmp     r3, #0                      @ check object for null
     mov     r2, rINST, lsr #8           @ r2<- A(+)
     beq     common_errNullObject        @ object was null
+#ifndef __ARM_ARCH_4__
     ldrd    r0, [r3, r1]                @ r0<- obj.field (64 bits, aligned)
+#else
+    ldr    r0, [r3, r1]
+    add	   r1, r1, #4
+    ldr    r1, [r3, r1]
+#endif
     and     r2, r2, #15
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     add     r3, rFP, r2, lsl #2         @ r3<- &fp[A]
@@ -7527,7 +7547,13 @@ d2i_doconv:
     beq     common_errNullObject        @ object was null
     FETCH(r3, 1)                        @ r3<- field byte offset
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
+#ifndef __ARM_ARCH_4__
     strd    r0, [r2, r3]                @ obj.field (64 bits, aligned)<- r0/r1
+#else
+    str     r0, [r2, r3]                @ obj.field (64 bits, aligned)<- r0/r1
+    add     ip, r3, #4
+    str     r1, [r2, ip]                @ obj.field (64 bits, aligned)<- r0/r1
+#endif
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
     GOTO_OPCODE(ip)                     @ jump to next instruction
 
@@ -8315,7 +8341,12 @@ OP_CMPG_FLOAT_nan:
 
 .LOP_AGET_WIDE_finish:
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
+#ifndef __ARM_ARCH_4__
     ldrd    r2, [r0, #offArrayObject_contents]  @ r2/r3<- vBB[vCC]
+#else
+    ldr     r2, [r0, #offArrayObject_contents]
+    ldr     r3, [r0, #(offArrayObject_contents+4)]
+#endif
     add     r9, rFP, r9, lsl #2         @ r9<- &fp[AA]
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
     stmia   r9, {r2-r3}                 @ vAA/vAA+1<- r2/r3
@@ -8328,7 +8359,12 @@ OP_CMPG_FLOAT_nan:
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     ldmia   r9, {r2-r3}                 @ r2/r3<- vAA/vAA+1
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
+#ifndef __ARM_ARCH_4__
     strd    r2, [r0, #offArrayObject_contents]  @ r2/r3<- vBB[vCC]
+#else
+    str     r2, [r0, #offArrayObject_contents]  @ r2/r3<- vBB[vCC]
+    str     r3, [r0, #(offArrayObject_contents+4)]  @ r2/r3<- vBB[vCC]
+#endif
     GOTO_OPCODE(ip)                     @ jump to next instruction
 
 
@@ -8387,7 +8423,13 @@ OP_CMPG_FLOAT_nan:
     ldr     r3, [r0, #offInstField_byteOffset]  @ r3<- byte offset of field
     beq     common_errNullObject        @ object was null
     mov     r2, rINST, lsr #8           @ r2<- A+
+#ifndef __ARM_ARCH_4__
     ldrd    r0, [r9, r3]                @ r0/r1<- obj.field (64-bit align ok)
+#else
+    ldr    r0, [r9, r3]
+    add	   r1, r3, #4
+    ldr    r1, [r9, r1]
+#endif
     and     r2, r2, #15                 @ r2<- A
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     add     r3, rFP, r2, lsl #2         @ r3<- &fp[A]
@@ -8538,8 +8580,14 @@ OP_CMPG_FLOAT_nan:
     beq     common_errNullObject        @ object was null
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     ldmia   r2, {r0-r1}                 @ r0/r1<- fp[A]
-    GET_INST_OPCODE(ip)                 @ extract opcode from rINST
+#ifndef __ARM_ARCH_4__
     strd    r0, [r9, r3]                @ obj.field (64 bits, aligned)<- r0
+#else
+    str     r0, [r9, r3]                @ obj.field (64 bits, aligned)<- r0
+    add     ip, r3, #4
+    str     r1, [r9, ip]                @ obj.field (64 bits, aligned)<- r0
+#endif
+    GET_INST_OPCODE(ip)                 @ extract opcode from rINST
     GOTO_OPCODE(ip)                     @ jump to next instruction
 
 
@@ -9196,7 +9244,12 @@ d2l_doconv:
 0:
     @b       dvmPerformInlineOp4Std
     ldr     r9, .LOP_EXECUTE_INLINE_table       @ table of InlineOperation
+#ifndef __ARM_ARCH_4__
     ldr     pc, [r9, r10, lsl #4]       @ sizeof=16, "func" is first entry
+#else
+    ldr     ip, [r9, r10, lsl #4]       @ sizeof=16, "func" is first entry
+    bx      ip
+#endif
     @ (not reached)
 
 .LOP_EXECUTE_INLINE_table:
@@ -9278,7 +9331,7 @@ common_periodicChecks:
     bne     3f                          @ debugger/profiler, switch interp
 #endif
 
-    mov     pc, lr                      @ nothing to do, return
+    bx      lr                          @ nothing to do, return
 
 2:  @ check suspend
     ldr     r0, [rGLUE, #offGlue_self]  @ r0<- glue->self
@@ -9455,8 +9508,14 @@ dalvik_mterp:
 .Lskip:
 #endif
 
+#ifndef __ARM_ARCH_4__
     mov     lr, pc                      @ set return addr
     ldr     pc, [r2, #offMethod_nativeFunc] @ pc<- methodToCall->nativeFunc
+#else
+    ldr     ip, [r2, #offMethod_nativeFunc] @ methodToCall->nativeFunc
+    mov     lr, pc                      @ set return addr
+    bx      ip
+#endif
 
     @ native return; r9=self, r10=newSaveArea
     @ equivalent to dvmPopJniLocals
@@ -9769,7 +9828,12 @@ common_squeak\num:
     ldr     r0, strSqueak
     mov     r1, #\num
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
     .endm
 
     SQUEAK  0
@@ -9787,7 +9851,12 @@ common_printNum:
     mov     r1, r0
     ldr     r0, strSqueak
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Print a newline, preserving registers.
@@ -9796,7 +9865,12 @@ common_printNewline:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     ldr     r0, strNewline
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
     /*
      * Print the 32-bit quantity in r0 as a hex value, preserving registers.
@@ -9806,7 +9880,12 @@ common_printHex:
     mov     r1, r0
     ldr     r0, strPrintHex
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Print the 64-bit quantity in r0-r1, preserving registers.
@@ -9817,7 +9896,12 @@ common_printLong:
     mov     r2, r0
     ldr     r0, strPrintLong
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Print full method info.  Pass the Method* in r0.  Preserves regs.
@@ -9825,7 +9909,12 @@ common_printLong:
 common_printMethod:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bl      dvmMterpPrintMethod
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Call a C helper function that dumps regs and possibly some
@@ -9835,7 +9924,12 @@ common_printMethod:
 common_dumpRegs:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bl      dvmMterpDumpArmRegs
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
     .endif
 
 

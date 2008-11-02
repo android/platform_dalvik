@@ -53,7 +53,12 @@
 0:
     @b       dvmPerformInlineOp4Std
     ldr     r9, .L${opcode}_table       @ table of InlineOperation
+#ifndef __ARM_ARCH_4__
     ldr     pc, [r9, r10, lsl #4]       @ sizeof=16, "func" is first entry
+#else
+    ldr     ip, [r9, r10, lsl #4]       @ sizeof=16, "func" is first entry
+    bx      ip
+#endif
     @ (not reached)
 
 .L${opcode}_table:

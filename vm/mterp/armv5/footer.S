@@ -68,7 +68,7 @@ common_periodicChecks:
     bne     3f                          @ debugger/profiler, switch interp
 #endif
 
-    mov     pc, lr                      @ nothing to do, return
+    bx      lr                          @ nothing to do, return
 
 2:  @ check suspend
     ldr     r0, [rGLUE, #offGlue_self]  @ r0<- glue->self
@@ -245,8 +245,14 @@ dalvik_mterp:
 .Lskip:
 #endif
 
+#ifndef __ARM_ARCH_4__
     mov     lr, pc                      @ set return addr
     ldr     pc, [r2, #offMethod_nativeFunc] @ pc<- methodToCall->nativeFunc
+#else
+    ldr     ip, [r2, #offMethod_nativeFunc] @ methodToCall->nativeFunc
+    mov     lr, pc                      @ set return addr
+    bx      ip
+#endif
 
     @ native return; r9=self, r10=newSaveArea
     @ equivalent to dvmPopJniLocals
@@ -559,7 +565,12 @@ common_squeak\num:
     ldr     r0, strSqueak
     mov     r1, #\num
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
     .endm
 
     SQUEAK  0
@@ -577,7 +588,12 @@ common_printNum:
     mov     r1, r0
     ldr     r0, strSqueak
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Print a newline, preserving registers.
@@ -586,7 +602,12 @@ common_printNewline:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     ldr     r0, strNewline
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
     /*
      * Print the 32-bit quantity in r0 as a hex value, preserving registers.
@@ -596,7 +617,12 @@ common_printHex:
     mov     r1, r0
     ldr     r0, strPrintHex
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Print the 64-bit quantity in r0-r1, preserving registers.
@@ -607,7 +633,12 @@ common_printLong:
     mov     r2, r0
     ldr     r0, strPrintLong
     bl      printf
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Print full method info.  Pass the Method* in r0.  Preserves regs.
@@ -615,7 +646,12 @@ common_printLong:
 common_printMethod:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bl      dvmMterpPrintMethod
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
 
 /*
  * Call a C helper function that dumps regs and possibly some
@@ -625,7 +661,12 @@ common_printMethod:
 common_dumpRegs:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bl      dvmMterpDumpArmRegs
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r0, r1, r2, r3, ip, pc}
+#else
+    ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
+    bx      lr
+#endif
     .endif
 
 

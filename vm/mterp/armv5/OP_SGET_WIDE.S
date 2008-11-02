@@ -14,7 +14,12 @@
     beq     .L${opcode}_resolve         @ yes, do resolve
 .L${opcode}_finish:
     mov     r1, rINST, lsr #8           @ r1<- AA
+#ifndef __ARM_ARCH_4__
     ldrd    r2, [r0, #offStaticField_value] @ r2/r3<- field value (aligned)
+#else
+    ldr     r2, [r0, #offStaticField_value]
+    ldr     r3, [r0, #(offStaticField_value+4)]
+#endif
     add     r1, rFP, r1, lsl #2         @ r1<- &fp[AA]
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     stmia   r1, {r2-r3}                 @ vAA/vAA+1<- r2/r3

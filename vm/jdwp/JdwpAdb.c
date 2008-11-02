@@ -135,7 +135,11 @@ static int  receiveClientFd(JdwpNetState*  netState)
     struct cmsghdr*  cmsg;
     struct iovec     iov;
     char             dummy = '!';
-    char             buffer[sizeof(struct cmsghdr)+sizeof(int)];
+    union {
+        struct cmsghdr cm;
+        char buffer[CMSG_SPACE(sizeof(int))];
+    } cm_un;
+
     int              ret;
 
     iov.iov_base       = &dummy;
@@ -145,8 +149,8 @@ static int  receiveClientFd(JdwpNetState*  netState)
     msg.msg_iov        = &iov;
     msg.msg_iovlen     = 1;
     msg.msg_flags      = 0;
-    msg.msg_control    = buffer;
-    msg.msg_controllen = sizeof(buffer);
+    msg.msg_control    = cm_un.buffer;
+    msg.msg_controllen = sizeof(cm_un.buffer);
     
     cmsg = CMSG_FIRSTHDR(&msg);
     cmsg->cmsg_len   = msg.msg_controllen;

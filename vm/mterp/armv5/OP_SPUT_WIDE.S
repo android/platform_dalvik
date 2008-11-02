@@ -18,7 +18,12 @@
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
     ldmia   r9, {r2-r3}                 @ r2/r3<- vAA/vAA+1
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
+#ifndef __ARM_ARCH_4__
     strd    r2, [r0, #offStaticField_value] @ field<- vAA/vAA+1
+#else
+    str     r2, [r0, #offStaticField_value] @ field<- vAA/vAA+1
+    str     r3, [r0, #(offStaticField_value+4)] @ field<- vAA/vAA+1
+#endif
     GOTO_OPCODE(ip)                     @ jump to next instruction
 %break
 

@@ -107,8 +107,12 @@ dvmMterpStdBail:
     ldr     sp, [r0, #offGlue_bailPtr]      @ sp<- saved SP
     mov     r0, r1                          @ return the changeInterp value
     add     sp, sp, #4                      @ un-align 64
+#ifndef __ARM_ARCH_4__
     ldmfd   sp!, {r4-r10,fp,pc}             @ restore 9 regs
-
+#else
+    ldmfd   sp!, {r4-r10,fp,lr}             @ restore 9 regs
+    bx      lr
+#endif
 
 /*
  * String references.

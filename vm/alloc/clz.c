@@ -18,7 +18,7 @@
 
 int clz_impl(unsigned long int x)
 {
-#if defined(__arm__) && !defined(__thumb__)
+#if defined(__arm__) && !defined(__thumb__) && !defined(__ARM_ARCH_4__)
     return __builtin_clz(x);
 #else
     if (!x) return 32;

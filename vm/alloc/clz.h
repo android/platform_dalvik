@@ -18,7 +18,7 @@
 
 #include <stdint.h>
 
-#if defined(__arm__) && !defined(__thumb__)
+#if defined(__arm__) && !defined(__thumb__) && !defined(__ARM_ARCH_4__)
 
 #define CLZ(x) __builtin_clz(x)
 
