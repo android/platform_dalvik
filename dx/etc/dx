@@ -73,7 +73,6 @@ if [[ `uname` == "FreeBSD" ]]; then
 fi
 
 while $EXPR "x$1" : "x-J" >/dev/null; do
-    
     opt=`$EXPR "$1" : '-J\(.*\)'`
     javaOpts="${javaOpts} -${opt}"
     shift
