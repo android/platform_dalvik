@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "zb4252d0eb615f07aca629354567b05f1",
+        "filename": "dx/etc/dx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000411
+      },
+      "writtenOn": "2008-12-03T16:11:36Z",
+      "side": 1,
+      "message": "please remove superfluous blank line",
+      "revId": "737116f7c5ae05dd6b7b7baa6d448fed71506de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
