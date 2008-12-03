@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "zbbf0479834f5f59584fae7e9bde1fc65",
+        "filename": "vm/alloc/clz.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2008-12-03T16:11:30Z",
+      "side": 1,
+      "message": "I am not totally sure what the Official Right Way to differentiate between ARM versions is. I\u0027ll be asking other folks shortly. Apologies in advance if this isn\u0027t the way to check and I ask you to alter your methodology. (Same comment applies throughout the patch.)",
+      "revId": "b872d6ee14cf94568e30a602ce8cf0465991a3db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "z66f53854c8f0919ee667c7a9dfaab4a2",
+        "filename": "vm/arch/arm/CallOldABI.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2008-12-03T16:11:30Z",
+      "side": 1,
+      "message": "Unrelated change here. Also, although I think we may have yet to publish these widely enough, the Android convention is to avoid hard tabs except when demanded by syntax (e.g., in a Makefile).",
+      "revId": "b872d6ee14cf94568e30a602ce8cf0465991a3db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "za9bd52a9bace14b217dcd0b1ed2a32b8",
+        "filename": "vm/jdwp/JdwpAdb.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2008-12-03T16:11:30Z",
+      "side": 1,
+      "message": "This change looks unrelated to anything else in the patch. Maybe this belongs in a separate patch?",
+      "revId": "b872d6ee14cf94568e30a602ce8cf0465991a3db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "z180db98be07315582849a80f74274696",
+        "filename": "vm/mterp/armv5/OP_IPUT_WIDE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2008-12-03T16:11:29Z",
+      "side": 1,
+      "message": "Sorry, this tweak isn\u0027t acceptable: The strd takes less time to execute in the old position, as there is no interlock delay between it and the ldmia.",
+      "revId": "b872d6ee14cf94568e30a602ce8cf0465991a3db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
