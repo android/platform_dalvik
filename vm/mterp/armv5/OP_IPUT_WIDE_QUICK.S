@@ -11,7 +11,13 @@
     beq     common_errNullObject        @ object was null
     FETCH(r3, 1)                        @ r3<- field byte offset
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
+#ifdef __ARM_HAVE_PAIR_LOAD_STORE
     strd    r0, [r2, r3]                @ obj.field (64 bits, aligned)<- r0/r1
+#else
+    str     r0, [r2, r3]                @ obj.field (64 bits, aligned)<- r0/r1
+    add     ip, r3, #4
+    str     r1, [r2, ip]                @ obj.field (64 bits, aligned)<- r0/r1
+#endif
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
     GOTO_OPCODE(ip)                     @ jump to next instruction
 

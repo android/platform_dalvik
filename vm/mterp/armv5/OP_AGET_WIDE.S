@@ -25,7 +25,12 @@
 
 .L${opcode}_finish:
     FETCH_ADVANCE_INST(2)               @ advance rPC, load rINST
+#ifdef __ARM_HAVE_PAIR_LOAD_STORE
     ldrd    r2, [r0, #offArrayObject_contents]  @ r2/r3<- vBB[vCC]
+#else
+    ldr     r2, [r0, #offArrayObject_contents]
+    ldr     r3, [r0, #(offArrayObject_contents+4)]
+#endif
     add     r9, rFP, r9, lsl #2         @ r9<- &fp[AA]
     GET_INST_OPCODE(ip)                 @ extract opcode from rINST
     stmia   r9, {r2-r3}                 @ vAA/vAA+1<- r2/r3
