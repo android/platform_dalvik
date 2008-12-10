@@ -23,6 +23,8 @@
 
 #ifndef __ARM_EABI__
 
+#include <machine/cpu-features.h>
+
 /*
 Function prototype:
 
@@ -87,7 +89,7 @@ dvmPlatformInvoke:
 	@ rest of the code.  If we don't plan to use a debugger we can speed
 	@ this up a little.
 	mov		ip, sp
-	stmfd	sp!, {r4, r5, r6, fp, ip, lr, pc}
+	stmfd		sp!, {r4, r5, r6, fp, ip, lr, pc}
 	sub		fp, ip, #4			@ set up fp, same way gdb does
 
 	@ We need to push a variable number of arguments onto the stack.
@@ -141,10 +143,21 @@ dvmPlatformInvoke:
 	@ address supplied by the caller.  The value for "pc" is offset by 8
 	@ due to instruction prefetching.
 	@
-	@ This works for the ARM5 architecture.  Earlier versions may require
-	@ a blx here.
+	@ Make sure interworking is handled property with whatever instructions
+	@ are available
+	@
+	@
+#ifdef __ARM_HAVE_PC_INTERWORK
 	mov		lr, pc
 	ldr		pc, [r4, #8]
+#elif  __ARM_HAVE_BLX
+	ldr		ip, [r4, #8]
+	blx		ip
+#else
+	ldr		ip, [r4, #8]
+	mov		lr, pc
+	bx		ip
+#endif
 
 
 	@ We're back, result is in r0 or (for long/double) r0-r1.
@@ -158,6 +171,11 @@ dvmPlatformInvoke:
 	@ Restore the registers we saved and return.  Note this remaps stuff,
 	@ so that "sp" comes from "ip", "pc" comes from "lr", and the "pc"
 	@ we pushed on evaporates when we restore "sp".
+#ifdef __ARM_HAVE_PC_INTERWORK
 	ldmfd	r5, {r4, r5, r6, fp, sp, pc}
+#else
+	ldmfd	r5, {r4, r5, r6, fp, sp, lr}
+	bx	lr
+#endif
 
 #endif /*__ARM_EABI__*/

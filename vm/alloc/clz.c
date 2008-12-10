@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
+#include <machine/cpu-features.h>
 #include "clz.h"
 
 int clz_impl(unsigned long int x)
 {
-#if defined(__arm__) && !defined(__thumb__)
+#if defined(__ARM_HAVE_CLZ) && !defined(__thumb__)
     return __builtin_clz(x);
 #else
     if (!x) return 32;

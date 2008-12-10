@@ -17,8 +17,9 @@
 #ifndef _DALVIK_CLZ
 
 #include <stdint.h>
+#include <machine/cpu-features.h>
 
-#if defined(__arm__) && !defined(__thumb__)
+#if defined(__ARM_HAVE_CLZ) && !defined(__thumb__)
 
 #define CLZ(x) __builtin_clz(x)
 

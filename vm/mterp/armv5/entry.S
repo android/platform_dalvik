@@ -36,6 +36,7 @@
     .global dvmMterpStdRun
     .type   dvmMterpStdRun, %function
 
+#include <machine/cpu-features.h>
 /*
  * On entry:
  *  r0  MterpGlue* glue
@@ -107,7 +108,12 @@ dvmMterpStdBail:
     ldr     sp, [r0, #offGlue_bailPtr]      @ sp<- saved SP
     mov     r0, r1                          @ return the changeInterp value
     add     sp, sp, #4                      @ un-align 64
+#ifdef  __ARM_HAVE_PC_INTERWORK
     ldmfd   sp!, {r4-r10,fp,pc}             @ restore 9 regs
+#else
+    ldmfd   sp!, {r4-r10,fp,lr}             @ restore 9 regs
+    bx      lr
+#endif
 
 
 /*
