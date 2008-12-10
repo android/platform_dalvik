@@ -38,7 +38,7 @@
     ldrd    r0, [r9, r3]                @ r0/r1<- obj.field (64-bit align ok)
 #else
     ldr    r0, [r9, r3]
-    add	   r1, r3, #4
+    add    r1, r3, #4
     ldr    r1, [r9, r1]
 #endif
     and     r2, r2, #15                 @ r2<- A

@@ -11,7 +11,7 @@
     ldrd    r0, [r3, r1]                @ r0<- obj.field (64 bits, aligned)
 #else
     ldr    r0, [r3, r1]
-    add	   r1, r1, #4
+    add    r1, r1, #4
     ldr    r1, [r3, r1]
 #endif
     and     r2, r2, #15

@@ -154,7 +154,7 @@ dvmPlatformInvoke:
 	ldr		ip, [r4, #8]
 	blx		ip
 #else
-	ldr		ip, [r4, #8]	
+	ldr		ip, [r4, #8]
 	mov		lr, pc
 	bx		ip
 #endif
