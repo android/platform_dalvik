@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sed -i '1,8d' $1 
+cat copyright.txt $1 | sponge $1
+sed -i s/XXFILEXX/$1/ $1

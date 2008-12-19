@@ -207,7 +207,7 @@ LOCAL_C_INCLUDES += \
 	dalvik \
 	dalvik/vm \
 	external/zlib \
-	$(KERNEL_HEADERS)
+	$(KERNEL_HEADERS) 
 
 
 ifeq ($(TARGET_SIMULATOR),true)
@@ -220,6 +220,9 @@ else
   LOCAL_SHARED_LIBRARIES += libdl
 endif
 
+# Uncomment both for fast IA interpreter
+#FAST_IA=YES
+
 ifeq ($(TARGET_ARCH),arm)
   LOCAL_SRC_FILES += \
 		arch/arm/CallOldABI.S \
@@ -231,7 +234,21 @@ ifeq ($(TARGET_ARCH),arm)
 		mterp/out/InterpAsm-armv5te.S
   LOCAL_SHARED_LIBRARIES += libdl
 else
-  ifeq ($(TARGET_ARCH),x86)
+   ifdef FAST_IA
+	# use FFI for now, then use custom 
+	# version rather than FFI
+ 	$(warning compiling fast IA interpreter)
+	
+	LOCAL_SRC_FILES += arch/ia32/CallABI.S \
+			   arch/ia32/HintsABI.c
+
+	LOCAL_SRC_FILES += \
+		mterp/out/InterpC-ia32.c \
+		mterp/out/InterpAsm-ia32.S
+    ifneq ($(TARGET_SIMULATOR),true)
+	LOCAL_SHARED_LIBRARIES += libdl
+    endif
+  else ifeq ($(TARGET_ARCH),x86)
     LOCAL_SRC_FILES += \
 		arch/x86/Call386ABI.S \
 		arch/x86/Hints386ABI.c
