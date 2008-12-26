@@ -62,8 +62,8 @@ javaOpts=""
 # and pass them to Java (instead of to dx). This makes it possible for you to
 # add a command-line parameter such as "-JXmx256M" in your ant scripts, for
 # example.
-while expr "x$1" : 'x-J' >/dev/null; do
-    opt=`expr "$1" : '-J\(.*\)'`
+while expr -- "$1" : '-J' >/dev/null; do
+    opt=`expr -- "$1" : '-J\(.*\)'`
     javaOpts="${javaOpts} -${opt}"
     shift
 done
