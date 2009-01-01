@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "z34f30cd6060d7de0c367af62de4a94a5",
+        "filename": "dx/etc/dx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-01-01T03:04:10Z",
+      "side": 1,
+      "message": "At least in the first expr, \"--\" isn\u0027t sufficient as an argument that looks like an operator could confuse things. The opengroup.org description of expr suggests using an \"x\" prefix in the way used here exactly for that reason.\n\n\u003chttp://www.opengroup.org/onlinepubs/007908775/xcu/expr.html\u003e\n",
+      "revId": "d16269c941256ab941317087407bf6d340720a00",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
