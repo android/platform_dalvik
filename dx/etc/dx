@@ -63,7 +63,7 @@ javaOpts=""
 # add a command-line parameter such as "-JXmx256M" in your ant scripts, for
 # example.
 while expr "x$1" : 'x-J' >/dev/null; do
-    opt=`expr "$1" : '-J\(.*\)'`
+    opt=`expr "x$1" : 'x-J\(.*\)'`
     javaOpts="${javaOpts} -${opt}"
     shift
 done
