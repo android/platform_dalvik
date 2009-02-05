@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACX///5U\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-05T20:16:55Z",
+      "side": 1,
+      "message": "Please use private static final int\nUse upper case for static final fields (MAX_CHACHE_ELEMENTS)",
+      "revId": "e04a5623d5d12892e83ba3baf6047512842cd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///5Q\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-05T20:16:55Z",
+      "side": 1,
+      "message": "Please move all fields at the top of the class",
+      "revId": "e04a5623d5d12892e83ba3baf6047512842cd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///5E\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-05T20:16:55Z",
+      "side": 1,
+      "message": "This entire method is not thread-safe",
+      "revId": "e04a5623d5d12892e83ba3baf6047512842cd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///5M\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-05T20:16:55Z",
+      "side": 1,
+      "message": "Opening curly braces go on the previous line",
+      "revId": "e04a5623d5d12892e83ba3baf6047512842cd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///5I\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-05T20:16:55Z",
+      "side": 1,
+      "message": "Space between if and (\nSpace around \u003d\u003d\nUse { } around the content of if",
+      "revId": "e04a5623d5d12892e83ba3baf6047512842cd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
