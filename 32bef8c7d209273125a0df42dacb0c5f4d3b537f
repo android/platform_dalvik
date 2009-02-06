@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "AAAACn////k\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-06T03:35:51Z",
+      "side": 1,
+      "message": "Please add { } around the content of if statements",
+      "revId": "32bef8c7d209273125a0df42dacb0c5f4d3b537f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn////g\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-06T03:35:51Z",
+      "side": 1,
+      "message": "I am dubious about the need of allocating the array with MAX_CACHE_ELEMENTS right away. What is the typical needed size? Can\u0027t just it grow as needed instead?",
+      "revId": "32bef8c7d209273125a0df42dacb0c5f4d3b537f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACn////0\u003d",
         "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
         "patchSetId": 1
@@ -30,6 +64,23 @@
       "writtenOn": "2009-02-06T00:46:00Z",
       "side": 1,
       "message": "We prefer spaces around operators, except where that would make a line go over 79 characters.\n\nBut of course I remain doubtful about the performance of this code.",
+      "revId": "32bef8c7d209273125a0df42dacb0c5f4d3b537f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn////c\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-02-06T03:35:51Z",
+      "side": 1,
+      "message": "Spaces around +",
       "revId": "32bef8c7d209273125a0df42dacb0c5f4d3b537f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
