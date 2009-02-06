@@ -35,7 +35,5 @@
     UNSPILL(rPC)
     testl      %eax,%eax
     je         common_exceptionThrown
-    movl       $$$isrange,%ecx
-    #jmp        common_invokeMethod${routine}
-    jmp        common_invokeOld
+    jmp        common_invokeMethod${routine}
 

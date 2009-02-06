@@ -23,7 +23,5 @@
     movl      offClassObject_vtable(%ecx),%ecx # ecx<- vtable
     EXPORT_PC()
     movl      (%ecx,%eax,4),%eax        # eax<- super->vtable[BBBB]
-    movl      $$$isrange,%ecx           # ecx<- range flag
-    #jmp       common_invokeMethod${routine}
-    jmp       common_invokeOld
+    jmp       common_invokeMethod${routine}
 

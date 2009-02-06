@@ -14,10 +14,8 @@
     EXPORT_PC()
     movl      offDvmDex_pResMethods(%ecx),%ecx  # ecx<- pDvmDex->pResMethods
     movl      (%ecx,%eax,4),%eax        # eax<- resolved methodToCall
-    movl      $$$isrange,%ecx           # needed by common_invokeOld - revisit
     testl     %eax,%eax
-    #jne       common_invokeMethod${routine}
-    jne       common_invokeOld
+    jne       common_invokeMethod${routine}
     GET_GLUE(%ecx)
     movl      offGlue_method(%ecx),%ecx # ecx<- glue->method
     movzwl    2(rPC),%eax
@@ -33,9 +31,7 @@
     SPILL(rPC)
     call      dvmResolveMethod          # call(clazz,ref,flags)
     UNSPILL(rPC)
-    movl      $$$isrange,%ecx
     testl     %eax,%eax                 # got null?
-    #jne       common_invokeMethod${routine}
-    jne       common_invokeOld
+    jne       common_invokeMethod${routine}
     jmp       common_exceptionThrown
 

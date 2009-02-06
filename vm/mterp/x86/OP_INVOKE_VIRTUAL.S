@@ -52,7 +52,5 @@
     movl      offObject_clazz(%ecx),%ecx  # ecx<- thisPtr->clazz
     movl      offClassObject_vtable(%ecx),%ecx # ecx<- thisPtr->clazz->vtable
     movl      (%ecx,%eax,4),%eax        # eax<- vtable[methodIndex]
-    movl      $$$isrange,%ecx           # needed for common_invokeOld
-    #jmp       common_invokeMethod${routine}
-    jmp       common_invokeOld
+    jmp       common_invokeMethod${routine}
 
