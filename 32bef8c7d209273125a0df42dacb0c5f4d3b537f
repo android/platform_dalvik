@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn////4\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-02-06T00:46:00Z",
+      "side": 1,
+      "message": "It looks like you reindented this line. (There are no tabs in the original file, and our convention is to avoid them except where required in makefiles.)",
+      "revId": "32bef8c7d209273125a0df42dacb0c5f4d3b537f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn////0\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-02-06T00:46:00Z",
+      "side": 1,
+      "message": "We prefer spaces around operators, except where that would make a line go over 79 characters.\n\nBut of course I remain doubtful about the performance of this code.",
+      "revId": "32bef8c7d209273125a0df42dacb0c5f4d3b537f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
