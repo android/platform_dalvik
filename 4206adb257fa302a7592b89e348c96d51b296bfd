@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAADn///4k\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-02-09T18:28:10Z",
+      "side": 1,
+      "message": "Style note: Android style avoids all use of tabs except where necessary in Makefiles.",
+      "revId": "4206adb257fa302a7592b89e348c96d51b296bfd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
