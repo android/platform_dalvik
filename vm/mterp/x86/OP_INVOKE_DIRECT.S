@@ -30,9 +30,7 @@
 .L${opcode}_finish:
     UNSPILL(rPC)
     testl     %ecx,%ecx                # null "this"?
-    movl      $$$isrange,%ecx
-    #jne       common_invokeMethod${routine}  # no, continue on
-    jne       common_invokeOld          # no, continue on, eax<- method, ecx<- methodCallRange
+    jne       common_invokeMethod${routine}  # no, continue on
     jmp       common_errNullObject
 %break
 

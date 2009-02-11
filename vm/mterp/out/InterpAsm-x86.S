@@ -2854,9 +2854,7 @@ dvmAsmInstructionStart = .L_OP_NOP
 .LOP_INVOKE_DIRECT_finish:
     UNSPILL(rPC)
     testl     %ecx,%ecx                # null "this"?
-    movl      $0,%ecx
-    #jne       common_invokeMethodNoRange  # no, continue on
-    jne       common_invokeOld          # no, continue on, eax<- method, ecx<- methodCallRange
+    jne       common_invokeMethodNoRange  # no, continue on
     jmp       common_errNullObject
 
 /* ------------------------------ */
@@ -2876,10 +2874,8 @@ dvmAsmInstructionStart = .L_OP_NOP
     EXPORT_PC()
     movl      offDvmDex_pResMethods(%ecx),%ecx  # ecx<- pDvmDex->pResMethods
     movl      (%ecx,%eax,4),%eax        # eax<- resolved methodToCall
-    movl      $0,%ecx           # needed by common_invokeOld - revisit
     testl     %eax,%eax
-    #jne       common_invokeMethodNoRange
-    jne       common_invokeOld
+    jne       common_invokeMethodNoRange
     GET_GLUE(%ecx)
     movl      offGlue_method(%ecx),%ecx # ecx<- glue->method
     movzwl    2(rPC),%eax
@@ -3021,9 +3017,7 @@ dvmAsmInstructionStart = .L_OP_NOP
 .LOP_INVOKE_DIRECT_RANGE_finish:
     UNSPILL(rPC)
     testl     %ecx,%ecx                # null "this"?
-    movl      $1,%ecx
-    #jne       common_invokeMethodRange  # no, continue on
-    jne       common_invokeOld          # no, continue on, eax<- method, ecx<- methodCallRange
+    jne       common_invokeMethodRange  # no, continue on
     jmp       common_errNullObject
 
 
@@ -3045,10 +3039,8 @@ dvmAsmInstructionStart = .L_OP_NOP
     EXPORT_PC()
     movl      offDvmDex_pResMethods(%ecx),%ecx  # ecx<- pDvmDex->pResMethods
     movl      (%ecx,%eax,4),%eax        # eax<- resolved methodToCall
-    movl      $1,%ecx           # needed by common_invokeOld - revisit
     testl     %eax,%eax
-    #jne       common_invokeMethodRange
-    jne       common_invokeOld
+    jne       common_invokeMethodRange
     GET_GLUE(%ecx)
     movl      offGlue_method(%ecx),%ecx # ecx<- glue->method
     movzwl    2(rPC),%eax
@@ -6029,9 +6021,8 @@ dvmAsmInstructionStart = .L_OP_NOP
     movl      offClassObject_vtable(%eax),%eax # eax<- thisPtr->clazz->vtable
     EXPORT_PC()                         # might throw later - get ready
     movl      (%eax,%ecx,4),%eax        # eax<- vtable[BBBB]
-    movl      $0,%ecx           # pass range flag
-    #jmp       common_invokeMethodNoRange
-    jmp       common_invokeOld
+    jmp       common_invokeMethodNoRange
+
 
 
 /* ------------------------------ */
@@ -6058,9 +6049,8 @@ dvmAsmInstructionStart = .L_OP_NOP
     movl      offClassObject_vtable(%eax),%eax # eax<- thisPtr->clazz->vtable
     EXPORT_PC()                         # might throw later - get ready
     movl      (%eax,%ecx,4),%eax        # eax<- vtable[BBBB]
-    movl      $1,%ecx           # pass range flag
-    #jmp       common_invokeMethodRange
-    jmp       common_invokeOld
+    jmp       common_invokeMethodRange
+
 
 
 
@@ -6090,9 +6080,7 @@ dvmAsmInstructionStart = .L_OP_NOP
     movl      offClassObject_vtable(%ecx),%ecx # ecx<- vtable
     EXPORT_PC()
     movl      (%ecx,%eax,4),%eax        # eax<- super->vtable[BBBB]
-    movl      $0,%ecx           # ecx<- range flag
-    #jmp       common_invokeMethodNoRange
-    jmp       common_invokeOld
+    jmp       common_invokeMethodNoRange
 
 
 /* ------------------------------ */
@@ -6122,9 +6110,7 @@ dvmAsmInstructionStart = .L_OP_NOP
     movl      offClassObject_vtable(%ecx),%ecx # ecx<- vtable
     EXPORT_PC()
     movl      (%ecx,%eax,4),%eax        # eax<- super->vtable[BBBB]
-    movl      $1,%ecx           # ecx<- range flag
-    #jmp       common_invokeMethodRange
-    jmp       common_invokeOld
+    jmp       common_invokeMethodRange
 
 
 
@@ -7661,9 +7647,7 @@ dvmAsmSisterStart:
     movl      offObject_clazz(%ecx),%ecx  # ecx<- thisPtr->clazz
     movl      offClassObject_vtable(%ecx),%ecx # ecx<- thisPtr->clazz->vtable
     movl      (%ecx,%eax,4),%eax        # eax<- vtable[methodIndex]
-    movl      $0,%ecx           # needed for common_invokeOld
-    #jmp       common_invokeMethodNoRange
-    jmp       common_invokeOld
+    jmp       common_invokeMethodNoRange
 
 
 /* continuation for OP_INVOKE_SUPER */
@@ -7680,9 +7664,8 @@ dvmAsmSisterStart:
     jae     .LOP_INVOKE_SUPER_nsm           # method not present in superclass
     movl    offClassObject_vtable(%eax),%eax   # eax<- ...clazz->super->vtable
     movl    (%eax,%ecx,4),%eax        # eax<- vtable[methodIndex]
-    movl    $0,%ecx
-    #jmp     common_invokeMethodNoRange
-    jmp     common_invokeOld
+    jmp     common_invokeMethodNoRange
+
 
     /* At this point:
      * ecx = null (needs to be resolved base method)
@@ -7745,10 +7728,8 @@ dvmAsmSisterStart:
     SPILL(rPC)
     call      dvmResolveMethod          # call(clazz,ref,flags)
     UNSPILL(rPC)
-    movl      $0,%ecx
     testl     %eax,%eax                 # got null?
-    #jne       common_invokeMethodNoRange
-    jne       common_invokeOld
+    jne       common_invokeMethodNoRange
     jmp       common_exceptionThrown
 
 
@@ -7759,9 +7740,7 @@ dvmAsmSisterStart:
     UNSPILL(rPC)
     testl      %eax,%eax
     je         common_exceptionThrown
-    movl       $0,%ecx
-    #jmp        common_invokeMethodNoRange
-    jmp        common_invokeOld
+    jmp        common_invokeMethodNoRange
 
 
 /* continuation for OP_INVOKE_VIRTUAL_RANGE */
@@ -7793,9 +7772,7 @@ dvmAsmSisterStart:
     movl      offObject_clazz(%ecx),%ecx  # ecx<- thisPtr->clazz
     movl      offClassObject_vtable(%ecx),%ecx # ecx<- thisPtr->clazz->vtable
     movl      (%ecx,%eax,4),%eax        # eax<- vtable[methodIndex]
-    movl      $1,%ecx           # needed for common_invokeOld
-    #jmp       common_invokeMethodRange
-    jmp       common_invokeOld
+    jmp       common_invokeMethodRange
 
 
 /* continuation for OP_INVOKE_SUPER_RANGE */
@@ -7812,9 +7789,8 @@ dvmAsmSisterStart:
     jae     .LOP_INVOKE_SUPER_RANGE_nsm           # method not present in superclass
     movl    offClassObject_vtable(%eax),%eax   # eax<- ...clazz->super->vtable
     movl    (%eax,%ecx,4),%eax        # eax<- vtable[methodIndex]
-    movl    $1,%ecx
-    #jmp     common_invokeMethodRange
-    jmp     common_invokeOld
+    jmp     common_invokeMethodRange
+
 
     /* At this point:
      * ecx = null (needs to be resolved base method)
@@ -7877,10 +7853,8 @@ dvmAsmSisterStart:
     SPILL(rPC)
     call      dvmResolveMethod          # call(clazz,ref,flags)
     UNSPILL(rPC)
-    movl      $1,%ecx
     testl     %eax,%eax                 # got null?
-    #jne       common_invokeMethodRange
-    jne       common_invokeOld
+    jne       common_invokeMethodRange
     jmp       common_exceptionThrown
 
 
@@ -7891,9 +7865,7 @@ dvmAsmSisterStart:
     UNSPILL(rPC)
     testl      %eax,%eax
     je         common_exceptionThrown
-    movl       $1,%ecx
-    #jmp        common_invokeMethodRange
-    jmp        common_invokeOld
+    jmp        common_invokeMethodRange
 
 
 /* continuation for OP_FLOAT_TO_INT */
@@ -8527,10 +8499,216 @@ dvmMterpStdBail:
  */
 common_backwardBranch:
     GET_GLUE(%ecx)
-    call   common_periodicChecks      # Note: expects rPC to be preserved
+    call   common_periodicChecks  # Note: expects rPC to be preserved
     ADVANCE_PC_INDEXED(rINST_FULL)
     FETCH_INST()
     GOTO_NEXT
+
+
+
+/*
+ * Common code for method invocation with range.
+ *
+ * On entry:
+ *   eax = Method* methodToCall
+ *   rINST trashed, must reload
+ */
+
+common_invokeMethodRange:
+.LinvokeNewRange:
+
+   /*
+    * prepare to copy args to "outs" area of current frame
+    */
+
+    movzbl      1(rPC),rINST_FULL       # rINST_FULL<- AA
+    movzwl      4(rPC), %ecx            # %ecx<- CCCC
+    SPILL(rPC)
+    SAVEAREA_FROM_FP(%edx,rFP)          # %edx<- &StackSaveArea
+    test        rINST_FULL, rINST_FULL
+    movl        rINST_FULL, LOCAL0_OFFSET(%ebp) # LOCAL0_OFFSET(%ebp)<- AA
+    jz          .LinvokeArgsDone        # no args; jump to args done
+
+
+   /*
+    * %eax=methodToCall, %ecx=CCCC, LOCAL0_OFFSET(%ebp)=count, %edx=&outs (&stackSaveArea)
+    * (very few methods have > 10 args; could unroll for common cases)
+    */
+
+    movl        %ebx, LOCAL1_OFFSET(%ebp)       # LOCAL1_OFFSET(%ebp)<- save %ebx
+    lea         (rFP, %ecx, 4), %ecx    # %ecx<- &vCCCC
+    shll        $2, LOCAL0_OFFSET(%ebp)        # LOCAL0_OFFSET(%ebp)<- offset
+    subl        LOCAL0_OFFSET(%ebp), %edx       # %edx<- update &outs
+    shrl        $2, LOCAL0_OFFSET(%ebp)        # LOCAL0_OFFSET(%ebp)<- offset
+1:
+    movl        (%ecx), %ebx            # %ebx<- vCCCC
+    lea         4(%ecx), %ecx           # %ecx<- &vCCCC++
+    subl        $1, LOCAL0_OFFSET(%ebp)        # LOCAL0_OFFSET<- LOCAL0_OFFSET--
+    movl        %ebx, (%edx)            # *outs<- vCCCC
+    lea         4(%edx), %edx           # outs++
+    jne         1b                      # loop if count (LOCAL0_OFFSET(%ebp)) not zero
+    movl        LOCAL1_OFFSET(%ebp), %ebx       # %ebx<- restore %ebx
+    jmp         .LinvokeArgsDone        # continue
+
+   /*
+    * %eax is "Method* methodToCall", the method we're trying to call
+    * prepare to copy args to "outs" area of current frame
+    */
+
+common_invokeMethodNoRange:
+.LinvokeNewNoRange:
+    movzbl      1(rPC),rINST_FULL       # rINST_FULL<- BA
+    SPILL(rPC)
+    movl        rINST_FULL, LOCAL0_OFFSET(%ebp) # LOCAL0_OFFSET(%ebp)<- BA
+    shrl        $4, LOCAL0_OFFSET(%ebp)        # LOCAL0_OFFSET(%ebp)<- B
+    je          .LinvokeArgsDone        # no args; jump to args done
+    movzwl      4(rPC), %ecx            # %ecx<- GFED
+    SAVEAREA_FROM_FP(%edx,rFP)          # %edx<- &StackSaveArea
+
+   /*
+    * %eax=methodToCall, %ecx=GFED, LOCAL0_OFFSET(%ebp)=count, %edx=outs
+    */
+
+.LinvokeNonRange:
+    cmp         $2, LOCAL0_OFFSET(%ebp)        # compare LOCAL0_OFFSET(%ebp) to 2
+    movl        %ecx, LOCAL1_OFFSET(%ebp)       # LOCAL1_OFFSET(%ebp)<- GFED
+    jl          1f                      # handle 1 arg
+    je          2f                      # handle 2 args
+    cmp         $4, LOCAL0_OFFSET(%ebp)        # compare LOCAL0_OFFSET(%ebp) to 4
+    jl          3f                      # handle 3 args
+    je          4f                      # handle 4 args
+5:
+    andl        $15, rINST_FULL        # rINST<- A
+    lea         -4(%edx), %edx          # %edx<- update &outs; &outs--
+    movl        (rFP, rINST_FULL, 4), %ecx # %ecx<- vA
+    movl        %ecx, (%edx)            # *outs<- vA
+    movl        LOCAL1_OFFSET(%ebp), %ecx       # %ecx<- GFED
+4:
+    shr         $12, %ecx              # %ecx<- G
+    lea         -4(%edx), %edx          # %edx<- update &outs; &outs--
+    movl        (rFP, %ecx, 4), %ecx    # %ecx<- vG
+    movl        %ecx, (%edx)            # *outs<- vG
+    movl        LOCAL1_OFFSET(%ebp), %ecx       # %ecx<- GFED
+3:
+    and         $0x0f00, %ecx          # %ecx<- 0F00
+    shr         $8, %ecx               # %ecx<- F
+    lea         -4(%edx), %edx          # %edx<- update &outs; &outs--
+    movl        (rFP, %ecx, 4), %ecx    # %ecx<- vF
+    movl        %ecx, (%edx)            # *outs<- vF
+    movl        LOCAL1_OFFSET(%ebp), %ecx       # %ecx<- GFED
+2:
+    and         $0x00f0, %ecx          # %ecx<- 00E0
+    shr         $4, %ecx               # %ecx<- E
+    lea         -4(%edx), %edx          # %edx<- update &outs; &outs--
+    movl        (rFP, %ecx, 4), %ecx    # %ecx<- vE
+    movl        %ecx, (%edx)            # *outs<- vE
+    movl        LOCAL1_OFFSET(%ebp), %ecx       # %ecx<- GFED
+1:
+    and         $0x000f, %ecx          # %ecx<- 000D
+    movl        (rFP, %ecx, 4), %ecx    # %ecx<- vD
+    movl        %ecx, -4(%edx)          # *--outs<- vD
+0:
+
+   /*
+    * %eax is "Method* methodToCall", the method we're trying to call
+    * find space for the new stack frame, check for overflow
+    */
+
+.LinvokeArgsDone:
+    movzwl      offMethod_registersSize(%eax), %edx # %edx<- methodToCall->regsSize
+    movzwl      offMethod_outsSize(%eax), %ecx # %ecx<- methodToCall->outsSize
+    movl        %eax, LOCAL0_OFFSET(%ebp)       # LOCAL0_OFFSET<- methodToCall
+    shl         $2, %edx               # %edx<- update offset
+    SAVEAREA_FROM_FP(%eax,rFP)          # %eax<- &StackSaveArea
+    subl        %edx, %eax              # %eax<- newFP; (old savearea - regsSize)
+    GET_GLUE(%edx)                      # %edx<- pMterpGlue
+    movl        %eax, LOCAL1_OFFSET(%ebp)       # LOCAL1_OFFSET(%ebp)<- &outs
+    subl        $sizeofStackSaveArea, %eax # %eax<- newSaveArea (stack save area using newFP)
+    movl        offGlue_interpStackEnd(%edx), %edx # %edx<- glue->interpStackEnd
+    movl        %edx, LOCAL2_OFFSET(%ebp)       # LOCAL2_OFFSET<- glue->interpStackEnd
+    shl         $2, %ecx               # %ecx<- update offset for outsSize
+    movl        %eax, %edx              # %edx<- newSaveArea
+    sub         %ecx, %eax              # %eax<- bottom; (newSaveArea - outsSize)
+    cmp         LOCAL2_OFFSET(%ebp), %eax       # compare interpStackEnd and bottom
+    movl        LOCAL0_OFFSET(%ebp), %eax       # %eax<- restore methodToCall
+    jl          .LstackOverflow         # handle frame overflow
+
+   /*
+    * set up newSaveArea
+    */
+
+#ifdef EASY_GDB
+    SAVEAREA_FROM_FP(%ecx,rFP)          # %ecx<- &StackSaveArea
+    movl        %ecx, offStackSaveArea_prevSave(%edx) # newSaveArea->prevSave<- &outs
+#endif
+    movl        rFP, offStackSaveArea_prevFrame(%edx) # newSaveArea->prevFrame<- rFP
+    movl        rPC_SPILL(%ebp), %ecx
+    movl        %ecx, offStackSaveArea_savedPc(%edx) # newSaveArea->savedPc<- rPC
+    testl       $ACC_NATIVE, offMethod_accessFlags(%eax) # check for native call
+    movl        %eax, offStackSaveArea_method(%edx) # newSaveArea->method<- method to call
+    jne         .LinvokeNative          # handle native call
+
+   /*
+    * Update "glue" values for the new method
+    * %eax=methodToCall, LOCAL1_OFFSET(%ebp)=newFp
+    */
+
+    movl        offMethod_clazz(%eax), %edx # %edx<- method->clazz
+    GET_GLUE(%ecx)                      # %ecx<- pMterpGlue
+    movl        offClassObject_pDvmDex(%edx), %edx # %edx<- method->clazz->pDvmDex
+    movl        %eax, offGlue_method(%ecx) # glue->method<- methodToCall
+    movl        %edx, offGlue_methodClassDex(%ecx) # glue->methodClassDex<- method->clazz->pDvmDex
+    movl        offMethod_insns(%eax), rPC # rPC<- methodToCall->insns
+    movl        offGlue_self(%ecx), %eax # %eax<- glue->self
+    movl        LOCAL1_OFFSET(%ebp), rFP # rFP<- newFP
+    movl        rFP, offThread_curFrame(%eax) # glue->self->curFrame<- newFP
+    FETCH_INST()
+    GOTO_NEXT                           # jump to methodToCall->insns
+
+   /*
+    * Prep for the native call
+    * %eax=methodToCall, LOCAL1_OFFSET(%ebp)=newFP, %edx=newSaveArea
+    */
+
+.LinvokeNative:
+    GET_GLUE(%ecx)                      # %ecx<- pMterpGlue
+    movl        %eax, OUT_ARG1(%esp)    # push parameter methodToCall
+    movl        offGlue_self(%ecx), %ecx        # %ecx<- glue->self
+    movl        offThread_jniLocal_nextEntry(%ecx), %eax # %eax<- glue->self->thread->refNext
+    movl        %eax, offStackSaveArea_localRefTop(%edx) # newSaveArea->localRefTop<- refNext
+    movl        %edx, OUT_ARG4(%esp)    # save newSaveArea
+    movl        LOCAL1_OFFSET(%ebp), %edx # %edx<- newFP
+    movl        %edx, offThread_curFrame(%ecx)  # glue->self->curFrame<- newFP
+    movl        %ecx, OUT_ARG3(%esp)    # save glue->self
+    movl        %ecx, OUT_ARG2(%esp)    # push parameter glue->self
+    GET_GLUE(%ecx)                      # %ecx<- pMterpGlue
+    movl        OUT_ARG1(%esp), %eax    # %eax<- methodToCall
+    lea         offGlue_retval(%ecx), %ecx # %ecx<- &retval
+    movl        %ecx, OUT_ARG0(%esp)    # push parameter pMterpGlue
+    push        %edx                    # push parameter newFP
+
+    call        *offMethod_nativeFunc(%eax) # call methodToCall->nativeFunc
+    lea         4(%esp), %esp
+    movl        OUT_ARG4(%esp), %ecx    # %ecx<- newSaveArea
+    movl        OUT_ARG3(%esp), %eax    # %eax<- glue->self
+    movl        offStackSaveArea_localRefTop(%ecx), %edx # %edx<- newSaveArea->localRefTop
+    cmp         $0, offThread_exception(%eax) # check for exception
+    movl        rFP, offThread_curFrame(%eax) # glue->self->curFrame<- rFP
+    movl        %edx, offThread_jniLocal_nextEntry(%eax) # glue->self<- newSaveArea->localRefTop
+    UNSPILL(rPC)
+    jne         common_exceptionThrown  # handle exception
+    FETCH_INST_WORD(3)
+    ADVANCE_PC(3)
+    GOTO_NEXT                           # jump to next instruction
+
+.LstackOverflow:
+    GET_GLUE(%eax)                      # %eax<- pMterpGlue
+    movl        offGlue_self(%eax), %eax # %eax<- glue->self
+    movl        %eax, OUT_ARG0(%esp)    # push parameter self
+    call        dvmHandleStackOverflow  # call: (Thread* self)
+    UNSPILL(rPC)                        # return: void
+    jmp         common_exceptionThrown  # handle exception
+
 
 /*
  * Common invoke code (old-style).

@@ -20,7 +20,6 @@
     movl      offClassObject_vtable(%eax),%eax # eax<- thisPtr->clazz->vtable
     EXPORT_PC()                         # might throw later - get ready
     movl      (%eax,%ecx,4),%eax        # eax<- vtable[BBBB]
-    movl      $$$isrange,%ecx           # pass range flag
-    #jmp       common_invokeMethod${routine}
-    jmp       common_invokeOld
+    jmp       common_invokeMethod${routine}
+
 

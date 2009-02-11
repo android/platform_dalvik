@@ -40,9 +40,8 @@
     jae     .L${opcode}_nsm           # method not present in superclass
     movl    offClassObject_vtable(%eax),%eax   # eax<- ...clazz->super->vtable
     movl    (%eax,%ecx,4),%eax        # eax<- vtable[methodIndex]
-    movl    $$$isrange,%ecx
-    #jmp     common_invokeMethod${routine}
-    jmp     common_invokeOld
+    jmp     common_invokeMethod${routine}
+
 
     /* At this point:
      * ecx = null (needs to be resolved base method)
