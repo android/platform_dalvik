@@ -121,6 +121,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAI3///+A\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-03-02T21:52:07Z",
+      "side": 1,
+      "message": "Haha, I feel dumb now. I forgot about the do { } above and read it as a standalone while(); with no body :)\n\nMy bad!",
+      "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAI3///+M\u003d",
         "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
         "patchSetId": 1
