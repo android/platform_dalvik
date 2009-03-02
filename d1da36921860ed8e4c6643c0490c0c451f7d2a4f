@@ -19,6 +19,57 @@
     },
     {
       "key": {
+        "uuid": "AAAAI3///+g\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-02T21:24:47Z",
+      "side": 1,
+      "message": "\"CACHE_SIZE\" would be a bit more standard and is more readable. I would phrase the assignment as \"1 \u003c\u003c 8\" to make it clear that it needs to be a power of two.\n\nI would also add this:\n\nprivate static final int CACHE_MASK \u003d CACHE_SIZE - 1;\n\nAnd then use this instead of \"CACHE_SIZE - 1\" below, again for readability.",
+      "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAI3///+k\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-02T21:24:47Z",
+      "side": 1,
+      "message": "Similarly, \"MAX_PROBES\".",
+      "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAI3///+Y\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-02T21:24:47Z",
+      "side": 1,
+      "message": "And finally, I\u0027d name this without abbreviation, e.g. \"replacementIndex\", and add a javadoc comment describing it. Actually, I\u0027d javadoc all of these variables.",
+      "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAIn////I\u003d",
         "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
         "patchSetId": 1
@@ -47,6 +98,40 @@
       "writtenOn": "2009-03-02T19:09:30Z",
       "side": 1,
       "message": "What is the point of this loop? The probe variable is not even used afterwards.",
+      "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAI3///+c\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-02T21:24:47Z",
+      "side": 1,
+      "message": "Romain, probe is used in the body to try different indices in the cache. It\u0027s okay not to use it after the loop.\n\nBy way of recommendation, I would have made it a for(;;) loop.",
+      "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAI3///+M\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-02T21:24:47Z",
+      "side": 1,
+      "message": "Rather than have two assignments to replIdx (one because of ++), I would just say:\n\nreplacementIndex \u003d (replacementIndex + 1) % MAX_PROBES.\n\nAnd note: I think you do want to be mod MAX_PROBES and not MAX_PROBES+1, given that you will never try idx+MAX_PROBES in the loop.",
       "revId": "d1da36921860ed8e4c6643c0490c0c451f7d2a4f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
