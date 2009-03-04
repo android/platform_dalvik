@@ -331,7 +331,7 @@ static bool isTypeWidthEqual1nr(RegType type1, RegType type2)
  */
 static RegType primitiveTypeToRegType(PrimitiveType primType)
 {
-    struct {
+    static const struct {
         RegType         regType;        /* type equivalent */
         PrimitiveType   primType;       /* verification */
     } convTab[] = {
@@ -1326,7 +1326,7 @@ static ClassObject* getFieldClass(const Method* meth, const Field* field)
  */
 
 /*
- * Get the type of register N, verifying that the register is valid.
+ * Get the type of register vscr, verifying that the register is valid.
  *
  * Sets "*pOkay" to false if the register number is out of range.
  */
@@ -1424,8 +1424,8 @@ bail:
 }
 
 /*
- * Set the type of register N, verifying that the register is valid.  If
- * "newType" is the "Lo" part of a 64-bit value, register N+1 will be
+ * Set the type of register vdst, verifying that the register is valid.  If
+ * "newType" is the "Lo" part of a 64-bit value, register vdst+1 will be
  * set to "newType+1".
  *
  * Sets "*pOkay" to false if the register number is out of range.
@@ -3037,7 +3037,7 @@ static bool doCodeVerification(const Method* meth, InsnFlags* insnFlags,
     if (DEAD_CODE_SCAN) {
         /*
          * Scan for dead code.  There's nothing "evil" about dead code, but it
-         * indicates a flaw somewhere down the line, possibly in the verifier.
+         * indicates a flaw somewhere upstream, possibly in the verifier.
          */
         int deadStart = -1;
         for (insnIdx = 0; insnIdx < insnsSize;

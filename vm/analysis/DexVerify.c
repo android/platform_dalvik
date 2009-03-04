@@ -40,7 +40,7 @@ bool dvmVerificationStartup(void)
 }
 
 /*
- * Initialize some things we need for verification.
+ * Free up some things we needed for verification.
  */
 void dvmVerificationShutdown(void)
 {
