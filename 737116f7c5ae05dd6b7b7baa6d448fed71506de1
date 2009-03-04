@@ -16,6 +16,23 @@
       "revId": "737116f7c5ae05dd6b7b7baa6d448fed71506de1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJn////Q\u003d",
+        "filename": "dx/etc/dx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-04T22:31:07Z",
+      "side": 1,
+      "message": "I don\u0027t see where POSIX requires this:\n\n\u003chttp://www.opengroup.org/onlinepubs/007908775/xcu/expr.html\u003e\n\nThat said, if there is a practical reason not to use \"-\" to start the arguments, I\u0027m all for fixing it.\n\nHowever, my preferred way would be to do the simpler thing that is one line up (and probably should have been here in the first place), namely prepend an \"x\" symmetrically to both arguments of the \":\" operator.",
+      "revId": "737116f7c5ae05dd6b7b7baa6d448fed71506de1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
