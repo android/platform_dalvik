@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAJn////Y\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-03-04T22:21:30Z",
+      "side": 1,
+      "message": "Doc comments begin with \"/**\". Ditto below.",
+      "revId": "1c5044ee26bec9c99df7d44ff072698d30f1fb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
