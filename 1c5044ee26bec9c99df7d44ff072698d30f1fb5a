@@ -16,6 +16,23 @@
       "revId": "1c5044ee26bec9c99df7d44ff072698d30f1fb5a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAJn////I\u003d",
+        "filename": "libcore/luni/src/main/java/org/apache/harmony/luni/platform/PlatformAddressFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001146
+      },
+      "writtenOn": "2009-03-04T22:52:26Z",
+      "side": 1,
+      "message": "Please put the { on the previous line :)",
+      "revId": "1c5044ee26bec9c99df7d44ff072698d30f1fb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
