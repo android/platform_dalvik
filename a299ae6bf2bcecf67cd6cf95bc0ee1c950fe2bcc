@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAJn///9Q\u003d",
+        "filename": "libcore/icu/src/main/native/ResourceInterface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-03-05T15:50:44Z",
+      "side": 1,
+      "message": "Is there a reason why this approach is preferred over something like:\n\nenv-\u003eNewString(\"\\u00a4\", 1);\n\n?  Might be easier for somebody to understand since they don\u0027t have to mentally un-translate the UTF-8.",
+      "revId": "a299ae6bf2bcecf67cd6cf95bc0ee1c950fe2bcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
