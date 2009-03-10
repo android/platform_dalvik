@@ -63,6 +63,19 @@ bool dvmHeapStartup()
     gcHeap->ddmHpsgWhat = 0;
     gcHeap->ddmNhsgWhen = 0;
     gcHeap->ddmNhsgWhat = 0;
+#if COLLECT_GC_AGING_STATS
+    int i;
+    for (i = 0; i < AGE_MAX; i++) {
+      gcHeap->markCountByAge[i] = 0;
+      gcHeap->markSizeByAge[i] = 0;
+      gcHeap->sweepCountByAge[i] = 0;
+      gcHeap->sweepSizeByAge[i] = 0;
+    }
+#endif
+#if GC_FREQUENTLY
+    gcHeap->gcEverySoOften = 20*1024;
+    gcHeap->allocSizeSinceGc = 0;
+#endif
 #if WITH_HPROF
     gcHeap->hprofDumpOnGc = false;
     gcHeap->hprofContext = NULL;
@@ -315,7 +328,7 @@ static void gcForMalloc(bool collectSoftReferences)
 #endif
     /* This may adjust the soft limit as a side-effect.
      */
-    LOGD_HEAP("dvmMalloc initiating GC%s\n",
+    LOGD_HEAP("dvmMalloc initiating xxx GC%s\n",
             collectSoftReferences ? "(collect SoftReferences)" : "");
     dvmCollectGarbageInternal(collectSoftReferences);
 }
@@ -346,6 +359,14 @@ static DvmHeapChunk *tryMalloc(size_t size)
 //      (number of allocations ago) (watch for thread effects)
 //    DeflateTest allocs a bunch of ~128k buffers w/in 0-5 allocs of each other
 //      (or, at least, there are only 0-5 objects swept each time)
+
+#if GC_FREQUENTLY
+    gDvm.gcHeap->allocSizeSinceGc += size + sizeof(DvmHeapChunk);
+    if (gDvm.gcHeap->allocSizeSinceGc > gDvm.gcHeap->gcEverySoOften) {
+      gcForMalloc(false);
+      gDvm.gcHeap->allocSizeSinceGc = 0;
+    }
+#endif
 
     hc = dvmHeapSourceAlloc(size + sizeof(DvmHeapChunk));
     if (hc != NULL) {

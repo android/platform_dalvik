@@ -23,6 +23,7 @@
 #include <sys/mman.h>   // for madvise(), mmap()
 #include <cutils/ashmem.h>
 
+
 #define GC_DEBUG_PARANOID   2
 #define GC_DEBUG_BASIC      1
 #define GC_DEBUG_OFF        0
@@ -69,6 +70,13 @@
 #if WITH_OBJECT_HEADERS
 u2 gGeneration = 0;
 static const Object *gMarkParent = NULL;
+#if COLLECT_GC_AGING_STATS
+inline u2 ageBucket(DvmHeapChunk *hc)
+{
+    u2 age = gGeneration - ((DvmHeapChunk *)(hc))->birthGeneration;
+    return age < AGE_MAX ? age : AGE_MAX -1;
+}
+#endif
 #endif
 
 #ifndef PAGE_SIZE
@@ -167,6 +175,10 @@ dvmHeapBeginMarkStep()
 
 #if WITH_OBJECT_HEADERS
     gGeneration++;
+    if (gGeneration <= 0) {
+        LOGE("GC generation count has wrapped.");
+        dvmAbort();
+    }
 #endif
 
     return true;
@@ -209,10 +221,12 @@ _markObjectNonNullCommon(const Object *obj, GcMarkContext *ctx,
         }
 
 #if WITH_OBJECT_HEADERS
-        if (hc->scanGeneration != hc->markGeneration) {
+        if (hc->scanGeneration != hc->markGeneration &&
+            !(gDvm.zygote && hc->scanGeneration == 0)) {
             LOGE("markObject(0x%08x): wasn't scanned last time\n", (uint)obj);
             dvmAbort();
         }
+        /* This may abort when gGeneration wraps. */
         if (hc->markGeneration == gGeneration) {
             LOGE("markObject(0x%08x): already marked this generation\n",
                     (uint)obj);
@@ -239,6 +253,11 @@ _markObjectNonNullCommon(const Object *obj, GcMarkContext *ctx,
         gDvm.gcHeap->markCount++;
         gDvm.gcHeap->markSize += dvmHeapSourceChunkSize((void *)hc) +
                 HEAP_SOURCE_CHUNK_OVERHEAD;
+#endif
+#if COLLECT_GC_AGING_STATS /* <<< WITH_OBJECT_HEADERS & ??  */
+        gDvm.gcHeap->markCountByAge[ageBucket(hc)]++;
+        gDvm.gcHeap->markSizeByAge[ageBucket(hc)] +=
+            dvmHeapSourceChunkSize((void *)hc) + HEAP_SOURCE_CHUNK_OVERHEAD;
 #endif
 
         /* obj->clazz can be NULL if we catch an object between
@@ -1210,6 +1229,11 @@ sweepBitmapCallback(size_t numPtrs, void **ptrs, const void *finger, void *arg)
             LOGE("sweeping marked object: 0x%08x\n", (uint)obj);
             dvmAbort();
         }
+#endif
+#if COLLECT_GC_AGING_STATS
+        gDvm.gcHeap->sweepCountByAge[ageBucket(hc)]++;
+        gDvm.gcHeap->sweepSizeByAge[ageBucket(hc)] +=
+            dvmHeapSourceChunkSize((void *)hc) + HEAP_SOURCE_CHUNK_OVERHEAD;
 #endif
 
         /* Free the monitor associated with the object.

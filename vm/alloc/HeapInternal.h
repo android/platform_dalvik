@@ -29,11 +29,16 @@
 #define ptr2chunk(p)    (((DvmHeapChunk *)(p)) - 1)
 #define chunk2ptr(p)    ((void *)(((DvmHeapChunk *)(p)) + 1))
 
-#define WITH_OBJECT_HEADERS 0
+#define WITH_OBJECT_HEADERS 1
+#define COLLECT_GC_AGING_STATS 0
 #if WITH_OBJECT_HEADERS
 #define OBJECT_HEADER   0x11335577
 extern u2 gGeneration;
+#if COLLECT_GC_AGING_STATS
+#define AGE_MAX 50
 #endif
+#endif
+#define GC_FREQUENTLY 0
 
 typedef struct DvmHeapChunk {
 #if WITH_OBJECT_HEADERS
@@ -174,7 +179,23 @@ struct GcHeap {
     size_t          markCount;
     size_t          markSize;
 #endif
-
+#if COLLECT_GC_AGING_STATS
+    /* Every time an unmarked object becomes marked, markCountByAge[]
+     * is incremented and markSizeByAge[] increases by the size of
+     * that object, indexed by the age of the object, with the last
+     * entry tracking everything AGE_MAX and up.
+     * Likewise for sweepCountByAge and sweepSizeByAge.
+     */
+    size_t          markCountByAge[AGE_MAX];
+    size_t          markSizeByAge[AGE_MAX];
+    size_t          sweepCountByAge[AGE_MAX];
+    size_t          sweepSizeByAge[AGE_MAX];
+#endif
+#if GC_FREQUENTLY
+  /* FIX COMMENT gcTrigger gets decremented by */
+    size_t          gcEverySoOften;
+    size_t          allocSizeSinceGc;
+#endif
     /*
      * Debug control values
      */
