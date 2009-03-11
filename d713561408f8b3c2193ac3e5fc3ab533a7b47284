@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALn////8\u003d",
+        "filename": "vm/alloc/MarkSweep.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-03-11T20:33:27Z",
+      "side": 1,
+      "message": "Please add a comment explaining why this requires an extra check for zygote.",
+      "revId": "d713561408f8b3c2193ac3e5fc3ab533a7b47284",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
