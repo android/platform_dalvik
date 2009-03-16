@@ -213,7 +213,6 @@ _markObjectNonNullCommon(const Object *obj, GcMarkContext *ctx,
             LOGE("markObject(0x%08x): wasn't scanned last time\n", (uint)obj);
             dvmAbort();
         }
-        /* This may abort when gGeneration wraps. */
         if (hc->markGeneration == gGeneration) {
             LOGE("markObject(0x%08x): already marked this generation\n",
                     (uint)obj);
