@@ -209,8 +209,7 @@ _markObjectNonNullCommon(const Object *obj, GcMarkContext *ctx,
         }
 
 #if WITH_OBJECT_HEADERS
-        if (hc->scanGeneration != hc->markGeneration &&
-            !(gDvm.zygote && hc->scanGeneration == 0)) {
+        if (hc->scanGeneration != hc->markGeneration) {
             LOGE("markObject(0x%08x): wasn't scanned last time\n", (uint)obj);
             dvmAbort();
         }
@@ -522,6 +521,16 @@ static void scanObject(const Object *obj, GcMarkContext *ctx)
     }
 #endif
 
+#if WITH_OBJECT_HEADERS
+    if (ptr2chunk(obj)->scanGeneration == gGeneration) {
+        LOGE("object 0x%08x was already scanned this generation\n",
+                (uintptr_t)obj);
+        dvmAbort();
+    }
+    ptr2chunk(obj)->oldScanGeneration = ptr2chunk(obj)->scanGeneration;
+    ptr2chunk(obj)->scanGeneration = gGeneration;
+    ptr2chunk(obj)->scanCount++;
+#endif
     /* Get and mark the class object for this particular instance.
      */
     clazz = obj->clazz;
@@ -544,16 +553,7 @@ static void scanObject(const Object *obj, GcMarkContext *ctx)
     }
 #if WITH_OBJECT_HEADERS
     gMarkParent = obj;
-    if (ptr2chunk(obj)->scanGeneration == gGeneration) {
-        LOGE("object 0x%08x was already scanned this generation\n",
-                (uintptr_t)obj);
-        dvmAbort();
-    }
-    ptr2chunk(obj)->oldScanGeneration = ptr2chunk(obj)->scanGeneration;
-    ptr2chunk(obj)->scanGeneration = gGeneration;
-    ptr2chunk(obj)->scanCount++;
 #endif
-
     assert(dvmIsValidObject((Object *)clazz));
     markObjectNonNull((Object *)clazz, ctx);
 
