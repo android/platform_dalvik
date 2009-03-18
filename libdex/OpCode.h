@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * Dalvik opcode enumeration.
  */
@@ -36,24 +37,19 @@
  *  - update the parallel definitions in the class dalvik.bytecode.Opcodes
  *
  * Interpreter:
- *  - implement/update the instruction in C in interp/InterpCore.h
+ *  - implement/update the instruction in C in mterp/c/...
  *    - verify new code by running with "dalvik.vm.execution-mode =
  *      int:portable" or "-Xint:portable"
- *  - propagate the changes to mterp/c/...
- *    - verify by configuring "mterp" to use C instead of asm in the
- *      mterp config file and running with "dalvik.vm.execution-mode =
- *      int:fast" or "-Xint:fast"
  *  - implement/update the instruction in ARM in mterp/armv5/...
  *    - verify by enabling ARM handler for that instruction in mterp config
  *      and running int:fast as above
- *  - for the previous two, rebuild mterp by cd'ing to mterp and running
- *    ./rebuild.sh; files get written into the out subdirectory
+ *  - repeat for other platforms (x86, ...)
+ *  (see notes in mterp/ReadMe.txt for rebuilding instructions)
  * 
  * Verifier / optimizer:
  *  - update some stuff in analysis/DexOptimize.c, analysis/DexVerify.c,
  *    and/or analysis/CodeVerify.c as needed
- *    - verify by running with "dalvik.vm.verify-bytecode = true" or
- *      "-Xverify:all"
+ *    - verify by running with verifier enabled (it's on by default)
  * 
  * Tools:
  *  - update the OpCodeNames table in dexdump/OpCodeNames.c

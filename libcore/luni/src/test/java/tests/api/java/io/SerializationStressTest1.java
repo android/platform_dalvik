@@ -16,7 +16,7 @@
  */
 package tests.api.java.io;
 
-import dalvik.annotation.TestTargets;
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass; 
@@ -356,10 +356,6 @@ public class SerializationStressTest1 extends SerializationStressTest {
                 throws java.io.IOException, ClassNotFoundException {
             throw new MyException();
         }
-    }
-
-    public SerializationStressTest1(String name) {
-        super(name);
     }
 
     @TestTargetNew(
@@ -816,7 +812,8 @@ public class SerializationStressTest1 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_14_writeObject() {
+    @BrokenTest("throws IllegalAccessException on Android and InvalidClassException on RI")
+    public void test_18_14_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -861,7 +858,8 @@ public class SerializationStressTest1 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_15_writeObject() {
+    @BrokenTest("throws IllegalAccessException on Android and InvalidClassException on RI")
+    public void test_18_15_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1349,6 +1347,7 @@ public class SerializationStressTest1 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
+    @BrokenTest("Needs investigation. fails on RI, succeeds on Android. Maybe a bug in the RI.")
     public void test_18_28_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
@@ -1616,6 +1615,7 @@ public class SerializationStressTest1 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
+    @BrokenTest("succeeds on Android, but fails on RI with MyException being thrown.")
     public void test_18_33_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)

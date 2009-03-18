@@ -23,13 +23,14 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class SQLiteTest extends TestCase {
     public static Connection conn;
     public static File dbFile = null;
     
-    public void setup() {
-        String tmp = System.getProperty("ctsdir");
+    public void setUp() throws Exception {
+        String tmp = System.getProperty("java.io.tmpdir");
         File tmpDir = new File(tmp);
         try {
             if (tmpDir.isDirectory()) {
@@ -41,16 +42,13 @@ public class SQLiteTest extends TestCase {
             
             Class.forName("SQLite.JDBCDriver").newInstance();
 
-            if (dbFile.exists()) {
-                System.out.println("SQLTest.getSQLiteConnection()File:"
-                        + dbFile.getName());
-            }
-            System.out.println("DB File created and Driver instantiated");
-            System.out.println("Path "+ dbFile.getPath());
+            if (!dbFile.exists()) {
+              Logger.global.severe("DB file could not be created. Tests can not be executed.");
+            } else {
             conn = DriverManager.getConnection("jdbc:sqlite:/"
                     + dbFile.getPath());
-            assertNotNull("Connection created ",conn);
-
+            }
+            assertNotNull("Error creating connection",conn);
         } catch (IOException e) {
             System.out.println("Problem creating test file in " + tmp);
         } catch (SQLException e) {

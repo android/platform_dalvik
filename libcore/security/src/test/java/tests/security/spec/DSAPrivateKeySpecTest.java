@@ -41,14 +41,6 @@ import java.security.spec.KeySpec;
 public class DSAPrivateKeySpecTest extends TestCase {
 
     /**
-     * Constructor for DSAPrivateKeySpecTest.
-     * @param name
-     */
-    public DSAPrivateKeySpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test for constructor
      */
     @TestTargetNew(

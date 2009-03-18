@@ -19,14 +19,12 @@ package tests.api.java.net;
 
 import dalvik.annotation.KnownFailure; 
 import dalvik.annotation.TestTargetClass; 
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
 import java.io.IOException;
 import java.net.BindException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -273,13 +271,13 @@ public class MulticastSocketTest extends SocketTestCase {
                     groupPort = Support_PortManager.getNextPortForUDP();
                     mss = new MulticastSocket(groupPort);
                     mss.setNetworkInterface(networkInterface1);
-                    assertTrue(
+                    InetAddress addr = mss.getInterface();
+                    NetworkInterface if1 = NetworkInterface.getByInetAddress(addr);
+                    assertEquals(
                             "getInterface did not return interface set by " +
-                            "setNeworkInterface Expected: "
-                                    + firstAddress + "Got:"
-                                    + mss.getInterface(), NetworkInterface
-                                    .getByInetAddress(mss.getInterface())
-                                    .equals(networkInterface1));
+                            "setNeworkInterface Expected: " + firstAddress
+                                    + "Got:" + mss.getInterface(),
+                                    networkInterface1, if1);
                 }
                 mss.close();
                 try {

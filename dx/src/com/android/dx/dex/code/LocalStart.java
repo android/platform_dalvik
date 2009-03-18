@@ -24,9 +24,9 @@ import com.android.dx.rop.code.SourcePosition;
  * Pseudo-instruction which is used to introduce a new local variable. That
  * is, an instance of this class in an instruction stream indicates that
  * starting with the subsequent instruction, the indicated variable
- * is set.
+ * is bound.
  */
-public final class LocalIntroduction extends ZeroSizeInsn {
+public final class LocalStart extends ZeroSizeInsn {
     /**
      * non-null; register spec representing the local variable introduced
      * by this instance 
@@ -52,7 +52,7 @@ public final class LocalIntroduction extends ZeroSizeInsn {
      * @param local non-null; register spec representing the local
      * variable introduced by this instance
      */
-    public LocalIntroduction(SourcePosition position, RegisterSpec local) {
+    public LocalStart(SourcePosition position, RegisterSpec local) {
         super(position);
 
         if (local == null) {
@@ -65,13 +65,13 @@ public final class LocalIntroduction extends ZeroSizeInsn {
     /** {@inheritDoc} */
     @Override
     public DalvInsn withRegisterOffset(int delta) {
-        return new LocalIntroduction(getPosition(), local.withOffset(delta));
+        return new LocalStart(getPosition(), local.withOffset(delta));
     }
 
     /** {@inheritDoc} */
     @Override
     public DalvInsn withRegisters(RegisterSpecList registers) {
-        return new LocalIntroduction(getPosition(), local);
+        return new LocalStart(getPosition(), local);
     }
 
     /**
@@ -93,6 +93,6 @@ public final class LocalIntroduction extends ZeroSizeInsn {
     /** {@inheritDoc} */
     @Override
     protected String listingString0(boolean noteIndices) {
-        return "local-intro " + localString(local);
+        return "local-start " + localString(local);
     }
 }

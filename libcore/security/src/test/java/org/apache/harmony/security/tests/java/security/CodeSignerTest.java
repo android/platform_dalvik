@@ -180,7 +180,7 @@ public class CodeSignerTest extends TestCase {
         assertTrue(new CodeSigner(cpath, null).toString().contains(""));
         assertTrue(new CodeSigner(cpath, ts).toString().contains(""));
         
-        assertTrue(new CodeSigner(cpath, null).toString().contains("CodeSigner"));
+        assertTrue(new CodeSigner(cpath, null).toString().contains("Signer"));
         assertTrue(new CodeSigner(cpath, ts).toString().contains(ts.toString()));
     }
 

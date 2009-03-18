@@ -82,15 +82,6 @@ public class CertPathBuilder2Test extends TestCase {
         Security.removeProvider(mProv.getName());
     }
 
-    /**
-     * Constructor for CertPathBuilder2Test.
-     * 
-     * @param arg0
-     */
-    public CertPathBuilder2Test(String arg0) {
-        super(arg0);
-    }
-
     private void checkResult(CertPathBuilder certBuild)
             throws InvalidAlgorithmParameterException,
             CertPathBuilderException {

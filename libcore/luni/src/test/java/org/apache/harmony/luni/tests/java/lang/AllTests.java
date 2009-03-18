@@ -93,7 +93,6 @@ public class AllTests {
         suite.addTestSuite(RuntimePermissionTest.class);
         suite.addTestSuite(RuntimeTest.class);
         suite.addTestSuite(SecurityExceptionTest.class);
-        suite.addTestSuite(SecurityManager2Test.class); 
         suite.addTestSuite(SecurityManagerTest.class);
         suite.addTestSuite(ShortTest.class);
         suite.addTestSuite(StackOverflowErrorTest.class);

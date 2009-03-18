@@ -76,8 +76,8 @@ abstract class AbstractSqlTest extends TestCase {
     private final String[] ones_updated;
 
     /** Creates a new instance of this class */
-    public AbstractSqlTest(String testName) {
-        super(testName);
+    public AbstractSqlTest() {
+        super();
         ones_updated = new String[ones.length];
         for (int i = 0; i < ones.length; i++) {
             ones_updated[i] = ones[i] + twos[i];

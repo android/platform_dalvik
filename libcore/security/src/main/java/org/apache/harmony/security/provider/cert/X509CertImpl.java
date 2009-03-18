@@ -567,8 +567,13 @@ public class X509CertImpl extends X509Certificate {
      * @param key The RSA public key to use
      * 
      * @throws SignatureException If the verification fails.
+     * @throws InvalidKeyException 
      */
-    private void fastVerify(PublicKey key) throws SignatureException {
+    private void fastVerify(PublicKey key) throws SignatureException,
+            InvalidKeyException {
+        if (!(key instanceof RSAPublicKey)) {
+            throw new InvalidKeyException(Messages.getString("security.15C1"));
+        }
         RSAPublicKey rsaKey = (RSAPublicKey) key;
         
         String algorithm = getSigAlgName();

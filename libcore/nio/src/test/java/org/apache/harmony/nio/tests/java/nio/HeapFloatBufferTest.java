@@ -29,8 +29,6 @@ public class HeapFloatBufferTest extends FloatBufferTest {
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
 
     @TestTargetNew(

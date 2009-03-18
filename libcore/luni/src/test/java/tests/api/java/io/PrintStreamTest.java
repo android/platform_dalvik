@@ -815,6 +815,27 @@ public class PrintStreamTest extends junit.framework.TestCase {
         bis.read(rbytes, 0, fileString.length());
         assertTrue("Incorrect bytes written", new String(rbytes, 0, fileString
                 .length()).equals(fileString));
+        
+        try {
+            os.write(rbytes, -1, 1);
+            fail("IndexOutOfBoundsException should have been thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        
+        try {
+            os.write(rbytes, 0, -1);
+            fail("IndexOutOfBoundsException should have been thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        
+        try {
+            os.write(rbytes, 1, rbytes.length);
+            fail("IndexOutOfBoundsException should have been thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
     }
 
     /**

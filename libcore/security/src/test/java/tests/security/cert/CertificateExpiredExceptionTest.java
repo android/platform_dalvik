@@ -39,18 +39,6 @@ import java.security.cert.CertificateExpiredException;
 @TestTargetClass(CertificateExpiredException.class)
 public class CertificateExpiredExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertificateExpiredExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertificateExpiredExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     static String[] msgs = {
             "",
             "Check new message",

@@ -82,15 +82,6 @@ public class AlgorithmParameterGenerator2Test extends TestCase {
         Security.removeProvider(mProv.getName());
     }
 
-    /**
-     * Constructor for SecurityManagerFactoryTest2.
-     * 
-     * @param arg0
-     */
-    public AlgorithmParameterGenerator2Test(String arg0) {
-        super(arg0);
-    }
-
     private void checkResult(AlgorithmParameterGenerator algParGen) 
             throws InvalidAlgorithmParameterException {
         AlgorithmParameters param = algParGen.generateParameters();

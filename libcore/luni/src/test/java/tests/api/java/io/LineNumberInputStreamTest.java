@@ -152,7 +152,7 @@ public class LineNumberInputStreamTest extends junit.framework.TestCase {
      * @tests java.io.LineNumberInputStream#read(byte[], int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         method = "read",
         args = {byte[].class, int.class, int.class}
     )     
@@ -167,6 +167,39 @@ public class LineNumberInputStreamTest extends junit.framework.TestCase {
             lnis.read(buf, 0, 100);
             fail("Test 2: IOException expected.");
         } catch (IOException e) {
+            // Expected.
+        }
+    }
+
+    /**
+     * @tests java.io.LineNumberInputStream#read(byte[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        method = "read",
+        args = {byte[].class, int.class, int.class}
+    )     
+    public void test_read$BII_Exception() throws IOException {
+        byte[] buf = new byte[10];
+        
+        try {
+            lnis.read(buf, -1, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+        
+        try {
+            lnis.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+        
+        try {
+            lnis.read(buf, 10, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
             // Expected.
         }
     }

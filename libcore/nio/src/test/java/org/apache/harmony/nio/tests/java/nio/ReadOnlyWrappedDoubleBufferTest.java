@@ -23,15 +23,15 @@ import java.nio.DoubleBuffer;
 public class ReadOnlyWrappedDoubleBufferTest extends ReadOnlyDoubleBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = DoubleBuffer.wrap(new double[BUFFER_LENGTH]);
-        super.loadTestData1(buf);
+        loadTestData1(buf);
         buf = buf.asReadOnlyBuffer();
         baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        buf =null;
+        baseBuf = null;
     }
 }

@@ -17,7 +17,7 @@
 
 package tests.api.java.io;
 
-import dalvik.annotation.TestTargets;
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass; 
@@ -804,10 +804,6 @@ public class SerializationStressTest2 extends SerializationStressTest {
         }
     }
 
-    public SerializationStressTest2(String name) {
-        super(name);
-    }
-
     @TestTargetNew(
         level = TestLevel.COMPLETE,
         notes = "Verifies serialization.",
@@ -1423,7 +1419,8 @@ public class SerializationStressTest2 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_57_writeObject() {
+    @KnownFailure("Executed replacement when it should not: class java.lang.String")
+    public void test_18_57_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1461,7 +1458,8 @@ public class SerializationStressTest2 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_58_writeObject() {
+    @KnownFailure("Executed replacement when it should not: class java.lang.String")
+    public void test_18_58_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1902,7 +1900,8 @@ public class SerializationStressTest2 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_DeepNestingWithWriteObject() {
+    @KnownFailure("Maybe the stack gets too deep for android. Change the test?")
+    public void test_DeepNestingWithWriteObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 

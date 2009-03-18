@@ -92,12 +92,14 @@ struct DvmGlobals {
     int         jniGrefLimit;       // 0 means no limit
     bool        reduceSignals;
     bool        noQuitHandler;
+    bool        verifyDexChecksum;
     char*       stackTraceFile;     // for SIGQUIT-inspired output
 
     bool        logStdio;
 
     DexOptimizerMode    dexOptMode;
     DexClassVerifyMode  classVerifyMode;
+    bool        generateRegisterMaps;
 
     int         assertionCtrlCount;
     AssertionControl*   assertionCtrl;

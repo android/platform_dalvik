@@ -16,6 +16,8 @@
 
 package dalvik.system;
 
+import java.io.IOException;
+
 /**
  * Provides access to some VM-specific debug features. Though this class and
  * many of its members are public, this class is meant to be wrapped in a more
@@ -239,6 +241,18 @@ public final class VMDebug {
      * @return the number of loaded classes
      */
     public static native int getLoadedClassCount();
+
+    /**
+     * Dump "hprof" data to the specified file.  This will cause a GC.
+     *
+     * The VM may create a temporary file in the same directory.
+     *
+     * @param fileName Full pathname of output file (e.g. "/sdcard/dump.hprof").
+     * @throws UnsupportedOperationException if the VM was built without
+     *         HPROF support.
+     * @throws IOException if an error occurs while opening or writing files.
+     */
+    public static native void dumpHprofData(String fileName) throws IOException;
 
     /* don't ask */
     static native void printThis(Object thisThing, int count, int thing);

@@ -17,16 +17,17 @@
 
 package tests.support.resource;
 
+import tests.support.Support_Configuration;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import tests.support.Support_Configuration;
 
 public class Support_Resources {
 
@@ -78,7 +79,7 @@ public class Support_Resources {
         return folder;
     }
 
-    public static void copyFile(File root, String folder, String file) {
+    public static File copyFile(File root, String folder, String file) {
         File f;
         if (folder != null) {
             f = new File(root.toString() + "/" + folder);
@@ -103,6 +104,8 @@ public class Support_Resources {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        return dest;
     }
 
     public static File createTempFile(String suffix) throws IOException {
@@ -144,17 +147,51 @@ public class Support_Resources {
      * @return - resource input stream
      */
     public static InputStream getResourceStream(String name) {
-
-        InputStream is = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream(name);
+//ATTENTION:
+//    Against class.getResourceStream(name) the name can start with a "/".
+//    Against classLoader.getResourceStream NOT!
+        
+        InputStream is;
+//        is = Support_Resources.class.getClassLoader().getResourceAsStream(name); This would work without leading "/"
+        is = Support_Resources.class.getResourceAsStream(name);
+//        is = ClassLoader.getSystemClassLoader().getResourceAsStream(name); This would work without leading "/"
 
         if (is == null) {
-            throw new RuntimeException("Failed to load resource: " + name);
+            name = "/tests/resources/" + name;
+            is = Support_Resources.class.getResourceAsStream(name);
+            if (is == null) {
+                throw new RuntimeException("Failed to load resource: " + name);
+            }
         }
         
         return is;
     }
-    
+
+    /**
+     * Util method to write resource files directly to an OutputStream.
+     * 
+     * @param name - name of resource file.
+     * @param out - OutputStream to write to.
+     * @return - number of bytes written to out.
+     */
+    public static int writeResourceToStream(String name, OutputStream out) {
+        InputStream input = getResourceStream(name);
+        byte[] buffer = new byte[512];
+        int total = 0;
+        int count;
+        try {
+            count = input.read(buffer);
+            while (count != -1) {
+                out.write(buffer, 0, count);
+                total = total + count;
+                count = input.read(buffer);
+            }
+            return total;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write to passed stream.", e);
+        }
+    }
+
     /**
      * Util method to get absolute path to resource file
      * 

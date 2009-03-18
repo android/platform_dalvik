@@ -13,10 +13,15 @@
  
 package org.w3c.domts;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -30,14 +35,132 @@ import org.w3c.dom.NodeList;
 public class JUnitTestCaseAdapter extends TestCase implements DOMTestFramework {
 
   private DOMTestCase test;
+  
+  
+  private static DOMTestDocumentBuilderFactory defaultFactory = null; 
 
   public JUnitTestCaseAdapter(DOMTestCase test) {
     super(test.getTargetURI());
     test.setFramework(this);
     this.test = test;
   }
+//BEGIN android-added
+  public JUnitTestCaseAdapter() {
+      
+  }
+  
+  private String errorMessage = null;
+  private boolean failed = false;
+  
+  @Override
+    public void setName(String name) {
+        super.setName(name);
+        if (test == null) {
+            try {
+                URI uri = new URI(name);
+                String path = uri.getPath();
+                path = path.replaceAll("/", ".");
+                Class<?> clazz = null;
+                int pos = path.indexOf('.');
+                while (pos != -1) {
+                    try {
+                        clazz = Class.forName("org.w3c.domts." + path);
+                        break;
+                    } catch (ClassNotFoundException e) {
+                        // do nothing
+                    }
+                    path = path.substring(pos + 1);
+                }
+                if (clazz == null) {
+                    errorMessage = "class not found for test: " + name;
+                    failed = true;
+                    return;
+                }
 
+                if (defaultFactory == null) {
+                    defaultFactory = new JAXPDOMTestDocumentBuilderFactory(null,
+                            JAXPDOMTestDocumentBuilderFactory.getConfiguration1());
+                }
+
+                Constructor<?> constructor = clazz.getConstructor(new Class<?>[] {
+                    DOMTestDocumentBuilderFactory.class
+                });
+
+                test = (DOMTestCase)constructor.newInstance(new Object[] {
+                    defaultFactory
+                });
+                test.setFramework(this);
+                
+            } catch (URISyntaxException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (IllegalAccessException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (InstantiationException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (DOMTestIncompatibleException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (SecurityException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (NoSuchMethodException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (IllegalArgumentException e) {
+                failed = true;
+                errorMessage = e.getMessage();
+                if (errorMessage == null) {
+                    errorMessage = "" + e.toString();
+                }
+            } catch (InvocationTargetException e) {
+                failed = true;
+                Throwable t = e.getCause();
+                if (t != null) {
+                    errorMessage = t.getMessage();
+                    if (errorMessage == null) {
+                        errorMessage = "" + t.toString();
+                    }
+                } else {
+                    errorMessage = e.getMessage();
+                    if (errorMessage == null) {
+                        errorMessage = "" + e.toString();
+                    }
+                }
+            }
+        }
+    }
+//END android-added
   protected void runTest() throws Throwable {
+      //BEGIN android-added
+      if (failed) {
+          if (errorMessage != null) {
+              fail(errorMessage);
+          } else {
+              fail("init failed");
+          }
+      }
+      //END android-added
     test.runTest();
     int mutationCount = test.getMutationCount();
     if (mutationCount != 0) {

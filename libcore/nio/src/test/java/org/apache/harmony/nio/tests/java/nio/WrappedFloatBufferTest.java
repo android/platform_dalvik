@@ -24,7 +24,6 @@ import java.nio.FloatBuffer;
 @TestTargetClass(java.nio.FloatBuffer.class)
 public class WrappedFloatBufferTest extends FloatBufferTest {
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = FloatBuffer.wrap(new float[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,7 +31,6 @@ public class WrappedFloatBufferTest extends FloatBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         baseBuf = null;
         buf = null;
     }

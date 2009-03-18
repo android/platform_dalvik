@@ -15,21 +15,18 @@
  */
 package tests.api.java.nio.charset;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 
-import junit.framework.TestCase;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
 @TestTargetClass(targets.Charsets.EUC_JP.class)
+@AndroidOnly("icu different from RI")
 
 public class Charset_MultiByte_EUC_JP_Android extends Charset_AbstractTest {
 
@@ -508,6 +505,12 @@ public class Charset_MultiByte_EUC_JP_Android extends Charset_AbstractTest {
         super.setUp();
     }
 
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Duplicate Characters.",
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     @Override
     public void test_CodecDynamic () throws CharacterCodingException {
         encoder.onUnmappableCharacter(CodingErrorAction.REPORT);

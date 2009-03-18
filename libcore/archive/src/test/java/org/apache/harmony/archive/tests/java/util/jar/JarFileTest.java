@@ -18,6 +18,7 @@
 package org.apache.harmony.archive.tests.java.util.jar;
 
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -72,6 +73,8 @@ public class JarFileTest extends TestCase {
     private final String jarName3 = "hyts_manifest1.jar";
 
     private final String jarName4 = "hyts_signed.jar";
+    
+    private final String jarName5 = "hyts_signed_inc.jar";
 
     private final String entryName = "foo/bar/A.class";
 
@@ -623,6 +626,10 @@ public class JarFileTest extends TestCase {
         method = "getInputStream",
         args = {java.util.zip.ZipEntry.class}
     )
+    @AndroidOnly("This test doesn't pass on RI. If entry size is set up " +
+            "incorrectly, SecurityException is thrown. " +
+	    "But SecurityException is thrown on RI only " +
+            "if jar file is signed incorreclty.")
     public void test_getInputStreamLjava_util_jar_JarEntry_subtest0() {
         File signedFile = null;
         try {
@@ -652,8 +659,7 @@ public class JarFileTest extends TestCase {
         } catch (Exception e) {
             fail("Exception during test 4: " + e);
         }
-
-        boolean exception = false;
+        
         try {
             JarFile jar = new JarFile(signedFile);
             JarEntry entry = new JarEntry(entryName3);
@@ -662,12 +668,30 @@ public class JarFileTest extends TestCase {
             // BEGIN android-added
             byte[] dummy = getAllBytesFromStream(in);
             // END android-added
+            fail("SecurityException should be thrown.");
         } catch (SecurityException e) {
-            exception = true;
+            // expected
         } catch (Exception e) {
             fail("Exception during test 5: " + e);
         }
-        assertTrue("Failed to throw SecurityException", exception);
+
+        try {
+            Support_Resources.copyFile(resources, null, jarName5);
+            signedFile = new File(resources, jarName5);
+        } catch (Exception e) {
+            fail("Failed to create local file 5: " + e);
+        }
+        
+        try {
+            JarFile jar = new JarFile(signedFile);
+            JarEntry entry = new JarEntry(entryName3);
+            InputStream in = jar.getInputStream(entry);
+            fail("SecurityException should be thrown.");
+        } catch (SecurityException e) {
+            // expected
+        } catch (Exception e) {
+            fail("Exception during test 5: " + e);
+        }
     }
 
     /*

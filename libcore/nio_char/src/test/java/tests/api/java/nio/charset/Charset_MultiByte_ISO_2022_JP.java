@@ -16,7 +16,9 @@
 package tests.api.java.nio.charset;
 
 import dalvik.annotation.KnownFailure;
+import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.TestTargetNew;
 
 import java.nio.charset.CharacterCodingException;
 
@@ -368,18 +370,32 @@ public class Charset_MultiByte_ISO_2022_JP extends Charset_AbstractTest {
         super.setUp();
     }
 
-    @KnownFailure("This Characterset is not properly supported in Android!")
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     @Override
     public void test_CodecDynamic() throws CharacterCodingException {
         super.test_CodecDynamic();
     }
 
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     @KnownFailure("This Characterset is not properly supported in Android!")
     @Override
     public void test_Decode() throws CharacterCodingException {
         super.test_Decode();
     }
 
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     @KnownFailure("This Characterset is not properly supported in Android!")
     @Override
     public void test_Encode() throws CharacterCodingException {

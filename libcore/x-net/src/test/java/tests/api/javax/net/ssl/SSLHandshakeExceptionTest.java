@@ -27,18 +27,6 @@ import junit.framework.TestCase;
 @TestTargetClass(SSLHandshakeException.class) 
 public class SSLHandshakeExceptionTest extends TestCase {
     
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for SSLHandshakeExceptionTest.
-     * 
-     * @param arg0
-     */
-    public SSLHandshakeExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

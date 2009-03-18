@@ -91,8 +91,6 @@ static jobjectArray getcertificatebytes(JNIEnv* env,
     }
 }
 
-extern int verify_callback_mydata_index;
-
 /**
  * Verify the X509 certificate.
  */
@@ -107,7 +105,7 @@ static int verify_callback(int preverify_ok, X509_STORE_CTX *x509_store_ctx)
     /* Get the correct index to the SSLobject stored into X509_STORE_CTX. */
     ssl = (SSL*)X509_STORE_CTX_get_ex_data(x509_store_ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
 
-    mydata = (mydata_t*)SSL_get_ex_data(ssl, verify_callback_mydata_index);
+    mydata = (mydata_t*)SSL_get_app_data(ssl);
 
     cls = mydata->env->GetObjectClass(mydata->object);
 

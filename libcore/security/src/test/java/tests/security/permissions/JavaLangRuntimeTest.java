@@ -16,7 +16,6 @@
 
 package tests.security.permissions;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -78,17 +77,18 @@ public class JavaLangRuntimeTest extends TestCase {
         class TestSecurityManager extends SecurityManager {
             boolean called;
             String cmd;
-            
             void reset(){
                 called = false;
                 cmd = null;
             }
-            
             @Override
             public void checkExec(String cmd) {
                 called = true;
                 this.cmd = cmd;
-                super.checkExec(cmd);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -133,7 +133,6 @@ public class JavaLangRuntimeTest extends TestCase {
             args = {java.lang.Thread.class}
         )
     })
-    @KnownFailure("ToT fixed.")
     public void test_shutdownHook() {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -148,7 +147,6 @@ public class JavaLangRuntimeTest extends TestCase {
                     called = true;
                     this.permission = permission;
                 }
-                super.checkPermission(permission);
             }
         }
         
@@ -189,6 +187,10 @@ public class JavaLangRuntimeTest extends TestCase {
                 this.status = status;
                 throw new ExitNotAllowedException(); // prevent that the system is shut down
             }
+            @Override
+            public void checkPermission(Permission p) {
+                
+            }
         }
         
         TestSecurityManager s = new TestSecurityManager();
@@ -212,7 +214,6 @@ public class JavaLangRuntimeTest extends TestCase {
         method = "runFinalizersOnExit",
         args = {boolean.class}
     )
-    @KnownFailure("ToT fixed.")
     public void test_runFinalizersOnExit() {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -225,7 +226,10 @@ public class JavaLangRuntimeTest extends TestCase {
             public void checkExit(int status){
                 this.called = true;
                 this.status = status;
-                super.checkExit(status);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -268,7 +272,10 @@ public class JavaLangRuntimeTest extends TestCase {
                 if(library.equals(lib)){
                     throw new CheckLinkCalledException();
                 }
-                super.checkLink(lib);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -299,6 +306,3 @@ public class JavaLangRuntimeTest extends TestCase {
     }
 
 }
-
-
-

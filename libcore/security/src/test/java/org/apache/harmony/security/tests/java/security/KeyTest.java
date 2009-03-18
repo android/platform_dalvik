@@ -39,15 +39,6 @@ import junit.framework.TestCase;
 public class KeyTest extends TestCase {
 
     /**
-     * Constructor for KeyTest.
-     * 
-     * @param arg0
-     */
-    public KeyTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
      * Test for <code>serialVersionUID</code> field
      */
     @TestTargetNew(

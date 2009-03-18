@@ -211,21 +211,21 @@ public class CharArrayReaderTest extends junit.framework.TestCase {
             cr.read(c , -1, 1);
             fail("Test 3: ArrayIndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         try {
             cr.read(c , 1, -1);
             fail("Test 4: ArrayIndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
 
         try {
             cr.read(c, 1, c.length);
             fail("Test 5: ArrayIndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
 
         cr.close();

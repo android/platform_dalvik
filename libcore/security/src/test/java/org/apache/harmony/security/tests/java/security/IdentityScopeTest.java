@@ -58,14 +58,6 @@ public class IdentityScopeTest extends TestCase {
     IdentityScope is;
 
     /**
-     * Constructor for IdentityScopeTest.
-     * @param arg0
-     */
-    public IdentityScopeTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
      * Class under test for String toString()
      */
     @TestTargetNew(

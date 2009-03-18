@@ -70,14 +70,6 @@ public class PKIXCertPathBuilderResultTest extends TestCase {
     };
 
 
-    /**
-     * Constructor for PKIXCertPathBuilderResultTest.
-     * @param name
-     */
-    public PKIXCertPathBuilderResultTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

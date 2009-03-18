@@ -19,7 +19,6 @@ package tests.api.java.net;
 
 import dalvik.annotation.KnownFailure; 
 import dalvik.annotation.TestTargetClass; 
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
@@ -38,7 +37,6 @@ import java.net.NetworkInterface;
 import java.net.PortUnreachableException;
 import java.net.SocketAddress;
 import java.net.SocketException;
-import java.net.SocketPermission;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.channels.DatagramChannel;
@@ -300,7 +298,6 @@ public class DatagramSocketTest extends SocketTestCase {
         method = "connect",
         args = {java.net.InetAddress.class, int.class}
     )
-    @KnownFailure("An unexpected Exception was thrown in the last part of the test")
     public void test_connectLjava_net_InetAddressI() {
         try {
             ds = new java.net.DatagramSocket();

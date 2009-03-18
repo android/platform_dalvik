@@ -15,21 +15,15 @@
  */
 package tests.api.java.nio.charset;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 
-import junit.framework.TestCase;
-
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CodingErrorAction;
 
 @TestTargetClass(targets.Charsets.IBM864.class)
+@AndroidOnly("icu different from RI")
 
 public class Charset_SingleByte_IBM864 extends Charset_SingleByteAbstractTest {
 
@@ -75,12 +69,17 @@ public class Charset_SingleByte_IBM864 extends Charset_SingleByteAbstractTest {
         super.setUp();
     }
 
-    public static void _test_Bytes_DifferentOnes_RI() throws CharacterCodingException {
-        decodeReplace(
-                theseBytes(new int[]{26, 28, 37, 127, 159, 215, 216, 241}),
-                new char[] {26, 28, 1642, 127, 65533, 65217, 65221, 1617} );
-    }
+//    public static void _test_Bytes_DifferentOnes_RI() throws CharacterCodingException {
+//        decodeReplace(
+//                theseBytes(new int[]{26, 28, 37, 127, 159, 215, 216, 241}),
+//                new char[] {26, 28, 1642, 127, 65533, 65217, 65221, 1617} );
+//    }
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     public static void test_Bytes_DifferentOnes_Android() throws CharacterCodingException {
         // Android:
         decodeReplace(

@@ -210,6 +210,13 @@ public class ProcessManagerTest extends TestCase {
 
     InputStream in;
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        notes = "Check non standard fd behavior",
+        clazz = Runtime.class,
+        method = "exec",
+        args = {String[].class, String[].class, java.io.File.class}
+    )
     public void testCloseNonStandardFds()
             throws IOException, InterruptedException {
         String[] commands = { "ls", "/proc/self/fd" };
@@ -245,11 +252,18 @@ public class ProcessManagerTest extends TestCase {
         return count;
     }
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        notes = "Check non standard fd behavior",
+        clazz = Runtime.class,
+        method = "exec",
+        args = {String[].class, String[].class, java.io.File.class}
+    )
     public void testInvalidCommand()
             throws IOException, InterruptedException {
         try {
             String[] commands = { "doesnotexist" };
             Runtime.getRuntime().exec(commands, null, null);
         } catch (IOException e) { /* expected */ }
-    }    
+    }
 }

@@ -31,6 +31,8 @@ public class AllTests {
         suite.addTestSuite(ConstantsTest.class);
         suite.addTestSuite(BlobTest.class);
         suite.addTestSuite(StmtTest.class);
+        suite.addTestSuite(ExceptionTest.class);
+        suite.addTestSuite(FunctionContextTest.class);
         //$JUnit-END$
         return suite;
     }

@@ -16,6 +16,8 @@
  */
 package tests.api.java.io;
 
+import dalvik.annotation.BrokenTest;
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -358,10 +360,6 @@ public class SerializationStressTest3 extends SerializationStressTest {
         }
     }
 
-    public SerializationStressTest3(String name) {
-        super(name);
-    }
-
     @TestTargetNew(
         level = TestLevel.COMPLETE,
         notes = "Verifies serialization.",
@@ -514,7 +512,8 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_85_writeObject() {
+    @BrokenTest("Needs investigation.Fails on Android with IlegalAccessException and RI with IOException: no valid constructor")
+    public void test_18_85_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1347,7 +1346,7 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_109_writeObject() {
+    public void test_18_109_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1381,7 +1380,7 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_110_writeObject() {
+    public void test_18_110_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1416,7 +1415,7 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_111_writeObject() {
+    public void test_18_111_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1451,7 +1450,7 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_112_writeObject() {
+    public void test_18_112_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1486,7 +1485,8 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_113_writeObject() {
+    @KnownFailure("Serialization of SimpleDateFormat object fails")
+    public void test_18_113_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 
@@ -1554,7 +1554,8 @@ public class SerializationStressTest3 extends SerializationStressTest {
         method = "!Serialization",
         args = {}
     )
-    public void _test_18_115_writeObject() {
+    @KnownFailure("Serialization of NumberFormat object fails")
+    public void test_18_115_writeObject() {
         // Test for method void
         // java.io.ObjectOutputStream.writeObject(java.lang.Object)
 

@@ -24,7 +24,6 @@ import java.security.Permission;
 import java.util.Map;
 
 import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -1971,7 +1970,6 @@ public class ThreadTest extends junit.framework.TestCase {
         method = "getState",
         args = {}
     )
-    @KnownFailure("ToT FIXED") 
     public void test_getState() {
         Thread.State state = Thread.currentThread().getState();
         assertNotNull(state);

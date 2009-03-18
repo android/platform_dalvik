@@ -20,9 +20,11 @@ package org.apache.harmony.nio.tests.java.nio;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.InvalidMarkException;
@@ -32,7 +34,7 @@ import java.nio.InvalidMarkException;
  * 
  */
 @TestTargetClass(java.nio.IntBuffer.class)
-public class IntBufferTest extends AbstractBufferTest {
+public abstract class IntBufferTest extends AbstractBufferTest {
     
     
     protected static final int SMALL_TEST_LENGTH = 5;
@@ -172,6 +174,7 @@ public class IntBufferTest extends AbstractBufferTest {
         method = "compact",
         args = {}
     )
+    @AndroidOnly("Fails on RI. See comment below")
     public  void testCompact() {
         // case: buffer is full
         buf.clear();
@@ -199,6 +202,9 @@ public class IntBufferTest extends AbstractBufferTest {
         assertEquals(buf.limit(), buf.capacity());
         assertContentLikeTestData1(buf, 0, 0, buf.capacity());
         try {
+            // Fails on RI. Spec doesn't specify the behavior if
+	    // actually nothing to be done by compact(). So RI doesn't reset
+            // mark position 
             buf.reset();
             fail("Should throw Exception"); //$NON-NLS-1$
         } catch (InvalidMarkException e) {
@@ -530,6 +536,16 @@ public class IntBufferTest extends AbstractBufferTest {
 
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Abstract method.",
+        method = "isReadOnly",
+        args = {}
+    )
+    public void testIsReadOnly() {
+        assertFalse(buf.isReadOnly());
+    }
+
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "",
         method = "order",
         args = {}
@@ -667,6 +683,29 @@ public class IntBufferTest extends AbstractBufferTest {
         assertEquals(buf.position(), buf.capacity());
         assertContentEquals(buf, array, 0, array.length);
         assertSame(ret, buf);
+    }
+    
+    /*
+     * Class under test for java.nio.IntBuffer put(int[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Regression Test",
+        method = "put",
+        args = {int[].class, int.class, int.class}
+    )
+    public  void testPutintArrayintint2() {
+        // Regression test
+        ByteBuffer buf = ByteBuffer.allocateDirect(20);
+        IntBuffer intBuf = buf.asIntBuffer();
+        int[] src = new int[5];
+        intBuf.put(src);
+        intBuf.clear();
+        try {
+            intBuf.put(src);
+        } catch (BufferOverflowException e) {
+            fail("should not throw a BufferOverflowException");
+        }
     }
 
     /*

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * Dalvik initialization, shutdown, and command-line argument processing.
  */
@@ -93,8 +94,10 @@ static void dvmUsage(const char* progName)
                 "  -Xjnigreflimit:N  (must be multiple of 100, >= 200)\n");
     dvmFprintf(stderr, "  -Xjniopts:{warnonly,forcecopy}\n");
     dvmFprintf(stderr, "  -Xdeadlockpredict:{off,warn,err,abort}\n");
-    dvmFprintf(stderr, "  -Xstacktracefile:<file name>");
-    dvmFprintf(stderr, "\n\n");
+    dvmFprintf(stderr, "  -Xstacktracefile:<filename>\n");
+    dvmFprintf(stderr, "  -Xgenregmap\n");
+    dvmFprintf(stderr, "  -Xcheckdexsum\n");
+    dvmFprintf(stderr, "\n");
     dvmFprintf(stderr, "Configured with:"
 #ifdef WITH_DEBUGGER
         " debugger"
@@ -783,6 +786,12 @@ static int dvmProcessOptions(int argc, const char* const argv[],
         } else if (strncmp(argv[i], "-Xstacktracefile:", 17) == 0) {
             gDvm.stackTraceFile = strdup(argv[i]+17);
 
+        } else if (strcmp(argv[i], "-Xgenregmap") == 0) {
+            gDvm.generateRegisterMaps = true;
+
+        } else if (strcmp(argv[i], "-Xcheckdexsum") == 0) {
+            gDvm.verifyDexChecksum = true;
+
         } else {
             if (!ignoreUnrecognized) {
                 dvmFprintf(stderr, "Unrecognized option '%s'\n", argv[i]);
@@ -1248,7 +1257,7 @@ static bool dvmInitJDWP(void)
  * Returns 0 on success.
  */
 int dvmPrepForDexOpt(const char* bootClassPath, DexOptimizerMode dexOptMode,
-    DexClassVerifyMode verifyMode)
+    DexClassVerifyMode verifyMode, int dexoptFlags)
 {
     gDvm.initializing = true;
     gDvm.optimizing = true;
@@ -1264,6 +1273,7 @@ int dvmPrepForDexOpt(const char* bootClassPath, DexOptimizerMode dexOptMode,
     /* set opt/verify modes */
     gDvm.dexOptMode = dexOptMode;
     gDvm.classVerifyMode = verifyMode;
+    gDvm.generateRegisterMaps = (dexoptFlags & DEXOPT_GEN_REGISTER_MAPS) != 0;
 
     /*
      * Initialize the heap, some basic thread control mutexes, and

@@ -31,8 +31,8 @@ public class ASCCharsetTest extends AbstractCharsetTestCase {
      * Constructor.
      * 
      */
-    public ASCCharsetTest(String arg0) {
-        super(arg0, "US-ASCII", new String[] { "ISO646-US", "ASCII", "cp367",
+    public ASCCharsetTest() {
+        super("US-ASCII", new String[] { "ISO646-US", "ASCII", "cp367",
                 "ascii7", "ANSI_X3.4-1986", "iso-ir-6", "us", "646",
                 "iso_646.irv:1983", "csASCII", "ANSI_X3.4-1968",
                 "ISO_646.irv:1991" }, true, true); // "ibm-367"

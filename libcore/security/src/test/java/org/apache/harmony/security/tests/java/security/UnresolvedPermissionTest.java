@@ -19,7 +19,6 @@ package org.apache.harmony.security.tests.java.security;
 
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 
 import java.io.Serializable;
@@ -138,11 +137,11 @@ public class UnresolvedPermissionTest extends TestCase {
 
     @TestTargetNew(
         level = TestLevel.COMPLETE,
-        notes = "missing serialization golden file",
+        notes = "",
         method = "!SerializationGolden",
         args = {}
     )
-    public void _testSerialization_Compatibility() throws Exception {
+    public void testSerialization_Compatibility() throws Exception {
         UnresolvedPermission up = new UnresolvedPermission(
                 "java.security.SecurityPermission", "a.b.c", "actions", null);
         assertEquals("java.security.SecurityPermission", up.getUnresolvedType());
@@ -156,8 +155,10 @@ public class UnresolvedPermissionTest extends TestCase {
                 assertEquals("java.security.SecurityPermission", deserializedUp
                         .getUnresolvedType());
                 assertEquals("a.b.c", deserializedUp.getUnresolvedName());
-                assertEquals("actions", deserializedUp.getUnresolvedActions());
-                assertNull(deserializedUp.getUnresolvedCerts());
+                assertEquals("action", deserializedUp.getUnresolvedActions());
+                Certificate[] certs = deserializedUp.getUnresolvedCerts();
+                assertNotNull(certs);
+                assertEquals(1, certs.length);
             }
         });
     }

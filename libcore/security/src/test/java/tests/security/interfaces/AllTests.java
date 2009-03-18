@@ -39,9 +39,6 @@ public class AllTests {
         suite.addTestSuite(RSAMultiPrimePrivateCrtKeyTest.class);
         suite.addTestSuite(DSAPrivateKeyTest.class);
         suite.addTestSuite(DSAPublicKeyTest.class);
-        suite.addTestSuite(ECKeyTest.class);
-        suite.addTestSuite(ECPrivateKeyTest.class);
-        suite.addTestSuite(ECPublicKeyTest.class);
         suite.addTestSuite(RSAKeyTest.class);
         suite.addTestSuite(RSAPrivateCrtKeyTest.class);
         suite.addTestSuite(RSAPrivateKeyTest.class);

@@ -17,8 +17,10 @@
 
 package tests.api.java.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.FilterReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -161,7 +163,7 @@ public class FilterReaderTest extends junit.framework.TestCase {
      * @tests java.io.FilterReader#read(char[], int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Verifies read(char[], int, int).",
         method = "read",
         args = {char[].class, int.class, int.class}
@@ -170,6 +172,44 @@ public class FilterReaderTest extends junit.framework.TestCase {
         char[] buffer = new char[5];
         fr.read(buffer, 0, 5);
         assertTrue("read(char[], int, int) has not been called.", called);
+    }
+    
+    /**
+     * @tests java.io.FilterReader#read(char[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Verifies read(char[], int, int).",
+        method = "read",
+        args = {char[].class, int.class, int.class}
+    )     
+    public void test_read$CII_Exception() throws IOException {
+        byte[] bbuffer = new byte[20];
+        char[] buffer = new char[10];
+        
+        fr = new MyFilterReader(new InputStreamReader(
+            new ByteArrayInputStream(bbuffer)));
+
+        try {
+            fr.read(buffer, 0, -1);
+            fail("Test 1: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+
+        try {
+            fr.read(buffer, -1, 1);
+            fail("Test 2: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+
+        try {
+            fr.read(buffer, 10, 1);
+            fail("Test 3: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
     }
     
     /**

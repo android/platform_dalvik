@@ -43,14 +43,6 @@ public class MGF1ParameterSpecTest extends TestCase {
      */
     private static final String testAlgName = "TEST";
 
-    /**
-     * Constructor for MGF1ParameterSpecTest.
-     * @param arg0
-     */
-    public MGF1ParameterSpecTest(String arg0) {
-        super(arg0);
-    }
-
     //
     // Tests
     //

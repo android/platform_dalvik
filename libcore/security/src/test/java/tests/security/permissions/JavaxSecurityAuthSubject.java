@@ -23,7 +23,7 @@ import dalvik.annotation.TestTargets;
 
 import junit.framework.TestCase;
 
-import org.apache.harmony.security.tests.support.acl.PrincipalImpl;
+//import org.apache.harmony.security.tests.support.acl.PrincipalImpl;
 
 import java.security.AccessControlContext;
 import java.security.KeyFactory;
@@ -95,7 +95,6 @@ public class JavaxSecurityAuthSubject extends TestCase {
                         && "getSubject".equals(permission.getName())) {
                     called = true;
                 }
-                super.checkPermission(permission);
             }
         }
 
@@ -140,7 +139,6 @@ public class JavaxSecurityAuthSubject extends TestCase {
                         && "setReadOnly".equals(permission.getName())) {
                     called = true;
                 }
-                super.checkPermission(permission);
             }
         }
 
@@ -186,7 +184,6 @@ public class JavaxSecurityAuthSubject extends TestCase {
                         && "doAs".equals(permission.getName())) {
                     called = true;
                 }
-                super.checkPermission(permission);
             }
         }
 
@@ -223,13 +220,13 @@ public class JavaxSecurityAuthSubject extends TestCase {
     
     @TestTargets({
         @TestTargetNew(
-            level = TestLevel.PARTIAL,
+            level = TestLevel.TODO,
             notes = "Exception checking missing",
             method = "doAs",
             args = {javax.security.auth.Subject.class, java.security.PrivilegedAction.class}
         ),
         @TestTargetNew(
-            level = TestLevel.PARTIAL,
+            level = TestLevel.TODO,
             notes = "Exception checking missing",
             method = "doAs",
             args = {javax.security.auth.Subject.class, java.security.PrivilegedExceptionAction.class}
@@ -267,7 +264,6 @@ public class JavaxSecurityAuthSubject extends TestCase {
                         && "doAsPrivileged".equals(permission.getName())) {
                     called = true;
                 }
-                super.checkPermission(permission);
             }
         }
 
@@ -304,13 +300,13 @@ public class JavaxSecurityAuthSubject extends TestCase {
     
     @TestTargets({
         @TestTargetNew(
-            level = TestLevel.PARTIAL,
+            level = TestLevel.TODO,
             notes = "",
             method = "doAsPrivileged",
             args = {javax.security.auth.Subject.class, java.security.PrivilegedAction.class, java.security.AccessControlContext.class}
         ),
         @TestTargetNew(
-            level = TestLevel.PARTIAL,
+            level = TestLevel.TODO,
             notes = "",
             method = "doAsPrivileged",
             args = {javax.security.auth.Subject.class, java.security.PrivilegedExceptionAction.class, java.security.AccessControlContext.class}
@@ -322,13 +318,13 @@ public class JavaxSecurityAuthSubject extends TestCase {
     
     @TestTargets({
         @TestTargetNew(
-                level = TestLevel.PARTIAL,
+                level = TestLevel.TODO,
                 notes = "",
                 method = "isReadOnly",
                 args = {}
     ),
         @TestTargetNew(
-                level = TestLevel.PARTIAL,
+                level = TestLevel.TODO,
                 notes = "",
                 method = "setReadOnly",
                 args = {}
@@ -339,7 +335,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getPrincipals",
       args = {}
@@ -349,7 +345,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getPrincipals",
       args = {java.lang.Class.class}
@@ -359,7 +355,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getPrivateCredentials",
       args = {}
@@ -369,7 +365,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getPrivateCredentials",
       args = {java.lang.Class.class}
@@ -379,7 +375,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getPublicCredentials",
       args = {}
@@ -389,7 +385,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getPublicCredentials",
       args = {java.lang.Class.class}
@@ -399,7 +395,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "getSubject",
       args = {java.security.AccessControlContext.class}
@@ -409,7 +405,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "hashCode",
       args = {}
@@ -419,7 +415,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "",
       method = "equals",
       args = {java.lang.Object.class}
@@ -442,7 +438,7 @@ public class JavaxSecurityAuthSubject extends TestCase {
     }
     
     @TestTargetNew(
-      level = TestLevel.PARTIAL,
+      level = TestLevel.TODO,
       notes = "test only started please continue. Throws exception InvalidKeySpecException line 455",
       method = "Subject",
       args = {boolean.class, java.util.Set.class, java.util.Set.class, java.util.Set.class}

@@ -1,7 +1,6 @@
 package tests.targets.security;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -26,7 +25,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
-@TestTargetClass(targets.KeyStores.Internal.class)
 public class KeyStoreTest extends TestCase {
 
     private final String algorithmName;
@@ -50,6 +48,11 @@ public class KeyStoreTest extends TestCase {
                 level=TestLevel.ADDITIONAL,
                 method="load",
                 args={InputStream.class,char[].class}
+        ),
+        @TestTargetNew(
+                level=TestLevel.PARTIAL_COMPLETE,
+                method="method",
+                args={}
         )
     })
     public void testKeyStoreLoad() {
@@ -94,6 +97,11 @@ public class KeyStoreTest extends TestCase {
                 level=TestLevel.ADDITIONAL,
                 method="setEntry",
                 args={String.class,Entry.class,ProtectionParameter.class}
+        ),
+        @TestTargetNew(
+                level=TestLevel.PARTIAL_COMPLETE,
+                method="method",
+                args={}
         )
     })    
     public void testKeyStoreCreate() {

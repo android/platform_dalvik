@@ -17,7 +17,6 @@
 
 package tests.api.java.lang.reflect;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -2130,7 +2129,6 @@ public class FieldTest extends junit.framework.TestCase {
         method = "hashCode",
         args = {}
     )
-    @KnownFailure("Spec and code is not conform with other well-established implementation. Fixed in ToT.")
     public void test_hashCode() throws Exception {
         Field field = TestClass.class.getDeclaredField("annotatedField");
         assertEquals("Wrong hashCode returned", field.getName().hashCode()

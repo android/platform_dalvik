@@ -840,9 +840,12 @@ public abstract class URLConnection {
      * @since Android 1.0
      */
     public void setDefaultUseCaches(boolean newValue) {
-        if (connected) {
-            throw new IllegalAccessError(Msg.getString("K0037")); //$NON-NLS-1$
-        }
+        // BEGIN android-removed
+        // Setting the default doesn't concern the current connection.
+        // if (connected) {
+        //     throw new IllegalAccessError(Msg.getString("K0037")); //$NON-NLS-1$
+        // }
+        // END android-removed
         defaultUseCaches = newValue;
     }
 

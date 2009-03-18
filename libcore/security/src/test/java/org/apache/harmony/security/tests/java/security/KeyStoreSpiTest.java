@@ -161,15 +161,6 @@ import java.util.Date;
 
 public class KeyStoreSpiTest extends TestCase {
 
-    /**
-     * Constructor for KeyStoreSpi.
-     * 
-     * @param arg0
-     */
-    public KeyStoreSpiTest(String arg0) {
-        super(arg0);
-    }
-    
     @SuppressWarnings("cast")
     @TestTargetNew(
         level = TestLevel.COMPLETE,

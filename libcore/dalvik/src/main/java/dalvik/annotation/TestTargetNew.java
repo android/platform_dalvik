@@ -51,7 +51,7 @@ public @interface TestTargetNew {
      * not provided, the class identified in @TestTargetClass is used by the
      * test progress doclet.
      */
-    Class<?> clazz(); // default void.class;
+    Class<?> clazz() default void.class;
  
     /**
      * Specifies the level of coverage the tested API method has.

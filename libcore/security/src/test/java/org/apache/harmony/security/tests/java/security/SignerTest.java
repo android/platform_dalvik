@@ -63,14 +63,6 @@ public class SignerTest extends TestCase {
     }
 
     /**
-     * Constructor for SignerTest.
-     * @param arg0
-     */
-    public SignerTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
      * @tests java.security.Signer#toString()
      */
     @TestTargetNew(
@@ -86,7 +78,8 @@ public class SignerTest extends TestCase {
         Signer s2 = new SignerStub("testToString2", IdentityScope.getSystemScope());
         s2.toString();
 
-        KeyPair kp = new KeyPair(new PublicKeyStub("public", "SignerTest.testToString", null), new PrivateKeyStub("private", "SignerTest.testToString", null));
+        KeyPair kp = new KeyPair(new PublicKeyStub("public", "SignerTest.testToString", null),
+                new PrivateKeyStub("private", "SignerTest.testToString", null));
         s1.setKeyPair(kp);
         s1.toString();
 
@@ -198,15 +191,17 @@ public class SignerTest extends TestCase {
         System.setSecurityManager(sm);
         try {
             Signer s = new SignerStub("sss6");
-            s.setKeyPair(new KeyPair(new PublicKeyStub("public", "fff", null), new PrivateKeyStub("private", "fff", null)));
+            s.setKeyPair(new KeyPair(new PublicKeyStub("public", "fff", null), new PrivateKeyStub(
+                    "private", "fff", null)));
             try {
                 s.getPrivateKey();
                 fail("SecurityException should be thrown");
-            } catch (SecurityException ok) {}            
+            } catch (SecurityException ok) {
+            }
         } finally {
             System.setSecurityManager(null);
         }
-        
+
     }
 
     /**

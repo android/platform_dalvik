@@ -69,13 +69,6 @@ public class KeyPairTest extends TestCase {
         }
     }
 
-    /**
-     * Constructor for KeyPairTest.
-     * @param name
-     */
-    public KeyPairTest(String name) {
-        super(name);
-    }
 
     /**
      * Test #1 for <code>KeyPair(PublicKey, PrivateKey)</code> constructor<br>

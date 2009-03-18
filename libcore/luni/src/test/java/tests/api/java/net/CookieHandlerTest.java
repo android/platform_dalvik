@@ -23,7 +23,6 @@ import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.CookieHandler;
 import java.net.MalformedURLException;
 import java.net.NetPermission;

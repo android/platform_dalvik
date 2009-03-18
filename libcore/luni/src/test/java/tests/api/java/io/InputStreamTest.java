@@ -200,23 +200,23 @@ public class InputStreamTest extends junit.framework.TestCase {
         method = "read",
         args = {byte[].class, int.class, int.class}
     )     
-    public void test_read$BII_IllegalArgument() throws IOException {
+    public void test_read$BII_Exception() throws IOException {
         byte[] b = new byte[10];
         int bytesRead = 0;
         
         // Test 1: Invalid offset.
         try {
             bytesRead = is.read(b, -1, 5);
-            fail("Test 1: ArrayIndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException e) {
+            fail("Test 1: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
             // expected
         }
 
         // Test 2: Invalid length.
         try {
             bytesRead = is.read(b, 5, -1);
-            fail("Test 2: ArrayIndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException e) {
+            fail("Test 2: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
             // expected
         }
 
@@ -224,16 +224,16 @@ public class InputStreamTest extends junit.framework.TestCase {
         // than the length of b).
         try {
             bytesRead = is.read(b, 6, 5);
-            fail("Test 3: ArrayIndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException e) {
+            fail("Test 3: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
             // expected
         }
 
         // Test 4: Border case.
         try {
             bytesRead = is.read(b, 6, 4);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            fail("Test 4: Unexpected ArrayIndexOutOfBoundsException.");
+        } catch (IndexOutOfBoundsException e) {
+            fail("Test 4: Unexpected IndexOutOfBoundsException.");
         }
         assertEquals("Test 4:", bytesRead, 4);
 

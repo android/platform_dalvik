@@ -54,13 +54,6 @@ import java.util.Collection;
 @TestTargetClass(CertStore.class)
 public class CertStore1Test extends TestCase {
 
-    /**
-     * Constructor for CertStoreTests.
-     * @param arg0
-     */
-    public CertStore1Test(String arg0) {
-        super(arg0);
-    }
     public static final String srvCertStore = "CertStore";
 
     private static final String defaultType = "LDAP";  

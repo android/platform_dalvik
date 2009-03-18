@@ -38,18 +38,6 @@ import java.security.cert.CertStoreException;
 @TestTargetClass(CertStoreException.class)
 public class CertStoreExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertStoreExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertStoreExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

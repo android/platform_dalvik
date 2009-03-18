@@ -158,6 +158,7 @@ static void logThreadStacks(void)
             ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
         printProcessName(&target);
         dvmPrintDebugMessage(&target, "\n");
+        fflush(fp);     /* emit at least the header if we crash during dump */
         dvmDumpAllThreadsEx(&target, true);
         fprintf(fp, "----- end %d -----\n", pid);
 
@@ -247,7 +248,7 @@ loop:
         } else if (rcvd == SIGUSR1) {
 #if WITH_HPROF
             LOGI("SIGUSR1 forcing GC and HPROF dump\n");
-            hprofDumpHeap();
+            hprofDumpHeap(NULL);
 #else
             LOGI("SIGUSR1 forcing GC (no HPROF)\n");
             dvmCollectGarbage(false);

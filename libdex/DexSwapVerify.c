@@ -2753,6 +2753,43 @@ int dexFixByteOrdering(u1* addr, int len)
     }
 
     if (okay) {
+        int expectedLen = (int) SWAP4(pHeader->fileSize);
+        if (len < expectedLen) {
+            LOGE("ERROR: Bad length: expected %d, got %d\n", expectedLen, len);
+            okay = false;
+        } else if (len != expectedLen) {
+            LOGW("WARNING: Odd length: expected %d, got %d\n", expectedLen,
+                    len);
+            // keep going
+        }
+    }
+
+    if (okay) {
+        /*
+         * Compute the adler32 checksum and compare it to what's stored in
+         * the file.  This isn't free, but chances are good that we just
+         * unpacked this from a jar file and have all of the pages sitting
+         * in memory, so it's pretty quick.
+         *
+         * This might be a big-endian system, so we need to do this before
+         * we byte-swap the header.
+         */
+        uLong adler = adler32(0L, Z_NULL, 0);
+        const int nonSum = sizeof(pHeader->magic) + sizeof(pHeader->checksum);
+        u4 storedFileSize = SWAP4(pHeader->fileSize);
+        u4 expectedChecksum = SWAP4(pHeader->checksum);
+
+        adler = adler32(adler, ((const u1*) pHeader) + nonSum,
+                    storedFileSize - nonSum);
+
+        if (adler != expectedChecksum) {
+            LOGE("ERROR: bad checksum (%08lx, expected %08x)\n",
+                adler, expectedChecksum);
+            okay = false;
+        }
+    }
+
+    if (okay) {
         state.fileStart = addr;
         state.fileEnd = addr + len;
         state.fileLen = len;
@@ -2777,18 +2814,6 @@ int dexFixByteOrdering(u1* addr, int len)
             LOGW("WARNING: Large header size %d, struct %d\n",
                     pHeader->headerSize, (int) sizeof(DexHeader));
             // keep going?
-        }
-    }
-
-    if (okay) {
-        int expectedLen = (int) pHeader->fileSize;
-        if (len < expectedLen) {
-            LOGE("ERROR: Bad length: expected %d, got %d\n", expectedLen, len);
-            okay = false;
-        } else if (len != expectedLen) {
-            LOGW("WARNING: Odd length: expected %d, got %d\n", expectedLen,
-                    len);
-            // keep going
         }
     }
 

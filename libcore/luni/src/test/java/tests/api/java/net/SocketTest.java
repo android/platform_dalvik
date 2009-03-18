@@ -18,7 +18,7 @@
 package tests.api.java.net;
 
 import dalvik.annotation.AndroidOnly; 
-import dalvik.annotation.KnownFailure; 
+//import dalvik.annotation.KnownFailure; 
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -617,8 +617,8 @@ public class SocketTest extends SocketTestCase {
         int sport = startServer("SServer getLocAddress");
         int portNumber = Support_PortManager.getNextPort();
         s = new Socket(InetAddress.getLocalHost(), sport, null, portNumber);
-        assertTrue("Returned incorrect InetAddress", s.getLocalAddress()
-                .equals(InetAddress.getLocalHost()));
+        assertEquals("Returned incorrect InetAddress",
+                InetAddress.getLocalHost(), s.getLocalAddress());
 
         // now validate thet behaviour when the any address is returned
         String preferIPv4StackValue = System
@@ -675,7 +675,6 @@ public class SocketTest extends SocketTestCase {
         method = "getOutputStream",
         args = {}
     )
-    @KnownFailure("Needs investigation")
     public void test_getOutputStream() throws IOException {
         // Test for method java.io.OutputStream
         // java.net.Socket.getOutputStream()
@@ -1586,7 +1585,7 @@ public class SocketTest extends SocketTestCase {
         assertTrue(
                 "Local address not correct after bind:"
                         + theSocket.getLocalSocketAddress().toString()
-                        + "Expected: "
+                        + " Expected: "
                         + (new InetSocketAddress(InetAddress.getLocalHost(),
                                 portNumber)).toString(), theSocket
                         .getLocalSocketAddress().equals(
@@ -1604,7 +1603,7 @@ public class SocketTest extends SocketTestCase {
         assertTrue(
                 "Returned Remote address from server connected to does not match expected local address:"
                         + servSock.getRemoteSocketAddress().toString()
-                        + "Expected: "
+                        + " Expected: "
                         + (new InetSocketAddress(InetAddress.getLocalHost(),
                                 portNumber)).toString(), servSock
                         .getRemoteSocketAddress().equals(

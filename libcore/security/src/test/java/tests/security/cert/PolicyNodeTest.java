@@ -98,14 +98,6 @@ public class PolicyNodeTest extends TestCase {
     }
 
 
-    /**
-     * Constructor for CRLTest.
-     * @param name
-     */
-    public PolicyNodeTest(String name) {
-        super(name);
-    }
-    
     class MyPolicyNode extends PolicyNodeImpl {
         MyPolicyNode(PolicyNodeImpl policynode, String s, Set set, 
                      boolean flag, Set set1, boolean flag1) {

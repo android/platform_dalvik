@@ -141,23 +141,41 @@ public class HttpURLConnection extends java.net.HttpURLConnection {
                 throwClosed();
             }
 
-            return is.read();
+            int result = is.read();
+            if (useCaches && cacheOut != null) {
+                cacheOut.write(result);
+            }
+            return result;
         }
 
         public int read(byte[] b, int off, int len) throws IOException {
             if (closed) {
                 throwClosed();
             }
-
-            return is.read(b, off, len);
+            int result = is.read(b, off, len);
+            if (result > 0) {
+                // if user has set useCache to true and cache exists, writes to
+                // it
+                if (useCaches && cacheOut != null) {
+                    cacheOut.write(b, off, result);
+                }
+            }
+            return result;
         }
 
         public int read(byte[] b) throws IOException {
             if (closed) {
                 throwClosed();
             }
-
-            return is.read(b);
+            int result = is.read(b);
+            if (result > 0) {
+                // if user has set useCache to true and cache exists, writes to
+                // it
+                if (useCaches && cacheOut != null) {
+                    cacheOut.write(b, 0, result);
+                }
+            }
+            return result;
         }
 
         public long skip(long n) throws IOException {
@@ -178,6 +196,9 @@ public class HttpURLConnection extends java.net.HttpURLConnection {
 
         public void close() {
             closed = true;
+            if (useCaches && cacheRequest != null) {
+                cacheRequest.abort();
+            }
         }
 
         public void mark(int readLimit) {
@@ -1000,8 +1021,6 @@ public class HttpURLConnection extends java.net.HttpURLConnection {
      * header field values associated with that key name.
      * 
      * @return the mapping of header field names to values
-     * 
-     * @since 1.4
      */
     @Override
     public Map<String, List<String>> getHeaderFields() {

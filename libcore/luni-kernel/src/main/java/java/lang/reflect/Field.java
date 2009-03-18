@@ -132,7 +132,6 @@ public final class Field extends AccessibleObject implements Member {
      * Indicates whether or not this field is synthetic.
      * 
      * @return {@code true} if this field is synthetic, {@code false} otherwise
-     * @since 1.5
      * @since Android 1.0
      */
     public boolean isSynthetic() {
@@ -145,7 +144,6 @@ public final class Field extends AccessibleObject implements Member {
      * generic type.
      * 
      * @return the string representation of this field
-     * @since 1.5
      * @since Android 1.0
      */
     public String toGenericString() {
@@ -168,7 +166,6 @@ public final class Field extends AccessibleObject implements Member {
      * 
      * @return {@code true} if this field is an enumeration constant, {@code
      *         false} otherwise
-     * @since 1.5
      * @since Android 1.0
      */
     public boolean isEnumConstant() {
@@ -187,7 +184,6 @@ public final class Field extends AccessibleObject implements Member {
      * @throws MalformedParameterizedTypeException
      *             if the generic type points to a type that cannot be
      *             instantiated for some reason
-     * @since 1.5
      * @since Android 1.0
      */
     public Type getGenericType() {

@@ -50,14 +50,6 @@ import org.apache.harmony.security.tests.support.cert.MyCertStoreSpi;
 @TestTargetClass(CertStoreSpi.class)
 public class CertStoreSpiTest extends TestCase {
 
-    /**
-     * Constructor for CertStoreSpiTest.
-     * 
-     * @param arg0
-     */
-    public CertStoreSpiTest(String arg0) {
-        super(arg0);
-    }
 
     /**
      * Test for <code>CertStoreSpi</code> constructor Assertion: constructs

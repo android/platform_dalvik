@@ -19,6 +19,7 @@ import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
 
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -93,5 +94,48 @@ public class DirectIntBufferTest extends IntBufferTest {
     )
     public void testOrder() {
         assertEquals(ByteOrder.BIG_ENDIAN, buf.order());
+    }
+
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Regression test for IntToByteBufferAdapter",
+        clazz = ByteBuffer.class,
+        method = "asIntBuffer",
+        args = {}
+    )
+    public void testRangeChecks() {
+        int[] myInts = new int[BUFFER_LENGTH];
+
+        for (int i = 0; i < BUFFER_LENGTH; i++) {
+            myInts[i] = 1000 + i;
+        }
+
+        buf.position(0);
+        buf.put(myInts, 0, BUFFER_LENGTH);
+        buf.position(0);
+        buf.put(myInts, 0, BUFFER_LENGTH);
+
+        try {
+            buf.put(myInts, 0, 1); // should fail
+            fail("BufferOverflowException expected but not thrown");
+        } catch (BufferOverflowException boe) {
+            // expected
+        }
+
+        try {
+            buf.position(0);
+            buf.put(myInts, 0, BUFFER_LENGTH + 1); // should fail
+            fail("BufferOverflowException expected but not thrown");
+        } catch (IndexOutOfBoundsException ioobe) {
+            // expected
+        }
+
+        try {
+            buf.position(BUFFER_LENGTH - 1);
+            buf.put(myInts, 0, 2); // should fail
+            fail("BufferOverflowException expected but not thrown");
+        } catch (BufferOverflowException boe) {
+            // expected
+        }
     }
 }

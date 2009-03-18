@@ -31,8 +31,8 @@ public class ISOCharsetTest extends AbstractCharsetTestCase {
     /**
      * Constructor.
      */
-    public ISOCharsetTest(String arg0) {
-        super(arg0, "ISO-8859-1", new String[] { "iso-ir-100", "8859_1",
+    public ISOCharsetTest() {
+        super("ISO-8859-1", new String[] { "iso-ir-100", "8859_1",
                 "ISO_8859-1", "ISO8859_1", "819", "csISOLatin1", "IBM-819",
                 "ISO_8859-1:1987", "latin1", "cp819", "ISO8859-1", "IBM819",
                 "ISO_8859_1", "l1" }, true, true);

@@ -22,6 +22,7 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestLevel;
+import dalvik.annotation.AndroidOnly;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -517,9 +518,12 @@ public class SocketChannelTest extends TestCase {
         method = "socket",
         args = {}
     )
+    @AndroidOnly("Fails on RI. See comment below")
     public void testSocket_BasicStatusBeforeConnect() throws IOException {
         assertFalse(this.channel1.isConnected());// not connected
         Socket s1 = this.channel1.socket();
+	// RI fails here. RI returns 0 while spec says getLocalPort()
+	// shall return -1 for unbound socket
         assertSocketBeforeConnect(s1);
         Socket s2 = this.channel1.socket();
         // same
@@ -551,6 +555,7 @@ public class SocketChannelTest extends TestCase {
         method = "socket",
         args = {}
     )
+    @AndroidOnly("Fails on RI. See comment below")
     public void testSocket_NonBlock_BasicStatusAfterConnect() throws Exception {
         assertFalse(this.channel1.isConnected());// not connected
         this.channel1.configureBlocking(false);
@@ -559,6 +564,8 @@ public class SocketChannelTest extends TestCase {
         assertTrue(this.channel1.isConnectionPending());
         Socket s1 = this.channel1.socket();
         // status of not connected
+	// RI fails here. RI returns 0 while spec says getLocalPort()
+	// shall return -1 for unbound socket 
         assertSocketBeforeConnect(s1);
         Socket s2 = this.channel1.socket();
         // same
@@ -2666,7 +2673,7 @@ public class SocketChannelTest extends TestCase {
         method = "write",
         args = {java.nio.ByteBuffer.class}
     )
-    @KnownFailure("Fxed on ToT")
+    @KnownFailure("Fixed on ToT")
     public void test_writeLjava_nio_ByteBuffer_Nonblocking_HugeData() throws IOException {
         // initialize write content
         ByteBuffer writeContent = ByteBuffer.allocate(CAPACITY_HUGE);

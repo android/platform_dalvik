@@ -30,6 +30,11 @@ typedef enum DexOptimizerMode {
     OPTIMIZE_MODE_ALL           /* optimize all classes */
 } DexOptimizerMode;
 
+/* some additional bit flags for dexopt */
+enum DexoptFlags {
+    DEXOPT_GEN_REGISTER_MAPS = 1, /* generate register maps during verify */
+};
+
 /*
  * Given the full path to a DEX or Jar file, and (if appropriate) the name
  * within the Jar, open the optimized version from the cache.

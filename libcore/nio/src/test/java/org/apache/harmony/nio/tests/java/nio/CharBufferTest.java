@@ -21,6 +21,7 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.io.IOException;
 import java.nio.BufferOverflowException;
@@ -35,7 +36,7 @@ import java.nio.ReadOnlyBufferException;
  * 
  */
 @TestTargetClass(CharBuffer.class)
-public class CharBufferTest extends AbstractBufferTest {
+public abstract class CharBufferTest extends AbstractBufferTest {
     protected static final int SMALL_TEST_LENGTH = 5;
 
     protected static final int BUFFER_LENGTH = 20;
@@ -203,6 +204,7 @@ public class CharBufferTest extends AbstractBufferTest {
         method = "compact",
         args = {}
     )
+    @AndroidOnly("fails on RI. See comment below")
     public void testCompact() {
         // case: buffer is full
         buf.clear();
@@ -230,6 +232,8 @@ public class CharBufferTest extends AbstractBufferTest {
         assertEquals(buf.limit(), buf.capacity());
         assertContentLikeTestData1(buf, 0, (char) 0, buf.capacity());
         try {
+	        // failed on RI. Spec doesn't specify the behavior if 
+	        // actually nothing to be done by compact()
             buf.reset();
             fail("Should throw Exception"); //$NON-NLS-1$
         } catch (InvalidMarkException e) {
@@ -938,6 +942,7 @@ public class CharBufferTest extends AbstractBufferTest {
         method = "put",
         args = {java.lang.String.class, int.class, int.class}
     )
+    @AndroidOnly("Fails on RI. See commend below")
     public void testPutStringintint() {
         buf.clear();
         String str = String.valueOf(new char[buf.capacity()]);
@@ -951,6 +956,11 @@ public class CharBufferTest extends AbstractBufferTest {
         } catch (BufferOverflowException e) {
             // expected
         }
+
+        // Fails on RI. On RI put() starts transferring characters even if 
+        // there's no free space for whole string
+        assertEquals(0, buf.position());
+
         try {
             buf.put((String) null, 0, buf.capacity() + 1);
             fail("Should throw Exception"); //$NON-NLS-1$
@@ -1004,26 +1014,26 @@ public class CharBufferTest extends AbstractBufferTest {
         assertSame(ret, buf);
     }
 
-    void loadTestData1(char array[], int offset, int length) {
+    protected void loadTestData1(char array[], int offset, int length) {
         for (int i = 0; i < length; i++) {
             array[offset + i] = (char) i;
         }
     }
 
-    void loadTestData2(char array[], int offset, int length) {
+    protected void loadTestData2(char array[], int offset, int length) {
         for (int i = 0; i < length; i++) {
             array[offset + i] = (char) (length - i);
         }
     }
 
-    void loadTestData1(CharBuffer buf) {
+    protected void loadTestData1(CharBuffer buf) {
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             buf.put(i, (char) i);
         }
     }
 
-    void loadTestData2(CharBuffer buf) {
+    protected void loadTestData2(CharBuffer buf) {
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             buf.put(i, (char) (buf.capacity() - i));
@@ -1344,24 +1354,23 @@ public class CharBufferTest extends AbstractBufferTest {
 
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
+        notes = "Abstract method.",
+        method = "isReadOnly",
+        args = {}
+    )
+    public void testIsReadOnly() {
+        assertFalse(buf.isReadOnly());
+    }
+
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Verifies that hasArray returns true value.",
         method = "hasArray",
         args = {}
     )
     public void testHasArray() {
-        if (buf.hasArray()) {
-            assertNotNull(buf.array());
-        } else {
-            try {
-                buf.array();
-                fail("Should throw Exception"); //$NON-NLS-1$
-            } catch (UnsupportedOperationException e) {
-                // expected
-                // Note:can not tell when to catch 
-                // UnsupportedOperationException or
-                // ReadOnlyBufferException, so catch all.
-            }
-        }
+        assertTrue(buf.hasArray());
+        assertNotNull(buf.array());
     }
 
     @TestTargetNew(
@@ -1372,16 +1381,6 @@ public class CharBufferTest extends AbstractBufferTest {
     )
     public void testOrder() {
         assertEquals(ByteOrder.nativeOrder(), buf.order());
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Abstract method.",
-        method = "isReadOnly",
-        args = {}
-    )
-    public void testIsReadOnly() {
-        assertFalse(buf.isReadOnly());
     }
 
     /*

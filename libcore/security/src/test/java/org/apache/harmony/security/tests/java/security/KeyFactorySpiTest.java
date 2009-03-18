@@ -39,15 +39,6 @@ import junit.framework.TestCase;
 public class KeyFactorySpiTest extends TestCase {
 
     /**
-     * Constructor for KeyFactorySpiTest.
-     * 
-     * @param name
-     */
-    public KeyFactorySpiTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test for <code>KeyFactorySpi</code> constructor
      * Assertion: constructs KeyFactorySpi
      */

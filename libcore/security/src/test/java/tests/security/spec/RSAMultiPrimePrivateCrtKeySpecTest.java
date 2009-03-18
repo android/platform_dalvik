@@ -50,14 +50,6 @@ public class RSAMultiPrimePrivateCrtKeySpecTest extends TestCase {
             new RSAOtherPrimeInfo(BigInteger.ONE, BigInteger.ONE, BigInteger.ONE)
     };
     
-    /**
-     * Constructor for RSAMultiPrimePrivateCrtKeySpecTest.
-     * @param name
-     */
-    public RSAMultiPrimePrivateCrtKeySpecTest(String name) {
-        super(name);
-    }
-
     // Test-cases:
 
     /**

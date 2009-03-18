@@ -25,6 +25,8 @@ import junit.framework.TestCase;
 
 import tests.support.resource.Support_Resources;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -128,9 +130,7 @@ public class Pack200PackerTest extends TestCase {
         assertTrue(packFile2.length()>packFile3.length());
     }
     
-/*
- * java.beans.* not implemented yet on android platform
- *     class MyPCL implements PropertyChangeListener {
+    class MyPCL implements PropertyChangeListener {
         boolean flag = false;
         
         public boolean isCalled() {
@@ -141,15 +141,14 @@ public class Pack200PackerTest extends TestCase {
             flag = true;
         }
     }
-@TestInfo(
-      level = TestLevel.COMPLETE,
-      
-      targets = {
-        @TestTarget(
-          methodName = "addPropertyChangeListener",
-          methodArgs = {java.beans.PropertyChangeListener.class}
-        )
-    })
+
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        notes = "",
+        method = "addPropertyChangeListener",
+        args = {java.beans.PropertyChangeListener.class}
+    )
+    @KnownFailure("No Implementation in Android!")
     public void testAddPropertyChangeListener() {
         MyPCL pcl = new MyPCL();
         packer.addPropertyChangeListener(pcl);
@@ -158,15 +157,13 @@ public class Pack200PackerTest extends TestCase {
         assertTrue(pcl.isCalled());
     }
 
-@TestInfo(
-      level = TestLevel.COMPLETE,
-      
-      targets = {
-        @TestTarget(
-          methodName = "removePropertyChangeListener",
-          methodArgs = {java.beans.PropertyChangeListener.class}
-        )
-    })
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        notes = "",
+        method = "removePropertyChangeListener",
+        args = {java.beans.PropertyChangeListener.class}
+    )
+    @KnownFailure("No Implementation in Android!")
     public void testRemovePropertyChangeListener() {
         MyPCL pcl = new MyPCL();
         packer.addPropertyChangeListener(pcl);
@@ -175,7 +172,7 @@ public class Pack200PackerTest extends TestCase {
         properties.put(Packer.EFFORT, "7");
         assertFalse(pcl.isCalled());
     }
-*/
+
     @Override
     protected void setUp() {
         packer = Pack200.newPacker();

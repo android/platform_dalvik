@@ -199,7 +199,7 @@ static JdwpError handleVM_Version(JdwpState* state, const u1* buf,
     int dataLen, ExpandBuf* pReply)
 {
     /* text information on VM version */
-    expandBufAddUtf8String(pReply, (const u1*) "Android DalvikVM 0.0.1");
+    expandBufAddUtf8String(pReply, (const u1*) "Android DalvikVM 1.0.1");
     /* JDWP version numbers */
     expandBufAdd4BE(pReply, 1);        // major
     expandBufAdd4BE(pReply, 5);        // minor

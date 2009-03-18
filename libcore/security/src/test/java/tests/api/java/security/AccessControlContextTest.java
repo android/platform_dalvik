@@ -17,7 +17,6 @@
 
 package tests.api.java.security;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -251,7 +250,6 @@ public class AccessControlContextTest extends junit.framework.TestCase {
         method = "equals",
         args = {java.lang.Object.class}
     )
-    @KnownFailure("AccessControlContext.equals() doesn't compare the DomainCombiner")
     public void test_equals() {
         final Permission perm1 = new PropertyPermission("java.class.path",
                 "read");

@@ -24,14 +24,16 @@
     such as (but not limited to) the program counter and a reference to the
     <code>.dex</code> file that contains the method.
   </li>
-  <li>The <i>N</i> arguments to a method land in the last <i>N</i> registers
-    of the method's invocation frame.
-  </li>
   <li>Registers are 32 bits wide. Adjacent register pairs are used for 64-bit
     values.
   </li>
   <li>In terms of bitwise representation, <code>(Object) null == (int)
     0</code>.
+  </li>
+  <li>The <i>N</i> arguments to a method land in the last <i>N</i> registers
+    of the method's invocation frame, in order. Wide arguments consume
+    two registers. Instance methods are passed a <code>this</code> reference
+    as their first argument.
   </li>
   </ul>
 <li>The storage unit in the instruction stream is a 16-bit unsigned quantity.
@@ -385,9 +387,13 @@
   <td>check-cast vAA, type@BBBB</td>
   <td><code>A:</code> reference-bearing register (8 bits)<br/>
     <code>B:</code> type index (16 bits)</td>
-  <td>Throw if the reference in the given register cannot be cast to the
-    indicated type. The type must be a reference type (not a primitive
-    type).</td>
+  <td>Throw a <code>ClassCastException</code> if the reference in the
+    given register cannot be cast to the indicated type.
+    <p><b>Note:</b> Since <code>A</code> must always be a reference
+    (and not a primitive value), this will necessarily fail at runtime
+    (that is, it will throw an exception) if <code>B</code> refers to a
+    primitive type.</p>
+  </td>
 </tr>
 <tr>
   <td>20 22c</td>
@@ -397,8 +403,11 @@
     <code>C:</code> type index (16 bits)</td>
   <td>Store in the given destination register <code>1</code>
     if the indicated reference is an instance of the given type,
-    or <code>0</code> if not. The type must be a
-    reference type (not a primitive type).</td>
+    or <code>0</code> if not.
+    <p><b>Note:</b> Since <code>B</code> must always be a reference
+    (and not a primitive value), this will always result
+    in <code>0</code> being stored if <code>C</code> refers to a primitive
+    type.</td>
 </tr>
 <tr>
   <td>21 12x</td>
@@ -462,7 +471,9 @@
   </td>
   <td>Fill the given array with the indicated data. The reference must be
     to an array of primitives, and the data table must match it in type and
-    size.
+    must contain no more elements than will fit in the array. That is,
+    the array may be larger than the table, and if so, only the initial
+    elements of the array are set, leaving the remainder alone.
   </td>
 </tr>
 <tr>
@@ -1159,7 +1170,7 @@ round-to-nearest and gradual underflow, except where stated otherwise.</p>
   <td>float a;<br/>
     int64 result = (int64) a;
   </td>
-  <td>Conversion of <code>float</code> to <code>int32</code>, using
+  <td>Conversion of <code>float</code> to <code>int64</code>, using
     round-toward-zero. The same special case rules as for
     <code>float-to-int</code> apply here, except that out-of-range values
     get converted to either <code>0x7fffffffffffffff</code> or

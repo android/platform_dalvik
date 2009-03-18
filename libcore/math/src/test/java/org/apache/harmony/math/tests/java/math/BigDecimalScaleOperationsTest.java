@@ -529,7 +529,7 @@ public class BigDecimalScaleOperationsTest extends TestCase {
         method = "movePointRight",
         args = {int.class}
     )
-    @KnownFailure("Throws ArrayIndexOutOfBoundsException instead of ArithmeticException!")
+    @KnownFailure("Throws OutOfMemoryError instead of ArithmeticException!")
     public void testMovePointRightEx2() {
         BigDecimal a = new BigDecimal("123456789012345678901234567890123456789E25");
         try {

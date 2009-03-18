@@ -843,7 +843,7 @@ public class PrintWriterTest extends junit.framework.TestCase {
      * @tests java.io.PrintWriter#write(char[], int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "",
         method = "write",
         args = {char[].class, int.class, int.class}
@@ -864,6 +864,38 @@ public class PrintWriterTest extends junit.framework.TestCase {
             fail("IOException during test : " + e.getMessage());
         }
         assertTrue("Wrote incorrect char[] string: " + s, s.equals("World"));
+    }
+
+    /**
+     * @tests java.io.PrintWriter#write(char[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "write",
+        args = {char[].class, int.class, int.class}
+    )
+    public void test_write$CII_Exception() {
+        // Test for method void java.io.PrintWriter.write(char [], int, int)
+        char[] chars = new char[10];
+        try {
+            pw.write(chars, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            pw.write(chars, -1, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            pw.write(chars, 10, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
     }
 
     /**

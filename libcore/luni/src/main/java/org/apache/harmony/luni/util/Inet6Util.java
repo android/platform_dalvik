@@ -144,7 +144,10 @@ public class Inet6Util {
 
     }
 
-    static String hexCharacters = "0123456789ABCDEF";
+    // BEGIN android-changed
+    static char[] hexCharacters = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
+            '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    // END android-changed
 
     public static String createIPAddrStringFromByteArray(byte ipByteArray[]) {
         if (ipByteArray.length == 4) {
@@ -160,15 +163,31 @@ public class Inet6Util {
                 return addressToString(bytesToInt(ipv4ByteArray, 0));
             }
             StringBuilder buffer = new StringBuilder();
-            for (int i = 0; i < ipByteArray.length; i++) {
-                int j = (ipByteArray[i] & 0xf0) >>> 4;
-                buffer.append(hexCharacters.charAt(j));
-                j = ipByteArray[i] & 0x0f;
-                buffer.append(hexCharacters.charAt(j));
-                if (i % 2 != 0 && (i + 1) < ipByteArray.length) {
+            // BEGIN android-changed
+            for (int i = 0; i < 8; i++) { // ipByteArray.length / 2
+
+                int num = (ipByteArray[2 * i] & 0xff) << 8;
+                num ^= ipByteArray[2 * i + 1] & 0xff;
+
+                // count the digits to display without leading 0
+                int count = 1, j = num;
+                while ((j >>>= 4) != 0) {
+                    count++;
+                }
+
+                char[] buf = new char[count];
+                do {
+                    int t = num & 0x0f;
+                    buf[--count] = hexCharacters[t];
+                    num >>>= 4;
+                } while (count > 0);
+
+                buffer.append(buf);
+                if ((i + 1) < 8) { // ipByteArray.length / 2
                     buffer.append(":");
                 }
             }
+            // END android-changed
             return buffer.toString();
         }
         return null;
@@ -292,6 +311,21 @@ public class Inet6Util {
         return ((value >> 24) & 0xff) + "." + ((value >> 16) & 0xff) + "."
                 + ((value >> 8) & 0xff) + "." + (value & 0xff);
     }
+
+    // BEGIN android-added
+    // copied from a newer version of harmony
+    public static boolean isIP6AddressInFullForm(String ipAddress) {
+        if (isValidIP6Address(ipAddress)) {
+            int doubleColonIndex = ipAddress.indexOf("::");
+            if (doubleColonIndex >= 0) {
+                // Simplified form which contains ::
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    // END android-added
 
     public static boolean isValidIP6Address(String ipAddress) {
         int length = ipAddress.length();
@@ -501,4 +535,5 @@ public class Inet6Util {
         }
         // END android-changed
     }
+
 }

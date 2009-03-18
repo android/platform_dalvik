@@ -17,6 +17,7 @@
 
 package org.apache.harmony.logging.tests.java.util.logging;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -885,6 +886,7 @@ public class FileHandlerTest extends TestCase {
             args = {java.util.logging.LogRecord.class}
         )
     })
+    @AndroidOnly("This test fails on RI. Doesn't parse special pattern \"%t/%h.")
     public void testInvalidParams() throws IOException {
 
         // %t and %p parsing can add file separator automatically

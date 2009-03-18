@@ -188,6 +188,41 @@ public class FilterOutputStreamTest extends junit.framework.TestCase {
     }
 
     /**
+     * @tests java.io.FilterOutputStream#write(byte[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        method = "write",
+        args = {byte[].class, int.class, int.class}
+    )    
+    public void test_write$BII_Exception() throws IOException {
+        Support_OutputStream sos = new Support_OutputStream(testLength);
+        os = new FilterOutputStream(sos);
+        byte[] buf = new byte[10];
+
+        try {
+            os.write(buf, -1, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        } 
+
+        try {
+            os.write(buf, 0, -1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        } 
+
+        try {
+            os.write(buf, 10, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        } 
+    }
+
+    /**
      * @tests java.io.FilterOutputStream#write(int)
      */
     @TestTargetNew(

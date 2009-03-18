@@ -44,15 +44,6 @@ public class PermissionTest extends TestCase {
         junit.textui.TestRunner.run(PermissionTest.class);
     }
 
-    /**
-     * Constructor for PermissionTest.
-     * 
-     * @param arg0
-     */
-    public PermissionTest(String arg0) {
-        super(arg0);
-    }
-
     // Bare extension to instantiate abstract Permission class
     static final class RealPermission extends Permission {
 

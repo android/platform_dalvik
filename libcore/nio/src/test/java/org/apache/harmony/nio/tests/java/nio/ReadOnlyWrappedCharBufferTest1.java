@@ -24,15 +24,15 @@ import java.nio.CharBuffer;
 public class ReadOnlyWrappedCharBufferTest1 extends ReadOnlyCharBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = CharBuffer.wrap(new char[BUFFER_LENGTH]);
-        super.loadTestData1(buf);
+        loadTestData1(buf);
         buf = buf.asReadOnlyBuffer();
         baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        buf = null;
+        baseBuf = null;
     }
 }

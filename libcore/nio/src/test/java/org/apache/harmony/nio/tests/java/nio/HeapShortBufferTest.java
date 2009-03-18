@@ -29,8 +29,6 @@ public class HeapShortBufferTest extends ShortBufferTest {
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
 
     @TestTargetNew(

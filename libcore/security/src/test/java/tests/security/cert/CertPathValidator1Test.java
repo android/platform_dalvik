@@ -52,13 +52,6 @@ import org.apache.harmony.security.tests.support.SpiEngUtils;
 @TestTargetClass(CertPathValidator.class)
 public class CertPathValidator1Test extends TestCase {
 
-    /**
-     * Constructor for CertPathValidatorTests.
-     * @param name
-     */
-    public CertPathValidator1Test(String name) {
-        super(name);
-    }
     public static final String srvCertPathValidator = "CertPathValidator";
     
     private static final String defaultType = "PKIX";    

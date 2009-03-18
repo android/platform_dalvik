@@ -98,6 +98,15 @@ enum {
 #define kRegTypeUninitMask  0xff
 #define kRegTypeUninitShift 8
 
+/*
+ * RegType holds information about the type of data held in a register.
+ * For most types it's a simple enum.  For reference types it holds a
+ * pointer to the ClassObject, and for uninitialized references it holds
+ * an index into the UninitInstanceMap.
+ */
+typedef u4 RegType;
+
+/* table with merge logic for primitive types */
 extern const char gDvmMergeTab[kRegTypeMAX][kRegTypeMAX];
 
 

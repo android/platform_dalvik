@@ -42,13 +42,13 @@ public class SQLTest extends TestCase {
     protected void getSQLiteConnection() {
         String tmp = System.getProperty("java.io.tmpdir");
         assertEquals(tmp,System.getProperty("java.io.tmpdir"));
-        File ctsDir = new File(tmp);
+        File tmpDir = new File(tmp);
         try {
-            if (ctsDir.isDirectory()) {
-                dbFile = File.createTempFile("sqliteTest", ".db", ctsDir);
+            if (tmpDir.isDirectory()) {
+                dbFile = File.createTempFile("sqliteTest", ".db", tmpDir);
                 dbFile.deleteOnExit();
             } else {
-                System.err.println("ctsdir does not exist");
+                System.err.println("java.io.tmpdir does not exist");
             }
             
             Class.forName("SQLite.JDBCDriver").newInstance();

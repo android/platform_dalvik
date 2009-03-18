@@ -1,7 +1,6 @@
 package tests.targets.security;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-@TestTargetClass(targets.MessageDigests.Internal.class)
 public abstract class MessageDigestTest extends TestCase {
 
     private String digestAlgorithmName;
@@ -78,9 +76,14 @@ public abstract class MessageDigestTest extends TestCase {
                 level = TestLevel.ADDITIONAL,
                 method = "digest",
                 args = {}
+            ),
+            @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                method = "method",
+                args = {}
             )
     })
-    public void testMessageDigest()
+    public void testMessageDigest1()
     {
         byte[] buf = new byte[128];
         int read = 0;
@@ -103,5 +106,169 @@ public abstract class MessageDigestTest extends TestCase {
             assertEquals("byte " + i + " of computed and check digest differ", checkDigest[i], computedDigest[i]);
         }
         
+    }
+    
+    @TestTargets({
+        @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "update",
+                args = {byte.class}
+            ),
+            @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "digest",
+                args = {}
+            ),
+            @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                method = "method",
+                args = {}
+            )
+    })
+    public void testMessageDigest2()
+    {
+        int val;
+        try {
+            while ((val = sourceData.read()) != -1)
+            {
+                digest.update((byte)val);
+            }
+        } catch (IOException e) {
+            fail("failed to read digest data");
+        }
+        
+        byte[] computedDigest = digest.digest();
+        
+        assertNotNull("computed digest is is null", computedDigest);
+        assertEquals("digest length mismatch", checkDigest.length, computedDigest.length);
+        StringBuilder sb1, sb2;
+        sb1 = new StringBuilder();
+        sb2 = new StringBuilder();
+        for (int i = 0; i < checkDigest.length; i++)
+        {
+            assertEquals("byte " + i + " of computed and check digest differ", checkDigest[i], computedDigest[i]);
+        }
+        
+    }
+
+
+    /**
+     * Official FIPS180-2 testcases
+     */
+
+    protected String source1, source2, source3;
+    protected String expected1, expected2, expected3;
+
+    String getLongMessage(int length) {
+        StringBuilder sourceBuilder = new StringBuilder(length);
+        for (int i = 0; i < length / 10; i++) {
+            sourceBuilder.append("aaaaaaaaaa");
+        }
+        return sourceBuilder.toString();
+    }
+
+    @TestTargets({
+        @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "update",
+                args = {byte.class}
+            ),
+            @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "digest",
+                args = {}
+            ),
+            @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                method = "method",
+                args = {}
+            )
+    })
+    public void testfips180_2_singleblock() {
+
+        digest.update(source1.getBytes(), 0, source1.length());
+
+        byte[] computedDigest = digest.digest();
+
+        assertNotNull("computed digest is null", computedDigest);
+
+        StringBuilder sb = new StringBuilder();
+        String res;
+        for (int i = 0; i < computedDigest.length; i++)
+        {
+            res = Integer.toHexString(computedDigest[i] & 0xFF);
+            sb.append((res.length() == 1 ? "0" : "") + res);
+        }
+        assertEquals("computed and check digest differ", expected1, sb.toString());
+    }
+
+    @TestTargets({
+        @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "update",
+                args = {byte.class}
+            ),
+            @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "digest",
+                args = {}
+            ),
+            @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                method = "method",
+                args = {}
+            )
+    })
+    public void testfips180_2_multiblock() {
+
+        digest.update(source2.getBytes(), 0, source2.length());
+
+        byte[] computedDigest = digest.digest();
+
+        assertNotNull("computed digest is null", computedDigest);
+
+        StringBuilder sb = new StringBuilder();
+        String res;
+        for (int i = 0; i < computedDigest.length; i++)
+        {
+            res = Integer.toHexString(computedDigest[i] & 0xFF);
+            sb.append((res.length() == 1 ? "0" : "") + res);
+        }
+        assertEquals("computed and check digest differ", expected2, sb.toString());
+    }
+
+    @TestTargets({
+        @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "update",
+                args = {byte.class}
+            ),
+            @TestTargetNew(
+                level = TestLevel.ADDITIONAL,
+                method = "digest",
+                args = {}
+            ),
+            @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                method = "method",
+                args = {}
+            )
+    })
+    public void testfips180_2_longMessage() {
+
+        digest.update(source3.getBytes(), 0, source3.length());
+
+        byte[] computedDigest = digest.digest();
+
+        assertNotNull("computed digest is null", computedDigest);
+
+        StringBuilder sb = new StringBuilder();
+        String res;
+        for (int i = 0; i < computedDigest.length; i++)
+        {
+            res = Integer.toHexString(computedDigest[i] & 0xFF);
+            sb.append((res.length() == 1 ? "0" : "") + res);
+        }
+        assertEquals("computed and check digest differ", expected3, sb.toString());
     }
 }

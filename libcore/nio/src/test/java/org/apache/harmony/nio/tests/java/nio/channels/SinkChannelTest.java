@@ -20,6 +20,7 @@ import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
+import dalvik.annotation.AndroidOnly;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -270,6 +271,7 @@ public class SinkChannelTest extends TestCase {
         method = "write",
         args = {java.nio.ByteBuffer[].class}
     )     
+    @AndroidOnly("seems to run on newer RI versions")
     public void test_write_LByteBuffer_SourceClosed() throws IOException {
         source.close();
         int written = sink.write(buffer);
@@ -384,6 +386,7 @@ public class SinkChannelTest extends TestCase {
         method = "write",
         args = {java.nio.ByteBuffer[].class}
     )
+    @AndroidOnly("seems to run on newer RI versions")
     public void test_write_$LByteBuffer_SourceClosed() throws IOException {
         ByteBuffer[] bufArray = { buffer };
         source.close();
@@ -553,6 +556,7 @@ public class SinkChannelTest extends TestCase {
         method = "write",
         args = {java.nio.ByteBuffer[].class, int.class, int.class}
     )        
+    @AndroidOnly("seems to run on newer RI versions")
     public void test_write_$LByteBufferII_SourceClosed() throws IOException {
         ByteBuffer[] bufArray = { buffer };
         source.close();

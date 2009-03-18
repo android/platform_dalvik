@@ -1,5 +1,6 @@
 package tests.api.java.lang.reflect;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -36,7 +37,9 @@ public class GenericSignatureFormatErrorTest extends TestCase{
     )
     public void test_readResource() throws Exception {
         File tf = File.createTempFile("classes", ".dex");
-        System.out.println("GenericSignatureFormatErrorTest:"+tf.getAbsolutePath()+", canRead: "+tf.canRead()+", canWrite: "+tf.canWrite());
+        // System.out.println("GenericSignatureFormatErrorTest:"
+        //         +tf.getAbsolutePath()+", canRead: "+tf.canRead()
+        //         +", canWrite: "+tf.canWrite()); 
         InputStream is = this.getClass().getResourceAsStream("dex1.bytes");
         assertNotNull(is);
     }
@@ -48,6 +51,8 @@ public class GenericSignatureFormatErrorTest extends TestCase{
         method = "GenericSignatureFormatError",
         args = {}
     )    
+    @AndroidOnly("Uses Android specific class dalvik.system.DexFile " +
+            "for loading classes.")
     public void test_signatureFormatError() throws Exception {
         /*
          * dex1.bytes is a jar file with a classes.dex in it.
@@ -66,7 +71,9 @@ public class GenericSignatureFormatErrorTest extends TestCase{
          */
         
         File tf = File.createTempFile("classes", ".dex");
-        System.out.println("GenericSignatureFormatErrorTest:"+tf.getAbsolutePath()+", canRead: "+tf.canRead()+", canWrite: "+tf.canWrite());
+        // System.out.println("GenericSignatureFormatErrorTest:" + 
+        //         tf.getAbsolutePath() + ", canRead: " + tf.canRead() + 
+        //         ", canWrite: "+tf.canWrite());
         InputStream is = this.getClass().getResourceAsStream("dex1.bytes");
         assertNotNull(is);
         OutputStream fos = new FileOutputStream(tf);
@@ -81,9 +88,9 @@ public class GenericSignatureFormatErrorTest extends TestCase{
             Class clazz = df.loadClass("demo/HelloWorld", this.getClass().getClassLoader());
             TypeVariable[] tvs = clazz.getTypeParameters();
             fail("expecting a GenericSignatureFormatError");
-            for (TypeVariable tv : tvs) {
-                System.out.println("tv:"+tv.toString());
-            }
+            // for (TypeVariable tv : tvs) {
+            //     System.out.println("tv:"+tv.toString());
+            // }
         } catch (GenericSignatureFormatError gsfe) {
             // expected
         }

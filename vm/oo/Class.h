@@ -144,6 +144,11 @@ bool dvmLoaderInInitiatingList(const ClassObject* clazz, const Object* loader);
 void dvmSetNativeFunc(const Method* method, DalvikBridgeFunc func,
     const u2* insns);
 
+/*
+ * Set the method's "registerMap" field.
+ */
+void dvmSetRegisterMap(Method* method, const RegisterMap* pMap);
+
 /* during DEX optimizing, add an extra DEX to the bootstrap class path */
 INLINE void dvmSetBootPathExtraDex(DvmDex* pDvmDex);
 

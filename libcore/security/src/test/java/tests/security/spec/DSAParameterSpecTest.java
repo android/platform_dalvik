@@ -41,14 +41,6 @@ import java.security.spec.DSAParameterSpec;
 public class DSAParameterSpecTest extends TestCase {
 
     /**
-     * Constructor for DSAParameterSpecTest.
-     * @param name
-     */
-    public DSAParameterSpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Ctor test 
      */
     @TestTargetNew(

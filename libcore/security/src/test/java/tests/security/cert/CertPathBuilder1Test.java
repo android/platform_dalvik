@@ -53,13 +53,6 @@ import java.security.cert.CertificateException;
 @TestTargetClass(CertPathBuilder.class)
 public class CertPathBuilder1Test extends TestCase {
 
-    /**
-     * Constructor for CertPathBuilderTests.
-     * @param name
-     */
-    public CertPathBuilder1Test(String name) {
-        super(name);
-    }
     public static final String srvCertPathBuilder = "CertPathBuilder";
 
     public static final String defaultType = "PKIX";    
@@ -398,6 +391,7 @@ public class CertPathBuilder1Test extends TestCase {
             method="build",
             args={CertPathParameters.class}
     )
+    // Test passed on RI
     public void testBuild() throws Exception {
         TestUtils.initCertPathSSCertChain();
         CertPathParameters params = TestUtils.getCertPathParameters();

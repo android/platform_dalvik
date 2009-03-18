@@ -1,7 +1,6 @@
 package tests.targets.security;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -10,7 +9,6 @@ import junit.framework.TestCase;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
-@TestTargetClass(targets.SecureRandoms.Internal.class)
 public abstract class SecureRandomTest extends TestCase {
 
 
@@ -41,6 +39,11 @@ public abstract class SecureRandomTest extends TestCase {
                 level=TestLevel.ADDITIONAL,
                 method="nextBytes",
                 args={byte[].class}
+        ),
+        @TestTargetNew(
+                level=TestLevel.COMPLETE,
+                method="method",
+                args={}
         )
     })
     public void testSecureRandom() {

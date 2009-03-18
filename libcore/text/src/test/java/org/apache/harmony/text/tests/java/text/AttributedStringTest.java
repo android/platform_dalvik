@@ -16,7 +16,6 @@
  */
 package org.apache.harmony.text.tests.java.text;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -148,7 +147,6 @@ public class AttributedStringTest extends junit.framework.TestCase {
         method = "AttributedString",
         args = {java.text.AttributedCharacterIterator.class, int.class, int.class, java.text.AttributedCharacterIterator.Attribute[].class}
     )
-    @KnownFailure("ToT FIXED Wrong behaviour if null Attribute Array is passed to AttributedString constructor.")
     public void test_ConstructorLAttributedCharacterIterator_3() {
         String testString = "Test string";
         AttributedString attrString = new AttributedString(testString);

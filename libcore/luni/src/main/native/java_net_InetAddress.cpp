@@ -33,6 +33,8 @@
 #include <sys/socket.h>
 
 
+static jclass byteArrayClass = NULL;
+
 static jstring InetAddress_gethostname(JNIEnv* env, jobject obj)
 {
     char name[256];
@@ -57,10 +59,24 @@ static void throwNullPointerException(JNIEnv* env)
     }
 }
 
-static jbyteArray getHostByNameAdb(JNIEnv* env, const char* name)
+static void logIpString(struct addrinfo* ai, const char* name)
+{
+    char ipString[INET6_ADDRSTRLEN];
+    int result = getnameinfo(ai->ai_addr, ai->ai_addrlen, ipString,
+                             sizeof(ipString), NULL, 0, NI_NUMERICHOST);
+    if (result == 0) {
+        LOGD("%s: %s (family %d, proto %d)", name, ipString, ai->ai_family,
+             ai->ai_protocol);
+    } else {
+        LOGE("%s: getnameinfo: %s", name, gai_strerror(result));
+    }
+}
+
+static jobjectArray getAllByNameUsingAdb(JNIEnv* env, const char* name)
 {
     struct in_addr outaddr;
-    jbyteArray out = NULL;
+    jobjectArray addressArray = NULL;
+    jbyteArray byteArray;
 
 #if 0
     LOGI("ADB networking: -gethostbyname err %d addr 0x%08x %u.%u.%u.%u",
@@ -70,155 +86,214 @@ static jbyteArray getHostByNameAdb(JNIEnv* env, const char* name)
 #endif
 
     if (adb_networking_gethostbyname(name, &outaddr) >= 0) {
-        out = env->NewByteArray(4);
-        env->SetByteArrayRegion(out, 0, 4, (jbyte*) &outaddr.s_addr);
+        addressArray = env->NewObjectArray(1, byteArrayClass, NULL);
+        byteArray = env->NewByteArray(4);
+        if (addressArray && byteArray) {
+            env->SetByteArrayRegion(byteArray, 0, 4, (jbyte*) &outaddr.s_addr);
+            env->SetObjectArrayElement(addressArray, 1, byteArray);
+        }
     }
-
-    return out;
+    return addressArray;
 }
 
-static jbyteArray getHostByNameGetAddrInfo(JNIEnv* env, const char* name, jboolean preferIPv6Address)
+static jobjectArray getAllByNameUsingDns(JNIEnv* env, const char* name, 
+                                         jboolean preferIPv4Stack)
 {
-    struct addrinfo hints, *res = NULL;
-    jbyteArray out = NULL;
+    struct addrinfo hints, *addressList = NULL, *addrInfo;
+    jobjectArray addressArray = NULL;
 
     memset(&hints, 0, sizeof(hints));
-    hints.ai_family = preferIPv6Address ? AF_UNSPEC : AF_INET;
+    /*
+     * IPv4 only for now until the socket code supports IPv6; otherwise, the
+     * resolver will create two separate requests, one for IPv4 and one,
+     * currently unnecessary, for IPv6.
+     */
+    hints.ai_family = AF_INET;
+    /*
+     * If we don't specify a socket type, every address will appear twice, once
+     * for SOCK_STREAM and one for SOCK_DGRAM. Since we do not return the family
+     * anyway, just pick one.
+     */
+    hints.ai_socktype = SOCK_STREAM;
 
-    int ret = getaddrinfo(name, NULL, &hints, &res);
-    if (ret == 0  && res) {
-        struct sockaddr* saddr = res[0].ai_addr;
-        size_t addrlen = 0;
-        void* rawaddr;
-
-        switch (res[0].ai_family) {
-            // Find the raw address length and start pointer.
-            case AF_INET6:
-                addrlen = 16;
-                rawaddr = &((struct sockaddr_in6*) saddr)->sin6_addr.s6_addr;
-                break;
-            case AF_INET:
-                addrlen = 4;
-                rawaddr = &((struct sockaddr_in*) saddr)->sin_addr.s_addr;
-                break;
-            default:
-                // Do nothing. addrlength = 0, so we will return NULL.
-                break;
+    int result = getaddrinfo(name, NULL, &hints, &addressList);
+    if (result == 0 && addressList) {
+        // Count results so we know how to size the output array.
+        int addressCount = 0;
+        for (addrInfo = addressList; addrInfo; addrInfo = addrInfo->ai_next) {
+            if (addrInfo->ai_family == AF_INET ||
+                addrInfo->ai_family == AF_INET6) {
+                addressCount++;
+            }
         }
 
-        if (addrlen) {
-            out = env->NewByteArray(addrlen);
-            env->SetByteArrayRegion(out, 0, addrlen, (jbyte*) rawaddr);
+        // Prepare output array.
+        addressArray = env->NewObjectArray(addressCount, byteArrayClass, NULL);
+        if (addressArray == NULL) {
+            // Appropriate exception will be thrown.
+            LOGE("getAllByNameUsingDns: could not allocate output array");
+            freeaddrinfo(addrInfo);
+            return NULL;
         }
-    } else if (ret == EAI_SYSTEM && errno == EACCES) {
+
+        // Examine returned addresses one by one, save them in the output array.
+        int index = 0;
+        for (addrInfo = addressList; addrInfo; addrInfo = addrInfo->ai_next) {
+            struct sockaddr* address = addrInfo->ai_addr;
+            size_t addressLength = 0;
+            void* rawAddress;
+
+            switch (addrInfo->ai_family) {
+                // Find the raw address length and start pointer.
+                case AF_INET6:
+                    addressLength = 16;
+                    rawAddress =
+                        &((struct sockaddr_in6*) address)->sin6_addr.s6_addr;
+                    logIpString(addrInfo, name);
+                    break;
+                case AF_INET:
+                    addressLength = 4;
+                    rawAddress =
+                        &((struct sockaddr_in*) address)->sin_addr.s_addr;
+                    logIpString(addrInfo, name);
+                    break;
+                default:
+                    // Unknown address family. Skip this address.
+                    LOGE("getAllByNameUsingDns: Unknown address family %d",
+                         addrInfo->ai_family);
+                    continue;
+            }
+
+            // Convert each IP address into a Java byte array.
+            jbyteArray bytearray = env->NewByteArray(addressLength);
+            if (bytearray == NULL) {
+                // Out of memory error will be thrown on return.
+                LOGE("getAllByNameUsingDns: Can't allocate %d-byte array",
+                     addressLength);
+                addressArray = NULL;
+                break;
+            }
+            env->SetByteArrayRegion(bytearray, 0, addressLength,
+                                    (jbyte*) rawAddress);
+            env->SetObjectArrayElement(addressArray, index, bytearray);
+            env->DeleteLocalRef(bytearray);
+            index++;
+        }
+    } else if (result == EAI_SYSTEM && errno == EACCES) {
         /* No permission to use network */
         jniThrowException(
-                env, "java/lang/SecurityException",
-                "Permission denied (maybe missing INTERNET permission)");
+            env, "java/lang/SecurityException",
+            "Permission denied (maybe missing INTERNET permission)");
+    } else {
+        // Do nothing. Return value will be null and the caller will throw an
+        // UnknownHostExeption.
     }
 
-    if (res) {
-        freeaddrinfo(res);
+    if (addressList) {
+        freeaddrinfo(addressList);
     }
 
-    return out;
+    return addressArray;
 }
 
-jbyteArray InetAddress_gethostbyname(JNIEnv* env, jobject obj, jstring nameStr, jboolean preferIPv6Address)
+jobjectArray InetAddress_getallbyname(JNIEnv* env, jobject obj,
+                                      jstring javaName,
+                                      jboolean preferIPv4Stack)
 {
-    if (nameStr == NULL) {
+    if (javaName == NULL) {
         throwNullPointerException(env);
-        return 0;
+        return NULL;
     }
 
-    const char* name = env->GetStringUTFChars(nameStr, NULL);
-    jbyteArray out = NULL;
+    const char* name = env->GetStringUTFChars(javaName, NULL);
+    jobjectArray out = NULL;
 
     char useAdbNetworkingProperty[PROPERTY_VALUE_MAX];
     char adbConnected[PROPERTY_VALUE_MAX];
-    property_get ("android.net.use-adb-networking",
+    property_get("android.net.use-adb-networking",
             useAdbNetworkingProperty, "");
-    property_get ("adb.connected",
+    property_get("adb.connected",
             adbConnected, "");
 
     // Any non-empty string value for use-adb-networking is considered "set"
     if ((strlen(useAdbNetworkingProperty) > 0)
             && (strlen(adbConnected) > 0) ) {
-        out = getHostByNameAdb(env, name);
+        out = getAllByNameUsingAdb(env, name);
     } else {
-        out = getHostByNameGetAddrInfo(env, name, preferIPv6Address);
+        out = getAllByNameUsingDns(env, name, preferIPv4Stack);
     }
 
     if (!out) {
         LOGI("Unknown host %s, throwing UnknownHostException", name);
         jniThrowException(env, "java/net/UnknownHostException", name);
     }
-    env->ReleaseStringUTFChars(nameStr, name);
+    env->ReleaseStringUTFChars(javaName, name);
     return out;
 }
 
 
-static jstring InetAddress_gethostbyaddr(JNIEnv* env, jobject obj, jstring addrStr)
+static jstring InetAddress_gethostbyaddr(JNIEnv* env, jobject obj,
+                                         jbyteArray javaAddress)
 {
-    if (addrStr == NULL) {
-        throwNullPointerException(env);
-        return false;
-    }
-    
-    jstring result;
-    const char* addr = env->GetStringUTFChars(addrStr, NULL);
-
-    struct hostent* ent = gethostbyaddr(addr, strlen(addr), AF_INET);
-            
-    if (ent != NULL  && ent->h_name != NULL) {
-        result = env->NewStringUTF(ent->h_name);
-    } else {
-        result = NULL;
-    }
-
-    env->ReleaseStringUTFChars(addrStr, addr);
-
-    return result;
-}
-
-
-static jobjectArray InetAddress_getaliasesbyname(JNIEnv* env, jobject obj, jstring nameStr)
-{
-    if (nameStr == NULL) {
+    if (javaAddress == NULL) {
         throwNullPointerException(env);
         return NULL;
     }
 
-    jclass clazz = env->FindClass("java/lang/String");
-    if (clazz == NULL) {
-        jniThrowException(env, "java/lang/ClassNotFoundException", "couldn't find class java.lang.String");
+    size_t addrlen = env->GetArrayLength(javaAddress);
+    jbyte* rawAddress = env->GetByteArrayElements(javaAddress, NULL);
+    if (rawAddress == NULL) {
+        throwNullPointerException(env);
         return NULL;
     }
 
-    jobjectArray result;
-
-    const char* name = env->GetStringUTFChars(nameStr, NULL);
-
-    struct hostent* ent = gethostbyname(name);
-       
-    if (ent != NULL) {
-        // Count aliases
-        int count = 0;
-        while (ent->h_aliases[count] != NULL) {
-             count++;
-        }
-     
-        // Create an array of String objects and fill it.
-        result = env->NewObjectArray(count, clazz, NULL);
-        int i;
-        for (i = 0; i < count; i++) {
-            env->SetObjectArrayElement(result, i, env->NewStringUTF(ent->h_aliases[i]));
-        }
-    } else {
-        result = env->NewObjectArray(0, clazz, NULL);
+    // Convert the raw address bytes into a socket address structure.
+    struct sockaddr_storage ss;
+    struct sockaddr_in *sin = (struct sockaddr_in *) &ss;
+    struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) &ss;
+    size_t socklen;
+    switch (addrlen) {
+        case 4:
+            socklen = sizeof(struct sockaddr_in);
+            memset(sin, 0, sizeof(struct sockaddr_in));
+            sin->sin_family = AF_INET;
+            memcpy(&sin->sin_addr.s_addr, rawAddress, 4);
+            break;
+        case 16:
+            socklen = sizeof(struct sockaddr_in6);
+            memset(sin6, 0, sizeof(struct sockaddr_in6));
+            sin6->sin6_family = AF_INET6;
+            memcpy(&sin6->sin6_addr.s6_addr, rawAddress, 4);
+            break;
+        default:
+            jniThrowException(env, "java/net/UnknownHostException",
+                                   "Invalid address length");
+            return NULL;
     }
 
-    env->ReleaseStringUTFChars(nameStr, name);
+
+    // Convert the socket address structure to an IP string for logging.
+    int ret;
+    char ipstr[INET6_ADDRSTRLEN];
+    ret = getnameinfo((struct sockaddr *) &ss, socklen, ipstr, sizeof(ipstr),
+                      NULL, 0, NI_NUMERICHOST);
+    if (ret) {
+        LOGE("gethostbyaddr: getnameinfo: %s", gai_strerror(ret));
+        return NULL;
+    }
+
+    // Look up the IP address from the socket address structure.
+    jstring result = NULL;
+    char name[NI_MAXHOST];
+    ret = getnameinfo((struct sockaddr *) &ss, socklen, name, sizeof(name),
+                      NULL, 0, 0);
+    if (ret == 0) {
+        LOGI("gethostbyaddr: getnameinfo: %s = %s", ipstr, name);
+        result = env->NewStringUTF(name);
+    } else {
+        LOGE("gethostbyaddr: getnameinfo: unknown host %s: %s", ipstr,
+             gai_strerror(ret));
+    }
 
     return result;
 }
@@ -228,18 +303,24 @@ static jobjectArray InetAddress_getaliasesbyname(JNIEnv* env, jobject obj, jstri
  */
 static JNINativeMethod gMethods[] = {
     /* name, signature, funcPtr */
-    { "getaliasesbyname", "(Ljava/lang/String;)[Ljava/lang/String;",
-      (void*) InetAddress_getaliasesbyname },
-    { "gethostbyaddr",    "(Ljava/lang/String;)Ljava/lang/String;",
+    { "gethostbyaddr",    "([B)Ljava/lang/String;",
       (void*) InetAddress_gethostbyaddr },
-    { "gethostbyname",    "(Ljava/lang/String;Z)[B",
-      (void*) InetAddress_gethostbyname },
+    { "getallbyname",     "(Ljava/lang/String;Z)[[B",
+      (void*) InetAddress_getallbyname },
     { "gethostname",      "()Ljava/lang/String;",
-      (void*) InetAddress_gethostname  }
+      (void*) InetAddress_gethostname  },
 };
 
 extern "C" int register_java_net_InetAddress(JNIEnv* env)
 {
+    jclass tempClass = env->FindClass("[B");
+    if (tempClass) {
+        byteArrayClass = (jclass) env->NewGlobalRef(tempClass);
+    }
+    if (!byteArrayClass) {
+        LOGE("register_java_net_InetAddress: cannot allocate byte array class");
+        return -1;
+    }
     return jniRegisterNativeMethods(env, "java/net/InetAddress",
                 gMethods, NELEM(gMethods));
 }

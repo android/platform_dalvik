@@ -16,7 +16,6 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -215,7 +214,6 @@ public class SecurityManagerTest extends TestCase {
         method = "checkMemberAccess",
         args = {java.lang.Class.class, int.class}
     )
-    @KnownFailure("ToT fixed.") 
     public void test_checkMemberAccessLjava_lang_ClassI() {
         // enable all but one check
         mutableSM.addPermission(new AllPermission());
@@ -510,7 +508,6 @@ public class SecurityManagerTest extends TestCase {
         method = "checkConnect",
         args = {java.lang.String.class, int.class}
     )
-    @KnownFailure("ToT fixed.") 
     public void test_checkConnectLjava_lang_StringI() {
         String hostName = "localhost";
         int port = 1024;
@@ -569,7 +566,6 @@ public class SecurityManagerTest extends TestCase {
         method = "checkConnect",
         args = {java.lang.String.class, int.class, java.lang.Object.class}
     )
-    @KnownFailure("ToT fixed.") 
     @SuppressWarnings("nls")
     public void test_checkConnectLjava_lang_String_int_Ljava_lang_Object() {
         // enable all but one check
@@ -1558,7 +1554,6 @@ public class SecurityManagerTest extends TestCase {
         method = "getClassContext",
         args = {}
     )
-    @KnownFailure("ToT fixed.") 
     public void test_getClassContext() {
         
         Class [] stack = {MockSecurityManager.class,

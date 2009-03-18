@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package tests.security.interfaces;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -40,7 +39,7 @@ public class RSAPrivateKeyTest extends TestCase {
         args = {}
     )
     public void test_getPrivateExponent() throws Exception {
-        KeyFactory gen = KeyFactory.getInstance("RSA", Util.prov);
+        KeyFactory gen = KeyFactory.getInstance("RSA");
         final BigInteger n = BigInteger.valueOf(3233);
         final BigInteger d = BigInteger.valueOf(2753);
         RSAPrivateKey key = (RSAPrivateKey) gen.generatePrivate(new RSAPrivateKeySpec(

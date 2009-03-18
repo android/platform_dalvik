@@ -17,7 +17,6 @@
 
 package tests.api.java.lang.reflect;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -168,7 +167,6 @@ public class AccessibleObjectTest extends junit.framework.TestCase {
         method = "getAnnotation",
         args = {java.lang.Class.class}
     )
-    @KnownFailure("Does not throw NPE if argument is null. Fixed in ToT")
     public void test_getAnnotation() throws Exception{
         AccessibleObject ao = SubTestClass.class.getMethod("annotatedMethod");
         //test error case
@@ -238,7 +236,6 @@ public class AccessibleObjectTest extends junit.framework.TestCase {
         method = "isAnnotationPresent",
         args = {java.lang.Class.class}
     )
-    @KnownFailure("Does not throw NPE if argument is null. Fixed in ToT")
     public void test_isAnnotationPresent() throws Exception {
         AccessibleObject ao = SubTestClass.class.getMethod("annotatedMethod");
         assertTrue("Missing @AnnotationRuntime0",

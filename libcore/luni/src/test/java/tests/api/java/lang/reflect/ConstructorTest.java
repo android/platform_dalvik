@@ -17,7 +17,6 @@
 
 package tests.api.java.lang.reflect;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -217,7 +216,6 @@ public class ConstructorTest extends junit.framework.TestCase {
         method = "toGenericString",
         args = {}
     )
-    @KnownFailure("Generic string does not contain declared exception types. Fixed in ToT.")
     public void test_toGenericString() throws Exception {
         Constructor<GenericConstructorTestHelper> genericCtor = GenericConstructorTestHelper.class
                 .getConstructor(Object.class, Object.class);
@@ -471,7 +469,6 @@ public class ConstructorTest extends junit.framework.TestCase {
         args = {}
     )
     @SuppressWarnings("unchecked")
-    @KnownFailure("Does not return any declared exception types. Fixed in ToT.")
     public void test_getGenericExceptionTypes() {
         Type[] types = null;
         

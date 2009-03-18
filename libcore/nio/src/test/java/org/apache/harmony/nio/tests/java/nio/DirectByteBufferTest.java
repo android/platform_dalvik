@@ -25,14 +25,13 @@ import java.nio.ByteBuffer;
 public class DirectByteBufferTest extends ByteBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = ByteBuffer.allocateDirect(BUFFER_LENGTH);
+        loadTestData1(buf);
         baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         buf = null;
         baseBuf = null;
     }
@@ -110,15 +109,5 @@ public class DirectByteBufferTest extends ByteBufferTest {
         } catch (UnsupportedOperationException e) {
             // expected
         }
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Verifies isReadOnly method for direct ByteBuffer.",
-        method = "isReadOnly",
-        args = {}
-    )
-    public void testIsReadOnly() {
-        assertFalse(buf.isReadOnly());
     }
 }

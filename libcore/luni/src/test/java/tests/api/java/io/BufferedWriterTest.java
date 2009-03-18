@@ -219,42 +219,42 @@ public class BufferedWriterTest extends junit.framework.TestCase {
             bw.write(charArray, -1, 0);
             fail("Test 2: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
 
         try {
             bw.write(charArray, 0, -1);
             fail("Test 3: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         try {
             bw.write(charArray, charArray.length + 1, 0);
             fail("Test 4: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         try {
             bw.write(charArray, charArray.length, 1);
             fail("Test 5: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         try {
             bw.write(charArray, 0, charArray.length + 1);
             fail("Test 6: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         try {
             bw.write(charArray, 1, charArray.length);
             fail("Test 7: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         bw.close();

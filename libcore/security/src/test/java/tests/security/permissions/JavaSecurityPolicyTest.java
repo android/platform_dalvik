@@ -65,7 +65,6 @@ public class JavaSecurityPolicyTest extends TestCase {
                 if(permission instanceof SecurityPermission && "getPolicy".equals(permission.getName())){
                     called = true;              
                 }
-                super.checkPermission(permission);
             }
         }
         TestSecurityManager s = new TestSecurityManager();
@@ -93,7 +92,6 @@ public class JavaSecurityPolicyTest extends TestCase {
                 if(permission instanceof SecurityPermission && "setPolicy".equals(permission.getName())){
                     called = true;              
                 }
-                super.checkPermission(permission);
             }
         }
         

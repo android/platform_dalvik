@@ -150,58 +150,27 @@ public class StringWriterTest extends junit.framework.TestCase {
         method = "write",
         args = {char[].class, int.class, int.class}
     )
-    public void test_write$CII_2() {
-        StringWriter obj = null;
+    public void test_write$CII_Exception() {
+        StringWriter obj = new StringWriter();
         try {
-            obj = new StringWriter();
-            obj.write(new char[0], (int) 0, (int) -1);
+            obj.write(new char[10], 0, -1);
             fail("IndexOutOfBoundsException expected");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals(
-                    "IndexOutOfBoundsException rather than a subclass expected",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
-    }
 
-    /**
-     * @tests java.io.StringWriter#write(char[], int, int)
-     */
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
-        method = "write",
-        args = {char[].class, int.class, int.class}
-    )
-    public void test_write$CII_3() {
-        StringWriter obj = null;
         try {
-            obj = new StringWriter();
-            obj.write(new char[0], (int) -1, (int) 0);
+            obj.write(new char[10], -1, 1);
             fail("IndexOutOfBoundsException expected");
-        } catch (ArrayIndexOutOfBoundsException t) {
-            fail("IndexOutOfBoundsException expected");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
-    }
 
-    /**
-     * @tests java.io.StringWriter#write(char[], int, int)
-     */
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
-        method = "write",
-        args = {char[].class, int.class, int.class}
-    )
-    public void test_write$CII_4() {
-        StringWriter obj = null;
         try {
-            obj = new StringWriter();
-            obj.write(new char[0], (int) -1, (int) -1);
+            obj.write(new char[10], 2, 9);
             fail("IndexOutOfBoundsException expected");
-        } catch (ArrayIndexOutOfBoundsException t) {
-            fail("IndexOutOfBoundsException expected");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 

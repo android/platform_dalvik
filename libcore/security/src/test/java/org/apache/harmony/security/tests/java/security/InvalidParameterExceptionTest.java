@@ -38,18 +38,6 @@ import junit.framework.TestCase;
  */
 public class InvalidParameterExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for InvalidParameterExceptionTests.
-     * 
-     * @param arg0
-     */
-    public InvalidParameterExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     static String[] msgs = {
             "",
             "Check new message",

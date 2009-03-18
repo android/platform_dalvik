@@ -117,7 +117,11 @@ int dvmDexFileOpenFromFd(int fd, DvmDex** ppDvmDex)
     DvmDex* pDvmDex;
     DexFile* pDexFile;
     MemMapping memMap;
+    int parseFlags = kDexParseDefault;
     int result = -1;
+
+    if (gDvm.verifyDexChecksum)
+        parseFlags |= kDexParseVerifyChecksum;
 
     if (lseek(fd, 0, SEEK_SET) < 0) {
         LOGE("lseek rewind failed\n");
@@ -129,7 +133,7 @@ int dvmDexFileOpenFromFd(int fd, DvmDex** ppDvmDex)
         goto bail;
     }
 
-    pDexFile = dexFileParse(memMap.addr, memMap.length, kDexParseDefault);
+    pDexFile = dexFileParse(memMap.addr, memMap.length, parseFlags);
     if (pDexFile == NULL) {
         LOGE("DEX parse failed\n");
         sysReleaseShmem(&memMap);
@@ -164,9 +168,13 @@ int dvmDexFileOpenPartial(const void* addr, int len, DvmDex** ppDvmDex)
 {
     DvmDex* pDvmDex;
     DexFile* pDexFile;
+    int parseFlags = kDexParseDefault;
     int result = -1;
 
-    pDexFile = dexFileParse(addr, len, kDexParseDefault);
+    if (gDvm.verifyDexChecksum)
+        parseFlags |= kDexParseVerifyChecksum;
+
+    pDexFile = dexFileParse(addr, len, parseFlags);
     if (pDexFile == NULL) {
         LOGE("DEX parse failed\n");
         goto bail;

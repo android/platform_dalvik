@@ -112,7 +112,7 @@ public class DataInputStreamTest extends junit.framework.TestCase {
      * @tests java.io.DataInputStream#read(byte[], int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         method = "read",
         args = {byte[].class, int.class, int.class}
     )     
@@ -145,6 +145,43 @@ public class DataInputStreamTest extends junit.framework.TestCase {
             fail("Test 5: IOException expected.");
         } catch (IOException e) {
             // Expected.
+        }
+    }
+
+    /**
+     * @tests java.io.DataInputStream#read(byte[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        method = "read",
+        args = {byte[].class, int.class, int.class}
+    )     
+    public void test_read$BII_Exception() throws IOException {
+        byte rbytes[] = new byte[testLength - 5];
+        
+        os.write(fileString.getBytes());
+        os.close();
+        openDataInputStream();
+        
+        try {
+            dis.read(rbytes, -1, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        
+        try {
+            dis.read(rbytes, 0, -1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        
+        try {
+            dis.read(rbytes, rbytes.length, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 

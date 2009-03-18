@@ -350,14 +350,36 @@ public class ObjectInputStreamTest extends junit.framework.TestCase implements
      */
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Checks IOException.",
+        notes = "Checks Exceptions.",
         method = "read",
         args = {byte[].class, int.class, int.class}
     )        
-    public void test_read$BII_IOException() throws IOException {
+    public void test_read$BII_Exception() throws IOException {
         byte[] buf = new byte[testLength];
         oos.writeObject(testString);
         oos.close();
+
+        ois = new ObjectInputStream(new ByteArrayInputStream(bao.toByteArray()));
+        try {
+            ois.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            ois.read(buf, -1,1);
+            fail("IndexOutOfBoundsException was not thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            ois.read(buf, testLength, 1);
+            fail("IndexOutOfBoundsException was not thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        ois.close();
+        
         
         Support_ASimpleInputStream sis = new Support_ASimpleInputStream(bao.toByteArray());
         ois = new ObjectInputStream(sis);
@@ -450,7 +472,7 @@ public class ObjectInputStreamTest extends junit.framework.TestCase implements
         method = "readFully",
         args = {byte[].class}
     )        
-    public void test_readFully$B_IOException() throws IOException {
+    public void test_readFully$B_Exception() throws IOException {
         byte[] buf = new byte[testLength];
         oos.writeObject(testString);
         oos.close();
@@ -502,14 +524,35 @@ public class ObjectInputStreamTest extends junit.framework.TestCase implements
      */
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Checks IOException.",
+        notes = "Checks Exceptions.",
         method = "readFully",
         args = {byte[].class, int.class, int.class}
     )        
-    public void test_readFully$BII_IOException() throws IOException {
+    public void test_readFully$BII_Exception() throws IOException {
         byte[] buf = new byte[testLength];
         oos.writeObject(testString);
         oos.close();
+
+        ois = new ObjectInputStream(new ByteArrayInputStream(bao.toByteArray()));
+        try {
+            ois.readFully(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            ois.readFully(buf, -1,1);
+            fail("IndexOutOfBoundsException was not thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            ois.readFully(buf, testLength, 1);
+            fail("IndexOutOfBoundsException was not thrown.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        ois.close();
         
         Support_ASimpleInputStream sis = new Support_ASimpleInputStream(bao.toByteArray());
         ois = new ObjectInputStream(sis);

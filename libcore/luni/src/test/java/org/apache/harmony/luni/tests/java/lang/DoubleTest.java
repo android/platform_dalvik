@@ -17,7 +17,6 @@
 package org.apache.harmony.luni.tests.java.lang;
 
 import dalvik.annotation.KnownFailure;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -542,6 +541,8 @@ public class DoubleTest extends TestCase {
         method = "parseDouble",
         args = {java.lang.String.class}
     )
+    @KnownFailure("parseDouble returns different value on Android " +
+            "for 0x44b52d02c7e14af6L, it returns 1.0e23.")
     public void test_parseDoubleLjava_lang_String() {
         assertEquals("Incorrect double returned, expected zero.", 0.0, Double
                 .parseDouble("2.4703282292062327208828439643411e-324"), 0.0);
@@ -858,11 +859,10 @@ public class DoubleTest extends TestCase {
 
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
+        notes = "Regression test for hotfix in native code of double parser.",
         method = "parseDouble",
         args = {java.lang.String.class}
     )
-    @KnownFailure("Hot fix is submitted to ToT.")      
     public void test_parseDouble_LString_AndroidRegression() {
         // Android regression test
         long startTime = System.currentTimeMillis();

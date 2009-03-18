@@ -16,16 +16,14 @@
 
 package tests.api.org.apache.harmony.kernel.dalvik;
 
-import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
-import dalvik.annotation.TestTargetNew;
+import java.lang.reflect.Field;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-
 import sun.misc.Unsafe;
-
-import java.lang.reflect.Field;
+import dalvik.annotation.TestLevel;
+import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.TestTargetNew;
 
 /**
  * Tests for the <code>park()</code> functionality of {@link Unsafe}.
@@ -33,6 +31,7 @@ import java.lang.reflect.Field;
 @TestTargetClass(Unsafe.class)
 public class ThreadsTest extends TestCase {
     private static Unsafe UNSAFE = null;
+    private static RuntimeException INITIALIZEFAILED = null;
     
     static {
         /*
@@ -47,9 +46,9 @@ public class ThreadsTest extends TestCase {
 
             UNSAFE = (Unsafe) field.get(null);
         } catch (NoSuchFieldException ex) {
-            throw new RuntimeException(ex);
+            INITIALIZEFAILED = new RuntimeException(ex);
         } catch (IllegalAccessException ex) {
-            throw new RuntimeException(ex);
+        	INITIALIZEFAILED = new RuntimeException(ex);
         }
     }
 
@@ -289,5 +288,11 @@ public class ThreadsTest extends TestCase {
 
             UNSAFE.unpark(thread);
         }
+    }
+    
+    @Override
+    protected void setUp() throws Exception {
+    	if (INITIALIZEFAILED != null)
+    		throw INITIALIZEFAILED;
     }
 }

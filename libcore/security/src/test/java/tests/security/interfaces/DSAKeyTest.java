@@ -15,7 +15,6 @@
  */
 
 package tests.security.interfaces;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -46,7 +45,7 @@ public class DSAKeyTest extends TestCase {
     public void test_getParams() throws Exception {
         DSAParams param = new DSAParameterSpec(Util.P, Util.Q, Util.G);
         
-        KeyPairGenerator gen = KeyPairGenerator.getInstance("DSA", Util.prov);
+        KeyPairGenerator gen = KeyPairGenerator.getInstance("DSA");
         gen.initialize((DSAParameterSpec) param);
         DSAKey key = null;
         

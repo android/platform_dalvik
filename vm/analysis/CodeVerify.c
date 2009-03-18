@@ -29,6 +29,7 @@
  */
 #include "Dalvik.h"
 #include "analysis/CodeVerify.h"
+#include "analysis/RegisterMap.h"
 #include "libdex/DexCatch.h"
 #include "libdex/InstrUtils.h"
 
@@ -36,16 +37,22 @@
 
 
 /*
- * If defined, store registers for all instructions, not just branch
- * targets.  Increases memory usage and adds to CPU load.  Only necessary
- * when generating data for exact GC.
+ * We don't need to store the register data for many instructions, because
+ * we either only need it at branch points (for verification) or GC points
+ * and branches (for verification + type-precise register analysis).
  */
-#define USE_FULL_TABLE  false
+typedef enum RegisterTrackingMode {
+    kTrackRegsBranches,
+    kTrackRegsGcPoints,
+    kTrackRegsAll
+} RegisterTrackingMode;
 
 /*
  * Set this to enable dead code scanning.  This is not required, but it's
  * very useful when testing changes to the verifier (to make sure we're not
  * skipping over stuff) and for checking the optimized output from "dx".
+ * The only reason not to do it is that it slightly increases the time
+ * required to perform verification.
  */
 #define DEAD_CODE_SCAN  true
 
@@ -82,21 +89,13 @@ static inline bool doVerboseLogging(const Method* meth) {
 #define RESULT_REGISTER(_insnRegCount)  (_insnRegCount)
 
 /*
- * RegType holds information about the type of data held in a register.
- * For most types it's a simple enum.  For reference types it holds a
- * pointer to the ClassObject, and for uninitialized references it holds
- * an index into the UninitInstanceMap.
- */
-typedef u4 RegType;
-
-/*
  * Big fat collection of registers.
  */
 typedef struct RegisterTable {
     /*
      * Array of RegType arrays, one per address in the method.  We only
-     * set the pointers for addresses that are branch targets unless
-     * USE_FULL_TABLE is true.
+     * set the pointers for certain addresses, based on what we're trying
+     * to accomplish.
      */
     RegType**   addrRegs;
 
@@ -104,7 +103,7 @@ typedef struct RegisterTable {
      * Number of registers we track for each instruction.  This is equal
      * to the method's declared "registersSize" plus kExtraRegs.
      */
-    int         insnRegCount;
+    int         insnRegCountPlus;
 
     /*
      * A single large alloc, with all of the storage needed for addrRegs.
@@ -293,37 +292,34 @@ static bool canConvertTo2(RegType srcType, RegType checkType)
 }
 
 /*
- * Determine whether or not "srcType" and "checkType" have the same width.
- * The idea is to determine whether or not it's okay to use a sub-integer
- * instruction (say, sget-short) with a primitive field of a specific type.
+ * Determine whether or not "instrType" and "targetType" are compatible,
+ * for purposes of getting or setting a value in a field or array.  The
+ * idea is that an instruction with a category 1nr type (say, aget-short
+ * or iput-boolean) is accessing a static field, instance field, or array
+ * entry, and we want to make sure sure that the operation is legal.
  *
- * We should always be passed "definite" types here; pseudo-types like
- * kRegTypeZero are not expected.  We could get kRegTypeUnknown if a type
- * lookup failed.
+ * At a minimum, source and destination must have the same width.  We
+ * further refine this to assert that "short" and "char" are not
+ * compatible, because the sign-extension is different on the "get"
+ * operations.  As usual, "float" and "int" are interoperable.
+ *
+ * We're not considering the actual contents of the register, so we'll
+ * never get "pseudo-types" like kRegTypeZero or kRegTypePosShort.  We
+ * could get kRegTypeUnknown in "targetType" if a field or array class
+ * lookup failed.  Category 2 types and references are checked elsewhere.
  */
-static bool isTypeWidthEqual1nr(RegType type1, RegType type2)
+static bool checkFieldArrayStore1nr(RegType instrType, RegType targetType)
 {
-    /* primitive sizes; we use zero for boolean so it's not equal to others */
-    static const char sizeTab[kRegType1nrEND-kRegType1nrSTART+1] = {
-        /* F  0  1  Z  b  B  s  S  C  I */
-           4, 8, 9, 0, 1, 1, 2, 2, 2, 4
-    };
-
-    assert(type1 != kRegTypeZero && type1 != kRegTypeOne &&
-           type1 != kRegTypePosByte && type1 != kRegTypePosShort);
-    assert(type2 != kRegTypeZero && type2 != kRegTypeOne &&
-           type2 != kRegTypePosByte && type2 != kRegTypePosShort);
-
-    if (type1 == type2)
+    if (instrType == targetType)
         return true;            /* quick positive; most common case */
 
-    /* might be able to eliminate one of these by narrowly defining our args? */
-    if (type1 < kRegType1nrSTART || type1 > kRegType1nrEND)
-        return false;
-    if (type2 < kRegType1nrSTART || type2 > kRegType1nrEND)
-        return false;
+    if ((instrType == kRegTypeInteger && targetType == kRegTypeFloat) ||
+        (instrType == kRegTypeFloat && targetType == kRegTypeInteger))
+    {
+        return true;
+    }
 
-    return sizeTab[type1-kRegType1nrSTART] == sizeTab[type2-kRegType1nrSTART];
+    return false;
 }
 
 /*
@@ -1476,9 +1472,17 @@ static void setRegisterType(RegType* insnRegs, const int insnRegCount,
             }
             insnRegs[vdst] = newType;
 
-            /* if it's an initialized ref, make sure it's not a prim class */
-            assert(regTypeIsUninitReference(newType) ||
-                !dvmIsPrimitiveClass(regTypeInitializedReferenceToClass(newType)));
+            /*
+             * In most circumstances we won't see a reference to a primitive
+             * class here (e.g. "D"), since that would mean the object in the
+             * register is actually a primitive type.  It can happen as the
+             * result of an assumed-successful check-cast instruction in
+             * which the second argument refers to a primitive class.  (In
+             * practice, such an instruction will always throw an exception.)
+             *
+             * This is not an issue for instructions like const-class, where
+             * the object in the register is a java.lang.Class instance.
+             */
             break;
         }
         /* bad - fall through */
@@ -2443,20 +2447,22 @@ static void checkFinalFieldAccess(const Method* meth, const Field* field,
         return;
     }
 
+    /*
+     * The EMMA code coverage tool generates a static method that
+     * modifies a private static final field.  The method is only
+     * called by <clinit>, so the code is reasonable if not quite
+     * kosher.  (Attempting to *compile* code that does something
+     * like that will earn you a quick thumbs-down from javac.)
+     *
+     * The verifier in another popular VM doesn't complain about this,
+     * so we're going to allow classes to modify their own static
+     * final fields outside of class initializers.  Further testing
+     * showed that modifications to instance fields are also allowed.
+     */
+#if 0
     /* make sure we're in the right kind of constructor */
     if (dvmIsStaticField(field)) {
-        /*
-         * The EMMA code coverage tool generates a static method that
-         * modifies a private static final field.  The method is only
-         * called by <clinit>, so the code is reasonable if not quite
-         * kosher.  (Attempting to *compile* code that does something
-         * like that will earn you a quick thumbs-down from javac.)
-         *
-         * The verifier in another popular VM doesn't complain about this,
-         * so we're going to allow classes to modify their own static
-         * final fields outside of class initializers.
-         */
-        if (false && !isClassInitMethod(meth)) {
+        if (!isClassInitMethod(meth)) {
             LOG_VFY_METH(meth,
                 "VFY: can't modify final static field outside <clinit>\n");
             *pOkay = false;
@@ -2468,6 +2474,7 @@ static void checkFinalFieldAccess(const Method* meth, const Field* field,
             *pOkay = false;
         }
     }
+#endif
 }
 
 /*
@@ -2627,71 +2634,91 @@ static ClassObject* getCaughtExceptionType(const Method* meth, int insnIdx)
  * information to kRegTypeUnknown.
  */
 static bool initRegisterTable(const Method* meth, const InsnFlags* insnFlags,
-    RegisterTable* regTable)
+    RegisterTable* regTable, RegisterTrackingMode trackRegsFor)
 {
     const int insnsSize = dvmGetMethodInsnsSize(meth);
     int i;
 
-    regTable->insnRegCount = meth->registersSize + kExtraRegs;
+    regTable->insnRegCountPlus = meth->registersSize + kExtraRegs;
     regTable->addrRegs = (RegType**) calloc(insnsSize, sizeof(RegType*));
     if (regTable->addrRegs == NULL)
         return false;
 
+    assert(insnsSize > 0);
+
     /*
-     * "Full" means "every address that holds the start of an instruction".
-     * "Not full" means "every address that can be branched to".
+     * "All" means "every address that holds the start of an instruction".
+     * "Branches" and "GcPoints" mean just those addresses.
      *
-     * "Full" seems to require > 6x the memory on average.  Fortunately we
-     * don't need to hold on to it for very long.
+     * "GcPoints" fills about half the addresses, "Branches" about 15%.
      */
-    if (USE_FULL_TABLE) {
-        int insnCount = 0;
+    int interestingCount = 0;
+    //int insnCount = 0;
 
-        for (i = 0; i < insnsSize; i++) {
-            if (dvmInsnIsOpcode(insnFlags, i))
-                insnCount++;
-        }
+    for (i = 0; i < insnsSize; i++) {
+        bool interesting;
 
-        regTable->regAlloc = (RegType*)
-            calloc(regTable->insnRegCount * insnCount, sizeof(RegType));
-        if (regTable->regAlloc == NULL)
+        switch (trackRegsFor) {
+        case kTrackRegsAll:
+            interesting = dvmInsnIsOpcode(insnFlags, i);
+            break;
+        case kTrackRegsGcPoints:
+            interesting = dvmInsnIsGcPoint(insnFlags, i) ||
+                          dvmInsnIsBranchTarget(insnFlags, i);
+            break;
+        case kTrackRegsBranches:
+            interesting = dvmInsnIsBranchTarget(insnFlags, i);
+            break;
+        default:
+            dvmAbort();
             return false;
-
-        RegType* regPtr = regTable->regAlloc;
-        for (i = 0; i < insnsSize; i++) {
-            if (dvmInsnIsOpcode(insnFlags, i)) {
-                regTable->addrRegs[i] = regPtr;
-                regPtr += regTable->insnRegCount;
-            }
-        }
-        assert(regPtr - regTable->regAlloc ==
-               regTable->insnRegCount * insnCount);
-    } else {
-        int branchCount = 0;
-
-        for (i = 0; i < insnsSize; i++) {
-            if (dvmInsnIsBranchTarget(insnFlags, i))
-                branchCount++;
-        }
-        assert(branchCount > 0);
-
-        regTable->regAlloc = (RegType*)
-            calloc(regTable->insnRegCount * branchCount, sizeof(RegType));
-        if (regTable->regAlloc == NULL)
-            return false;
-
-        RegType* regPtr = regTable->regAlloc;
-        for (i = 0; i < insnsSize; i++) {
-            if (dvmInsnIsBranchTarget(insnFlags, i)) {
-                regTable->addrRegs[i] = regPtr;
-                regPtr += regTable->insnRegCount;
-            }
         }
 
-        assert(regPtr - regTable->regAlloc ==
-               regTable->insnRegCount * branchCount);
+        if (interesting)
+            interestingCount++;
+
+        /* count instructions, for display only */
+        //if (dvmInsnIsOpcode(insnFlags, i))
+        //    insnCount++;
     }
 
+    regTable->regAlloc = (RegType*)
+        calloc(regTable->insnRegCountPlus * interestingCount, sizeof(RegType));
+    if (regTable->regAlloc == NULL)
+        return false;
+
+    RegType* regPtr = regTable->regAlloc;
+    for (i = 0; i < insnsSize; i++) {
+        bool interesting;
+
+        switch (trackRegsFor) {
+        case kTrackRegsAll:
+            interesting = dvmInsnIsOpcode(insnFlags, i);
+            break;
+        case kTrackRegsGcPoints:
+            interesting = dvmInsnIsGcPoint(insnFlags, i) ||
+                          dvmInsnIsBranchTarget(insnFlags, i);
+            break;
+        case kTrackRegsBranches:
+            interesting = dvmInsnIsBranchTarget(insnFlags, i);
+            break;
+        default:
+            dvmAbort();
+            return false;
+        }
+
+        if (interesting) {
+            regTable->addrRegs[i] = regPtr;
+            regPtr += regTable->insnRegCountPlus;
+        }
+    }
+
+    //LOGD("Tracking registers for %d, total %d of %d(%d) (%d%%)\n",
+    //    TRACK_REGS_FOR, interestingCount, insnCount, insnsSize,
+    //    (interestingCount*100) / insnCount);
+
+    assert(regPtr - regTable->regAlloc ==
+        regTable->insnRegCountPlus * interestingCount);
     assert(regTable->addrRegs[0] != NULL);
     return true;
 }
@@ -2715,12 +2742,10 @@ static void verifyFilledNewArrayRegs(const Method* meth,
     assert(dvmIsArrayClass(resClass));
     elemType = resClass->elementClass->primitiveType;
     if (elemType == PRIM_NOT) {
-        LOG_VFY("VFY: filled-new-array not yet supported on reference types\n");
-        *pOkay = false;
-        return;
+        expectedType = regTypeFromClass(resClass->elementClass);
+    } else {
+        expectedType = primitiveTypeToRegType(elemType);
     }
-
-    expectedType = primitiveTypeToRegType(elemType);
     //LOGI("filled-new-array: %s -> %d\n", resClass->descriptor, expectedType);
 
     /*
@@ -2760,6 +2785,7 @@ bool dvmVerifyCodeFlow(const Method* meth, InsnFlags* insnFlags,
     bool result = false;
     const int insnsSize = dvmGetMethodInsnsSize(meth);
     const u2* insns = meth->insns;
+    const bool generateRegisterMap = gDvm.generateRegisterMaps;
     int i, offset;
     bool isConditional;
     RegisterTable regTable;
@@ -2767,7 +2793,7 @@ bool dvmVerifyCodeFlow(const Method* meth, InsnFlags* insnFlags,
     memset(&regTable, 0, sizeof(regTable));
 
 #ifndef NDEBUG
-    checkMergeTab();     // only need to do this when table changes
+    checkMergeTab();     // only need to do this if table gets updated
 #endif
 
     /*
@@ -2796,9 +2822,12 @@ bool dvmVerifyCodeFlow(const Method* meth, InsnFlags* insnFlags,
     }
 
     /*
-     * Create register lists, and initialize them to "Unknown".
+     * Create register lists, and initialize them to "Unknown".  If we're
+     * also going to create the register map, we need to retain the
+     * register lists for a larger set of addresses.
      */
-    if (!initRegisterTable(meth, insnFlags, &regTable))
+    if (!initRegisterTable(meth, insnFlags, &regTable,
+            generateRegisterMap ? kTrackRegsGcPoints : kTrackRegsBranches))
         goto bail;
 
     /*
@@ -2813,6 +2842,30 @@ bool dvmVerifyCodeFlow(const Method* meth, InsnFlags* insnFlags,
      */
     if (!doCodeVerification(meth, insnFlags, &regTable, uninitMap))
         goto bail;
+
+    /*
+     * Generate a register map.
+     */
+    if (generateRegisterMap) {
+        RegisterMap* pMap;
+        VerifierData vd;
+
+        vd.method = meth;
+        vd.insnsSize = insnsSize;
+        vd.insnRegCount = meth->registersSize;
+        vd.insnFlags = insnFlags;
+        vd.addrRegs = regTable.addrRegs;
+        
+        pMap = dvmGenerateRegisterMapV(&vd);
+        if (pMap != NULL) {
+            /*
+             * Tuck it into the Method struct.  It will either get used
+             * directly or, if we're in dexopt, will be packed up and
+             * appended to the DEX file.
+             */
+            dvmSetRegisterMap((Method*)meth, pMap);
+        }
+    }
 
     /*
      * Success.
@@ -3776,7 +3829,7 @@ aget_1nr_common:
                 srcType = primitiveTypeToRegType(
                                         resClass->elementClass->primitiveType);
 
-                if (!isTypeWidthEqual1nr(tmpType, srcType)) {
+                if (!checkFieldArrayStore1nr(tmpType, srcType)) {
                     LOG_VFY("VFY: invalid aget-1nr, array type=%d with"
                             " inst type=%d (on %s)\n",
                         srcType, tmpType, resClass->descriptor);
@@ -3961,7 +4014,7 @@ aput_1nr_common:
                                     resClass->elementClass->primitiveType);
             assert(dstType != kRegTypeUnknown);
 
-            if (!isTypeWidthEqual1nr(tmpType, dstType)) {
+            if (!checkFieldArrayStore1nr(tmpType, dstType)) {
                 LOG_VFY("VFY: invalid aput-1nr on %s (inst=%d dst=%d)\n",
                         resClass->descriptor, tmpType, dstType);
                 okay = false;
@@ -4108,7 +4161,7 @@ iget_1nr_common:
             /* make sure the field's type is compatible with expectation */
             fieldType = primSigCharToRegType(instField->field.signature[0]);
             if (fieldType == kRegTypeUnknown ||
-                !isTypeWidthEqual1nr(tmpType, fieldType))
+                !checkFieldArrayStore1nr(tmpType, fieldType))
             {
                 LOG_VFY("VFY: invalid iget-1nr of %s.%s (inst=%d field=%d)\n",
                         instField->field.clazz->descriptor,
@@ -4232,7 +4285,7 @@ iput_1nr_common:
             /* get type of field we're storing into */
             fieldType = primSigCharToRegType(instField->field.signature[0]);
             if (fieldType == kRegTypeUnknown ||
-                !isTypeWidthEqual1nr(tmpType, fieldType))
+                !checkFieldArrayStore1nr(tmpType, fieldType))
             {
                 LOG_VFY("VFY: invalid iput-1nr of %s.%s (inst=%d field=%d)\n",
                         instField->field.clazz->descriptor,
@@ -4376,7 +4429,7 @@ sget_1nr_common:
              * because e.g. "int" and "float" are interchangeable.)
              */
             fieldType = primSigCharToRegType(staticField->field.signature[0]);
-            if (!isTypeWidthEqual1nr(tmpType, fieldType)) {
+            if (!checkFieldArrayStore1nr(tmpType, fieldType)) {
                 LOG_VFY("VFY: invalid sget-1nr of %s.%s (inst=%d actual=%d)\n",
                     staticField->field.clazz->descriptor,
                     staticField->field.name, tmpType, fieldType);
@@ -4486,7 +4539,7 @@ sput_1nr_common:
              * can lead to trouble if we do 16-bit writes.
              */
             fieldType = primSigCharToRegType(staticField->field.signature[0]);
-            if (!isTypeWidthEqual1nr(tmpType, fieldType)) {
+            if (!checkFieldArrayStore1nr(tmpType, fieldType)) {
                 LOG_VFY("VFY: invalid sput-1nr of %s.%s (inst=%d actual=%d)\n",
                     staticField->field.clazz->descriptor,
                     staticField->field.name, tmpType, fieldType);

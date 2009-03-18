@@ -17,8 +17,8 @@
 
 package org.apache.harmony.archive.tests.java.util.zip;
 
-import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.KnownFailure;
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -28,6 +28,7 @@ import tests.support.resource.Support_Resources;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,10 +41,9 @@ import java.util.zip.ZipFile;
 @TestTargetClass(ZipFile.class)
 public class ZipFileTest extends junit.framework.TestCase {
 
-    // BEGIN android-added
     public byte[] getAllBytesFromStream(InputStream is) throws IOException {
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        byte[] buf = new byte[666];
+        byte[] buf = new byte[512];
         int iRead;
         int off;
         while (is.available() > 0) {
@@ -52,8 +52,6 @@ public class ZipFileTest extends junit.framework.TestCase {
         }
         return bs.toByteArray();
     }
-
-    // END android-added
 
     // the file hyts_zipFile.zip in setup must be included as a resource
     private String tempFileName;
@@ -67,7 +65,10 @@ public class ZipFileTest extends junit.framework.TestCase {
 
 
         public void checkPermission(Permission perm) {
-            if (perm.getActions().equals(forbidenPermissionAction)) {
+            // only check if it's a FilePermission because Locale checks
+            // for a PropertyPermission with action"read" to get system props.
+            if (perm instanceof FilePermission 
+                    && perm.getActions().equals(forbidenPermissionAction)) {
                 throw new SecurityException();
             }
         }
@@ -327,7 +328,7 @@ public class ZipFileTest extends junit.framework.TestCase {
         method = "getEntry",
         args = {java.lang.String.class}
     )
-    @AndroidOnly("God knows why!")
+    @BrokenTest("Needs investigation. AndroidOnly?")
     public void test_getEntryLjava_lang_String_AndroidOnly() throws IOException {
         java.util.zip.ZipEntry zentry = zfile.getEntry("File1.txt");
         assertNotNull("Could not obtain ZipEntry", zentry);
@@ -349,7 +350,8 @@ public class ZipFileTest extends junit.framework.TestCase {
         method = "getEntry",
         args = {java.lang.String.class}
     )
-    @KnownFailure("Android does not throw IllegalStateException when using getEntry() after close().")
+    @KnownFailure("Android does not throw IllegalStateException when using "
+            + "getEntry() after close().")
     public void test_getEntryLjava_lang_String_Ex() throws IOException {
         java.util.zip.ZipEntry zentry = zfile.getEntry("File1.txt");
         assertNotNull("Could not obtain ZipEntry", zentry);
@@ -434,7 +436,8 @@ public class ZipFileTest extends junit.framework.TestCase {
         method = "size",
         args = {}
     )
-    @KnownFailure("IllegalStateException not thrown when using ZipFile.size() after close().")
+    @KnownFailure("IllegalStateException not thrown when using ZipFile.size() "
+            + "after close().")
     public void test_size() throws IOException {
         assertEquals(6, zfile.size());
         zfile.close();
@@ -453,7 +456,6 @@ public class ZipFileTest extends junit.framework.TestCase {
     @Override
     protected void setUp() {
         try {
-            // BEGIN android-changed
             // Create a local copy of the file since some tests want to alter
             // information.
             tempFileName = System.getProperty("java.io.tmpdir");
@@ -471,7 +473,6 @@ public class ZipFileTest extends junit.framework.TestCase {
             f.delete();
             InputStream is = Support_Resources.getStream("hyts_ZipFile.zip");
             FileOutputStream fos = new FileOutputStream(f);
-            // END android-changed
             byte[] rbuf = getAllBytesFromStream(is);
             fos.write(rbuf, 0, rbuf.length);
             is.close();

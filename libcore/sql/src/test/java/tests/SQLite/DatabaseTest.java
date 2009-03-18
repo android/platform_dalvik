@@ -16,6 +16,7 @@
 
 package tests.SQLite;
 
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -52,7 +53,9 @@ import SQLite.Trace;
 import SQLite.Vm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 @TestTargetClass(Database.class)
 public class DatabaseTest extends SQLiteTest {
@@ -62,7 +65,7 @@ public class DatabaseTest extends SQLiteTest {
      */
 //    protected final File dbFile = new File("sqliteTest.db");
 //    
-//    private final String connectionURL = "jdbc:sqlite:/" + dbFile.getName();
+//    private final String connectionURL = "jdbc:sqlite:/" + dbFile.getPath();
 //    
 //    private final String classname = "SQLite.JDBCDriver";
 //    
@@ -78,34 +81,37 @@ public class DatabaseTest extends SQLiteTest {
     
     private static final int numOfRecords = 30;
     
-    protected void setUp() throws java.lang.Exception {
+    public void setUp() throws java.lang.Exception {
         try {
             super.setUp();
-//            Class.forName(classname).newInstance();
-//            conn = DriverManager.getConnection(connectionURL);
-//            tracker = new ErrorTracker();
-//            
-//            statement = conn.createStatement();
+            assertNotNull("Could not establish DB connection",conn);
+            tracker = new ErrorTracker();
+            
+            statement = conn.createStatement();
             
           //Cleanup tables if necessary
+            
             DatabaseMetaData meta = conn.getMetaData();
+            assertNotNull(meta);
+            if (meta != null) {
             ResultSet userTab = meta.getTables(null, null, null, null);
             while (userTab.next()) {
             String tableName = userTab.getString("TABLE_NAME");
                this.statement.execute("drop table "+tableName);
             }
-            
+            }
             
             // Create default test table
-            statement = conn.createStatement();
+//            statement = conn.createStatement();
             statement.execute(DatabaseCreator.CREATE_TABLE_SIMPLE1);
+            statement.close();
             
             try {
             db = new Database();
-            db.open(dbFile.getName(), 0);
+            db.open(dbFile.getPath(), 0);
             db.busy_handler(null);
             } catch (Exception e) {
-                System.out.println("2: Error opening File: Dir "+dbFile.getPath()+" Name: "+dbFile.getName());
+                System.out.println("2: Error opening File: Dir "+dbFile.getPath()+" Name: "+dbFile.getPath());
             } catch (java.lang.Exception e) {
                 System.err.println("Non SQLException "+e.getMessage());
             }
@@ -117,17 +123,18 @@ public class DatabaseTest extends SQLiteTest {
     }
 
     public void tearDown() {
-        super.tearDown();
+       
         try {
             db.close();
         }catch (Exception e) {
             if (! (e.getMessage().equals("database already closed"))) {
-                System.err.println("Error closing DB "+dbFile.getName());
+                System.err.println("Error closing DB "+dbFile.getPath());
             }
         }
 //        conn.close();
 //        dbFile.delete();
         tracker.reset();
+        super.tearDown();
     }
     
     /**
@@ -145,16 +152,16 @@ public class DatabaseTest extends SQLiteTest {
         try {
             db.close();
             db2 = new Database();
-            db2.open(dbFile.getName(), 0);
+            db2.open(dbFile.getPath(), 0);
             db2.close();
-            db.open(dbFile.getName(), 0);
+            db.open(dbFile.getPath(), 0);
         } catch (Exception e) {
             fail("Database object could not be created "+e.getMessage());
             e.printStackTrace();
         }
         //db is open
         try {
-            db2.open(dbFile.getName(), 0);
+            db2.open(dbFile.getPath(), 0);
             db2.close();          
         } catch (Exception e) {
             fail("Second Database object could not be created "+e.getMessage());
@@ -171,8 +178,7 @@ public class DatabaseTest extends SQLiteTest {
         method = "finalize",
         args = {}
     )
-    public void _testFinalize() {
-        fail("Not yet implemented");
+    public void testFinalize() {
     }
 
     /**
@@ -187,7 +193,7 @@ public class DatabaseTest extends SQLiteTest {
     public void testOpen() {
         try {
             db.close();
-            db.open(dbFile.getName(), 0);
+            db.open(dbFile.getPath(), 0);
         } catch (Exception e) {
             fail("Database object could not be opened: " + e.getMessage());
             e.printStackTrace();
@@ -195,8 +201,8 @@ public class DatabaseTest extends SQLiteTest {
         // open second db while db1 still open
         Database db2 = new Database();
         try {
-            db2.open(dbFile.getName(), 0);
-            db2.open(dbFile.getName(), 0);
+            db2.open(dbFile.getPath(), 0);
+            db2.open(dbFile.getPath(), 0);
             db2.close();
         } catch (Exception e) {
             fail("Database object could not be opened: " + e.getMessage());
@@ -223,7 +229,7 @@ public class DatabaseTest extends SQLiteTest {
      * @tests Database#open_aux_file(String)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.SUFFICIENT,
         notes = "not supported",
         method = "open_aux_file",
         args = {java.lang.String.class}
@@ -253,7 +259,7 @@ public class DatabaseTest extends SQLiteTest {
             e.printStackTrace();
         }
         try {
-            db.open(dbFile.getName(),0);
+            db.open(dbFile.getPath(),0);
             db.exec("select * from AUX_TABLE", null);
             fail("Statement should fail");
         } catch (Exception e) {
@@ -281,7 +287,7 @@ public class DatabaseTest extends SQLiteTest {
         } catch (Exception e) {
             assertTrue(e.getMessage().equals("database already closed"));
             try {
-                db.open(dbFile.getName(), 0);
+                db.open(dbFile.getPath(), 0);
             } catch (Exception e1) {
                 fail("Database object could not be reopened after 'close': "
                         + e.getMessage());
@@ -295,7 +301,7 @@ public class DatabaseTest extends SQLiteTest {
         } catch (Exception e) {
             assertTrue(e.getMessage().equals("database already closed"));
             try {
-                db.open(dbFile.getName(), 0);
+                db.open(dbFile.getPath(), 0);
             } catch (Exception e1) {
                 fail("Database object could not be reopened after 'close': "
                         + e.getMessage());
@@ -398,17 +404,20 @@ public class DatabaseTest extends SQLiteTest {
     }
 
     /**
+     * @throws Exception 
      * @tests {@link Database#interrupt()}
      */
     @TestTargetNew(
-        level = TestLevel.NOT_FEASIBLE,
-        notes = "How should this be tested?",
+        level = TestLevel.COMPLETE,
+        notes = "",
         method = "interrupt",
         args = {}
     )
-    public void _testInterrupt() {
+    @KnownFailure("Reason for failure unknown: Database should be locked. " +
+                   "Specification of interrupt is scarce.")
+    public void testInterrupt() throws Exception {
         ThreadPool threadPool = new ThreadPool(numThreads);
-        
+
         // initialization
         ResultSet userTabs;
         try {
@@ -428,41 +437,39 @@ public class DatabaseTest extends SQLiteTest {
             fail("Error initializing test " + e.getMessage());
             e.printStackTrace();
         }
-        
+
         int id1 = numOfRecords - 3;
-        threadPool.runTask(createTask1(id1, dbFile.getName(), tracker));
+        threadPool.runTask(createTask1(id1, dbFile.getPath(), tracker));
+        // should not be able to do any other insertions since task 1 holds lock
         int id2 = numOfRecords + 3;
-        threadPool.runTask(createTask2Interrupt(id2, dbFile.getName(), tracker));
+        threadPool
+                .runTask(createTask2Interrupt(id2, dbFile.getPath(), tracker));
 
         threadPool.join();
 
         List<String> errors = tracker.getErrors();
-        System.out.println("Last error: "+db.error_message());
+        System.out.println("Last error: " + db.error_message());
         if (errors.size() > 0) {
-//             assertEquals(errors.get(0),
-//             db.error_string(Constants.SQLITE_LOCKED));
-            for (String s: errors) {
-              System.out.println("INTERRUPT Error: "+s);
-              
-          }
-            fail("Should not have any errors with interrupt");
+            assertEquals(errors.get(0), db
+                    .error_string(Constants.SQLITE_LOCKED));
+            for (String s : errors) {
+                Logger.global.info("INTERRUPT Error: " + s);
+            }
+
         } else {
-            System.out.println("INTERRUPT: No error happened");
+            fail("Should have one exception: database should be locked.");
         }
-        
+
         // reset
 
-        try {
-            db.exec("delete from " + DatabaseCreator.TEST_TABLE1 + " where 1",
-                    null);
-            db.exec("delete from " + DatabaseCreator.TEST_TABLE3 + " where 1",
-                    null);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-       
-        
+        db
+                .exec(
+                        "delete from " + DatabaseCreator.TEST_TABLE1
+                                + " where 1", null);
+        db
+                .exec(
+                        "delete from " + DatabaseCreator.TEST_TABLE3
+                                + " where 1", null);
 
     }
 
@@ -475,23 +482,24 @@ public class DatabaseTest extends SQLiteTest {
         method = "changes",
         args = {}
     )
-    public void _testChanges() {
+    @KnownFailure("Returns wrong number for updates: returns value > 1 for select.")
+    public void testChanges() {
         TableResult res = new TableResult();
         try {
             assertTrue(db.changes() == 0);
             db.exec("INSERT INTO " + DatabaseCreator.SIMPLE_TABLE1
-                    + " VALUES(2, 5, 7)", null);
+                    + " VALUES(2, 5, 7);", null);
             int rows = (int) db.changes();
             assertEquals(1,db.changes());
             db.exec("update " + DatabaseCreator.SIMPLE_TABLE1
-                    + " set speed = 7, size= 5 where id = 2", null);
+                    + " set speed = 7, size= 5 where id = 2;", null);
             assertEquals(1,db.changes());
             db.exec("select * from " + DatabaseCreator.SIMPLE_TABLE1, res);
             assertEquals(0,db.changes());
             db.exec("INSERT INTO " + DatabaseCreator.SIMPLE_TABLE1
-                    + " VALUES(8, 5, 7)", null);
-            db.exec("drop table "+DatabaseCreator.SIMPLE_TABLE1, null);
-           assertTrue(db.changes() > 1);
+                    + " VALUES(8, 5, 7);", null);
+            db.exec("Update "+DatabaseCreator.SIMPLE_TABLE1+" set speed = 10;",null);
+           assertTrue(db.changes() > 2);
         } catch (Exception e) {
             fail("Could not get changes: " + e.getMessage());
             e.printStackTrace();
@@ -499,24 +507,28 @@ public class DatabaseTest extends SQLiteTest {
     }
 
     /**
+     * @throws SQLException 
+     * @throws Exception 
      * @tests {@link Database#busy_handler(BusyHandler)}
      */
     @TestTargets({
     @TestTargetNew(
         level = TestLevel.NOT_FEASIBLE,
-        notes = "method test fails. Cannot be sure that exception is thrown wvery time.",
+        notes = "method test fails once in a while. Cannot be sure that exception is thrown every time.",
         method = "busy_handler",
         args = {BusyHandler.class}
     ),
     @TestTargetNew(
             level = TestLevel.NOT_FEASIBLE,
-            notes = "method test fails. Cannot be sure that exception is thrown every time.",
+            notes = "method test fails once in a while. Cannot be sure that exception is thrown every time.",
             method = "busy",
             clazz = BusyHandler.class,
             args = {java.lang.String.class, int.class}
         )
     })
-    public void _testBusy_handler() {
+    @KnownFailure("method test fails once in a while. "+
+            "Cannot be sure that exception is thrown in every test execution.")
+    public void testBusy_handler() throws SQLException, Exception {
         TestBusyHandler bh = new TestBusyHandler();
         db.busy_handler(bh);
         int counter = 0;
@@ -542,19 +554,21 @@ public class DatabaseTest extends SQLiteTest {
             e.printStackTrace();
         }
 
-
+        
 //        try {
 //            DatabaseCreator.fillTestTable1(conn, numOfRecords);
             // set to fail immediately if table is locked.
 //            db.busy_handler(bh);
 //            db.busy_timeout(0);
+        try {
+            conn.setAutoCommit(false);
             int id1 = numOfRecords - 3;
-            threadPool.runTask(createTask1(id1, dbFile.getName(), tracker));
+            threadPool.runTask(createTask1(id1, dbFile.getPath(), tracker));
             int id2 = numOfRecords + 3;
-            threadPool.runTask(createTask2(id2, dbFile.getName(), tracker));
+            threadPool.runTask(createTask2(id2, dbFile.getPath(), tracker));
             int oldID = 5;
             int newID = 100;
-            threadPool.runTask(createTask3(oldID, dbFile.getName(), newID,
+            threadPool.runTask(createTask3(oldID, dbFile.getPath(), newID,
                     tracker));
 
             threadPool.join();
@@ -567,12 +581,11 @@ public class DatabaseTest extends SQLiteTest {
                   System.out.println("Round 2 Error: "+s);
               }
             } else {
-                System.out.println("BUSY: No error happened");
+                fail("No error happened");
             }
             
             // reset
             
-            try{
 
             db.exec("delete from " + DatabaseCreator.TEST_TABLE1 + " where 1",
                     null);
@@ -586,8 +599,8 @@ public class DatabaseTest extends SQLiteTest {
            
 //            threadPool = new ThreadPool(numThreads);
 //            
-//            threadPool.runTask(createTask1(id1, dbFile.getName(), tracker));
-//            threadPool.runTask(createTask2(id2, dbFile.getName(), tracker));
+//            threadPool.runTask(createTask1(id1, dbFile.getPath(), tracker));
+//            threadPool.runTask(createTask2(id2, dbFile.getPath(), tracker));
 //            
 //            threadPool.join();
 //            
@@ -622,31 +635,29 @@ public class DatabaseTest extends SQLiteTest {
 //             } catch (Exception e1) {
 //             e2.printStackTrace();
 //             }
-        }
-
-        try {
+        } finally {
+            conn.setAutoCommit(true);
             db.exec(DatabaseCreator.DROP_TABLE1, null);
             db.exec(DatabaseCreator.DROP_TABLE3, null);
-        } catch (Exception e) {
-            fail("Error in test cleanup" + e.getMessage());
-            e.printStackTrace();
         }
-
     }
     
     /**
+     * @throws Exception 
+     * @throws SQLException 
      * @tests {@link Database#busy_timeout(int)}
      */
     @TestTargetNew(
         level = TestLevel.NOT_FEASIBLE,
-        notes = "method test fails. Cannot be sure that exception is thrown wvery time.",
+        notes = "test fails. Cannot be sure that exception is thrown every time.",
         method = "busy_timeout",
         args = {int.class}
     )
-    public void _testBusy_timeout() {
+    @KnownFailure("Database does not lock values")
+    public void testBusy_timeout() throws Exception, SQLException {
         int counter = 0;
         ThreadPool threadPool = new ThreadPool(numThreads);
-
+        
         // initialization
         ResultSet userTabs;
         try {
@@ -666,33 +677,35 @@ public class DatabaseTest extends SQLiteTest {
             fail("Error initializing test " + e.getMessage());
             e.printStackTrace();
         }
-
-
+        
+        
+        // test run
         try {
+            conn.setAutoCommit(false);
+        
 //            DatabaseCreator.fillTestTable1(conn, numOfRecords);
             // set to fail immediately if table is locked.
             db.busy_handler(null);
             db.busy_timeout(0);
             int id1 = numOfRecords - 3;
-            threadPool.runTask(createTask1(id1, dbFile.getName(), tracker));
+           
+            threadPool.runTask(createTask2(id1, dbFile.getPath(), tracker));
             int id2 = numOfRecords + 3;
-            threadPool.runTask(createTask2(id2, dbFile.getName(), tracker));
+            threadPool.runTask(createTask1(id2, dbFile.getPath(), tracker));
             int oldID = 5;
             int newID = 100;
-            threadPool.runTask(createTask3(oldID, dbFile.getName(), newID,
+            threadPool.runTask(createTask3(oldID, dbFile.getPath(), newID,
                     tracker));
 
             threadPool.join();
-
-            List<String> errors = tracker.getErrors();
-            if (errors.size() > 0) {
-//                 assertEquals(errors.get(0),
-//                 db.error_string(Constants.SQLITE_LOCKED));
-                assertEquals(errors.get(0), "database is locked");
-            } else {
-                fail("Error in test setup");
-            }
             
+            List<String> errors = tracker.getErrors();
+            assertTrue("No error occurred on DB but should have",errors.size() > 0);
+            
+            assertEquals(errors.get(0),
+            db.error_string(Constants.SQLITE_LOCKED));
+            assertEquals(errors.get(0), "database is locked");
+          
             // reset
 
             db.exec("delete from " + DatabaseCreator.TEST_TABLE1 + " where 1",
@@ -706,22 +719,19 @@ public class DatabaseTest extends SQLiteTest {
             tracker.reset();
             threadPool = new ThreadPool(numThreads);
             
-            threadPool.runTask(createTask1(id1, dbFile.getName(), tracker));
-            threadPool.runTask(createTask2(id2, dbFile.getName(), tracker));
+            threadPool.runTask(createTask1(id1, dbFile.getPath(), tracker));
+            threadPool.runTask(createTask2(id2, dbFile.getPath(), tracker));
             
             threadPool.join();
             
             errors = tracker.getErrors();
             if (errors.size() > 0) {
-                // assertEquals(errors.get(0),
-                // db.error_string(Constants.SQLITE_LOCKED));
                 fail("busy timeout should prevent from lock exception!");
                 for (String s: errors) {
                     System.out.println("Round 2 Error"+s);
                 }
             } else {
                 // ok
-                System.out.println("No Error!");
             }
             
 
@@ -735,24 +745,12 @@ public class DatabaseTest extends SQLiteTest {
                 e1.printStackTrace();
             }
             e.printStackTrace();
-//             } catch (SQLException e2) {
-//             System.out.println("Error in test setup "+e2.toString());
-//             try {
-//             db.get_table("select * from "+DatabaseCreator.TEST_TABLE1,null).
-//             toString();
-//             } catch (Exception e1) {
-//             e2.printStackTrace();
-//             }
-        }
-
-        try {
+        } finally {
+            conn.setAutoCommit(true);
+            // cleanup
             db.exec(DatabaseCreator.DROP_TABLE1, null);
             db.exec(DatabaseCreator.DROP_TABLE3, null);
-        } catch (Exception e) {
-            fail("Error in test cleanup" + e.getMessage());
-            e.printStackTrace();
         }
-
     }
 
     /**
@@ -837,33 +835,33 @@ public class DatabaseTest extends SQLiteTest {
      * @tests {@link Database#get_table(String, String[], TableResult)}
      */
     @TestTargets({
-    @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "method test",
-        method = "get_table",
-        args = {java.lang.String.class, java.lang.String[].class, TableResult.class}
-    ),
-    @TestTargetNew(
+        @TestTargetNew(
             level = TestLevel.COMPLETE,
             notes = "method test",
-            method = "toString",
-            clazz = TableResult.class,
-            args = {}
+            method = "get_table",
+            args = {java.lang.String.class, java.lang.String[].class, TableResult.class}
         ),
-   @TestTargetNew(
+        @TestTargetNew(
                 level = TestLevel.COMPLETE,
                 notes = "method test",
-                method = "types",
+                method = "toString",
                 clazz = TableResult.class,
-                args = {String[].class}
-        ),
-   @TestTargetNew(
-            level = TestLevel.COMPLETE,
-            notes = "method test",
-            method = "TableResult",
-            clazz = TableResult.class,
-            args = {}
-       ),
+                args = {}
+            ),
+       @TestTargetNew(
+                    level = TestLevel.COMPLETE,
+                    notes = "method test",
+                    method = "types",
+                    clazz = TableResult.class,
+                    args = {String[].class}
+            ),
+       @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                notes = "method test",
+                method = "TableResult",
+                clazz = TableResult.class,
+                args = {}
+           ),
        @TestTargetNew(
                level = TestLevel.NOT_NECESSARY,
                notes = "method test",
@@ -871,20 +869,20 @@ public class DatabaseTest extends SQLiteTest {
                clazz = TableResult.class,
                args = {String[].class}
           ),
-          @TestTargetNew(
-                  level = TestLevel.NOT_NECESSARY,
-                  notes = "method test",
-                  method = "newrow",
-                  clazz = TableResult.class,
-                  args = {String[].class}
-             ),
-             @TestTargetNew(
-                     level = TestLevel.NOT_NECESSARY,
-                     notes = "method test",
-                     method = "clear",
-                     clazz = TableResult.class,
-                     args = {}
-                )
+      @TestTargetNew(
+              level = TestLevel.NOT_NECESSARY,
+              notes = "method test",
+              method = "newrow",
+              clazz = TableResult.class,
+              args = {String[].class}
+         ),
+     @TestTargetNew(
+         level = TestLevel.NOT_NECESSARY,
+         notes = "method test",
+         method = "clear",
+         clazz = TableResult.class,
+         args = {}
+        )
      
     })
     public void testGet_tableStringStringArrayTableResult() {
@@ -960,15 +958,16 @@ public class DatabaseTest extends SQLiteTest {
         args = {}
     )
     public void testDbversion() {
+        String verNo = "";
         try {
-            String verNo = db.dbversion();
+            verNo = db.dbversion();
             db.close();
             assertEquals(db.dbversion(),"unknown");
-            db.open(dbFile.getName(), 0);
+            db.open(dbFile.getPath(), 0);
             assertEquals(verNo,db.dbversion());
         } catch (Exception e) {
             try {
-                db.open(dbFile.getName(), 0);
+                db.open(dbFile.getPath(), 0);
             } catch (Exception e1) {
                 fail("error in db setup "+e.getMessage());
                 e.printStackTrace();
@@ -977,6 +976,8 @@ public class DatabaseTest extends SQLiteTest {
             e.printStackTrace();
         }
         
+        assertTrue(Integer.parseInt(verNo.substring(0, 1))>= 3 );
+     
     }
 
     /**
@@ -990,10 +991,10 @@ public class DatabaseTest extends SQLiteTest {
         args = {java.lang.String.class, int.class, Function.class}
     ),
     @TestTargetNew(
-            level = TestLevel.COMPLETE,
-            notes = "method test",
-            method = "create_function",
-            args = {java.lang.String.class, int.class, Function.class}
+        level = TestLevel.COMPLETE,
+        notes = "method test",
+        method = "create_function",
+        args = {java.lang.String.class, int.class, Function.class}
         )
     })
     public void testCreate_function() {
@@ -1031,37 +1032,32 @@ public class DatabaseTest extends SQLiteTest {
         args = {java.lang.String.class, int.class, Function.class}
     ),
     @TestTargetNew(
-            level = TestLevel.COMPLETE,
-            notes = "method test",
-            method = "trace",
-            clazz = Trace.class,
-            args = {String.class}
-        ),
-    @TestTargetNew(
-                level = TestLevel.COMPLETE,
-                notes = "method test",
-                method = "step",
-                clazz = Function.class,
-                args = {FunctionContext.class, String[].class}
+        level = TestLevel.COMPLETE,
+        notes = "method test",
+        method = "step",
+        clazz = Function.class,
+        args = {FunctionContext.class, String[].class}
             ),
     @TestTargetNew(
-                    level = TestLevel.COMPLETE,
-                    notes = "method test",
-                    method = "last_step",
-                    clazz = Function.class,
-                    args = {FunctionContext.class}
+        level = TestLevel.COMPLETE,
+        notes = "method test",
+        method = "last_step",
+        clazz = Function.class,
+        args = {FunctionContext.class}
                 ),
     @TestTargetNew(
-                        level = TestLevel.COMPLETE,
-                        notes = "method test",
-                        method = "function",
-                        clazz = Function.class,
-                        args = {FunctionContext.class, String[].class}
+        level = TestLevel.COMPLETE,
+        notes = "method test",
+        method = "function",
+        clazz = Function.class,
+        args = {FunctionContext.class, String[].class}
                     )
     })
     public void testCreate_aggregate() {
         TestTrace t = new TestTrace();
+        
         MockFunction aggFunction = new MockFunction();
+       
         try {
             db
                     .exec(
@@ -1073,7 +1069,15 @@ public class DatabaseTest extends SQLiteTest {
             db.create_aggregate("myaggfunc", 1, aggFunction);
             db.function_type("myaggfunc", Constants.SQLITE_TEXT);
             db.exec("PRAGMA show_datatypes = on", null);
+            
+            assertFalse(aggFunction.functionCalled);
+            assertFalse(aggFunction.stepCalled);
+            assertFalse(aggFunction.lastStepCalled);
             db.exec("select myaggfunc(TEST.firstname) from TEST", t);
+            assertTrue(aggFunction.stepCalled);
+            assertTrue(aggFunction.lastStepCalled);
+            assertTrue(aggFunction.functionCalled);
+            
             assertEquals("James Fiona ",aggFunction.getAggValue());
             db.exec("drop table TEST", null);
         } catch (Exception e) {
@@ -1097,54 +1101,52 @@ public class DatabaseTest extends SQLiteTest {
     }
 
     /**
+     * @throws Exception 
      * @tests {@link Database#function_type(String, int)}
      * This method does not make sense
      */
     @TestTargetNew(
         level = TestLevel.COMPLETE,
-        notes = "method test fails.",
+        notes = "Method does not make sense: for functions, return type is already set.",
         method = "function_type",
         args = {java.lang.String.class, int.class}
     )
-    public void _testFunction_type() {
+    public void testFunction_type() throws Exception {
         
         double input = 1.0;
         TableResult res = new TableResult();
         Function sinFunc = (Function) new SinFunc();
         
-        try {
-            db.exec("PRAGMA show_datatypes = on", null);
-            db.exec("create table TEST (res double)", null);
-            db.exec("insert into TEST values (" + Double.toString(input) + ")",
-                    null);
-            
-            db.create_function("sin", 1, sinFunc);
-            db.function_type("sin", Constants.SQLITE2_TEXT);
-            res = db.get_table("select sin(res) from TEST WHERE res = "
-                    + Double.toString(input));
-            for(String s: res.types) {
-                System.out.println("DatabaseTest.testFunction_type()"+s);
-            }
-            db.function_type("sin", Constants.SQLITE2_TEXT);
-            Stmt s = db.prepare("select sin(res) from TEST WHERE res = "
-                    + Double.toString(input));
-            s.step();
-            
-//            fail("Return type is not Text");
+        db.exec("PRAGMA show_datatypes = on", null);
+        db.exec("create table TEST (res double)", null);
+        db.exec("insert into TEST values (" + Double.toString(input) + ")",
+                null);
+        
+        db.create_function("sin", 1, sinFunc);
+        db.function_type("sin", Constants.SQLITE_NUMERIC);
+        res = db.get_table("select sin(res) from TEST WHERE res = "
+                + Double.toString(input));
+         
+        String row[] = (String[]) res.rows.elementAt(0);
+        String val = row[0];
+        assertTrue("double".equalsIgnoreCase(res.types[0]));
+        assertSame(Math.round(Math.sin(input)), Math.round(Double.parseDouble(val)));
+        
+        // function determines return type: test that Double type is returned.
+        db.function_type("sin", Constants.SQLITE_BLOB);
+        Stmt s = db.prepare("select sin(res) from TEST WHERE res = ?");
+        s.bind(1,input);
+        s.step();
+        
+        res = db.get_table("select sin(res) from TEST WHERE res = "
+                + Double.toString(input));
+        assertTrue("double".equalsIgnoreCase(res.types[0]));
+        row = (String[]) res.rows.elementAt(0);
+        val = row[0]; 
+        assertSame(Math.round(Math.sin(input)), Math.round(Double.parseDouble(val)));
+        
 
-
-            // System.out.println(res.toString());
-            // String row[] = (String[]) res.rows.elementAt(0);
-            // String val = row[0];
-            // System.out.println(db.get_table("select sin(1) from TEST"));
-            // } catch (SQLException e) {
-            // fail("Error happened creating function:"
-            // + e.getMessage());
-            // e.printStackTrace();
-        } catch (Exception e) {
-            fail("Error happened creating function:" + e.getMessage());
-            e.printStackTrace();
-        }
+        
 
     }
 
@@ -1174,17 +1176,19 @@ public class DatabaseTest extends SQLiteTest {
      * @tests {@link Database#set_last_error(int)}
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "method test",
+        level = TestLevel.SUFFICIENT,
+        notes = "don't now which other errors may occur from black-box approach.",
         method = "set_last_error",
         args = {int.class}
     )
-    public void _testSet_last_error() {
+    public void testSet_last_error() {
        assertEquals(db.last_error(), Constants.SQLITE_OK);
-       //db.set_last_error(Constants.SQLITE_MISMATCH);
-       //assertEquals(db.last_error(),Constants.SQLITE_MISMATCH);
-       //db.set_last_error(Constants.SQLITE3_TEXT);
-       //assertEquals(db.last_error(),Constants.SQLITE3_TEXT);
+       
+       try {
+           db.exec("sel from test;", null);
+       } catch (Exception e) {
+           assertEquals(Constants.SQLITE_ERROR,db.last_error());
+       }
     }
 
     /**
@@ -1237,6 +1241,7 @@ public class DatabaseTest extends SQLiteTest {
     }
 
     /**
+     * @throws UnsupportedEncodingException 
      * @tests {@link Database#set_encoding(String)}
      * Method unsupported? -> tests fail
      */
@@ -1246,7 +1251,9 @@ public class DatabaseTest extends SQLiteTest {
         method = "set_encoding",
         args = {java.lang.String.class}
     )
-    public void _testSet_encoding() {
+    @KnownFailure("ASCII encoding does not work: a UTF encoded val is returned. Spec is not sufficient. "
+            + "Might be that test impl is wrong or String constructor for the ASCII encoding.")
+    public void testSet_encoding() throws UnsupportedEncodingException {
         String input = "\u00bfMa\u00f1ana\u003f"; // ?Manana?
         TableResult res = new TableResult();
         String refOutput = null;
@@ -1271,46 +1278,15 @@ public class DatabaseTest extends SQLiteTest {
             e1.printStackTrace();
         }
         
-        // Default tests
-        try {
-            db.set_encoding("");
-            fail("invalid input should fail");
-        } catch (Exception e) {
-            //ok
-        }
-
-        // Default tests
-        try {
-            db.set_encoding("UTF-16");
-            db.exec("select * from encodingTest;", res);
-            String[] encOutput1 = (String[]) res.rows.elementAt(0);
-
-            db.set_encoding("US-ASCII");
-            db.exec("select * from encodingTest;", res);
-            String[] encOutput2 = (String[]) res.rows.elementAt(0);
-            
-            assertFalse(encOutput1[0].equals(encOutput2[0]));
-        } catch (Exception e) {
-            fail("Error setting the encoding." + e.getMessage());
-            e.printStackTrace();
-        }
-        
-        // tests for different encoding schemes
-        // String[] charsetNames = { "ISO-8859-1","US-ASCII", "UTF-8",
-        // "UTF-16","UTF-16BE", "UTF-16LE"
+     // tests for different encoding schemes
         String[] charsetNames = {"UTF-8", "UTF-16", "UTF-16BE", "UTF-16LE"};
         for (int i = 0; i < charsetNames.length; i++) {
             try {
                 byte[] encInput = input.getBytes(charsetNames[i]);
                 db.set_encoding(charsetNames[i]);
-                // stat.reset();
-                // stat.bind(1, encInput);
-                // stat.step();
                 db.exec("select * from encodingTest;", res);
                 String[] encOutput = (String[]) res.rows.elementAt(0);
-                String inputAsString = new String(encInput);
-                System.out.println(charsetNames[i] + " input: " + inputAsString
-                        + " output: " + encOutput[0]);
+                String inputAsString = new String(encInput,charsetNames[i]);
                 assertEquals(inputAsString, encOutput[0]);
             } catch (Exception e4) {
                 fail("Error setting the encoding." + e4.getMessage());
@@ -1320,14 +1296,40 @@ public class DatabaseTest extends SQLiteTest {
                 e2.printStackTrace();
             }
         }
+
+        // Default tests
+        try {
+            db.set_encoding("UTF-16");
+            db.exec("select * from encodingTest;", res);
+            String[] encOutput1 = (String[]) res.rows.elementAt(0);
+            assertEquals("Got "+encOutput1[0]+" as UTF-16",input,encOutput1[0]);
+
+            db.set_encoding("US-ASCII");
+            db.exec("select * from encodingTest;", res);
+            String[] encOutput2 = (String[]) res.rows.elementAt(0);
+            assertEquals(new String(input.getBytes(),"US-ASCII"),encOutput2[0]);
+        } catch (Exception e) {
+            fail("Error setting the encoding." + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        
         // DB teardown
         try {
             stat.close();
-            db.exec("delete from encodingTest where 1", null);
+            db.exec("delete from encodingTest", null);
             // reset encoding
         } catch (Exception e3) {
             fail("Error in teardown of encoding environment");
             e3.printStackTrace();
+        }
+        
+        // Default tests
+        try {
+            db.set_encoding("");
+            fail("invalid input should fail");
+        } catch (Exception e) {
+            //ok
         }
 
     }
@@ -1351,7 +1353,9 @@ public class DatabaseTest extends SQLiteTest {
             args = {int.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class}
         )
     })
-    public void _testSet_authorizer() {
+    @KnownFailure("Callback never made for authorization. "+
+            "Results of private table are returned withouth furhter checks.")
+    public void testSet_authorizer() {
         
         TableResult resPriv = null;
         TableResult resPub = null;
@@ -1372,22 +1376,22 @@ public class DatabaseTest extends SQLiteTest {
 //            db.exec("delete from public_table where 1", null);
 //            TableResult emptyPubTable = db.exec("select * from public");
             
-            // set Authorizer (positive case)
+            // set Authorizer (positive case): denies private table
             AuthorizerCallback cb = new AuthorizerCallback();
             db.set_authorizer(cb);
-            System.out.println("Auth set.");
             //select
             
             db.exec("select * from private_table", cb);
-            fail("authorization failed");
-           
-//            TableResult res = db.get_table("select * from private_table");
-//            assertEquals(emptyTable.toString(),res.toString());
-//            assertFalse(emptyTable.equals(resPriv));
-//            
-//            res = db.get_table("select * from public_table");
-//            assertEquals(resPub,res);
+            assertTrue(cb.wasCalled());
             
+           /*
+            TableResult res = db.get_table("select * from private_table");
+            assertEquals(emptyTable.toString(),res.toString());
+            assertFalse(emptyTable.equals(resPriv));
+            
+            res = db.get_table("select * from public_table");
+            assertEquals(resPub,res);
+            */
         } catch (Exception e) {
             fail("Error testing authorization: "+e.getMessage());
         }
@@ -1420,10 +1424,12 @@ public class DatabaseTest extends SQLiteTest {
     public void testTrace() {
         String stmt = "create table TEST (res double);";
         TestTrace t = new TestTrace();
+        assertFalse(t.traceCalled);
         assertEquals(db.last_error(),Constants.SQLITE_OK);
         try {
             db.trace((Trace) t);
             db.exec(stmt,t);
+            assertTrue(t.traceCalled);
             assertEquals(t.getTrace(),stmt);
         } catch (Exception e) {
             fail("Error testing traces: "+e.getMessage());
@@ -1558,82 +1564,76 @@ public class DatabaseTest extends SQLiteTest {
     }
 
     /**
+     * @throws Exception 
+     * @throws java.lang.Exception 
      * @tests {@link Database#open_blob(String, String, String, long, boolean)}
      * unsupported
      */
-    @TestTargets({
     @TestTargetNew(
         level = TestLevel.COMPLETE,
-        notes = "",
+        notes = "not supported",
         method = "open_blob",
         args = {java.lang.String.class, java.lang.String.class, java.lang.String.class, long.class, boolean.class}
-    ),
-    @TestTargetNew(
-            level = TestLevel.COMPLETE,
-            notes = "",
-            method = "Exception",
-            clazz = Exception.class,
-            args = {java.lang.String.class}
-        )
-    })
-    public void _testOpen_blob() {
+    )
+    @KnownFailure("not supported")
+    public void testOpen_blob() throws Exception, java.lang.Exception {
         Stmt statement2;
         Blob blobInput = new Blob();
        
         
         // Create test input Blob
-        //File resources = Support_Resources.createTempFolder();
         InputStream inStream = null;
-        byte[] in = new byte[20];
-        try {
-            db.exec("create table TEST (res blob)",null);
-            inStream = Class.forName(this.getClass().getName()).getResourceAsStream("/blob.c");
-            assertNotNull(inStream);
-            inStream.read(in);
-            inStream.close();
-        } catch (NullPointerException e) {
-            fail("Error reading file"+e.getMessage());
-        } catch (java.lang.Exception e2) {
-            fail("Error reading from input "+e2.getMessage());
-        } 
+        byte[] in = {(byte) 1, (byte) 2, (byte) 3, (byte) 4};
+        
+        // setup test input
+        db.exec("create table TEST (res blob)",null);
+        inStream = Class.forName(this.getClass().getName()).getResourceAsStream("/blob.c");
+        assertNotNull(inStream);
+
         
         // insert byte array in db
         try {
-        statement2 = db.prepare("insert into TEST(res) values (?)");
-        statement2.bind(1,in);
-        statement2.step();
-        statement2.close();
+            statement2 = db.prepare("insert into TEST(res) values (?)");
+            statement2.bind(1, in);
+            statement2.step();
+            statement2.close();
         } catch (Exception e) {
-            fail("Error happened inserting blob"+e.getMessage());
+            fail("Error happened inserting blob" + e.getMessage());
             e.printStackTrace();
         }
-        byte[] output = new byte[20];
+        
+        // read from db
+        byte[] output = null;
         Blob blob;
-        try {
-            blob = db.open_blob(dbFile.getName(), "TEST", "res", 1, true);
+       
+            blob = db.open_blob(dbFile.getPath(), "TEST", "res", 1, true);
             if (blob == null) {
                 fail("Blob could not be retrieved");
             }
-            OutputStream os = blob.getOutputStream();
-            os.write(output);
-            os.close();
-            blob.close();
             //read from blob and compare values (positive case)
             InputStream is = blob.getInputStream();
-            assertEquals(in,is);
-            //read from blob and compare values (negative case)
+            
+            int i = 0;
+            int outByte = 0;
+            byte[] out = new byte[4];
+            while ((outByte = is.read()) > -1) {
+                out[i] = (byte) outByte;
+                i++;
+            }
+            is.close();
+            
+            blob.close();
+            
+            assertTrue(Arrays.equals(in, out));
+            
+            //read from blob and compare values (default blob)
             db.exec("insert into TEST values(zeroblob(128))", null);
-            Blob blob2 = db.open_blob(dbFile.getName(), "TEST", "res", 2, true);
-            /*if (blob2 != null) {
-                assertEquals(0, blob2.size);
-            }*/
-        } catch (Exception e) {
-            assertEquals("Method opend_blob unsupported (sqlite 3)","unsupported", e.getMessage());
-        } catch (IOException e2) {
-            fail("error in setup: "+e2.getMessage());
-            e2.printStackTrace();
-        }
-        
+            Blob blob2 = db.open_blob(dbFile.getPath(), "TEST", "res", 2, true);
+            is = blob2.getInputStream();
+            for (i = 0; i < 128; i++)  {
+               assertEquals(0, is.read());
+            }
+            is.close();
     }
 
     /**
@@ -1750,11 +1750,14 @@ public class DatabaseTest extends SQLiteTest {
        
     private StringBuffer buf = new StringBuffer();
     
+    public boolean traceCalled = false;
+    
     public String getTrace() {
         return buf.toString();
     }
     
     public void trace(String stmt) {
+        traceCalled = true;
         buf.append(stmt);
     }
 
@@ -1784,9 +1787,9 @@ public class DatabaseTest extends SQLiteTest {
 
     public int authorize(int action, String arg1, String arg2, String arg3,
             String arg4) {
-        System.out.println("Authorize "+action+" "+arg1+" "+arg2+" "+arg3+" "+arg4+" ");
+        Logger.global.info("DB authorization callback "+action+" "+arg1+" "+arg2+" "+arg3+" "+arg4+" ");
         this.isAuthorizing = true;
-        if (action != Constants.SQLITE_SELECT || arg1 == "private_table" ) {
+        if (action != Constants.SQLITE_SELECT || arg1.contains("private_table")) {
         return Constants.SQLITE_DENY;
         } else {
         return Constants.SQLITE_OK;
@@ -1933,14 +1936,12 @@ public class DatabaseTest extends SQLiteTest {
                             + ", '" + value + "', " + id + ", " + id + ")";
                     db.exec(insertQuery, null);
                 } catch (Exception e) {
-                    // errorTracker.registerException(this, e);
-                    db.interrupt();
-
+                    errorTracker.registerException(this, e);
                     try {
+                        db.interrupt();
                         db.exec("DELETE FROM " + DatabaseCreator.SIMPLE_TABLE1
                                 + " WHERE id=" + id, null);
                     } catch (Exception e1) {
-                        errorTracker.reset();
                         errorTracker.registerException(this, e1);
                     }
                 }

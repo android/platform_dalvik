@@ -17,7 +17,6 @@
 
 package org.apache.harmony.luni.tests.java.net;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -28,12 +27,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.CacheRequest;
 import java.net.CacheResponse;
-import java.net.DatagramSocket;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.ResponseCache;
-import java.net.SocketException;
 import java.net.SocketPermission;
 import java.net.URI;
 import java.net.URL;
@@ -592,7 +589,6 @@ public class HttpURLConnectionTest extends junit.framework.TestCase {
       method = "setUseCaches",
       args = {boolean.class}
     )
-    @KnownFailure("getInputStream doesn't call get method of cache")
     public void test_UseCache_HttpURLConnection_NonCached() throws IOException {
         ResponseCache.setDefault(new MockNonCachedResponseCache());
         uc = (HttpURLConnection) url.openConnection();
@@ -600,7 +596,6 @@ public class HttpURLConnectionTest extends junit.framework.TestCase {
         // default useCaches is true
         assertTrue(uc.getUseCaches());
         uc.setDoInput(true);
-        uc.connect();
 
         // make sure ResponseCache.get/put is called
         isGetCalled = false;

@@ -146,7 +146,7 @@ public class LineNumberReaderTest extends junit.framework.TestCase {
      * @tests java.io.LineNumberReader#read(char[], int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         method = "read",
         args = {char[].class, int.class, int.class}
     )    
@@ -164,6 +164,40 @@ public class LineNumberReaderTest extends junit.framework.TestCase {
             lnr.read(c, 0, 4);
             fail("Test 3: IOException expected.");
         } catch (IOException e) {
+            // Expected.
+        }
+    }
+
+    /**
+     * @tests java.io.LineNumberReader#read(char[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        method = "read",
+        args = {char[].class, int.class, int.class}
+    )    
+    public void test_read$CII_Exception() throws IOException {
+        lnr = new LineNumberReader(new StringReader(text));
+        char[] c = new char[10];
+
+        try {
+            lnr.read(c, -1, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+
+        try {
+            lnr.read(c, 0, -1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+
+        try {
+            lnr.read(c, 10, 1);
+            fail("IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
             // Expected.
         }
     }

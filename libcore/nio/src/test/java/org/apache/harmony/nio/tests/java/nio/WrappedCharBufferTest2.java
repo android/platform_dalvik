@@ -19,6 +19,7 @@ package org.apache.harmony.nio.tests.java.nio;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.nio.BufferOverflowException;
 import java.nio.CharBuffer;
@@ -170,4 +171,15 @@ public class WrappedCharBufferTest2 extends ReadOnlyCharBufferTest {
             // expected
         }
     }    
+
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "slice",
+        args = {}
+    )
+    @AndroidOnly("Fails on RI")
+    public void testSlice() {
+        super.testSlice();  
+    }
 }

@@ -45,15 +45,6 @@ import org.apache.harmony.security.tests.support.cert.MyCertPathValidatorSpi;
 public class CertPathValidatorSpiTest extends TestCase {
 
     /**
-     * Constructor for CertPathValidatorSpiTest.
-     * 
-     * @param arg0
-     */
-    public CertPathValidatorSpiTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
      * Test for <code>CertPathValidatorSpi</code> constructor Assertion:
      * constructs CertPathValidatorSpi
      */

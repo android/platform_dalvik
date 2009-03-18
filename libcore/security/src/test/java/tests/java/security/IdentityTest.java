@@ -60,14 +60,6 @@ public class IdentityTest extends TestCase {
         junit.textui.TestRunner.run(IdentityTest.class);
     }
 
-    /**
-     * Constructor for IdentityTest.
-     * @param name
-     */
-    public IdentityTest(String name) {
-        super(name);
-    }
-    
     @TestTargetNew(
         level = TestLevel.PARTIAL,
         notes = "Method's returned variable is not checked",

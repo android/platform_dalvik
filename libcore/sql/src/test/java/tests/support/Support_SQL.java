@@ -52,12 +52,12 @@ public class Support_SQL {
                     .getResourceAsStream("/connection.properties"));
 
             String tmp = System.getProperty("java.io.tmpdir");
-            File ctsDir = new File(tmp);
-            if (ctsDir.isDirectory()) {
-                dbFile = File.createTempFile("sqliteTest", ".db", ctsDir);
+            File tmpDir = new File(tmp);
+            if (tmpDir.isDirectory()) {
+                dbFile = File.createTempFile("sqliteTest", ".db", tmpDir);
                 dbFile.deleteOnExit();
             } else {
-                System.err.println("ctsdir does not exist");
+                System.err.println("java.io.tmpdir does not exist");
             }
             Class.forName("SQLite.JDBCDriver").newInstance();
 

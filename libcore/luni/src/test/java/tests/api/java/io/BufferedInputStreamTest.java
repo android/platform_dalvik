@@ -400,21 +400,21 @@ public class BufferedInputStreamTest extends TestCase {
             bis.read(new byte[0], -1, -1);
             fail("should throw IndexOutOfBoundsException");
         } catch (IndexOutOfBoundsException e) {
-            //expected
+            // Expected
         }
 
         try {
             bis.read(new byte[0], 1, -1);
             fail("should throw IndexOutOfBoundsException");
         } catch (IndexOutOfBoundsException e) {
-            //expected
+            // Expected
         }
 
         try {
             bis.read(new byte[0], 1, 1);
             fail("should throw IndexOutOfBoundsException");
         } catch (IndexOutOfBoundsException e) {
-            //expected
+            // Expected
         }
         
         bis.close();

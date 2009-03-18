@@ -40,14 +40,6 @@ import java.security.spec.RSAOtherPrimeInfo;
 public class RSAOtherPrimeInfoTest extends TestCase {
 
     /**
-     * Constructor for RSAOtherPrimeInfoTest.
-     * @param name
-     */
-    public RSAOtherPrimeInfoTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test #1 for <code>RSAOtherPrimeInfo(BigInteger,BigInteger,BigInteger)</code> ctor
      * Assertion: constructs <code>RSAOtherPrimeInfo</code>
      * object using valid parameter

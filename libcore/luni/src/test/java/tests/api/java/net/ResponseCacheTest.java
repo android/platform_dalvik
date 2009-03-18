@@ -22,13 +22,8 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.CacheRequest;
 import java.net.CacheResponse;
@@ -40,7 +35,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.Permission;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -168,7 +162,8 @@ public class ResponseCacheTest extends TestCase {
         method = "get",
         args = {java.net.URI.class, java.lang.String.class, java.util.Map.class}
     )
-    @BrokenTest("cache seems not to be used")
+    @BrokenTest("This test fails on both RI and android. Also only getting " +
+            "from the cache is tested. The put method is not tested.")
     public void test_get_put() throws Exception {
         
         URL url  = new URL("http://" + 

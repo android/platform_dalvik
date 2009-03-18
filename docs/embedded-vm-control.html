@@ -111,21 +111,21 @@ optimization and verification).
 <p>There are two command-line flags that control the just-in-time
 verification and optimization,
 <code>-Xverify</code> and <code>-Xdexopt</code>.  The Android framework
-configures these based on the <code>dalvik.vm.verify-bytecode</code>
+configures these based on the <code>dalvik.vm.dexopt-flags</code>
 property.
 
 <p>If you set:
-<pre>adb shell setprop dalvik.vm.verify-bytecode true</pre>
+<pre>adb shell setprop dalvik.vm.dexopt-flags v=a,o=v</pre>
 then the framework will pass <code>-Xverify:all -Xdexopt:verified</code>
 to the VM.  This enables verification, and only optimizes classes that
 successfully verified.  This is the safest setting, and is the default.
-<p>If <code>dalvik.vm.verify-bytecode</code> is set to <code>false</code>,
-the framework passes <code>-Xverify:none -Xdexopt:verified</code> to disable
-verification.  (We could pass in <code>-Xdexopt:all</code>, but that wouldn't
-necessarily optimize more of the code, since classes that fail
-verification may well be skipped by the optimizer for the same reasons.)
-Classes will not be verified by <code>dexopt</code>, and unverified code
-will be loaded and executed.
+<p>You could also set <code>dalvik.vm.dexopt-flags</code> to <code>v=n</code>
+to have the framework pass <code>-Xverify:none -Xdexopt:verified</code>
+to disable verification.  (We could pass in <code>-Xdexopt:all</code> to
+allow optimization, but that wouldn't necessarily optimize more of the
+code, since classes that fail verification may well be skipped by the
+optimizer for the same reasons.)  Classes will not be verified by
+<code>dexopt</code>, and unverified code will be loaded and executed.
 
 <p>Enabling verification will make the <code>dexopt</code> command
 take significantly longer, because the verification process is fairly slow.
@@ -142,6 +142,10 @@ this property changes.  You can do this with:
 <pre>adb shell "rm /data/dalvik-cache/*"</pre>
 This removes the cached versions of the DEX files.  Remember to
 stop and restart the runtime (<code>adb shell stop; adb shell start</code>).
+
+<p>(Previous version of the runtime supported the boolean
+<code>dalvik.vm.verify-bytecode</code> property, but that has been
+superceded by <code>dalvik.vm.dexopt-flags</code>.)</p>
 
 
 <h2><a name="execmode">Execution Mode</a></h2>

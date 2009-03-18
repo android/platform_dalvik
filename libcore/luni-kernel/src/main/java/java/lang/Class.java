@@ -653,7 +653,21 @@ public final class Class<T> implements Serializable, AnnotatedElement, GenericDe
             }
         }
         
-        throw new NoSuchMethodException(getSimpleName());
+        // BEGIN android-changed
+        StringBuilder sb = new StringBuilder();
+        sb.append(getSimpleName());
+        sb.append('(');
+        boolean first = true;
+        for (Class<?> p : parameterTypes) {
+            if (!first) {
+                sb.append(',');
+            }
+            first = false;
+            sb.append(p.getSimpleName());
+        }
+        sb.append(')');
+        throw new NoSuchMethodException(sb.toString());
+        // END android-changed
     }
     
     /**

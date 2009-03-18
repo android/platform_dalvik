@@ -44,7 +44,7 @@ LOCAL_C_INCLUDES := $(dexdump_c_includes)
 LOCAL_SHARED_LIBRARIES := $(dexdump_shared_libraries) libz liblog
 LOCAL_STATIC_LIBRARIES := $(dexdump_static_libraries)
 LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES)
-LOCAL_MODULE_TAGS := debug development
+LOCAL_MODULE_TAGS := debug
 LOCAL_LDLIBS +=
 include $(BUILD_EXECUTABLE)
 

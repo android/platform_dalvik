@@ -66,7 +66,7 @@ public class StringBufferInputStreamTest extends junit.framework.TestCase {
      * @tests java.io.StringBufferInputStream#read()
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "",
         method = "read",
         args = {byte[].class, int.class, int.class}
@@ -77,6 +77,38 @@ public class StringBufferInputStreamTest extends junit.framework.TestCase {
         sbis.skip(6);
         sbis.read(buf, 0, 5);
         assertEquals("Returned incorrect chars", "World", new String(buf));
+    }
+
+    /**
+     * @tests java.io.StringBufferInputStream#read()
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "read",
+        args = {byte[].class, int.class, int.class}
+    )
+    public void test_read$BII_Exception() {
+        // Test for method int java.io.StringBufferInputStream.read()
+        byte[] buf = new byte[10];
+        try {
+            sbis.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            sbis.read(buf, -1, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            sbis.read(buf, 10, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
     }
 
     /**

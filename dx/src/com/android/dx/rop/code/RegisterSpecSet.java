@@ -187,16 +187,47 @@ public final class RegisterSpecSet
     }
 
     /**
+     * Returns the spec in this set that's currently associated with a
+     * given local (type, name, and signature), or {@code null} if there is
+     * none. This ignores the register number of the given spec but
+     * matches on everything else.
+     * 
+     * @param spec non-null; local to look for
+     * @return null-ok; first register found that matches, if any
+     */
+    public RegisterSpec findMatchingLocal(RegisterSpec spec) {
+        int length = specs.length;
+        
+        for (int reg = 0; reg < length; reg++) {
+            RegisterSpec s = specs[reg];
+
+            if (s == null) {
+                continue;
+            }
+
+            if (spec.matchesVariable(s)) {
+                return s;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the spec in this set that's currently associated with a given
-     * name, or null if there is none.
+     * local (name and signature), or {@code null} if there is none.
      *
      * @param local non-null; local item to search for
-     * @return null-ok; first register found with name.
+     * @return null-ok; first register found with matching name and signature
      */
     public RegisterSpec localItemToSpec(LocalItem local) {
-        for (int reg = 0; reg < specs.length; reg++) {
-            if (specs[reg] != null && local.equals(specs[reg].getLocalItem())) {
-                return specs[reg];
+        int length = specs.length;
+        
+        for (int reg = 0; reg < length; reg++) {
+            RegisterSpec spec = specs[reg];
+            
+            if ((spec != null) && local.equals(spec.getLocalItem())) {
+                return spec;
             }
         }
 
@@ -256,6 +287,22 @@ public final class RegisterSpecSet
         } catch (ArrayIndexOutOfBoundsException ex) {
             // Translate the exception.
             throw new IllegalArgumentException("spec.getReg() out of range");
+        }
+    }
+
+    /**
+     * Put the entire contents of the given set into this one.
+     * 
+     * @param set non-null; the set to put into this instance
+     */
+    public void putAll(RegisterSpecSet set) {
+        int max = set.getMaxSize();
+
+        for (int i = 0; i < max; i++) {
+            RegisterSpec spec = set.get(i);
+            if (spec != null) {
+                put(spec);
+            }
         }
     }
 

@@ -39,18 +39,6 @@ import javax.security.cert.CertificateNotYetValidException;
 @TestTargetClass(CertificateNotYetValidException.class)
 public class CertificateNotYetValidExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertificateNotYetValidExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertificateNotYetValidExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     static String[] msgs = {
             "",
             "Check new message",

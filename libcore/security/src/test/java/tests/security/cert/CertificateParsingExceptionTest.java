@@ -40,18 +40,6 @@ import java.security.cert.CertificateParsingException;
 @TestTargetClass(CertificateParsingException.class)
 public class CertificateParsingExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertificateParsingExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertificateParsingExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

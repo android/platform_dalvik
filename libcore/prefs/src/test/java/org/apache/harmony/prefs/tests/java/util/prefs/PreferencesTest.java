@@ -45,6 +45,9 @@ import java.util.prefs.Preferences;
 @TestTargetClass(Preferences.class)
 public class PreferencesTest extends TestCase {
 
+    private String oldJavaHome;
+    private String oldUserHome;
+
     MockSecurityManager manager = new MockSecurityManager();
 
     MockInputStream stream = null;
@@ -77,18 +80,10 @@ public class PreferencesTest extends TestCase {
                 "<!DOCTYPE preferences SYSTEM \"http://java.sun.com/dtd/preferences.dtd\"><preferences><root type=\"user\"><map></map></root></preferences>"
                         .getBytes("UTF-8"));
         stream = new MockInputStream(in);
-        
-        String userHome = System.getProperty("user.home");
-        if (userHome != null) {
-            File userHomeDir = new File(userHome);
-            if (!userHomeDir.isDirectory() || !userHomeDir.canWrite()) {
-                userHome = null;
-            }
-        }
-        if (userHome == null) {
-            System.setProperty("user.home", System.getProperty("java.io.tmpdir"));
-        }
-        
+
+        Preferences.systemRoot().clear();
+        Preferences.userRoot().clear();
+
         Preferences p = Preferences.userNodeForPackage(Preferences.class);
         p.clear();
         try {
@@ -109,6 +104,9 @@ public class PreferencesTest extends TestCase {
             p.removeNode();
         } catch (BackingStoreException e) {
         }
+
+        Preferences.systemRoot().clear();
+        Preferences.userRoot().clear();
     }
 
     @TestTargetNew(
@@ -146,7 +144,7 @@ public class PreferencesTest extends TestCase {
         }
 
         try {
-            p = Preferences.userNodeForPackage(null);
+            p = Preferences.systemNodeForPackage(null);
             fail("NullPointerException has not been thrown");
         } catch (NullPointerException e) {
             // expected

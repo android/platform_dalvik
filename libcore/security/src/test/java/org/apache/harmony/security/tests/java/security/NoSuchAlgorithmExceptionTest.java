@@ -38,18 +38,6 @@ import junit.framework.TestCase;
  */
 public class NoSuchAlgorithmExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for NoSuchAlgorithmExceptionTests.
-     * 
-     * @param arg0
-     */
-    public NoSuchAlgorithmExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

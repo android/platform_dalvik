@@ -147,7 +147,7 @@ public class StringReaderTest extends junit.framework.TestCase {
         method = "read",
         args = {char[].class, int.class, int.class}
     )
-    public void test_read$CII() {
+    public void test_read$CII() throws Exception {
         // Test for method int java.io.StringReader.read(char [], int, int)
         try {
             sr = new StringReader(testString);
@@ -158,6 +158,27 @@ public class StringReaderTest extends junit.framework.TestCase {
                     .equals(testString));
         } catch (Exception e) {
             fail("Exception during read test : " + e.getMessage());
+        }
+
+        char[] buf = new char[testString.length()];
+        sr = new StringReader(testString);
+        try {
+            sr.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            sr.read(buf, -1, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            sr.read(buf, 1, testString.length());
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 

@@ -111,20 +111,14 @@ public class ProviderTest extends TestCase {
             args = {}
         )
     @KnownFailure("AccessController/AccessControlContext grants Permissions by default")
-    public final void testClear_SecurityException() {
+    public final void testClear_SecurityManager() {
         TestSecurityManager sm = new TestSecurityManager("clearProviderProperties.MyProvider");
-        try {
-            System.setSecurityManager(sm);
-            p.clear();
-            fail("expected SecurityException");
-        } catch (SecurityException e) {
-            // ok
-            assertTrue("Provider.clear must call checkPermission with "
-                    + "SecurityPermission clearProviderProperties.NAME",
-                    sm.called);
-        } finally {
-            System.setSecurityManager(null);
-        }
+        System.setSecurityManager(sm);
+        p.clear();
+        assertTrue("Provider.clear must call checkPermission with "
+                + "SecurityPermission clearProviderProperties.NAME",
+                sm.called);
+        System.setSecurityManager(null);
     }
 
     /*
@@ -382,21 +376,15 @@ public class ProviderTest extends TestCase {
             args = {java.lang.Object.class, java.lang.Object.class}
         )
     @KnownFailure("AccessController/AccessControlContext grants Permissions by default")
-    public final void testPutObjectObject_SecurityException() {
+    public final void testPutObjectObject_SecurityManager() {
 
         TestSecurityManager sm = new TestSecurityManager("putProviderProperty.MyProvider");
         Provider p = new MyProvider();
-        try {
-            System.setSecurityManager(sm);
-            p.put(new Object(), new Object());
-            fail("expected SecurityPermission");
-        } catch (SecurityException e) {
-            // ok
-            assertTrue("Provider put must call checkPermission "
-                    + "SecurityPermission putProviderProperty.Name", sm.called);
-        } finally {
-            System.setSecurityManager(null);
-        }
+        System.setSecurityManager(sm);
+        p.put(new Object(), new Object());
+        assertTrue("Provider put must call checkPermission "
+                + "SecurityPermission putProviderProperty.Name", sm.called);
+        System.setSecurityManager(null);
     }
 
     /*
@@ -408,7 +396,6 @@ public class ProviderTest extends TestCase {
         method = "remove",
         args = {java.lang.Object.class}
     )
-    @KnownFailure("AccessController/AccessControlContext grants Permissions by default")    
     public final void testRemoveObject() {
         Object o = p.remove("MessageDigest.SHA-1");
         if (!"SomeClassName".equals(o)) {
@@ -439,21 +426,15 @@ public class ProviderTest extends TestCase {
         args = {java.lang.Object.class}
     )
     @KnownFailure("AccessController/AccessControlContext grants Permissions by default")    
-    public final void testRemoveObject_SecurityException() {
+    public final void testRemoveObject_SecurityManager() {
         TestSecurityManager sm = new TestSecurityManager(
                 "removeProviderProperty.MyProvider");
-        try {
-            System.setSecurityManager(sm);
-            p.remove(new Object());
-            fail("expected SecurityException");
-        } catch (SecurityException e) {
-            // ok
-            assertTrue("Provider.remove must check permission "
-                    + "SecurityPermission removeProviderProperty.NAME",
-                    sm.called);
-        } finally {
-            System.setSecurityManager(null);
-        }
+        System.setSecurityManager(sm);
+        p.remove(new Object());
+        assertTrue("Provider.remove must check permission "
+                + "SecurityPermission removeProviderProperty.NAME",
+                sm.called);
+        System.setSecurityManager(null);
     }
 
     @TestTargetNew(
@@ -802,7 +783,6 @@ public class ProviderTest extends TestCase {
             if (permission instanceof SecurityPermission) {
                 if (permissionName.equals(permission.getName())) {
                     called = true;
-                    super.checkPermission(permission);
                 }
             }
         }

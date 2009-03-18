@@ -160,9 +160,6 @@ public class InetAddress extends Object implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
         // BEGIN android-changed
         if (!(obj instanceof InetAddress)) {
             return false;
@@ -217,10 +214,11 @@ public class InetAddress extends Object implements Serializable {
         // Added change taken from newer harmony concerning zero length hostname.
         // Added special handling for localhost, since it doesn't work properly.
         // TODO Get rid of this later...
-        if (host == null || 0 == host.length() || 
+        if (host == null || 0 == host.length() ||
                 "localhost".equalsIgnoreCase(host)) {
-            return new InetAddress[] { preferIPv6Addresses() ? Inet6Address.LOOPBACK
-                    : LOOPBACK };
+            return new InetAddress[] { preferIPv6Addresses()
+                                       ? Inet6Address.LOOPBACK
+                                       : LOOPBACK };
         }
         // END android-changed
 
@@ -229,13 +227,28 @@ public class InetAddress extends Object implements Serializable {
             if (security != null) {
                 security.checkConnect(host, -1);
             }
-            if (Socket.preferIPv4Stack()) {
-                return getAliasesByNameImpl(host);
+            // BEGIN android-changed
+            byte[][] rawAddresses = getallbyname(host,
+                                                 Socket.preferIPv4Stack());
+            InetAddress[] returnedAddresses = new
+                                              InetAddress[rawAddresses.length];
+            for (int i = 0; i < rawAddresses.length; i++) {
+                byte[] rawAddress = rawAddresses[i];
+                if (rawAddress.length == 16) {
+                    returnedAddresses[i] = new Inet6Address(rawAddress, host);
+                } else if (rawAddress.length == 4) {
+                    returnedAddresses[i] = new Inet4Address(rawAddress, host);
+                } else {
+                  // Cannot happen, because the underlying code only returns
+                  // addresses that are 4 or 16 bytes long.
+                  throw new AssertionError("Impossible address length " + 
+                                           rawAddress.length);
+                }
             }
 
             // ok we may have to re-order to make sure the
             // preferIPv6Addresses is respected
-            InetAddress[] returnedAddresses = getAliasesByNameImpl(host);
+            // END android-changed
             InetAddress[] orderedAddresses = null;
             if (returnedAddresses != null) {
                 orderedAddresses = new InetAddress[returnedAddresses.length];
@@ -513,63 +526,26 @@ public class InetAddress extends Object implements Serializable {
         return anInetAddress;
     }
 
-    // BEGIN android-changed
+    // BEGIN android-added
     /**
      * Multiplies value by 1 billion.
      */
     private static long secondsToNanos(int ttl) {
         return (long) ttl * 1000000000;
     }
-    // END android-changed
+    // END android-added
 
-    /**
-     * Query the IP stack for aliases for the host. The host is in string name
-     * form. If the host does not have aliases (only multihomed hosts do),
-     * return an array with a single {@code InetAddress} constructed from the
-     * host name & address.
-     * 
-     * @param name
-     *            the host name to lookup.
-     * @throws UnknownHostException
-     *             if an error occurs during lookup.
-     */
-    // BEGIN android-changed
+    // BEGIN android-deleted
     // static native InetAddress[] getAliasesByNameImpl(String name)
     //     throws UnknownHostException;
-    static InetAddress[] getAliasesByNameImpl(String name)
-            throws UnknownHostException {
-        // TODO Probably a bit inefficient. Provide native later.
-        InetAddress addr = getHostByNameImpl(name, false);
+    // END android-deleted
 
-        String[] aliases = getaliasesbyname(name);
-        
-        if (aliases.length == 0) {
-            // If no alias addresses where found (only multihosts do have them)
-            // return the address with the name
-            byte[] address = addr.getAddress();
-            InetAddress[] result = new InetAddress[1];
-            result[0] = (address.length == 4 ? 
-                    new Inet4Address(address, name) : 
-                    new Inet6Address(address, name));
-            return result;
-        }
-        
-        InetAddress[] result = new InetAddress[aliases.length];
-        for (int i = 0; i < result.length; i++) {
-            byte[] address = addr.getAddress();
-            result[i] = (address.length == 4 ? 
-                    new Inet4Address(address, aliases[i]) : 
-                    new Inet6Address(address, aliases[i]));
-        }
-
-        return result;
-    }
-
+    // BEGIN android-changed
     /**
-     * Wrapper for libc call. It is assumed to be thread-safe, which is
-     * in fact the case on Android.
+     * Resolves a host name to its IP addresses. Thread safe.
      */
-    private static native String[] getaliasesbyname(String name);
+    private static native byte[][] getallbyname(String name,
+                                                boolean preferIPv4Stack);
     // END android-changed
 
     /**
@@ -585,23 +561,13 @@ public class InetAddress extends Object implements Serializable {
     //    throws UnknownHostException;
     static InetAddress getHostByAddrImpl(byte[] addr)
             throws UnknownHostException {
-        // TODO Probably inefficient. Provide native later.
-        String ipaddr = (addr[0] & 0xff) + "." + (addr[1] & 0xff) + "."
-            + (addr[2] & 0xff) + "." + (addr[3] & 0xff);
-        String host = gethostbyaddr(ipaddr);
-
-        if (host == null) {
-            throw new UnknownHostException(ipaddr);
-        }
-        
-        return new InetAddress(addr, host);
+        return new InetAddress(addr, gethostbyaddr(addr));
     }
 
     /**
-     * Wrapper for libc call. It is assumed to be thread-safe, which is
-     * in fact the case on Android.
+     * Resolves an IP address to a hostname. Thread safe.
      */
-    private static native String gethostbyaddr(String addr);
+    private static native String gethostbyaddr(byte[] addr);
     // END android-changed
 
     static int inetAddr(String host) throws UnknownHostException {
@@ -615,7 +581,8 @@ public class InetAddress extends Object implements Serializable {
      * exception, so this value should not be used as an argument. See also
      * inetAddr(String).
      */
-//    static native int inetAddrImpl(String host) throws UnknownHostException;
+    // BEGIN android-changed
+    // static native int inetAddrImpl(String host) throws UnknownHostException;
     static int inetAddrImpl(String host) throws UnknownHostException {
         // TODO Probably not exactly what we want, and also inefficient. Provide native later.
         try {
@@ -631,12 +598,14 @@ public class InetAddress extends Object implements Serializable {
             throw new UnknownHostException(host);
         }
     }
+    // END android-changed
 
     /**
      * Convert a binary address into a string containing an Ipv4 Internet
      * Protocol dotted address.
      */
-//    static native String inetNtoaImpl(int hipAddr);
+    // BEGIN android-changed
+    // static native String inetNtoaImpl(int hipAddr);
     static String inetNtoaImpl(int hipAddr) {
         // TODO Inefficient and probably wrong. Provide proper (native?) implementation later.
         int a = (hipAddr >> 24) & 0xFF;
@@ -646,6 +615,7 @@ public class InetAddress extends Object implements Serializable {
         
         return "" + a + "." + b + "." + c + "." + d;
     }
+    // END android-changed
 
     /**
      * Query the IP stack for the host address. The host is in string name form.
@@ -664,35 +634,22 @@ public class InetAddress extends Object implements Serializable {
     static InetAddress getHostByNameImpl(String name,
             boolean preferIPv6Address) throws UnknownHostException {
         // TODO Mapped Harmony to Android native. Get rid of indirection later.
-        return new InetAddress(gethostbyname(name, preferIPv6Address), name);
+        return getAllByName(name)[0];
     }
-
-    /**
-     * Wrapper for libc call. It is assumed to be thread-safe, which is
-     * in fact the case on Android. Either returns a raw address or throws
-     * UnknownHostException.
-     */
-    private native static byte[] gethostbyname(String host, boolean preferIPv6Addresses);
     // END android-changed
 
     /**
-     * Query the IP stack for the host machine name.
+     * Gets the host name of the system.
      * 
-     * @return String the host machine name
+     * @return String the system hostname
      */
     // BEGIN android-changed
-    // static native String getHostNameImpl();
     static String getHostNameImpl() {
         // TODO Mapped Harmony to Android native. Get rid of indirection later.
 
         return gethostname();
     }
-
-    /**
-     * Wrapper for libc call. It is assumed to be thread-safe, which is
-     * in fact the case on Android.
-     */
-    private native static String gethostname();
+    static native String gethostname();
     // END android-changed
 
     static String getHostNameInternal(String host) throws UnknownHostException {
@@ -1037,7 +994,7 @@ public class InetAddress extends Object implements Serializable {
             // if (!reachable) {
                 reachable = isReachableByTCP(this, null, timeout);
             // }
-            // END adnroid-changed
+            // END android-changed
         } else {
             // Not Bind to any address
             if (null == netif.addresses) {

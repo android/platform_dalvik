@@ -51,27 +51,11 @@ public class HandlerTest extends TestCase {
     private static String className = HandlerTest.class.getName();
 
     /*
-     * @see TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    /*
      * @see TestCase#tearDown()
      */
     protected void tearDown() throws Exception {
         super.tearDown();
         CallVerificationStack.getInstance().clear();
-    }
-
-    /**
-     * Constructor for HandlerTest.
-     * 
-     * @param arg0
-     */
-    public HandlerTest(String arg0) {
-        super(arg0);
     }
 
     /*

@@ -181,7 +181,9 @@ public final class Security {
         if (algName == null || propName == null) {
             return null;
         }
-        String prop = propName + "." + algName; //$NON-NLS-1$
+        // BEGIN android-changed
+        String prop = "Alg." + propName + "." + algName; //$NON-NLS-1$
+        // END android-changed
         Provider[] providers = getProviders();
         for (int i = 0; i < providers.length; i++) {
             for (Enumeration e = providers[i].propertyNames(); e

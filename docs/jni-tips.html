@@ -22,12 +22,16 @@
 </li>
 <li> <a href="#Arrays">Primitive Arrays</a>
 </li>
+<li> <a href="#RegionCalls">Region Calls</a>
+</li>
 <li> <a href="#Exceptions">Exceptions</a>
 </li>
 
 <li> <a href="#Extended_checking">Extended Checking</a>
 </li>
 <li> <a href="#Native_Libraries">Native Libraries</a>
+</li>
+<li> <a href="#64bit">64-bit Considerations</a>
 </li>
 
 <li> <a href="#Unsupported">Unsupported Features</a>
@@ -219,7 +223,9 @@ allocate some memory and make a copy.  Either way, the raw pointer returned
 is guaranteed to be valid until the corresponding <code>Release</code> call
 is issued (which implies that, if the data wasn't copied, the array object
 will be pinned down and can't be relocated as part of compacting the heap).
-<strong>You must Release every array you Get.</strong>
+<strong>You must Release every array you Get.</strong>  Also, if the Get
+call fails, you must ensure that your code doesn't try to Release a NULL
+pointer later.
 </p><p>
 You can determine whether or not the data was copied by passing in a
 non-NULL pointer for the <code>isCopy</code> argument.  This is rarely
@@ -270,6 +276,45 @@ and you will need to call <code>Release</code> again with a different flag
 eventually.
 </p><p>
 </p><p>
+
+
+</p><h2><a name="RegionCalls"> Region Calls </a></h2>
+
+<p>
+There is an alternative to calls like <code>Get&lt;Type&gt;ArrayElements</code>
+and <code>GetStringChars</code> that may be very helpful when all you want
+to do is copy data in or out.  Consider the following:
+<pre>
+    jbyte* data = env->GetByteArrayElements(array, NULL);
+    if (data != NULL) {
+        memcpy(buffer, data, len);
+        env->ReleaseByteArrayElements(array, data, JNI_ABORT);
+    }
+</pre>
+<p>
+This grabs the array, copies the first <code>len</code> byte
+elements out of it, and then releases the array.  Depending upon the VM
+policies the <code>Get</code> call will either pin or copy the array contents.
+We copy the data (for perhaps a second time), then call Release; in this case
+we use <code>JNI_ABORT</code> so there's no chance of a third copy.
+</p><p>
+We can accomplish the same thing with this:
+<pre>
+    env->GetByteArrayRegion(array, 0, len, buffer);
+</pre>
+</p><p>
+This accomplishes the same thing, with several advantages:
+<ul>
+    <li>Requires one JNI call instead of 3, reducing overhead.
+    <li>Doesn't require pinning or extra data copies.
+    <li>Reduces the risk of programmer error -- no need to match up
+    <code>Get</code> and <code>Release</code> calls.
+</ul>
+</p><p>
+Similarly, you can use the <code>Set&lt;Type&gt;ArrayRegion</code> call
+to copy data into an array, and <code>GetStringRegion</code> or
+<code>GetStringUTFRegion</code> to copy characters out of a
+<code>String</code>.
 
 
 </p><h2><a name="Exceptions"> Exceptions </a></h2>
@@ -380,7 +425,7 @@ storage is freed to trip up code that uses the data after calling Release.
 it continues on.
 </dl></blockquote>
 
-</p><p>
+
 </p><p>
 </p><h2><a name="Native_Libraries"> Native Libraries </a></h2>
 <p>
@@ -422,12 +467,25 @@ application's private data storage area from the context object.
 </p><p>
 Dalvik does support "discovery" of native methods that are named in a
 specific way (see <a href="http://java.sun.com/javase/6/docs/technotes/guides/jni/spec/design.html#wp615">
-    the JNI spec</a> for details), but this is less a less desirable
+    the JNI spec</a> for details), but this is a less desirable
 approach.  It requires more space in the shared object symbol table,
 loading is slower because it requires string searches through all of the
 loaded shared libraries, and if a method signature is wrong you won't know
 about it until the first time the method is actually used.
 </p><p>
+
+
+</p><h2><a name="64bit"> 64-bit Considerations </a></h2>
+
+<p>
+Android is currently expected to run on 32-bit platforms.  In theory it
+could be built for a 64-bit system, but that is not a goal at this time.
+For the most part this isn't something that you will need to worry about
+when interacting with native code,
+but it becomes significant if you plan to store pointers to native
+structures in integer fields in an object.  To support architectures
+that use 64-bit pointers, <strong>you need to stash your native pointers in a
+<code>long</code> field rather than an <code>int</code></strong>.
 
 
 </p><h2><a name="Unsupported"> Unsupported Features </a></h2>

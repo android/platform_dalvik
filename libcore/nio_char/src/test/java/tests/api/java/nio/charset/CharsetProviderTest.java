@@ -15,11 +15,11 @@
  */
 package tests.api.java.nio.charset;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
+import dalvik.annotation.AndroidOnly;
 
 import junit.framework.TestCase;
 
@@ -131,7 +131,8 @@ public class CharsetProviderTest extends TestCase {
         method = "charsetForName",
         args = {String.class}
     )
-    @KnownFailure("Fixed in ToT")
+    @AndroidOnly("Looks like RI doesn't use current thread's context class "+
+    "loader to lookup charset providers")
     public void testIsSupported_And_ForName_NormalProvider() throws Exception {
         try {
             assertFalse(Charset.isSupported("mockCharset10"));
@@ -231,7 +232,8 @@ public class CharsetProviderTest extends TestCase {
         method = "charsetForName",
         args = {String.class}
     )
-    @KnownFailure("Fixed in ToT")
+    @AndroidOnly("Looks like RI doesn't use current thread's context class "+
+    "loader to lookup charset providers")
     public void testIsSupported_NotCharsetProviderClass() throws Exception {
         try {
             StringBuffer sb = new StringBuffer();
@@ -359,7 +361,8 @@ public class CharsetProviderTest extends TestCase {
         method = "charsetForName",
         args = {String.class}
     )
-    @KnownFailure("Fixed in ToT")
+    @AndroidOnly("Looks like RI doesn't use current thread's context class "+
+    "loader to lookup charset providers")    
     public void testForName_NonExistingClass() throws Exception {
         try {
             StringBuffer sb = new StringBuffer();
@@ -385,7 +388,8 @@ public class CharsetProviderTest extends TestCase {
         method = "charsetForName",
         args = {String.class}
     )
-    @KnownFailure("Fixed in ToT")
+    @AndroidOnly("Looks like RI doesn't use current thread's context class "+
+    "loader to lookup charset providers")    
     public void testForName_NotCharsetProviderClass() throws Exception {
         try {
             StringBuffer sb = new StringBuffer();
@@ -411,7 +415,8 @@ public class CharsetProviderTest extends TestCase {
         method = "charsets",
         args = {}
     )
-    @KnownFailure("Fixed in ToT")
+    @AndroidOnly("Looks like RI doesn't use current thread's context class "+
+    "loader to lookup charset providers")    
     public void testAvailableCharsets_NormalProvider() throws Exception {
         try {
             assertFalse(Charset.availableCharsets()
@@ -506,7 +511,8 @@ public class CharsetProviderTest extends TestCase {
         method = "charsets",
         args = {}
     )
-    @KnownFailure("Fixed in ToT")
+    @AndroidOnly("Looks like RI doesn't use current thread's context class "+
+    "loader to lookup charset providers")    
     public void testAvailableCharsets_NotCharsetProviderClass()
             throws Exception {
         try {

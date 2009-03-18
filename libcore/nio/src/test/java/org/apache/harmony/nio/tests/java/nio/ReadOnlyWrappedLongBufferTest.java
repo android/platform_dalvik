@@ -23,7 +23,6 @@ import java.nio.LongBuffer;
 public class ReadOnlyWrappedLongBufferTest extends ReadOnlyLongBufferTest{
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = LongBuffer.wrap(new long[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,6 +31,7 @@ public class ReadOnlyWrappedLongBufferTest extends ReadOnlyLongBufferTest{
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        buf = null;
+        baseBuf = null;
     }
 }

@@ -326,6 +326,39 @@ public class BufferedReaderTest extends junit.framework.TestCase {
         } catch (IOException e) {
             fail("Unexpected: " + e);
         }
+    }
+
+    /**
+     * @tests java.io.BufferedReader#read(char[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "The test verifies read(char[] cbuf, int off, int len) method.",
+        method = "read",
+        args = {char[].class, int.class, int.class}
+    )    
+    public void test_read$CII_Exception() throws Exception {
+        br = new BufferedReader(new Support_StringReader(testString));
+        try{
+            br.read(new char[10], -1, 1);
+            fail("should throw IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+
+        try{
+            br.read(new char[10], 0, -1);
+            fail("should throw IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+
+        try{
+            br.read(new char[10], 10, 1);
+            fail("should throw IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
         
         //regression for HARMONY-831
         try{

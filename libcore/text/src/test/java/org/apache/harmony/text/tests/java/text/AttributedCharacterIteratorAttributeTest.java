@@ -16,7 +16,6 @@
  */
 package org.apache.harmony.text.tests.java.text;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -145,8 +144,6 @@ public class AttributedCharacterIteratorAttributeTest extends
         method = "hashCode",
         args = {}
     )
-    @KnownFailure("hashCode method returns equal hash code values for " +
-            "non equal objects. This test passes on RI.")
     public void test_hashCode() {
         try {
             MockAttributedCharacterIteratorAttribute mac1 = new MockAttributedCharacterIteratorAttribute(

@@ -41,14 +41,6 @@ import java.security.spec.RSAKeyGenParameterSpec;
 public class RSAKeyGenParameterSpecTest extends TestCase {
 
     /**
-     * Constructor for RSAKeyGenParameterSpecTest.
-     * @param name
-     */
-    public RSAKeyGenParameterSpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test for <code>RSAKeyGenParameterSpec(int,BigInteger)</code> ctor
      * Assertion: constructs <code>RSAKeyGenParameterSpec</code>
      * object using valid parameters

@@ -17,6 +17,7 @@
 
 package org.apache.harmony.logging.tests.java.util.logging;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestTargetNew;
@@ -160,6 +161,10 @@ public class FormatterTest extends TestCase {
         method = "formatMessage",
         args = {LogRecord.class}
     )
+    @AndroidOnly("The RI fails in this test because it uses a MessageFormat " +
+            "to format the message even though it doesn't contain \"{0\". " +
+            "The spec says that this would indicate that a MessageFormat " +
+            "should be used and else no formatting should be done.")
     public void testFormatMessage() {
         assertEquals(MSG, f.formatMessage(r));
 

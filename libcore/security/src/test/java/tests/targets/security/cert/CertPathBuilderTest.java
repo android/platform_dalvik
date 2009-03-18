@@ -1,7 +1,6 @@
 package tests.targets.security.cert;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -14,7 +13,6 @@ import java.security.cert.CertPathBuilder;
 import java.security.cert.CertPathBuilderException;
 import java.security.cert.CertPathBuilderResult;
 import java.security.cert.CertPathParameters;
-@TestTargetClass(targets.CertPathBuilders.Internal.class)
 public abstract class CertPathBuilderTest extends TestCase {
 
     private final String algorithmName;
@@ -48,6 +46,11 @@ public abstract class CertPathBuilderTest extends TestCase {
                 level=TestLevel.ADDITIONAL,
                 clazz=CertPathBuilderResult.class,
                 method="getCertPath",
+                args={}
+        ),
+        @TestTargetNew(
+                level=TestLevel.COMPLETE,
+                method="method",
                 args={}
         )
     })

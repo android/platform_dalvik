@@ -72,7 +72,6 @@ public class JavaxSecurityAuthSubjectDomainCombiner extends TestCase {
                         && "getSubjectFromDomainCombiner".equals(permission.getName())) {
                     called = true;
                 }
-                super.checkPermission(permission);
             }
         }
 

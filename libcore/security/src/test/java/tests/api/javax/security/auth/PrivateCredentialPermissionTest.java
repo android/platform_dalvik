@@ -239,7 +239,7 @@ public class PrivateCredentialPermissionTest extends TestCase {
         }
         
         
-        PrivateCredentialPermission p3 = new PrivateCredentialPermission(name2, "read");
+        PrivateCredentialPermission p3 = new PrivateCredentialPermission(name4, "read");
         assertFalse("hashCode() must not be the same for non-equal PrivateCredentialPermission objects", p1.hashCode() == p3.hashCode());
     }
     

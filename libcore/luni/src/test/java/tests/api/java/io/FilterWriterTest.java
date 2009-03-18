@@ -17,8 +17,14 @@
 
 package tests.api.java.io;
 
+import tests.api.java.io.FilterReaderTest.MyFilterReader;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FilterWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -144,6 +150,43 @@ public class FilterWriterTest extends junit.framework.TestCase {
         char[] buffer = new char[5];       
         fw.write(buffer, 0, 5);
         assertTrue("write(char[], int, int) has not been called.", called);
+    }
+    
+    /**
+     * @tests java.io.FilterReader#read(char[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        notes = "Verifies write(char[], int, int).",
+        method = "write",
+        args = {char[].class, int.class, int.class}
+    )     
+    public void test_write$CII_Exception() throws IOException {
+        char[] buffer = new char[10];
+        
+        fw = new MyFilterWriter(new OutputStreamWriter(
+            new ByteArrayOutputStream()));
+
+        try {
+            fw.write(buffer, 0, -1);
+            fail("Test 1: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+
+        try {
+            fw.write(buffer, -1, 1);
+            fail("Test 2: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
+
+        try {
+            fw.write(buffer, 10, 1);
+            fail("Test 3: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected.
+        }
     }
     
     /**

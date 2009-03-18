@@ -25,7 +25,6 @@ package java.lang.reflect;
  * @param <D>
  *            the generic declaration that declares this type variable
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface TypeVariable<D extends GenericDeclaration> extends Type {

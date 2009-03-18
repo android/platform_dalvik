@@ -79,6 +79,13 @@ public class MySignature1 extends Signature {
 
     protected void engineUpdate(byte[] b, int off, int len)
             throws SignatureException {
+        if (b == null) throw new NullPointerException();
+        if (off < 0 || off > b.length || off > len) {
+            throw new IllegalArgumentException("incorrect parameter off");
+        }
+        if (len < 0 || len > b.length) {
+            throw new IllegalArgumentException("incorrect parameter len");
+        }
         runEngineUpdate2 = true;
     }
 

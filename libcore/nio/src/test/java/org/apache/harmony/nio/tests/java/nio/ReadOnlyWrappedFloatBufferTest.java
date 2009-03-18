@@ -23,15 +23,15 @@ import java.nio.FloatBuffer;
 public class ReadOnlyWrappedFloatBufferTest extends ReadOnlyFloatBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = FloatBuffer.wrap(new float[BUFFER_LENGTH]);
-        super.loadTestData1(buf);
+        loadTestData1(buf);
         buf = buf.asReadOnlyBuffer();
         baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        buf = null;
+        baseBuf = null;
     }
 }

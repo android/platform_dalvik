@@ -87,10 +87,10 @@ public class WriterTest extends TestCase {
      * @tests java.io.Writer#append(CharSequence, int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "",
         method = "append",
-        args = {java.lang.CharSequence.class, int.class, int.class}
+        args = {CharSequence.class, int.class, int.class}
     )
     public void test_appendCharSequenceIntInt() throws IOException {
         String testString = "My Test String";
@@ -119,6 +119,38 @@ public class WriterTest extends TestCase {
             tobj.append(testString, 29, 30);
             fail("IOException not thrown!");
         } catch (IOException e) {
+            // expected
+        }
+    }
+
+    /**
+     * @tests java.io.Writer#append(CharSequence, int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "append",
+        args = {CharSequence.class, int.class, int.class}
+    )
+    public void test_appendCharSequenceIntInt_Exception() throws IOException {
+        String testString = "My Test String";
+        Writer tobj = new Support_ASimpleWriter(21);
+        try {
+            tobj.append(testString, 30, 31);
+            fail("IndexOutOfBoundsException not thrown!");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        try {
+            tobj.append(testString, -1, 1);
+            fail("IndexOutOfBoundsException not thrown!");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        try {
+            tobj.append(testString, 0, -1);
+            fail("IndexOutOfBoundsException not thrown!");
+        } catch (IndexOutOfBoundsException e) {
             // expected
         }
     }
@@ -193,10 +225,10 @@ public class WriterTest extends TestCase {
      * @tests java.io.PrintWriter#write(java.lang.String, int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "",
         method = "write",
-        args = {java.lang.String.class, int.class, int.class}
+        args = {String.class, int.class, int.class}
     )
     public void test_writeLjava_lang_StringII() throws IOException {
         String testString;
@@ -222,7 +254,38 @@ public class WriterTest extends TestCase {
             // expected
         }
     }
-    
+
+    /**
+     * @tests java.io.Writer#append(CharSequence, int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "write",
+        args = {String.class, int.class, int.class}
+    )
+    public void test_writeLjava_lang_StringII_Exception() throws IOException {
+        String testString = "My Test String";
+        Writer tobj = new Support_ASimpleWriter(21);
+        try {
+            tobj.write(testString, 30, 31);
+            fail("IndexOutOfBoundsException not thrown!");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        try {
+            tobj.write(testString, -1, 1);
+            fail("IndexOutOfBoundsException not thrown!");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        try {
+            tobj.write(testString, 0, -1);
+            fail("IndexOutOfBoundsException not thrown!");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+    }
 
     class MockWriter extends Writer {
         private char[] contents;

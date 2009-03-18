@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,20 +28,41 @@
 #include "libdex/DexCatch.h"
 #include "libdex/InstrUtils.h"
 
+#include <stddef.h>
+
 
 /*
-Notes on RegisterMap vs. verification
+Notes on just-in-time RegisterMap generation
 
-Much of this is redundant with the bytecode verifier.  Unfortunately we
-can't do this at verification time unless we're willing to store the
-results in the optimized DEX file, which increases their size by about 25%
-unless we use compression, and for performance reasons we don't want to
-just re-run the verifier.
+Generating RegisterMap tables as part of verification is convenient because
+we generate most of what we need to know as part of doing the verify.
+The negative aspect of doing it this way is that we must store the
+result in the DEX file (if we're verifying ahead of time) or in memory
+(if verifying during class load) for every concrete non-native method,
+even if we never actually need the map during a GC.
 
-On the plus side, we know that verification has completed successfully --
-or at least are allowed to assume that it would -- so we skip a lot of
-the checks (like verifying that the register indices in instructions
-are reasonable).
+A simple but compact encoding of register map data increases the size of
+optimized DEX files by about 25%, so size considerations are important.
+
+We can instead generate the RegisterMap at the point where it is needed.
+In a typical application we only need to convert about 2% of the loaded
+methods, and we can generate type-precise roots reasonably quickly because
+(a) we know the method has already been verified and hence can make a
+lot of assumptions, and (b) we don't care what type of object a register
+holds, just whether or not it holds a reference, and hence can skip a
+lot of class resolution gymnastics.
+
+There are a couple of problems with this approach however.  First, to
+get good performance we really want an implementation that is largely
+independent from the verifier, which means some duplication of effort.
+Second, we're dealing with post-dexopt code, which contains "quickened"
+instructions.  We can't process those without either tracking type
+information (which slows us down) or storing additional data in the DEX
+file that allows us to reconstruct the original instructions (adds ~5%
+to the size of the ODEX).
+
+
+Implementation notes...
 
 Both type-precise and live-precise information can be generated knowing
 only whether or not a register holds a reference.  We don't need to
@@ -50,14 +71,249 @@ Not only can we skip many of the fancy steps in the verifier, we can
 initialize from simpler sources, e.g. the initial registers and return
 type are set from the "shorty" signature rather than the full signature.
 
-The short-term storage needs are different; for example, the verifier
-stores 4-byte RegType values for every address that can be a branch
-target, while we store 1-byte SRegType values for every address that
-can be a GC point.  There are many more GC points than branch targets.
-We could use a common data type here, but for larger methods it can mean
-the difference between 300KB and 1.2MB.
+The short-term storage needs for just-in-time register map generation can
+be much lower because we can use a 1-byte SRegType instead of a 4-byte
+RegType.  On the other hand, if we're not doing type-precise analysis
+in the verifier we only need to store register contents at every branch
+target, rather than every GC point (which are much more frequent).
 
+Whether it happens in the verifier or independently, because this is done
+with native heap allocations that may be difficult to return to the system,
+an effort should be made to minimize memory use.
 */
+
+// fwd
+static void outputTypeVector(const RegType* regs, int insnRegCount, u1* data);
+static bool verifyMap(VerifierData* vdata, const RegisterMap* pMap);
+
+/*
+ * Generate the register map for a method that has just been verified
+ * (i.e. we're doing this as part of verification).
+ *
+ * For type-precise determination we have all the data we need, so we
+ * just need to encode it in some clever fashion.
+ *
+ * Returns a pointer to a newly-allocated RegisterMap, or NULL on failure.
+ */
+RegisterMap* dvmGenerateRegisterMapV(VerifierData* vdata)
+{
+    RegisterMap* pMap = NULL;
+    RegisterMap* pResult = NULL;
+    RegisterMapFormat format;
+    u1 regWidth;
+    u1* mapData;
+    int i, bytesForAddr, gcPointCount;
+    int bufSize;
+
+    regWidth = (vdata->method->registersSize + 7) / 8;
+    if (vdata->insnsSize < 256) {
+        format = kFormatCompact8;
+        bytesForAddr = 1;
+    } else {
+        format = kFormatCompact16;
+        bytesForAddr = 2;
+    }
+
+    /*
+     * Count up the number of GC point instructions.
+     *
+     * NOTE: this does not automatically include the first instruction,
+     * since we don't count method entry as a GC point.
+     */
+    gcPointCount = 0;
+    for (i = 0; i < vdata->insnsSize; i++) {
+        if (dvmInsnIsGcPoint(vdata->insnFlags, i))
+            gcPointCount++;
+    }
+    if (gcPointCount >= 65536) {
+        /* we could handle this, but in practice we don't get near this */
+        LOGE("ERROR: register map can't handle %d gc points in one method\n",
+            gcPointCount);
+        goto bail;
+    }
+
+    /*
+     * Allocate a buffer to hold the map data.
+     */
+    bufSize = offsetof(RegisterMap, data);
+    bufSize += gcPointCount * (bytesForAddr + regWidth);
+
+    LOGD("+++ grm: %s.%s (adr=%d gpc=%d rwd=%d bsz=%d)\n",
+        vdata->method->clazz->descriptor, vdata->method->name,
+        bytesForAddr, gcPointCount, regWidth, bufSize);
+
+    pMap = (RegisterMap*) malloc(bufSize);
+    pMap->format = format;
+    pMap->regWidth = regWidth;
+    pMap->numEntries = gcPointCount;
+
+    /*
+     * Populate it.
+     */
+    mapData = pMap->data;
+    for (i = 0; i < vdata->insnsSize; i++) {
+        if (dvmInsnIsGcPoint(vdata->insnFlags, i)) {
+            assert(vdata->addrRegs[i] != NULL);
+            if (format == kFormatCompact8) {
+                *mapData++ = i;
+            } else /*kFormatCompact16*/ {
+                *mapData++ = i & 0xff;
+                *mapData++ = i >> 8;
+            }
+            outputTypeVector(vdata->addrRegs[i], vdata->insnRegCount, mapData);
+            mapData += regWidth;
+        }
+    }
+
+    LOGI("mapData=%p pMap=%p bufSize=%d\n", mapData, pMap, bufSize);
+    assert(mapData - (const u1*) pMap == bufSize);
+
+#if 1
+    if (!verifyMap(vdata, pMap))
+        goto bail;
+#endif
+
+    pResult = pMap;
+
+bail:
+    return pResult;
+}
+
+/*
+ * Release the storage held by a RegisterMap.
+ */
+void dvmFreeRegisterMap(RegisterMap* pMap)
+{
+    if (pMap == NULL)
+        return;
+
+    free(pMap);
+}
+
+/*
+ * Determine if the RegType value is a reference type.
+ *
+ * Ordinarily we include kRegTypeZero in the "is it a reference"
+ * check.  There's no value in doing so here, because we know
+ * the register can't hold anything but zero.
+ */
+static inline bool isReferenceType(RegType type)
+{
+    return (type > kRegTypeMAX || type == kRegTypeUninit);
+}
+
+/*
+ * Given a line of registers, output a bit vector that indicates whether
+ * or not the register holds a reference type (which could be null).
+ *
+ * We use '1' to indicate it's a reference, '0' for anything else (numeric
+ * value, uninitialized data, merge conflict).  Register 0 will be found
+ * in the low bit of the first byte.
+ */
+static void outputTypeVector(const RegType* regs, int insnRegCount, u1* data)
+{
+    u1 val = 0;
+    int i;
+
+    for (i = 0; i < insnRegCount; i++) {
+        RegType type = *regs++;
+        val >>= 1;
+        if (isReferenceType(type))
+            val |= 0x80;        /* set hi bit */
+
+        if ((i & 0x07) == 7)
+            *data++ = val;
+    }
+    if ((i & 0x07) != 0) {
+        /* flush bits from last byte */
+        val >>= 8 - (i & 0x07);
+        *data++ = val;
+    }
+}
+
+/*
+ * Double-check the map.
+ *
+ * We run through all of the data in the map, and compare it to the original.
+ */
+static bool verifyMap(VerifierData* vdata, const RegisterMap* pMap)
+{
+    const u1* data = pMap->data;
+    int ent;
+
+    for (ent = 0; ent < pMap->numEntries; ent++) {
+        int addr;
+
+        switch (pMap->format) {
+        case kFormatCompact8:
+            addr = *data++;
+            break;
+        case kFormatCompact16:
+            addr = *data++;
+            addr |= (*data++) << 8;
+            break;
+        default:
+            /* shouldn't happen */
+            LOGE("GLITCH: bad format (%d)", pMap->format);
+            dvmAbort();
+        }
+
+        const RegType* regs = vdata->addrRegs[addr];
+        if (regs == NULL) {
+            LOGE("GLITCH: addr %d has no data\n", addr);
+            return false;
+        }
+
+        u1 val;
+        int i;
+
+        for (i = 0; i < vdata->method->registersSize; i++) {
+            bool bitIsRef, regIsRef;
+
+            val >>= 1;
+            if ((i & 0x07) == 0) {
+                /* load next byte of data */
+                val = *data++;
+            }
+
+            bitIsRef = val & 0x01;
+
+            RegType type = regs[i];
+            regIsRef = isReferenceType(type);
+
+            if (bitIsRef != regIsRef) {
+                LOGE("GLITCH: addr %d reg %d: bit=%d reg=%d(%d)\n",
+                    addr, i, bitIsRef, regIsRef, type);
+                return false;
+            }
+        }
+
+        /* print the map as a binary string */
+        if (false) {
+            char outBuf[vdata->method->registersSize +1];
+            for (i = 0; i < vdata->method->registersSize; i++) {
+                if (isReferenceType(regs[i])) {
+                    outBuf[i] = '1';
+                } else {
+                    outBuf[i] = '0';
+                }
+            }
+            outBuf[i] = '\0';
+            LOGD("  %04d %s\n", addr, outBuf);
+        }
+    }
+
+    return true;
+}
+
+
+/*
+ * ===========================================================================
+ *      Just-in-time generation
+ * ===========================================================================
+ */
+
+#if 0   /* incomplete implementation; may be removed entirely in the future */
 
 /*
  * This is like RegType in the verifier, but simplified.  It holds a value
@@ -1152,12 +1408,13 @@ sget_1nr_common:
 
     /*
      * See comments in analysis/CodeVerify.c re: why some of these are
-     * annoying to deal with.  In here, "annoying" turns into "impossible",
-     * since we make no effort to keep reference type info.
+     * annoying to deal with.  It's worse in this implementation, because
+     * we're not keeping any information about the classes held in each
+     * reference register.
      *
      * Handling most of these would require retaining the field/method
      * reference info that we discarded when the instructions were
-     * quickened.
+     * quickened.  This is feasible but not currently supported.
      */
     case OP_EXECUTE_INLINE:
     case OP_INVOKE_DIRECT_EMPTY:
@@ -1171,7 +1428,7 @@ sget_1nr_common:
     case OP_INVOKE_VIRTUAL_QUICK_RANGE:
     case OP_INVOKE_SUPER_QUICK:
     case OP_INVOKE_SUPER_QUICK_RANGE:
-        dvmAbort();     // can't work
+        dvmAbort();     // not implemented, shouldn't be here
         break;
 
 
@@ -1430,4 +1687,6 @@ static void updateRegisters(WorkState* pState, int nextInsn,
             dvmInsnSetChanged(insnFlags, nextInsn, true);
     }
 }
+
+#endif /*#if 0*/
 

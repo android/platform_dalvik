@@ -59,10 +59,6 @@ public class SerializationStressTest5 extends SerializationStressTest {
             { new Integer(5), new Boolean(false), new Boolean(false),
                     new Integer(5), new Integer(5) }, {} };
 
-    public SerializationStressTest5(String name) {
-        super(name);
-    }
-
     @TestTargetNew(
         level = TestLevel.ADDITIONAL,
         notes = "",

@@ -39,14 +39,6 @@ import java.security.spec.ECFieldFp;
 @TestTargetClass(ECFieldFp.class)
 public class ECFieldFpTest extends TestCase {
 
-    /**
-     * Constructor for ECFieldFpTest.
-     * @param name
-     */
-    public ECFieldFpTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

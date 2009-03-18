@@ -27,6 +27,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.lang.annotation.Annotation;
 
+import java.lang.annotation.Annotation;
+
 import tests.support.resource.Support_Resources;
 
 @TestTargetClass(Package.class) 
@@ -38,16 +40,31 @@ public class PackageTest extends junit.framework.TestCase {
     
     Class clazz;
 
+    // URLClassLoader doesn't load classes from jar.
+    // use PathClassLoader
+    boolean USE_PATH_CLASS_LOADER = true;
+
     Package getTestPackage(String resourceJar, String className)
             throws Exception {
+        
+        if (USE_PATH_CLASS_LOADER) {
+            resourceJar = resourceJar.substring(0, resourceJar.indexOf(".")) + 
+                                                                    "_dex.jar";
+        }
         Support_Resources.copyFile(resources, "Package", resourceJar);
         URL resourceURL = new URL("file:/" + resPath + "/Package/"
                 + resourceJar);
 
-        URLClassLoader ucl = new URLClassLoader(new URL[] { resourceURL }, null);
-        
-        clazz = Class.forName(className, true, ucl);
-        return clazz.getPackage();
+        ClassLoader cl = null;
+        if(USE_PATH_CLASS_LOADER) {
+            cl = new dalvik.system.PathClassLoader(
+                resourceURL.getPath(), getClass().getClassLoader());
+        } else {
+            cl = new URLClassLoader(new URL[] { resourceURL }, 
+                                                getClass().getClassLoader());
+        }
+       clazz = cl.loadClass(className);
+       return clazz.getPackage();
     }
 
     @Override
@@ -110,6 +127,7 @@ public class PackageTest extends junit.framework.TestCase {
             args = {}
         )
     })
+    @KnownFailure("get methods don't work.")
     public void test_helper_Attributes() throws Exception {
 
         Package p = getTestPackage("hyts_all_attributes.jar", "p.C");
@@ -241,7 +259,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "getPackage",
         args = {java.lang.String.class}
     )
-    @KnownFailure("Package information missing on android")
+    @KnownFailure("Real package information missing on android.")
     public void test_getPackageLjava_lang_String() throws Exception {
         assertSame("Package getPackage failed for java.lang", Package
                 .getPackage("java.lang"), Package.getPackage("java.lang"));
@@ -284,7 +302,6 @@ public class PackageTest extends junit.framework.TestCase {
         method = "hashCode",
         args = {}
     )
-    @KnownFailure("Package information missing on android")
     public void test_hashCode() {
         Package p1 = Package.getPackage("java.lang");
         if (p1 != null) {
@@ -301,6 +318,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "isCompatibleWith",
         args = {java.lang.String.class}
     )
+    @KnownFailure("isCompatibleWith returns incorrect value.")
     public void test_isCompatibleWithLjava_lang_String() throws Exception {
         Package p = getTestPackage("hyts_c.jar", "p.C");
 
@@ -357,6 +375,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "isSealed",
         args = {}
     )
+    @KnownFailure("isSealed method returns false for sealed package.")    
     public void test_isSealed() throws Exception {
         Package p = getTestPackage("hyts_pq.jar", "p.q.C");
         assertTrue("Package isSealed returns wrong boolean", p.isSealed());
@@ -374,6 +393,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "isSealed",
         args = {java.net.URL.class}
     )
+    @KnownFailure("isSealed method returns false for sealed package.")
     public void test_isSealedLjava_net_URL() throws Exception {
         Package p = getTestPackage("hyts_c.jar", "p.C");
         assertFalse("Package isSealed returns wrong boolean (1)", p
@@ -404,7 +424,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "getAnnotation",
         args = {java.lang.Class.class}
     )
-    @KnownFailure("Problem in android with loading class from jar")
+    @KnownFailure("Class loader can't retrieve information about annotations.")
     public void test_getAnnotation() throws Exception {
         String annotationName = "a.b.PackageAnnotation";
         Package p = getTestPackage("hyts_package.jar", annotationName);
@@ -422,6 +442,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "getAnnotations",
         args = {}
     )
+    @KnownFailure("Class loader can't retrieve information about annotations.")    
     public void test_getAnnotations() throws Exception {
         String annotationName = "a.b.PackageAnnotation";
         Package p = getTestPackage("hyts_package.jar", annotationName);
@@ -439,6 +460,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "getDeclaredAnnotations",
         args = {}
     )
+    @KnownFailure("Class loader can't retrieve information about annotations.")
     public void test_getDeclaredAnnotations() throws Exception {
         String annotationName = "a.b.PackageAnnotation";
         Package p = getTestPackage("hyts_package.jar", annotationName);
@@ -457,6 +479,7 @@ public class PackageTest extends junit.framework.TestCase {
         method = "isAnnotationPresent",
         args = {java.lang.Class.class}
     )
+    @KnownFailure("Class loader can't retrieve information about annotations.")
     public void test_isAnnotationPresent() throws Exception {
         String annotationName = "a.b.PackageAnnotation";
         Package p = getTestPackage("hyts_package.jar", annotationName);

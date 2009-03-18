@@ -21,7 +21,6 @@
 
 package org.apache.harmony.math.tests.java.math;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -374,7 +373,6 @@ public class BigDecimalConstructorsTest extends TestCase {
         method = "BigDecimal",
         args = {java.math.BigInteger.class, int.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testConstrBigIntegerScaleMathContext_AndroidFailure() {
         MathContext mc;
         BigDecimal bd;
@@ -802,7 +800,6 @@ public class BigDecimalConstructorsTest extends TestCase {
         method = "BigDecimal",
         args = {double.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testConstrDoubleMathContext_AndroidFailure() {
         BigDecimal bd;
         MathContext mc;

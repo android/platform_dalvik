@@ -38,15 +38,6 @@ public class ECPublicKeySpecTest extends TestCase {
 
     ECPublicKeySpec ecpks;
 
-    /**
-     * Constructor for ECPublicKeySpec
-     * 
-     * @param name
-     */
-    public ECPublicKeySpecTest(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
         ECPoint ecpoint = new ECPoint(BigInteger.valueOf(1), BigInteger

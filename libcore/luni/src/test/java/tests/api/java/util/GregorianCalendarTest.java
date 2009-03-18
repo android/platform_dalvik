@@ -17,8 +17,8 @@
 
 package tests.api.java.util;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargetNew;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass; 
 import dalvik.annotation.KnownFailure;
@@ -208,7 +208,6 @@ public class GregorianCalendarTest extends junit.framework.TestCase {
         method = "GregorianCalendar",
         args = {java.util.TimeZone.class, java.util.Locale.class}
     )
-    @KnownFailure("same objects for different locales are not considered equal")
     public void test_ConstructorLjava_util_TimeZoneLjava_util_Locale() {
         // Test for method java.util.GregorianCalendar(java.util.TimeZone,
         // java.util.Locale)
@@ -248,6 +247,8 @@ public class GregorianCalendarTest extends junit.framework.TestCase {
         method = "add",
         args = {int.class, int.class}
     )
+    @AndroidOnly("This test fails on the RI with version 1.5 but succeeds"
+            + "on the RI with version 1.6")
     public void test_addII() {
         // Test for method void java.util.GregorianCalendar.add(int, int)
         GregorianCalendar gc1 = new GregorianCalendar(1998, 11, 6);
@@ -763,7 +764,8 @@ public class GregorianCalendarTest extends junit.framework.TestCase {
         method = "getMinimalDaysInFirstWeek",
         args = {}
     )
-    @KnownFailure("Looks like there're some mistakes in timezones and/or locales data")
+    @KnownFailure("Some difference in timezones and/or locales data"
+            + "Who is right, the CLDR or the RI?")
     public void test_getMinimalDaysInFirstWeek() {
         // Regression for Harmony-1037
         GregorianCalendar g = new GregorianCalendar(TimeZone
@@ -772,7 +774,7 @@ public class GregorianCalendarTest extends junit.framework.TestCase {
         assertEquals(4, minimalDaysInFirstWeek);
 
         g = new GregorianCalendar(TimeZone.getTimeZone("Paris/France"),
-                new Locale("fr"));
+                new Locale("fr", "FR"));
         minimalDaysInFirstWeek = g.getMinimalDaysInFirstWeek();
         assertEquals(4, minimalDaysInFirstWeek);
         

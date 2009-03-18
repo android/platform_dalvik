@@ -42,14 +42,6 @@ public class SecurityPermissionTest extends TestCase {
     }
 
     /**
-     * Constructor for SecurityPermissionTest.
-     * @param arg0
-     */
-    public SecurityPermissionTest(String arg0) {
-        super(arg0);
-    }
-    
-    /**
      * Check all constructors: an object is created with the specified valid name. 
      * If name equal null then NPE should be thrown. 
      * If  name is empty then IAE should be thrown. 

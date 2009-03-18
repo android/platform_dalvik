@@ -18,7 +18,6 @@
 package org.apache.harmony.text.tests.java.text;
 
 import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.BrokenTest;
 import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -152,7 +151,6 @@ public class DecimalFormatSymbolsTest extends TestCase {
         assertTrue("Returned incorrect currency",
                 dfsUS.getCurrency() == currency);
 
-        // BEGIN android-changed
         // use cs_CZ instead
         //Currency currK = Currency.getInstance("KRW");
         Currency currC = Currency.getInstance("CZK");
@@ -186,7 +184,6 @@ public class DecimalFormatSymbolsTest extends TestCase {
                 dfs1.getInternationalCurrencySymbol());
 
         dfs1 = new DecimalFormatSymbols(new Locale("de", "AT"));
-        // END android-changed
         assertTrue("Test4: Returned incorrect currency",
                 dfs1.getCurrency() == currE);
         assertEquals("Test4: Returned incorrect currencySymbol", "\u20ac", dfs1
@@ -417,10 +414,8 @@ public class DecimalFormatSymbolsTest extends TestCase {
             assertTrue("Hash codes of equal object are equal", dfs2
                     .hashCode() == dfs1.hashCode());
             dfs1.setInfinity("infinity_infinity");
-            // BEGIN android-changed
             assertTrue("Hash codes of non-equal objects are equal", dfs2
                     .hashCode() != dfs1.hashCode());
-            // END android-changed
         } catch (Exception e) {
             fail("Unexpected exception " + e.toString());
         }
@@ -545,7 +540,7 @@ public class DecimalFormatSymbolsTest extends TestCase {
         method = "setInternationalCurrencySymbol",
         args = {java.lang.String.class}
     )
-    @KnownFailure("getCurrency() doesn't return null. Test passes on RI.")
+    @KnownFailure("getCurrency() doesn't return null for bogus currency code.")
     public void test_setInternationalCurrencySymbolLjava_lang_String() {
         Locale locale = Locale.CANADA;
         DecimalFormatSymbols dfs = ((DecimalFormat) NumberFormat
@@ -734,7 +729,7 @@ public class DecimalFormatSymbolsTest extends TestCase {
         method = "!SerializationGolden",
         args = {}
     )
-    @BrokenTest("Deserialized object is not equal to the original object." +
+    @KnownFailure("Deserialized object is not equal to the original object." +
             "Test passes on RI.")
     public void test_RIHarmony_compatible() throws Exception {
         ObjectInputStream i = null;

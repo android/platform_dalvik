@@ -21,7 +21,6 @@
 
 package org.apache.harmony.math.tests.java.math;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -80,7 +79,6 @@ public class BigDecimalCompareTest extends TestCase {
         method = "abs",
         args = {java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.abs")
     public void testAbsMathContextNeg() {
         String a = "-123809648392384754573567356745735.63567890295784902768787678287E+21";
         BigDecimal aNumber = new BigDecimal(a);
@@ -628,7 +626,6 @@ public class BigDecimalCompareTest extends TestCase {
         method = "negate",
         args = {java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.negate")
     public void testNegateMathContextPositive() {
        String a = "92948782094488478231212478987482988429808779810457634781384756794987";
        MathContext mc = new MathContext(37, RoundingMode.FLOOR);
@@ -678,7 +675,6 @@ public class BigDecimalCompareTest extends TestCase {
         method = "negate",
         args = {java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.negate")
     public void testNegateMathContextNegative() {
        String a = "-92948782094488478231212478987482988429808779810457634781384756794987";
        int aScale = 49;

@@ -38,14 +38,6 @@ import java.security.spec.ECGenParameterSpec;
 @TestTargetClass(ECGenParameterSpec.class)
 public class ECGenParameterSpecTest extends TestCase {
 
-    /**
-     * Constructor for ECGenParameterSpecTest.
-     * @param name
-     */
-    public ECGenParameterSpecTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

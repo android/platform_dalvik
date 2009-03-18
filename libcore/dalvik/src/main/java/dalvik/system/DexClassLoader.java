@@ -95,7 +95,7 @@ public class DexClassLoader extends ClassLoader {
     /**
      * Complete initialization on first use of the class loader.
      */
-    private void ensureInit() {
+    private synchronized void ensureInit() {
         if (mInitialized) {
             return;
         }
@@ -195,13 +195,21 @@ public class DexClassLoader extends ClassLoader {
         else
             sourceFileName = sourcePathName.substring(lastSlash+1);
 
-        /* replace ".jar", ".zip", whatever with ".odex" */
+        /*
+         * Replace ".jar", ".zip", whatever with ".dex".  We don't want to
+         * use ".odex", because the build system uses that for files that
+         * are paired with resource-only jar files.  If the VM can assume
+         * that there's no classes.dex in the matching jar, it doesn't need
+         * to open the jar to check for updated dependencies, providing a
+         * slight performance boost at startup.  The use of ".dex" here
+         * matches the use on files in /data/dalvik-cache.
+         */
         int lastDot = sourceFileName.lastIndexOf(".");
         if (lastDot < 0)
             newStr.append(sourceFileName);
         else
             newStr.append(sourceFileName, 0, lastDot);
-        newStr.append(".odex");
+        newStr.append(".dex");
 
         if (VERBOSE_DEBUG)
             System.out.println("Output file will be " + newStr.toString());

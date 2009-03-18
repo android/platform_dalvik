@@ -43,14 +43,6 @@ import org.apache.harmony.security.tests.support.cert.MyCertificate;
 @TestTargetClass(CollectionCertStoreParameters.class)
 public class CollectionCertStoreParametersTest extends TestCase {
 
-    /**
-     * Constructor for CollectionCertStoreParametersTest.
-     * @param name
-     */
-    public CollectionCertStoreParametersTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

@@ -51,8 +51,8 @@ public class CertPathCertPathRepTest extends TestCase {
     }
     
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
-        notes = "ObjectStreamException checking missed",
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Checks ObjectStreamException",
         method = "CertPath.CertPathRep.readResolve",
         args = {}
     )
@@ -62,9 +62,9 @@ public class CertPathCertPathRepTest extends TestCase {
         
         try {
             Object obj = rep.readResolve();
-            assertTrue(obj instanceof CertPath);
+            fail("ObjectStreamException was not thrown.");
         } catch (ObjectStreamException e) {
-            fail("unexpected exception: " + e);
+            //expected
         }
 
         rep = cp.new MyCertPathRep("MyEncoding", new byte[] {(byte) 1, (byte) 2, (byte) 3 });

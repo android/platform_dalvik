@@ -24,7 +24,6 @@ import java.nio.LongBuffer;
 @TestTargetClass(java.nio.LongBuffer.class)
 public class WrappedLongBufferTest extends LongBufferTest {
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = LongBuffer.wrap(new long[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,7 +31,6 @@ public class WrappedLongBufferTest extends LongBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         baseBuf = null;
         buf = null;
     }

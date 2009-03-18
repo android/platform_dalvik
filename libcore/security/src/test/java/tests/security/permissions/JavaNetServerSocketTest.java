@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.SocketAddress;
+import java.security.Permission;
 /*
  * This class tests the security permissions which are documented in
  * http://java.sun.com/j2se/1.5.0/docs/guide/security/permissions.html#PermsAndMethods
@@ -88,7 +88,10 @@ public class JavaNetServerSocketTest extends TestCase {
             public void checkListen(int port) {
                 called = true;
                 this.port = port;
-                super.checkListen(port);
+            }
+            @Override
+            public void checkPermission(Permission permission) {
+                
             }
         }
         

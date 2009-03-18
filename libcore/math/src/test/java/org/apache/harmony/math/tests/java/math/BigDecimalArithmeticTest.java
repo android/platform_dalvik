@@ -231,7 +231,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "add",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testAddMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -432,7 +431,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "subtract",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testSubtractMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -629,7 +627,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "multiply",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testMultiplyMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -767,7 +764,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "pow",
         args = {int.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testPowMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -912,7 +908,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "divide",
         args = {java.math.BigDecimal.class, int.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testDivideINonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -1820,7 +1815,9 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "divide",
         args = {java.math.BigDecimal.class, int.class, java.math.RoundingMode.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound IS INSUFFICIENT!!!")
+    @KnownFailure("Has a rounding problem. seems like the precision is"
+            + " 1 too small and cuts off the last digit. also this test might"
+            + "not be correct. The name implies that scale should be used.")
     public void testDivideScaleRoundingModeNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -2041,7 +2038,8 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "divide",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound IS INSUFFICIENT!!!")
+    @KnownFailure("The same test and the same problem like "
+            + "testDivideScaleRoundingModeNonTrivial")
     public void testDivideMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -2196,7 +2194,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "divideToIntegralValue",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("Fix in BigDecimal.inplaceRound")
     public void testDivideToIntegralValueMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;
@@ -2382,7 +2379,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "divideAndRemainder",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("WHY ISN'T THE LAST VALUE ROUNDED?")
     public void testDivideAndRemainderMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res[];
@@ -2542,7 +2538,6 @@ public class BigDecimalArithmeticTest extends TestCase {
         method = "remainder",
         args = {java.math.BigDecimal.class, java.math.MathContext.class}
     )
-    @KnownFailure("WHY ISN'T THE LAST VALUE ROUNDED?")
     public void testRemainderMathContextNonTrivial() {
         MathContext mc;
         BigDecimal a, b, res;

@@ -33,15 +33,6 @@ import org.apache.harmony.security.tests.support.acl.*;
 @TestTargetClass(Group.class)
 public class IGroupTest extends TestCase {
     
-    /**
-     * Constructor for IOwnerTest.
-     * 
-     * @param arg0
-     */
-    public IGroupTest(String arg0) {
-        super(arg0);
-    }
-    
     class MyGroup extends GroupImpl {
         public MyGroup(String str) {
             super(str);

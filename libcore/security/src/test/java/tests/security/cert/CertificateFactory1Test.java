@@ -59,15 +59,6 @@ import java.util.Vector;
 @TestTargetClass(CertificateFactory.class)
 public class CertificateFactory1Test extends TestCase {
 
-    /**
-     * Constructor for CertificateFactoryTests.
-     * 
-     * @param arg0
-     */
-    public CertificateFactory1Test(String arg0) {
-        super(arg0);
-    }
-
     public static final String srvCertificateFactory = "CertificateFactory";
     
     private static String defaultProviderName = null;
@@ -675,6 +666,7 @@ public class CertificateFactory1Test extends TestCase {
             args = {java.io.InputStream.class, java.lang.String.class}
         )
     })
+    // Test passed on RI
     public void testCertificateFactory13() throws IOException {
         if (!X509Support) {
             fail(NotSupportMsg);

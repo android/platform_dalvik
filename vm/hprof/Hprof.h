@@ -178,7 +178,7 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj);
  */
 
 void hprofContextInit(hprof_context_t *ctx, char *fileName, FILE *fp,
-                      bool newFile);
+                      bool writeHeader);
 
 int hprofFlushRecord(hprof_record_t *rec, FILE *fp);
 int hprofFlushCurrentRecord(hprof_context_t *ctx);
@@ -234,7 +234,7 @@ int hprofShutdown_StackFrame(void);
  * Hprof.c functions
  */
 
-hprof_context_t *hprofStartup(const char *outputDir);
+hprof_context_t *hprofStartup(const char *outputFileName);
 void hprofShutdown(hprof_context_t *ctx);
 
 /*
@@ -244,7 +244,7 @@ void hprofShutdown(hprof_context_t *ctx);
  * the heap implementation; these functions require heap knowledge,
  * so they are implemented in Heap.c.
  */
-void hprofDumpHeap();
+void hprofDumpHeap(const char* fileName);
 void dvmHeapSetHprofGcScanState(hprof_heap_tag_t state, u4 threadSerialNumber);
 
 #endif  // _DALVIK_HPROF_HPROF

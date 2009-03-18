@@ -22,8 +22,7 @@
 
 package tests.security.cert;
 
-import dalvik.annotation.BrokenTest;
-import dalvik.annotation.KnownFailure;
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -68,15 +67,6 @@ public class PKIXParametersTest extends TestCase {
      */
     private final static String testIssuer =
         "CN=VM,OU=DRL Security,O=Intel,L=Novosibirsk,ST=NSO,C=RU";
-
-    /**
-     * Constructor for PKIXParametersTest.
-     * 
-     * @param name
-     */
-    public PKIXParametersTest(String name) {
-        super(name);
-    }
 
     //
     // Tests
@@ -1423,9 +1413,8 @@ public class PKIXParametersTest extends TestCase {
         method = "setDate",
         args = {java.util.Date.class}
     )
-    @KnownFailure("p.setDate(null) does not reset to current"+
-            " time. RI fails at last assertion (time reset to 2007). Our" +
-            " fails at assertNotNull(p.getDate)")
+    @AndroidOnly("On the RI p.setDate(null) does not reset the date to null "
+            + "as specified.")
     public final void test_setDateLjava_util_Date() throws Exception {
         Set<TrustAnchor> taSet = TestUtils.getTrustAnchorSet();
         assertNotNull("could not create test TrustAnchor set", taSet);
@@ -1453,8 +1442,7 @@ public class PKIXParametersTest extends TestCase {
         p = new PKIXParameters(taSet);
         p.setDate(new Date(555L));
         p.setDate(null); // reset 'date' back to current time
-        assertNotNull(p.getDate());
-        assertEquals(Calendar.getInstance().getTime(), p.getDate());
+        assertNull(p.getDate());
     }
 
     /**
@@ -1567,7 +1555,12 @@ public class PKIXParametersTest extends TestCase {
      * Test #3 for <code>setInitialPolicies(Set)</code> method<br>
      * Assertion: <code>Set</code> may be empty
      */
-    @TestTargetNew(level = TestLevel.PARTIAL_COMPLETE, notes = "Doesn't verify ClassCastException.", method = "setInitialPolicies", args = {java.util.Set.class})
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Doesn't verify ClassCastException.",
+        method = "setInitialPolicies",
+        args = {java.util.Set.class}
+    )
     public final void testSetInitialPolicies03() throws Exception {
         Set<TrustAnchor> taSet = TestUtils.getTrustAnchorSet();
         if (taSet == null) {
@@ -1585,7 +1578,12 @@ public class PKIXParametersTest extends TestCase {
      * Assertion: <code>Set</code> is copied to protect against subsequent
      * modifications
      */
-    @TestTargetNew(level = TestLevel.PARTIAL_COMPLETE, notes = "Verifies that Set is copied to protect against subsequent modifications.", method = "setInitialPolicies", args = {java.util.Set.class})
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Verifies that Set is copied to protect against subsequent modifications.",
+        method = "setInitialPolicies",
+        args = {java.util.Set.class}
+    )
     public final void testSetInitialPolicies04() throws Exception {
         Set<TrustAnchor> taSet = TestUtils.getTrustAnchorSet();
         if (taSet == null) {
@@ -1612,7 +1610,12 @@ public class PKIXParametersTest extends TestCase {
      * 
      * @throws InvalidAlgorithmParameterException
      */
-    @TestTargetNew(level = TestLevel.PARTIAL_COMPLETE, notes = "Verifies ClassCastException.", method = "setInitialPolicies", args = {java.util.Set.class})
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Verifies ClassCastException.",
+        method = "setInitialPolicies",
+        args = {java.util.Set.class}
+    )
     @SuppressWarnings("unchecked")
     public final void testSetInitialPolicies05() throws Exception {
         Set<TrustAnchor> taSet = TestUtils.getTrustAnchorSet();
@@ -1870,8 +1873,5 @@ public class PKIXParametersTest extends TestCase {
         
         
         PKIXParameters p = new PKIXParameters(keystore);
-        
-        
-
     }
 }

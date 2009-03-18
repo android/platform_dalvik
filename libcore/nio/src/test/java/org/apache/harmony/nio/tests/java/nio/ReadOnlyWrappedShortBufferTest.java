@@ -23,7 +23,6 @@ import java.nio.ShortBuffer;
 public class ReadOnlyWrappedShortBufferTest extends ReadOnlyShortBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = ShortBuffer.wrap(new short[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,6 +31,7 @@ public class ReadOnlyWrappedShortBufferTest extends ReadOnlyShortBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        buf = null;
+        baseBuf = null;
     }
 }

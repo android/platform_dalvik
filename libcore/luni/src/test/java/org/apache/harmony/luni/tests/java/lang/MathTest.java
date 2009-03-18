@@ -17,8 +17,6 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
-import dalvik.annotation.KnownFailure;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -796,9 +794,6 @@ public class MathTest extends junit.framework.TestCase {
         method = "pow",
         args = {double.class, double.class}
     )
-    @KnownFailure("Math.pow(double a, double b) returns 1.0 if " +
-            "the absolute value of the first argument equals 1 and " +
-            "the second argument is infinite. It should return NaN.")         
     public void test_powDD() {
         // Test for method double java.lang.Math.pow(double, double)
         assertTrue("pow returned incorrect value",
@@ -825,9 +820,9 @@ public class MathTest extends junit.framework.TestCase {
                                        Math.pow(0.9, Double.POSITIVE_INFINITY));   
         
         assertEquals("pow returned incorrect value", Double.NaN, 
-                                         Math.pow(1.0, Double.NEGATIVE_INFINITY));
+                                       Math.pow(1.0, Double.NEGATIVE_INFINITY));
         assertEquals("pow returned incorrect value", Double.NaN, 
-                                         Math.pow(1.0, Double.POSITIVE_INFINITY)); 
+                                       Math.pow(1.0, Double.POSITIVE_INFINITY)); 
 
         assertEquals("pow returned incorrect value", 0.0, Math.pow(0, 1));
         assertEquals("pow returned incorrect value", 0.0, 

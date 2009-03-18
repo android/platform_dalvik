@@ -400,10 +400,10 @@ static void Dalvik_dalvik_system_VMDebug_startInstructionCounting(const u4* args
 {
 #if defined(WITH_PROFILER)
     dvmStartInstructionCounting();
-    RETURN_VOID();
 #else
     dvmThrowException("Ljava/lang/UnsupportedOperationException;", NULL);
 #endif
+    RETURN_VOID();
 }
 
 /*
@@ -414,10 +414,10 @@ static void Dalvik_dalvik_system_VMDebug_stopInstructionCounting(const u4* args,
 {
 #if defined(WITH_PROFILER)
     dvmStopInstructionCounting();
-    RETURN_VOID();
 #else
     dvmThrowException("Ljava/lang/UnsupportedOperationException;", NULL);
 #endif
+    RETURN_VOID();
 }
 
 /*
@@ -440,11 +440,10 @@ static void Dalvik_dalvik_system_VMDebug_getInstructionCount(const u4* args,
     sched_yield();
     memcpy(storage, gDvm.executedInstrCounts,
         kNumDalvikInstructions * sizeof(int));
-
-    RETURN_VOID();
 #else
     dvmThrowException("Ljava/lang/UnsupportedOperationException;", NULL);
 #endif
+    RETURN_VOID();
 }
 
 /*
@@ -458,10 +457,10 @@ static void Dalvik_dalvik_system_VMDebug_resetInstructionCount(const u4* args,
 #if defined(WITH_PROFILER)
     sched_yield();
     memset(gDvm.executedInstrCounts, 0, kNumDalvikInstructions * sizeof(int));
-    RETURN_VOID();
 #else
     dvmThrowException("Ljava/lang/UnsupportedOperationException;", NULL);
 #endif
+    RETURN_VOID();
 }
 
 /*
@@ -501,10 +500,10 @@ static void Dalvik_dalvik_system_VMDebug_getLoadedClassCount(const u4* args,
  * or -1 if the feature isn't supported.
  */
 static void Dalvik_dalvik_system_VMDebug_threadCpuTimeNanos(const u4* args,
-        JValue* pResult)
+    JValue* pResult)
 {
     jlong result;
-    
+
 #ifdef HAVE_POSIX_CLOCKS
     struct timespec now;
     clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now);
@@ -516,49 +515,85 @@ static void Dalvik_dalvik_system_VMDebug_threadCpuTimeNanos(const u4* args,
     RETURN_LONG(result);
 }
 
+/*
+ * static void dumpHprofData(String fileName)
+ *
+ * Cause "hprof" data to be dumped.  We can throw an IOException if an
+ * error occurs during file handling.
+ */
+static void Dalvik_dalvik_system_VMDebug_dumpHprofData(const u4* args,
+    JValue* pResult)
+{
+#ifdef WITH_HPROF
+    StringObject* fileNameStr = (StringObject*) args[0];
+    char* fileName;
+
+    if (fileNameStr == NULL) {
+        dvmThrowException("Ljava/lang/NullPointerException;", NULL);
+        RETURN_VOID();
+    }
+
+    fileName = dvmCreateCstrFromString(fileNameStr);
+    if (fileName == NULL) {
+        /* unexpected -- malloc failure? */
+        dvmThrowException("Ljava/lang/RuntimeException;", "malloc failure?");
+        RETURN_VOID();
+    }
+
+    hprofDumpHeap(fileName);
+    free(fileName);
+#else
+    dvmThrowException("Ljava/lang/UnsupportedOperationException;", NULL);
+#endif
+
+    RETURN_VOID();
+}
+
 const DalvikNativeMethod dvm_dalvik_system_VMDebug[] = {
-    { "getAllocCount",          "(I)I",
+    { "getAllocCount",              "(I)I",
         Dalvik_dalvik_system_VMDebug_getAllocCount },
-    { "resetAllocCount",        "(I)V",
+    { "resetAllocCount",            "(I)V",
         Dalvik_dalvik_system_VMDebug_resetAllocCount },
     //{ "print",              "(Ljava/lang/String;)V",
     //    Dalvik_dalvik_system_VMDebug_print },
-    { "startAllocCounting",     "()V",
+    { "startAllocCounting",         "()V",
         Dalvik_dalvik_system_VMDebug_startAllocCounting },
-    { "stopAllocCounting",      "()V",
+    { "stopAllocCounting",          "()V",
         Dalvik_dalvik_system_VMDebug_stopAllocCounting },
-    { "startMethodTracing",     "(Ljava/lang/String;II)V",
+    { "startMethodTracing",         "(Ljava/lang/String;II)V",
         Dalvik_dalvik_system_VMDebug_startMethodTracing },
-    { "stopMethodTracing",      "()V",
+    { "stopMethodTracing",          "()V",
         Dalvik_dalvik_system_VMDebug_stopMethodTracing },
-    { "startEmulatorTracing",   "()V",
+    { "startEmulatorTracing",       "()V",
         Dalvik_dalvik_system_VMDebug_startEmulatorTracing },
-    { "stopEmulatorTracing",    "()V",
+    { "stopEmulatorTracing",        "()V",
         Dalvik_dalvik_system_VMDebug_stopEmulatorTracing },
-    { "setAllocationLimit",     "(I)I",
+    { "setAllocationLimit",         "(I)I",
         Dalvik_dalvik_system_VMDebug_setAllocationLimit },
-    { "setGlobalAllocationLimit", "(I)I",
+    { "setGlobalAllocationLimit",   "(I)I",
         Dalvik_dalvik_system_VMDebug_setGlobalAllocationLimit },
-    { "startInstructionCounting", "()V",
+    { "startInstructionCounting",   "()V",
         Dalvik_dalvik_system_VMDebug_startInstructionCounting },
-    { "stopInstructionCounting", "()V",
+    { "stopInstructionCounting",    "()V",
         Dalvik_dalvik_system_VMDebug_stopInstructionCounting },
-    { "resetInstructionCount",  "()V",
+    { "resetInstructionCount",      "()V",
         Dalvik_dalvik_system_VMDebug_resetInstructionCount },
-    { "getInstructionCount",    "([I)V",
+    { "getInstructionCount",        "([I)V",
         Dalvik_dalvik_system_VMDebug_getInstructionCount },
-    { "isDebuggerConnected",    "()Z",
+    { "isDebuggerConnected",        "()Z",
         Dalvik_dalvik_system_VMDebug_isDebuggerConnected },
-    { "isDebuggingEnabled",     "()Z",
+    { "isDebuggingEnabled",         "()Z",
         Dalvik_dalvik_system_VMDebug_isDebuggingEnabled },
-    { "lastDebuggerActivity",   "()J",
+    { "lastDebuggerActivity",       "()J",
         Dalvik_dalvik_system_VMDebug_lastDebuggerActivity },
-    { "printLoadedClasses",     "(I)V",
+    { "printLoadedClasses",         "(I)V",
         Dalvik_dalvik_system_VMDebug_printLoadedClasses },
-    { "getLoadedClassCount",     "()I",
+    { "getLoadedClassCount",        "()I",
         Dalvik_dalvik_system_VMDebug_getLoadedClassCount },
-    { "threadCpuTimeNanos",     "()J",
+    { "threadCpuTimeNanos",         "()J",
         Dalvik_dalvik_system_VMDebug_threadCpuTimeNanos },
+    { "dumpHprofData",              "(Ljava/lang/String;)V",
+        Dalvik_dalvik_system_VMDebug_dumpHprofData },
     { NULL, NULL, NULL },
 };
 

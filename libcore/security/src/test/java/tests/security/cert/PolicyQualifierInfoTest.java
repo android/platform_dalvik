@@ -39,13 +39,6 @@ import java.util.Arrays;
 @TestTargetClass(PolicyQualifierInfo.class)
 public class PolicyQualifierInfoTest extends TestCase {
 
-    /**
-     * Constructor for PolicyQualifierInfoTest.
-     * @param name
-     */
-    public PolicyQualifierInfoTest(String name) {
-        super(name);
-    }
 
     /**
      * Test #1 for <code>PolicyQualifierInfo</code> constructor<br>

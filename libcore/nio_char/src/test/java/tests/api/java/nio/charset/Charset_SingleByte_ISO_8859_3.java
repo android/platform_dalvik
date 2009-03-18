@@ -55,6 +55,11 @@ public class Charset_SingleByte_ISO_8859_3 extends Charset_SingleByteAbstractTes
         super.setUp();
     }
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     public static void test_Bytes_166() throws CharacterCodingException {
         decodeReplace(
                 new byte[] {(byte)166},
@@ -70,18 +75,33 @@ public class Charset_SingleByte_ISO_8859_3 extends Charset_SingleByteAbstractTes
 //                outputCB.array());
     }
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     public static void test_Bytes_195() throws CharacterCodingException {
         decodeReplace(
                 new byte[] {(byte)195},
                 new char[] {65533} );
     }
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     public static void test_Bytes_165() throws CharacterCodingException {
         decodeReplace(
                 new byte[] {(byte)165},
                 new char[] {65533} );
     }
 
+    @TestTargetNew(
+        level = TestLevel.ADDITIONAL,
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     public static void test_Bytes_165_any() throws CharacterCodingException {
         decodeReplace(
                 new byte[] {(byte)165, 32},

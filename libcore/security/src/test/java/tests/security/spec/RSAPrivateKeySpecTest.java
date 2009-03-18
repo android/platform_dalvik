@@ -41,14 +41,6 @@ import java.security.spec.RSAPrivateKeySpec;
 public class RSAPrivateKeySpecTest extends TestCase {
 
     /**
-     * Constructor for RSAPrivateKeySpecTest.
-     * @param name
-     */
-    public RSAPrivateKeySpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test for <code>RSAPrivateKeySpec(BigInteger,BigInteger)</code> ctor
      * Assertion: constructs <code>RSAPrivateKeySpec</code>
      * object using valid parameters

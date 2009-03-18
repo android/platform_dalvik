@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * Command-line DEX optimization and verification entry point.
  *
@@ -50,7 +51,8 @@ static const char* kClassesDex = "classes.dex";
  * up front for the DEX optimization header.
  */
 static int extractAndProcessZip(int zipFd, int cacheFd,
-    const char* debugFileName, int isBootstrap, const char* bootClassPath)
+    const char* debugFileName, int isBootstrap, const char* bootClassPath,
+    const char* dexoptFlagStr)
 {
     ZipArchive zippy;
     ZipEntry zipEntry;
@@ -123,7 +125,39 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
      */
     DexClassVerifyMode verifyMode = VERIFY_MODE_ALL;
     DexOptimizerMode dexOptMode = OPTIMIZE_MODE_VERIFIED;
-    if (dvmPrepForDexOpt(bootClassPath, dexOptMode, verifyMode) != 0) {
+    int dexoptFlags = 0;        /* bit flags, from enum DexoptFlags */
+    if (dexoptFlagStr[0] != '\0') {
+        const char* opc;
+        const char* val;
+
+        opc = strstr(dexoptFlagStr, "v=");      /* verification */
+        if (opc != NULL) {
+            switch (*(opc+2)) {
+            case 'n':   verifyMode = VERIFY_MODE_NONE;          break;
+            case 'r':   verifyMode = VERIFY_MODE_REMOTE;        break;
+            case 'a':   verifyMode = VERIFY_MODE_ALL;           break;
+            default:                                            break;
+            }
+        }
+
+        opc = strstr(dexoptFlagStr, "o=");      /* optimization */
+        if (opc != NULL) {
+            switch (*(opc+2)) {
+            case 'n':   dexOptMode = OPTIMIZE_MODE_NONE;        break;
+            case 'v':   dexOptMode = OPTIMIZE_MODE_VERIFIED;    break;
+            case 'a':   dexOptMode = OPTIMIZE_MODE_ALL;         break;
+            default:                                            break;
+            }
+        }
+
+        opc = strstr(dexoptFlagStr, "m=y");     /* register map */
+        if (opc != NULL) {
+            dexoptFlags |= DEXOPT_GEN_REGISTER_MAPS;
+        }
+    }
+    if (dvmPrepForDexOpt(bootClassPath, dexOptMode, verifyMode,
+            dexoptFlags) != 0)
+    {
         LOGE("DexOptZ: VM init failed\n");
         goto bail;
     }
@@ -169,6 +203,7 @@ bail:
  *   4. filename of file being optimized (used for debug messages and
  *      for comparing against BOOTCLASSPATH -- does not need to be
  *      accessible or even exist)
+ *   5. dexopt flags
  *
  * The BOOTCLASSPATH environment variable is assumed to hold the correct
  * boot class path.  If the filename provided appears in the boot class
@@ -184,8 +219,9 @@ static int fromZip(int argc, char* const argv[])
     int zipFd, cacheFd, vmBuildVersion;
     const char* inputFileName;
     char* bcpCopy = NULL;
+    const char* dexoptFlagStr;
 
-    if (argc != 5) {
+    if (argc != 6) {
         LOGE("Wrong number of args for --zip (found %d)\n", argc);
         goto bail;
     }
@@ -197,6 +233,8 @@ static int fromZip(int argc, char* const argv[])
     GET_ARG(zipFd, strtol, "bad zip fd");
     GET_ARG(cacheFd, strtol, "bad cache fd");
     inputFileName = *++argv;
+    --argc;
+    dexoptFlagStr = *++argv;
     --argc;
 
     /*
@@ -237,7 +275,7 @@ static int fromZip(int argc, char* const argv[])
     }
 
     result = extractAndProcessZip(zipFd, cacheFd, inputFileName,
-                isBootstrap, bcp);
+                isBootstrap, bcp, dexoptFlagStr);
 
 bail:
     free(bcpCopy);
@@ -351,6 +389,7 @@ static int fromDex(int argc, char* const argv[])
     bool onlyOptVerifiedDex = false;
     DexClassVerifyMode verifyMode;
     DexOptimizerMode dexOptMode;
+    int dexoptFlags = 0;
 
     /* ugh -- upgrade these to a bit field if they get any more complex */
     if ((flags & DEXOPT_VERIFY_ENABLED) != 0) {
@@ -369,8 +408,13 @@ static int fromDex(int argc, char* const argv[])
     } else {
         dexOptMode = OPTIMIZE_MODE_NONE;
     }
+    if ((flags & DEXOPT_GEN_REGISTER_MAP) != 0) {
+        dexoptFlags |= DEXOPT_GEN_REGISTER_MAPS;
+    }
 
-    if (dvmPrepForDexOpt(bootClassPath, dexOptMode, verifyMode) != 0) {
+    if (dvmPrepForDexOpt(bootClassPath, dexOptMode, verifyMode,
+            dexoptFlags) != 0)
+    {
         LOGE("VM init failed\n");
         goto bail;
     }

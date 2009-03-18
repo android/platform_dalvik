@@ -22,14 +22,12 @@
 
 package org.apache.harmony.security.tests.java.security;
 
-import dalvik.annotation.TestTargetClass;
-import dalvik.annotation.TestTargets;
-import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetNew;
-
 import java.security.PublicKey;
 
 import junit.framework.TestCase;
+import dalvik.annotation.TestLevel;
+import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.TestTargetNew;
 @TestTargetClass(PublicKey.class)
 /**
  * Tests for <code>PublicKey</code> class field
@@ -37,16 +35,6 @@ import junit.framework.TestCase;
  */
 
 public class PublicKeyTest extends TestCase {
-
-
-    /**
-     * Constructor for PublicKeyTest.
-     * 
-     * @param arg0
-     */
-    public PublicKeyTest(String arg0) {
-        super(arg0);
-    }
 
     /**
      * Test for <code>serialVersionUID</code> field

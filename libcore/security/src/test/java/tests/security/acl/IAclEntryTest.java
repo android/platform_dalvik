@@ -35,16 +35,6 @@ import org.apache.harmony.security.tests.support.acl.*;
 @TestTargetClass(AclEntry.class)
 public class IAclEntryTest extends TestCase {
     
-    /**
-     * Constructor for IAclEntryTest.
-     * 
-     * @param arg0
-     */
-    public IAclEntryTest(String arg0) {
-        super(arg0);
-    }
-    
-    
     class MyAclEntry extends AclEntryImpl {
         public MyAclEntry() {
             super();

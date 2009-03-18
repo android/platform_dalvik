@@ -27,7 +27,6 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
-import java.security.AllPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.*;
@@ -41,32 +40,26 @@ import junit.framework.TestCase;
 
 public class PermissionCollectionTest extends TestCase {
 
-    public static void main(String[] args) {
-        junit.textui.TestRunner.run(PermissionCollectionTest.class);
-    }
-
-    /**
-     * Constructor for PermissionCollectionTest.
-     * @param arg0
-     */
-    public PermissionCollectionTest(String arg0) {
-        super(arg0);
-    }
-   
     // Bare extension to instantiate abstract PermissionCollection class
     private static final class RealPermissionCollection extends PermissionCollection
     {
-        final private Collection col; 
-        public RealPermissionCollection(Collection col)
+        final private Set <Permission> setCol = new HashSet<Permission>(); 
+        public RealPermissionCollection(Set <Permission> col)
         {
-            this.col = col; 
+            if (col != null) {
+                setCol.addAll(col);
+            }
         }
-                
-        public void add(Permission permission) {}
+               
+        public void add(Permission permission) {
+            if (!setCol.add(permission)) {
+                throw new IllegalArgumentException("permission is not added");
+            }
+        }
         
         public Enumeration elements() 
         {
-            return col == null ? null : Collections.enumeration(col);
+            return setCol == null ? null : Collections.enumeration(setCol);
         }
         
         public boolean implies(Permission permission) 
@@ -107,12 +100,37 @@ public class PermissionCollectionTest extends TestCase {
         args = {}
     )
     public void testToString() {
-        PermissionCollection pc = new RealPermissionCollection(null);
+        Set<Permission> perm = new HashSet<Permission>();
+        Permission p = new RealPermission("TestPermission");
+        perm.add(p);
+        PermissionCollection pc = new RealPermissionCollection(perm);
         try {
             String str = pc.toString();
             assertNotNull("toString return null", str);
         } catch (Exception e) {
-            fail("Unexpected exception");
+            fail("Unexpected exception " + e);
         }
+    }
+}
+
+class RealPermission extends Permission {
+    
+    public RealPermission(String name) {
+        super(name);
+    }
+
+    public boolean equals(Object obj) {
+        return false;
+    }
+
+    public String getActions() {
+        return null;
+    }
+    public int hashCode() {
+        return 0;
+    }
+
+    public boolean implies(Permission permission) {
+        return false;
     }
 }

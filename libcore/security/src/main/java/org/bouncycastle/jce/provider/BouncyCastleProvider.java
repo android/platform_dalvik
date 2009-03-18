@@ -112,7 +112,10 @@ public final class BouncyCastleProvider extends Provider
         // END android-removed
         put("AlgorithmParameters.IES", "org.bouncycastle.jce.provider.JDKAlgorithmParameters$IES");
         put("AlgorithmParameters.PKCS12PBE", "org.bouncycastle.jce.provider.JDKAlgorithmParameters$PKCS12PBE");
-        put("AlgorithmParameters.1.2.840.113549.3.7", "org.bouncycastle.jce.provider.JDKAlgorithmParameters$IVAlgorithmParameters");
+        // BEGIN android-removed
+        // double entry
+        // put("AlgorithmParameters.1.2.840.113549.3.7", "org.bouncycastle.jce.provider.JDKAlgorithmParameters$IVAlgorithmParameters");
+        // END android-removed
         // BEGIN android-removed
         // put("AlgorithmParameters.IDEA", "org.bouncycastle.jce.provider.JDKAlgorithmParameters$IDEAAlgorithmParameters");
         // put("AlgorithmParameters.1.3.6.1.4.1.188.7.1.1.2", "org.bouncycastle.jce.provider.JDKAlgorithmParameters$IDEAAlgorithmParameters");
@@ -171,12 +174,14 @@ public final class BouncyCastleProvider extends Provider
         put("Alg.Alias.AlgorithmParameters.PBEWITHSHA-256AND192BITAES-CBC-BC","PKCS12PBE");
         put("Alg.Alias.AlgorithmParameters.PBEWITHSHA-256AND256BITAES-CBC-BC","PKCS12PBE");
 
-        put("AlgorithmParameters.SHA1WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
-        put("AlgorithmParameters.SHA224WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
-        put("AlgorithmParameters.SHA256WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
-        put("AlgorithmParameters.SHA384WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
-        put("AlgorithmParameters.SHA512WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
-        
+        // BEGIN android-removed
+        // put("AlgorithmParameters.SHA1WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
+        // put("AlgorithmParameters.SHA224WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
+        // put("AlgorithmParameters.SHA256WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
+        // put("AlgorithmParameters.SHA384WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
+        // put("AlgorithmParameters.SHA512WITHECDSA", "org.bouncycastle.jce.provider.JDKECDSAAlgParameters$SigAlgParameters");
+        // END android-removed
+
         //
         // key agreement
         //
@@ -491,9 +496,10 @@ public final class BouncyCastleProvider extends Provider
         
         put("Alg.Alias.KeyFactory.1.2.840.113549.1.1.1", "RSA");
         put("Alg.Alias.KeyFactory.1.2.840.10040.4.1", "DSA");
-        put("Alg.Alias.KeyFactory." + X9ObjectIdentifiers.id_ecPublicKey, "EC");
+        // BEGIN android-removed
+        // put("Alg.Alias.KeyFactory." + X9ObjectIdentifiers.id_ecPublicKey, "EC");
         
-        // END android-removed
+
         // put("KeyFactory.GOST3410", "org.bouncycastle.jce.provider.JDKKeyFactory$GOST3410");
         // put("Alg.Alias.KeyFactory.GOST-3410", "GOST3410");
         // put("Alg.Alias.KeyFactory.GOST-3410-94", "GOST3410");
@@ -732,16 +738,18 @@ public final class BouncyCastleProvider extends Provider
     //
     private void addMessageDigestAlgorithms()
     {
-        put("MessageDigest.SHA-1", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA1");
-        put("Alg.Alias.MessageDigest.SHA1", "SHA-1");
-        put("Alg.Alias.MessageDigest.SHA", "SHA-1");
-        put("Alg.Alias.MessageDigest." + OIWObjectIdentifiers.idSHA1, "SHA-1");
-        put("MessageDigest.SHA-224", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA224");
-        put("Alg.Alias.MessageDigest.SHA224", "SHA-224");
-        put("Alg.Alias.MessageDigest." + NISTObjectIdentifiers.id_sha224, "SHA-224");
-        put("MessageDigest.SHA-256", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA256");
-        put("Alg.Alias.MessageDigest.SHA256", "SHA-256");
-        put("Alg.Alias.MessageDigest." + NISTObjectIdentifiers.id_sha256, "SHA-256");
+        // BEGIN android-removed
+        // put("MessageDigest.SHA-1", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA1");
+        // put("Alg.Alias.MessageDigest.SHA1", "SHA-1");
+        // put("Alg.Alias.MessageDigest.SHA", "SHA-1");
+        // put("Alg.Alias.MessageDigest." + OIWObjectIdentifiers.idSHA1, "SHA-1");
+        // put("MessageDigest.SHA-224", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA224");
+        // put("Alg.Alias.MessageDigest.SHA224", "SHA-224");
+        // put("Alg.Alias.MessageDigest." + NISTObjectIdentifiers.id_sha224, "SHA-224");
+        // put("MessageDigest.SHA-256", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA256");
+        // put("Alg.Alias.MessageDigest.SHA256", "SHA-256");
+        // put("Alg.Alias.MessageDigest." + NISTObjectIdentifiers.id_sha256, "SHA-256");
+        // END android-removed
         put("MessageDigest.SHA-384", "org.bouncycastle.jce.provider.JDKMessageDigest$SHA384");
         put("Alg.Alias.MessageDigest.SHA384", "SHA-384");
         put("Alg.Alias.MessageDigest." + NISTObjectIdentifiers.id_sha384, "SHA-384");
@@ -754,10 +762,8 @@ public final class BouncyCastleProvider extends Provider
         // put("Alg.Alias.MessageDigest." + PKCSObjectIdentifiers.md2, "MD2");
         // put("MessageDigest.MD4", "org.bouncycastle.jce.provider.JDKMessageDigest$MD4");
         // put("Alg.Alias.MessageDigest." + PKCSObjectIdentifiers.md4, "MD4");
-        // END android-removed
-        put("MessageDigest.MD5", "org.bouncycastle.jce.provider.JDKMessageDigest$MD5");
-        put("Alg.Alias.MessageDigest." + PKCSObjectIdentifiers.md5, "MD5");
-        // BEGIN android-removed
+        // put("MessageDigest.MD5", "org.bouncycastle.jce.provider.JDKMessageDigest$MD5");
+        // put("Alg.Alias.MessageDigest." + PKCSObjectIdentifiers.md5, "MD5");
         // put("MessageDigest.RIPEMD128", "org.bouncycastle.jce.provider.JDKMessageDigest$RIPEMD128");
         // put("Alg.Alias.MessageDigest." + TeleTrusTObjectIdentifiers.ripemd128, "RIPEMD128");
         // put("MessageDigest.RIPEMD160", "org.bouncycastle.jce.provider.JDKMessageDigest$RIPEMD160");

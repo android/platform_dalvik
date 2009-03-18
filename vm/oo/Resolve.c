@@ -64,6 +64,7 @@ ClassObject* dvmResolveClass(const ClassObject* referrer, u4 classIdx,
 {
     DvmDex* pDvmDex = referrer->pDvmDex;
     ClassObject* resClass;
+    const char* className;
 
     /*
      * Check the table first -- this gets called from the other "resolve"
@@ -85,9 +86,13 @@ ClassObject* dvmResolveClass(const ClassObject* referrer, u4 classIdx,
      *
      * If this is an array class, we'll generate it here.
      */
-    resClass = dvmFindClassNoInit(
-            dexStringByTypeIdx(pDvmDex->pDexFile, classIdx),
-            referrer->classLoader);
+    className = dexStringByTypeIdx(pDvmDex->pDexFile, classIdx);
+    if (className[0] != '\0' && className[1] == '\0') {
+        /* primitive type */
+        resClass = dvmFindPrimitiveClass(className[0]);
+    } else {
+        resClass = dvmFindClassNoInit(className, referrer->classLoader);
+    }
 
     if (resClass != NULL) {
         /*

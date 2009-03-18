@@ -32,8 +32,6 @@ public class ReadOnlyCharBufferTest extends CharBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        buf = null;
-        baseBuf = null;
         super.tearDown();
     }
 

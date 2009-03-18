@@ -46,13 +46,6 @@ import junit.framework.TestSuite;
 
 public class KSPrivateKeyEntryTest extends TestCase {
 
-    /**
-     * Constructor for KSPrivateKeyEntryTest.
-     * @param arg0
-     */
-    public KSPrivateKeyEntryTest(String arg0) {
-        super(arg0);
-    }
     private PrivateKey testPrivateKey;
     private Certificate [] testChain;
     

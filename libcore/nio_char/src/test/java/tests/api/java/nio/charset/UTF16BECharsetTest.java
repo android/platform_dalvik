@@ -31,8 +31,8 @@ public class UTF16BECharsetTest extends AbstractCharsetTestCase {
     /**
      * Constructor.
      */
-    public UTF16BECharsetTest(String arg0) {
-        super(arg0, "UTF-16BE", new String[] { "X-UTF-16BE", "UTF_16BE" },
+    public UTF16BECharsetTest() {
+        super("UTF-16BE", new String[] { "X-UTF-16BE", "UTF_16BE" },
                 true, true); // "ISO-10646-UCS-2"
     }
 

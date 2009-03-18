@@ -1,15 +1,13 @@
 package tests.api.java.nio.charset;
 
-import dalvik.annotation.TestTargetClass;
-import dalvik.annotation.TestTargets;
-import dalvik.annotation.TestTargetNew;
-import dalvik.annotation.TestLevel;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
 import junit.framework.TestCase;
+import dalvik.annotation.TestLevel;
+import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.TestTargetNew;
 
 @TestTargetClass(Charset.class)
 
@@ -54,9 +52,8 @@ public abstract class AbstractCharsetTestCase extends TestCase {
      * Constructor for ConcreteCharsetTest.
      * 
      */
-    public AbstractCharsetTestCase(String arg0, String canonicalName,
+    public AbstractCharsetTestCase(String canonicalName,
             String[] aliases, boolean canEncode, boolean isRegistered) {
-        super(arg0);
         this.canonicalName = canonicalName;
         this.canEncode = canEncode;
         this.isRegistered = isRegistered;

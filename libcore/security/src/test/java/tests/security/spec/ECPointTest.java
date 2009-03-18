@@ -39,14 +39,6 @@ import java.security.spec.ECPoint;
 @TestTargetClass(ECPoint.class)
 public class ECPointTest extends TestCase {
 
-    /**
-     * Constructor for ECPointTest.
-     * @param name
-     */
-    public ECPointTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

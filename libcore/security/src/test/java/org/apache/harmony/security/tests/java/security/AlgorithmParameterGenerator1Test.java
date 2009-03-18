@@ -49,14 +49,6 @@ import junit.framework.TestCase;
  */
 
 public class AlgorithmParameterGenerator1Test extends TestCase {
-    /**
-     * Constructor for AlgorithmParameterGeneratorTests.
-     * 
-     * @param arg0
-     */
-    public AlgorithmParameterGenerator1Test(String arg0) {
-        super(arg0);
-    }
 
     private static String[] invalidValues = SpiEngUtils.invalidValues;
     private static String validAlgName = "DSA";

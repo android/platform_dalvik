@@ -17,6 +17,7 @@
 
 package tests.api.java.io;
 
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -256,13 +257,10 @@ public class PipedWriterTest extends junit.framework.TestCase {
         pw = new PipedWriter(new PipedReader());
         
         try {
-            pw.write(testBuf, -1, 10);
+            pw.write(testBuf, -1, 1);
             fail("Test 2: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
             // Expected.
-            assertEquals(
-                    "Test 2: IndexOutOfBoundsException rather than a subclass expected.",
-                    IndexOutOfBoundsException.class, e.getClass());
         }
         
         try {
@@ -270,9 +268,6 @@ public class PipedWriterTest extends junit.framework.TestCase {
             fail("Test 3: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
             // Expected.
-            assertEquals(
-                    "Test 3: IndexOutOfBoundsException rather than a subclass expected.",
-                    IndexOutOfBoundsException.class, e.getClass());
         }
         
         try {
@@ -280,9 +275,6 @@ public class PipedWriterTest extends junit.framework.TestCase {
             fail("Test 4: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
             // Expected.
-            assertEquals(
-                    "Test 4: IndexOutOfBoundsException rather than a subclass expected.",
-                    IndexOutOfBoundsException.class, e.getClass());
         }
         
         pw.close();
@@ -326,6 +318,7 @@ public class PipedWriterTest extends junit.framework.TestCase {
         method = "write",
         args = {char[].class, int.class, int.class}
     )
+    @BrokenTest("Hangs on RI")
     public void test_write$CII_MultiThread() throws Exception {
         final PipedReader pr = new PipedReader();
         final PipedWriter pw = new PipedWriter();
@@ -429,6 +422,7 @@ public class PipedWriterTest extends junit.framework.TestCase {
         method = "write",
         args = {int.class}
     )
+    @BrokenTest("Hangs on RI")
     public void test_writeI_MultiThread() throws IOException {
         final PipedReader pr = new PipedReader();
         final PipedWriter pw = new PipedWriter();

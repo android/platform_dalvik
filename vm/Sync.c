@@ -527,7 +527,7 @@ static void waitMonitor(Thread* self, Monitor* mon, s8 msec, s4 nsec,
      * situation, but we need to handle it correctly.)
      */
     if (mon->notifying + mon->interrupting > mon->waiting) {
-        LOGI("threadid=%d: bogus mon %d+%d>%d; adjusting\n",
+        LOGD("threadid=%d: bogus mon %d+%d>%d; adjusting\n",
             self->threadId, mon->notifying, mon->interrupting,
             mon->waiting);
 

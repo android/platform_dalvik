@@ -2941,7 +2941,8 @@ void dvmDbgDdmDisconnected(void)
 void dvmDbgDdmSendChunk(int type, int len, const u1* buf)
 {
     if (gDvm.jdwpState == NULL) {
-        LOGI("Ignoring DDM send req for type=0x%08x len=%d\n", type, len);
+        LOGI("Debugger thread not active, ignoring DDM send (t=0x%08x l=%d)\n",
+            type, len);
         return;
     }
 

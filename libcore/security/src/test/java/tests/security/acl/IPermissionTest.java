@@ -31,15 +31,6 @@ import org.apache.harmony.security.tests.support.acl.*;
 @TestTargetClass(Permission.class)
 public class IPermissionTest extends TestCase {
     
-    /**
-     * Constructor for IPermissionTest.
-     * 
-     * @param arg0
-     */
-    public IPermissionTest(String arg0) {
-        super(arg0);
-    }
-    
     class MyPermission extends PermissionImpl {
         public MyPermission(String str) {
             super(str);

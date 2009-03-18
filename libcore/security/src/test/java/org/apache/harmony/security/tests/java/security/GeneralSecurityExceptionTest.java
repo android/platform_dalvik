@@ -38,18 +38,6 @@ import junit.framework.TestCase;
  */
 public class GeneralSecurityExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for GeneralSecurityExceptionTests.
-     * 
-     * @param arg0
-     */
-    public GeneralSecurityExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

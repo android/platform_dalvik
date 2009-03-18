@@ -38,15 +38,6 @@ public class ECParameterSpecTest extends TestCase {
 
     ECParameterSpec ecps;
 
-    /**
-     * Constructor for ECParameterSpecTest.
-     * 
-     * @param name
-     */
-    public ECParameterSpecTest(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
         curve = new EllipticCurve(new ECFieldF2m(2), BigInteger.valueOf(1),

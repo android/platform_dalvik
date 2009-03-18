@@ -14,14 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Grab a pair of hprof files using adb. If an argument is specified, grab
+# Grab an hprof file using adb. If an argument is specified, grab
 # the so-named file. If no argument is specified, grab the last such file
 # as found by using "ls".
 
 FILE_BASE="$1"
 if [ "x$FILE_BASE" = "x" ]; then
     # Note: substr() is to get rid of the final carriage return.
-    FILE_BASE=`adb shell ls '/data/misc/heap-dump*.hprof' | tail -1 | \
+    FILE_BASE=`adb shell ls -l '/data/misc/heap-dump*.hprof' | tail -1 | \
 	awk '{ printf("%s", substr($7, 1, length($7) - 1)); }'`
     if [ "x$FILE_BASE" = "x" ]; then
         echo "No file base defined."
@@ -29,22 +29,13 @@ if [ "x$FILE_BASE" = "x" ]; then
     fi
 fi
 
-FILE_BASE=/data/misc/`echo $FILE_BASE | sed -e 's,^/data/misc/,,;s,-head$,,'`
-
-HEAD_FILE=/tmp/hprof-head
-TAIL_FILE=/tmp/hprof-tail
+FILE_BASE=/data/misc/${FILE_BASE}
 OUT_FILE=heap-dump.hprof
 
-adb pull "${FILE_BASE}-head" "$HEAD_FILE"
-if [ "$?" -ne 0 ]; then
-    echo "Failed pulling ${FILE_BASE}-head."
-    exit 1
-fi
-adb pull "$FILE_BASE" "$TAIL_FILE"
+adb pull "$FILE_BASE" "$OUT_FILE"
 if [ $? -ne 0 ]; then
     echo "Failed pulling $FILE_BASE."
     exit 1
 fi
-cat "$HEAD_FILE" "$TAIL_FILE" > "$OUT_FILE"
-rm "$HEAD_FILE" "$TAIL_FILE"
 echo "hat $OUT_FILE"
+exit 0

@@ -141,6 +141,37 @@ public class DebugInfoItem extends OffsettedItem {
      */
     private byte[] encode(DexFile file, String prefix, PrintWriter debugPrint,
             AnnotatedOutput out, boolean consume) {
+        byte[] result = encode0(file, prefix, debugPrint, out, consume);
+
+        if (ENABLE_ENCODER_SELF_CHECK && (file != null)) {
+            try {
+                DebugInfoDecoder.validateEncode(result, file, ref, code,
+                        isStatic);
+            } catch (RuntimeException ex) {
+                // Reconvert, annotating to System.err.
+                encode0(file, "", new PrintWriter(System.err, true), null,
+                        false);
+                throw ex;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Helper for {@link #encode} to do most of the work.
+     *
+     * @param file null-ok; file to refer to during encoding
+     * @param prefix null-ok; prefix to attach to each line of output
+     * @param debugPrint null-ok; if specified, an alternate output for
+     * annotations
+     * @param out null-ok; if specified, where annotations should go
+     * @param consume whether to claim to have consumed output for
+     * <code>out</code>
+     * @return non-null; the encoded array
+     */
+    private byte[] encode0(DexFile file, String prefix, PrintWriter debugPrint,
+            AnnotatedOutput out, boolean consume) {
         PositionList positions = code.getPositions();
         LocalList locals = code.getLocals();
         DalvInsnList insns = code.getInsns();
@@ -156,13 +187,8 @@ public class DebugInfoItem extends OffsettedItem {
         if ((debugPrint == null) && (out == null)) {
             result = encoder.convert();
         } else {
-            result = encoder.convertAndAnnotate(
-                    prefix, debugPrint, out, consume);
-        }
-
-        if (ENABLE_ENCODER_SELF_CHECK && (file != null)) {
-            DebugInfoDecoder.validateEncode(encoded, codeSize,
-                    regSize, positions, locals, isStatic, ref, file);
+            result = encoder.convertAndAnnotate(prefix, debugPrint, out,
+                    consume);
         }
 
         return result;

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.SocketAddress;
+import java.security.Permission;
 
 /*
  * This class tests the secrity permissions which are documented in
@@ -85,6 +86,10 @@ public class JavaNetMulticastSocketTest extends TestCase {
                 called = true;
                 this.port = port;
                 super.checkListen(port);
+            }
+            @Override
+            public void checkPermission(Permission permission) {
+                
             }
         }
         

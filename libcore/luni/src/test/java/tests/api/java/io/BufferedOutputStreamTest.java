@@ -165,7 +165,7 @@ public class BufferedOutputStreamTest extends junit.framework.TestCase {
         method = "write",
         args = {byte[].class, int.class, int.class}
     )         
-    public void test_write_$BII_Exception() throws IOException {
+    public void test_write$BII_Exception() throws IOException {
         OutputStream bos = new BufferedOutputStream(new ByteArrayOutputStream());    
         byte[] nullByteArray = null;
         byte[] byteArray = new byte[10];
@@ -179,23 +179,23 @@ public class BufferedOutputStreamTest extends junit.framework.TestCase {
         
         try {
             bos.write(byteArray, -1, 1);
-            fail("Test 2: ArrayIndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // Expected.
+            fail("Test 2: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
 
         try {
             bos.write(byteArray, 0, -1);
-            fail("Test 3: ArrayIndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // Expected.
+            fail("Test 3: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
 
         try {
             bos.write(byteArray, 1, 10);
-            fail("Test 4: ArrayIndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // Expected.
+            fail("Test 4: IndexOutOfBoundsException expected.");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 

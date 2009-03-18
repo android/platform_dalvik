@@ -1,7 +1,6 @@
 package tests.targets.security;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -12,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 
-@TestTargetClass(targets.AlgorithmParameters.Internal.class)
 public class AlgorithmParametersTest extends TestCase {
 
     private final String algorithmName;
@@ -40,6 +38,11 @@ public class AlgorithmParametersTest extends TestCase {
                 level=TestLevel.ADDITIONAL,
                 method="init",
                 args={byte[].class}
+        ),
+        @TestTargetNew(
+                level=TestLevel.COMPLETE,
+                method="method",
+                args={}
         )
     })
     public void testAlgorithmParameters() {

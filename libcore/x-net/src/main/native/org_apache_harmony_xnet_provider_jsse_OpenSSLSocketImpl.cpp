@@ -41,12 +41,6 @@
 #include "org_apache_harmony_xnet_provider_jsse_common.h"
 
 /**
- * Global variable used in module org_apache_harmony_xnet_provider_jsse_common.h.
- * It is correctly updated in the function accept().
- */
-int verify_callback_mydata_index = 0;
-
-/**
  * Module scope variables initialized during JNI registration.
  */
 static jfieldID field_ssl_ctx;
@@ -1273,8 +1267,6 @@ static void org_apache_harmony_xnet_provider_jsse_OpenSSLSocketImpl_accept(JNIEn
     SSL_CTX *ssl_ctx;
     mydata_t mydata;
 
-    char name[] = "mydata index";
-
     ssl_ctx = (SSL_CTX *)jssl_ctx;
 
     ssl = create_ssl(env, object, ssl_ctx);
@@ -1310,33 +1302,55 @@ static void org_apache_harmony_xnet_provider_jsse_OpenSSLSocketImpl_accept(JNIEn
 
     SSL_set_bio(ssl, bio, bio);
 
-    /* Call to "register" some new application specific data. It takes three
-     * optional function pointers which are called when the parent structure 
-     * (in this case an RSA structure) is initially created, when it is copied
-     * and when it is freed up. If any or all of these function pointer 
-     * arguments are not used they should be set to NULL. Here we simply
-     * register a dummy callback application with the index 0.
+    /*
+     * Fill in the mydata structure needed for the certificate callback and
+     * store this in the SSL application data slot.
      */
-    verify_callback_mydata_index = SSL_get_ex_new_index(0, name, NULL, NULL, NULL);
-
-    /* Fill in the mydata structure */
     mydata.env = env;
     mydata.object = object;
-    SSL_set_ex_data(ssl, verify_callback_mydata_index, &mydata);
+    SSL_set_app_data(ssl, &mydata);
 
+    /*
+     * Do the actual SSL_accept(). It is possible this code is insufficient.
+     * Maybe we need to deal with all the special SSL error cases (WANT_*),
+     * just like we do for SSL_connect(). But currently it is looking ok.
+     */
     ret = SSL_accept(ssl);
 
-    if (ret < 1) {
+    /*
+     * Clear the SSL application data slot again, so we can safely use it for
+     * our ordinary synchronization structure afterwards. Also, we don't want
+     * sslDestroyAppData() to think that there is something that needs to be
+     * freed right now (in case of an error).
+     */
+    SSL_set_app_data(ssl, NULL);
+
+    if (ret == 0) {
         /*
-         * Translate the error, and throw if it turns out to be a real
-         * problem.
+         * The other side closed the socket before the handshake could be
+         * completed, but everything is within the bounds of the TLS protocol.
+         * We still might want to find out the real reason of the failure.
          */
         int sslErrorCode = SSL_get_error(ssl, ret);
-        if (sslErrorCode != SSL_ERROR_ZERO_RETURN) {
-            throwIOExceptionWithSslErrors(env, ret, sslErrorCode,
-                    "Trouble accepting connection");
-            free_ssl(env, object);
-        }
+        if (sslErrorCode == SSL_ERROR_NONE ||
+                sslErrorCode == SSL_ERROR_SYSCALL && errno == 0) {
+          throwIOExceptionStr(env, "Connection closed by peer");
+        } else {
+          throwIOExceptionWithSslErrors(env, ret, sslErrorCode,
+              "Trouble accepting connection");
+    	}
+        free_ssl(env, object);
+        return;
+    } else if (ret < 0) {
+        /*
+         * Translate the error and throw exception. We are sure it is an error
+         * at this point.
+         */
+        int sslErrorCode = SSL_get_error(ssl, ret);
+        throwIOExceptionWithSslErrors(env, ret, sslErrorCode,
+                "Trouble accepting connection");
+        free_ssl(env, object);
+        return;
     }
 
     /*

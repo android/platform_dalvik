@@ -46,14 +46,6 @@ import org.apache.harmony.security.tests.support.cert.TestUtils;
 @TestTargetClass(PKIXCertPathChecker.class)
 public class PKIXCertPathCheckerTest extends TestCase {
 
-    /**
-     * Constructor for PKIXCertPathCheckerTest.
-     * @param name
-     */
-    public PKIXCertPathCheckerTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

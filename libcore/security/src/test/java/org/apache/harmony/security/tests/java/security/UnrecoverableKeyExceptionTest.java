@@ -38,18 +38,6 @@ import junit.framework.TestCase;
  */
 public class UnrecoverableKeyExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for UnrecoverableKeyExceptionTests.
-     * 
-     * @param arg0
-     */
-    public UnrecoverableKeyExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     static String[] msgs = {
             "",
             "Check new message",

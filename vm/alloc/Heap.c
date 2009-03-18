@@ -829,11 +829,20 @@ void dvmCollectGarbageInternal(bool collectSoftReferences)
 #endif
 
     if (gcHeap->hprofDumpOnGc) {
-        gcHeap->hprofContext = hprofStartup("/data/misc");
+        char nameBuf[128];
+
+        if (gcHeap->hprofFileName == NULL) {
+            /* no filename was provided; invent one */
+            sprintf(nameBuf, "/data/misc/heap-dump-tm%d-pid%d.hprof",
+                (int) time(NULL), (int) getpid());
+            gcHeap->hprofFileName = nameBuf;
+        }
+        gcHeap->hprofContext = hprofStartup(gcHeap->hprofFileName);
         if (gcHeap->hprofContext != NULL) {
             hprofStartHeapDump(gcHeap->hprofContext);
         }
         gcHeap->hprofDumpOnGc = false;
+        gcHeap->hprofFileName = NULL;
     }
 #endif
 
@@ -1033,11 +1042,17 @@ void dvmCollectGarbageInternal(bool collectSoftReferences)
 }
 
 #if WITH_HPROF
-void hprofDumpHeap()
+/*
+ * Perform garbage collection, writing heap information to the specified file.
+ *
+ * If "fileName" is NULL, a suitable name will be generated automatically.
+ */
+void hprofDumpHeap(const char* fileName)
 {
     dvmLockMutex(&gDvm.gcHeapLock);
 
     gDvm.gcHeap->hprofDumpOnGc = true;
+    gDvm.gcHeap->hprofFileName = fileName;
     dvmCollectGarbageInternal(false);
 
     dvmUnlockMutex(&gDvm.gcHeapLock);

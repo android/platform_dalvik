@@ -41,14 +41,6 @@ import java.security.spec.KeySpec;
 public class DSAPublicKeySpecTest extends TestCase {
 
     /**
-     * Constructor for DSAPublicKeySpecTest.
-     * @param name
-     */
-    public DSAPublicKeySpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test for <code>DSAPublicKeySpec</code> ctor
      */
     @TestTargetNew(

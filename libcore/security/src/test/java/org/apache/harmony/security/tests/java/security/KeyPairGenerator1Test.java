@@ -51,15 +51,6 @@ import junit.framework.TestCase;
 
 public class KeyPairGenerator1Test extends TestCase {
 
-    /**
-     * Constructor for KayPairGeneratorTest.
-     * 
-     * @param arg0
-     */
-    public KeyPairGenerator1Test(String arg0) {
-        super(arg0);
-    }
-
     private static String[] invalidValues = SpiEngUtils.invalidValues;
     
     public static final String srvKeyPairGenerator = "KeyPairGenerator";

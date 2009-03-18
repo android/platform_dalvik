@@ -695,7 +695,7 @@ public class KeyStore4Test extends TestCase {
     )
     public void testGetProvider() {
         assertNotNull(keyStore.getProvider());
-        assertSame(provider, keyStore.getProvider());
+        assertEquals("not equal", provider, keyStore.getProvider());
     }
 
 }

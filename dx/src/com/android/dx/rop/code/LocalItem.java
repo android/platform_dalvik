@@ -22,7 +22,6 @@ import com.android.dx.rop.cst.CstUtf8;
  * A local variable item: either a name or a signature or both.
  */
 public class LocalItem implements Comparable<LocalItem> {
-
     /** null-ok; local variable name */
     private final CstUtf8 name;
 
@@ -38,7 +37,7 @@ public class LocalItem implements Comparable<LocalItem> {
      * @param signature null-ok; local variable signature
      * @return non-null; appropriate instance.
      */
-    public static LocalItem make (CstUtf8 name, CstUtf8 signature) {
+    public static LocalItem make(CstUtf8 name, CstUtf8 signature) {
         if (name == null && signature == null) {
             return null;
         }
@@ -52,14 +51,14 @@ public class LocalItem implements Comparable<LocalItem> {
      * @param name null-ok; local variable name
      * @param signature null-ok; local variable signature
      */
-    private LocalItem (CstUtf8 name, CstUtf8 signature) {
+    private LocalItem(CstUtf8 name, CstUtf8 signature) {
         this.name = name;
         this.signature = signature;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean equals (Object other) {
+    public boolean equals(Object other) {
         if (!(other instanceof LocalItem)) {
             return false;
         }
@@ -89,7 +88,7 @@ public class LocalItem implements Comparable<LocalItem> {
     }
 
     /** {@inheritDoc} */
-    public int compareTo (LocalItem local) {
+    public int compareTo(LocalItem local) {
         int ret;
 
         ret = compareHandlesNulls(name, local.name);
@@ -106,7 +105,7 @@ public class LocalItem implements Comparable<LocalItem> {
 
     /** {@inheritDoc} */
     @Override
-    public int hashCode () {
+    public int hashCode() {
         return (name == null ? 0 : name.hashCode()) * 31
                 + (signature == null ? 0 : signature.hashCode());
     }
@@ -121,7 +120,7 @@ public class LocalItem implements Comparable<LocalItem> {
         }
 
         return "[" + (name == null ? "" : name.toQuoted())
-                + "|" + (signature == null ? "" : signature.toQuoted());        
+                + "|" + (signature == null ? "" : signature.toQuoted());
     }
 
     /**

@@ -104,7 +104,6 @@ public class ThreadPool extends ThreadGroup {
                 }
 
                 if (task == null) {
-                    Logger.global.info("Task is null");
                     return;
                 }
 

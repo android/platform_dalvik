@@ -17,7 +17,7 @@
 
 package org.apache.harmony.logging.tests.java.util.logging;
 
-import dalvik.annotation.AndroidOnly;
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -89,15 +89,6 @@ public class LoggerTest extends TestCase {
         Locale.setDefault(oldLocale);
         LogManager.getLogManager().reset();
         super.tearDown();
-    }
-
-    /**
-     * Constructor for LoggerTest.
-     * 
-     * @param arg0
-     */
-    public LoggerTest(String arg0) {
-        super(arg0);
     }
 
     /*
@@ -442,8 +433,10 @@ public class LoggerTest extends TestCase {
         method = "getLogger",
         args = {java.lang.String.class}
     )
-    @AndroidOnly("getResourceBundle and getResourceBundleName methods return " +
-            "null on RI for Logger with empty string name.")
+    @BrokenTest("This fails on RI and Android." +
+            "getResourceBundle and getResourceBundleName methods return " +
+            "null on RI for Logger with empty string name. On the RI " + 
+            "getHandlers() returns a non empty array.")
     public void testGetLogger_Empty() {
         assertNotNull(LogManager.getLogManager().getLogger(""));
         Logger log = Logger.getLogger("");

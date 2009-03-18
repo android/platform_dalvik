@@ -30,7 +30,7 @@ import junit.framework.TestCase;
  * Tests a java.nio.Buffer instance.
  */
 @TestTargetClass(java.nio.Buffer.class)
-public class AbstractBufferTest extends TestCase {
+public abstract class AbstractBufferTest extends TestCase {
     
     protected Buffer baseBuf;
     protected int capacity;
@@ -139,9 +139,7 @@ public class AbstractBufferTest extends TestCase {
         method = "isReadOnly",
         args = {}
     )
-    public void testIsReadOnly() {
-        baseBuf.isReadOnly();
-    }
+    public abstract void testIsReadOnly();
 
     /*
      * Class under test for int limit()

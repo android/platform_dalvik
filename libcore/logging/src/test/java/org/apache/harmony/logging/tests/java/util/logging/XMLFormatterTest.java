@@ -17,6 +17,7 @@
 
 package org.apache.harmony.logging.tests.java.util.logging;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -263,6 +264,8 @@ public class XMLFormatterTest extends TestCase {
             args = {}
         )
     })
+    @AndroidOnly("This test fails on RI. Output doesn't contain " +
+            "<message/>.")
     public void testInvalidParameter() {
         formatter.getTail(null);
         try {

@@ -17,9 +17,7 @@
 
 package tests.api.java.util;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetNew;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass; 
 
@@ -295,7 +293,6 @@ public class AbstractMapTest extends junit.framework.TestCase {
         method = "putAll",
         args = {java.util.Map.class}
     )
-    @KnownFailure("ToT fixed.")
     public void test_putAllLMap() {
         Hashtable ht  = new Hashtable();
         AMT amt = new AMT();

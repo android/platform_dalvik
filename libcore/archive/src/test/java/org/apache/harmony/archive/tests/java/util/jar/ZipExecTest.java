@@ -17,8 +17,7 @@
 
 package org.apache.harmony.archive.tests.java.util.jar;
 
-import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.BrokenTest;
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -45,13 +44,12 @@ import java.util.zip.ZipOutputStream;
 @TestTargetClass(ZipOutputStream.class)
 public class ZipExecTest extends junit.framework.TestCase {
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Regression functional test. Exception checking missed.",
         method = "putNextEntry",
         args = {java.util.zip.ZipEntry.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_1562() throws Exception {
         Manifest man = new Manifest();
         Attributes att = man.getMainAttributes();
@@ -91,13 +89,12 @@ public class ZipExecTest extends junit.framework.TestCase {
      * @throws Exception in case of troubles
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "ZipOutputStream",
         args = {java.io.OutputStream.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_zip_class_path() throws Exception {
         File fooZip = File.createTempFile("hyts_", ".zip");
         File barZip = File.createTempFile("hyts_", ".zip");
@@ -169,13 +166,12 @@ public class ZipExecTest extends junit.framework.TestCase {
 
 
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "ZipOutputStream",
         args = {java.io.OutputStream.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_zip_jar_mix() throws Exception {
         File fooJar = File.createTempFile("hyts_", ".jar");
         File barZip = File.createTempFile("hyts_", ".zip");
@@ -213,13 +209,12 @@ public class ZipExecTest extends junit.framework.TestCase {
     }
 
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "ZipOutputStream",
         args = {java.io.OutputStream.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_zip_jar_mix_1() throws Exception {
         File fooZip = File.createTempFile("hyts_", ".zip");
         File barJar = File.createTempFile("hyts_", ".jar");
@@ -265,13 +260,12 @@ public class ZipExecTest extends junit.framework.TestCase {
      * @throws Exception in case of troubles
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "ZipOutputStream",
         args = {java.io.OutputStream.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_main_class_in_another_zip() throws Exception {
         File fooZip = File.createTempFile("hyts_", ".zip");
         File barZip = File.createTempFile("hyts_", ".zip");

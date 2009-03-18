@@ -111,8 +111,8 @@ public final class OutputFinisher {
                     return true;
                 }
             }
-        } else if (insn instanceof LocalIntroduction) {
-            RegisterSpec spec = ((LocalIntroduction) insn).getLocal();
+        } else if (insn instanceof LocalStart) {
+            RegisterSpec spec = ((LocalStart) insn).getLocal();
             if (hasLocalInfo(spec)) {
                 return true;
             }
@@ -168,8 +168,8 @@ public final class OutputFinisher {
             for (int i = 0; i < size; i++) {
                 addConstants(result, specs.get(i));
             }
-        } else if (insn instanceof LocalIntroduction) {
-            RegisterSpec spec = ((LocalIntroduction) insn).getLocal();
+        } else if (insn instanceof LocalStart) {
+            RegisterSpec spec = ((LocalStart) insn).getLocal();
             addConstants(result, spec);
         }
     }

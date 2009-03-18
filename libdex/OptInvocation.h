@@ -40,6 +40,7 @@ int dexOptCreateEmptyHeader(int fd);
 #define DEXOPT_VERIFY_ENABLED   (1 << 2)
 #define DEXOPT_VERIFY_ALL       (1 << 3)
 #define DEXOPT_IS_BOOTSTRAP     (1 << 4)
+#define DEXOPT_GEN_REGISTER_MAP (1 << 5)
 
 
 #ifdef __cplusplus

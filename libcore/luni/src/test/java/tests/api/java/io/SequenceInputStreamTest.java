@@ -299,7 +299,7 @@ public class SequenceInputStreamTest extends junit.framework.TestCase {
         method = "read",
         args = {byte[].class, int.class, int.class}
     )
-    public void test_read$BII_exc() throws IOException {
+    public void test_read$BII_Excpetion() throws IOException {
         byte[] buf = new byte[4];
         si.read(buf, 0, 2);
         si.read(buf, 2, 1);
@@ -312,6 +312,29 @@ public class SequenceInputStreamTest extends junit.framework.TestCase {
             fail("IOException not thrown!");
         } catch (IOException e) {
             // expected
+        }
+
+        buf = new byte[10];
+        simple1 = new Support_ASimpleInputStream(s1);
+        simple2 = new Support_ASimpleInputStream(s2);
+        si = new SequenceInputStream(simple1, simple2);
+        try {
+            si.read(buf, -1, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            si.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            si.read(buf, 1, 10);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 

@@ -22,7 +22,6 @@
 
 package org.apache.harmony.security.tests.java.security;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -267,7 +266,6 @@ public class KeyStoreTest extends TestCase {
         method = "getPassword",
         args = {}
     )
-    @KnownFailure("the password char[] is not cloned in the constructor of PasswordProtection")
     public void testKeyStorePPGetPassword() {
         // Regression for HARMONY-1539
         // no exception expected

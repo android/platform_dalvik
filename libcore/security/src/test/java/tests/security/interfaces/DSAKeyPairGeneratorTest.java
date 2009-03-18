@@ -16,7 +16,6 @@
 
 package tests.security.interfaces;
 
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;

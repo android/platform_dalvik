@@ -296,7 +296,7 @@ static void NativeCrypto_EVP_DigestInit(JNIEnv* env, jclass clazz, EVP_MD_CTX* c
 }
 
 /*
- * public static native void EVP_DigestReset(int)
+ * public static native void EVP_DigestSize(int)
  */
 static jint NativeCrypto_EVP_DigestSize(JNIEnv* env, jclass clazz, EVP_MD_CTX* ctx) {
     // LOGI("NativeCrypto_EVP_DigestSize");
@@ -314,7 +314,7 @@ static jint NativeCrypto_EVP_DigestSize(JNIEnv* env, jclass clazz, EVP_MD_CTX* c
 }
 
 /*
- * public static native void EVP_DigestReset(int)
+ * public static native void EVP_DigestBlockSize(int)
  */
 static jint NativeCrypto_EVP_DigestBlockSize(JNIEnv* env, jclass clazz, EVP_MD_CTX* ctx) {
     // LOGI("NativeCrypto_EVP_DigestBlockSize");

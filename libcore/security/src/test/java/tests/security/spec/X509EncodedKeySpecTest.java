@@ -41,14 +41,6 @@ import java.util.Arrays;
 @TestTargetClass(X509EncodedKeySpec.class)
 public class X509EncodedKeySpecTest extends TestCase {
 
-    /**
-     * Constructor for X509EncodedKeySpecTest.
-     * @param name
-     */
-    public X509EncodedKeySpecTest(String name) {
-        super(name);
-    }
-
     //
     // Test cases
     //

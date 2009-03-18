@@ -19,7 +19,6 @@ package java.lang.reflect;
 /**
  * Common interface for language constructs that declare type parameters.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface GenericDeclaration {

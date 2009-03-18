@@ -187,6 +187,7 @@ struct GcHeap {
 
 #if WITH_HPROF
     bool            hprofDumpOnGc;
+    const char*     hprofFileName;
     hprof_context_t *hprofContext;
 #endif
 };

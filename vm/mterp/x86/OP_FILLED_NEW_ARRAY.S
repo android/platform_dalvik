@@ -47,15 +47,20 @@
     movl    offClassObject_descriptor(%eax),%ecx  # ecx<- arrayClass->descriptor
     movl    $$ALLOC_DONT_TRACK,OUT_ARG2(%esp)     # arg2<- flags
     movzbl  1(%ecx),%ecx                          # ecx<- descriptor[1]
-    movl    %ecx,OUT_ARG0(%esp)                   # arg0<- typeCh
+    movl    %eax,OUT_ARG0(%esp)                   # arg0<- arrayClass
     cmpb    $$'I',%cl                             # supported?
+    je      1f
+    cmpb    $$'L',%cl
+    je      1f
+    cmpb    $$'[',%cl
     jne      .L${opcode}_notimpl                  # no, not handled yet
+1:
     .if      (!$isrange)
     SPILL_TMP(rINST_FULL)                         # save copy, need "B" later
     sarl    $$4,rINST_FULL
     .endif
     movl    rINST_FULL,OUT_ARG1(%esp)             # arg1<- A or AA (length)
-    call    dvmAllocPrimitiveArray      # eax<- call(typeCh, length, flags)
+    call    dvmAllocArrayByClass                  # eax<- call(arrayClass, length, flags)
     UNSPILL(rPC)
     GET_GLUE(%ecx)
     testl   %eax,%eax                             # alloc successful?

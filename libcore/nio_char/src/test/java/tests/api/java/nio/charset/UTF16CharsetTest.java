@@ -31,8 +31,8 @@ public class UTF16CharsetTest extends AbstractCharsetTestCase {
     /**
      * Constructor.
      */
-    public UTF16CharsetTest(String arg0) {
-        super(arg0, "UTF-16", new String[] { "UTF_16" }, true, true);
+    public UTF16CharsetTest() {
+        super("UTF-16", new String[] { "UTF_16" }, true, true);
     }
 
     /*

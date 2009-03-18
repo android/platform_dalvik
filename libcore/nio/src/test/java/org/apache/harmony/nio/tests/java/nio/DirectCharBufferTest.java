@@ -25,14 +25,14 @@ import java.nio.ByteOrder;
 @TestTargetClass(java.nio.CharBuffer.class)
 public class DirectCharBufferTest extends CharBufferTest {
     
-    public void setUp(){
+    protected void setUp(){
         capacity = BUFFER_LENGTH;
-        buf = ByteBuffer.allocateDirect(BUFFER_LENGTH*2).asCharBuffer();
-        super.loadTestData1(buf);
+        buf = ByteBuffer.allocateDirect(BUFFER_LENGTH * 2).asCharBuffer();
+        loadTestData1(buf);
         baseBuf = buf;
     }
     
-    public void tearDown(){
+    protected void tearDown(){
         buf = null;
         baseBuf = null;
     }

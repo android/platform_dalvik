@@ -29,8 +29,6 @@ public class HeapLongBufferTest extends LongBufferTest {
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
 
     @TestTargetNew(

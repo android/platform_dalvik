@@ -40,18 +40,6 @@ import java.security.cert.CertificateEncodingException;
 @TestTargetClass(CertificateEncodingException.class)
 public class CertificateEncodingExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertificateEncodingExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertificateEncodingExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

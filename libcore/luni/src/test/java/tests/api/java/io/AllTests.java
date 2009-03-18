@@ -90,13 +90,11 @@ public class AllTests {
         suite.addTestSuite(RandomAccessFileTest.class);
         suite.addTestSuite(SequenceInputStreamTest.class);
         suite.addTestSuite(SerializablePermissionTest.class);
-        suite.addTestSuite(SerializationStressTest.class);
+        suite.addTestSuite(SerializationStressTest0.class);
         suite.addTestSuite(SerializationStressTest1.class);
         suite.addTestSuite(SerializationStressTest2.class);
         suite.addTestSuite(SerializationStressTest3.class);
         suite.addTestSuite(SerializationStressTest4.class);
-        suite.addTestSuite(SerializationStressTest4.class);
-        suite.addTestSuite(SerializationStressTest5.class);
         suite.addTestSuite(StreamCorruptedExceptionTest.class);
         suite.addTestSuite(StreamTokenizerTest.class);
         suite.addTestSuite(StringBufferInputStreamTest.class);

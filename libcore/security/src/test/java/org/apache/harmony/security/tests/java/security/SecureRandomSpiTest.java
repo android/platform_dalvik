@@ -35,15 +35,6 @@ import junit.framework.TestCase;
 public class SecureRandomSpiTest extends TestCase {
 
     /**
-     * Constructor for SecureRandomSpiTest.
-     * 
-     * @param name
-     */
-    public SecureRandomSpiTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test for <code>SecureRandomSpi</code> constructor
      * Assertion: constructs SecureRandomSpi
      */

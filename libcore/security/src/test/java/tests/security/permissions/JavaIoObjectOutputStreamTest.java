@@ -72,7 +72,6 @@ public class JavaIoObjectOutputStreamTest extends TestCase {
                     called = true;
                     this.permission = permission;
                 }
-                super.checkPermission(permission);
             }
         }
         
@@ -124,7 +123,6 @@ public class JavaIoObjectOutputStreamTest extends TestCase {
                     called = true;
                     this.permission = permission;
                 }
-                super.checkPermission(permission);
             }
         }
         

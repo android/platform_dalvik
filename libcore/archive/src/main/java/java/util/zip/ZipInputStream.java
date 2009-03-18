@@ -58,7 +58,9 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
 
     static final int ZIPLocalHeaderVersionNeeded = 20;
 
-    private boolean zipClosed = false;
+    // BEGI android-removed
+    // private boolean zipClosed = false;
+    // END android-removed
 
     private boolean entriesEnd = false;
 
@@ -101,11 +103,12 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
      */
     @Override
     public void close() throws IOException {
-        if (zipClosed != true) {
+        // BEGIN android-changed
+        if (closed != true) {
             closeEntry(); // Close the current entry
-            zipClosed = true;
             super.close();
         }
+        // END android-changed
     }
 
     /**
@@ -116,9 +119,11 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
      * @since Android 1.0
      */
     public void closeEntry() throws IOException {
-        if (zipClosed) {
+        // BEGIN android-changed
+        if (closed) {
             throw new IOException(Messages.getString("archive.1E")); //$NON-NLS-1$
         }
+        // END android-changed
         if (currentEntry == null) {
             return;
         }
@@ -261,6 +266,9 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
             }
             currentEntry.setExtra(e);
         }
+        // BEGIN android-added
+        eof = false;
+        // END android-added
         return currentEntry;
     }
 
@@ -268,9 +276,11 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
 
     @Override
     public int read(byte[] buffer, int start, int length) throws IOException {
-        if (zipClosed) {
+        // BEGIN android-changed
+        if (closed) {
             throw new IOException(Messages.getString("archive.1E")); //$NON-NLS-1$
         }
+        // END android-changed
         if (inf.finished() || currentEntry == null) {
             return -1;
         }
@@ -280,11 +290,17 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
             if (currentEntry.compressionMethod == STORED) {
                 int csize = (int) currentEntry.size;
                 if (inRead >= csize) {
+                    // BEGIN android-added
+                    eof = true;
+                    // END android-added
                     return -1;
                 }
                 if (lastRead >= len) {
                     lastRead = 0;
                     if ((len = in.read(buf)) == -1) {
+                        // BEGIN android-added
+                        eof = true;
+                        // END android-added
                         return -1;
                     }
                     entryIn += len;
@@ -360,22 +376,15 @@ public class ZipInputStream extends InflaterInputStream implements ZipConstants 
      */
     @Override
     public int available() throws IOException {
-        if (zipClosed) {
+        // BEGIN android-changed
+        if (closed) {
             throw new IOException(Messages.getString("archive.1E")); //$NON-NLS-1$
         }
         if (currentEntry == null) {
             return 1;
         }
-        if (currentEntry.compressionMethod == STORED) {
-            if (inRead >= currentEntry.size) {
-                return 0;
-            }
-        } else {
-            if (inf.finished()) {
-                return 0;
-            }
-        }
-        return 1;
+        return super.available();
+        // END android-changed
     }
 
     /**

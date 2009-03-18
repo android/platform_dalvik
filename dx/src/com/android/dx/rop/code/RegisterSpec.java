@@ -29,7 +29,7 @@ import java.util.HashMap;
  * destinations of register-based operations.
  */
 public final class RegisterSpec
-        implements TypeBearer, ToHuman {
+        implements TypeBearer, ToHuman, Comparable<RegisterSpec> {
     /** non-null; string to prefix register numbers with */
     public static final String PREFIX = "v";
 
@@ -97,7 +97,8 @@ public final class RegisterSpec
      * @param local non-null; the associated local variable
      * @return non-null; an appropriately-constructed instance
      */
-    public static RegisterSpec make(int reg, TypeBearer type, LocalItem local) {
+    public static RegisterSpec make(int reg, TypeBearer type,
+            LocalItem local) {
         if (local == null) {
             throw new NullPointerException("local  == null");
         }
@@ -172,6 +173,43 @@ public final class RegisterSpec
     }
 
     /**
+     * Like {@code equals}, but only consider the simple types of the
+     * registers. That is, this compares {@code getType()} on the types
+     * to ignore whatever arbitrary extra stuff might be carried around
+     * by an outer {@link TypeBearer}.
+     * 
+     * @param other null-ok; spec to compare to
+     * @return {@code true} iff {@code this} and {@code other} are equal
+     * in the stated way
+     */
+    public boolean equalsUsingSimpleType(RegisterSpec other) {
+        if (!matchesVariable(other)) {
+            return false;
+        }
+
+        return (reg == other.reg);
+    }
+
+    /**
+     * Like {@link #equalsUsingSimpleType} but ignoring the register number.
+     * This is useful to determine if two instances refer to the "same"
+     * local variable.
+     * 
+     * @param other null-ok; spec to compare to
+     * @return {@code true} iff {@code this} and {@code other} are equal
+     * in the stated way
+     */
+    public boolean matchesVariable(RegisterSpec other) {
+        if (other == null) {
+            return false;
+        }
+
+        return type.getType().equals(other.type.getType())
+            && ((local == other.local)
+                    || ((local != null) && local.equals(other.local)));
+    }
+
+    /**
      * Helper for {@link #equals} and {@link #ForComparison.equals},
      * which actually does the test.
      * 
@@ -187,6 +225,35 @@ public final class RegisterSpec
             && ((this.local == local)
                     || ((this.local != null) && this.local.equals(local)));
     }
+
+    /**
+     * Compares by (in priority order) register number, unwrapped type
+     * (that is types not {@link TypeBearer}s, and local info.
+     * 
+     * @param other non-null; spec to compare to
+     * @return {@code -1..1}; standard result of comparison
+     */
+    public int compareTo(RegisterSpec other) {
+        if (this.reg < other.reg) {
+            return -1;
+        } else if (this.reg > other.reg) {
+            return 1;
+        }
+
+        int compare = type.getType().compareTo(other.type.getType());
+
+        if (compare != 0) {
+            return compare;
+        }
+
+        if (this.local == null) {
+            return (other.local == null) ? 0 : -1;
+        } else if (other.local == null) {
+            return 1;
+        }
+
+        return this.local.compareTo(other.local);
+    }    
 
     /** {@inheritDoc} */
     @Override
@@ -292,10 +359,36 @@ public final class RegisterSpec
      * Gets the category of this instance's type. This is just a convenient
      * shorthand for <code>getType().getCategory()</code>.
      * 
+     * @see #isCategory1
+     * @see #isCategory2
      * @return 1..2; the category of this instance's type
      */
     public int getCategory() {
         return type.getType().getCategory();
+    }
+
+    /**
+     * Gets whether this instance's type is category 1. This is just a
+     * convenient shorthand for <code>getType().isCategory1()</code>.
+     * 
+     * @see #getCategory
+     * @see #isCategory2
+     * @return whether or not this instance's type is of category 1
+     */
+    public boolean isCategory1() {
+        return type.getType().isCategory1();
+    }
+
+    /**
+     * Gets whether this instance's type is category 2. This is just a
+     * convenient shorthand for <code>getType().isCategory2()</code>.
+     * 
+     * @see #getCategory
+     * @see #isCategory1
+     * @return whether or not this instance's type is of category 2
+     */
+    public boolean isCategory2() {
+        return type.getType().isCategory2();
     }
 
     /**
@@ -323,16 +416,16 @@ public final class RegisterSpec
      *     are <code>equals()</code>, then the intersection's type bearer
      *     is the one from this instance. Otherwise, the intersection's
      *     type bearer is the <code>getType()</code> of this instance.</li>
-     *   <li>If the locals are <code>equals()</code>, then the local info of the
-     *     intersection is the local info of this instance. Otherwise, the local info
-     *     of the intersection is <code>null</code>.</li>
+     *   <li>If the locals are <code>equals()</code>, then the local info
+     *     of the intersection is the local info of this instance. Otherwise,
+     *     the local info of the intersection is <code>null</code>.</li>
      * </ul>
      * 
      * @param other null-ok; instance to intersect with (or <code>null</code>)
-     * @param localPrimary whether local variables are primary to
-     * the intersection; if <code>true</code>, then the only non-null
-     * results occur when registers being intersected have equal local infos (or
-     * both have <code>null</code> local infos)
+     * @param localPrimary whether local variables are primary to the
+     * intersection; if <code>true</code>, then the only non-null
+     * results occur when registers being intersected have equal local
+     * infos (or both have <code>null</code> local infos)
      * @return null-ok; the intersection
      */
     public RegisterSpec intersect(RegisterSpec other, boolean localPrimary) {
@@ -346,7 +439,8 @@ public final class RegisterSpec
         }
 
         LocalItem resultLocal =
-            ((local == null) || !local.equals(other.getLocalItem())) ? null : local;
+            ((local == null) || !local.equals(other.getLocalItem()))
+            ? null : local;
         boolean sameName = (resultLocal == local);
 
         if (localPrimary && !sameName) {

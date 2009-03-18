@@ -16,6 +16,12 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 class TestLibrary {
     private native String printName();
     
@@ -25,7 +31,20 @@ class TestLibrary {
         return false;
     }
     
-    static {
-        Runtime.getRuntime().load(TestLibrary.class.getResource("/libTestLibrary.so").getPath());
+    TestLibrary() {
+        InputStream in = TestLibrary.class.getResourceAsStream("/libTestLibrary.so");
+        try {
+            File tmp = File.createTempFile("libTestLibrary", "so");
+            tmp.deleteOnExit();
+            FileOutputStream out = new FileOutputStream(tmp);
+            while (in.available() > 0) {
+                out.write(in.read()); // slow
+            }
+            in.close();
+            out.close();
+            Runtime.getRuntime().load(tmp.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
     }        
 }

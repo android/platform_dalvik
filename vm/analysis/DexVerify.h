@@ -57,4 +57,9 @@ bool dvmVerifyAllClasses(DexFile* pDexFile);
  */
 bool dvmVerifyClass(ClassObject* clazz, int verifyFlags);
 
+/*
+ * Release the storage associated with a RegisterMap.
+ */
+void dvmFreeRegisterMap(RegisterMap* pMap);
+
 #endif /*_DALVIK_DEXVERIFY*/

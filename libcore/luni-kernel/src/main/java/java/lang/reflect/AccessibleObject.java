@@ -55,7 +55,6 @@ import org.apache.harmony.kernel.vm.ReflectionAccess;
  * @see Method
  * @see ReflectPermission
  * 
- * @since 1.2
  * @since Android 1.0
  */
 public class AccessibleObject implements AnnotatedElement {

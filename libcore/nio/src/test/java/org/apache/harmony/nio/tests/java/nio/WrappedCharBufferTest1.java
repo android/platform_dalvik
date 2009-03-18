@@ -26,7 +26,6 @@ import java.nio.CharBuffer;
 public class WrappedCharBufferTest1 extends CharBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = CharBuffer.wrap(new char[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -34,7 +33,6 @@ public class WrappedCharBufferTest1 extends CharBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         baseBuf = null;
         buf = null;
     }

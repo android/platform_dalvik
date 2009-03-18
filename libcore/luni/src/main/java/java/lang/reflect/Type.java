@@ -19,7 +19,6 @@ package java.lang.reflect;
 /**
  * Common interface implemented by all Java types.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface Type {

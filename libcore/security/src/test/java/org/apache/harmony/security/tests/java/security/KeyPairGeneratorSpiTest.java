@@ -46,15 +46,6 @@ import junit.framework.TestCase;
 public class KeyPairGeneratorSpiTest extends TestCase {
 
     /**
-     * Constructor for KeyPairGeneratorSpiTest.
-     * 
-     * @param arg0
-     */
-    public KeyPairGeneratorSpiTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
      * Test for <code>KeyPairGeneratorSpi</code> constructor 
      * Assertion: constructs KeyPairGeneratorSpi
      */

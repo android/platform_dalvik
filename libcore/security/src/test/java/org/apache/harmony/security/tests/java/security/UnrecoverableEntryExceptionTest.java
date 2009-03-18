@@ -38,15 +38,6 @@ import junit.framework.TestCase;
 
 public class UnrecoverableEntryExceptionTest extends TestCase {
 
-    /**
-     * Constructor for UnrecoverableEntryExceptionTest.
-     * 
-     * @param arg0
-     */
-    public UnrecoverableEntryExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     static String[] msgs = {
             "",
             "Check new message",

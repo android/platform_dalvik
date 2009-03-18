@@ -2439,6 +2439,7 @@ public class FileChannelTest extends TestCase {
         method = "position",
         args = {}
     )
+    @AndroidOnly("Fails on RI. See comment below")
     public void test_position_append() throws Exception {
         // Regression test for Harmony-508
         File tmpfile = File.createTempFile("FileOutputStream", "tmp");

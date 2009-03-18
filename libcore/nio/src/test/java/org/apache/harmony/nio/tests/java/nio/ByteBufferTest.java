@@ -20,6 +20,7 @@ package org.apache.harmony.nio.tests.java.nio;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
@@ -40,20 +41,23 @@ import java.util.Arrays;
  * 
  */
 @TestTargetClass(ByteBuffer.class)
-public class ByteBufferTest extends AbstractBufferTest {
+public abstract class ByteBufferTest extends AbstractBufferTest {
     protected static final int SMALL_TEST_LENGTH = 5;
     protected static final int BUFFER_LENGTH = 250;
     
     protected ByteBuffer buf;
 
     protected void setUp() throws Exception {
-        capacity = 10;
-        buf = ByteBuffer.allocate(10);
+        capacity = BUFFER_LENGTH;
+        buf = ByteBuffer.allocate(BUFFER_LENGTH);
+        loadTestData1(buf);
         baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
+        buf = null;
+        baseBuf = null;
     }
 
     /*
@@ -192,6 +196,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         args = {}
     )
     public void testAsReadOnlyBuffer() {
+        loadTestData1(buf);
         buf.clear();
         buf.mark();
         buf.position(buf.limit());
@@ -221,6 +226,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         method = "compact",
         args = {}
     )
+    @AndroidOnly("Fails on RI. See comment below")
     public void testCompact() {
         if (buf.isReadOnly()) {
             try {
@@ -242,6 +248,9 @@ public class ByteBufferTest extends AbstractBufferTest {
         assertEquals(buf.capacity(), buf.limit());
         assertContentLikeTestData1(buf, 0, (byte) 0, buf.capacity());
         try {
+            // Fails on RI. Spec doesn't specify the behavior if
+	    // actually nothing to be done by compact(). So RI doesn't reset
+            // mark position 
             buf.reset();
             fail("Should throw Exception"); //$NON-NLS-1$
         } catch (InvalidMarkException e) {
@@ -361,6 +370,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         args = {java.lang.Object.class}
     )
     public void testEquals() {
+        loadTestData1(buf);
+
         // equal to self
         assertTrue(buf.equals(buf));
         ByteBuffer readonly = buf.asReadOnlyBuffer();
@@ -380,6 +391,10 @@ public class ByteBufferTest extends AbstractBufferTest {
         buf.limit(buf.capacity() - 1).position(0);
         duplicate.limit(duplicate.capacity()).position(0);
         assertFalse(buf.equals(duplicate));
+
+        buf.limit(buf.capacity() - 1).position(0);
+        duplicate.limit(duplicate.capacity()).position(1);
+        assertFalse(buf.equals(duplicate));
     }
 
     /*
@@ -392,6 +407,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         args = {}
     )
     public void testGet() {
+        loadTestData1(buf);
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             assertEquals(i, buf.position());
@@ -416,6 +432,7 @@ public class ByteBufferTest extends AbstractBufferTest {
     )
     public void testGetbyteArray() {
         byte array[] = new byte[1];
+        loadTestData1(buf);
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             assertEquals(i, buf.position());
@@ -451,6 +468,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         args = {byte[].class, int.class, int.class}
     )
     public void testGetbyteArrayintint() {
+        loadTestData1(buf);
         buf.clear();
         byte array[] = new byte[buf.capacity()];
 
@@ -524,6 +542,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         args = {int.class}
     )
     public void testGetint() {
+        loadTestData1(buf);
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             assertEquals(i, buf.position());
@@ -545,24 +564,13 @@ public class ByteBufferTest extends AbstractBufferTest {
 
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
+        notes = "Verifies hasArray method for wrapped ByteBuffer.",
         method = "hasArray",
         args = {}
     )
     public void testHasArray() {
-        if (buf.hasArray()) {
-            assertNotNull(buf.array());
-        } else {
-            try {
-                buf.array();
-                fail("Should throw Exception"); //$NON-NLS-1$
-            } catch (UnsupportedOperationException e) {
-                // expected
-                // Note:can not tell when to catch 
-                // UnsupportedOperationException or
-                // ReadOnlyBufferException, so catch all.
-            }
-        }
+        assertTrue(buf.hasArray());
+        assertNotNull(buf.array());
     }
 
     @TestTargetNew(
@@ -603,12 +611,22 @@ public class ByteBufferTest extends AbstractBufferTest {
 
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Abstract method.",
+        notes = "Verifies isDirect method with not direct buffer.",
         method = "isDirect",
         args = {}
     )
     public void testIsDirect() {
-        buf.isDirect();
+        assertFalse(buf.isDirect());
+    }
+
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "isReadOnly",
+        args = {}
+    )
+    public void testIsReadOnly() {
+        assertFalse(buf.isReadOnly());
     }
 
     @TestTargetNew(
@@ -943,6 +961,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         args = {}
     )
     public void testSlice() {
+        loadTestData1(buf);
         assertTrue(buf.capacity() > SMALL_TEST_LENGTH);
         buf.position(1);
         buf.limit(buf.capacity() - 1);
@@ -994,6 +1013,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         CharBuffer charBuffer;
         byte bytes[] = new byte[2];
         char value;
+        loadTestData1(buf);
 
         // test BIG_ENDIAN char buffer, read
         buf.clear();
@@ -1056,6 +1076,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         DoubleBuffer doubleBuffer;
         byte bytes[] = new byte[8];
         double value;
+        loadTestData1(buf);
 
         // test BIG_ENDIAN double buffer, read
         buf.clear();
@@ -1092,7 +1113,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             doubleBuffer = buf.asDoubleBuffer();
             assertSame(ByteOrder.BIG_ENDIAN, doubleBuffer.order());
             while (doubleBuffer.remaining() > 0) {
-                value = (double) doubleBuffer.remaining();
+                value = doubleBuffer.remaining();
                 doubleBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, double2bytes(value, buf.order())));
@@ -1104,7 +1125,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             doubleBuffer = buf.asDoubleBuffer();
             assertSame(ByteOrder.LITTLE_ENDIAN, doubleBuffer.order());
             while (doubleBuffer.remaining() > 0) {
-                value = (double) doubleBuffer.remaining();
+                value = doubleBuffer.remaining();
                 doubleBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, double2bytes(value, buf.order())));
@@ -1125,6 +1146,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         FloatBuffer floatBuffer;
         byte bytes[] = new byte[4];
         float value;
+        loadTestData1(buf);
 
         // test BIG_ENDIAN float buffer, read
         buf.clear();
@@ -1161,7 +1183,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             floatBuffer = buf.asFloatBuffer();
             assertSame(ByteOrder.BIG_ENDIAN, floatBuffer.order());
             while (floatBuffer.remaining() > 0) {
-                value = (float) floatBuffer.remaining();
+                value = floatBuffer.remaining();
                 floatBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, float2bytes(value, buf.order())));
@@ -1173,7 +1195,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             floatBuffer = buf.asFloatBuffer();
             assertSame(ByteOrder.LITTLE_ENDIAN, floatBuffer.order());
             while (floatBuffer.remaining() > 0) {
-                value = (float) floatBuffer.remaining();
+                value = floatBuffer.remaining();
                 floatBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, float2bytes(value, buf.order())));
@@ -1194,6 +1216,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         IntBuffer intBuffer;
         byte bytes[] = new byte[4];
         int value;
+        loadTestData1(buf);
 
         // test BIG_ENDIAN int buffer, read
         buf.clear();
@@ -1224,7 +1247,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             intBuffer = buf.asIntBuffer();
             assertSame(ByteOrder.BIG_ENDIAN, intBuffer.order());
             while (intBuffer.remaining() > 0) {
-                value = (int) intBuffer.remaining();
+                value = intBuffer.remaining();
                 intBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, int2bytes(value, buf.order())));
@@ -1236,7 +1259,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             intBuffer = buf.asIntBuffer();
             assertSame(ByteOrder.LITTLE_ENDIAN, intBuffer.order());
             while (intBuffer.remaining() > 0) {
-                value = (int) intBuffer.remaining();
+                value = intBuffer.remaining();
                 intBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, int2bytes(value, buf.order())));
@@ -1257,6 +1280,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         LongBuffer longBuffer;
         byte bytes[] = new byte[8];
         long value;
+        loadTestData1(buf);
 
         // test BIG_ENDIAN long buffer, read
         buf.clear();
@@ -1287,7 +1311,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             longBuffer = buf.asLongBuffer();
             assertSame(ByteOrder.BIG_ENDIAN, longBuffer.order());
             while (longBuffer.remaining() > 0) {
-                value = (long) longBuffer.remaining();
+                value = longBuffer.remaining();
                 longBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, long2bytes(value, buf.order())));
@@ -1299,7 +1323,7 @@ public class ByteBufferTest extends AbstractBufferTest {
             longBuffer = buf.asLongBuffer();
             assertSame(ByteOrder.LITTLE_ENDIAN, longBuffer.order());
             while (longBuffer.remaining() > 0) {
-                value = (long) longBuffer.remaining();
+                value = longBuffer.remaining();
                 longBuffer.put(value);
                 buf.get(bytes);
                 assertTrue(Arrays.equals(bytes, long2bytes(value, buf.order())));
@@ -1320,6 +1344,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         ShortBuffer shortBuffer;
         byte bytes[] = new byte[2];
         short value;
+        loadTestData1(buf);
 
         // test BIG_ENDIAN short buffer, read
         buf.clear();
@@ -1383,6 +1408,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 2;
         byte bytes[] = new byte[nbytes];
         char value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1415,6 +1442,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 2;
         byte bytes[] = new byte[nbytes];
         char value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1473,7 +1502,8 @@ public class ByteBufferTest extends AbstractBufferTest {
             assertEquals((i + 1) * nbytes, buf.position());
             buf.reset();
             buf.get(bytes);
-            assertTrue(Arrays.equals(char2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(char2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -1522,7 +1552,8 @@ public class ByteBufferTest extends AbstractBufferTest {
             buf.putChar(i, value);
             assertEquals(i, buf.position());
             buf.get(bytes);
-            assertTrue(Arrays.equals(char2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(char2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -1562,6 +1593,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 8;
         byte bytes[] = new byte[nbytes];
         double value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1597,6 +1630,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 8;
         byte bytes[] = new byte[nbytes];
         double value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1643,7 +1678,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         if (buf.isReadOnly()) {
             try {
                 buf.clear();
-                buf.putDouble((double) 1);
+                buf.putDouble(1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -1658,13 +1693,14 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (double) i;
+            value = i;
             buf.mark();
             buf.putDouble(value);
             assertEquals((i + 1) * nbytes, buf.position());
             buf.reset();
             buf.get(bytes);
-            assertTrue(Arrays.equals(double2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(double2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -1702,7 +1738,7 @@ public class ByteBufferTest extends AbstractBufferTest {
     public void testPutDoubleint() {
         if (buf.isReadOnly()) {
             try {
-                buf.putDouble(0, (double) 1);
+                buf.putDouble(0, 1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -1717,12 +1753,13 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (double) i;
+            value = i;
             buf.position(i);
             buf.putDouble(i, value);
             assertEquals(i, buf.position());
             buf.get(bytes);
-            assertTrue(Arrays.equals(double2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(double2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -1762,6 +1799,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 4;
         byte bytes[] = new byte[nbytes];
         float value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1797,6 +1836,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 4;
         byte bytes[] = new byte[nbytes];
         float value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1837,7 +1878,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         if (buf.isReadOnly()) {
             try {
                 buf.clear();
-                buf.putFloat((float) 1);
+                buf.putFloat(1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -1852,13 +1893,14 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (float) i;
+            value = i;
             buf.mark();
             buf.putFloat(value);
             assertEquals((i + 1) * nbytes, buf.position());
             buf.reset();
             buf.get(bytes);
-            assertTrue(Arrays.equals(float2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(float2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -1896,7 +1938,7 @@ public class ByteBufferTest extends AbstractBufferTest {
     public void testPutFloatint() {
         if (buf.isReadOnly()) {
             try {
-                buf.putFloat(0, (float) 1);
+                buf.putFloat(0, 1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -1911,12 +1953,13 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (float) i;
+            value = i;
             buf.position(i);
             buf.putFloat(i, value);
             assertEquals(i, buf.position());
             buf.get(bytes);
-            assertTrue(Arrays.equals(float2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(float2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -1956,6 +1999,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 4;
         byte bytes[] = new byte[nbytes];
         int value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -1988,6 +2033,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 4;
         byte bytes[] = new byte[nbytes];
         int value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -2030,7 +2077,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         if (buf.isReadOnly()) {
             try {
                 buf.clear();
-                buf.putInt((int) 1);
+                buf.putInt(1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -2045,13 +2092,14 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (int) i;
+            value = i;
             buf.mark();
             buf.putInt(value);
             assertEquals((i + 1) * nbytes, buf.position());
             buf.reset();
             buf.get(bytes);
-            assertTrue(Arrays.equals(int2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(int2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -2080,7 +2128,7 @@ public class ByteBufferTest extends AbstractBufferTest {
     public void testPutIntint() {
         if (buf.isReadOnly()) {
             try {
-                buf.putInt(0, (int) 1);
+                buf.putInt(0, 1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -2095,12 +2143,13 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (int) i;
+            value = i;
             buf.position(i);
             buf.putInt(i, value);
             assertEquals(i, buf.position());
             buf.get(bytes);
-            assertTrue(Arrays.equals(int2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(int2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -2134,6 +2183,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 8;
         byte bytes[] = new byte[nbytes];
         long value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -2166,6 +2217,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 8;
         byte bytes[] = new byte[nbytes];
         long value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -2203,7 +2256,7 @@ public class ByteBufferTest extends AbstractBufferTest {
         if (buf.isReadOnly()) {
             try {
                 buf.clear();
-                buf.putLong((long) 1);
+                buf.putLong(1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -2218,13 +2271,14 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (long) i;
+            value = i;
             buf.mark();
             buf.putLong(value);
             assertEquals((i + 1) * nbytes, buf.position());
             buf.reset();
             buf.get(bytes);
-            assertTrue(Arrays.equals(long2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(long2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -2253,7 +2307,7 @@ public class ByteBufferTest extends AbstractBufferTest {
     public void testPutLongint() {
         if (buf.isReadOnly()) {
             try {
-                buf.putLong(0, (long) 1);
+                buf.putLong(0, 1);
                 fail("Should throw Exception"); //$NON-NLS-1$
             } catch (ReadOnlyBufferException e) {
                 // expected
@@ -2268,12 +2322,13 @@ public class ByteBufferTest extends AbstractBufferTest {
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
                     : ByteOrder.LITTLE_ENDIAN);
-            value = (long) i;
+            value = i;
             buf.position(i);
             buf.putLong(i, value);
             assertEquals(i, buf.position());
             buf.get(bytes);
-            assertTrue(Arrays.equals(long2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(long2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -2307,6 +2362,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 2;
         byte bytes[] = new byte[nbytes];
         short value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; buf.remaining() >= nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -2339,6 +2396,8 @@ public class ByteBufferTest extends AbstractBufferTest {
         int nbytes = 2;
         byte bytes[] = new byte[nbytes];
         short value;
+        loadTestData1(buf);
+
         buf.clear();
         for (int i = 0; i <= buf.limit() - nbytes; i++) {
             buf.order(i % 2 == 0 ? ByteOrder.BIG_ENDIAN
@@ -2397,7 +2456,8 @@ public class ByteBufferTest extends AbstractBufferTest {
             assertEquals((i + 1) * nbytes, buf.position());
             buf.reset();
             buf.get(bytes);
-            assertTrue(Arrays.equals(short2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(short2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -2446,7 +2506,8 @@ public class ByteBufferTest extends AbstractBufferTest {
             buf.putShort(i, value);
             assertEquals(i, buf.position());
             buf.get(bytes);
-            assertTrue(Arrays.equals(short2bytes(value, buf.order()), bytes));
+            assertTrue("Wrong value at " + i,
+                    Arrays.equals(short2bytes(value, buf.order()), bytes));
         }
 
         try {
@@ -2569,26 +2630,29 @@ public class ByteBufferTest extends AbstractBufferTest {
         }
     }
 
-    private void loadTestData1(byte array[], int offset, int length) {
+    protected void loadTestData1(byte array[], int offset, int length) {
         for (int i = 0; i < length; i++) {
             array[offset + i] = (byte) i;
         }
     }
 
-    private void loadTestData2(byte array[], int offset, int length) {
+    protected void loadTestData2(byte array[], int offset, int length) {
         for (int i = 0; i < length; i++) {
             array[offset + i] = (byte) (length - i);
         }
     }
 
-    private void loadTestData1(ByteBuffer buf) {
+    protected void loadTestData1(ByteBuffer buf) {
+        if (buf.isReadOnly()) {
+            return;
+        }
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             buf.put(i, (byte) i);
         }
     }
 
-    private void loadTestData2(ByteBuffer buf) {
+    protected void loadTestData2(ByteBuffer buf) {
         buf.clear();
         for (int i = 0; i < buf.capacity(); i++) {
             buf.put(i, (byte) (buf.capacity() - i));

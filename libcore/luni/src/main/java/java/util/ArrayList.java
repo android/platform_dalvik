@@ -112,7 +112,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, Cloneable,
      * @param object
      *            the object to add.
      * @throws IndexOutOfBoundsException
-     *             when {@code location < 0 || >= size()}
+     *             when {@code location < 0 || > size()}
      * @since Android 1.0
      */
     @Override

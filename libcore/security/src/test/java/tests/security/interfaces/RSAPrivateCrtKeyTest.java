@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package tests.security.interfaces;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -31,7 +30,7 @@ public class RSAPrivateCrtKeyTest extends TestCase {
     
     protected void setUp() throws Exception {
         super.setUp();
-        KeyFactory gen = KeyFactory.getInstance("RSA", Util.prov);
+        KeyFactory gen = KeyFactory.getInstance("RSA");
         key = (RSAPrivateCrtKey) gen.generatePrivate(Util.rsaCrtParam);
     }
     

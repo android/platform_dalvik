@@ -19,7 +19,6 @@ package tests.api.java.security;
 
 import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestTargetClass;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
@@ -66,8 +65,8 @@ public class PermissionCollectionTest extends junit.framework.TestCase {
         method = "implies",
         args = {java.security.Permission.class}
     )
-    @BrokenTest("Method implies is not called in this test")
-    public void _test_impliesLjava_security_Permission() throws Exception{
+    @BrokenTest("Android doesn't support protection domains. NPE at first Line")
+    public void test_impliesLjava_security_Permission() throws Exception{
 
         // Look for the tests classpath
         URL classURL = this.getClass().getProtectionDomain().getCodeSource()

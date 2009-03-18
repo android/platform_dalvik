@@ -341,6 +341,7 @@ public class CertPathTest extends TestCase {
             args = {}
         )
     })
+    // Test passed on RI
     public void testSerializationSelf() throws Exception {
         TestUtils.initCertPathSSCertChain();
         CertPath certPath = TestUtils.buildCertPathSSCertChain();
@@ -371,6 +372,7 @@ public class CertPathTest extends TestCase {
             args = {}
         )
     })
+    // Test passed on RI
     public void testSerializationCompatibility() throws Exception {
         TestUtils.initCertPathSSCertChain();
         CertPath certPath = TestUtils.buildCertPathSSCertChain();

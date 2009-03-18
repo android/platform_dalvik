@@ -484,18 +484,6 @@ static bool processAnnotationValue(const ClassObject* clazz,
             elemObj = (Object*) dvmResolveClass(clazz, idx, true);
             setObject = true;
             if (elemObj == NULL) {
-                /* see if it's a primitive type - not common */
-                dvmClearException(self);
-                const char* className =
-                    dexStringByTypeIdx(clazz->pDvmDex->pDexFile, idx);
-
-                if (className != NULL &&
-                    className[0] != '\0' && className[1] == '\0')
-                {
-                    elemObj = (Object*) dvmFindPrimitiveClass(className[0]);
-                }
-            }
-            if (elemObj == NULL) {
                 /* we're expected to throw a TypeNotPresentException here */
                 DexFile* pDexFile = clazz->pDvmDex->pDexFile;
                 const char* desc = dexStringByTypeIdx(pDexFile, idx);

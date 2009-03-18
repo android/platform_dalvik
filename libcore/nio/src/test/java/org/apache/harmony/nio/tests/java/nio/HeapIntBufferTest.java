@@ -29,8 +29,6 @@ public class HeapIntBufferTest extends IntBufferTest {
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
 
     @TestTargetNew(

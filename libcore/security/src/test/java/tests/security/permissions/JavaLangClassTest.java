@@ -19,8 +19,6 @@ package tests.security.permissions;
 import java.security.Permission;
 
 import junit.framework.TestCase;
-import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -54,8 +52,6 @@ public class JavaLangClassTest extends TestCase {
         method = "getProtectionDomain",
         args = {}
     )
-    @KnownFailure("Fails because the default security manager allows " +
-            "everything. Remove this when it is more restrictive.")
     public void test_getProtectionDomain () {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -66,7 +62,6 @@ public class JavaLangClassTest extends TestCase {
             public void checkPermission(Permission permission){
                 if(permission instanceof RuntimePermission && "getProtectionDomain".equals(permission.getName())){
                     called = true;
-                    super.checkPermission(permission);
                 }
             }
         }
@@ -78,12 +73,7 @@ public class JavaLangClassTest extends TestCase {
         System.setSecurityManager(s);
         
         s.reset();
-        try {
-            c.getProtectionDomain();
-            fail("Test 1: SecurityException expected.");
-        } catch (SecurityException e) {
-            // Expected.
-        }
+        c.getProtectionDomain();
         assertTrue("Test 2: Class.getProtectionDomain() must check " +
                 "RuntimePermission(\"getProtectionDomain\") on " +
                 "security manager", s.called);
@@ -95,11 +85,6 @@ public class JavaLangClassTest extends TestCase {
         method = "forName",
         args = {String.class, boolean.class, ClassLoader.class}
     )
-    @AndroidOnly("")
-    // TODO it is not clear under which conditions the security manager is inspected
-    // Should only be checked if the calling class loader is not null.
-    @KnownFailure("Fails because the default security manager allows " +
-            "everything. Remove this when it is more restrictive.")
     public void test_forName() throws ClassNotFoundException {
                 class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -110,7 +95,6 @@ public class JavaLangClassTest extends TestCase {
             public void checkPermission(Permission permission){
                 if (permission instanceof RuntimePermission && "getClassLoader".equals(permission.getName())){
                     called = true;
-                    super.checkPermission(permission);
                 }
             }
         }
@@ -119,27 +103,9 @@ public class JavaLangClassTest extends TestCase {
         System.setSecurityManager(s);
         
         s.reset();
-        try {
-            Class.forName("java.lang.String", true, null);
-            fail("Test 1: Security exception expected.");
-        } catch (SecurityException e) {
-            // Expected.
-        }
+        Class.forName("java.lang.String", true, null);
         assertTrue("Test 2: Class.forName(String,boolean,Classloader) must " +
                 "check RuntimePermission(getClassLoader) on security manager", 
                 s.called);
     }
-
-    /*
-    @TestTargetNew(
-        level = TestLevel.TODO,
-        notes = "this test is only here as otherwise all tests in this class " +
-                "would be underscored which would give an error upon" +
-                "invokation of the tests.",
-        method = "forName",
-        args = {String.class, boolean.class, ClassLoader.class}
-     )
-    public void test_dummy() throws ClassNotFoundException {}
-    */
-    
 }

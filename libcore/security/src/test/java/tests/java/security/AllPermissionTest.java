@@ -45,14 +45,6 @@ public class AllPermissionTest extends TestCase {
     }
 
     /**
-     * Constructor for AllPermissionsTest.
-     * @param arg0
-     */
-    public AllPermissionTest(String arg0) {
-        super(arg0);
-    }
-    
-    /**
      * Test all constructors: an object is created, name and actions are ignored
      */
     @TestTargets({

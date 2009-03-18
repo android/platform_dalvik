@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * VM initialization and shutdown.
  */
@@ -37,7 +38,7 @@ void dvmLateEnableAssertions(void);
  * asked to optimize a DEX file holding fundamental classes.
  */
 int dvmPrepForDexOpt(const char* bootClassPath, DexOptimizerMode dexOptMode,
-    DexClassVerifyMode verifyMode);
+    DexClassVerifyMode verifyMode, int dexoptFlags);
 
 /*
  * Unconditionally abort the entire VM.  Try not to use this.

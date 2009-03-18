@@ -18,7 +18,6 @@
 package org.apache.harmony.security.tests.java.security;
 
 import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -562,7 +561,6 @@ public class KeyStore2Test extends junit.framework.TestCase {
         method = "load",
         args = {java.io.InputStream.class, char[].class}
     )
-    @KnownFailure("null parameter for password is not checked and results in a NullPointerException")
     public void test_loadLjava_io_InputStream$C() throws Exception {
         // Test for method void java.security.KeyStore.load(java.io.InputStream,
         // char [])

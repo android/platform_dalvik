@@ -102,7 +102,7 @@ public class PathClassLoader extends ClassLoader {
         this.libPath = libPath;
     }
     
-    private void ensureInit() {
+    private synchronized void ensureInit() {
         if (initialized) {
             return;
         }

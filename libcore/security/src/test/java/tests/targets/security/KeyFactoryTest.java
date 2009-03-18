@@ -1,7 +1,6 @@
 package tests.targets.security;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -15,7 +14,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-@TestTargetClass(targets.KeyFactories.Internal.class)
 public abstract class KeyFactoryTest<PublicKeySpec extends KeySpec, PrivateKeySpec extends KeySpec>
         extends TestCase {
 
@@ -65,6 +63,11 @@ public abstract class KeyFactoryTest<PublicKeySpec extends KeySpec, PrivateKeySp
             level = TestLevel.ADDITIONAL,
             method = "generatePublic",
             args = {KeySpec.class}
+        ),
+        @TestTargetNew(
+            level=TestLevel.COMPLETE,
+            method="method",
+            args={}
         )
     })
     public void testKeyFactory() {

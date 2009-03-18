@@ -21,7 +21,6 @@ package java.lang.reflect;
  * This interface represents a parameterized type such as {@code 
  * 'Set&lt;String&gt;'}.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface ParameterizedType extends Type {

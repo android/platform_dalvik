@@ -17,11 +17,20 @@
 
 package org.apache.harmony.logging.tests.java.util.logging;
 
-//import android.access.IPropertyChangeEvent;
-//import android.access.;
-import dalvik.annotation.*;
 
 
+import dalvik.annotation.TestLevel;
+import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.TestTargetNew;
+import dalvik.annotation.TestTargets;
+
+import junit.framework.TestCase;
+
+import org.apache.harmony.logging.tests.java.util.logging.HandlerTest.NullOutputStream;
+import org.apache.harmony.logging.tests.java.util.logging.util.EnvironmentHelper;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -35,12 +44,6 @@ import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.LoggingPermission;
-
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
-import org.apache.harmony.logging.tests.java.util.logging.HandlerTest.NullOutputStream;
-import org.apache.harmony.logging.tests.java.util.logging.util.EnvironmentHelper;
 
 /**
  * 
@@ -56,7 +59,7 @@ public class LogManagerTest extends TestCase {
 
     LogManager manager = LogManager.getLogManager();
 
-    //    MockPropertyChangeListener listener;
+        MockPropertyChangeListener listener;
 
     Properties props;
 
@@ -77,6 +80,7 @@ public class LogManagerTest extends TestCase {
     /*
      * @see TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         mockManager = new MockLogManager();
@@ -100,6 +104,7 @@ public class LogManagerTest extends TestCase {
     /*
      * @see TestCase#tearDown()
      */
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
         handler = null;
@@ -161,7 +166,7 @@ public class LogManagerTest extends TestCase {
         Enumeration<String> enumar = mockManager.getLoggerNames();
         int i = 0;
         while (enumar.hasMoreElements()) {
-            String name = (String)enumar.nextElement();
+            String name = enumar.nextElement();
             i++;
             assertEquals(FOO, name);
         }
@@ -379,7 +384,7 @@ public class LogManagerTest extends TestCase {
             args = {java.lang.String.class}
         )
     })
-    public void testAddGetLogger_addRoot() throws IOException {
+    public void testAddGetLogger_addRoot() {
         Logger foo = new MockLogger(FOO, null);
         Logger fooChild = new MockLogger(FOO + ".child", null);
         Logger other = new MockLogger("other", null);
@@ -426,7 +431,12 @@ public class LogManagerTest extends TestCase {
     public void test_addLoggerLLogger_Security() throws Exception {
         // regression test for Harmony-1286
         SecurityManager originalSecurityManager = System.getSecurityManager();
-        System.setSecurityManager(new SecurityManager());
+        System.setSecurityManager(new SecurityManager() {
+            @Override
+            public void checkPermission(Permission perm) {
+                
+            }
+        });
         try {
             LogManager manager = LogManager.getLogManager();
             manager.addLogger(new MockLogger("mock", null));
@@ -461,6 +471,7 @@ public class LogManagerTest extends TestCase {
         assertEquals(Level.FINE, root.getLevel());
         assertEquals("", root.getName());
         assertSame(root.getParent(), null);
+        // This test sometimes fails if other tests are run before this one.
         assertNull(root.getResourceBundle());
         assertNull(root.getResourceBundleName());
         assertTrue(root.getUseParentHandlers());
@@ -516,7 +527,7 @@ public class LogManagerTest extends TestCase {
         Enumeration<String> enumar = mockManager.getLoggerNames();
         int i = 0;
         while (enumar.hasMoreElements()) {
-            String name = (String)enumar.nextElement();
+            String name = enumar.nextElement();
             i++;
             assertEquals("name logger should be equal to foreseen name", FOO, name);
         }
@@ -672,6 +683,12 @@ public class LogManagerTest extends TestCase {
             notes = "Verifies SecurityException.",
             method = "getLogManager",
             args = {}
+        ),
+        @TestTargetNew(
+            level = TestLevel.PARTIAL_COMPLETE,
+            notes = "Verifies SecurityException.",
+            method = "addPropertyChangeListener",
+            args = {java.beans.PropertyChangeListener.class}
         )
     })
     public void testLoggingPermission() throws IOException {
@@ -701,22 +718,22 @@ public class LogManagerTest extends TestCase {
             fail("should throw SecurityException");
         } catch (SecurityException e) {
         }
-        //        try {
-        //            mockManager
-        //                    .addPropertyChangeListener(new MockPropertyChangeListener());
-        //            fail("should throw SecurityException");
-        //        } catch (SecurityException e) {
-        //        }
-        //        try {
-        //            mockManager.addPropertyChangeListener(null);
-        //            fail("should throw NPE");
-        //        } catch (NullPointerException e) {
-        //        }
-        //        try {
-        //            mockManager.removePropertyChangeListener(null);
-        //            fail("should throw SecurityException");
-        //        } catch (SecurityException e) {
-        //        }
+        try {
+            mockManager
+                    .addPropertyChangeListener(new MockPropertyChangeListener());
+            fail("should throw SecurityException");
+        } catch (SecurityException e) {
+        }
+        try {
+            mockManager.addPropertyChangeListener(null);
+            fail("should throw NPE");
+        } catch (NullPointerException e) {
+        }
+        try {
+            mockManager.removePropertyChangeListener(null);
+            fail("should throw SecurityException");
+        } catch (SecurityException e) {
+        }
         try {
             mockManager.reset();
             fail("should throw SecurityException");
@@ -777,6 +794,7 @@ public class LogManagerTest extends TestCase {
         assertEquals(0, root.getHandlers().length);
         assertEquals(Level.INFO, root.getLevel());
         manager.readConfiguration(EnvironmentHelper.PropertiesToInputStream(props));
+        manager.reset();
     }
 
     @TestTargetNew(
@@ -858,33 +876,32 @@ public class LogManagerTest extends TestCase {
         args = {java.io.InputStream.class}
     )
     public void testReadConfigurationInputStream() throws IOException {
-        // mock LogManager
-        InputStream stream = EnvironmentHelper.PropertiesToInputStream(props);
-        
+
         Logger foo = new MockLogger(FOO, null);
         assertNull(foo.getLevel());
         assertTrue(mockManager.addLogger(foo));
 
-        Logger fo = new MockLogger("LogManagerTestFoo2", null);
+        Logger fo = new MockLogger(FOO + "2", null);
         fo.setLevel(Level.ALL);
         assertTrue(mockManager.addLogger(fo));
 
         Handler h = new ConsoleHandler();
         Level l = h.getLevel();
-        assertSame(Level.OFF, h.getLevel());
+        assertSame(Level.INFO, h.getLevel());
 
         // read configuration from stream
+        InputStream stream = EnvironmentHelper.PropertiesToInputStream(props);
         mockManager.readConfiguration(stream);
         stream.close();
 
-        // level DO has effect
+        // level DOES have an effect on LogManagerTestFoo
         assertEquals(Level.WARNING, foo.getLevel());
 
         // for non specified logger, level is reset to null
         assertNull(fo.getLevel());
 
         // read properties don't affect handler
-        assertSame(Level.OFF, h.getLevel());
+        assertSame(Level.INFO, h.getLevel());
         assertSame(l, h.getLevel());
     }
 
@@ -925,7 +942,6 @@ public class LogManagerTest extends TestCase {
         args = {java.io.InputStream.class}
     )
     public void testReadConfigurationInputStream_root() throws IOException {
-        InputStream stream = EnvironmentHelper.PropertiesToInputStream(props);
         manager.readConfiguration(EnvironmentHelper.PropertiesToInputStream(props));
 
         Logger logger = new MockLogger("testReadConfigurationInputStream_root.foo", null);
@@ -946,69 +962,99 @@ public class LogManagerTest extends TestCase {
         // }
 
         // after read stream
+        InputStream stream = EnvironmentHelper.PropertiesToInputStream(props);
         manager.readConfiguration(stream);
+        stream.close();
         assertEquals(Level.FINE, root.getLevel());
         assertEquals(2, root.getHandlers().length);
         assertNull(logger.getLevel());
         assertEquals(0, logger.getHandlers().length);
-        stream.close();
+        manager.reset();
     }
 
-    //    public void testAddRemovePropertyChangeListener() throws Exception {
-    //        MockPropertyChangeListener listener1 = new MockPropertyChangeListener();
-    //        MockPropertyChangeListener listener2 = new MockPropertyChangeListener();
-    //        // add same listener1 two times
-    //        mockManager.addPropertyChangeListener(listener1);
-    //        mockManager.addPropertyChangeListener(listener1);
-    //        mockManager.addPropertyChangeListener(listener2);
-    //
-    //        assertNull(listener1.getEvent());
-    //        assertNull(listener2.getEvent());
-    //        mockManager.readConfiguration(EnvironmentHelper.PropertiesToInputStream(props));
-    //        // if (!hasConfigClass) {
-    //        assertNotNull(listener1.getEvent());
-    //        assertNotNull(listener2.getEvent());
-    //        // }
-    //
-    //        listener1.reset();
-    //        listener2.reset();
-    //
-    //        // remove listener1, no effect
-    //        mockManager.removePropertyChangeListener(listener1);
-    //        mockManager.readConfiguration(EnvironmentHelper
-    //                .PropertiesToInputStream(props));
-    //        assertNotNull(listener1.getEvent());
-    //        assertNotNull(listener2.getEvent());
-    //        listener1.reset();
-    //        listener2.reset();
-    //
-    //        // remove listener1 again and it works
-    //        mockManager.removePropertyChangeListener(listener1);
-    //        mockManager.readConfiguration(EnvironmentHelper
-    //                .PropertiesToInputStream(props));
-    //        assertNull(listener1.getEvent());
-    //        assertNotNull(listener2.getEvent());
-    //        listener2.reset();
-    //
-    //        // reset don't produce event
-    //        mockManager.reset();
-    //        assertNull(listener2.getEvent());
-    //
-    //        mockManager.removePropertyChangeListener(listener2);
-    //        mockManager.readConfiguration(EnvironmentHelper.PropertiesToInputStream(props));
-    //        assertNull(listener1.getEvent());
-    //        assertNull(listener2.getEvent());
-    //    }
-    //
-    //    public void testAddRemovePropertyChangeListener_null() {
-    //        // seems nothing happened
-    //        try{
-    //            mockManager.addPropertyChangeListener(null);
-    //            fail("Should throw NPE");
-    //        }catch(NullPointerException e){
-    //        }
-    //        mockManager.removePropertyChangeListener(null);
-    //    }
+    @TestTargets({
+        @TestTargetNew(
+            level = TestLevel.PARTIAL_COMPLETE,
+            notes = "",
+            method = "addPropertyChangeListener",
+            args = {java.beans.PropertyChangeListener.class}
+        ),
+        @TestTargetNew(
+            level = TestLevel.PARTIAL_COMPLETE,
+            notes = "",
+            method = "removePropertyChangeListener",
+            args = {java.beans.PropertyChangeListener.class}
+        )
+    })
+    public void testAddRemovePropertyChangeListener() throws Exception {
+        MockPropertyChangeListener listener1 = new MockPropertyChangeListener();
+        MockPropertyChangeListener listener2 = new MockPropertyChangeListener();
+        // add same listener1 two times
+        mockManager.addPropertyChangeListener(listener1);
+        mockManager.addPropertyChangeListener(listener1);
+        mockManager.addPropertyChangeListener(listener2);
+
+        assertNull(listener1.getEvent());
+        assertNull(listener2.getEvent());
+        mockManager.readConfiguration(EnvironmentHelper.PropertiesToInputStream(props));
+        // if (!hasConfigClass) {
+        assertNotNull(listener1.getEvent());
+        assertNotNull(listener2.getEvent());
+        // }
+
+        listener1.reset();
+        listener2.reset();
+
+        // remove listener1, no effect
+        mockManager.removePropertyChangeListener(listener1);
+        mockManager.readConfiguration(EnvironmentHelper
+                .PropertiesToInputStream(props));
+        assertNotNull(listener1.getEvent());
+        assertNotNull(listener2.getEvent());
+        listener1.reset();
+        listener2.reset();
+
+        // remove listener1 again and it works
+        mockManager.removePropertyChangeListener(listener1);
+        mockManager.readConfiguration(EnvironmentHelper
+                .PropertiesToInputStream(props));
+        assertNull(listener1.getEvent());
+        assertNotNull(listener2.getEvent());
+        listener2.reset();
+
+        // reset don't produce event
+        mockManager.reset();
+        assertNull(listener2.getEvent());
+
+        mockManager.removePropertyChangeListener(listener2);
+        mockManager.readConfiguration(EnvironmentHelper.PropertiesToInputStream(props));
+        assertNull(listener1.getEvent());
+        assertNull(listener2.getEvent());
+    }
+
+    @TestTargets({
+        @TestTargetNew(
+            level = TestLevel.PARTIAL_COMPLETE,
+            notes = "",
+            method = "addPropertyChangeListener",
+            args = {java.beans.PropertyChangeListener.class}
+        ),
+        @TestTargetNew(
+            level = TestLevel.PARTIAL_COMPLETE,
+            notes = "",
+            method = "removePropertyChangeListener",
+            args = {java.beans.PropertyChangeListener.class}
+        )
+    })
+    public void testAddRemovePropertyChangeListener_null() {
+        // seems nothing happened
+        try{
+            mockManager.addPropertyChangeListener(null);
+            fail("Should throw NPE");
+        }catch(NullPointerException e){
+        }
+        mockManager.removePropertyChangeListener(null);
+    }
 
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
@@ -1126,6 +1172,7 @@ public class LogManagerTest extends TestCase {
             assertEquals(Level.FINE, manager.getLogger("").getLevel());
         } finally {
             System.setErr(err);
+            manager.reset();
         }
 
     }
@@ -1219,6 +1266,7 @@ public class LogManagerTest extends TestCase {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            manager.reset();
         }
     }
 
@@ -1250,6 +1298,7 @@ public class LogManagerTest extends TestCase {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            manager.reset();
         }
     }
 
@@ -1295,6 +1344,7 @@ public class LogManagerTest extends TestCase {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            manager.reset();
         }
     }
 
@@ -1397,24 +1447,24 @@ public class LogManagerTest extends TestCase {
         }
     }
 
-    //    public static class MockPropertyChangeListener implements
-    //            IPropertyChangeListener {
-    //
-    //        IPropertyChangeEvent event = null;
-    //
-    //        public void propertyChange(IPropertyChangeEvent event) {
-    //            this.event = event;
-    //        }
-    //
-    //        public IPropertyChangeEvent getEvent() {
-    //            return event;
-    //        }
-    //
-    //        public void reset() {
-    //            event = null;
-    //        }
-    //
-    //    }
+    public static class MockPropertyChangeListener implements
+            PropertyChangeListener {
+
+        PropertyChangeEvent event = null;
+
+        public void propertyChange(PropertyChangeEvent event) {
+            this.event = event;
+        }
+
+        public PropertyChangeEvent getEvent() {
+            return event;
+        }
+
+        public void reset() {
+            event = null;
+        }
+
+    }
 
     public static class MockSecurityManagerLogPermission extends SecurityManager {
 

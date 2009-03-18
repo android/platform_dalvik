@@ -38,15 +38,6 @@ import junit.framework.TestCase;
 public class PrivateKeyTest extends TestCase {
 
     /**
-     * Constructor for PrivateKeyTest.
-     * 
-     * @param arg0
-     */
-    public PrivateKeyTest(String arg0) {
-        super(arg0);
-    }
-
-    /**
      * Test for <code>serialVersionUID</code> field
      */
     @TestTargetNew(

@@ -46,18 +46,6 @@ import java.util.Vector;
 @TestTargetClass(CertPathValidatorException.class)
 public class CertPathValidatorExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertPathValidatorExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertPathValidatorExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

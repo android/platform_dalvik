@@ -38,7 +38,6 @@ public class BigDecimal extends Number implements Comparable<BigDecimal>, Serial
     /**
      * The constant zero as a {@code BigDecimal}.
      * 
-     * @since 1.2
      * @since Android 1.0
      */
     public static final BigDecimal ZERO = new BigDecimal(0, 0);
@@ -46,7 +45,6 @@ public class BigDecimal extends Number implements Comparable<BigDecimal>, Serial
     /**
      * The constant one as a {@code BigDecimal}.
      * 
-     * @since 1.2
      * @since Android 1.0
      */
     public static final BigDecimal ONE = new BigDecimal(1, 0);
@@ -54,7 +52,6 @@ public class BigDecimal extends Number implements Comparable<BigDecimal>, Serial
     /**
      * The constant ten as a {@code BigDecimal}.
      * 
-     * @since 1.5
      * @since Android 1.0
      */
     public static final BigDecimal TEN = new BigDecimal(10, 0);

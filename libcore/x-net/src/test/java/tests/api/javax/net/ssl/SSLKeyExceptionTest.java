@@ -27,18 +27,6 @@ import junit.framework.TestCase;
 @TestTargetClass(SSLKeyException.class) 
 public class SSLKeyExceptionTest extends TestCase {
     
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for SSLKeyExceptionTest.
-     * 
-     * @param arg0
-     */
-    public SSLKeyExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

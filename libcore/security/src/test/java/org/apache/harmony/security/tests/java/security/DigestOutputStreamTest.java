@@ -75,14 +75,6 @@ public class DigestOutputStreamTest extends TestCase {
      */
     private static final int MY_MESSAGE_LEN = myMessage.length;
 
-    /**
-     * Constructor for DigestInputStreamTest.
-     * @param name
-     */
-    public DigestOutputStreamTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

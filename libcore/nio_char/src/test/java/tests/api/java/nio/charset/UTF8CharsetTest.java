@@ -32,8 +32,8 @@ public class UTF8CharsetTest extends AbstractCharsetTestCase {
      * Constructor for UTF8CharsetTest.
      * 
      */
-    public UTF8CharsetTest(String arg0) {
-        super(arg0, "UTF-8", new String[] { "UTF8" }, true, true);
+    public UTF8CharsetTest() {
+        super("UTF-8", new String[] { "UTF8" }, true, true);
     }
 
     /*

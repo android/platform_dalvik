@@ -23,11 +23,12 @@ import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
 
-import java.io.UnsupportedEncodingException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -125,7 +126,7 @@ public class ResultSetGetterTests extends SQLTest {
     static Class[] typeMap = new Class[]{
             java.lang.String.class, //
             java.lang.Integer.class,//Types.INTEGER,
-            java.lang.String.class, //Types.LONG, not a JDBC 1.0 type
+            java.lang.Integer.class, //Types.LONG, not a JDBC 1.0 type
             java.lang.Long.class,  // Types.BIGINT,
             java.lang.Byte.class,            // Types.TINYINT,
             java.lang.Short.class, // Types.SMALLINT,
@@ -263,7 +264,7 @@ public class ResultSetGetterTests extends SQLTest {
     )
     public void testGetBytesInt() {
         int i = 1;
-       /*
+
             
         // null value
         try {
@@ -284,93 +285,229 @@ public class ResultSetGetterTests extends SQLTest {
         } catch (SQLException e) {
             //ok
         }
-        */
+
     }
     
     /**
      * Test method for {@link java.sql.ResultSet#getBytes(int)}.
+     * @throws SQLException 
      */
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Integer, test fails",
+        notes = "VARBINARY value",
         method = "getBytes",
         args = {int.class}
     )
-    @KnownFailure("res.close() does not wrap up")
-    public void testGetBytesIntInteger() {
+    @KnownFailure("last assertion fails: invalid conversion. Test passes on RI")
+    public void testGetBytesIntVarbinary() throws SQLException {
+
+        Statement st = null;
+        Statement stQuery = null;
+        PreparedStatement stPrep = null;
+        ResultSet res = null;
+
+        // setup
         try {
+            String testString = "HelloWorld";
+            st = conn.createStatement();
+            st.executeUpdate("create table testBinary (VARBINARY value);");
+            stPrep = conn
+                    .prepareStatement("insert into testBinary values (?);");
+            stPrep.setBytes(1, testString.getBytes());
+            stPrep.execute();
 
-            Integer input = -1;
-            String output = "";
-
-            Byte inputB = Byte.valueOf(input.toString());
-            String hexInput = Integer.toHexString(inputB);
-            // byte[] inputBytes =
-            byte[] outputBytes = res.getBytes(2);
-            for (byte b : outputBytes) {
-                output += Integer.toHexString(b);
+            stQuery = conn.createStatement();
+            res = stQuery.executeQuery("select * from testBinary");
+            try {
+                assertTrue(res.next());
+                byte[] output = res.getBytes(1);
+                String helloTest = new String(output);
+                assertNotNull(helloTest);
+                assertEquals(testString, helloTest);
+            } catch (SQLException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
-            
-            assertEquals(1, outputBytes.length);
-            assertEquals(hexInput, output);
-
-
-
-        } catch (SQLException e) {
-            fail("Unexpected exception: " + e.getMessage());
+        } finally {
+            if (res != null) res.close();
+            if (stPrep != null) stPrep.close();
+            if (st != null) st.close();
+            if (stQuery != null) stQuery.close();
         }
         
-     // null value
+    }
+    
+    /**
+     * Test method for {@link java.sql.ResultSet#getBytes(int)}.
+     * @throws SQLException 
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "BINARY value",
+        method = "getBytes",
+        args = {int.class}
+    )
+     @KnownFailure("last assertion fails: invalid conversion. Test passes on RI")
+    public void testGetBytesIntBinary() throws SQLException {
+
+        Statement st = null;
+        Statement stQuery = null;
+        PreparedStatement stPrep = null;
+        ResultSet res = null;
+
+
+        // setup
+
+        String testString = "HelloWorld";
+        st = conn.createStatement();
+        st.executeUpdate("create table testBinary (BINARY value);");
+        stPrep = conn.prepareStatement("insert into testBinary values (?);");
+        stPrep.setBytes(1, testString.getBytes());
+        stPrep.execute();
         try {
-            assertTrue(res.next());
-            byte[] b = res.getBytes(2);
-            assertNull(b);
+            stQuery = conn.createStatement();
+            res = stQuery.executeQuery("select * from testBinary");
+            try {
+                assertTrue(res.next());
+                byte[] output = res.getBytes(1);
+                String helloTest = new String(output);
+                assertNotNull(helloTest);
+                assertEquals(testString, helloTest);
+            } catch (SQLException e) {
+                fail("Unexpected exception: " + e.getMessage());
+            }
+        } finally {
+            if (res != null) res.close();
+            if (stPrep != null) stPrep.close();
+            if (st != null) st.close();
+            if (stQuery != null) stQuery.close();
+        }
+    }
+    
+    /**
+     * Test method for {@link java.sql.ResultSet#getBytes(String)}.
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Exception testing",
+        method = "getBytes",
+        args = {String.class}
+    )
+    public void testGetBytesString() {
+        int i = 1;
+        
+        // null value
+        try {
+
+            res.next();
+            for (String t : colNames) {
+                assertNull(res.getBytes(t));
+            }
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
         
         try {
             res.close();
-            res.getBytes(2);
+            res.getBytes(colNames.get(24));
             fail("Should get Exception");
         } catch (SQLException e) {
             //ok
         }
     }
-
-
+    
     /**
-     * Test method for {@link java.sql.ResultSet#getBytes(java.lang.String)}.
+     * Test method for {@link java.sql.ResultSet#getBytes(int)}.
+     * @throws SQLException 
      */
     @TestTargetNew(
-        level = TestLevel.NOT_FEASIBLE,
-        notes = "no BINARY type supported",
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "VARBINARY value",
         method = "getBytes",
-        args = {java.lang.String.class}
+        args = {String.class}
     )
-    public void testGetBytesString() {
-        /*
-        
-        
-     // null value
+    @KnownFailure("last assertion fails: invalid conversion. Test passes on RI")
+    public void testGetBytesStringVarbinary() throws SQLException {
+
+        Statement st = null;
+        Statement stQuery = null;
+        PreparedStatement stPrep = null;
+        ResultSet res = null;
+
+        // setup
         try {
-            res.next();
-            
-            for  (String name: colNames) {
-                assertNull(res.getBytes(name));
+            String testString = "HelloWorld";
+            st = conn.createStatement();
+            st.executeUpdate("create table testBinary (VARBINARY value);");
+            stPrep = conn
+                    .prepareStatement("insert into testBinary values (?);");
+            stPrep.setBytes(1, testString.getBytes());
+            stPrep.execute();
+
+            stQuery = conn.createStatement();
+            res = stQuery.executeQuery("select value from testBinary");
+            try {
+                assertTrue(res.next());
+                byte[] output = res.getBytes("value");
+                String helloTest = new String(output);
+                assertNotNull(helloTest);
+                assertEquals(testString, helloTest);
+            } catch (SQLException e) {
+                fail("Unexpected exception: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            fail("Unexpected exception: " + e.getMessage());
+        } finally {
+            if (res != null) res.close();
+            if (stPrep != null) stPrep.close();
+            if (st != null) st.close();
+            if (stQuery != null) stQuery.close();
         }
         
+    }
+        
+    /**
+     * Test method for {@link java.sql.ResultSet#getBytes(int)}.
+     * @throws SQLException 
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "BINARY value",
+        method = "getBytes",
+        args = {String.class}
+    )
+     @KnownFailure("last assertion fails: invalid conversion. Test passes on RI")
+    public void testGetBytesStringBinary() throws SQLException {
+    
+        Statement st = null;
+        Statement stQuery = null;
+        PreparedStatement stPrep = null;
+        ResultSet res = null;
+    
+    
+        // setup
+    
+        String testString = "HelloWorld";
+        st = conn.createStatement();
+        st.executeUpdate("create table testBinary (BINARY value);");
+        stPrep = conn.prepareStatement("insert into testBinary values (?);");
+        stPrep.setBytes(1, testString.getBytes());
+        stPrep.execute();
         try {
-            res.close();
-            res.getBytes("TextVal");
-            fail("Should get Exception");
-        } catch (SQLException e) {
-            //ok
+            stQuery = conn.createStatement();
+            res = stQuery.executeQuery("select value from testBinary");
+            try {
+                assertTrue(res.next());
+                byte[] output = res.getBytes("value");
+                String helloTest = new String(output);
+                assertNotNull(helloTest);
+                assertEquals(testString, helloTest);
+            } catch (SQLException e) {
+                fail("Unexpected exception: " + e.getMessage());
+            }
+        } finally {
+            if (res != null) res.close();
+            if (stPrep != null) stPrep.close();
+            if (st != null) st.close();
+            if (stQuery != null) stQuery.close();
         }
-        */
     }
 
     /**
@@ -378,7 +515,7 @@ public class ResultSetGetterTests extends SQLTest {
      */
     @TestTargetNew(
         level = TestLevel.SUFFICIENT,
-        notes = "PARTIAL_OKly supported: CONCUR_UPDATABLE not supported",
+        notes = "Not fully supported: CONCUR_UPDATABLE not supported",
         method = "getConcurrency",
         args = {}
     )
@@ -924,7 +1061,7 @@ public class ResultSetGetterTests extends SQLTest {
          * "LONGBLOB", "TINYTEXT", "TEXT", "MEDIUMTEXT", "LONGTEXT", "BIGINT",
          * "BIGINT","URL","URL");
          */
-        List<String> types = Arrays.asList("VARCHAR", "INTEGER", "VARCHAR",
+        List<String> types = Arrays.asList("VARCHAR", "INTEGER", "INTEGER",
                 "BIGINT", "SMALLINT", "SHORT", "INTEGER", "INTEGER", "FLOAT",
                 "DOUBLE", "DOUBLE", "DECIMAL", "NUMERIC", "VARCHAR", "DATE",
                 "TIME", "TIMESTAMP", "DATETIME", "BLOB", "BLOB", "BLOB",
@@ -1298,8 +1435,8 @@ public class ResultSetGetterTests extends SQLTest {
         method = "getTime",
         args = {int.class}
     )
+    @KnownFailure("getTime should return Time value for a TIMESTAMP type but returns null")
     public void testGetTimeInt() {
-        List<Time> times = new LinkedList<Time>();
         // values "12:35:45", "2007-10-09 14:28:02.0", "1221-09-22 10:11:55"
 
         Calendar cal = new GregorianCalendar();
@@ -1312,7 +1449,19 @@ public class ResultSetGetterTests extends SQLTest {
         long millis = cal.getTime().getTime();
         Time t1 = new java.sql.Time(millis);
         assertNotNull("t1", t1);
-        times.add(t1);
+  
+        
+        Calendar cal2 = new GregorianCalendar();
+        cal2.set(Calendar.YEAR, 2007);
+        cal2.set(Calendar.MONTH, Calendar.OCTOBER);
+        cal2.set(Calendar.DATE, 9);
+        cal2.set(Calendar.HOUR_OF_DAY, 14);
+        cal2.set(Calendar.MINUTE, 28);
+        cal2.set(Calendar.SECOND, 02);
+        cal2.set(Calendar.MILLISECOND, 0);
+
+        long millis2 = cal2.getTime().getTime();
+        Time t2 = new java.sql.Time(millis2); 
 
         int i = 16;
 
@@ -1322,6 +1471,18 @@ public class ResultSetGetterTests extends SQLTest {
             assertEquals(t1.toString(), resTime.toString());
             assertEquals(t1.getTime(), resTime.getTime());
             assertEquals(t1, resTime);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        // Compatibility Test: TIMESTAMP value
+        i = 17;
+        
+        try {
+            Time resTime = res.getTime(i);
+            assertNotNull("Pos " + i + " null", resTime);
+            assertEquals(t2.toString(), resTime.toString());
+            assertEquals(t2.getTime(), resTime.getTime());
+            assertEquals(t2, resTime);
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
@@ -1351,6 +1512,7 @@ public class ResultSetGetterTests extends SQLTest {
         method = "getTime",
         args = {int.class, java.util.Calendar.class}
     )
+     @KnownFailure("getTime on TIMESTAMP value fails: returns null")
     public void testGetTimeIntCalendar() {
         List<Time> times = new LinkedList<Time>();
         List<Calendar> cals = new LinkedList<Calendar>();
@@ -1366,6 +1528,20 @@ public class ResultSetGetterTests extends SQLTest {
 
         long millis = cal1.getTime().getTime();
         Time t1 = new java.sql.Time(millis);
+        
+        Calendar cal2 = new GregorianCalendar();
+        cal2.set(Calendar.YEAR, 2007);
+        cal2.set(Calendar.MONTH, Calendar.OCTOBER);
+        cal2.set(Calendar.DATE, 9);
+        cal2.set(Calendar.HOUR_OF_DAY, 14);
+        cal2.set(Calendar.MINUTE, 28);
+        cal2.set(Calendar.SECOND, 02);
+        cal2.set(Calendar.MILLISECOND, 0);
+
+        long millis2 = cal2.getTime().getTime();
+        Time t2 = new java.sql.Time(millis2); 
+
+        // TIME value
 
         int i = 16;
 
@@ -1375,6 +1551,19 @@ public class ResultSetGetterTests extends SQLTest {
                 assertEquals(t1.toString(), timeRes.toString());
                 assertEquals(t1.getTime(), timeRes.getTime());
                 assertEquals(t1, timeRes);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        
+        // TIMESTAMP value
+        i = 17;
+        
+        try {
+            Time timeRes = res.getTime(i,new GregorianCalendar());
+            assertNotNull(timeRes);
+            assertEquals(t2.toString(), timeRes.toString());
+            assertEquals(t2.getTime(), timeRes.getTime());
+            assertEquals(t2, timeRes);
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
@@ -1407,7 +1596,7 @@ public class ResultSetGetterTests extends SQLTest {
         method = "getTime",
         args = {java.lang.String.class}
     )
-//    @KnownFailure("Type Time not supported. test fails")
+    @KnownFailure("getTime should return a Time value for a TIMESTAMP type but returns null")
     public void testGetTimeString() {
         List<Time> times = new LinkedList<Time>();
         
@@ -1438,6 +1627,31 @@ public class ResultSetGetterTests extends SQLTest {
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
+        
+        Calendar cal2 = new GregorianCalendar();
+        cal2.set(Calendar.YEAR, 2007);
+        cal2.set(Calendar.MONTH, Calendar.OCTOBER);
+        cal2.set(Calendar.DATE, 9);
+        cal2.set(Calendar.HOUR_OF_DAY, 14);
+        cal2.set(Calendar.MINUTE, 28);
+        cal2.set(Calendar.SECOND, 02);
+        cal2.set(Calendar.MILLISECOND, 0);
+        
+        long millis2 = cal.getTime().getTime();
+        Time t2 = new java.sql.Time(millis2);
+        
+        col = it.next();
+        
+        try {
+                Time timeRes = res.getTime(col);
+                assertNotNull(timeRes);
+                assertEquals(t2.toString(), timeRes.toString());
+                assertEquals(t2.getTime(), timeRes.getTime());
+                assertEquals(t2, timeRes);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+
 
         try {
             res.next();
@@ -1460,11 +1674,11 @@ public class ResultSetGetterTests extends SQLTest {
      */
     @TestTargetNew(
         level = TestLevel.COMPLETE,
-        notes = "type Time not supported. Test fails",
+        notes = "Testing getTime with TIME, TIMESTAMP value",
         method = "getTime",
         args = {java.lang.String.class, java.util.Calendar.class}
     )
-//    @KnownFailure("type Time not supported. Test fails")
+    @KnownFailure("getTime on TIMESTAMP value fails: returns null")
     public void testGetTimeStringCalendar() {
         List<Time> times = new LinkedList<Time>();
 
@@ -1497,7 +1711,7 @@ public class ResultSetGetterTests extends SQLTest {
         long millis2 = cal2.getTime().getTime();
         Time t2 = new java.sql.Time(millis2); 
 
-//        ListIterator<Calendar> calIt = cals.listIterator();
+        // TIME value
         String col = it.next();
 
         try {
@@ -1509,9 +1723,8 @@ public class ResultSetGetterTests extends SQLTest {
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
-        
+        //TIMESTAMP value
         col = it.next();
-        System.out.println("ResultSetGetterTests.testGetTimeStringCalendar() "+col);
         
         try {
             Time timeRes = res.getTime(col, new GregorianCalendar());
@@ -1568,7 +1781,7 @@ public class ResultSetGetterTests extends SQLTest {
         long millis = cal2.getTime().getTime();
         Timestamp t2 = new Timestamp(millis);
         times.add(t2);
-        //
+        
          Calendar cal3 = new GregorianCalendar();
           cal3.set(Calendar.YEAR, 1221);
           cal3.set(Calendar.MONTH, Calendar.SEPTEMBER);
@@ -1581,26 +1794,27 @@ public class ResultSetGetterTests extends SQLTest {
          millis = cal3.getTime().getTime();
          Timestamp t3 = new Timestamp(millis);
          times.add(t3);
-         
-//         cals.add(cal1);
-         cals.add(cal2);
-         cals.add(cal3);
-
-        // ListIterator<Calendar> calIt = cals.listIterator();
-
+         // TIMESTAMP value
         int i = 17;
-
+     
         try {
-            // String col = it.next();
             Timestamp timeRes = res.getTimestamp(i);
             assertEquals(t2.toString(), timeRes.toString());
              assertEquals(t2.getTime(), timeRes.getTime());
-            // assertEquals(t, res.getTime(col));
+             assertEquals(t2, timeRes);
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
-
-        // calIt = cals.listIterator();
+        // DATE value
+        i = 18;
+        try {
+            Timestamp timeRes = res.getTimestamp(i);
+            assertEquals(t3.toString(), timeRes.toString());
+             assertEquals(t3.getTime(), timeRes.getTime());
+             assertEquals(t3, timeRes);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
 
         try {
             res.next();
@@ -1668,18 +1882,22 @@ public class ResultSetGetterTests extends SQLTest {
         int i = 17;
 
         try {
-            // String col = it.next();
-            Timestamp timeRes = res.getTimestamp(i,cal2);
+            Timestamp timeRes = res.getTimestamp(i,new GregorianCalendar());
             assertEquals(t2.toString(), timeRes.toString());
-            timeRes = res.getTimestamp(i+1,cal3);
-            assertEquals(t3.toString(), timeRes.toString());
-             assertEquals(t3.getTime(), timeRes.getTime());
-            // assertEquals(t, res.getTime(col));
+            assertEquals(t2, timeRes);
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
-
-        // calIt = cals.listIterator();
+        
+        i = 18;
+        
+        try {
+            Timestamp timeRes = res.getTimestamp(i,new GregorianCalendar());
+            assertEquals(t3.toString(), timeRes.toString());
+            assertEquals(t3, timeRes);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
 
         try {
             res.next();
@@ -1739,24 +1957,29 @@ public class ResultSetGetterTests extends SQLTest {
          Timestamp t3 = new Timestamp(millis);
          times.add(t3);
          
-//         cals.add(cal1);
-//         cals.add(cal2);
-//         cals.add(cal3);
-//
-//        ListIterator<Calendar> calIt = cals.listIterator();
+        String col = it.next();
 
         try {
-            Timestamp timeRes = res.getTimestamp(stringTimes.get(0));
+            Timestamp timeRes = res.getTimestamp(col);
             assertEquals(t2.toString(), timeRes.toString());
-            timeRes = res.getTimestamp(stringTimes.get(1));
-            assertEquals(t3.toString(), timeRes.toString());
-            assertEquals(t3.getTime(), timeRes.getTime());
-            // assertEquals(t, res.getTime(col));
+            assertEquals(t2.toString(), timeRes.toString());
+            assertEquals(t2.getTime(), timeRes.getTime());
+            assertEquals(t2, timeRes);
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }
-
-        // calIt = cals.listIterator();
+        // DATE value
+        col = it.next();
+        
+        try {
+            Timestamp timeRes = res.getTimestamp(col);
+            assertEquals(t3.toString(), timeRes.toString());
+            assertEquals(t3.toString(), timeRes.toString());
+            assertEquals(t3.getTime(), timeRes.getTime());
+            assertEquals(t3, timeRes);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
 
         try {
             res.next();
@@ -1818,10 +2041,17 @@ public class ResultSetGetterTests extends SQLTest {
         try {
             Timestamp timeRes = res.getTimestamp(stringTimes.get(0),cal2);
             assertEquals(t2.toString(), timeRes.toString());
-            timeRes = res.getTimestamp(stringTimes.get(1),cal3);
+            assertEquals(t2.getTime(), timeRes.getTime());
+            assertEquals(t2, timeRes);
+        } catch (SQLException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+            // DATE value
+        try {
+            Timestamp timeRes = res.getTimestamp(stringTimes.get(1),cal3);
             assertEquals(t3.toString(), timeRes.toString());
             assertEquals(t3.getTime(), timeRes.getTime());
-            // assertEquals(t, res.getTime(col));
+            assertEquals(t3, timeRes);
         } catch (SQLException e) {
             fail("Unexpected exception: " + e.getMessage());
         }

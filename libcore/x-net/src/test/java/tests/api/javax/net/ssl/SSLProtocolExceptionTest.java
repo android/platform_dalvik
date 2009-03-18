@@ -27,18 +27,6 @@ import junit.framework.TestCase;
 @TestTargetClass(SSLProtocolException.class) 
 public class SSLProtocolExceptionTest extends TestCase {
     
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for SSLProtocolExceptionTest.
-     * 
-     * @param arg0
-     */
-    public SSLProtocolExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

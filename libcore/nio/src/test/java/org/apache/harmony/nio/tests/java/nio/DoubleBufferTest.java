@@ -20,6 +20,7 @@ package org.apache.harmony.nio.tests.java.nio;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
@@ -32,7 +33,7 @@ import java.nio.InvalidMarkException;
  * Tests java.nio.DoubleBuffer
  */
 @TestTargetClass(java.nio.DoubleBuffer.class)
-public class DoubleBufferTest extends AbstractBufferTest {
+public abstract class DoubleBufferTest extends AbstractBufferTest {
 
     protected static final int SMALL_TEST_LENGTH = 5;
 
@@ -216,6 +217,7 @@ public class DoubleBufferTest extends AbstractBufferTest {
         method = "compact",
         args = {}
     )
+    @AndroidOnly("Fails on RI. See comment below")
     public void testCompact() {
         // case: buffer is full
         buf.clear();
@@ -243,6 +245,9 @@ public class DoubleBufferTest extends AbstractBufferTest {
         assertEquals(buf.limit(), buf.capacity());
         assertContentLikeTestData1(buf, 0, 0.0, buf.capacity());
         try {
+            // Fails on RI. Spec doesn't specify the behavior if
+	    // actually nothing to be done by compact(). So RI doesn't reset
+            // mark position 
             buf.reset();
             fail("Should throw Exception"); //$NON-NLS-1$
         } catch (InvalidMarkException e) {
@@ -565,6 +570,16 @@ public class DoubleBufferTest extends AbstractBufferTest {
     )
     public void testIsDirect() {
         assertFalse(buf.isDirect());
+    }
+
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Abstract method.",
+        method = "isReadOnly",
+        args = {}
+    )
+    public void testIsReadOnly() {
+        assertFalse(buf.isReadOnly());
     }
 
     @TestTargetNew(

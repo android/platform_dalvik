@@ -1,5 +1,6 @@
 package tests.security.cert;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -289,6 +290,8 @@ public class X509CRLSelector2Test extends TestCase {
         method = "setMinCRLNumber",
         args = {java.math.BigInteger.class}
     )
+    @AndroidOnly("Uses specific class: " +
+            "org.apache.harmony.security.asn1.ASN1OctetString.")    
     public void testSetMinCRLNumberLjava_math_BigInteger() {
         X509CRLSelector selector = new X509CRLSelector();
         BigInteger minCRL = new BigInteger("10000");
@@ -317,6 +320,8 @@ public class X509CRLSelector2Test extends TestCase {
         method = "setMaxCRLNumber",
         args = {java.math.BigInteger.class}
     )
+    @AndroidOnly("Uses specific class: " +
+            "org.apache.harmony.security.asn1.ASN1OctetString.")    
     public void testSetMaxCRLNumberLjava_math_BigInteger() {
         X509CRLSelector selector = new X509CRLSelector();
         BigInteger maxCRL = new BigInteger("10000");
@@ -573,6 +578,9 @@ public class X509CRLSelector2Test extends TestCase {
         method = "clone",
         args = {}
     )
+    @AndroidOnly("Uses specific classes: " +
+            "org.apache.harmony.security.asn1.ASN1OctetString, " +
+            "org.apache.harmony.security.asn1.ASN1Integer.")
     public void testClone() {
         X509CRLSelector selector = new X509CRLSelector();
         X500Principal iss1 = new X500Principal("O=First Org.");

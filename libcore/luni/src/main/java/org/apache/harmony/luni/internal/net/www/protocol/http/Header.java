@@ -150,8 +150,6 @@ public class Header implements Cloneable {
      * Lists of Strings.
      * 
      * @return an unmodifiable map of the headers
-     * 
-     * @since 1.4
      */
     public Map<String, List<String>> getFieldMap() {
         Map<String, List<String>> result = new HashMap<String, List<String>>(

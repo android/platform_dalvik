@@ -527,15 +527,23 @@ static bool verifyInstructions(const Method* meth, InsnFlags* insnFlags,
 {
     const int insnCount = dvmGetMethodInsnsSize(meth);
     const u2* insns = meth->insns;
-    int i, width, offset, absOffset;
+    int i;
 
     /* the start of the method is a "branch target" */
     dvmInsnSetBranchTarget(insnFlags, 0, true);
 
     for (i = 0; i < insnCount; /**/) {
-        width = dvmInsnGetWidth(insnFlags, i);
+        static int gcMask = kInstrCanBranch | kInstrCanSwitch |
+            kInstrCanThrow | kInstrCanReturn;
+        int width = dvmInsnGetWidth(insnFlags, i);
+        OpCode opcode = *insns & 0xff;
+        InstructionFlags opFlags = dexGetInstrFlags(gDvm.instrFlags, opcode);
+        int offset, absOffset;
 
-        switch (*insns & 0xff) {
+        if ((opFlags & gcMask) != 0)
+            dvmInsnSetGcPoint(insnFlags, i, true);
+
+        switch (opcode) {
         case OP_NOP:
             /* plain no-op or switch table data; nothing to do here */
             break;

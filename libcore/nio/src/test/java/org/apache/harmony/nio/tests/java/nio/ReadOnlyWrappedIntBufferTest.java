@@ -23,7 +23,6 @@ import java.nio.IntBuffer;
 public class ReadOnlyWrappedIntBufferTest extends ReadOnlyIntBufferTest {
 
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = IntBuffer.wrap(new int[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,6 +31,7 @@ public class ReadOnlyWrappedIntBufferTest extends ReadOnlyIntBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        buf = null;
+        baseBuf = null;
     }
 }

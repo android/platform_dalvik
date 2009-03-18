@@ -22,7 +22,6 @@ import java.lang.annotation.Annotation;
 /**
  * This interface provides reflective access to annotation information.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface AnnotatedElement {

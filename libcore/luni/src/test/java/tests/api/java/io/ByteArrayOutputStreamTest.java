@@ -276,31 +276,25 @@ public class ByteArrayOutputStreamTest extends TestCase {
         try {
             bos.write(target, -1, 1);
             fail("Test 1: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals(
-                    "IndexOutOfBoundsException rather than a subclass expected;",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
         try {
             bos.write(target, 0, -1);
             fail("Test 2: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals(
-                    "IndexOutOfBoundsException rather than a subclass expected;",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
         try {
             bos.write(target, 1, target.length);
             fail("Test 3: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals(
-                    "IndexOutOfBoundsException rather than a subclass expected;",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
         try {
             bos.write(null, 1, 1);
             fail("Test 4: NullPointerException expected.");
-        } catch (NullPointerException t) {
+        } catch (NullPointerException e) {
             // Expected.
         }
     }

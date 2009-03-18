@@ -41,15 +41,6 @@ import java.security.spec.PSSParameterSpec;
 public class PSSParameterSpecTest extends TestCase {
 
     /**
-     * Constructor for PSSParameterSpecTest.
-     * 
-     * @param name
-     */
-    public PSSParameterSpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test #1 for <code>PSSParameterSpec(int)</code> ctor<br>
      * Assertion: constructs using valid parameter
      * <code>PSSParameterSpec<code> object

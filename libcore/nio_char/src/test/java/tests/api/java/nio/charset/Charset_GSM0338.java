@@ -16,7 +16,9 @@
 package tests.api.java.nio.charset;
 
 import dalvik.annotation.AndroidOnly;
+import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.TestTargetNew;
 
 import java.nio.charset.CharacterCodingException;
 
@@ -54,6 +56,12 @@ public class Charset_GSM0338 extends Charset_AbstractTest {
         super.setUp();
     }
 
+    @TestTargetNew(
+        level = TestLevel.SUFFICIENT,
+        notes = "Not applicable to this charset.",
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     @Override
     public void test_CodecDynamic () throws CharacterCodingException {
     }

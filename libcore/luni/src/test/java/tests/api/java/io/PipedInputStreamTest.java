@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -383,31 +384,25 @@ public class PipedInputStreamTest extends junit.framework.TestCase {
     public void test_read$BII_3() throws IOException {
         PipedInputStream obj = new PipedInputStream();
         try {
-            obj.read(new byte[0], -1, 0);
+            obj.read(new byte[10], -1, 1);
             fail("IndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException t) {
-            fail("IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+            assertTrue(e.getClass().equals(IndexOutOfBoundsException.class));
         }
-    }
-
-    /**
-     * @tests java.io.PipedInputStream#read(byte[], int, int)
-     */
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Tests invalid combination of offset and length arguments.",
-        method = "read",
-        args = {byte[].class, int.class, int.class}
-    )
-    public void test_read$BII_4() throws IOException {
-        PipedInputStream obj = new PipedInputStream();
         try {
-            obj.read(new byte[10], 2, 9);
+            obj.read(new byte[10], 0, -1);
             fail("IndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+            assertTrue(e.getClass().equals(IndexOutOfBoundsException.class));
+        }
+        try {
+            obj.read(new byte[10], 9, 2);
             fail("IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+            assertTrue(e.getClass().equals(IndexOutOfBoundsException.class));
         }
     }
 
@@ -420,6 +415,7 @@ public class PipedInputStreamTest extends junit.framework.TestCase {
         method = "receive",
         args = {int.class}
     )
+    @BrokenTest("Test hangs indefinitely on the RI")
     public void test_receive() throws IOException {
         pis = new PipedInputStream();
         pos = new PipedOutputStream();

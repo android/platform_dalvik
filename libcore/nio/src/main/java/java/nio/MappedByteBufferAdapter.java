@@ -17,6 +17,7 @@
 
 // BEGIN android-note
 // updated to a newer version of harmony
+// added some missing updates on position and limit
 // END android-note
 
 package java.nio;
@@ -105,32 +106,44 @@ final class MappedByteBufferAdapter extends MappedByteBuffer implements DirectBu
     }
 
     public byte get() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         byte result = this.wrapped.get(); 
         this.position++;
         return result;
     }
 
     public byte get(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.get(index);
     }
 
     public char getChar() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         char result = this.wrapped.getChar();
         this.position += CHAR_SIZE;
         return result;
     }
 
     public char getChar(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.getChar(index);
     }
 
     public double getDouble() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         double result = this.wrapped.getDouble();
         this.position += DOUBLE_SIZE;
         return result;
     }
 
     public double getDouble(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.getDouble(index);
     }
 
@@ -139,42 +152,58 @@ final class MappedByteBufferAdapter extends MappedByteBuffer implements DirectBu
     }
 
     public float getFloat() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         float result = this.wrapped.getFloat();
         this.position += FLOAT_SIZE;
         return result;
     }
 
     public float getFloat(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.getFloat(index);
     }
 
     public int getInt() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         int result = this.wrapped.getInt();
         this.position += INTEGER_SIZE;
         return result;
     }
 
     public int getInt(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.getInt(index);
     }
 
     public long getLong() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         long result = this.wrapped.getLong();
         this.position += LONG_SIZE;
         return result;
     }
 
     public long getLong(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.getLong(index);
     }
 
     public short getShort() {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         short result = this.wrapped.getShort();
         this.position += SHORT_SIZE;
         return result;
     }
 
     public short getShort(int index) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         return this.wrapped.getShort(index);
     }
 
@@ -192,12 +221,15 @@ final class MappedByteBufferAdapter extends MappedByteBuffer implements DirectBu
     }
 
     public ByteBuffer put(byte b) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.put(b);
         this.position++;
         return this;
     }
 
     public ByteBuffer put(byte[] src, int off, int len) {
+        this.wrapped.limit(this.limit);
         this.wrapped.position(this.position);
         this.wrapped.put(src, off, len);
         this.position += len;
@@ -205,71 +237,97 @@ final class MappedByteBufferAdapter extends MappedByteBuffer implements DirectBu
     }
 
     public ByteBuffer put(int index, byte b) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.put(index, b);
         return this;
     }
 
     public ByteBuffer putChar(char value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putChar(value);
         this.position += CHAR_SIZE;
         return this;
     }
 
     public ByteBuffer putChar(int index, char value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putChar(index, value);
         return this;
     }
 
     public ByteBuffer putDouble(double value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putDouble(value);
         this.position += DOUBLE_SIZE;
         return this;
     }
 
     public ByteBuffer putDouble(int index, double value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putDouble(index, value);
         return this;
     }
 
     public ByteBuffer putFloat(float value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putFloat(value);
         this.position += FLOAT_SIZE;
         return this;
     }
 
     public ByteBuffer putFloat(int index, float value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putFloat(index, value);
         return this;
     }
 
     public ByteBuffer putInt(int index, int value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putInt(index, value);
         return this;
     }
 
     public ByteBuffer putInt(int value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putInt(value);
         this.position += INTEGER_SIZE;
         return this;
     }
 
     public ByteBuffer putLong(int index, long value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putLong(index, value);
         return this;
     }
 
     public ByteBuffer putLong(long value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putLong(value);
         this.position += LONG_SIZE;
         return this;
     }
 
     public ByteBuffer putShort(int index, short value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putShort(index, value);
         return this;
     }
 
     public ByteBuffer putShort(short value) {
+        this.wrapped.limit(this.limit);
+        this.wrapped.position(this.position);
         this.wrapped.putShort(value);
         this.position += SHORT_SIZE;
         return this;

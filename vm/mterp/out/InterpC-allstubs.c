@@ -3037,7 +3037,7 @@ GOTO_TARGET(filledNewArray, bool methodCallRange)
     {
         ClassObject* arrayClass;
         ArrayObject* newArray;
-        int* contents;
+        u4* contents;
         char typeCh;
         int i;
         u4 arg5;
@@ -3089,31 +3089,22 @@ GOTO_TARGET(filledNewArray, bool methodCallRange)
             dvmThrowException("Ljava/lang/RuntimeError;",
                 "bad filled array req");
             GOTO_exceptionThrown();
-        } else if (typeCh == 'L' || typeCh == '[') {
-            /* create array of objects or array of arrays */
-            /* TODO: need some work in the verifier before we allow this */
-            LOGE("fnao not implemented\n");
-            dvmThrowException("Ljava/lang/InternalError;",
-                "filled-new-array not implemented for reference types");
-            GOTO_exceptionThrown();
-        } else if (typeCh != 'I') {
+        } else if (typeCh != 'L' && typeCh != '[' && typeCh != 'I') {
             /* TODO: requires multiple "fill in" loops with different widths */
-            LOGE("non-int not implemented\n");
+            LOGE("non-int primitives not implemented\n");
             dvmThrowException("Ljava/lang/InternalError;",
                 "filled-new-array not implemented for anything but 'int'");
             GOTO_exceptionThrown();
         }
 
-        assert(strchr("BCIFZ", typeCh) != NULL);
-        newArray = dvmAllocPrimitiveArray(arrayClass->descriptor[1], vsrc1,
-                    ALLOC_DONT_TRACK);
+        newArray = dvmAllocArrayByClass(arrayClass, vsrc1, ALLOC_DONT_TRACK);
         if (newArray == NULL)
             GOTO_exceptionThrown();
 
         /*
          * Fill in the elements.  It's legal for vsrc1 to be zero.
          */
-        contents = (int*) newArray->contents;
+        contents = (u4*) newArray->contents;
         if (methodCallRange) {
             for (i = 0; i < vsrc1; i++)
                 contents[i] = GET_REGISTER(vdst+i);
@@ -3670,6 +3661,10 @@ GOTO_TARGET(exceptionThrown)
          * exception this won't happen until some other exception gets
          * thrown.  If the code keeps pushing the stack bounds we'll end
          * up aborting the VM.
+         *
+         * Note we want to do this *after* the call to dvmFindCatchBlock,
+         * because that may need extra stack space to resolve exception
+         * classes (e.g. through a class loader).
          */
         if (self->stackOverflowed)
             dvmCleanupStackOverflow(self);

@@ -515,7 +515,7 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
         printf(" v%d", pDecInsn->vA);
         break;
     case kFmt10t:        // op +AA
-    case kFmt20t:        // op +AABBBB
+    case kFmt20t:        // op +AAAA
         {
             s4 targ = (s4) pDecInsn->vA;
             printf(" %04x // %c%04x",
@@ -1073,7 +1073,8 @@ int process(const char* fileName)
         goto bail;
     mapped = true;
 
-    pDexFile = dexFileParse(map.addr, map.length, kDexParseVerifyChecksum);
+    pDexFile = dexFileParse(map.addr, map.length,
+        kDexParseVerifyChecksum | kDexParseContinueOnError);
     if (pDexFile == NULL) {
         fprintf(stderr, "ERROR: DEX parse failed\n");
         goto bail;

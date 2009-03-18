@@ -26,6 +26,7 @@ import junit.framework.TestCase;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.security.Permission;
 /*
  * This class tests the security permissions which are documented in
  * http://java.sun.com/j2se/1.5.0/docs/guide/security/permissions.html#PermsAndMethods
@@ -75,6 +76,10 @@ public class JavaIoRandomAccessFileTest extends TestCase {
                 called = true;
                 this.file = file;
                 super.checkRead(file);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
 
@@ -129,6 +134,10 @@ public class JavaIoRandomAccessFileTest extends TestCase {
                 checkWriteCalled = true;
                 this.checkWriteFile = file;
                 super.checkWrite(file);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
 

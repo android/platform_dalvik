@@ -1057,7 +1057,7 @@ void dexDecodeInstruction(const InstructionFormat* fmts, const u2* insns,
         pDec->vA = (s1) INST_AA(inst);              // sign-extend 8-bit value
         break;
     case kFmt20t:        // op +AAAA
-        pDec->vB = (s2) FETCH(1);                   // sign-extend 16-bit value
+        pDec->vA = (s2) FETCH(1);                   // sign-extend 16-bit value
         break;
     case kFmt21c:        // op vAA, thing@BBBB
     case kFmt22x:        // op vAA, vBBBB
@@ -1232,4 +1232,3 @@ int dexGetInstrOrTableWidthAbs(const InstructionWidth* widths, const u2* insns)
     }
     return width;
 }
-

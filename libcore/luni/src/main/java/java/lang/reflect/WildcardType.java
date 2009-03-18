@@ -23,7 +23,6 @@ package java.lang.reflect;
  * multiple upper bounded wildcard {@code '? extends Closeable & Flushable'} or
  * the lower bounded wildcard {@code '? super OutputStream'}.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface WildcardType extends Type {

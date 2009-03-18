@@ -24,6 +24,7 @@ import dalvik.annotation.TestTargetClass;
 import junit.framework.TestCase;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.zip.ZipFile;
 /*
  * This class tests the security permissions which are documented in
@@ -70,7 +71,8 @@ public class JavaUtilZipZipFile extends TestCase {
             }
         }
         
-        String filename = "foo.zip";
+        File file = File.createTempFile("foo", "zip");
+        String filename = file.getAbsolutePath();
         
         TestSecurityManager s = new TestSecurityManager();
         System.setSecurityManager(s);

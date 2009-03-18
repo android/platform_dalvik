@@ -41,14 +41,6 @@ import junit.framework.TestCase;
 public class KSPasswordProtectionTest extends TestCase {
 
     /**
-     * Constructor for KSPasswordProtectionTest.
-     * @param arg0
-     */
-    public KSPasswordProtectionTest(String arg0) {
-        super(arg0);
-    }
-    
-    /**
      * Test for <code>KeyStore.PasswordProtection(char[] password)</code> constructor
      * and the following methods 
      * <code>getPassword()<code>

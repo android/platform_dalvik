@@ -16,16 +16,14 @@
 
 package org.apache.harmony.prefs.tests.java.util.prefs;
 
-import dalvik.annotation.BrokenTest;
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
 import java.io.FilePermission;
-import java.io.IOException;
 import java.security.Permission;
-import java.util.prefs.AbstractPreferences;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -34,28 +32,15 @@ import junit.framework.TestCase;
 @TestTargetClass(java.util.prefs.Preferences.class)
 public class FilePreferencesImplTest extends TestCase {
 
-    private String prevFactory;
-    private Preferences uroot;
-    private Preferences sroot;
-    
     public FilePreferencesImplTest() {
         super();
     }
     
-    protected void setUp() throws Exception {
-     //   prevFactory = System.getProperty("java.util.prefs.PreferencesFactory");
-    //    System.setProperty("java.util.prefs.PreferencesFactory", "java.util.prefs.FilePreferencesFactoryImpl");
-        
-    //    uroot = (AbstractPreferences) Preferences.userRoot();
-        uroot = Preferences.userRoot();
-        sroot = Preferences.systemRoot();
+    @Override
+    protected void setUp(){
     }
-    
-    protected void tearDown() throws Exception {
-      //  if (prevFactory != null)
-      //      System.setProperty("java.util.prefs.PreferencesFactory", prevFactory);
-        uroot = null;
-        sroot = null;
+    @Override
+    protected void tearDown(){
     }
 
     @TestTargets({
@@ -78,7 +63,8 @@ public class FilePreferencesImplTest extends TestCase {
             args = {}
         )
     })
-    public void testPutGet() throws IOException, BackingStoreException {
+    public void testUserPutGet() throws BackingStoreException {
+        Preferences uroot = Preferences.userRoot().node("test");
         uroot.put("ukey1", "value1");
         assertEquals("value1", uroot.get("ukey1", null));
         String[] names = uroot.keys();
@@ -94,7 +80,30 @@ public class FilePreferencesImplTest extends TestCase {
         uroot.clear();
         names = uroot.keys();
         assertEquals(0, names.length);
+    }
 
+    @TestTargets({
+        @TestTargetNew(
+            level = TestLevel.PARTIAL,
+            notes = "Exceptions checking missed, but method is abstract, probably it is OK",
+            method = "put",
+            args = {java.lang.String.class, java.lang.String.class}
+        ),
+        @TestTargetNew(
+            level = TestLevel.PARTIAL,
+            notes = "Exceptions checking missed, but method is abstract, probably it is OK",
+            method = "get",
+            args = {java.lang.String.class, java.lang.String.class}
+        ),
+        @TestTargetNew(
+            level = TestLevel.PARTIAL,
+            notes = "Exceptions checking missed, but method is abstract, probably it is OK",
+            method = "keys",
+            args = {}
+        )
+    })
+    public void testSystemPutGet() throws BackingStoreException {
+        Preferences sroot = Preferences.systemRoot().node("test");
         sroot.put("skey1", "value1");
         assertEquals("value1", sroot.get("skey1", null));
         sroot.put("\u4e2d key1", "\u4e2d value1");
@@ -107,65 +116,74 @@ public class FilePreferencesImplTest extends TestCase {
         method = "childrenNames",
         args = {}
     )
-    @BrokenTest("Checking of childNames.length is not valid because of " +
-            "it depends on .userPrefs")
-    public void testChildNodes() throws Exception {
-        
+    public void testUserChildNodes() throws Exception {
+        Preferences uroot = Preferences.userRoot().node("test");
+
         Preferences child1 = uroot.node("child1");
         Preferences child2 = uroot.node("\u4e2d child2");
         Preferences grandchild = child1.node("grand");
         assertNotNull(grandchild);
 
         String[] childNames = uroot.childrenNames();
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println("test:" + childNames[i]);
-        }        
-        assertEquals(4, childNames.length);
+        assertContains(childNames, "child1");
+        assertContains(childNames, "\u4e2d child2");
+        assertNotContains(childNames, "grand");
 
         childNames = child1.childrenNames();
-        assertEquals(1, childNames.length);
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println(childNames[i]);
-        }
+        assertContains(childNames, "grand");
 
         childNames = child2.childrenNames();
         assertEquals(0, childNames.length);
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println(childNames[i]);
-        }
 
         child1.removeNode();
         childNames = uroot.childrenNames();
-        assertEquals(3, childNames.length);
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println(childNames[i]);
-        }
-        // child2.removeNode();
-        // childNames = uroot.childrenNames();
-        // assertEquals(0, childNames.length);
+        assertNotContains(childNames, "child1");
+        assertContains(childNames, "\u4e2d child2");
+        assertNotContains(childNames, "grand");
 
-        child1 = sroot.node("child1");
-        child2 = sroot.node("child2");
-        grandchild = child1.node("grand");
+        child2.removeNode();
+        childNames = uroot.childrenNames();
+        assertNotContains(childNames, "child1");
+        assertNotContains(childNames, "\u4e2d child2");
+        assertNotContains(childNames, "grand");
+    }
 
-        childNames = sroot.childrenNames();
+    @TestTargetNew(
+        level = TestLevel.PARTIAL,
+        notes = "Exceptions checking missed, but method is abstract, probably it is OK",
+        method = "childrenNames",
+        args = {}
+    )
+    @AndroidOnly("It seems like the RI can't remove nodes created in the system root.")
+    public void testSystemChildNodes() throws Exception {
+        Preferences sroot = Preferences.systemRoot().node("test");
 
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println(childNames[i]);
-        }
-    //    assertEquals(2, childNames.length);
+        Preferences child1 = sroot.node("child1");
+        Preferences child2 = sroot.node("child2");
+        Preferences grandchild = child1.node("grand");
+
+        String[] childNames = sroot.childrenNames();
+        assertContains(childNames, "child1");
+        assertContains(childNames, "child2");
+        assertNotContains(childNames, "grand");
 
         childNames = child1.childrenNames();
         assertEquals(1, childNames.length);
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println(childNames[i]);
-        }
 
         childNames = child2.childrenNames();
         assertEquals(0, childNames.length);
-        for (int i = 0; i < childNames.length; i++) {
-            System.out.println(childNames[i]);
-        }
+
+        child1.removeNode();
+        childNames = sroot.childrenNames();
+        assertNotContains(childNames, "child1");
+        assertContains(childNames, "child2");
+        assertNotContains(childNames, "grand");
+
+        child2.removeNode();
+        childNames = sroot.childrenNames();
+        assertNotContains(childNames, "child1");
+        assertNotContains(childNames, "child2");
+        assertNotContains(childNames, "grand");
     }
 
     @TestTargets({
@@ -201,6 +219,8 @@ public class FilePreferencesImplTest extends TestCase {
         )
     })
     public void testSecurityException() throws BackingStoreException {
+        Preferences uroot = Preferences.userRoot().node("test");
+
         Preferences child1 = uroot.node("child1");
         MockFileSecurityManager manager = new MockFileSecurityManager();
         manager.install();
@@ -240,6 +260,23 @@ public class FilePreferencesImplTest extends TestCase {
             }
         } finally {
             manager.restoreDefault();
+        }
+    }
+
+    private void assertContains(String[] childNames, String name) {
+        for (String childName : childNames) {
+            if (childName == name) {
+                return;
+            }
+        }
+        fail("No child with name " + name + " was found. It was expected to exist.");
+    }
+
+    private void assertNotContains(String[] childNames, String name) {
+        for (String childName : childNames) {
+            if (childName == name) {
+                fail("Child with name " + name + " was found. This was unexpected.");
+            }
         }
     }
 

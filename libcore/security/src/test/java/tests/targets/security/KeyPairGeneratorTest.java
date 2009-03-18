@@ -27,7 +27,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
-@TestTargetClass(targets.KeyPairGenerators.Internal.class)
 public abstract class KeyPairGeneratorTest extends TestCase {
 
     private final String algorithmName;
@@ -67,6 +66,11 @@ public abstract class KeyPairGeneratorTest extends TestCase {
                 level = TestLevel.ADDITIONAL,
                 method = "generateKeyPair",
                 args = {}
+            ),
+            @TestTargetNew(
+                level=TestLevel.COMPLETE,
+                method="method",
+                args={}
             )
     })
     public void testKeyPairGenerator() {

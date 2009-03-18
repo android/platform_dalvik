@@ -15,7 +15,6 @@
  */
 package tests.java.sql;
 
-import dalvik.annotation.BrokenTest;
 import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -933,12 +932,12 @@ public class DatabaseMetaDataTest extends TestCase {
      * @tests java.sql.DatabaseMetaData#getNumericFunctions()
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.SUFFICIENT,
         notes = "Test fails. Not implemented correctly. SQLException checking test fails",
         method = "getNumericFunctions",
         args = {}
     )
-    @BrokenTest("Not supported feature, Ticket 98. Broken because "+
+    @KnownFailure("Not supported feature, Ticket 98. Broken because "+
             "NUMERIC_FUNCTIONS not complete. When fixed change to @KnownFailure")
     public void test_getNumericFunctions() throws SQLException {
         escapedFunctions(NUMERIC_FUNCTIONS, meta.getNumericFunctions());
@@ -1172,8 +1171,7 @@ public class DatabaseMetaDataTest extends TestCase {
         method = "getStringFunctions",
         args = {}
     )
-    @BrokenTest("not supported, complete STRING_FUNCTIONS"+
-            " to complete test, Ticket 98")
+    @KnownFailure("not supported")
     public void test_getStringFunctions() throws SQLException {
         escapedFunctions(STRING_FUNCTIONS, meta.getStringFunctions());
         
@@ -1201,8 +1199,7 @@ public class DatabaseMetaDataTest extends TestCase {
         method = "getSystemFunctions",
         args = {}
     )
-    @BrokenTest("not supported, complete SYSTEM_FUNCTIONS"+
-            " to complete test, Ticket 98")
+    @KnownFailure("not supported")
     public void test_getSystemFunctions() throws SQLException {
         escapedFunctions(SYSTEM_FUNCTIONS, meta.getSystemFunctions());
         
@@ -1345,8 +1342,7 @@ public class DatabaseMetaDataTest extends TestCase {
         method = "getTimeDateFunctions",
         args = {}
     )
-    @BrokenTest("not supported, complete TIMEDATE_FUNCTIONS"+
-            " to complete test, Ticket 98.")
+    @KnownFailure("not supported")
     public void test_getTimeDateFunctions() throws SQLException {
         
         escapedFunctions(TIMEDATE_FUNCTIONS, meta.getTimeDateFunctions());

@@ -42,13 +42,6 @@ public class JDBCDriverFunctionalTest extends AbstractSqlTest {
     private String connectionURL = "empty";
 
     /**
-     * Creates a new instance of this class.
-     */
-     public JDBCDriverFunctionalTest(String testName) {
-        super(testName);
-    }
-
-    /**
      * Sets up an unit test by loading the SQLite.JDBCDriver, getting two
      * connections and calling the setUp method of the super class.
      * @throws Exception 
@@ -61,7 +54,7 @@ public class JDBCDriverFunctionalTest extends AbstractSqlTest {
      * @throws Exception 
      */
     @Override
-    protected void setUp() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, Exception { // the Exception class needs to be fully
+    public void setUp() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, Exception { // the Exception class needs to be fully
         // qualified since there is an Exception
         // class in the SQLite package.
 
@@ -93,7 +86,7 @@ public class JDBCDriverFunctionalTest extends AbstractSqlTest {
                 }
                 dbFile.deleteOnExit();
             } else {
-                System.err.println("ctsdir does not exist");
+                System.err.println("java.io.tmpdir does not exist");
             }
 
             connectionURL = "jdbc:sqlite:/" + dbFile.getPath();

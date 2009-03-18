@@ -421,10 +421,10 @@ static jbyteArray NativeBN_BN_bn2bin(JNIEnv* env, jclass cls, BIGNUM* a, jbyteAr
 // FIXME: Currently ignoring array passed in to:
     returnJBytes = (*env)->NewByteArray(env, byteCnt);
 // FIXME: is it neccessary to check for returnJBytes != NULL?
-    tmpBytes = (unsigned char *)((*env)->GetPrimitiveArrayCritical(env, returnJBytes, 0));
+    tmpBytes = (unsigned char *)((*env)->GetPrimitiveArrayCritical(env, returnJBytes, NULL));
     if (tmpBytes != NULL) {
         len = BN_bn2bin(a, tmpBytes);
-        (*env)->ReleasePrimitiveArrayCritical(env, returnJBytes, tmpBytes, JNI_ABORT);
+        (*env)->ReleasePrimitiveArrayCritical(env, returnJBytes, tmpBytes, 0);
         return returnJBytes;
     }
     else return NULL;
@@ -443,10 +443,10 @@ static jintArray NativeBN_bn2litEndInts(JNIEnv* env, jclass cls, BIGNUM* a, jint
 // FIXME: Currently ignoring array passed in to:
         returnJInts = (*env)->NewIntArray(env, len);
 // FIXME: is it neccessary to check for returnJBytes != NULL?
-        BN_ULONG* tmpInts = (BN_ULONG*)((*env)->GetPrimitiveArrayCritical(env, returnJInts, 0));
+        BN_ULONG* tmpInts = (BN_ULONG*)((*env)->GetPrimitiveArrayCritical(env, returnJInts, NULL));
         if (tmpInts != NULL) {
             int i = len; do { i--; tmpInts[i] = a->d[i]; } while (i > 0);
-            (*env)->ReleasePrimitiveArrayCritical(env, returnJInts, tmpInts, JNI_ABORT);
+            (*env)->ReleasePrimitiveArrayCritical(env, returnJInts, tmpInts, 0);
             return returnJInts;
         }
         else return NULL;
@@ -468,10 +468,10 @@ static jbyteArray NativeBN_bn2twosComp(JNIEnv* env, jclass cls, BIGNUM* a, jbyte
 // FIXME: Currently ignoring array passed in to:
     returnJBytes = (*env)->NewByteArray(env, byteCnt);
 // FIXME: is it neccessary to check for returnJBytes != NULL?
-    tmpBytes = (unsigned char *)((*env)->GetPrimitiveArrayCritical(env, returnJBytes, 0));
+    tmpBytes = (unsigned char *)((*env)->GetPrimitiveArrayCritical(env, returnJBytes, NULL));
     if (tmpBytes != NULL) {
         len = BN_bn2bin(a, tmpBytes);
-        (*env)->ReleasePrimitiveArrayCritical(env, returnJBytes, tmpBytes, JNI_ABORT);
+        (*env)->ReleasePrimitiveArrayCritical(env, returnJBytes, tmpBytes, 0);
         return returnJBytes;
     }
     else return NULL;

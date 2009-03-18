@@ -17,7 +17,6 @@
 package org.apache.harmony.text.tests.java.text;
 
 import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.BrokenTest;
 import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -470,7 +469,8 @@ public class SimpleDateFormatTest extends junit.framework.TestCase {
     )
     @KnownFailure("SimpleDateFormat.format(Date date, " +
             "StringBuffer toAppendTo, FieldPosition pos) " +
-            "return incorrect week number for \" W\" pattern. ")
+            "return incorrect week number for \" W\" pattern. " + 
+            "Also Android doesn't support formatting of PST, EST, ...")
     public void test_formatLjava_util_DateLjava_lang_StringBufferLjava_text_FieldPosition() {
         // Test for method java.lang.StringBuffer
         // java.text.SimpleDateFormat.format(java.util.Date,
@@ -607,20 +607,6 @@ public class SimpleDateFormatTest extends junit.framework.TestCase {
                 " 0", DateFormat.HOUR0_FIELD);
         test.test(" KK", cal, " 03", DateFormat.HOUR0_FIELD);
         test.test(" KKKK", cal, " 0003", DateFormat.HOUR0_FIELD);
-        
-//        Android doesn't support EST/EDT time zones
-//        format.setTimeZone(TimeZone.getTimeZone("EST"));
-//        test.test(" z", cal, " EDT", DateFormat.TIMEZONE_FIELD);
-//        Calendar temp2 = new GregorianCalendar(1999, Calendar.JANUARY, 12);
-//        test.test(" z", temp2, " EST", DateFormat.TIMEZONE_FIELD);
-//        test.test(" zz", cal, " EDT", DateFormat.TIMEZONE_FIELD);
-//        test.test(" zzz", cal, " EDT", DateFormat.TIMEZONE_FIELD);
-//        test.test(" zzzz", cal, " Eastern Daylight Time",
-//                DateFormat.TIMEZONE_FIELD);
-//        test.test(" zzzz", temp2, " Eastern Standard Time",
-//                DateFormat.TIMEZONE_FIELD);
-//       test.test(" zzzzz", cal, " Eastern Daylight Time",
-//                DateFormat.TIMEZONE_FIELD);
 
         format.setTimeZone(new SimpleTimeZone(60000, "ONE MINUTE"));
         test.test(" z", cal, " GMT+00:01", DateFormat.TIMEZONE_FIELD);
@@ -647,6 +633,19 @@ public class SimpleDateFormatTest extends junit.framework.TestCase {
         } catch (Throwable ex) {
             fail("Expected test to throw NPE, not " + ex.getClass().getName());
         }
+        
+        format.setTimeZone(TimeZone.getTimeZone("EST"));
+        test.test(" z", cal, " EDT", DateFormat.TIMEZONE_FIELD);
+        Calendar temp2 = new GregorianCalendar(1999, Calendar.JANUARY, 12);
+        test.test(" z", temp2, " EST", DateFormat.TIMEZONE_FIELD);
+        test.test(" zz", cal, " EDT", DateFormat.TIMEZONE_FIELD);
+        test.test(" zzz", cal, " EDT", DateFormat.TIMEZONE_FIELD);
+        test.test(" zzzz", cal, " Eastern Daylight Time",
+                DateFormat.TIMEZONE_FIELD);
+        test.test(" zzzz", temp2, " Eastern Standard Time",
+                DateFormat.TIMEZONE_FIELD);
+       test.test(" zzzzz", cal, " Eastern Daylight Time",
+                DateFormat.TIMEZONE_FIELD);
     }
 
     /**
@@ -672,6 +671,7 @@ public class SimpleDateFormatTest extends junit.framework.TestCase {
             args = {java.lang.String.class}
         )
     })
+    @KnownFailure("Android doesn't support formatting of PST, EST, ...")
     public void test_timeZoneFormatting() {
         // tests specific to formatting of timezones
         Date summerDate = new GregorianCalendar(1999, Calendar.JUNE, 2, 15, 3,
@@ -681,33 +681,32 @@ public class SimpleDateFormatTest extends junit.framework.TestCase {
 
         TestFormat test = new TestFormat(
                 "test_formatLjava_util_DateLjava_lang_StringBufferLjava_text_FieldPosition");
-//        Android doesn't support this time zone 
-//        test.verifyFormatTimezone("PST", "PDT, Pacific Daylight Time",
-//                "-0700, -0700", summerDate);
-//        test.verifyFormatTimezone("PST", "PST, Pacific Standard Time",
-//                "-0800, -0800", winterDate);
-
         test.verifyFormatTimezone("GMT-7", "GMT-07:00, GMT-07:00",
                 "-0700, -0700", summerDate);
         test.verifyFormatTimezone("GMT-7", "GMT-07:00, GMT-07:00",
                 "-0700, -0700", winterDate);
 
-        // Pacific/Kiritimati is one of the timezones supported only in mJava
+        // Pacific/Kiritimati is one of the timezones supported only in Java
 //         Android doesn't support this time zone 
 //        test.verifyFormatTimezone("Pacific/Kiritimati", "LINT, Line Is. Time",
 //                "+1400, +1400", summerDate);
 //        test.verifyFormatTimezone("Pacific/Kiritimati", "LINT, Line Is. Time",
 //                "+1400, +1400", winterDate);
 
-//        test.verifyFormatTimezone("EDT", "EDT, Eastern Daylight Time",
-//                "-0400, -0400", summerDate);
-//        test.verifyFormatTimezone("EST", "EST, Eastern Standard Time",
-//                "-0500, -0500", winterDate);
-
         test.verifyFormatTimezone("GMT+14", "GMT+14:00, GMT+14:00",
                 "+1400, +1400", summerDate);
         test.verifyFormatTimezone("GMT+14", "GMT+14:00, GMT+14:00",
                 "+1400, +1400", winterDate);
+
+        test.verifyFormatTimezone("PST", "PDT, Pacific Daylight Time",
+                "-0700, -0700", summerDate);
+        test.verifyFormatTimezone("PST", "PST, Pacific Standard Time",
+                "-0800, -0800", winterDate);
+
+        test.verifyFormatTimezone("EDT", "EDT, Eastern Daylight Time",
+                "-0400, -0400", summerDate);
+        test.verifyFormatTimezone("EST", "EST, Eastern Standard Time",
+                "-0500, -0500", winterDate);
     }
 
     /**

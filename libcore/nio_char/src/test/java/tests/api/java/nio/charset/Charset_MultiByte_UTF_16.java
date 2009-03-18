@@ -29,8 +29,10 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
-// SEE correspondig_Android test class:
-//@TestTargetClass(targets.Charsets.UTF_16.class)
+@TestTargetClass(targets.Charsets.UTF_16.class)
+/** @hide
+ * SEE correspondig_Android test class:
+ */
 
 public class Charset_MultiByte_UTF_16 extends Charset_AbstractTest {
 

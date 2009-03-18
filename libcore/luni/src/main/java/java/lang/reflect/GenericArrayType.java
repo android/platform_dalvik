@@ -21,7 +21,6 @@ package java.lang.reflect;
  * This interface represents an array type with a component type that is either
  * a parameterized type or a type variable.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public interface GenericArrayType extends Type {

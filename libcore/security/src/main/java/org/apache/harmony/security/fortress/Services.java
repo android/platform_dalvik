@@ -44,7 +44,11 @@ public class Services {
 
     // The HashMap that contains information about preferred implementations for
     // all serviceName.algName in the registered providers
-    private static final Map<String, Provider.Service> services = new HashMap<String, Provider.Service>(512);
+    // BEGIN android-changed
+    // set the initial size to 600 so we don't grow to 1024 by default because
+    // initialization adds a few entries more than the growth threshold.
+    private static final Map<String, Provider.Service> services = new HashMap<String, Provider.Service>(600);
+    // END android-changed
 
     // Need refresh flag
     private static boolean needRefresh; // = false;

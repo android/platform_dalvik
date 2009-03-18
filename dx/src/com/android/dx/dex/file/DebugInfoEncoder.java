@@ -55,8 +55,12 @@ import static com.android.dx.dex.file.DebugInfoConstants.*;
 public final class DebugInfoEncoder {
     private static final boolean DEBUG = false;
 
-    private final PositionList positionlist;
-    private final LocalList locallist;
+    /** null-ok; positions (line numbers) to encode */
+    private final PositionList positions;
+
+    /** null-ok; local variables to encode */
+    private final LocalList locals;
+
     private final ByteArrayAnnotatedOutput output;
     private final DexFile file;
     private final int codeSize;
@@ -92,8 +96,8 @@ public final class DebugInfoEncoder {
     /**
      * Creates an instance.
      *
-     * @param pl null-ok
-     * @param ll null-ok
+     * @param pl null-ok; positions (line numbers) to encode
+     * @param ll null-ok; local variables to encode
      * @param file null-ok; may only be <code>null</code> if simply using
      * this class to do a debug print
      * @param codeSize
@@ -104,9 +108,8 @@ public final class DebugInfoEncoder {
     public DebugInfoEncoder(PositionList pl, LocalList ll,
             DexFile file, int codeSize, int regSize,
             boolean isStatic, CstMethodRef ref) {
-
-        this.positionlist = pl;
-        this.locallist = ll;
+        this.positions = pl;
+        this.locals = ll;
         this.file = file;
         output = new ByteArrayAnnotatedOutput();
         this.desc = ref.getPrototype();
@@ -190,18 +193,11 @@ public final class DebugInfoEncoder {
     
     private byte[] convert0() throws IOException {
         ArrayList<PositionList.Entry> sortedPositions = buildSortedPositions();
-        ArrayList<LocalList.Entry> sortedLocalsStart = buildLocalsStart();
-
-        // Parameter locals are removed from sortedLocalsStart here.
-        ArrayList<LocalList.Entry> methodArgs
-                = extractMethodArguments(sortedLocalsStart);
-
-        ArrayList<LocalList.Entry> sortedLocalsEnd
-                = buildLocalsEnd(sortedLocalsStart);
+        ArrayList<LocalList.Entry> methodArgs = extractMethodArguments();
 
         emitHeader(sortedPositions, methodArgs);
 
-        // TODO: Make this mark the actual prologue end.
+        // TODO: Make this mark be the actual prologue end.
         output.writeByte(DBG_SET_PROLOGUE_END);
 
         if (annotateTo != null || debugPrint != null) {
@@ -209,56 +205,37 @@ public final class DebugInfoEncoder {
         }
 
         int szp = sortedPositions.size();
-        int szl = sortedLocalsStart.size();
+        int szl = locals.size();
 
         // Current index in sortedPositions
         int curp = 0;
-        // Current index in sortedLocalsStart
-        int curls = 0;
-        // Current index in sortedLocalsEnd
-        int curle = 0;
+        // Current index in locals
+        int curl = 0;
 
         for (;;) {
             /*
              * Emit any information for the current address.
              */
 
-            curle = emitLocalEndsAtAddress(curle, sortedLocalsEnd, curls,
-                    sortedLocalsStart);
-
-            /*
-             * Our locals-sorted-by-range-end has reached the end
-             * of the code block. Ignore everything else.
-             */
-            if (address == codeSize) {
-                curle = szl;
-            }
-
-            curls = emitLocalStartsAtAddress(curls, sortedLocalsStart);
-
+            curl = emitLocalsAtAddress(curl);
             curp = emitPositionsAtAddress(curp, sortedPositions);
 
             /*
              * Figure out what the next important address is.
              */
 
-            int nextAddrLS = Integer.MAX_VALUE;
-            int nextAddrLE = Integer.MAX_VALUE;
-            int nextAddrP = Integer.MAX_VALUE;
+            int nextAddrL = Integer.MAX_VALUE; // local variable
+            int nextAddrP = Integer.MAX_VALUE; // position (line number)
 
-            if (curls < szl) {
-                nextAddrLS = sortedLocalsStart.get(curls).getStart();
-            }
-
-            if (curle < szl) {
-                nextAddrLE = sortedLocalsEnd.get(curle).getEnd();
+            if (curl < szl) {
+                nextAddrL = locals.get(curl).getAddress();
             }
 
             if (curp < szp) {
                 nextAddrP = sortedPositions.get(curp).getAddress();
             }
 
-            int next = Math.min(nextAddrP, Math.min(nextAddrLS, nextAddrLE));
+            int next = Math.min(nextAddrP, nextAddrL);
 
             // No next important address == done.
             if (next == Integer.MAX_VALUE) {
@@ -270,7 +247,7 @@ public final class DebugInfoEncoder {
              * block, stop here. Those are implied anyway.
              */
             if (next == codeSize
-                    && nextAddrLS == Integer.MAX_VALUE
+                    && nextAddrL == Integer.MAX_VALUE
                     && nextAddrP == Integer.MAX_VALUE) {
                 break;                
             }
@@ -285,99 +262,30 @@ public final class DebugInfoEncoder {
 
         emitEndSequence();
 
-        byte[] result = output.toByteArray();
-        
-        if (DEBUG) {
-            int origSize = 0;
-            int newSize = result.length;
-
-            if (positionlist != null) {
-                origSize +=  (positionlist.size() * 6);
-            }
-
-            if (locallist != null) {
-                origSize += (4 * 5 * locallist.size());
-            }
-
-            System.err.printf(
-                    "Lines+Locals table was %d bytes is now %d bytes\n",
-                    origSize, newSize);
-        }
-        
-        return result;
+        return output.toByteArray();
     }
 
     /**
-     * Emits all local ends that occur at the current <code>address</code>
+     * Emits all local variable activity that occurs at the current
+     * {@link #address} starting at the given index into {@code
+     * locals} and including all subsequent activity at the same
+     * address.
      *
-     * @param curle Current index in sortedLocalsEnd
-     * @param sortedLocalsEnd Locals, sorted by ascending end address
-     * @param curls Current index in sortedLocalsStart
-     * @param sortedLocalsStart Locals, sorted by ascending start address
-     * @return new value for <code>curle</code>
+     * @param curl Current index in locals
+     * @return new value for <code>curl</code>
      * @throws IOException
      */
-    private int emitLocalEndsAtAddress(int curle,
-            ArrayList<LocalList.Entry> sortedLocalsEnd, int curls,
-            ArrayList<LocalList.Entry> sortedLocalsStart)
+    private int emitLocalsAtAddress(int curl)
             throws IOException {
+        int sz = locals.size();
 
-        int szl = sortedLocalsEnd.size();
+        // TODO: Don't emit ends implied by starts.
 
-        // Ignore "local ends" at end of code.
-        while (curle < szl
-                && sortedLocalsEnd.get(curle).getEnd() == address
-                && address != codeSize) {
-
-            boolean skipLocalEnd = false;
-
-            /*
-             * Check to see if there's a range-start that appears at
-             * the same address for the same register. If so, the
-             * end-range is implicit so skip it.
-             */
-            for (int j = curls; j < szl
-                    && sortedLocalsStart.get(j).getStart() == address
-                    ; j++) {
-
-                if (sortedLocalsStart.get(j).getRegister()
-                        == sortedLocalsEnd.get(curle).getRegister()) {
-                    skipLocalEnd = true;
-
-                    if (DEBUG) {
-                        System.err.printf("skip local end v%d\n",
-                                sortedLocalsEnd.get(curle).getRegister());
-                    }
-                    curle++;
-                    break;
-                }
-            }
-
-            if (!skipLocalEnd) {
-                emitLocalEnd(sortedLocalsEnd.get(curle++));
-            }
-        }
-        return curle;
-    }
-
-    /**
-     * Emits all local starts that occur at the current <code>address</code>
-     *
-     * @param curls Current index in sortedLocalsStart
-     * @param sortedLocalsStart Locals, sorted by ascending start address
-     * @return new value for <code>curls</code>
-     * @throws IOException
-     */
-    private int emitLocalStartsAtAddress(int curls,
-            ArrayList<LocalList.Entry> sortedLocalsStart)
-            throws IOException {
-
-        int szl = sortedLocalsStart.size();
-
-        while (curls < szl
-                && sortedLocalsStart.get(curls).getStart() == address) {
-            LocalList.Entry lle = sortedLocalsStart.get(curls++);
-            LocalList.Entry prevlle = lastEntryForReg[lle.getRegister()];
+        while ((curl < sz)
+                && (locals.get(curl).getAddress() == address)) {
+            LocalList.Entry lle = locals.get(curl++);
+            int reg = lle.getRegister();
+            LocalList.Entry prevlle = lastEntryForReg[reg];
 
             if (lle == prevlle) {
                 /*
@@ -386,23 +294,47 @@ public final class DebugInfoEncoder {
                  * lastEntryForReg array.
                  */
                 continue;
-            } else if (prevlle != null && lle.matches(prevlle)) {
-                if (prevlle.getEnd() == lle.getStart()) {
+            } 
+
+            // At this point we have a new entry one way or another.
+            lastEntryForReg[reg] = lle;
+
+            if (lle.isStart()) {
+                if ((prevlle != null) && lle.matches(prevlle)) {
                     /*
-                     * An adjacent range with the same register.
-                     * The previous emitLocalEndsAtAddress() call skipped
-                     * this local end, so we'll skip this local start as well.
+                     * The previous local in this register has the same
+                     * name and type as the one being introduced now, so
+                     * use the more efficient "restart" form.
                      */
-                    continue;
-                } else {
+                    if (prevlle.isStart()) {
+                        /*
+                         * We should never be handed a start when a
+                         * a matching local is already active.
+                         */
+                        throw new RuntimeException("shouldn't happen");
+                    }
                     emitLocalRestart(lle);
+                } else {
+                    emitLocalStart(lle);
                 }
             } else {
-                lastEntryForReg[lle.getRegister()] = lle;
-                emitLocalStart(lle);
+                /*
+                 * Only emit a local end if it is *not* due to a direct
+                 * replacement. Direct replacements imply an end of the
+                 * previous local in the same register.
+                 * 
+                 * TODO: Make sure the runtime can deal with implied
+                 * local ends from category-2 interactions, and when so,
+                 * also stop emitting local ends for those cases.
+                 */
+                if (lle.getDisposition()
+                        != LocalList.Disposition.END_REPLACED) {
+                    emitLocalEnd(lle);
+                }
             }
         }
-        return curls;
+
+        return curl;
     }
 
     /**
@@ -533,7 +465,7 @@ public final class DebugInfoEncoder {
          * a LOCAL_RESTART_EXTENDED
          */
 
-        for (LocalList.Entry arg: lastEntryForReg) {
+        for (LocalList.Entry arg : lastEntryForReg) {
             if (arg == null) {
                 continue;
             }
@@ -552,11 +484,11 @@ public final class DebugInfoEncoder {
      * @return A sorted positions list
      */
     private ArrayList<PositionList.Entry> buildSortedPositions() {
-        int sz = (positionlist == null) ? 0 : positionlist.size();
+        int sz = (positions == null) ? 0 : positions.size();
         ArrayList<PositionList.Entry> result = new ArrayList(sz);
 
         for (int i = 0; i < sz; i++) {
-            result.add(positionlist.get(i));
+            result.add(positions.get(i));
         }
 
         // Sort ascending by address.
@@ -570,58 +502,6 @@ public final class DebugInfoEncoder {
             }
         });
         return result;
-    }
-
-    /**
-     * Builds a list of locals entries sorted by ascending start address.
-     *
-     * @return A sorted locals list list
-     */
-    private ArrayList<LocalList.Entry> buildLocalsStart() {
-        int sz = (locallist == null) ? 0 : locallist.size();
-        ArrayList<LocalList.Entry> result = new ArrayList(sz);
-
-        // Add all the entries
-        for (int i = 0; i < sz; i++) {
-            LocalList.Entry e = locallist.get(i);
-            result.add(locallist.get(i));
-        }
-
-        // Sort ascending by start address.
-        Collections.sort (result, new Comparator<LocalList.Entry>() {
-            public int compare (LocalList.Entry a, LocalList.Entry b) {
-                return a.getStart() - b.getStart();
-            }
-
-            public boolean equals (Object obj) {
-               return obj == this;
-            }
-        });
-        return result;
-    }
-
-    /**
-     * Builds a list of locals entries sorted by ascending end address.
-     * 
-     * @param list locals list in any order
-     * @return a sorted locals list
-     */
-    private ArrayList<LocalList.Entry> buildLocalsEnd(
-            ArrayList<LocalList.Entry> list) {
-
-        ArrayList<LocalList.Entry> sortedLocalsEnd  = new ArrayList(list);
-
-        // Sort ascending by end address.
-        Collections.sort (sortedLocalsEnd, new Comparator<LocalList.Entry>() {
-            public int compare (LocalList.Entry a, LocalList.Entry b) {
-                return a.getEnd() - b.getEnd();
-            }
-
-            public boolean equals (Object obj) {
-               return obj == this;
-            }
-        });
-        return sortedLocalsEnd;
     }
 
     /**
@@ -641,24 +521,18 @@ public final class DebugInfoEncoder {
      * from the input list and sorted by ascending register in the
      * returned list.
      *
-     * @param sortedLocals locals list, sorted by ascending start address,
-     * to process; left unmodified
      * @return list of non-<code>this</code> method argument locals,
      * sorted by ascending register
      */
-    private ArrayList<LocalList.Entry> extractMethodArguments (
-            ArrayList<LocalList.Entry> sortedLocals) {
-
+    private ArrayList<LocalList.Entry> extractMethodArguments() {
         ArrayList<LocalList.Entry> result
                 = new ArrayList(desc.getParameterTypes().size());
-
         int argBase = getParamBase();
-
         BitSet seen = new BitSet(regSize - argBase);
+        int sz = locals.size();
 
-        int sz = sortedLocals.size();
         for (int i = 0; i < sz; i++) {
-            LocalList.Entry e = sortedLocals.get(i);
+            LocalList.Entry e = locals.get(i);
             int reg = e.getRegister();
 
             if (reg < argBase) {
@@ -675,12 +549,12 @@ public final class DebugInfoEncoder {
         }
 
         // Sort by ascending register.
-        Collections.sort (result, new Comparator<LocalList.Entry>() {
-            public int compare (LocalList.Entry a, LocalList.Entry b) {
+        Collections.sort(result, new Comparator<LocalList.Entry>() {
+            public int compare(LocalList.Entry a, LocalList.Entry b) {
                 return a.getRegister() - b.getRegister();
             }
 
-            public boolean equals (Object obj) {
+            public boolean equals(Object obj) {
                return obj == this;
             }
         });
@@ -817,7 +691,7 @@ public final class DebugInfoEncoder {
 
         output.writeByte(DBG_START_LOCAL);
 
-        emitUnsignedLeb128 (entry.getRegister());
+        emitUnsignedLeb128(entry.getRegister());
         emitStringIndex(entry.getName());
         emitTypeIndex(entry.getType());
 
@@ -846,7 +720,7 @@ public final class DebugInfoEncoder {
 
         output.writeByte(DBG_START_LOCAL_EXTENDED);
 
-        emitUnsignedLeb128 (entry.getRegister());
+        emitUnsignedLeb128(entry.getRegister());
         emitStringIndex(entry.getName());
         emitTypeIndex(entry.getType());
         emitStringIndex(entry.getSignature());
@@ -939,7 +813,7 @@ public final class DebugInfoEncoder {
 
         if (annotateTo != null || debugPrint != null) {
             annotate(1,
-                    String.format ("%04x: line %d", address, line));
+                    String.format("%04x: line %d", address, line));
         }
     }
 
@@ -958,10 +832,10 @@ public final class DebugInfoEncoder {
         if (deltaLines < DBG_LINE_BASE
                 || deltaLines > (DBG_LINE_BASE + DBG_LINE_RANGE -1)) {
 
-            throw new RuntimeException ("Parameter out of range");            
+            throw new RuntimeException("Parameter out of range");            
         }
 
-        return  (deltaLines - DBG_LINE_BASE)
+        return (deltaLines - DBG_LINE_BASE)
             + (DBG_LINE_RANGE * deltaAddress) + DBG_FIRST_SPECIAL;
     }
 

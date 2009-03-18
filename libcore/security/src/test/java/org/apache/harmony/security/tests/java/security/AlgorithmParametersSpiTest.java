@@ -35,14 +35,6 @@ import junit.framework.TestCase;
 @TestTargetClass(AlgorithmParametersSpi.class)
 public class AlgorithmParametersSpiTest extends TestCase {
 
-    /**
-     * Constructor for AlgorithmParametersSpiTest.
-     * 
-     * @param name
-     */
-    public AlgorithmParametersSpiTest(String name) {
-        super(name);
-    }
 
     /**
      * Test for <code>AlgorithmParametersSpi</code> constructor

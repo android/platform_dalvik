@@ -152,7 +152,6 @@ public class BigInteger extends Number implements Comparable<BigInteger>,
     /**
      * The {@code BigInteger} constant 0.
      * 
-     * @since 1.2
      * @since Android 1.0
      */
     public static final BigInteger ZERO = new BigInteger(0, 0);
@@ -160,7 +159,6 @@ public class BigInteger extends Number implements Comparable<BigInteger>,
     /**
      * The {@code BigInteger} constant 1.
      * 
-     * @since 1.2
      * @since Android 1.0
      */
     public static final BigInteger ONE = new BigInteger(1, 1);
@@ -168,7 +166,6 @@ public class BigInteger extends Number implements Comparable<BigInteger>,
     /**
      * The {@code BigInteger} constant 10.
      * 
-     * @since 1.5
      * @since Android 1.0
      */
     public static final BigInteger TEN = new BigInteger(1, 10);

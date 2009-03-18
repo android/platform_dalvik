@@ -13,43 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Preparation and completion of hprof data generation.  The output is
+ * written into two files and then combined.  This is necessary because
+ * we generate some of the data (strings and classes) while we dump the
+ * heap, and some analysis tools require that the class and string data
+ * appear first.
+ */
 #include "Hprof.h"
+
+#include <string.h>
+#include <unistd.h>
 #include <errno.h>
 #include <sys/time.h>
 #include <time.h>
 
-#define TWO_FILES 1
+
+#define kHeadSuffix "-hptemp"
 
 hprof_context_t *
-hprofStartup(const char *outputDir)
+hprofStartup(const char *outputFileName)
 {
     hprof_context_t *ctx;
 
     ctx = malloc(sizeof(*ctx));
     if (ctx != NULL) {
+        int len = strlen(outputFileName);
+        char fileName[len + sizeof(kHeadSuffix)];
         FILE *fp;
-        struct timeval tv;
 
-        /* Construct the output file name.
+        /* Construct the temp file name.  This wasn't handed to us by the
+         * application, so we need to be careful about stomping on it.
          */
-        int len = strlen(outputDir);
-        len += 64;  // hprofShutdown assumes that there's some slack
-        gettimeofday(&tv, NULL);
-        char *fileName = malloc(len);
-        if (fileName == NULL) {
-            LOGE("hprof: can't malloc %d bytes.\n", len);
+        sprintf(fileName, "%s" kHeadSuffix, outputFileName);
+        if (access(fileName, F_OK) == 0) {
+            LOGE("hprof: temp file %s exists, bailing\n", fileName);
             free(ctx);
             return NULL;
         }
-        snprintf(fileName, len, "%s/heap-dump-tm%d-pid%d.hprof",
-                outputDir, (int)tv.tv_sec, getpid());
-        fileName[len-1] = '\0';
 
-        fp = fopen(fileName, "w");
+        fp = fopen(fileName, "w+");
         if (fp == NULL) {
             LOGE("hprof: can't open %s: %s.\n", fileName, strerror(errno));
             free(ctx);
             return NULL;
+        }
+        if (unlink(fileName) != 0) {
+            LOGW("hprof: WARNING: unable to remove temp file %s\n", fileName);
+            /* keep going */
         }
         LOGI("hprof: dumping VM heap to \"%s\".\n", fileName);
 
@@ -59,11 +71,9 @@ hprofStartup(const char *outputDir)
         hprofStartup_StackFrame();
         hprofStartup_Stack();
 #endif
-#if TWO_FILES
-        hprofContextInit(ctx, fileName, fp, false);
-#else
-        hprofContextInit(ctx, fileName, fp, true);
-#endif
+
+        /* pass in "fp" for the temp file, and the name of the output file */
+        hprofContextInit(ctx, strdup(outputFileName), fp, false);
     } else {
         LOGE("hprof: can't allocate context.\n");
     }
@@ -71,31 +81,59 @@ hprofStartup(const char *outputDir)
     return ctx;
 }
 
+/*
+ * Copy the entire contents of "srcFp" to "dstFp".
+ *
+ * Returns "true" on success.
+ */
+static bool
+copyFileToFile(FILE *dstFp, FILE *srcFp)
+{
+    char buf[65536];
+    size_t dataRead, dataWritten;
+
+    while (true) {
+        dataRead = fread(buf, 1, sizeof(buf), srcFp);
+        if (dataRead > 0) {
+            dataWritten = fwrite(buf, 1, dataRead, dstFp);
+            if (dataWritten != dataRead) {
+                LOGE("hprof: failed writing data (%d of %d): %s\n",
+                    dataWritten, dataRead, strerror(errno));
+                return false;
+            }
+        } else {
+            if (feof(srcFp))
+                return true;
+            LOGE("hprof: failed reading data (res=%d): %s\n",
+                dataRead, strerror(errno));
+            return false;
+        }
+    }
+}
+
 void
 hprofShutdown(hprof_context_t *ctx)
 {
-#if TWO_FILES
+    FILE *tempFp = ctx->fp;
     FILE *fp;
 
-    /* hprofStartup allocated some slack, so the strcat() should be ok.
-     */
-    char *fileName = strcat(ctx->fileName, "-head");
-
+    /* flush output to the temp file, then prepare the output file */
     hprofFlushCurrentRecord(ctx);
-    fclose(ctx->fp);
     free(ctx->curRec.body);
+    ctx->curRec.body = NULL;
     ctx->curRec.allocLen = 0;
+    ctx->fp = NULL;
 
-    LOGI("hprof: dumping heap strings to \"%s\".\n", fileName);
-    fp = fopen(fileName, "w");
+    LOGI("hprof: dumping heap strings to \"%s\".\n", ctx->fileName);
+    fp = fopen(ctx->fileName, "w");
     if (fp == NULL) {
-        LOGE("can't open %s: %s\n", fileName, strerror(errno));
+        LOGE("can't open %s: %s\n", ctx->fileName, strerror(errno));
+        fclose(tempFp);
         free(ctx->fileName);
         free(ctx);
         return;
     }
     hprofContextInit(ctx, ctx->fileName, fp, true);
-#endif
 
     hprofDumpStrings(ctx);
     hprofDumpClasses(ctx);
@@ -122,7 +160,23 @@ hprofShutdown(hprof_context_t *ctx)
     hprofShutdown_StackFrame();
 #endif
 
+    /*
+     * Append the contents of the temp file to the output file.  The temp
+     * file was removed immediately after being opened, so it will vanish
+     * when we close it.
+     */
+    rewind(tempFp);
+    if (!copyFileToFile(ctx->fp, tempFp)) {
+        LOGW("hprof: file copy failed, hprof data may be incomplete\n");
+        /* finish up anyway */
+    }
+
+    fclose(tempFp);
     fclose(ctx->fp);
     free(ctx->fileName);
+    free(ctx->curRec.body);
     free(ctx);
+
+    /* throw out a log message for the benefit of "runhat" */
+    LOGI("hprof: heap dump completed, temp file removed\n");
 }

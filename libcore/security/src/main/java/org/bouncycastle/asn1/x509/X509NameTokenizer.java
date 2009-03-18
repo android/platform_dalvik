@@ -66,6 +66,17 @@ public class X509NameTokenizer
             {
                 if (escaped || quoted)
                 {
+                    // BEGIN android-added
+                    // copied from a newer version of BouncyCastle
+                    if (c == '#' && buf.charAt(buf.length() - 1) == '=')
+                    {
+                        buf.append('\\');
+                    }
+                    else if (c == '+' && seperator != '+')
+                    {
+                        buf.append('\\');
+                    }
+                    // END android-added
                     buf.append(c);
                     escaped = false;
                 }

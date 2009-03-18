@@ -41,15 +41,6 @@ import java.security.spec.RSAPublicKeySpec;
 public class RSAPublicKeySpecTest extends TestCase {
 
     /**
-     * Constructor for RSAPublicKeySpecTest.
-     * @param name
-     */
-    public RSAPublicKeySpecTest(String name) {
-        super(name);
-    }
-
-
-    /**
      * Test #1 for <code>RSAPublicKeySpec</code> constructor
      * Assertion: Constructs <code>RSAPublicKeySpec</code>
      * object using valid parameters

@@ -29,8 +29,10 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
-// SEE correspondig_Android test class:
-//@TestTargetClass(targets.Charsets.GBK.class)
+@TestTargetClass(targets.Charsets.GBK.class)
+/** @hide
+ * SEE correspondig_Android test class:
+ */
 
 public class Charset_MultiByte_GBK extends Charset_AbstractTest {
 

@@ -23,27 +23,22 @@ public interface Signatures {
     }
 
     @VirtualTestTarget
-    static abstract class  SHA256withRSA extends Internal {
-        protected abstract void method();
-    }
-
-    @VirtualTestTarget
-    static abstract class  NONEwithDSA extends Internal {
-        protected abstract void method();
-    }
-
-    @VirtualTestTarget
-    static abstract class  SHA1withRSA extends Internal {
-        protected abstract void method();
-    }
-
-    @VirtualTestTarget
     static abstract class  SHA384withRSA extends Internal {
         protected abstract void method();
     }
 
     @VirtualTestTarget
-    static abstract class  SHA1withDSA extends Internal {
+    static abstract class  SHA256withRSA extends Internal {
+        protected abstract void method();
+    }
+
+    @VirtualTestTarget
+    static abstract class  SHA224withRSA extends Internal {
+        protected abstract void method();
+    }
+
+    @VirtualTestTarget
+    static abstract class  SHA1withRSA extends Internal {
         protected abstract void method();
     }
 
@@ -54,6 +49,16 @@ public interface Signatures {
 
     @VirtualTestTarget
     static abstract class  MD2withRSA extends Internal {
+        protected abstract void method();
+    }
+
+    @VirtualTestTarget
+    static abstract class  SHA1withDSA extends Internal {
+        protected abstract void method();
+    }
+
+    @VirtualTestTarget
+    static abstract class  NONEwithDSA extends Internal {
         protected abstract void method();
     }
 }

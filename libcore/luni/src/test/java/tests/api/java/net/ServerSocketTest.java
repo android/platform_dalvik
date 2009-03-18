@@ -46,15 +46,7 @@ import java.util.Properties;
 import tests.support.Support_Configuration;
 import tests.support.Support_PortManager;
 
-@TestTargetClass(value = ServerSocket.class, 
-                 untestedMethods = {
-                    @TestTargetNew(
-                        level = TestLevel.NOT_NECESSARY,
-                        notes = "Protected constructor.",
-                        method = "ServerSocket",
-                        args = {SocketImpl.class}
-                    )}
-                ) 
+@TestTargetClass(value = ServerSocket.class) 
 public class ServerSocketTest extends SocketTestCase {
 
     boolean interrupted;

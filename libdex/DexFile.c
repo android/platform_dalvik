@@ -678,7 +678,8 @@ static bool parseAuxData(const u1* data, DexFile* pDexFile)
 }
 
 /*
- * Parse an optimized or unoptimized .dex file sitting in memory.
+ * Parse an optimized or unoptimized .dex file sitting in memory.  This is
+ * called after the byte-ordering and structure alignment has been fixed up.
  *
  * On success, return a newly-allocated DexFile.
  */
@@ -751,17 +752,14 @@ DexFile* dexFileParse(const u1* data, size_t length, int flags)
      * byte-swapping and DEX optimization.
      */
     if (flags & kDexParseVerifyChecksum) {
-        uLong adler = adler32(0L, Z_NULL, 0);
-        const int nonSum = sizeof(pHeader->magic) + sizeof(pHeader->checksum);
-
-        adler = adler32(adler, data + nonSum, length - nonSum);
-
+        u4 adler = dexComputeChecksum(pHeader);
         if (adler != pHeader->checksum) {
-            LOGW("WARNING: bad checksum (%08lx vs %08x)\n",
+            LOGE("ERROR: bad checksum (%08x vs %08x)\n",
                 adler, pHeader->checksum);
-            /* keep going */
+            if (!(flags & kDexParseContinueOnError))
+                goto bail;
         } else {
-            LOGV("+++ adler32 checksum verified\n");
+            LOGV("+++ adler32 checksum (%08x) verified\n", adler);
         }
     }
 
@@ -781,23 +779,25 @@ DexFile* dexFileParse(const u1* data, size_t length, int flags)
         if (memcmp(sha1Digest, pHeader->signature, kSHA1DigestLen) != 0) {
             char tmpBuf1[kSHA1DigestOutputLen];
             char tmpBuf2[kSHA1DigestOutputLen];
-            LOGW("Warning: bad SHA1 digest (%s vs %s)\n",
+            LOGE("ERROR: bad SHA1 digest (%s vs %s)\n",
                 dexSHA1DigestToStr(sha1Digest, tmpBuf1),
                 dexSHA1DigestToStr(pHeader->signature, tmpBuf2));
-            /* for now, keep going */
+            if (!(flags & kDexParseContinueOnError))
+                goto bail;
         } else {
             LOGV("+++ sha1 digest verified\n");
         }
     }
 
     if (pHeader->fileSize != length) {
-        LOGW("Warning: embedded file size (%d) != expected (%d)\n",
+        LOGE("ERROR: stored file size (%d) != expected (%d)\n",
             (int) pHeader->fileSize, (int) length);
-        /* keep going, maybe it'll be okay */
+        if (!(flags & kDexParseContinueOnError))
+            goto bail;
     }
 
     if (pHeader->classDefsSize == 0) {
-        LOGW("DEX file has no classes in it, failing\n");
+        LOGE("ERROR: DEX file has no classes in it, failing\n");
         goto bail;
     }
 
@@ -865,6 +865,20 @@ const DexClassDef* dexFindClass(const DexFile* pDexFile,
 
         idx = (idx + 1) & mask;
     }
+}
+
+
+/*
+ * Compute the DEX file checksum for a memory-mapped DEX file.
+ */
+u4 dexComputeChecksum(const DexHeader* pHeader)
+{
+    const u1* start = (const u1*) pHeader;
+
+    uLong adler = adler32(0L, Z_NULL, 0);
+    const int nonSum = sizeof(pHeader->magic) + sizeof(pHeader->checksum);
+
+    return (u4) adler32(adler, start + nonSum, pHeader->fileSize - nonSum);
 }
 
 
@@ -1115,8 +1129,14 @@ void dexDecodeDebugInfo(
                     goto invalid_stream;
                 }
 
-                localInReg[reg].startAddress = address;
-                localInReg[reg].live = true;
+                /*
+                 * If the register is live, the "restart" is superfluous,
+                 * and we don't want to mess with the existing start address.
+                 */
+                if (!localInReg[reg].live) {
+                    localInReg[reg].startAddress = address;
+                    localInReg[reg].live = true;
+                }
                 break;
 
             case DBG_SET_PROLOGUE_END:

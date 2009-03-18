@@ -16,6 +16,7 @@
 
 package tests.java.sql;
 
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -144,7 +145,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        from the table
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects all records from the table",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -193,7 +194,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        from the table using parametric query
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects all records from the table using parametric query",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -261,7 +262,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        table using subselect
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from the table using subselect",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -296,7 +297,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        from a few tables
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a few tables",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -340,7 +341,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        from a table using union
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using union",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -374,7 +375,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        records from a table using left join
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using left join",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -411,7 +412,14 @@ public class SelectFunctionalityTest extends TestCase {
      *        
      * TODO RIGHT and FULL OUTER JOINs are not supported       
      */
-/*    public void test_SelectRightOuterJoin() throws SQLException {
+    @TestTargetNew(
+            level = TestLevel.PARTIAL_COMPLETE,
+            notes = "tests right outer joins. RIGHT and FULL OUTER JOINs are not supported",
+            method = "executeQuery",
+            args = {java.lang.String.class}
+        )
+    @KnownFailure("not supported")
+    public void test_SelectRightOuterJoin() throws SQLException {
         String sql = "SELECT distinct s.snum as ssnum, c.snum as ccnum FROM "
                 + DatabaseCreator.CUSTOMERS_TABLE + " c right outer join "
                 + DatabaseCreator.SALESPEOPLE_TABLE + " s on s.snum=c.snum";
@@ -437,13 +445,13 @@ public class SelectFunctionalityTest extends TestCase {
                 value.isEmpty());
         result.close();
     }
-*/
+
     /**
      * @tests SelectFunctionalityTest#test_SelectGroupBy(). Selects records from
      *        a table using group by
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using group by",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -476,7 +484,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        a table using order by
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using order by",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -515,7 +523,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        from a table using distinct
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using distinct",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -545,7 +553,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        records from a table using agregate functions
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using agregate functions",
         method = "executeQuery",
         args = {java.lang.String.class}
@@ -570,11 +578,21 @@ public class SelectFunctionalityTest extends TestCase {
     }
 
     private void func(String name, String query, int expected) {
+        int res = 0;
+        double resDouble = 0.0;
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
-                assertEquals("wrong value of " + name + " field", expected,
-                        result.getInt(name));
+                res = result.getInt(name);
+                if (res != 0 ) {
+                assertEquals(expected,res);
+                break;
+                }
+                // for Double: getInt not supported yet
+                resDouble  = Double.parseDouble(result.getString(name));
+                res = (int) Math.rint(resDouble);
+                assertEquals(expected,res);
+                
             }
             assertFalse("wrong size of result set", result.next());
             result.close();
@@ -588,7 +606,7 @@ public class SelectFunctionalityTest extends TestCase {
      *        a table using having
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "Functionality test: Selects records from a table using having",
         method = "executeQuery",
         args = {java.lang.String.class}

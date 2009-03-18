@@ -259,6 +259,7 @@ public class PipedOutputStreamTest extends junit.framework.TestCase {
         }
         
         out.close();
+        out = new PipedOutputStream();
         try {
             rt = new Thread(reader = new PReader(out));
             rt.start();
@@ -270,16 +271,6 @@ public class PipedOutputStreamTest extends junit.framework.TestCase {
             fail("Test 5: Unexpected IOException: " + e.getMessage());
         }
 
-/* Test disabled due to incomplete implementation, see ticket #92.        
-        rt.interrupt();
-        
-        try {
-            out.write(testString.getBytes(), 0, 5);
-            fail("Test 6: IOException expected.");
-        } catch (IOException e) {
-            // Expected.
-        }
-*/
         reader.getReader().close();
         try {
             out.write(testString.getBytes(), 0, 5);

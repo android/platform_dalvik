@@ -80,7 +80,7 @@ public class BufferedReader extends Reader {
         Logger.global.info(
                 "Default buffer size used in BufferedReader " +
                 "constructor. It would be " +
-                "better to be explicit if a 8k-char buffer is required.");
+                "better to be explicit if an 8k-char buffer is required.");
         // END android-added
     }
 

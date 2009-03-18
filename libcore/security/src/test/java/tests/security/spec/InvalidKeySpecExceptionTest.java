@@ -39,18 +39,6 @@ import java.security.spec.InvalidKeySpecException;
 @TestTargetClass(InvalidKeySpecException.class)
 public class InvalidKeySpecExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for InvalidKeySpecExceptionTests.
-     * 
-     * @param arg0
-     */
-    public InvalidKeySpecExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

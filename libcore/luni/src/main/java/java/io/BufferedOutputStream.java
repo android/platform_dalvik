@@ -80,7 +80,7 @@ public class BufferedOutputStream extends FilterOutputStream {
         Logger.global.info(
                 "Default buffer size used in BufferedOutputStream " +
                 "constructor. It would be " +
-                "better to be explicit if a 8k buffer is required.");
+                "better to be explicit if an 8k buffer is required.");
         // END android-added
     }
 

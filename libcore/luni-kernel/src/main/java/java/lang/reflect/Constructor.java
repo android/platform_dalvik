@@ -133,7 +133,6 @@ public final class Constructor<T> extends AccessibleObject implements GenericDec
      *
      * @return the string representation of the constructor's declaration
      * 
-     * @since 1.5
      * @since Android 1.0
      */
     public String toGenericString() {
@@ -187,7 +186,6 @@ public final class Constructor<T> extends AccessibleObject implements GenericDec
      *             if any parameter type points to a type that cannot be
      *             instantiated for some reason
      * 
-     * @since 1.5
      * @since Android 1.0
      */
     public Type[] getGenericParameterTypes() {
@@ -209,7 +207,6 @@ public final class Constructor<T> extends AccessibleObject implements GenericDec
      * @throws MalformedParameterizedTypeException
      *             if any exception type points to a type that cannot be
      *             instantiated for some reason
-     * @since 1.5
      * @since Android 1.0
      */
     public Type[] getGenericExceptionTypes() {
@@ -232,7 +229,6 @@ public final class Constructor<T> extends AccessibleObject implements GenericDec
      * 
      * @return an array of arrays of {@code Annotation} instances
      * 
-     * @since 1.5
      * @since Android 1.0
      */
     public Annotation[][] getParameterAnnotations() {
@@ -253,7 +249,6 @@ public final class Constructor<T> extends AccessibleObject implements GenericDec
      * @return {@code true} if a vararg is declare, otherwise
      *         {@code false}
      * 
-     * @since 1.5
      * @since Android 1.0
      */
     public boolean isVarArgs() {

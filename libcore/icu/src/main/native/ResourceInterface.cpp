@@ -157,16 +157,30 @@ static jstring getCurrencyCodeNative(JNIEnv* env, jclass clazz,
         ures_close(currency);
         ures_close(currencyMap);
         ures_close(supplData);
-        return NULL;
+        return env->NewStringUTF("None");
     }
 
-    UResourceBundle *currencyId = ures_getByKey(currencyElem, "id", NULL, &status);
-    if(U_FAILURE(status)) {
+    // check if there is a to date. If there is, the currency isn't used anymore.
+    UResourceBundle *currencyTo = ures_getByKey(currencyElem, "to", NULL, &status);
+    if(!U_FAILURE(status)) {
+        // return and let the ResourceBundle throw an exception
         ures_close(currencyElem);
         ures_close(currency);
         ures_close(currencyMap);
         ures_close(supplData);
         return NULL;
+    }
+    status = U_ZERO_ERROR;
+    ures_close(currencyTo);
+
+    UResourceBundle *currencyId = ures_getByKey(currencyElem, "id", NULL, &status);
+    if(U_FAILURE(status)) {
+        // No id defined for this country
+        ures_close(currencyElem);
+        ures_close(currency);
+        ures_close(currencyMap);
+        ures_close(supplData);
+        return env->NewStringUTF("None");
     }
 
     int length;
@@ -177,7 +191,7 @@ static jstring getCurrencyCodeNative(JNIEnv* env, jclass clazz,
         ures_close(currency);
         ures_close(currencyMap);
         ures_close(supplData);
-        return NULL;
+        return env->NewStringUTF("None");
     }
 
     ures_close(currencyId);
@@ -187,7 +201,7 @@ static jstring getCurrencyCodeNative(JNIEnv* env, jclass clazz,
     ures_close(supplData);
 
     if(length == 0) {
-        return NULL;
+        return env->NewStringUTF("None");
     }
     return env->NewString(id, length);
 }
@@ -1227,7 +1241,11 @@ endOfCalendar:
     counter++;
 
     // integer pattern derived from number pattern
-    decSepOffset = u_strcspn(pattern, (jchar *)".\0");
+    // We need to convert a C string literal to a UChar string for u_strcspn.
+    static const char c_decSep[] = ".";
+    UChar decSep[sizeof(c_decSep)];
+    u_charsToUChars(c_decSep, decSep, sizeof(c_decSep));
+    decSepOffset = u_strcspn(pattern, decSep);
     tmpPattern =  (jchar *) malloc((decSepOffset + 1) * sizeof(jchar));
     u_strncpy(tmpPattern, pattern, decSepOffset);
     integerPattern = env->NewString(tmpPattern, decSepOffset);

@@ -37,18 +37,6 @@ import junit.framework.TestCase;
  */
 public class KeyStoreExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for KeyStoreExceptionTests.
-     * 
-     * @param arg0
-     */
-    public KeyStoreExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

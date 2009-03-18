@@ -40,14 +40,6 @@ import java.util.Arrays;
 @TestTargetClass(PKCS8EncodedKeySpec.class)
 public class PKCS8EncodedKeySpecTest extends TestCase {
 
-    /**
-     * Constructor for PKCS8EncodedKeySpecTest.
-     * @param name
-     */
-    public PKCS8EncodedKeySpecTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

@@ -19,6 +19,7 @@ package tests.api.java.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -233,21 +234,21 @@ public class ByteArrayInputStreamTest extends junit.framework.TestCase {
             is.read(buf1 , -1, 1);
             fail("Test 3: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
         
         try {
             is.read(buf1 , 1, -1);
             fail("Test 4: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
 
         try {
             is.read(buf1, 1, buf1.length);
             fail("Test 5: IndexOutOfBoundsException expected.");
         } catch (IndexOutOfBoundsException e) {
-            // Expected.
+            // Expected
         }
     }
 

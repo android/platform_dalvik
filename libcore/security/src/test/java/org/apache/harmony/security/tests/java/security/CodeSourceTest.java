@@ -83,45 +83,52 @@ public class CodeSourceTest extends TestCase {
     private static URL urlFileDirStar;
 
     private static URL urlRef1, urlRef2;
+    
+    private boolean init = false;
 
-    static {
-        try {
-            String siteName = "www.intel.com";
-            InetAddress addr = InetAddress.getByName(siteName);
-            String siteIP = addr.getHostAddress();
-
-            urlSite = new URL("http://"+siteName+"");
-            urlDir = new URL("http://"+siteName+"/drl_test");
-            urlDirOtherSite = new URL("http://www.any-other-site-which-is-not-siteName.com/drl_test");
-
-            urlDir_port80 = new URL("http://"+siteName+":80/drl_test");
-            urlDir_port81 = new URL("http://"+siteName+":81/drl_test");
-            urlDirWithSlash = new URL(urlDir + "/");
-
-            //urlDirFtp = new URL("ftp://www.intel.com/drl_test");
-            urlDir_FileProtocol = new URL("file://"+siteName+"/drl_test");
-
-            urlDirIP = new URL("http://"+siteIP+"/drl_test");
-
-            urlFile = new URL("http://"+siteName+"/drl_test/empty.jar");
-            urlFileWithAdditionalDirs = new URL(
-                    "http://"+siteName+"/drl_test/what/ever/here/empty.jar");
-
-            urlFileDirMinus = new URL("http://"+siteName+"/drl_test/-");
-            urlFileDirStar = new URL("http://"+siteName+"/drl_test/*");
-            urlFileDirOtherDir = new URL("http://"+siteName+"/_test_drl_/*");
-
-            urlRef1 = new URL("http://"+siteName+"/drl_test/index.html#ref1");
-            urlRef2 = new URL("http://"+siteName+"/drl_test/index.html#ref2");
-        } catch (MalformedURLException ex) {
-            throw new Error(ex);
-        } catch (UnknownHostException ex) {
-            throw new Error(ex);
+    private void init() {
+        if (!init) {
+            try {
+                String siteName = "www.intel.com";
+                InetAddress addr = InetAddress.getByName(siteName);
+                String siteIP = addr.getHostAddress();
+    
+                urlSite = new URL("http://"+siteName+"");
+                urlDir = new URL("http://"+siteName+"/drl_test");
+                urlDirOtherSite = new URL("http://www.any-other-site-which-is-not-siteName.com/drl_test");
+    
+                urlDir_port80 = new URL("http://"+siteName+":80/drl_test");
+                urlDir_port81 = new URL("http://"+siteName+":81/drl_test");
+                urlDirWithSlash = new URL(urlDir + "/");
+    
+                //urlDirFtp = new URL("ftp://www.intel.com/drl_test");
+                urlDir_FileProtocol = new URL("file://"+siteName+"/drl_test");
+    
+                urlDirIP = new URL("http://"+siteIP+"/drl_test");
+    
+                urlFile = new URL("http://"+siteName+"/drl_test/empty.jar");
+                urlFileWithAdditionalDirs = new URL(
+                        "http://"+siteName+"/drl_test/what/ever/here/empty.jar");
+    
+                urlFileDirMinus = new URL("http://"+siteName+"/drl_test/-");
+                urlFileDirStar = new URL("http://"+siteName+"/drl_test/*");
+                urlFileDirOtherDir = new URL("http://"+siteName+"/_test_drl_/*");
+    
+                urlRef1 = new URL("http://"+siteName+"/drl_test/index.html#ref1");
+                urlRef2 = new URL("http://"+siteName+"/drl_test/index.html#ref2");
+            } catch (MalformedURLException ex) {
+                throw new Error(ex);
+            } catch (UnknownHostException ex) {
+                throw new Error(ex);
+            } finally {
+                init = true;
+            }
         }
     }
 
     protected void setUp() throws Exception {
         super.setUp();
+        init();
         chain = TestCertUtils.getCertChain();
     }
 

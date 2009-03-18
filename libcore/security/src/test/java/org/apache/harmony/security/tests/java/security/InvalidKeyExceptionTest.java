@@ -37,18 +37,6 @@ import junit.framework.TestCase;
  */
 public class InvalidKeyExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for InvalidKeyExceptionTests.
-     * 
-     * @param arg0
-     */
-    public InvalidKeyExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

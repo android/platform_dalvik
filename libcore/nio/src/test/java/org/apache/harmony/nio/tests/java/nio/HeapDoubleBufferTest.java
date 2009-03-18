@@ -29,8 +29,6 @@ public class HeapDoubleBufferTest extends DoubleBufferTest {
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
 
     @TestTargetNew(

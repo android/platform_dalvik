@@ -22,6 +22,7 @@
 
 package tests.security.cert;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -172,6 +173,10 @@ public class X509CRLTest extends TestCase {
 
 
     public X509CRLTest() {
+
+    }
+    
+    public void setUp() {
         tbt_crl = new TBTCRL() {
             public byte[] getEncoded() {
                 return new byte[] {1, 2, 3};
@@ -300,6 +305,8 @@ public class X509CRLTest extends TestCase {
         method = "getRevokedCertificate",
         args = {java.security.cert.X509Certificate.class}
     )
+    @AndroidOnly("Test filed on RI: getRevokedCertificate throws " +
+            "RuntimeException.")
     public void testGetRevokedCertificate() {
         try {
             tbt_crl.getRevokedCertificate((X509Certificate) null);

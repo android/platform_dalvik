@@ -260,4 +260,19 @@ public class FileLockTest extends TestCase {
         FileLock fileLock = fileChannel.lock();
         assertTrue(fileLock.toString().length() > 0);
     }
+
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        notes = "Regression test",
+        method = "release",
+        args = {}
+    )
+    public void testFileLock() throws Exception {
+        String fileName = File.createTempFile("test", "tmp").getAbsolutePath();
+        RandomAccessFile raf = new RandomAccessFile(fileName, "rw");   
+        FileLock lock = raf.getChannel().tryLock();
+        raf.write("file lock test".getBytes()); 
+        lock.release();   
+        raf.close();
+      }
 }

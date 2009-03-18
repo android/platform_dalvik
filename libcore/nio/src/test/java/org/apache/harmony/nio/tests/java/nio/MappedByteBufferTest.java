@@ -36,8 +36,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-import junit.framework.TestCase;
-
 @TestTargetClass(
     value = MappedByteBuffer.class,
     untestedMethods = {
@@ -48,9 +46,10 @@ import junit.framework.TestCase;
         )
     }
 )
-public class MappedByteBufferTest extends TestCase {
+public class MappedByteBufferTest extends DirectByteBufferTest {
 
     File tmpFile;
+    FileChannel fc;
     
     /**
      * A regression test for failing to correctly set capacity of underlying
@@ -62,28 +61,23 @@ public class MappedByteBufferTest extends TestCase {
         method = "asIntBuffer",
         args = {}
     )
-    public void test_asIntBuffer() throws IOException {
-        // Map file
-        FileInputStream fis = new FileInputStream(tmpFile);
-        FileChannel fc = fis.getChannel();
-        MappedByteBuffer mmb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc
-                .size());
-        int len = mmb.capacity();
-        assertEquals("Got wrong number of bytes", 46, len); //$NON-NLS-1$
+    public void test_asIntBuffer() {
+        int len = buf.capacity();
+        assertEquals("Got wrong number of bytes", BUFFER_LENGTH, len); //$NON-NLS-1$
 
         // Read in our 26 bytes
-        for (int i = 0; i < 26; i++) {
-            byte b = mmb.get();
-            assertEquals("Got wrong byte value", (byte) 'A' + i, b); //$NON-NLS-1$
+        for (int i = 0; i < BUFFER_LENGTH - 20; i++) {
+            byte b = buf.get();
+            assertEquals("Got wrong byte value", (byte) i, b); //$NON-NLS-1$
         }
 
         // Now convert to an IntBuffer to read our ints
-        IntBuffer ibuffer = mmb.asIntBuffer();
-        for (int i = 0; i < 5; i++) {
+        IntBuffer ibuffer = buf.asIntBuffer();
+        for (int i = BUFFER_LENGTH - 20; i < BUFFER_LENGTH; i+=4) {
             int val = ibuffer.get();
-            assertEquals("Got wrong int value", i + 1, val); //$NON-NLS-1$
+            int res = i * 16777216 + (i + 1) * 65536 + (i + 2) * 256 + (i + 3);
+            assertEquals("Got wrong int value", res, val); //$NON-NLS-1$
         }
-        fc.close();
     }
     
     /**
@@ -167,20 +161,33 @@ public class MappedByteBufferTest extends TestCase {
 
     protected void setUp() throws IOException {
         // Create temp file with 26 bytes and 5 ints
-        tmpFile = new File(System.getProperty("ctsdir"), "MappedByteBufferTest");  //$NON-NLS-1$//$NON-NLS-2$
+        tmpFile = File.createTempFile("MappedByteBufferTest", ".tmp");  //$NON-NLS-1$//$NON-NLS-2$
         tmpFile.createNewFile();
         tmpFile.deleteOnExit();
+
+        fillTempFile();
+
+        // Map file
+        RandomAccessFile raf = new RandomAccessFile(tmpFile, "rw");
+        fc = raf.getChannel();
+        capacity = (int) fc.size();
+        buf = fc.map(FileChannel.MapMode.READ_WRITE, 0, capacity);
+        baseBuf = buf;
+    }
+    
+    protected void tearDown() throws IOException {
+        fc.close();
+    }
+
+    private void fillTempFile() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(tmpFile);
         FileChannel fileChannel = fileOutputStream.getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(26 + 20);
-        for (int i = 0; i < 26; i++) {
-            byteBuffer.put((byte) ('A' + i));
-        }
-        for (int i = 0; i < 5; i++) {
-            byteBuffer.putInt(i + 1);
-        }
-        byteBuffer.rewind();
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(BUFFER_LENGTH);
+
+        loadTestData1(byteBuffer);
+        byteBuffer.clear();
         fileChannel.write(byteBuffer);
+
         fileChannel.close();
         fileOutputStream.close();
     }

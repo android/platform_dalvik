@@ -14,6 +14,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+// BEGIN andorid-note
+// This class was copied from a newer version of harmony
+// END andorid-note
 
 package java.net;
 
@@ -140,7 +143,7 @@ public final class SocketPermission extends Permission implements Serializable {
         setActions(action);
         actions = toCanonicalActionString(action);
         // Use host since we are only checking for port presence
-        parsePort(host);
+        parsePort(host, hostName);
     }
 
     /**
@@ -238,6 +241,7 @@ public final class SocketPermission extends Permission implements Serializable {
             } else if (action.equals(actionNames[SP_ACCEPT])) {
                 actionsMask |= SP_ACCEPT;
             } else if (action.equals(actionNames[SP_RESOLVE])) {
+                // do nothing
             } else {
                 throw new IllegalArgumentException(Msg.getString("K0048", //$NON-NLS-1$
                         action));
@@ -297,70 +301,61 @@ public final class SocketPermission extends Permission implements Serializable {
     public PermissionCollection newPermissionCollection() {
         return new SocketPermissionCollection();
     }
-
+    
     /**
-     * Parses the port string into the lower and higher bound of the port range.
-     * 
+     * Parse the port, including the minPort, maxPort
+     * @param hostPort the host[:port] one
+     * @param host the host name we just get
+     * @throws IllegalArgumentException If the port is not a positive number or minPort
+     *                                  is not less than or equal maxPort
      */
-    private void parsePort(String hostString) throws IllegalArgumentException {
-        int negidx = -1;
-        int len = -1;
-        int lastIdx = hostString.lastIndexOf(':');
-        int idx = hostString.indexOf(':');
-        int endOfIPv6Addr = hostString.lastIndexOf(']');
-        if ((endOfIPv6Addr == -1) && (idx != lastIdx)) {
-            // there are no square braces, but there are more than one ':' which
-            // implies an IPv6 address with no port, or an illegal argument
-            // check for valid IPv6 address
-            if (Inet6Util.isValidIP6Address(hostString)) {
-                return;
-            }
-            // throw an invalid argument exception
-            throw new IllegalArgumentException(Msg.getString("K004a")); //$NON-NLS-1$
-        }
-        // if there is a colon and it occurs after the ']' then there is a port
-        // to be parsed
-        if ((lastIdx > -1) && (lastIdx > endOfIPv6Addr)) {
-            try {
-                len = hostString.length();
-                // if hostString ends with ":*", such as "localhost:*"
-                // the port range should be 0-65535
-                if (hostString.endsWith(":*")) { //$NON-NLS-1$
-                    portMin = 0;
-                    portMax = 65535;
-                    return;
-                }
-                // look for a '-' after the colon
-                negidx = hostString.indexOf('-', lastIdx);
-                if (negidx == lastIdx + 1) {
-                    portMax = Integer.parseInt(hostString.substring(
-                            lastIdx + 2, len));
-                } else {
-                    // A port range was provided
-                    if (negidx != -1 && (negidx != len - 1)) {
-                        portMin = Integer.parseInt(hostString.substring(
-                                lastIdx + 1, negidx));
-                        portMax = Integer.parseInt(hostString.substring(
-                                negidx + 1, len));
-                    } else {
-                        if (negidx == -1) {
-                            portMin = Integer.parseInt(hostString.substring(
-                                    lastIdx + 1, len));
-                            portMax = portMin;
-                        } else {
-                            portMin = Integer.parseInt(hostString.substring(
-                                    lastIdx + 1, negidx));
-                        }
-                    }
-                }
-                if (portMax < portMin) {
-                    throw new IllegalArgumentException(Msg.getString("K0049")); //$NON-NLS-1$
-                }
+    private void parsePort(String hostPort, String host) throws IllegalArgumentException {
+       String port = hostPort.substring(host.length());
+       String emptyString = ""; //$NON-NLS-1$
 
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(Msg.getString("K004a")); //$NON-NLS-1$
-            }
-        }
+       if (emptyString.equals(port)) {
+           // Not specified
+           portMin = 80;
+           portMax = 80;
+           return;
+       }
+       
+       if (":*".equals(port)) {
+           // The port range should be 0-65535
+           portMin = 0;
+           portMax = 65535;
+           return;
+       }
+       
+       // Omit ':'
+       port = port.substring(1);
+       int negIdx = port.indexOf('-');
+       String strPortMin = emptyString;
+       String strPortMax = emptyString;
+       if (-1 == negIdx) {
+           // No neg mark, only one number
+           strPortMin = port;
+           strPortMax = port;
+       } else {
+           strPortMin = port.substring(0, negIdx);
+           strPortMax = port.substring(negIdx + 1);
+           if (emptyString.equals(strPortMin)) {
+               strPortMin = "0";
+           }
+           if (emptyString.equals(strPortMax)) {
+               strPortMax = "65535";
+           }
+       }
+       try {
+           portMin = Integer.valueOf(strPortMin).intValue();
+           portMax = Integer.valueOf(strPortMax).intValue();
+           
+           if (portMin > portMax) {
+               throw new IllegalArgumentException(Msg.getString("K0049") + " " + port); //$NON-NLS-1$
+           }
+       } catch (NumberFormatException e) {
+           throw new IllegalArgumentException(Msg.getString("K004a") + " " + port); //$NON-NLS-1$
+       }
     }
 
     /**
@@ -400,13 +395,26 @@ public final class SocketPermission extends Permission implements Serializable {
             try {
                 ipString = InetAddress.getHostNameInternal(hostName);
             } catch (UnknownHostException e) {
+                // ignore
             }
             resolved = true;
         }
         return ipString;
     }
 
+    /**
+     * Get the host part from the host[:port] one.
+     * The host should be
+     *      host = (hostname | IPv4address | IPv6reference | IPv6 in full uncompressed form)
+     * The wildcard "*" may be included once in a DNS name host specification. If it is included, 
+     * it must be in the leftmost position
+     * 
+     * @param host
+     * @return
+     * @throws IllegalArgumentException   if the host is invalid.
+     */
     private String getHostString(String host) throws IllegalArgumentException {
+        host = host.trim();
         int idx = -1;
         idx = host.indexOf(':');
         isPartialWild = (host.length() > 0 && host.charAt(0) == '*');
@@ -423,22 +431,46 @@ public final class SocketPermission extends Permission implements Serializable {
         }
 
         int lastIdx = host.lastIndexOf(':');
-        if ((idx > -1) && (idx == lastIdx)) {
-            host = host.substring(0, idx);
-        } else {
-            // likely host is or contains an IPv6 address
-            if (lastIdx != -1) {
-                if (Inet6Util.isValidIP6Address(host)) {
-                    return host.toLowerCase();
-                } else if (Inet6Util.isValidIP6Address(host.substring(0,
-                        lastIdx))) {
-                    host = host.substring(0, lastIdx);
-                } else {
-                    throw new IllegalArgumentException(Msg.getString("K004a")); //$NON-NLS-1$
+        
+        if (idx == lastIdx) {
+            if (-1 != idx) {
+                // only one colon, should be port
+                host = host.substring(0, idx);
+            }
+            return host.toLowerCase();
+        }
+            // maybe ipv6
+        boolean isFirstBracket = (host.charAt(0) == '[');
+        if (!isFirstBracket) {
+            // No bracket, should be in full form
+            int colonNum = 0;
+            for (int i = 0; i < host.length(); ++i) {
+                if (host.charAt(i) == ':') {
+                    colonNum++;
                 }
             }
+            // Get rid of the colon before port
+            if (8 == colonNum) {
+                host = host.substring(0, lastIdx);
+            }
+            if (Inet6Util.isIP6AddressInFullForm(host)) {
+                return host.toLowerCase();
+            }
+            throw new IllegalArgumentException(Msg.getString("K004a") + " "
+                    + host);
         }
-        return host.toLowerCase();
+        // forward bracket found
+        int bbracketIdx = host.indexOf(']');
+        if (-1 == bbracketIdx) {
+            // no back bracket found, wrong
+            throw new IllegalArgumentException(Msg.getString("K004a") + " "
+                    + host);
+        }
+        host = host.substring(0, bbracketIdx + 1);
+        if (Inet6Util.isValidIP6Address(host)) {
+            return host.toLowerCase();
+        }
+        throw new IllegalArgumentException(Msg.getString("K004a") + " " + host);
     }
 
     /**
@@ -474,7 +506,7 @@ public final class SocketPermission extends Permission implements Serializable {
         portMax = HIGHEST_PORT;
         actionsMask = SP_RESOLVE;
         hostName = getHostString(getName());
-        parsePort(getName());
+        parsePort(getName(), hostName);
         setActions(actions);
     }
 }

@@ -8056,16 +8056,18 @@ dvmAsmSisterStart:
 .LOP_FILLED_NEW_ARRAY_continue:
     ldr     r3, [r0, #offClassObject_descriptor] @ r3<- arrayClass->descriptor
     mov     r2, #ALLOC_DONT_TRACK       @ r2<- alloc flags
-    ldrb    r0, [r3, #1]                @ r0<- descriptor[1]
+    ldrb    r3, [r3, #1]                @ r3<- descriptor[1]
     .if     0
     mov     r1, r10                     @ r1<- AA (length)
     .else
     mov     r1, r10, lsr #4             @ r1<- B (length)
     .endif
-    cmp     r0, #'I'                    @ array of ints?
+    cmp     r3, #'I'                    @ array of ints?
+    cmpne   r3, #'L'                    @ array of objects?
+    cmpne   r3, #'['                    @ array of arrays?
     mov     r9, r1                      @ save length in r9
     bne     .LOP_FILLED_NEW_ARRAY_notimpl         @ no, not handled yet
-    bl      dvmAllocPrimitiveArray      @ r0<- call(typeCh, length, flags)
+    bl      dvmAllocArrayByClass        @ r0<- call(arClass, length, flags)
     cmp     r0, #0                      @ null return?
     beq     common_exceptionThrown      @ alloc failed, handle exception
 
@@ -8133,16 +8135,18 @@ dvmAsmSisterStart:
 .LOP_FILLED_NEW_ARRAY_RANGE_continue:
     ldr     r3, [r0, #offClassObject_descriptor] @ r3<- arrayClass->descriptor
     mov     r2, #ALLOC_DONT_TRACK       @ r2<- alloc flags
-    ldrb    r0, [r3, #1]                @ r0<- descriptor[1]
+    ldrb    r3, [r3, #1]                @ r3<- descriptor[1]
     .if     1
     mov     r1, r10                     @ r1<- AA (length)
     .else
     mov     r1, r10, lsr #4             @ r1<- B (length)
     .endif
-    cmp     r0, #'I'                    @ array of ints?
+    cmp     r3, #'I'                    @ array of ints?
+    cmpne   r3, #'L'                    @ array of objects?
+    cmpne   r3, #'['                    @ array of arrays?
     mov     r9, r1                      @ save length in r9
     bne     .LOP_FILLED_NEW_ARRAY_RANGE_notimpl         @ no, not handled yet
-    bl      dvmAllocPrimitiveArray      @ r0<- call(typeCh, length, flags)
+    bl      dvmAllocArrayByClass        @ r0<- call(arClass, length, flags)
     cmp     r0, #0                      @ null return?
     beq     common_exceptionThrown      @ alloc failed, handle exception
 
@@ -9663,21 +9667,22 @@ common_exceptionThrown:
 
     /* call, r0 gets catchRelPc (a code-unit offset) */
     bl      dvmFindCatchBlock           @ call(self, relPc, exc, scan?, &fp)
+
+    /* fix earlier stack overflow if necessary; may trash rFP */
+    ldrb    r1, [r10, #offThread_stackOverflowed]
+    cmp     r1, #0                      @ did we overflow earlier?
+    beq     1f                          @ no, skip ahead
+    mov     rFP, r0                     @ save relPc result in rFP
+    mov     r0, r10                     @ r0<- self
+    bl      dvmCleanupStackOverflow     @ call(self)
+    mov     r0, rFP                     @ restore result
+1:
+
+    /* update frame pointer and check result from dvmFindCatchBlock */
     ldr     rFP, [sp, #4]               @ retrieve the updated rFP
     cmp     r0, #0                      @ is catchRelPc < 0?
     add     sp, sp, #8                  @ restore stack
     bmi     .LnotCaughtLocally
-
-    /* fix stack overflow if necessary; must preserve r0 */
-    ldrb    r1, [r10, #offThread_stackOverflowed]
-    cmp     r1, #0                      @ did we overflow earlier?
-    beq     1f                          @ no, skip ahead
-    mov     r9, r0                      @ r9<- r0 (save it)
-    mov     r0, r10                     @ r0<- self
-    bl      dvmCleanupStackOverflow     @ call(self)
-    mov     r0, r9                      @ r0<- r9 (restore it)
-    ldr     r9, [r10, #offThread_exception] @ r9<- self->exception
-1:
 
     /* adjust locals to match self->curFrame and updated PC */
     SAVEAREA_FROM_FP(r1, rFP)           @ r1<- new save area
@@ -9978,7 +9983,7 @@ strPrintLong:
 .LstrDivideByZero:
     .asciz  "divide by zero"
 .LstrFilledNewArrayNotImpl:
-    .asciz  "filled-new-array only implemented for 'int'"
+    .asciz  "filled-new-array only implemented for objects and 'int'"
 .LstrInternalError:
     .asciz  "Ljava/lang/InternalError;"
 .LstrInstantiationError:

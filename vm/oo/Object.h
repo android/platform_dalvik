@@ -33,6 +33,7 @@ struct LineNumEntry;
 struct StaticField;
 struct InstField;
 struct Field;
+struct RegisterMap;
 typedef struct DataObject DataObject;
 typedef struct ClassObject ClassObject;
 typedef struct StringObject StringObject;
@@ -43,6 +44,7 @@ typedef struct LineNumEntry LineNumEntry;
 typedef struct StaticField StaticField;
 typedef struct InstField InstField;
 typedef struct Field Field;
+typedef struct RegisterMap RegisterMap;
 
 /*
  * Native function pointer type.
@@ -460,6 +462,13 @@ struct Method {
      * insns==NULL to detect JNI bridge vs. internal native.
      */
     DalvikBridgeFunc nativeFunc;
+
+    /*
+     * Register map data, if available.  This will point into the DEX file
+     * if the data was computed during pre-verification, or into the
+     * linear alloc area if not.
+     */
+    const RegisterMap* registerMap;
 
 #ifdef WITH_PROFILER
     bool            inProfile;

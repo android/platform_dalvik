@@ -16,7 +16,6 @@
 
 package org.apache.harmony.nio.tests.java.nio.channels;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -340,7 +339,6 @@ public class SelectorTest extends TestCase {
         method = "select",
         args = {long.class}
     )
-    @KnownFailure("fixed in ToT")
     public void test_selectJ_Empty_Keys() throws IOException {
         // regression test, see HARMONY-3888.
         // make sure select(long) does wait for specified amount of

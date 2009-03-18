@@ -121,7 +121,8 @@ public abstract class PBEParametersGenerator
     public static byte[] PKCS12PasswordToBytes(
         char[]  password)
     {
-        if (password.length > 0)
+        // BEGIN android-changed
+        if (password != null && password.length > 0)
         {
                                        // +1 for extra 2 pad bytes.
             byte[]  bytes = new byte[(password.length + 1) * 2];
@@ -138,5 +139,6 @@ public abstract class PBEParametersGenerator
         {
             return new byte[0];
         }
+        // END android-changed
     }
 }

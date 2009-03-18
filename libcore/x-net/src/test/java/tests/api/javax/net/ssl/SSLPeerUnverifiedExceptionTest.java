@@ -27,18 +27,6 @@ import junit.framework.TestCase;
 @TestTargetClass(SSLPeerUnverifiedException.class) 
 public class SSLPeerUnverifiedExceptionTest extends TestCase {
     
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for SSLPeerUnverifiedExceptionTest.
-     * 
-     * @param arg0
-     */
-    public SSLPeerUnverifiedExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

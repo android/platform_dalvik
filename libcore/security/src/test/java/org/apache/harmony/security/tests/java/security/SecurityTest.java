@@ -22,7 +22,6 @@
 
 package org.apache.harmony.security.tests.java.security;
 
-import dalvik.annotation.BrokenTest;
 import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -30,18 +29,13 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 
 import java.security.InvalidParameterException;
-import java.security.KeyFactory;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.Security;
-import java.security.Signature;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.harmony.security.tests.support.TestKeyPair;
 
 
 import junit.framework.TestCase;
@@ -50,35 +44,6 @@ import junit.framework.TestCase;
  * Tests for <code>Security</code> constructor and methods
  */
 public class SecurityTest extends TestCase {
-
-    @TestTargetNew(
-        level = TestLevel.ADDITIONAL,
-        notes = "Methods from java.security.Security class are not tested",
-        method = "!",
-        args = {}
-    )
-    @BrokenTest("empty test")
-    public final void testMixed() {
-
-        TestKeyPair tkp = null;
-        try {
-            tkp = new TestKeyPair("DSA");
-        } catch (NoSuchAlgorithmException e1) {
-            e1.printStackTrace();
-            return;
-        }
-
-        try {
-            MessageDigest.getInstance("SHA-1");
-            KeyFactory.getInstance("DSA");
-            Signature ss = Signature.getInstance("DSA");
-            ss.initSign(tkp.getPrivate());
-            Signature.getInstance("aaaaaaaaaaaa");
-        } catch (Exception e) {
-            // ignore
-        }
-
-    }
 
     /**
      * @tests java.security.Security#insertProviderAt(Provider, int)

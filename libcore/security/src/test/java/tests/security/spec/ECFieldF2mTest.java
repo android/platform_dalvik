@@ -104,14 +104,6 @@ public class ECFieldF2mTest extends TestCase {
         }
     }
 
-    /**
-     * Constructor for ECFieldF2mTest.
-     * @param name
-     */
-    public ECFieldF2mTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

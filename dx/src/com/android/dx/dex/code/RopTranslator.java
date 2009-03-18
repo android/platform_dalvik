@@ -457,7 +457,8 @@ public final class RopTranslator {
      * @param resultReg null-ok; the real result to use (ignore the insn's)
      * @return non-null; the instruction's complete register list
      */
-    private static RegisterSpecList getRegs(Insn insn, RegisterSpec resultReg) {
+    private static RegisterSpecList getRegs(Insn insn,
+            RegisterSpec resultReg) {
         RegisterSpecList regs = insn.getSources();
 
         if (insn.getOpcode().isCommutative()
@@ -703,7 +704,8 @@ public final class RopTranslator {
 
                 if (hasResult != (realResult != null)) {
                     throw new RuntimeException(
-                            "Insn with result/move-result-pseudo mismatch " + insn);
+                            "Insn with result/move-result-pseudo mismatch " +
+                            insn);
                 }
                 
                 if ((rop.getOpcode() == RegOps.NEW_ARRAY) &&
@@ -854,7 +856,7 @@ public final class RopTranslator {
         }
 
         /**
-         * Adds a {@link LocalIntroduction} to the output if the given
+         * Adds a {@link LocalStart} to the output if the given
          * instruction in fact introduces a local variable.
          * 
          * @param insn non-null; instruction in question
@@ -863,7 +865,7 @@ public final class RopTranslator {
             RegisterSpec spec = locals.getAssignment(insn);
 
             if (spec != null) {
-                addOutput(new LocalIntroduction(insn.getPosition(), spec));
+                addOutput(new LocalStart(insn.getPosition(), spec));
             }
         }
     }    

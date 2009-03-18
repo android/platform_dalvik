@@ -546,6 +546,7 @@ DexFile* dexFileParse(const u1* data, size_t length, int flags);
 enum {
     kDexParseDefault            = 0,
     kDexParseVerifyChecksum     = 1,
+    kDexParseContinueOnError    = (1 << 1),
 };
 
 /*
@@ -555,6 +556,11 @@ enum {
  * Return 0 on success.
  */
 int dexFixByteOrdering(u1* addr, int len);
+
+/*
+ * Compute DEX checksum.
+ */
+u4 dexComputeChecksum(const DexHeader* pHeader);
 
 /*
  * Free a DexFile structure, along with any associated structures.

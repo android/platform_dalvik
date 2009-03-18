@@ -16,24 +16,26 @@
 
 package tests.SQLite;
 
+import SQLite.Database;
 import SQLite.Exception;
+import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 
 import junit.framework.TestCase;
 
-public class ExceptionTest extends TestCase {
+@TestTargetClass(SQLite.Exception.class)
+public class ExceptionTest extends SQLiteTest {
+    
+    private Database db = null;
 
-    public ExceptionTest(String name) {
-        super(name);
-    }
-
-    protected void setUp() throws java.lang.Exception {
+    public void setUp() throws java.lang.Exception {
         super.setUp();
+        db = new Database();
     }
-
-    protected void tearDown() throws java.lang.Exception {
+    
+    public void tearDown() {
         super.tearDown();
     }
     
@@ -41,13 +43,18 @@ public class ExceptionTest extends TestCase {
      * @tests {@link Exception#Exception(String)}
      */
     @TestTargetNew(
-        level = TestLevel.TODO,
+        level = TestLevel.COMPLETE,
         notes = "constructor test",
         method = "Exception",
         args = {java.lang.String.class}
     )
     public void testException() {
-        fail("not yet implemented");
+        try {
+            db.open(dbFile.getName(), 0);
+        } catch (Exception e) {
+            assertNotNull(e);
+            assertNotNull(e.getMessage());
+        }
     }
 
 }

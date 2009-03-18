@@ -512,20 +512,27 @@ public class SignatureTest extends TestCase {
         assertTrue("update() failed", s.runEngineUpdate2);
         
         try {
-            s.update(b, 3, 0);
-        } catch (SignatureException e) {
-            fail("unexpected: " + e);
+            s.update(null, 0, 3);
+            fail("NullPointerException wasn't thrown");
+        } catch (NullPointerException npe) {
         }
         
         try {
-            s.update(b, 2, 4);
+            s.update(b, 3, 0);
             fail("expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // ok
         }
 
         try {
-            s.update(null, 0, 5);
+            s.update(b, 0, b.length + 1);
+            fail("expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // ok
+        }
+        
+        try {
+            s.update(b, -1, b.length);
             fail("expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // ok

@@ -86,15 +86,6 @@ public class CertificateFactory2Test extends TestCase {
         Security.removeProvider(mProv.getName());
     }
 
-    /**
-     * Constructor for CertificateFactory2Test.
-     * 
-     * @param arg0
-     */
-    public CertificateFactory2Test(String arg0) {
-        super(arg0);
-    }
-
     private void checkResult(CertificateFactory certFactory, boolean mode)
             throws CertificateException, CRLException {
         MyCertificateFactorySpi.putMode(mode);

@@ -87,7 +87,7 @@ public final class LocalSnapshot extends ZeroSizeInsn {
             RegisterSpec spec = locals.get(i);
             if (spec != null) {
                 sb.append("\n  ");
-                sb.append(LocalIntroduction.localString(spec));
+                sb.append(LocalStart.localString(spec));
             }
         }
 

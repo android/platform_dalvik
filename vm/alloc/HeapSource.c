@@ -17,6 +17,7 @@
 #include <cutils/mspace.h>
 #include <limits.h>     // for INT_MAX
 #include <sys/mman.h>
+#include <errno.h>
 
 #include "Dalvik.h"
 #include "alloc/Heap.h"
@@ -298,6 +299,7 @@ createMspace(size_t startSize, size_t absoluteMaxSize, size_t id)
      * than the starting size.
      */
     LOGV_HEAP("Creating VM heap of size %u\n", startSize);
+    errno = 0;
     msp = create_contiguous_mspace_with_name(startSize/2,
             absoluteMaxSize, /*locked=*/false, name);
     if (msp != NULL) {
@@ -306,7 +308,11 @@ createMspace(size_t startSize, size_t absoluteMaxSize, size_t id)
          */
         mspace_set_max_allowed_footprint(msp, startSize);
     } else {
-        LOGE_HEAP("Can't create VM heap of size %u\n", startSize/2);
+        /* There's no guarantee that errno has meaning when the call
+         * fails, but it often does.
+         */
+        LOGE_HEAP("Can't create VM heap of size (%u,%u) (errno=%d)\n",
+            startSize/2, absoluteMaxSize, errno);
     }
 
     return msp;

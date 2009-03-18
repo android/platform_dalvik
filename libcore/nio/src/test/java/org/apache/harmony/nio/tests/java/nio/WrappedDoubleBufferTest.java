@@ -24,7 +24,6 @@ import java.nio.DoubleBuffer;
 @TestTargetClass(java.nio.DoubleBuffer.class)
 public class WrappedDoubleBufferTest extends DoubleBufferTest {
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = DoubleBuffer.wrap(new double[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,9 +31,8 @@ public class WrappedDoubleBufferTest extends DoubleBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
-        baseBuf = null;
         buf = null;
+        baseBuf = null;
     }
 
     /**

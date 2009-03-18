@@ -593,11 +593,23 @@ public class PushbackReaderTest extends junit.framework.TestCase {
     public void test_unread_$CII_ArrayIndexOutOfBoundsException() throws IOException {
         //a pushback reader with one character buffer
         pbr = new PushbackReader(new StringReader(pbString));
-        
+
         try {
-            pbr.unread(new char[pbString.length()], -1 , -1);
+            pbr.unread(new char[pbString.length()], -1 , 1);
             fail("should throw ArrayIndexOutOfBoundsException");
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        try {
+            pbr.unread(new char[pbString.length()], 0 , -1);
+            fail("should throw ArrayIndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            // expected
+        }
+        try {
+            pbr.unread(new char[10], 10 , 1);
+            fail("should throw ArrayIndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
             // expected
         }
     }

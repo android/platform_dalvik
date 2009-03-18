@@ -545,6 +545,7 @@ public class TestUtils {
     // Second example
     /**
      * Certificate:
+     * <pre>
     Data:
         Version: 3 (0x2)
         Serial Number: 0 (0x0)
@@ -588,6 +589,7 @@ public class TestUtils {
         99:1c:f5:cb:77:86:36:cd:43:37:99:09:c2:9a:d8:f2:28:05:
         06:0c
 
+     * </pre>
      */
     public static final String rootCert = "-----BEGIN CERTIFICATE-----\n" + 
     "MIIDGzCCAoSgAwIBAgIBADANBgkqhkiG9w0BAQUFADBtMQswCQYDVQQGEwJBTjEQ\n" + 
@@ -631,6 +633,7 @@ public class TestUtils {
     
     /**
      * Certificate:
+     * <pre>
     Data:
         Version: 3 (0x2)
         Serial Number: 1 (0x1)
@@ -673,6 +676,7 @@ public class TestUtils {
         ba:b4:a2:c7:2c:cb:b1:3a:c2:d8:0c:21:31:ee:68:7e:97:ce:
         98:22:2e:c6:cf:f0:1a:11:04:ca:9a:06:de:98:48:85:ac:6c:
         6f:98
+     * </pre>
      */
     public static final String  endCert = 
         "-----BEGIN CERTIFICATE-----\n" + 

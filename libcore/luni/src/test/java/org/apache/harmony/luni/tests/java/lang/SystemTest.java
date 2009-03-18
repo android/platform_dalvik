@@ -17,7 +17,6 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -51,7 +50,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "setIn",
         args = {java.io.InputStream.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")       
     public void test_setInLjava_io_InputStream() {
         InputStream orgIn = System.in;
         InputStream in = new ByteArrayInputStream(new byte[0]);
@@ -90,7 +88,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "setOut",
         args = {java.io.PrintStream.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")       
     public void test_setOutLjava_io_PrintStream() {
         PrintStream orgOut = System.out;
         PrintStream out = new PrintStream(new ByteArrayOutputStream());
@@ -129,7 +126,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "setErr",
         args = {java.io.PrintStream.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")       
     public void test_setErrLjava_io_PrintStream() {
         PrintStream orgErr = System.err;
         PrintStream err = new PrintStream(new ByteArrayOutputStream());
@@ -170,8 +166,6 @@ public class SystemTest extends junit.framework.TestCase {
         args = {java.lang.Object.class, int.class, java.lang.Object.class, 
                 int.class, int.class}
     )
-    @KnownFailure("Doesn't throw IndexOutOfBoundsException for boundary value " +
-            "of src position. Failure in native code, doesn't check overflow.")    
     public void test_arraycopyLjava_lang_ObjectILjava_lang_ObjectII() {
         // Test for method void java.lang.System.arraycopy(java.lang.Object,
         // int, java.lang.Object, int, int)
@@ -684,7 +678,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "inheritedChannel",
         args = {}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")      
     public void test_inheritedChannel() throws IOException {
         Channel iChannel = System.inheritedChannel();
         assertNull("Incorrect value of channel", iChannel);
@@ -747,7 +740,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "runFinalizersOnExit",
         args = {boolean.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")     
     @SuppressWarnings("deprecation")
     public void test_runFinalizersOnExitZ() {
         // Can we call the method at least?
@@ -1001,9 +993,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "getenv",
         args = {}
     )
-    @KnownFailure("getenv() method returns empty map, " +
-            "because getEnvByIndex always returns null. " +
-            "ToT fixed.")    
     public void test_getenv() {
 
         // String[] props = { "PATH", "HOME", "USER"};
@@ -1090,7 +1079,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "load",
         args = {java.lang.String.class}
     )
-    @KnownFailure("UnsatisfiedLinkError is not thrown. ToT fixed.") 
     public void test_load() {
         try {
             new TestLibrary().checkString();
@@ -1142,7 +1130,6 @@ public class SystemTest extends junit.framework.TestCase {
         method = "loadLibrary",
         args = {java.lang.String.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")     
     public void test_loadLibrary() {
 
         try {

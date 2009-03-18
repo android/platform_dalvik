@@ -298,81 +298,28 @@ public class PipedReaderTest extends junit.framework.TestCase {
         method = "read",
         args = {char[].class, int.class, int.class}
     )
-    public void test_read$CII_2() throws IOException{
+    public void test_read$CII_Exception() throws IOException{
         PipedWriter pw = new PipedWriter();
-        PipedReader obj = null;
+        PipedReader obj = new PipedReader(pw);
         try {
-            obj = new PipedReader(pw);
-            obj.read(new char[0], 0, -1);
+            obj.read(new char[10], 0, -1);
             fail("IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
             // Expected.
-           assertEquals(
-                "IndexOutOfBoundsException rather than a subclass expected.",
-                IndexOutOfBoundsException.class, t.getClass());
         }
-    }
-
-    /**
-     * @tests java.io.PipedReader#read(char[], int, int)
-     */
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
-        method = "read",
-        args = {char[].class, int.class, int.class}
-    )
-    public void test_read$CII_3() throws IOException {
-        PipedWriter pw = new PipedWriter();
-        PipedReader obj = null;
         try {
-            obj = new PipedReader(pw);
-            obj.read(new char[0], -1, 0);
+            obj.read(new char[10], -1, 1);
             fail("IndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException t) {
-            fail("IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
             // Expected.
-       }
-    }
-
-    /**
-     * @tests java.io.PipedReader#read(char[], int, int)
-     */
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
-        method = "read",
-        args = {char[].class, int.class, int.class}
-    )
-    public void test_read$CII_4() throws IOException {
-        PipedWriter pw = new PipedWriter();
-        PipedReader obj = null;
+        }
         try {
-            obj = new PipedReader(pw);
             obj.read(new char[10], 2, 9);
             fail("IndexOutOfBoundsException expected.");
-        } catch (ArrayIndexOutOfBoundsException t) {
-            fail("IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
+        } catch (IndexOutOfBoundsException e) {
             // Expected.
         }
-    }
-    
-    /**
-     * @tests java.io.PipedReader#read(char[], int, int)
-     */
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
-        method = "read",
-        args = {char[].class, int.class, int.class}
-    )
-    public void test_read$CII_5() throws IOException{
-        PipedWriter pw = new PipedWriter();
-        PipedReader obj = null;
         try {
-            obj = new PipedReader(pw);
             obj.read(null, 0, 1);
             fail("NullPointerException expected.");
         } catch (NullPointerException e) {
@@ -389,7 +336,7 @@ public class PipedReaderTest extends junit.framework.TestCase {
         method = "read",
         args = {}
     )
-    public void test_read$CII_6() throws Exception {
+    public void test_read$CII_2() throws Exception {
         Thread writerThread;
         PipedWriter pw;
         PWriter2 pwriter;

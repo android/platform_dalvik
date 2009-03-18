@@ -16,7 +16,7 @@
 
 package tests.security.permissions;
 
-import dalvik.annotation.AndroidOnly;
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -71,7 +71,10 @@ public class JavaLangClassLoaderTest extends TestCase {
             @Override
             public void checkCreateClassLoader(){
                 called = true;
-                super.checkCreateClassLoader();
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -102,12 +105,12 @@ public class JavaLangClassLoaderTest extends TestCase {
         ),
         @TestTargetNew(
             level = TestLevel.PARTIAL,
-            notes = "Verifies that ClassLoader.getSystemClassLoader() calls checkPermission on security manager.",
+            notes = "Verifies that ClassLoader.getParent() calls checkPermission on security manager.",
             method = "getParent",
             args = {}
         )
     })
-    @AndroidOnly("test must be executed with a new PathClassLoader")
+    @BrokenTest("RI and Android don't pass this test. Also this test must be executed with a new PathClassLoader")
     public void test_getSystemClassLoader () {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -119,7 +122,6 @@ public class JavaLangClassLoaderTest extends TestCase {
                 if(permission instanceof RuntimePermission && "getClassLoader".equals(permission.getName())){
                     called = true;
                 }
-                super.checkPermission(permission);
             }
         }
         

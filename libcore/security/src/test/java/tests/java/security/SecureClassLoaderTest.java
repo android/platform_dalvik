@@ -22,6 +22,7 @@
 
 package tests.java.security;
 
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -247,6 +248,7 @@ public class SecureClassLoaderTest extends TestCase {
         method = "SecureClassLoader",
         args = {java.lang.ClassLoader.class}
     )
+    @KnownFailure("Android doesn't allow null parent.")
     public void testSecureClassLoaderClassLoader() throws Exception {
         URL[] urls = new URL[] { new URL("http://localhost") };
         URLClassLoader ucl = URLClassLoader.newInstance(urls);
@@ -307,36 +309,36 @@ public class SecureClassLoaderTest extends TestCase {
         ldr.getPerms(cs);
     }
 
-    /**
-     * Tests defineClass(String, byte[], int, int, CodeSource)
-     */
-    @TestTargetNew(
-        level = TestLevel.NOT_FEASIBLE,
-        notes = "ClassFormatError, IndexOutOfBoundsException, SecurityException checking missed",
-        method = "defineClass",
-        args = {java.lang.String.class, byte[].class, int.class, int.class, java.security.CodeSource.class}
-    )
-    public void _testDefineClassStringbyteArrayintintCodeSource() {
-        MyClassLoader ldr = new MyClassLoader();
-        Class klass = ldr.define(null, klassData, 0, klassData.length, null);
-        assertEquals(klass.getName(), klassName);
-    }
-
-    /**
-     * Tests defineClass(String, ByteBuffer, CodeSource)
-     */
-    @TestTargetNew(
-        level = TestLevel.NOT_FEASIBLE,
-        notes = "ClassFormatError, SecurityException checking missed",
-        method = "defineClass",
-        args = {java.lang.String.class, java.nio.ByteBuffer.class, java.security.CodeSource.class}
-    )
-    public void _testDefineClassStringByteBufferCodeSource() {
-        MyClassLoader ldr = new MyClassLoader();
-        ByteBuffer bbuf = ByteBuffer.wrap(klassData);
-        Class klass = ldr.define(null, bbuf, null);
-        assertEquals(klass.getName(), klassName);
-    }
+//    /**
+//     * Tests defineClass(String, byte[], int, int, CodeSource)
+//     */
+//    @TestTargetNew(
+//        level = TestLevel.NOT_FEASIBLE,
+//        notes = "ClassFormatError, IndexOutOfBoundsException, SecurityException checking missed",
+//        method = "defineClass",
+//        args = {java.lang.String.class, byte[].class, int.class, int.class, java.security.CodeSource.class}
+//    )
+//    public void _testDefineClassStringbyteArrayintintCodeSource() {
+//        MyClassLoader ldr = new MyClassLoader();
+//        Class klass = ldr.define(null, klassData, 0, klassData.length, null);
+//        assertEquals(klass.getName(), klassName);
+//    }
+//
+//    /**
+//     * Tests defineClass(String, ByteBuffer, CodeSource)
+//     */
+//    @TestTargetNew(
+//        level = TestLevel.NOT_FEASIBLE,
+//        notes = "ClassFormatError, SecurityException checking missed",
+//        method = "defineClass",
+//        args = {java.lang.String.class, java.nio.ByteBuffer.class, java.security.CodeSource.class}
+//    )
+//    public void _testDefineClassStringByteBufferCodeSource() {
+//        MyClassLoader ldr = new MyClassLoader();
+//        ByteBuffer bbuf = ByteBuffer.wrap(klassData);
+//        Class klass = ldr.define(null, bbuf, null);
+//        assertEquals(klass.getName(), klassName);
+//    }
 
     class MyClassLoader extends SecureClassLoader {
 

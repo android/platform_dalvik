@@ -86,16 +86,6 @@ public class PatternTest extends TestCase {
 
     final static int DEFAULT_FLAGS = 0;
 
-    /**
-     * Constructor for PatternTest.
-     * 
-     * @param name
-     */
-    public PatternTest(String name) {
-        super(name);
-    }
-
-
     @TestTargetNew(
         level = TestLevel.ADDITIONAL,
         notes = "TODO empty test",

@@ -14,6 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * Copyright (C) 2008 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package java.lang;
 
@@ -69,7 +84,7 @@ public abstract class ClassLoader {
      */
     static private class SystemClassLoader {
         public static ClassLoader loader = ClassLoader.createSystemClassLoader();
-    };
+    }
 
     /**
      * The parent ClassLoader.
@@ -192,12 +207,7 @@ public abstract class ClassLoader {
      * @since Android 1.0
      */
     protected ClassLoader() {
-        SecurityManager smgr = System.getSecurityManager();
-        if (smgr != null) {
-            smgr.checkCreateClassLoader();
-        }
-
-        parent = getSystemClassLoader();
+        this(getSystemClassLoader(), false);
     }
 
     /**
@@ -213,15 +223,22 @@ public abstract class ClassLoader {
      * @since Android 1.0
      */
     protected ClassLoader(ClassLoader parentLoader) {
+        this(parentLoader, false);
+    }
+
+    /*
+     * constructor for the BootClassLoader which needs parent to be null.
+     */
+    ClassLoader(ClassLoader parentLoader, boolean nullAllowed) {
         SecurityManager smgr = System.getSecurityManager();
         if (smgr != null) {
             smgr.checkCreateClassLoader();
         }
-
-        // TODO Shouldn't we check for null values here?
-        // if (parent == null) {
-        // throw new NullPointerException();
-        // }
+        
+        if (parentLoader == null && !nullAllowed) {
+            throw new NullPointerException(
+                    "Parent ClassLoader may not be null");
+        }
 
         parent = parentLoader;
     }
@@ -437,9 +454,7 @@ public abstract class ClassLoader {
     public URL getResource(String resName) {
         URL resource = null;
 
-        if (parent != null) {
-            resource = parent.getResource(resName);
-        }
+        resource = parent.getResource(resName);
 
         if (resource == null) {
             resource = findResource(resName);
@@ -464,12 +479,8 @@ public abstract class ClassLoader {
      */
     @SuppressWarnings("unchecked")
     public Enumeration<URL> getResources(String resName) throws IOException {
-        Enumeration first = EmptyEnumeration.getInstance();
 
-        if (parent != null) {
-            first = parent.getResources(resName);
-        }
-
+        Enumeration first = parent.getResources(resName);
         Enumeration second = findResources(resName);
 
         return new TwoEnumerationsInOne(first, second);
@@ -553,9 +564,7 @@ public abstract class ClassLoader {
 
         if (clazz == null) {
             try {
-                if (parent != null) {
-                    clazz = parent.loadClass(className, false);
-                }
+                clazz = parent.loadClass(className, false);
             } catch (ClassNotFoundException e) {
                 // Don't want to see this.
             }
@@ -726,7 +735,9 @@ public abstract class ClassLoader {
     protected Package[] getPackages() {
         synchronized (packages) {
             Collection<Package> col = packages.values();
-            return (Package[])col.toArray();
+            Package[] result = new Package[col.size()];
+            col.toArray(result);
+            return result;
         }
     }
 
@@ -1038,7 +1049,7 @@ class BootClassLoader extends ClassLoader {
     }
 
     public BootClassLoader() {
-        super(null);
+        super(null, true);
     }
 
     @Override
@@ -1099,6 +1110,27 @@ class BootClassLoader extends ClassLoader {
         return null;
     }
 
+    @Override
+    public URL getResource(String resName) {
+        return findResource(resName);
+    }
+
+    @Override
+    protected Class<?> loadClass(String className, boolean resolve)
+           throws ClassNotFoundException {
+        Class<?> clazz = findLoadedClass(className);
+
+        if (clazz == null) {
+            clazz = findClass(className);
+        }
+
+        return clazz;
+    }
+
+    @Override
+    public Enumeration<URL> getResources(String resName) throws IOException {
+        return findResources(resName);
+    }
 }
 
 /**

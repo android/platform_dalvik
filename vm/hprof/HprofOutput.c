@@ -55,7 +55,8 @@
     } while (0)
 
 void
-hprofContextInit(hprof_context_t *ctx, char *fileName, FILE *fp, bool newFile)
+hprofContextInit(hprof_context_t *ctx, char *fileName, FILE *fp,
+    bool writeHeader)
 {
     memset(ctx, 0, sizeof (*ctx));
     ctx->fileName = fileName;
@@ -65,7 +66,7 @@ hprofContextInit(hprof_context_t *ctx, char *fileName, FILE *fp, bool newFile)
     ctx->curRec.body = malloc(ctx->curRec.allocLen);
 //xxx check for/return an error
 
-    if (newFile) {
+    if (writeHeader) {
         char magic[] = HPROF_MAGIC_STRING;
         unsigned char buf[4];
         struct timeval now;

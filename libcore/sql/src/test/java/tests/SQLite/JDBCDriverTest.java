@@ -33,17 +33,9 @@ import java.sql.SQLException;
 @TestTargetClass(JDBCDriver.class)
 public class JDBCDriverTest extends JDBCDriverFunctionalTest {
     
-    public JDBCDriverTest(String testName) {
-        super(testName);
-    }
-
     /**
      * The SQLite db file.
      */
-//    private final File dbFile = new File("sqliteTest.db");
-//    
-//    private final String connectionURL = "jdbc:sqlite:/" + dbFile.getName();
-    
     private JDBCDriver jDriver;
     
     private Driver returnedDriver;

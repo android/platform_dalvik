@@ -39,18 +39,6 @@ import java.security.spec.InvalidParameterSpecException;
 @TestTargetClass(InvalidParameterSpecException.class)
 public class InvalidParameterSpecExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for InvalidParameterSpecExceptionTests.
-     * 
-     * @param arg0
-     */
-    public InvalidParameterSpecExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     static String[] msgs = {
             "",
             "Check new message",

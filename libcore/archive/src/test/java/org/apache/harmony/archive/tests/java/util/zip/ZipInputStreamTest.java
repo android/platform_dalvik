@@ -174,7 +174,8 @@ public class ZipInputStreamTest extends TestCase {
         method = "close",
         args = {}
     )
-    @KnownFailure("The behaviour is different from RI, but not neccessarily wrong.")
+    @KnownFailure("after an exception has been thrown wile reading a "
+            + "call to close also throws an exception.")
     public void test_closeAfterException() throws Exception {
         File resources = Support_Resources.createTempFolder();
         Support_Resources.copyFile(resources, null, "Broken_manifest.jar");
@@ -192,7 +193,7 @@ public class ZipInputStreamTest extends TestCase {
             // expected
         }
 
-        zis1.close();  // Android throws exception here, but RI only when getNextEntry/read/skip are called.
+        zis1.close();
         try {
             zis1.getNextEntry();
             fail("IOException expected");
@@ -346,31 +347,31 @@ public class ZipInputStreamTest extends TestCase {
         method = "available",
         args = {}
     )
-    @KnownFailure("Needs investigation!!!")
     public void test_available() throws Exception {
 
         File resources = Support_Resources.createTempFolder();
-        Support_Resources.copyFile(resources, null, "Broken_manifest.jar");
-        File fl = new File(resources, "Broken_manifest.jar");
+        Support_Resources.copyFile(resources, null, "hyts_ZipFile.zip");
+        File fl = new File(resources, "hyts_ZipFile.zip");
         FileInputStream fis = new FileInputStream(fl);
 
         ZipInputStream zis1 = new ZipInputStream(fis);
+        ZipEntry entry = zis1.getNextEntry();
+        assertNotNull("No entry in the archive.", entry);
+        long entrySize = entry.getSize();
+        assertTrue("Entry size was < 1", entrySize > 0);
         int i = 0;
-System.out.println(fl.length());
-        for (i = 0; i < fl.length(); i++) {
-//System.out.println(i);
+        for (i = 0; i < entrySize; i++) {
             zis1.skip(1);
-//System.out.println("Skipped 1");
-int avail = zis1.available();
-//System.out.println(avail);
-            if (zis1.available() == 0) break; // RI breaks at i = 0 already; Android loops till the end!
-//System.out.println("Looping...");
+            if (zis1.available() == 0) break;
         }
-        if (i == fl.length()) {
-            fail("ZipInputStream.available or ZipInputStream.skip does not working properly");
+        if (i != entrySize) {
+            fail("ZipInputStream.available or ZipInputStream.skip does not " +
+                    "working properly. Only skipped " + i +
+                    " bytes instead of " + entrySize);
         }
-        assertTrue(zis1.available() == 0);
         zis1.skip(1);
+        assertTrue(zis1.available() == 0);
+        zis1.closeEntry();
         assertFalse(zis.available() == 0);
         zis1.close();
         try {

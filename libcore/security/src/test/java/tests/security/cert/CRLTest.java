@@ -45,14 +45,6 @@ public class CRLTest extends TestCase {
     
     private final static String[] invalidValues = SpiEngUtils.invalidValues;
     
-    /**
-     * Constructor for CRLTest.
-     * @param name
-     */
-    public CRLTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

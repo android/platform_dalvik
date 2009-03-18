@@ -1097,8 +1097,9 @@ public class FileTest extends junit.framework.TestCase {
         args = {}
     )    
     public void test_getPath() {
-        System.setProperty("user.home", System.getProperty("java.io.tmpdir"));
-        String base = System.getProperty("user.home");
+        String oldUserDir = System.getProperty("java.io.tmpdir");
+        System.setProperty("user.dir", System.getProperty("java.io.tmpdir"));
+        String base = System.getProperty("user.dir");
         String fname;
         File f1;
         if (!base.regionMatches((base.length() - 1), slash, 0, 1))
@@ -1122,6 +1123,7 @@ public class FileTest extends junit.framework.TestCase {
         f2.delete();
         f3.delete();
         f4.delete();
+        System.setProperty("user.dir", oldUserDir);
     }
 
     /**
@@ -2099,27 +2101,27 @@ public class FileTest extends junit.framework.TestCase {
             f1.createNewFile();
             long orgTime = f1.lastModified();
             // Subtracting 100 000 milliseconds from the orgTime of File f1
-            f1.setLastModified(orgTime - 100000);
+            assertTrue(f1.setLastModified(orgTime - 100000));
             long lastModified = f1.lastModified();
             assertTrue("Test 1: LastModifed time incorrect: " + lastModified,
                     lastModified == (orgTime - 100000));
             // Subtracting 10 000 000 milliseconds from the orgTime of File f1
-            f1.setLastModified(orgTime - 10000000);
+            assertTrue(f1.setLastModified(orgTime - 10000000));
             lastModified = f1.lastModified();
             assertTrue("Test 2: LastModifed time incorrect: " + lastModified,
                     lastModified == (orgTime - 10000000));
             // Adding 100 000 milliseconds to the orgTime of File f1
-            f1.setLastModified(orgTime + 100000);
+            assertTrue(f1.setLastModified(orgTime + 100000));
             lastModified = f1.lastModified();
             assertTrue("Test 3: LastModifed time incorrect: " + lastModified,
                     lastModified == (orgTime + 100000));
             // Adding 10 000 000 milliseconds from the orgTime of File f1
-            f1.setLastModified(orgTime + 10000000);
+            assertTrue(f1.setLastModified(orgTime + 10000000));
             lastModified = f1.lastModified();
             assertTrue("Test 4: LastModifed time incorrect: " + lastModified,
                     lastModified == (orgTime + 10000000));
             // Trying to set time to an exact number
-            f1.setLastModified(315550800000L);
+            assertTrue(f1.setLastModified(315550800000L));
             lastModified = f1.lastModified();
             assertTrue("Test 5: LastModified time incorrect: " + lastModified,
                     lastModified == 315550800000L);
@@ -2139,6 +2141,9 @@ public class FileTest extends junit.framework.TestCase {
                 fail("IllegalArgumentException not thrown.");
             } catch (IllegalArgumentException e) {
             }
+            
+            File f2 = new File("/does not exist.txt");
+            assertFalse(f2.setLastModified(42));
         } catch (IOException e) {
             fail("Unexpected IOException during test : " + e.getMessage());
         } finally {
@@ -2338,7 +2343,7 @@ public class FileTest extends junit.framework.TestCase {
     )
     public void test_toURI2() {
 
-        File f = new File(System.getProperty("ctsdir"), "a/b/c/../d/e/./f");
+        File f = new File(System.getProperty("java.io.tmpdir"), "a/b/c/../d/e/./f");
 
         String path = f.getAbsolutePath();
         path = path.replace(File.separatorChar, '/');

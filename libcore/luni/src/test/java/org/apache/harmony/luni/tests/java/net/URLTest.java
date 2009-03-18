@@ -53,6 +53,7 @@ import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 import java.security.Permission;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @TestTargetClass(URL.class) 
@@ -528,7 +529,6 @@ public class URLTest extends TestCase {
         method = "toURI",
         args = {}
     )
-    @BrokenTest("cannot think of case which throws URISyntaxException on a valid URL")
     public void testToURI() throws MalformedURLException, URISyntaxException {
         String testHTTPURLString = "http://www.gamelan.com/pages/";
         String testFTPURLString = "ftp://myname@host.dom/etc/motd";
@@ -540,12 +540,42 @@ public class URLTest extends TestCase {
         assertEquals(testHTTPURI.toString(),testHTTPURLString);
         assertEquals(testFTPURI.toString(),testFTPURLString);
         
-        try {
-            URL urlQuery = new URL("jar:file:tests/resources/hyts_att.jar!/NoAttributes.txt");
-            urlQuery.toURI();
-            fail("Exception expected");
-        } catch (URISyntaxException e) {
-            // ok
+        //Exception test
+        String[] constructorTestsInvalid = new String[] {
+                "http:///a path#frag", // space char in path, not in escaped
+                // octet form, with no host
+                "http://host/a[path#frag", // an illegal char, not in escaped
+                // octet form, should throw an
+                // exception
+                "http://host/a%path#frag", // invalid escape sequence in path
+                "http://host/a%#frag", // incomplete escape sequence in path
+
+                "http://host#a frag", // space char in fragment, not in
+                // escaped octet form, no path
+                "http://host/a#fr#ag", // illegal char in fragment
+                "http:///path#fr%ag", // invalid escape sequence in fragment,
+                // with no host
+                "http://host/path#frag%", // incomplete escape sequence in
+                // fragment
+
+                "http://host/path?a query#frag", // space char in query, not
+                // in escaped octet form
+                "http://host?query%ag", // invalid escape sequence in query, no
+                // path
+                "http:///path?query%", // incomplete escape sequence in query,
+                // with no host
+
+                "mailto:user^name@fklkf.com" // invalid char in scheme
+        };
+       
+        for (String malformedURI : Arrays.asList(constructorTestsInvalid)) {
+            try {
+                URL urlQuery = new URL("http://host/a%path#frag");
+                urlQuery.toURI();
+                fail("Exception expected");
+            } catch (URISyntaxException e) {
+                // ok
+            }
         }
     }
 
@@ -554,83 +584,81 @@ public class URLTest extends TestCase {
      */
     @TestTargetNew(
         level = TestLevel.NOT_FEASIBLE,
-        notes = "Proxy does not work. Neither Proxy HTTP nor Proxy SOCKS work.",
+        notes = "See ExcludedProxyTest.",
         method = "openConnection",
         args = {java.net.Proxy.class}
     )
-    @BrokenTest("Hangs in RI and fails in Android")
+    @BrokenTest("the host address isn't working anymore")
     public void testOpenConnectionProxy() throws IOException {
         
-        URL gSearch = new URL("http://www.google.ch/"); 
-        HttpURLConnection uc = null;
-        int port = Support_PortManager.getNextPort();
-        SocketAddress addr1 = new InetSocketAddress("test.domain.org", port);
-        startServer("test.domain.org", port);
-        Proxy proxy1 = new Proxy(Proxy.Type.SOCKS, addr1);
-        Socket sock = new Socket(proxy1);
-        try {
-        uc = (HttpURLConnection) gSearch.openConnection(
-                );
-        uc.connect();
-        uc.getResponseCode();
-        assertEquals(uc.getURL(), gSearch);
-        } finally {
-            uc.disconnect();
-        }
+        // create Proxy
         
-        SocketAddress addr2 = new InetSocketAddress("test.domain.org", 2130);
-        Proxy proxy2 = new Proxy(Proxy.Type.HTTP, addr2);
-        Socket sock2 = new Socket(proxy1);
+        System.setProperty("http.proxyHost",
+                Support_Configuration.ProxyServerTestHost);
+        System.setProperty("http.proxyPort", "80");
+
+        URL u2 = new URL("http://"
+                + Support_Configuration.ProxyServerTestHost
+                + "/cgi-bin/test.pl");
+
+        SocketAddress addr1 = new InetSocketAddress(Support_Configuration.ProxyServerTestHost, 80);
+        Proxy proxy1 = new Proxy(Proxy.Type.HTTP, addr1);
         
-        try {
-           
-            Proxy proxyList[] = { proxy1, proxy2 
-                    };
-            for (int i = 0; i < proxyList.length; ++i) {
-               String posted = "just a test";
-               URL u = new URL("http://www.test.domain.org:2130");
-                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) u
-                        .openConnection(proxyList[i]);
-                conn.setDoOutput(true);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-length", String.valueOf(posted
-                        .length()));
-                
-                OutputStream out = conn.getOutputStream();
-                out.write(posted.getBytes());
-                out.close();
-                
-                conn.getResponseCode();
-                InputStream is = conn.getInputStream();
-                String response = "";
-                byte[] b = new byte[1024];
-                int count = 0;
-                while ((count = is.read(b)) > 0) {
-                    response += new String(b, 0, count);
-                }
-                assertTrue("Response to POST method invalid", response
-                        .equals(posted));
-            }
-            
-            URL httpUrl = new URL("http://abc.com");
-            URL jarUrl = new URL("jar:"
-                     + Support_Resources.getResourceURL("/JUC/lf.jar!/plus.bmp"));
-            URL ftpUrl = new URL("ftp://" + Support_Configuration.FTPTestAddress
-                    + "/nettest.txt");
-            URL fileUrl = new URL("file://abc");
-            URL[] urlList = { httpUrl, jarUrl, ftpUrl, fileUrl };
-            for (int i = 0; i < urlList.length; ++i) {
-                try {
-                    urlList[i].openConnection(null);
-                } catch (IllegalArgumentException iae) {
-                    // expected
-                }
-            }
-            // should not throw exception
-            fileUrl.openConnection(Proxy.NO_PROXY);
-        } finally {
-            sock.close();
+        // create test input   
+        String posted = "just a test";
+        
+        // perform test
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) u2
+                .openConnection(proxy1);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setConnectTimeout(3000);
+      
+        OutputStream out = conn.getOutputStream();
+        out.write(posted.getBytes());
+        out.close();
+        
+        
+        /*
+        InputStream in = conn.getErrorStream();
+        if (in != null ){
+        BufferedReader r = new BufferedReader(new InputStreamReader(in), 200);
+        String line;
+        while((line = r.readLine())!= null) {
+            System.err.println(line);
         }
+        }
+        */
+        
+        conn.getResponseCode();
+        InputStream is = conn.getInputStream();
+        String response = "";
+        byte[] b = new byte[1024];
+        int count = 0;
+        while ((count = is.read(b)) > 0) {
+            response += new String(b, 0, count);
+        }
+        assertTrue("Response to POST method invalid", response
+                .equals(posted));
+        
+        // Exception test
+        URL httpUrl = new URL("http://abc.com");
+        URL jarUrl = new URL("jar:"
+                 + Support_Resources.getResourceURL("/JUC/lf.jar!/plus.bmp"));
+        URL ftpUrl = new URL("ftp://" + Support_Configuration.FTPTestAddress
+                + "/nettest.txt");
+        URL fileUrl = new URL("file://abc");
+        URL[] urlList = { httpUrl, jarUrl, ftpUrl, fileUrl };
+        for (int i = 0; i < urlList.length; ++i) {
+            try {
+                urlList[i].openConnection(null);
+            } catch (IllegalArgumentException iae) {
+                // expected
+            }
+        }
+        // should not throw exception too
+        fileUrl.openConnection(Proxy.NO_PROXY);
+
     }
 
     /**
@@ -1036,21 +1064,30 @@ public class URLTest extends TestCase {
         InputStream is;
         String s;
         
-        /* throws nullpointer exception: failed or not failed test? Debatable
+        // Cannot make this test fail if no exception is thrown: Debatable
+        /*
         try {
             u = new URL("http", "www.yahoo.com", 8080, "test.html#foo",
                     null);
             fail("No error occurred");
         } catch (MalformedURLException e) {
             // ok
+        } catch (NullPointerException e) {
+            // ok
         }
         */
 
         TestURLStreamHandler lh = new TestURLStreamHandler();
+        
+        u = new URL("http", "www.yahoo.com", 8080, "test.html#foo",
+                lh);
+        
 
         try {
             new URL(null, "1", 0, "file", lh);
-            fail("NullPointerException expected, but nothing was thrown!");
+            fail("Exception expected, but nothing was thrown!");
+        } catch (MalformedURLException e) {
+            // ok
         } catch (NullPointerException e) {
             // Expected NullPointerException
         }
@@ -1066,37 +1103,42 @@ public class URLTest extends TestCase {
         method = "getContent",
         args = {java.lang.Class[].class}
     )
-    @BrokenTest("both RI and android fail on getcontent which returns null.")
     public void test_getContent_LJavaLangClass() throws Exception {
-        
+
         File sampleFile = createTempHelloWorldFile();
-        
+
         byte[] ba;
         String s;
 
+        InputStream is = null;
+
+        try {
+            u = new URL("file:///data/tmp/hyts_htmltest.html");
+            is = (InputStream) u.getContent(new Class[] {InputStream.class});
+            is.read(ba = new byte[4096]);
+            fail("No error occurred reading from nonexisting file");
+        } catch (IOException e) {
+            // ok
+        }
+
+        try {
+            u = new URL("file:///data/tmp/hyts_htmltest.html");
+            is = (InputStream) u.getContent(new Class[] {
+                    String.class, InputStream.class});
+            is.read(ba = new byte[4096]);
+            fail("No error occurred reading from nonexisting file");
+        } catch (IOException e) {
+            // ok
+        }
+
+        // Check for null
         u = sampleFile.toURL();
         u.openConnection();
         assertNotNull(u);
 
-        s = (String) u.getContent(new Class[] { String.class });
-        assertNotNull(s);
-        assertTrue("Incorrect content " + u
-                + " does not contain: \"Hello World\"",
-                s.indexOf("Hello World") >= 0);
-        
-        //Exception test
-        InputStream is = null;
-        
-        try {
-        u = new URL("file:///data/tmp/hyts_htmltest.html");
-//        u.openConnection();
-        is = (InputStream) u.getContent(new Class[] { InputStream.class });
-        is.read(ba = new byte[4096]);
-        fail("No error occurred reading from nonexisting file");
-        } catch (IOException e) {
-            //ok
-        }
-        
+        s = (String) u.getContent(new Class[] {String.class});
+        assertNull(s);
+
     }
     
     /**

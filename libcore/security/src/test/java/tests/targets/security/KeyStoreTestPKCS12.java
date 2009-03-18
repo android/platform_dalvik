@@ -1,35 +1,12 @@
 package tests.targets.security;
 
-import dalvik.annotation.KnownFailure;
-import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
-import dalvik.annotation.TestTargetNew;
 
 @TestTargetClass(targets.KeyStores.PKCS12.class)
 public class KeyStoreTestPKCS12 extends KeyStoreTest {
 
     public KeyStoreTestPKCS12() {
         super("PKCS12", keyStoreData, keyStorePassword);
-    }
-    
-    @Override
-    @TestTargetNew(
-            level = TestLevel.ADDITIONAL,
-            method = "!"
-    )
-    @KnownFailure("Missing SecretKeyFactory 1.2.840.113549.1.12.1.3")
-    public void testKeyStoreCreate() {
-        super.testKeyStoreCreate();
-    }
-    
-    @Override
-    @TestTargetNew(
-            level = TestLevel.ADDITIONAL,
-            method = "!"
-    )    
-    @KnownFailure("Missing SecretKeyFactory 1.2.840.113549.1.12.1.3")
-    public void testKeyStoreLoad() {
-        super.testKeyStoreLoad();
     }
     
     public static final String keyStorePassword = "the keystore password";

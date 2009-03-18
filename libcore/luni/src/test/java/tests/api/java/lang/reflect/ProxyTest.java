@@ -163,7 +163,6 @@ public class ProxyTest extends junit.framework.TestCase {
         method = "newProxyInstance",
         args = {java.lang.ClassLoader.class, java.lang.Class[].class, java.lang.reflect.InvocationHandler.class}
     )
-    @KnownFailure("Fixed in ToT")
     public void test_newProxyInstanceLjava_lang_ClassLoader$Ljava_lang_ClassLjava_lang_reflect_InvocationHandler() {
         Object p = Proxy.newProxyInstance(Support_Proxy_I1.class
                 .getClassLoader(), new Class[] { Support_Proxy_I1.class,
@@ -295,7 +294,6 @@ public class ProxyTest extends junit.framework.TestCase {
         method = "getInvocationHandler",
         args = {java.lang.Object.class}
     )
-    @KnownFailure("Fixed in ToT")
     public void test_getInvocationHandlerLjava_lang_Object() {
         InvocationHandler handler = new InvocationHandler() {
             public Object invoke(Object proxy, Method method, Object[] args)
@@ -341,7 +339,6 @@ public class ProxyTest extends junit.framework.TestCase {
         method = "newProxyInstance",
         args = {java.lang.ClassLoader.class, java.lang.Class[].class, java.lang.reflect.InvocationHandler.class}
     )
-    @KnownFailure("Fixed in ToT")
     public void test_newProxyInstance_withNonCompatibleReturnTypes() {
         try {
             Proxy.newProxyInstance(this.getClass().getClassLoader(),

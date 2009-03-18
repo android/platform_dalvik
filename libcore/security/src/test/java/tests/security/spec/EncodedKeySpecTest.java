@@ -41,15 +41,6 @@ import java.util.Arrays;
 public class EncodedKeySpecTest extends TestCase {
 
     /**
-     * Constructor for EncodedKeySpecTest.
-     * 
-     * @param name
-     */
-    public EncodedKeySpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Tests for constructor <code>EncodedKeySpec(byte[])</code><br>
      */
     @TestTargetNew(

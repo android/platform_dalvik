@@ -39,15 +39,6 @@ public class ECPrivateKeySpecTest extends TestCase {
 
     ECPrivateKeySpec ecpks;
 
-    /**
-     * Constructor for ECPrivateKeySpecTest
-     * 
-     * @param name
-     */
-    public ECPrivateKeySpecTest(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
 

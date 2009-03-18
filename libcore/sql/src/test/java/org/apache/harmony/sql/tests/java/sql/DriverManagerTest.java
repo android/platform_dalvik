@@ -82,12 +82,11 @@ public class DriverManagerTest extends TestCase {
      * @throws SQLException 
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "SQLException checking missed: not feasible. test fails, Disabled due to potential implementation error ticket #60.",
+        level = TestLevel.SUFFICIENT,
+        notes = "SQLException checking missed: not feasible.",
         method = "deregisterDriver",
         args = {java.sql.Driver.class}
     )
-    @BrokenTest("Error creating Test Helper in test setup")
     public void testDeregisterDriver() throws Exception {
         // First get one of the drivers loaded by the test
         Driver aDriver;

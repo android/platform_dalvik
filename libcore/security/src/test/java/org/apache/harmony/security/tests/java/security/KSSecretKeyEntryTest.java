@@ -41,13 +41,6 @@ import junit.framework.TestCase;
 public class KSSecretKeyEntryTest extends TestCase {
 
     /**
-     * Constructor for KSSecretKeyTest.
-     * @param arg0
-     */
-    public KSSecretKeyEntryTest(String arg0) {
-        super(arg0);
-    }
-    /**
      * Test for <code>SecretKeyEntry(SecretKey secretKey)</code> constructor
      * Assertion: throws NullPointerException when secretKey is null
      */

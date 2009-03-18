@@ -21,7 +21,6 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
-import dalvik.annotation.KnownFailure;
 
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -405,7 +404,6 @@ public class AbstractMapTest extends junit.framework.TestCase {
         method = "putAll",
         args = {java.util.Map.class}
     )
-    @KnownFailure("ToT fixed")
     public void test_putAllLMap() {
         Hashtable ht = new Hashtable();
         AbstractMap amt = new AMT();
@@ -431,7 +429,6 @@ public class AbstractMapTest extends junit.framework.TestCase {
         method = "equals",
         args = {java.lang.Object.class}
     )
-    @KnownFailure("ToT fixed")
     public void test_equalsLjava_lang_Object() {
         AbstractMap amt1 = new AMT();
         AbstractMap amt2 = new AMT();

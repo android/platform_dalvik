@@ -181,7 +181,7 @@ public class PushbackInputStreamTest extends junit.framework.TestCase {
      * @tests java.io.PushbackInputStream#read(byte[], int, int)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.PARTIAL_COMPLETE,
         notes = "",
         method = "read",
         args = {byte[].class, int.class, int.class}
@@ -200,6 +200,40 @@ public class PushbackInputStreamTest extends junit.framework.TestCase {
             fail("IOException not thrown.");
         } catch (IOException e) {
             // expected
+        }
+    }
+
+    /**
+     * @tests java.io.PushbackInputStream#read(byte[], int, int)
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "read",
+        args = {byte[].class, int.class, int.class}
+    )
+    public void test_read$BII_Exception() throws IOException {
+        PushbackInputStream tobj;
+        byte[] buf = new byte[10];
+
+        tobj = new PushbackInputStream(underlying);
+        try {
+            tobj.read(buf, -1, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            tobj.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            tobj.read(buf, 10, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 
@@ -343,6 +377,30 @@ public class PushbackInputStreamTest extends junit.framework.TestCase {
                     .equals(fileString.substring(50, 100)));
         } catch (IOException e) {
             fail("IOException during unread test : " + e.getMessage());
+        }
+        
+        try {
+            byte[] buf = new byte[10];
+            pis.unread(buf, 0, -1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        
+        try {
+            byte[] buf = new byte[10];
+            pis.unread(buf, -1, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        
+        try {
+            byte[] buf = new byte[10];
+            pis.unread(buf, 10, 1);
+            fail("IndexOutOfBoundsException was not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
     }
 

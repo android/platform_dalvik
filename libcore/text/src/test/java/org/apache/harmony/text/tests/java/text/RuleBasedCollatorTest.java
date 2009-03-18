@@ -18,7 +18,6 @@
 package org.apache.harmony.text.tests.java.text;
 
 import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.BrokenTest;
 import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
@@ -151,7 +150,6 @@ public class RuleBasedCollatorTest extends TestCase {
         method = "equals",
         args = {java.lang.Object.class}
     )
-    @KnownFailure("Succeeds against RI.")
     public void testEqualsObject() throws ParseException {
         String rule = "< a < b < c < d < e";
         RuleBasedCollator coll = new RuleBasedCollator(rule);
@@ -282,17 +280,17 @@ public class RuleBasedCollatorTest extends TestCase {
         method = "getCollationElementIterator",
         args = {java.text.CharacterIterator.class}
     )
-    @KnownFailure("Succeeds against RI.")
+    @KnownFailure("ICU seems to miss collation data")
     public void testGetCollationElementIteratorCharacterIterator() throws Exception {
         {
-            Locale locale = new Locale("es", "", "TRADITIONAL");
+            Locale locale = new Locale("cs", "CZ", "");
             RuleBasedCollator coll = (RuleBasedCollator) Collator
                     .getInstance(locale);
             String text = "cha";
             StringCharacterIterator source = new StringCharacterIterator(text);
             CollationElementIterator iterator = coll
                     .getCollationElementIterator(source);
-            int[] e_offset = { 0, 1, 2 };
+            int[] e_offset = { 0, 2 };
             int offset = iterator.getOffset();
             int i = 0;
             assertEquals(e_offset[i++], offset);
@@ -407,7 +405,6 @@ public class RuleBasedCollatorTest extends TestCase {
         method = "getAvailableLocales",
         args = {}
     )
-    @KnownFailure("Succeeds against RI.")
     public void testGetAvaiableLocales() {
         Locale[] locales = Collator.getAvailableLocales();
         boolean isUS = false;

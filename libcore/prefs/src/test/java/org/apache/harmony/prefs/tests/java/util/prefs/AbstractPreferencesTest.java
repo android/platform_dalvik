@@ -49,24 +49,18 @@ public class AbstractPreferencesTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
+        Preferences.systemRoot().clear();
+        Preferences.userRoot().clear();
+
         parent = (AbstractPreferences) Preferences.userNodeForPackage(this.getClass());
-/*
-        String str[] = parent.childrenNames();
-        for (int i = 0; i < str.length; i++) {
-            System.out.print(str[i] + "  ");
-        }
-        System.out.println();
-/**/
+
         pref = (AbstractPreferences) parent.node(nodeName);
     }
 
     protected void tearDown() throws Exception {
-/*        String str[] = parent.childrenNames();
-        for (int i = 0; i < str.length; i++) {
-            System.out.print(str[i] + "  ");
-        }
-        System.out.println();/**/
         parent.removeNode();
+        Preferences.systemRoot().clear();
+        Preferences.userRoot().clear();
         super.tearDown();
     }
 

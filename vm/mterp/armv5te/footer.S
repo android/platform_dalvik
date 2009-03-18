@@ -379,21 +379,22 @@ common_exceptionThrown:
 
     /* call, r0 gets catchRelPc (a code-unit offset) */
     bl      dvmFindCatchBlock           @ call(self, relPc, exc, scan?, &fp)
+
+    /* fix earlier stack overflow if necessary; may trash rFP */
+    ldrb    r1, [r10, #offThread_stackOverflowed]
+    cmp     r1, #0                      @ did we overflow earlier?
+    beq     1f                          @ no, skip ahead
+    mov     rFP, r0                     @ save relPc result in rFP
+    mov     r0, r10                     @ r0<- self
+    bl      dvmCleanupStackOverflow     @ call(self)
+    mov     r0, rFP                     @ restore result
+1:
+
+    /* update frame pointer and check result from dvmFindCatchBlock */
     ldr     rFP, [sp, #4]               @ retrieve the updated rFP
     cmp     r0, #0                      @ is catchRelPc < 0?
     add     sp, sp, #8                  @ restore stack
     bmi     .LnotCaughtLocally
-
-    /* fix stack overflow if necessary; must preserve r0 */
-    ldrb    r1, [r10, #offThread_stackOverflowed]
-    cmp     r1, #0                      @ did we overflow earlier?
-    beq     1f                          @ no, skip ahead
-    mov     r9, r0                      @ r9<- r0 (save it)
-    mov     r0, r10                     @ r0<- self
-    bl      dvmCleanupStackOverflow     @ call(self)
-    mov     r0, r9                      @ r0<- r9 (restore it)
-    ldr     r9, [r10, #offThread_exception] @ r9<- self->exception
-1:
 
     /* adjust locals to match self->curFrame and updated PC */
     SAVEAREA_FROM_FP(r1, rFP)           @ r1<- new save area
@@ -694,7 +695,7 @@ strPrintLong:
 .LstrDivideByZero:
     .asciz  "divide by zero"
 .LstrFilledNewArrayNotImpl:
-    .asciz  "filled-new-array only implemented for 'int'"
+    .asciz  "filled-new-array only implemented for objects and 'int'"
 .LstrInternalError:
     .asciz  "Ljava/lang/InternalError;"
 .LstrInstantiationError:

@@ -40,7 +40,7 @@ public class AllTests {
         suite.addTest(tests.security.interfaces.AllTests.suite());
         suite.addTest(tests.security.spec.AllTests.suite());
 
-        suite.addTestSuite(tests.security.SecurityPermissionsTest.class);
+        suite.addTest(tests.security.SecurityPermissionsTest.suite());
     
         suite.addTest(tests.api.javax.security.cert.AllTests.suite());
         

@@ -1032,6 +1032,28 @@ public class ObjectOutputStreamTest extends junit.framework.TestCase implements
         ois.close();
         assertEquals("Read incorrect bytes", "HelloWorld", new String(buf, 0,
                 10));
+
+        ois = new ObjectInputStream(new ByteArrayInputStream(bao.toByteArray()));
+        try {
+            ois.read(buf, 0, -1);
+            fail("IndexOutOfBoundsException not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            ois.read(buf, -1, 1);
+            fail("IndexOutOfBoundsException not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        try {
+            ois.read(buf, 10, 1);
+            fail("IndexOutOfBoundsException not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
+        ois.close();
+
     }
 
     /**

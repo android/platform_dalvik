@@ -462,6 +462,38 @@ public class LinkedHashMapTest extends junit.framework.TestCase {
         assertEquals("keySet() was not cloned", 
                 "key2", key2.iterator().next());
     }
+
+    /**
+     * @tests java.util.LinkedHashMap#clone()
+     */
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "",
+        method = "clone",
+        args = {}
+    )
+    public void test_clone_ordered() {
+        // Test for method java.lang.Object java.util.LinkedHashMap.clone()
+        LinkedHashMap<String, String> hm1 = new LinkedHashMap<String, String>(10, 0.75f, true);
+        hm1.put("a", "a");
+        hm1.put("b", "b");
+        hm1.put("c", "c");
+        LinkedHashMap<String, String> hm2 = (LinkedHashMap<String, String>) hm1.clone();
+        hm1.get("a");
+        
+        Map.Entry<String, String>[] set = new Map.Entry[3];
+        Iterator<Map.Entry<String,String>> iterator = hm1.entrySet().iterator();
+        
+        assertEquals("b", iterator.next().getKey());
+        assertEquals("c", iterator.next().getKey());
+        assertEquals("a", iterator.next().getKey());
+
+        iterator = hm2.entrySet().iterator();
+        assertEquals("a", iterator.next().getKey());
+        assertEquals("b", iterator.next().getKey());
+        assertEquals("c", iterator.next().getKey());
+    }
+
     @TestTargetNew(
         level = TestLevel.PARTIAL_COMPLETE,
         notes = "Regression test.",

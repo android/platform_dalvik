@@ -180,7 +180,6 @@ public class JarInputStreamTest extends junit.framework.TestCase {
         args = {}
     )
     @KnownFailure("IOException not thrown when using getNextJarEntry() after close().")
-    // This is the original test_getNextJarEntry including the failing section.
     public void test_getNextJarEntry_Ex() throws Exception {
         final Set<String> desired = new HashSet<String>(Arrays
                 .asList(new String[] {

@@ -29,8 +29,10 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 
-// SEE correspondig_Android test class:
-//@TestTargetClass(targets.Charsets.EUC_JP.class)
+@TestTargetClass(targets.Charsets.EUC_JP.class)
+/** @hide
+ * SEE correspondig_Android test class:
+ */
 
 public class Charset_MultiByte_EUC_JP extends Charset_AbstractTest {
 
@@ -509,6 +511,12 @@ public class Charset_MultiByte_EUC_JP extends Charset_AbstractTest {
         super.setUp();
     }
 
+    @TestTargetNew(
+        level = TestLevel.PARTIAL_COMPLETE,
+        notes = "Duplicate Characters.",
+        method = "functionalCoDec_REPR",
+        args = {}
+    )
     @Override
     public void test_CodecDynamic () throws CharacterCodingException {
         encoder.onUnmappableCharacter(CodingErrorAction.REPORT);

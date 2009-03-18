@@ -15,7 +15,6 @@
  */
 package tests.security.interfaces;
 import java.math.BigInteger;
-import java.security.Provider;
 import java.security.SecureRandomSpi;
 import java.security.spec.ECFieldFp;
 import java.security.spec.ECParameterSpec;
@@ -27,11 +26,6 @@ import java.security.spec.RSAPrivateCrtKeySpec;
  * Utility class to provide some constants 
  */
 class Util {
-
-    /**
-     * BouncyCastle provider
-     */
-    static final Provider prov = new org.bouncycastle.jce.provider.BouncyCastleProvider();
 
     /**
      * Valid P for DSA tests

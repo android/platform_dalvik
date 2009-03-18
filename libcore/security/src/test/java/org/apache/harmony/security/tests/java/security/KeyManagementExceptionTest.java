@@ -38,18 +38,6 @@ import junit.framework.TestCase;
  */
 public class KeyManagementExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for KeyManagementExceptionTests.
-     * 
-     * @param arg0
-     */
-    public KeyManagementExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

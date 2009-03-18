@@ -50,13 +50,6 @@ import java.security.cert.PKIXParameters;
 @TestTargetClass(CertPathValidator.class)
 public class CertPathValidator3Test extends TestCase {
 
-    /**
-     * Constructor for CertPathValidatorTests.
-     * @param name
-     */
-    public CertPathValidator3Test(String name) {
-        super(name);
-    }
     private static final String defaultType = CertPathBuilder1Test.defaultType;    
     
     private static boolean PKIXSupport = false;

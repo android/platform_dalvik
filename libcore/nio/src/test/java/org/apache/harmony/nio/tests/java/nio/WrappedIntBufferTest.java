@@ -24,7 +24,6 @@ import java.nio.IntBuffer;
 @TestTargetClass(java.nio.IntBuffer.class)
 public class WrappedIntBufferTest extends IntBufferTest {
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = IntBuffer.wrap(new int[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,7 +31,6 @@ public class WrappedIntBufferTest extends IntBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         baseBuf = null;
         buf = null;
     }

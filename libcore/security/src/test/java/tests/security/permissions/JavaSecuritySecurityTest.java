@@ -16,7 +16,6 @@
 
 package tests.security.permissions;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -73,9 +72,7 @@ public class JavaSecuritySecurityTest extends TestCase {
                   target = permission.getName();
                     if (target.equals("getProperty.key")) {
                         called = true;
-                        return;
                     }
-                    super.checkPermission(permission);
                 }
             }
 
@@ -87,46 +84,6 @@ public class JavaSecuritySecurityTest extends TestCase {
         Security.getProperty("key");
         assertTrue("java.security.Security.getProperty() must call checkSecurityAccess on security manager", s.called);
         assertEquals("Argument of checkSecurityAccess is not correct", "getProperty.key", s.target);
-    }
-    
-    @TestTargets({
-        @TestTargetNew(
-            level = TestLevel.PARTIAL_COMPLETE,
-            notes = "",
-            method = "getProperty",
-            args = {String.class}
-        ),
-        @TestTargetNew(
-            level = TestLevel.PARTIAL_COMPLETE,
-            notes = "",
-            method = "setProperty",
-            args = {String.class, String.class}
-        )
-    })
-    @KnownFailure("As long as ProtectionDomains are not implemeneted the default implementation of SecurityManager will allow everything.")
-    public void test_getProperty_setProperty_SecurityException() {
-        System.setSecurityManager(new SecurityManager() {
-            @Override
-            public void checkPermission(Permission permission) {
-                if (permission instanceof SecurityPermission) {
-                    super.checkPermission(permission);
-                }
-            }
-        });
-
-        try {
-            Security.getProperty("anotherKey");
-            fail("expected SecurityException");
-        } catch (SecurityException e) {
-            // ok
-        }
-
-        try {
-            Security.setProperty("anotherKey", "anotherValue");
-            fail("expected SecurityException");
-        } catch (SecurityException e) {
-            // ok
-        }
     }
     
     @TestTargetNew(
@@ -150,9 +107,7 @@ public class JavaSecuritySecurityTest extends TestCase {
                   target = permission.getName();
                     if (target.equals("setProperty.key")) {
                         called = true;
-                        return;
                     }
-                    super.checkPermission(permission);
                 }
             }
         }

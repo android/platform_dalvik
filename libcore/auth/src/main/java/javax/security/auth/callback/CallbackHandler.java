@@ -17,6 +17,8 @@
 
 package javax.security.auth.callback;
 
+import java.io.IOException;
+
 /**
  * Needs to be implemented by classes that want to handle authentication
  * {@link Callback}s. A single method {@link #handle(Callback[])} must be
@@ -49,6 +51,6 @@ public interface CallbackHandler {
      *             if the {@code CallbackHandler} is not able to handle a
      *             specific {@code Callback}
      */
-    void handle(Callback[] callbacks) throws java.io.IOException, UnsupportedCallbackException;
+    void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException;
 
 }

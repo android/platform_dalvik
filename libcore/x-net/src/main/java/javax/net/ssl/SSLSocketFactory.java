@@ -24,6 +24,7 @@ import java.security.Security;
 // BEGIN android-added
 import java.lang.reflect.Method;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 // END android-added
 
 import javax.net.SocketFactory;
@@ -57,60 +58,56 @@ public abstract class SSLSocketFactory extends SocketFactory {
      * @since Android 1.0
      */
     public static SocketFactory getDefault() {
-        if (defaultSocketFactory != null) {
+        synchronized (SSLSocketFactory.class) {
+            if (defaultSocketFactory != null) {
+                // BEGIN android-added
+                log("SSLSocketFactory", "Using factory " + defaultSocketFactory);
+                // END android-added
+                return defaultSocketFactory;
+            }
+            if (defaultName == null) {
+                AccessController.doPrivileged(new java.security.PrivilegedAction(){
+                    public Object run() {
+                        defaultName = Security.getProperty("ssl.SocketFactory.provider");
+                        if (defaultName != null) {
+                            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+                            if (cl == null) {
+                                cl = ClassLoader.getSystemClassLoader();
+                            }
+                            try {
+                                defaultSocketFactory = (SocketFactory) Class.forName(
+                                        defaultName, true, cl).newInstance();
+                             } catch (Exception e) {
+                                return e;
+                            }
+                        }
+                        return null;
+                    }
+                });
+            }
+
+            if (defaultSocketFactory == null) {
+                // Try to find in providers
+                SSLContext context = DefaultSSLContext.getContext();
+                if (context != null) {
+                    defaultSocketFactory = context.getSocketFactory();
+                }
+            }
+            if (defaultSocketFactory == null) {
+                // Use internal implementation
+                defaultSocketFactory = new DefaultSSLSocketFactory("No SSLSocketFactory installed");
+            }
             // BEGIN android-added
             log("SSLSocketFactory", "Using factory " + defaultSocketFactory);
             // END android-added
             return defaultSocketFactory;
         }
-        if (defaultName == null) {
-            AccessController.doPrivileged(new java.security.PrivilegedAction(){
-                public Object run() {
-                    defaultName = Security.getProperty("ssl.SocketFactory.provider");
-                    if (defaultName != null) {    
-                        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-                        if (cl == null) {
-                            cl = ClassLoader.getSystemClassLoader();
-                        }
-                        try {
-                            defaultSocketFactory = (SocketFactory) Class.forName(
-                                    defaultName, true, cl).newInstance();
-                         } catch (Exception e) {
-                            return e;
-                        }
-                    }
-                    return null;
-                }
-            });
-        }
-
-        if (defaultSocketFactory == null) {
-            // Try to find in providers
-            SSLContext context = DefaultSSLContext.getContext();
-            if (context != null) {
-                defaultSocketFactory = context.getSocketFactory();
-            }
-        }
-        if (defaultSocketFactory == null) {
-            // Use internal implementation
-            defaultSocketFactory = new DefaultSSLSocketFactory("No SSLSocketFactory installed");
-        }
-        // BEGIN android-added
-        log("SSLSocketFactory", "Using factory " + defaultSocketFactory);
-        // END android-added
-        return defaultSocketFactory;
     }
 
     // BEGIN android-added
     @SuppressWarnings("unchecked")
     private static void log(String tag, String msg) {
-        try {
-            Class clazz = Class.forName("android.util.Log");
-            Method method = clazz.getMethod("d", new Class[] { String.class, String.class });
-            method.invoke(null, new Object[] { tag, msg });
-        } catch (Exception ex) {
-            // Silently ignore.
-        }
+        Logger.getLogger(tag).info(msg);
     }
     // END android-added
 

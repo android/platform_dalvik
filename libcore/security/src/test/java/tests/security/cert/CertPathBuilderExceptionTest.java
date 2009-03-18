@@ -40,18 +40,6 @@ import java.security.cert.CertPathBuilderException;
 @TestTargetClass(CertPathBuilderException.class)
 public class CertPathBuilderExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CertPathBuilderExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CertPathBuilderExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",

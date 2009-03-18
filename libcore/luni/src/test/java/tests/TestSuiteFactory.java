@@ -19,6 +19,7 @@ package tests;
 import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.KnownFailure;
 
+import junit.extensions.TestSetup;
 import junit.framework.AssertionFailedError;
 import junit.framework.Protectable;
 import junit.framework.Test;
@@ -39,7 +40,7 @@ import java.util.Vector;
  * a sample command line:
  * 
  *  /usr/lib/jvm/java-1.5.0-sun/bin/java -Xmx1024m -Dcts.listOnlyFailingTests=true 
- *  -Dcts.ignoreKnownFailure=false -Dcts.runOnDalvikVM=false 
+ *  -Dcts.includeKnownFailure=false -Dcts.runOnDalvikVM=false 
  *  -Dcts.allowUnderscoreTests=false -Dcts.useEnhancedJunit=true 
  *  -Dcts.collectOnly=false 
  *  -cp 
@@ -59,8 +60,9 @@ public class TestSuiteFactory {
     static boolean _useEnhancedJunit = false;
     static boolean _allowUnderscoreTests = false;
     static boolean _runOnDalvikVM = true;
-    static boolean _ignoreKnowFailure = false;
+    static boolean _includeKnowFailure = false;
     static boolean _listOnlyFailingTests = false;
+    static boolean _useSuppliedTestResult = false;
     static int _maxRunningTimePerTest = 15000; // 15 seconds
 
     static {
@@ -69,16 +71,17 @@ public class TestSuiteFactory {
         _collectOnly = System.getProperty("cts.collectOnly", "false").equals("true");
         _allowUnderscoreTests= System.getProperty("cts.allowUnderscoreTests", "false").equals("true");
         _runOnDalvikVM = System.getProperty("cts.runOnDalvikVM", "true").equals("true");
-        _ignoreKnowFailure = System.getProperty("cts.ignoreKnownFailure", "false").equals("true");
+        _includeKnowFailure = System.getProperty("cts.includeKnownFailure", "false").equals("true");
         _maxRunningTimePerTest = Integer.parseInt(System.getProperty("cts.maxRunningTimePerTest", "15000"));
         _listOnlyFailingTests = System.getProperty("cts.listOnlyFailingTests", "false").equals("true");
+        _useSuppliedTestResult = System.getProperty("cts.useSuppliedTestResult", "false").equals("true");
         
         System.out.println("TestSuiteFactory: v0.97");
         System.out.println("TestSuiteFactory: using cts.useEnhancedJunit: "+_useEnhancedJunit);
         System.out.println("TestSuiteFactory: using cts.collectOnly: "+_collectOnly);
         System.out.println("TestSuiteFactory: max allowed running time per test (using Thread.stop()) (cts.maxRunningTimePerTest): "+_maxRunningTimePerTest);
         System.out.println("TestSuiteFactory: run tests on a dalvik vm (cts.runOnDalvikVM): "+_runOnDalvikVM);
-        System.out.println("TestSuiteFactory: ignore @KnowFailure when running on dalvik vm (cts.ignoreKnownFailure): "+_ignoreKnowFailure);
+        System.out.println("TestSuiteFactory: include @KnowFailure when running on dalvik vm (cts.includeKnownFailure): "+_includeKnowFailure);
         System.out.println("TestSuiteFactory: include '_test...' methods in test run (cts.allowUnderscoreTests): "+_allowUnderscoreTests);
         System.out.println("TestSuiteFactory: list only failing tests (cts.listOnlyFailingTests): "+_listOnlyFailingTests);        
         System.out.println();
@@ -175,7 +178,15 @@ class MyTestSuite extends TestSuite {
     private static int testCnt = 0;
     
     public void runTest(Test test, final TestResult dummy_result) {
-        TestResult aresult = new TestResult();
+    	
+    	if (TestSuiteFactory._useSuppliedTestResult) {
+    		if (test instanceof TestSetup) {
+    			test = ((TestSetup)test).getTest();
+    		}
+    		test.run(dummy_result);
+    		return;
+    	}
+    	
         TestResult eresult = new TestResult() {
             private String msg;
             private boolean error = false;
@@ -195,7 +206,7 @@ class MyTestSuite extends TestSuite {
                          //  @AndroidOnly("Because...") if the test is Android-specific, succeeds on Android but fails on the JDK. 
                         try {
                             Annotation[] annosClass = testcase.getClass().getDeclaredAnnotations();
-                            Method runMethod= testcase.getClass().getMethod(testcase.getName(), (Class[]) null);
+                            Method runMethod= testcase.getClass().getMethod(testcase.getName());
                             Annotation[] annosMethod = runMethod.getDeclaredAnnotations();
                             Annotation[] annos = null;
                             for (int i = 0; i < 2; i++) {
@@ -223,7 +234,7 @@ class MyTestSuite extends TestSuite {
                             !TestSuiteFactory._collectOnly
                             && (
                                     (TestSuiteFactory._runOnDalvikVM && 
-                                            (TestSuiteFactory._ignoreKnowFailure || !knownFailure)
+                                            (TestSuiteFactory._includeKnowFailure || !knownFailure)
                                     )
                                     || 
                                     (!TestSuiteFactory._runOnDalvikVM && !androidOnly)
@@ -293,7 +304,7 @@ class MyTestSuite extends TestSuite {
                     if (!TestSuiteFactory._runOnDalvikVM && androidOnly) {
                         msg+= "ignoring on RI since @AndroidOnly: "+((AndroidOnly)aAndroidOnly).value();
                     }
-                    if (TestSuiteFactory._runOnDalvikVM && knownFailure && !TestSuiteFactory._ignoreKnowFailure) {
+                    if (TestSuiteFactory._runOnDalvikVM && knownFailure && !TestSuiteFactory._includeKnowFailure) {
                         msg += "ignoring on dalvik since @KnownFailure: "+((KnownFailure)aKnownFailure).value();
                     }
                 }

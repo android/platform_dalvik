@@ -46,14 +46,6 @@ import junit.framework.TestCase;
 public class KSCallbackHandlerProtectionTest extends TestCase {
 
     /**
-     * Constructor for KSCallbackHandlerProtectionTest.
-     * @param arg0
-     */
-    public KSCallbackHandlerProtectionTest(String arg0) {
-        super(arg0);
-    }
-    
-    /**
      * Test for <code>KeyStore.CallbackHandlerProtection(CallbackHandler handler)</code>
      * constructor
      * Assertion: throws NullPointerException when handler is null

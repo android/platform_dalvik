@@ -26,14 +26,13 @@ import java.nio.ByteBuffer;
 public class WrappedByteBufferTest extends ByteBufferTest {
     
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = ByteBuffer.wrap(new byte[BUFFER_LENGTH]);
+        loadTestData1(buf);
         baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         buf = null;
         baseBuf = null;
     }
@@ -92,37 +91,6 @@ public class WrappedByteBufferTest extends ByteBufferTest {
         } catch (NullPointerException e) {
             // expected
         }
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Verifies isDirect method for non direct ByteBuffer.",
-        method = "isDirect",
-        args = {}
-    )
-    public void testIsDirect() {
-        assertFalse(buf.isDirect());
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Verifies hasArray method for wrapped ByteBuffer.",
-        method = "hasArray",
-        args = {}
-    )
-    public void testHasArray() {
-        assertTrue(buf.hasArray());
-        assertNotNull(buf.array());
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "",
-        method = "isReadOnly",
-        args = {}
-    )
-    public void testIsReadOnly() {
-        assertFalse(buf.isReadOnly());
     }
 
 }

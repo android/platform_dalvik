@@ -51,16 +51,8 @@ import java.util.List;
  */
 @TestTargetClass(CertificateFactorySpi.class)
 public class CertificateFactorySpiTest extends TestCase {
-    /**
-     * Constructor for CertStoreSpiTest.
-     * 
-     * @param arg0
-     */
-    public CertificateFactorySpiTest(String arg0) {
-        super(arg0);
-    }
 
-    /**
+	/**
      * Test for <code>CertificateFactorySpi</code> constructor 
      * Assertion: constructs CertificateFactorySpi
      */

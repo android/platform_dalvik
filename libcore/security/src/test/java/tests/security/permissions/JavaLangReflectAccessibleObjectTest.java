@@ -55,7 +55,6 @@ public class JavaLangReflectAccessibleObjectTest extends TestCase {
                         && "suppressAccessChecks".equals(permission.getName())) {
                     called = true;              
                 }
-                super.checkPermission(permission);
             }
             
         }
@@ -87,9 +86,7 @@ public class JavaLangReflectAccessibleObjectTest extends TestCase {
                         && "suppressAccessChecks".equals(permission.getName())) {
                     called = true;
                 }
-                super.checkPermission(permission);
             }
-            
         }
         TestSecurityManager s = new TestSecurityManager();
         System.setSecurityManager(s);

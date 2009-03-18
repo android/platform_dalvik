@@ -15,6 +15,7 @@
  */
 package org.apache.harmony.luni.tests.java.net;
 
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetClass; 
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -323,7 +324,8 @@ public class InetSocketAddressTest extends TestCase {
         method = "!SerializationGolden",
         args = {}
     )
-    public void _testSerializationCompatibility() throws Exception {
+    @KnownFailure("Problem with deserialization of Localhost vs. localhost")
+    public void testSerializationCompatibility() throws Exception {
 
         Object[] testCases = {
                 InetSocketAddress.createUnresolved("badhost", 1000), // unresolved

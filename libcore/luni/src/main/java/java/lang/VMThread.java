@@ -16,6 +16,9 @@
 
 package java.lang;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 class VMThread
 {
     Thread thread;
@@ -47,20 +50,25 @@ class VMThread
         VMThread.create(thread, stacksize);
     }
 
+    private static final String UNSUPPORTED_THREAD_METHOD
+            = "Deprecated Thread methods are not supported.";
+
     /**
      * Suspends the Thread.
      */
+    @SuppressWarnings("ThrowableInstanceNeverThrown")
     void suspend() {
-        throw new UnsupportedOperationException(
-                "Deprecated Thread methods are not supported.");
+        Logger.global.log(Level.SEVERE, UNSUPPORTED_THREAD_METHOD,
+                new UnsupportedOperationException());
     }
 
     /**
      * Resumes the Thread, assuming it is suspended.
      */
+    @SuppressWarnings("ThrowableInstanceNeverThrown")
     void resume() {
-        throw new UnsupportedOperationException(
-                "Deprecated Thread methods are not supported.");
+        Logger.global.log(Level.SEVERE, UNSUPPORTED_THREAD_METHOD,
+                new UnsupportedOperationException());
     }
 
     /**
@@ -72,9 +80,10 @@ class VMThread
     /**
      * Stops the Thread, passing it a Throwable (which might be ThreadDeath).
      */
+    @SuppressWarnings("ThrowableInstanceNeverThrown")
     void stop(Throwable throwable) {
-        throw new UnsupportedOperationException(
-                "Deprecated Thread methods are not supported.");
+        Logger.global.log(Level.SEVERE, UNSUPPORTED_THREAD_METHOD,
+                new UnsupportedOperationException());
     }
 
     native void setPriority(int newPriority);

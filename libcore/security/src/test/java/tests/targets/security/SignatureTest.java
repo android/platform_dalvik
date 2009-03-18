@@ -1,7 +1,6 @@
 package tests.targets.security;
 
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 
@@ -15,7 +14,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-@TestTargetClass(targets.Signatures.Internal.class)
 public abstract class SignatureTest extends TestCase {
 
     private final String algorithmName;
@@ -78,6 +76,11 @@ public abstract class SignatureTest extends TestCase {
                 level = TestLevel.ADDITIONAL,
                 method = "verify",
                 args = {byte[].class}
+        ),
+        @TestTargetNew(
+                level = TestLevel.COMPLETE,
+                method = "method",
+                args = {}
         )
     })
     public void testSignature() {

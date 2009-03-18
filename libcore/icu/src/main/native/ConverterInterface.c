@@ -805,9 +805,13 @@ static jobjectArray getAvailable(JNIEnv *env, jclass jClass) {
         }
 
         printf("canonical name for %s\n", canonicalName);
-#endif        
-        (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,canonicalName));
-         /*printf("canonical name : %s  at %i\n", name,i); */
+#endif
+        // BEGIN android-changed
+        jstring canonName = (*env)->NewStringUTF(env,canonicalName);
+        (*env)->SetObjectArrayElement(env,ret,i,canonName);
+        (*env)->DeleteLocalRef(env, canonName);
+        // END android-changed
+        /*printf("canonical name : %s  at %i\n", name,i); */
         canonicalName[0]='\0';/* nul terminate */
     }
     return (ret);
@@ -881,7 +885,11 @@ static jobjectArray getAliases(JNIEnv *env, jclass jClass, jstring enc) {
                                                         (*env)->FindClass(env,"java/lang/String"),
                                                         (*env)->NewStringUTF(env,""));
             for(;--j>=0;) {
-                 (*env)->SetObjectArrayElement(env,ret,j,(*env)->NewStringUTF(env,aliasArray[j]));
+                 // BEGIN android-changed
+                 jstring alias = (*env)->NewStringUTF(env, aliasArray[j]);
+                 (*env)->SetObjectArrayElement(env, ret, j, alias);
+                 (*env)->DeleteLocalRef(env, alias);
+                 // END android-changed
             }
         }            
     }

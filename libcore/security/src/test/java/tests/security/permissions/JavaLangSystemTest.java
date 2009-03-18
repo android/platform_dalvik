@@ -16,7 +16,6 @@
 
 package tests.security.permissions;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -76,7 +75,11 @@ public class JavaLangSystemTest extends TestCase {
             @Override
             public void checkPropertiesAccess() {
                 called = true;
-                super.checkPropertiesAccess();
+            }
+
+            @Override
+            public void checkPermission(Permission p) {
+                // nothing to do
             }
         }
         
@@ -120,7 +123,11 @@ public class JavaLangSystemTest extends TestCase {
             public void checkPropertyAccess(String key) {
                 called = true;
                 this.key = key;
-                super.checkPropertyAccess(key);
+            }
+
+            @Override
+            public void checkPermission(Permission p) {
+                // nothing to do
             }
         }
         
@@ -158,7 +165,6 @@ public class JavaLangSystemTest extends TestCase {
             public void checkPermission(Permission p) {
                 called = true;
                 this.p = p;
-                super.checkPermission(p);
             }
         }
         
@@ -185,7 +191,6 @@ public class JavaLangSystemTest extends TestCase {
                 if(permission instanceof RuntimePermission && "setSecurityManager".equals(permission.getName())){
                     called = true;              
                 }
-                super.checkPermission(permission);
             }
             
         }
@@ -220,7 +225,6 @@ public class JavaLangSystemTest extends TestCase {
             args = {java.io.PrintStream.class}
         )
     })
-    @KnownFailure("ToT fixed.")
     public void test_setInOutErr() {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -235,7 +239,6 @@ public class JavaLangSystemTest extends TestCase {
             public void checkPermission(Permission p) {
                 called = true;
                 this.p = p;
-                super.checkPermission(p);
             }
         }
         
@@ -282,6 +285,11 @@ public class JavaLangSystemTest extends TestCase {
                 this.status = status;
                 throw new ExitNotAllowedException(); // prevent that the system is shut down
             }
+
+            @Override
+            public void checkPermission(Permission p) {
+                // nothing to do
+            }
         }
         
         TestSecurityManager s = new TestSecurityManager();
@@ -305,7 +313,6 @@ public class JavaLangSystemTest extends TestCase {
         method = "runFinalizersOnExit",
         args = {boolean.class}
     )
-    @KnownFailure("ToT fixed.")
     public void test_runFinalizersOnExit() {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -318,7 +325,11 @@ public class JavaLangSystemTest extends TestCase {
             public void checkExit(int status){
                 this.called = true;
                 this.status = status;
-                super.checkExit(status);
+            }
+
+            @Override
+            public void checkPermission(Permission p) {
+                // nothing to do
             }
         }
         
@@ -339,18 +350,17 @@ public class JavaLangSystemTest extends TestCase {
     @TestTargets({
         @TestTargetNew(
             level = TestLevel.PARTIAL,
-            notes = "Verifies that methods load and loadLibrary call checkLink on security manager., loadlibrary needs to be fixed, see ticket #58",
+            notes = "Verifies that methods load and loadLibrary call checkLink on security manager.",
             method = "load",
             args = {java.lang.String.class}
         ),
         @TestTargetNew(
             level = TestLevel.PARTIAL,
-            notes = "Verifies that methods load and loadLibrary call checkLink on security manager., loadlibrary needs to be fixed, see ticket #58",
+            notes = "Verifies that methods load and loadLibrary call checkLink on security manager.",
             method = "loadLibrary",
             args = {java.lang.String.class}
         )
     })
-    @KnownFailure("ToT fixed.") 
     public void test_load() {
         final String library = "library";
         
@@ -364,6 +374,11 @@ public class JavaLangSystemTest extends TestCase {
                 }
                 super.checkLink(lib);
             }
+
+            @Override
+            public void checkPermission(Permission p) {
+                // nothing to do
+            }
         }
         
         TestSecurityManager s = new TestSecurityManager();
@@ -371,26 +386,25 @@ public class JavaLangSystemTest extends TestCase {
 
         try {
             System.load(library);
-            fail("System.load must call checkLink on security manager with argument "+library);
+            fail("System.load must call checkLink on security manager with argument \"" + library + "\"");
         }
         catch(CheckLinkCalledException e){
             // ok
         }
         catch(Throwable t){
-            fail("System.load must call checkLink on security manager with argument "+library);
+            fail("System.load must call checkLink on security manager with argument \"" + library + "\"");
         }
         
         try {
             System.loadLibrary(library);
-            fail("System.load must call checkLink on security manager with argument "+library);
+            fail("System.loadLibrary must call checkLink on security manager with argument \"" + library + "\"");
         }
         catch(CheckLinkCalledException e){
             // ok
         }
         catch(Throwable t){
-            fail("System.load must call checkLink on security manager with argument "+library);
+            fail("System.loadLibrary must call checkLink on security manager with argument \"" + library + "\"");
         }
         
     }
 }
-

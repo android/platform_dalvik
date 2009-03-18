@@ -18,13 +18,10 @@
 package tests.api.java.util;
 
 import dalvik.annotation.TestTargetNew;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass; 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.AndroidOnly;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Currency;
@@ -58,7 +55,6 @@ public class CurrencyTest extends junit.framework.TestCase {
         method = "getInstance",
         args = {java.util.Locale.class}
     )
-    @KnownFailure("getInstance instead of returning null value for region without currency throws exception which should be thrown only in case of locale does not support country code.")
     public void test_getInstanceLjava_util_Locale() {
         /*
          * the behaviour in all these three cases should be the same since this
@@ -150,30 +146,32 @@ public class CurrencyTest extends junit.framework.TestCase {
         method = "getSymbol",
         args = {}
     )
-    @KnownFailure("getSymbol() returns wrong value for currency symbol")
+    @AndroidOnly("icu and the RI have different data. Because Android"
+            + "only defines a few locales as a must have, it was not possible"
+            + "to find a set of combinations where no differences between"
+            + "the RI and Android exist.")
     public void test_getSymbol() {
-
+        
         Currency currK = Currency.getInstance("KRW");
-        Currency currI = Currency.getInstance("INR");
+        Currency currI = Currency.getInstance("IEP");
         Currency currUS = Currency.getInstance("USD");
 
         Locale.setDefault(Locale.US);
         assertEquals("currK.getSymbol()", "KRW", currK.getSymbol());
-        assertEquals("currI.getSymbol()", "INR", currI.getSymbol());
+        assertEquals("currI.getSymbol()", "IR\u00a3", currI.getSymbol());
         assertEquals("currUS.getSymbol()", "$", currUS.getSymbol());
 
-        Locale.setDefault(new Locale("ko", "KR"));
-        assertEquals("currK.getSymbol()", "\uffe6", currK.getSymbol());
-        assertEquals("currI.getSymbol()", "INR", currI.getSymbol());
+        Locale.setDefault(new Locale("en", "IE"));
+        assertEquals("currK.getSymbol()", "KRW", currK.getSymbol());
+        assertEquals("currI.getSymbol()", "\u00a3", currI.getSymbol());
         assertEquals("currUS.getSymbol()", "USD", currUS.getSymbol());
 
         // test what happens if this is an invalid locale,
         // one with Korean country but an India language
-        // this method should return the currency codes in that case
         Locale.setDefault(new Locale("kr", "KR"));
         assertEquals("currK.getSymbol()", "KRW", currK.getSymbol());
-        assertEquals("currI.getSymbol()", "INR", currI.getSymbol());
-        assertEquals("currUS.getSymbol()", "USD", currUS.getSymbol());
+        assertEquals("currI.getSymbol()", "IR\u00a3", currI.getSymbol());
+        assertEquals("currUS.getSymbol()", "$", currUS.getSymbol());
     }
 
     /**
@@ -220,23 +218,19 @@ public class CurrencyTest extends junit.framework.TestCase {
                 new Locale("en", "")};
                 
         String[] euro    = new String[] {"EUR", "\u20ac"};
-        String[] yen     = new String[] {"JPY", "\uffe5", "\uffe5JP", "JP\uffe5"};
+        // \u00a5 and \uffe5 are actually the same symbol, just different code points.
+        // But the RI returns the \uffe5 and Android returns those with \u00a5 
+        String[] yen     = new String[] {"JPY", "\u00a5", "\u00a5JP", "JP\u00a5", "\uffe5", "\uffe5JP", "JP\uffe5"};
         String[] dollar  = new String[] {"USD", "$", "US$", "$US"};
         String[] cDollar = new String[] {"CAD", "$", "Can$", "$Ca"};
-        String[] crone   = new String[] {"DKK", "kr", "CrD"};
 
         Currency currE   = Currency.getInstance("EUR");
         Currency currJ   = Currency.getInstance("JPY");
         Currency currUS  = Currency.getInstance("USD");
         Currency currCA  = Currency.getInstance("CAD");
-        Currency currDKK = Currency.getInstance("DKK");
 
         int i, j, k;
         boolean flag;
-        
-        Locale.setDefault(Locale.US);
-        Locale.setDefault(new Locale("ja", "JP"));
-        Locale.setDefault(new Locale("da", "DK"));
         
         for(k = 0; k < loc1.length; k++) {
             Locale.setDefault(loc1[k]);
@@ -249,7 +243,12 @@ public class CurrencyTest extends junit.framework.TestCase {
                         break;
                     }
                 }
-                assertTrue(flag);
+                assertTrue("Default Locale is: " + Locale.getDefault()
+                        + ". For locale " + loc1[i]
+                        + " the Euro currency returned "
+                        + currE.getSymbol(loc1[i])
+                        + ". Expected was one of these: "
+                        + Arrays.toString(euro), flag);
             }
             
             for (i = 0; i < loc1.length; i++) {
@@ -262,7 +261,12 @@ public class CurrencyTest extends junit.framework.TestCase {
                         break;
                     }
                 }
-                assertTrue(flag);
+                assertTrue("Default Locale is: " + Locale.getDefault()
+                        + ". For locale " + loc1[i]
+                        + " the Yen currency returned "
+                        + currJ.getSymbol(loc1[i])
+                        + ". Expected was one of these: "
+                        + Arrays.toString(yen), flag);
             }
             
             for (i = 0; i < loc1.length; i++) {
@@ -273,7 +277,12 @@ public class CurrencyTest extends junit.framework.TestCase {
                         break;
                     }
                 }
-                assertTrue(flag);
+                assertTrue("Default Locale is: " + Locale.getDefault()
+                        + ". For locale " + loc1[i]
+                        + " the Dollar currency returned "
+                        + currUS.getSymbol(loc1[i])
+                        + ". Expected was one of these: "
+                        + Arrays.toString(dollar), flag);
             }
             
             for (i = 0; i < loc1.length; i++) {
@@ -284,18 +293,12 @@ public class CurrencyTest extends junit.framework.TestCase {
                         break;
                     }
                 }
-                assertTrue(flag);
-            }
-            
-            for (i = 0; i < loc1.length; i++) {
-                flag = false;
-                for  (j = 0; j < dollar.length; j++) {
-                    if (currCA.getSymbol(loc1[i]).equals(cDollar[j])) {
-                        flag = true;
-                        break;
-                    }
-                }
-                assertTrue(flag);
+                assertTrue("Default Locale is: " + Locale.getDefault()
+                        + ". For locale " + loc1[i]
+                        + " the Canadian Dollar currency returned "
+                        + currCA.getSymbol(loc1[i])
+                        + ". Expected was one of these: "
+                        + Arrays.toString(cDollar), flag);
             }
         }
     }
@@ -309,26 +312,31 @@ public class CurrencyTest extends junit.framework.TestCase {
         method = "getDefaultFractionDigits",
         args = {}
     )
-    @KnownFailure("method return wrong number of digits for pseudo-currency")
     public void test_getDefaultFractionDigits() {
-        Currency c1 = Currency.getInstance("EUR");
+
+        Currency c1 = Currency.getInstance("TND");
         c1.getDefaultFractionDigits();
         assertEquals(" Currency.getInstance(\"" + c1
-                + "\") returned incorrect number of digits. ", 2, c1
+                + "\") returned incorrect number of digits. ", 3, c1
                 .getDefaultFractionDigits());
 
-        Currency c2 = Currency.getInstance("JPY");
+        Currency c2 = Currency.getInstance("EUR");
         c2.getDefaultFractionDigits();
         assertEquals(" Currency.getInstance(\"" + c2
-                + "\") returned incorrect number of digits. ", 0, c2
+                + "\") returned incorrect number of digits. ", 2, c2
                 .getDefaultFractionDigits());
 
-        Currency c3 = Currency.getInstance("XBD");
+        Currency c3 = Currency.getInstance("JPY");
         c3.getDefaultFractionDigits();
         assertEquals(" Currency.getInstance(\"" + c3
-                + "\") returned incorrect number of digits. ", -1, c3
+                + "\") returned incorrect number of digits. ", 0, c3
                 .getDefaultFractionDigits());
 
+        Currency c4 = Currency.getInstance("XXX");
+        c4.getDefaultFractionDigits();
+        assertEquals(" Currency.getInstance(\"" + c4
+                + "\") returned incorrect number of digits. ", -1, c4
+                .getDefaultFractionDigits());
     }
 
     /**

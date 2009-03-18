@@ -24,7 +24,6 @@ import java.nio.ShortBuffer;
 @TestTargetClass(java.nio.ShortBuffer.class)
 public class WrappedShortBufferTest extends ShortBufferTest {
     protected void setUp() throws Exception {
-        super.setUp();
         capacity = BUFFER_LENGTH;
         buf = ShortBuffer.wrap(new short[BUFFER_LENGTH]);
         loadTestData1(buf);
@@ -32,7 +31,6 @@ public class WrappedShortBufferTest extends ShortBufferTest {
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
         baseBuf = null;
         buf = null;
     }

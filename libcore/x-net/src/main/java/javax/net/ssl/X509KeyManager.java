@@ -72,7 +72,8 @@ public interface X509KeyManager extends KeyManager {
      * 
      * @param alias
      *            the alias to get the certificate chain for.
-     * @return the certificate chain for the specified alias.
+     * @return the certificate chain for the specified alias, or {@code null} if
+     *         the alias cannot be found.
      * @since Android 1.0
      */
     public X509Certificate[] getCertificateChain(String alias);
@@ -84,7 +85,7 @@ public interface X509KeyManager extends KeyManager {
      * @param keyType
      *            the public key algorithm type name.
      * @param issuers
-     *            the list of certificate issuers, or {@code null} is any issuer
+     *            the list of certificate issuers, or {@code null} if any issuer
      *            will do.
      * @return the client aliases for the specified public key type, or
      *         {@code null} if there are no matching aliases.
@@ -99,7 +100,7 @@ public interface X509KeyManager extends KeyManager {
      * @param keyType
      *            the public key algorithm type name.
      * @param issuers
-     *            the list of certificate issuers, or {@code null} is any issuer
+     *            the list of certificate issuers, or {@code null} if any issuer
      *            will do.
      * @return the client aliases for the specified public key type, or
      *         {@code null} if there are no matching aliases.

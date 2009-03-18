@@ -344,27 +344,37 @@ public class FileOutputStreamTest extends junit.framework.TestCase {
         try {
             fos.write(new byte[1], -1, 0);
             fail("Test 2: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
 
         try {
             fos.write(new byte[1], 0, -1);
             fail("Test 3: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
 
         try {
             fos.write(new byte[1], 0, 5);
             fail("Test 4: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
 
         try {
             fos.write(new byte[10], Integer.MAX_VALUE, 5);
             fail("Test 5: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
 
         try {
             fos.write(new byte[10], 5, Integer.MAX_VALUE);
             fail("Test 6: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
+        }
 
         fos.close();
         try {

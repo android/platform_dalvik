@@ -91,6 +91,7 @@ public class Charset_AbstractTest extends TestCase {
         args = {}
     )
     public void test_dumpEncodableChars () {
+        if (testChars == null) return;
         if (testChars.length > 0) return;
         System.out.format("\ntest_dumpEncodableChars() for name %s => %s (class = %s)\n",
                 charsetName, charset.name(), getClass().getName());
@@ -121,6 +122,7 @@ public class Charset_AbstractTest extends TestCase {
         args = {}
     )
     public void test_dumpEncoded () throws CharacterCodingException {
+        if (testChars == null) return;
         if (testChars.length == 0) return;
         if (testBytes.length > 0) return;
         System.out.format("\ntest_dumpEncoded() for name %s => %s (class = %s)\n",

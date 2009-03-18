@@ -40,14 +40,6 @@ import java.security.cert.LDAPCertStoreParameters;
 @TestTargetClass(LDAPCertStoreParameters.class)
 public class LDAPCertStoreParametersTest extends TestCase {
 
-    /**
-     * Constructor for LDAPCertStoreParametersTest.
-     * @param name
-     */
-    public LDAPCertStoreParametersTest(String name) {
-        super(name);
-    }
-
     //
     // Tests
     //

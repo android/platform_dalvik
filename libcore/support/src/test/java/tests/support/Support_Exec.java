@@ -29,6 +29,12 @@ import junit.framework.TestCase;
 
 public class Support_Exec extends TestCase {
 
+    static final boolean againstDalvik;
+    static {
+        String platform = System.getProperty("java.vendor");
+        againstDalvik = (platform.contains("Android"));
+    }
+
     /**
      *  This function returns the output of the process as a string
      */
@@ -51,7 +57,7 @@ public class Support_Exec extends TestCase {
         return getProcessOutput(arr, displayOutput);
     }
 
-    private static String getProcessOutput(Object[] arr, boolean displayOutput)
+    public static String getProcessOutput(Object[] arr, boolean displayOutput)
             throws IOException, InterruptedException {
         Process proc = (Process) arr[0];
         StringBuilder output = new StringBuilder();
@@ -109,7 +115,11 @@ public class Support_Exec extends TestCase {
             executable += File.separator;
         }
         executable += "bin" + File.separator;
-        execArgs.add(executable + "dalvikvm");
+        if (againstDalvik) {
+            execArgs.add(executable + "dalvikvm");
+        } else {
+            execArgs.add(executable + "java");
+        }
 
         // add classpath string
         if (classpath != null) {
@@ -156,9 +166,24 @@ public class Support_Exec extends TestCase {
         }
 
         // execute java process
-        final Process proc = Runtime.getRuntime().exec(
-                execArgs.toArray(new String[execArgs.size()]), envp);
+        return execAndDigestOutput(execArgs.toArray(new String[execArgs.size()]), envp);
+    }
+
+    //
+    // mc: This looks like functionaly worth publicity:
+    //
+    public static Object[] execAndDigestOutput (String[] cmdLine, String[] envp)
+            throws IOException, InterruptedException {
+
+//        System.out.println("Commandline BEGIN");
+//        for (int i = 0; i < cmdLine.length; i++) {
+//            System.out.println(cmdLine[i]);
+//        }
+//        System.out.println("END");
+
+        final Process proc = Runtime.getRuntime().exec(cmdLine, envp);
         final StringBuilder errBuf = new StringBuilder();
+
         Thread errThread = new Thread(new Runnable() {
             public void run() {
                 synchronized (errBuf) {

@@ -34,15 +34,6 @@ import org.apache.harmony.security.tests.support.acl.*;
 @TestTargetClass(Owner.class)
 public class IOwnerTest extends TestCase {
     
-    /**
-     * Constructor for IOwnerTest.
-     * 
-     * @param arg0
-     */
-    public IOwnerTest(String arg0) {
-        super(arg0);
-    }
-    
     class MyOwner extends OwnerImpl {
         public MyOwner(Principal pr) {
             super(pr);

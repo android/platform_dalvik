@@ -42,14 +42,6 @@ import java.security.spec.RSAPrivateKeySpec;
 public class RSAPrivateCrtKeySpecTest extends TestCase {
 
     /**
-     * Constructor for RSAPrivateCrtKeySpecTest.
-     * @param name
-     */
-    public RSAPrivateCrtKeySpecTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test #1 for <code>RSAPrivateCrtKeySpec</code> constructor
      * Assertion: Constructs <code>RSAPrivateCrtKeySpec</code>
      * object using valid parameters

@@ -504,7 +504,7 @@ public class X509Certificate2Test extends junit.framework.TestCase {
         assertNull(new MyX509Certificate().getSubjectAlternativeNames());
 
         Collection<List<?>> coll = cert.getSubjectAlternativeNames();
-
+        //getSubjectAlternativeNames method is not supported
         assertNotNull(coll);
 
         try {
@@ -540,7 +540,7 @@ public class X509Certificate2Test extends junit.framework.TestCase {
         assertNull(new MyX509Certificate().getIssuerAlternativeNames());
 
         Collection<List<?>> coll = cert.getIssuerAlternativeNames();
-
+        // getIssuerAlternativeNames returns null.
         assertNotNull(coll);
 
         try {

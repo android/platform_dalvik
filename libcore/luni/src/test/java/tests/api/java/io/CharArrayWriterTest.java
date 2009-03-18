@@ -219,28 +219,25 @@ public class CharArrayWriterTest extends junit.framework.TestCase {
         try {
             cw.write(target, -1, 1);
             fail("Test 1: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals("IndexOutOfBoundsException rather than a subclass expected;",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
         try {
             cw.write(target, 0, -1);
             fail("Test 2: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals("IndexOutOfBoundsException rather than a subclass expected;",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
         try {
             cw.write(target, 1, target.length);
             fail("Test 3: IndexOutOfBoundsException expected.");
-        } catch (IndexOutOfBoundsException t) {
-            assertEquals("IndexOutOfBoundsException rather than a subclass expected;",
-                    IndexOutOfBoundsException.class, t.getClass());
+        } catch (IndexOutOfBoundsException e) {
+            // Expected
         }
         try {
             cw.write((char[]) null, 1, 1);
             fail("Test 4: NullPointerException expected.");
-        } catch (NullPointerException t) {
+        } catch (NullPointerException e) {
             // Expected.
         }
     }

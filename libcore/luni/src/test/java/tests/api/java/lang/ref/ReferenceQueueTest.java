@@ -247,11 +247,11 @@ public class ReferenceQueueTest extends junit.framework.TestCase {
         
         try {
             rq.remove(-1);
-            fail("IllegalArgumentException was not thrown.");
+            fail("IllegalArgumentException expected.");
         } catch(IllegalArgumentException iae) {
             //expected
         } catch (InterruptedException e) {
-            fail("InterruptedException was not thrown.");
+            fail("Unexpected InterruptedException.");
         }
     }
 

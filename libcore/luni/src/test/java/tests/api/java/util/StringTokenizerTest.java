@@ -21,7 +21,6 @@ import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass; 
-import dalvik.annotation.KnownFailure;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
@@ -238,7 +237,6 @@ public class StringTokenizerTest extends junit.framework.TestCase {
         method = "nextToken",
         args = {java.lang.String.class}
     )
-    @KnownFailure("ToT fixed")
     public void test_nextTokenLjava_lang_String() {
         // Test for method java.lang.String
         // java.util.StringTokenizer.nextToken(java.lang.String)

@@ -22,10 +22,9 @@ public class DHTest extends TestCase {
 
     @TestTargetNew(
         level = TestLevel.ADDITIONAL,
-        method = "!",
+        method = "method",
         args = {}
     )
-    @BrokenTest("please cleanup test and annotations")
     public void testDHGen() throws Exception
     {
         KeyPairGenerator gen = null;
@@ -33,8 +32,6 @@ public class DHTest extends TestCase {
             gen = KeyPairGenerator.getInstance("DH");
         } catch (NoSuchAlgorithmException e) {
             fail(e.getMessage());
-//        } catch (NoSuchProviderException e) {
-//            fail(e.getMessage());
         }
         
         AlgorithmParameterGenerator algorithmparametergenerator = AlgorithmParameterGenerator.getInstance("DH");

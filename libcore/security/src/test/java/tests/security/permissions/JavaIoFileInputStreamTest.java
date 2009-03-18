@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.Permission;
 
 /*
  * This class tests the security permissions which are documented in
@@ -90,6 +91,10 @@ public class JavaIoFileInputStreamTest extends TestCase {
                 called = true;
                 this.file = file;
                 super.checkRead(file);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
 

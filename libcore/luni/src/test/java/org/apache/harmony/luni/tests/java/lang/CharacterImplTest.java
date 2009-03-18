@@ -16,6 +16,7 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -32,6 +33,7 @@ public class CharacterImplTest extends TestCase {
         method = "valueOf",
         args = {char.class}
     )
+    @AndroidOnly("valueOf doesn't return the same values on RI.")
     public void test_valueOfC() {
         // test the cache range
         for (char c = '\u0000'; c < 512; c++) {
@@ -40,7 +42,7 @@ public class CharacterImplTest extends TestCase {
             assertEquals(e, a);
 
             // WARN: this assertion may not be valid on other JREs
-            assertEquals(Character.valueOf(c), Character.valueOf(c));
+            assertSame(Character.valueOf(c), Character.valueOf(c));
         }
         // test the rest of the chars
         for (int c = '\u0512'; c <= Character.MAX_VALUE; c++) {

@@ -30,8 +30,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.SocketTimeoutException;
+import java.security.Permission;
 
 /*
  * This class tests the security permissions which are documented in
@@ -78,18 +77,19 @@ public class JavaNetDatagramSocketTest extends TestCase {
     public void test_ctor() throws IOException {
         class TestSecurityManager extends SecurityManager {
             boolean called = false;
-            String host = null;
             int port = 0;
             void reset(){
                 called = false;
-                host = null;
                 port = 0;
             }
             @Override
             public void checkListen(int port) {
                 called = true;
                 this.port = port;
-                super.checkListen(port);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -131,19 +131,17 @@ public class JavaNetDatagramSocketTest extends TestCase {
     public void test_receive() throws IOException {
         class TestSecurityManager extends SecurityManager {
             boolean called = false;
-            String host = null;
-            int port = 0;
             void reset(){
                 called = false;
-                host = null;
-                port = 0;
             }
             @Override
             public void checkAccept(String host, int port) {
-                this.host = host;
-                this.port = port;
                 this.called = true;
                 super.checkAccept(host, port);
+            }
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -177,12 +175,10 @@ public class JavaNetDatagramSocketTest extends TestCase {
         System.setSecurityManager(s);
 
         s.reset();
-        assert(s1.getInetAddress()==null);
         assertTrue(s1.getInetAddress()==null);
         try {
             s1.receive(p);
-        }
-        catch(Exception e){
+        } catch(Exception e) {
             fail("unexpected exception " + e);
         }
         sender.interrupt();

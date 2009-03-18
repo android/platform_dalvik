@@ -16,7 +16,7 @@
 
 package tests.security.permissions;
 
-import dalvik.annotation.KnownFailure;
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
@@ -67,7 +67,6 @@ public class JavaLangThreadTest extends TestCase {
             public void checkPermission(Permission p) {
                 called = true;
                 this.p = p;
-                super.checkPermission(p);
             }
         }
         
@@ -94,6 +93,7 @@ public class JavaLangThreadTest extends TestCase {
         method = "enumerate",
         args = {java.lang.Thread[].class}
     )
+    @AndroidOnly("RI impl differs from RI spec, Android impl does not.")
     public void test_enumerate() {
         class TestSecurityManager extends SecurityManager {
             boolean called;
@@ -108,7 +108,11 @@ public class JavaLangThreadTest extends TestCase {
             public void checkAccess(Thread t) {
                 called = true;
                 this.t = t;
-                super.checkAccess(t);
+            }
+
+            @Override
+            public void checkPermission(Permission p) {
+                
             }
         }
         
@@ -132,14 +136,12 @@ public class JavaLangThreadTest extends TestCase {
     @TestTargetNew(
         level = TestLevel.PARTIAL,
         notes = "Verifies that getContextClassLoader calls checkPermission " +
-                "on security manager.Needs fixes in methods " +
-                "Thread.getContextClassLoader and ClassLoader.isAncestorOf, " +
-                "see ticket #101",
+                "on security manager.",
         method = "getContextClassLoader",
         args = {}
     )
-    @KnownFailure("ToT fixed.")  
-    public void testGetContextClassLoader() {
+    @AndroidOnly("RI impl differs from RI spec, Android impl does not.")
+    public void test_getContextClassLoader() {
         class TestSecurityManager extends SecurityManager {
             boolean called;
 
@@ -153,7 +155,6 @@ public class JavaLangThreadTest extends TestCase {
                 && "getClassLoader".equals(p.getName())) {
                     called = true;
                 }
-                super.checkPermission(p);
             }
         }
         TestSecurityManager sm = new TestSecurityManager();
@@ -210,5 +211,4 @@ public class JavaLangThreadTest extends TestCase {
                 "caller's class loader is parent of requested class loader",
                 sm.called);
     }
-
 }

@@ -21,7 +21,6 @@ package java.lang.reflect;
  * Indicates that a malformed parameterized type has been encountered by a
  * reflective method.
  * 
- * @since 1.5
  * @since Android 1.0
  */
 public class MalformedParameterizedTypeException extends RuntimeException {

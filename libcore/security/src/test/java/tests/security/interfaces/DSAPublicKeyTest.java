@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package tests.security.interfaces;
-import dalvik.annotation.KnownFailure;
+import dalvik.annotation.BrokenTest;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -45,10 +45,9 @@ public class DSAPublicKeyTest extends TestCase {
         method = "getY",
         args = {}
     )
-    @SuppressWarnings("serial")
-    @KnownFailure("Incorrect value was returned for method " +
+    @BrokenTest("Incorrect value was returned for method " +
                   "java.security.interfaces.DSAPublicKey.getY(). "+
-                  "This test is passed for RI.")
+                  "This test does not pass on the RI.")
     public void test_getY() throws Exception {
         KeyPairGenerator keyGen = null;
         KeyPair keys = null;
@@ -56,7 +55,7 @@ public class DSAPublicKeyTest extends TestCase {
         DSAPublicKey publ = null;
         
         // Case 1: check with predefined p, q, g, x
-        keyGen = KeyPairGenerator.getInstance("DSA", Util.prov);
+        keyGen = KeyPairGenerator.getInstance("DSA");
         keyGen.initialize(new DSAParameterSpec(Util.P, Util.Q, Util.G),
                 new SecureRandom(new MySecureRandomSpi(), null) {
                 });
@@ -68,7 +67,7 @@ public class DSAPublicKeyTest extends TestCase {
 
         // Case 2: check with random p, q, g, x. It takes some time (up to 
         // minute)
-        keyGen = KeyPairGenerator.getInstance("DSA", Util.prov);
+        keyGen = KeyPairGenerator.getInstance("DSA");
         keys = keyGen.generateKeyPair();
         priv = (DSAPrivateKey) keys.getPrivate();
         publ = (DSAPublicKey) keys.getPublic();

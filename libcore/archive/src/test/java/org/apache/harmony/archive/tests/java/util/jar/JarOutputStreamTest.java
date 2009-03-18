@@ -44,8 +44,7 @@ public class JarOutputStreamTest extends junit.framework.TestCase {
      * @tests java.util.jar.JarOutputStream#putNextEntry(java.util.zip.ZipEntry)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "",
+        level = TestLevel.PARTIAL_COMPLETE,
         method = "putNextEntry",
         args = {java.util.zip.ZipEntry.class}
     )
@@ -112,7 +111,7 @@ public class JarOutputStreamTest extends junit.framework.TestCase {
             args[0] = "-jar";
             args[1] = outputJar.getAbsolutePath();
 
-// It's not that simple to execute a JAR agains Dalvik VM (see JarExecTest):
+// It's not that simple to execute a JAR against Dalvik VM (see DalvikExecTest):
 //
 //            try {
 //                // execute the JAR and read the result

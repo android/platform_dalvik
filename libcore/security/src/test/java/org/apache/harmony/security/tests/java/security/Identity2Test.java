@@ -32,7 +32,7 @@ import java.security.cert.X509Certificate;
 
 import org.apache.harmony.security.tests.java.security.IdentityScope2Test.IdentityScopeSubclass;
 
-import dalvik.annotation.KnownFailure;
+import dalvik.annotation.AndroidOnly;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -244,7 +244,8 @@ public class Identity2Test extends junit.framework.TestCase {
         args = {java.lang.String.class, java.security.IdentityScope.class}
     )
     public void test_ConstructorLjava_lang_StringLjava_security_IdentityScope() {
-        String[] str = {"test", "", "!@#$%^&*()", "identity name", null};
+        String nameNull = null;
+        String[] str = {"test", "", "!@#$%^&*()", "identity name"};
         IdentityScopeSubclass iss = new IdentityScopeSubclass("name");
         IdentitySubclass is;
         
@@ -254,8 +255,16 @@ public class Identity2Test extends junit.framework.TestCase {
                 assertNotNull(is);
                 assertTrue(is instanceof Identity);
             } catch (Exception e) {
+                System.out.println(e);
                 fail("Unexpected exception for parameter " + str[i]);
             }
+        }
+        
+        try {
+            is = new IdentitySubclass(nameNull, new IdentityScopeSubclass());
+        } catch (NullPointerException npe) {
+        } catch (Exception e) {
+            fail("Incorrect exception " + e + " was thrown");
         }
         
         try {
@@ -373,7 +382,8 @@ public class Identity2Test extends junit.framework.TestCase {
                 args = {java.security.Certificate.class}
         )
     })
-    @KnownFailure("Test 3 disabled because the exception is never thrown.")
+    @AndroidOnly("Spec says: Removing unknown certificates throw an exception. "
+            + "The RI ignores unknown certificates.")
     public void test_removeCertificateLjava_security_Certificate() throws Exception {
         IdentitySubclass sub = new IdentitySubclass("test",
                 new IdentityScopeSubclass());
@@ -384,21 +394,26 @@ public class Identity2Test extends junit.framework.TestCase {
         CertificateImpl certImpl = new CertificateImpl(cert[0]);
         sub.addCertificate(certImpl);
 
-        sub.removeCertificate(null);
-        assertEquals("Test 1: Certificate should not have been removed.", 
+        try {
+            sub.removeCertificate(null);
+            fail("Test 1: KeyManagementException expected.");
+        } catch (KeyManagementException e) {
+            // Expected.
+        }
+        assertEquals("Test 2: Certificate should not have been removed.", 
                 1, sub.certificates().length);
 
         sub.removeCertificate(certImpl);
-        assertEquals("Test 2: Certificate has not been removed.", 
+        assertEquals("Test 3: Certificate has not been removed.", 
                 0, sub.certificates().length);
 
         // Removing the same certificate a second time should fail.
-//        try {
-//            sub.removeCertificate(certImpl);
-//            fail("Test 3: KeyManagementException expected.");
-//        } catch (KeyManagementException e) {
-//            // Expected.
-//        }
+        try {
+            sub.removeCertificate(certImpl);
+            fail("Test 4: KeyManagementException expected.");
+        } catch (KeyManagementException e) {
+            // Expected.
+        }
 
     }
 

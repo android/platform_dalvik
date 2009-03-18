@@ -321,6 +321,9 @@ bool dvmOptimizeDexFile(int fd, off_t dexOffset, long dexLength,
      * want to avoid this.
      *
      * For optimization and/or verification, we need to load all the classes.
+     *
+     * We don't check gDvm.generateRegisterMaps, since that is dependent
+     * upon the verifier state.
      */
     if (gDvm.classVerifyMode == VERIFY_MODE_NONE &&
         (gDvm.dexOptMode == OPTIMIZE_MODE_NONE ||
@@ -423,6 +426,8 @@ bool dvmOptimizeDexFile(int fd, off_t dexOffset, long dexLength,
         }
         if (isBootstrap)
             flags |= DEXOPT_IS_BOOTSTRAP;
+        if (gDvm.generateRegisterMaps)
+            flags |= DEXOPT_GEN_REGISTER_MAP;
         sprintf(values[9], "%d", flags);
         argv[curArg++] = values[9];
 
@@ -794,7 +799,8 @@ bool dvmCheckOptHeaderAndDependencies(int fd, bool sourceAvail, u4 modWhen,
 
     magic = optHdr.magic;
     if (memcmp(magic, DEX_OPT_MAGIC, 4) != 0) {
-        LOGW("DexOpt: incorrect opt magic number (0x%02x %02x %02x %02x)\n",
+        /* not a DEX file, or previous attempt was interrupted */
+        LOGD("DexOpt: incorrect opt magic number (0x%02x %02x %02x %02x)\n",
             magic[0], magic[1], magic[2], magic[3]);
         goto bail;
     }
@@ -1627,9 +1633,13 @@ ClassObject* dvmOptResolveClass(ClassObject* referrer, u4 classIdx)
      */
     resClass = dvmDexGetResolvedClass(pDvmDex, classIdx);
     if (resClass == NULL) {
-        resClass = dvmFindClassNoInit(
-                    dexStringByTypeIdx(pDvmDex->pDexFile, classIdx),
-                    referrer->classLoader);
+        const char* className = dexStringByTypeIdx(pDvmDex->pDexFile, classIdx);
+        if (className[0] != '\0' && className[1] == '\0') {
+            /* primitive type */
+            resClass = dvmFindPrimitiveClass(className[0]);
+        } else {
+            resClass = dvmFindClassNoInit(className, referrer->classLoader);
+        }
         if (resClass == NULL) {
             /* not found, exception should be raised */
             LOGV("DexOpt: class %d (%s) not found\n",

@@ -96,10 +96,10 @@ public class Support_SimpleDateFormat extends Support_Format {
         // test with simple example
         format.applyPattern("h:m z");
 
-        super.text = "5:19 EDT";
+        super.text = "5:19 GMT-05:00";
         t_FormatWithField(21, format, date, null, Field.HOUR1, 0, 1);
         t_FormatWithField(22, format, date, null, Field.MINUTE, 2, 4);
-        t_FormatWithField(23, format, date, null, Field.TIME_ZONE, 5, 8);
+        t_FormatWithField(23, format, date, null, Field.TIME_ZONE, 5, 14);
 
         // test fields that are not included in the formatted text
 
@@ -125,14 +125,14 @@ public class Support_SimpleDateFormat extends Support_Format {
 
         // test with simple example with pattern char Z
         format.applyPattern("h:m Z z");
-        super.text = "5:19 -0400 EDT";
+        super.text = "5:19 -0400 GMT-05:00";
         t_FormatWithField(40, format, date, null, Field.HOUR1, 0, 1);
         t_FormatWithField(41, format, date, null, Field.MINUTE, 2, 4);
         t_FormatWithField(42, format, date, null, Field.TIME_ZONE, 5, 10);
     }
 
     public void t_formatToCharacterIterator() {
-        TimeZone tz = TimeZone.getTimeZone("EST");
+        TimeZone tz = TimeZone.getTimeZone("GMT-05:00");
         Calendar cal = new GregorianCalendar(tz);
         cal.set(1999, Calendar.SEPTEMBER, 13, 17, 19, 01);
         cal.set(Calendar.MILLISECOND, 0);
@@ -184,11 +184,11 @@ public class Support_SimpleDateFormat extends Support_Format {
     }
 
     private Vector<FieldContainer> getDateVector3() {
-        // "5:19 EDT"
+        // "5:19 GMT-05:00"
         Vector<FieldContainer> v = new Vector<FieldContainer>();
         v.add(new FieldContainer(0, 1, Field.HOUR1));
         v.add(new FieldContainer(2, 4, Field.MINUTE));
-        v.add(new FieldContainer(5, 8, Field.TIME_ZONE));
+        v.add(new FieldContainer(5, 14, Field.TIME_ZONE));
         return v;
     }
 
@@ -208,7 +208,7 @@ public class Support_SimpleDateFormat extends Support_Format {
         // 05
         // 005 19 019 1 01 001 0 00 000 Mon Monday 256 256 256 2 02 38 038 3 003
         // PM
-        // PM 5 005 EDT Eastern Daylight Time -0400 -0400"
+        // PM 5 005 GMT-05:00 GMT-05:00 -0500 -0500"
         v.add(new FieldContainer(0, 2, Field.ERA));
         v.add(new FieldContainer(3, 5, Field.ERA));
         v.add(new FieldContainer(6, 8, Field.YEAR));
@@ -253,10 +253,10 @@ public class Support_SimpleDateFormat extends Support_Format {
         v.add(new FieldContainer(145, 147, Field.AM_PM));
         v.add(new FieldContainer(149, 150, Field.HOUR0));
         v.add(new FieldContainer(151, 154, Field.HOUR0));
-        v.add(new FieldContainer(155, 158, Field.TIME_ZONE));
-        v.add(new FieldContainer(159, 180, Field.TIME_ZONE));
+        v.add(new FieldContainer(155, 164, Field.TIME_ZONE));
+        v.add(new FieldContainer(165, 174, Field.TIME_ZONE));
+        v.add(new FieldContainer(175, 180, Field.TIME_ZONE));
         v.add(new FieldContainer(181, 186, Field.TIME_ZONE));
-        v.add(new FieldContainer(187, 192, Field.TIME_ZONE));
         return v;
     }
 

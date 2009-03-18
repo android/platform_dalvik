@@ -33,16 +33,18 @@
 .L${opcode}_continue:
     ldr     r3, [r0, #offClassObject_descriptor] @ r3<- arrayClass->descriptor
     mov     r2, #ALLOC_DONT_TRACK       @ r2<- alloc flags
-    ldrb    r0, [r3, #1]                @ r0<- descriptor[1]
+    ldrb    r3, [r3, #1]                @ r3<- descriptor[1]
     .if     $isrange
     mov     r1, r10                     @ r1<- AA (length)
     .else
     mov     r1, r10, lsr #4             @ r1<- B (length)
     .endif
-    cmp     r0, #'I'                    @ array of ints?
+    cmp     r3, #'I'                    @ array of ints?
+    cmpne   r3, #'L'                    @ array of objects?
+    cmpne   r3, #'['                    @ array of arrays?
     mov     r9, r1                      @ save length in r9
     bne     .L${opcode}_notimpl         @ no, not handled yet
-    bl      dvmAllocPrimitiveArray      @ r0<- call(typeCh, length, flags)
+    bl      dvmAllocArrayByClass        @ r0<- call(arClass, length, flags)
     cmp     r0, #0                      @ null return?
     beq     common_exceptionThrown      @ alloc failed, handle exception
 

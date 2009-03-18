@@ -17,6 +17,8 @@
 
 package tests.api.java.net;
 
+import org.apache.harmony.testframework.serialization.SerializationTest;
+
 import dalvik.annotation.TestTargetClass; 
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
@@ -270,6 +272,56 @@ public class SocketPermissionTest extends junit.framework.TestCase {
                 pc.implies(p2));
         assertTrue("A different host should not imply resolve", !pc
                 .implies(star_Resolve));
+    }
+
+    /**
+     * @tests serialization/deserialization.
+     */
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        notes = "Verifies serialization/deserialization compatibility.",
+        method = "!SerializationSelf",
+        args = {}
+    )
+    public void testSerializationSelf() throws Exception {
+        SocketPermission permission = new SocketPermission("harmony.apache.org", "connect");;
+
+        SerializationTest.verifySelf(permission);
+    }
+
+    @TestTargetNew(
+        level = TestLevel.COMPLETE,
+        notes = "",
+        method = "SocketPermission",
+        args = {java.lang.String.class, java.lang.String.class}
+    )
+    public void test_ConstructorLjava_lang_StringLjava_lang_String_subtestIPv6() {
+        String[] goodTestStrings = { 
+                "12334.0.0.01", "[fe80::1]",
+                "[FE80:0000:0000:0000:0000:0000:0000:0001]:80",
+                "[::ffff]:80-82", "[ffff::]:80-82", "[fe80::1]:80",
+                "FE80:0000:0000:0000:0000:0000:0000:0001",
+                "FE80:0000:0000:0000:0000:0000:0000:0001:80"
+        };
+        String[] badTestStrings = {"someName:withColonInit:80", "fg80::1", "[ffff:::80-82]",
+                ":[:fff]:80", "FE80:0000:0000:0000:0000:0000:0000:0001:80:82", "FE80::1"
+        };
+
+        for (int i=0; i < goodTestStrings.length; i++) {
+            try {
+                SocketPermission sp = new SocketPermission(goodTestStrings[i], "connect");
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                fail("SocketPermission named: " + goodTestStrings[i] + " failed construction: " + e.getMessage());
+            }
+        }
+
+        for (int i=0; i < badTestStrings.length; i++) {
+            try {
+                SocketPermission sp = new SocketPermission(badTestStrings[i], "connect");
+                fail("SocketPermission named: " + badTestStrings[i] + " should have thrown an IllegalArgumentException on construction");
+            } catch (IllegalArgumentException e) {}
+        }
     }
 
     /**

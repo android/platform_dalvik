@@ -17,8 +17,6 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
-import tests.support.resource.Support_Resources;
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
@@ -34,6 +32,8 @@ import java.security.Permission;
 import java.util.Arrays;
 import java.util.Vector;
 
+import tests.support.resource.Support_Resources;
+
 @TestTargetClass(Runtime.class) 
 public class RuntimeTest extends junit.framework.TestCase {
 
@@ -46,6 +46,8 @@ public class RuntimeTest extends junit.framework.TestCase {
     static boolean flag = false;
 
     static boolean ranFinalize = false;
+    
+    int statusCode = -1;
 
     class HasFinalizer {
         String internalString;
@@ -71,24 +73,10 @@ public class RuntimeTest extends junit.framework.TestCase {
     }
 
     /**
-     * @tests java.lang.Runtime#exit(int)
-     */
-    @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "This method never returns normally, and can't be tested.",
-        method = "exit",
-        args = {int.class}
-    )
-    public void test_exitI() {
-        // Test for method void java.lang.Runtime.exit(int)
-        assertTrue("Can't really test this", true);
-    }
-
-    /**
      * @tests java.lang.Runtime#exec(java.lang.String)
      */
     @TestTargetNew(
-        level = TestLevel.COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "",
         method = "exec",
         args = {java.lang.String.class}
@@ -111,8 +99,26 @@ public class RuntimeTest extends junit.framework.TestCase {
         args = {}
     )
     public void test_freeMemory() {
-        // Test for method long java.lang.Runtime.freeMemory()
-        assertTrue("freeMemory returned nonsense value", r.freeMemory() > 0);
+        try {
+            long before = r.freeMemory();
+            Vector<StringBuffer> v = new Vector<StringBuffer>();
+            for (int i = 1; i < 10; i++)
+                v.addElement(new StringBuffer(10000));
+            long after =  r.freeMemory();
+            v = null;
+            r.gc();
+            assertTrue("freeMemory should return less value after " +
+                    "creating an object", after < before);            
+            long afterGC =  r.freeMemory();
+            assertTrue("freeMemory should not return less value after " +
+                    "creating an object", afterGC > after);
+        } catch (Exception e) {
+            System.out.println("Out of memory during freeMemory test: " 
+                    + e.getMessage());
+            r.gc();
+        } finally {
+            r.gc();
+        }
     }
 
     /**
@@ -141,7 +147,7 @@ public class RuntimeTest extends junit.framework.TestCase {
             assertTrue("space was not reclaimed", (r.totalMemory() - r
                     .freeMemory()) < secondRead);
         } catch (Throwable t) {
-            System.out.println("Out of memory during freeMemory test");
+            System.out.println("Out of memory during gc test");
             r.gc();
             r.gc();
         }
@@ -158,7 +164,7 @@ public class RuntimeTest extends junit.framework.TestCase {
     )
     public void test_getRuntime() {
         // Test for method java.lang.Runtime java.lang.Runtime.getRuntime()
-        assertTrue("Used to test", true);
+        assertNotNull(Runtime.getRuntime());
     }
 
     /**
@@ -206,9 +212,6 @@ public class RuntimeTest extends junit.framework.TestCase {
         method = "addShutdownHook",
         args = {java.lang.Thread.class}
     )
-    @KnownFailure("IllegalArgumentException is not thrown if " +
-            "hook is already registered, and addShutdownHook is " +
-            "called again. ToT fixed.") 
     public void test_addShutdownHook() {
         Thread thrException = new Thread () {
             public void run() {
@@ -710,23 +713,11 @@ public class RuntimeTest extends junit.framework.TestCase {
     }   
     
     @TestTargetNew(
-        level = TestLevel.NOT_FEASIBLE,
-        notes = "Can't be tested. This method terminates the currently running JVM",
-        method = "halt",
-        args = {int.class}
-    )
-    public void test_halt() {
-        // TODO Can't be tested. 
-        // This method terminates the currently running JVM.
-    }
-    
-    @TestTargetNew(
         level = TestLevel.COMPLETE,
         notes = "",
         method = "runFinalizersOnExit",
         args = {boolean.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")    
     public void test_runFinalizersOnExit() {
         Runtime.getRuntime().runFinalizersOnExit(true);
         
@@ -758,7 +749,6 @@ public class RuntimeTest extends junit.framework.TestCase {
         method = "removeShutdownHook",
         args = {java.lang.Thread.class}
     )
-    @KnownFailure("Security checking is missed. ToT fixed.")       
     public void test_removeShutdownHookLjava_lang_Thread() {
         Thread thr1 = new Thread () {
             public void run() {
@@ -847,7 +837,6 @@ public class RuntimeTest extends junit.framework.TestCase {
         method = "traceMethodCalls",
         args = {boolean.class}
     )
-    @KnownFailure("java.lang.InternalError occurs. ToT fixed.")   
     public void test_traceMethodCalls() {
         Runtime.getRuntime().traceMethodCalls(false);
         Runtime.getRuntime().traceMethodCalls(true);
@@ -866,7 +855,6 @@ public class RuntimeTest extends junit.framework.TestCase {
         method = "getLocalizedInputStream",
         args = {java.io.InputStream.class}
     )
-    @KnownFailure("ToT fixed.")       
     public void test_getLocalizedInputStream() {
         String simpleString = "Heart \u2f3c";
         byte[] expected = {72, 0, 101, 0, 97, 0, 114, 0, 116, 0, 32, 0, 60, 47};
@@ -903,7 +891,6 @@ public class RuntimeTest extends junit.framework.TestCase {
         method = "getLocalizedOutputStream",
         args = {java.io.OutputStream.class}
     )
-    @KnownFailure("ToT fixed.")    
     public void test_getLocalizedOutputStream() {
         String simpleString = "Heart \u2f3c";
         byte[] expected = {72, 0, 101, 0, 97, 0, 114, 0, 116, 0, 32, 0, 60, 47};
@@ -942,8 +929,6 @@ public class RuntimeTest extends junit.framework.TestCase {
         method = "load",
         args = {java.lang.String.class}
     )
-    @KnownFailure("UnsatisfiedLinkError is not thrown for non existent " +
-            "library. ToT fixed.")    
     public void test_load() {
        
         try {
@@ -967,7 +952,7 @@ public class RuntimeTest extends junit.framework.TestCase {
             }
             
             public void checkLink(String lib) {
-                if (lib.endsWith("libTestLibrary.so")) {
+                if (lib.endsWith("libjvm.so")) {
                     throw new SecurityException();
                 }
             }
@@ -976,7 +961,7 @@ public class RuntimeTest extends junit.framework.TestCase {
         SecurityManager oldSm = System.getSecurityManager();
         System.setSecurityManager(sm);
         try {
-            Runtime.getRuntime().load("libTestLibrary.so");
+            Runtime.getRuntime().load("libjvm.so");
             fail("SecurityException should be thrown.");
         } catch (SecurityException e) {
             // expected
@@ -1013,7 +998,7 @@ public class RuntimeTest extends junit.framework.TestCase {
             }
             
             public void checkLink(String lib) {
-                if (lib.endsWith("libTestLibrary.so")) {
+                if (lib.endsWith("libjvm.so")) {
                     throw new SecurityException();
                 }
             }
@@ -1022,7 +1007,7 @@ public class RuntimeTest extends junit.framework.TestCase {
         SecurityManager oldSm = System.getSecurityManager();
         System.setSecurityManager(sm);
         try {
-            Runtime.getRuntime().loadLibrary("libTestLibrary.so");
+            Runtime.getRuntime().loadLibrary("libjvm.so");
             fail("SecurityException should be thrown.");
         } catch (SecurityException e) {
             // expected
@@ -1031,6 +1016,76 @@ public class RuntimeTest extends junit.framework.TestCase {
         }               
     }
     
+    @TestTargetNew(
+        level = TestLevel.SUFFICIENT,
+        notes = "This method never returns normally, " +
+                "and can't be tested. Only SecurityException can be checked.",
+        method = "exit",
+        args = {int.class}
+    )    
+    public void test_exit() {
+        statusCode = -1;        
+        SecurityManager sm = new SecurityManager() {
+
+            public void checkPermission(Permission perm) {
+                
+            }
+            
+            public void checkExit(int status) {
+                statusCode = status;
+                throw new SecurityException();
+            }
+        };
+
+        SecurityManager oldSm = System.getSecurityManager();
+        System.setSecurityManager(sm);
+        try {
+            r.exit(0);
+            fail("SecurityException should be thrown.");
+        } catch (SecurityException e) {
+            // expected
+        } finally {
+            assertTrue("Incorrect status code was received: " + statusCode, 
+                    statusCode == 0);            
+            System.setSecurityManager(oldSm);
+        }  
+        
+    }
+
+    @TestTargetNew(
+        level = TestLevel.SUFFICIENT,
+        notes = "Can't be tested. This method terminates the currently " +
+                "running VM. Only SecurityException can be checked.",
+        method = "halt",
+        args = {int.class}
+    )         
+    public void test_halt() {
+        statusCode = -1;
+        SecurityManager sm = new SecurityManager() {
+
+            public void checkPermission(Permission perm) {
+                
+            }
+            
+            public void checkExit(int status) {
+                statusCode = status;
+                throw new SecurityException();
+            }
+        };
+
+        SecurityManager oldSm = System.getSecurityManager();
+        System.setSecurityManager(sm);
+        try {
+            r.halt(0);
+            fail("SecurityException should be thrown.");
+        } catch (SecurityException e) {
+            // expected
+        } finally {
+            assertTrue("Incorrect status code was received: " + statusCode, 
+                    statusCode == 0);
+            System.setSecurityManager(oldSm);
+        }  
+    }
     
     public RuntimeTest() {
     }

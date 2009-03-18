@@ -472,7 +472,7 @@ type_ids list. The referenced entry must be a non-array reference type.
   
       <tr>
         <td>
-          B21
+          A21
         </td>
         
         <td>
@@ -487,7 +487,7 @@ type_ids list. The referenced entry must be a non-array reference type.
   
       <tr>
         <td>
-          B22
+          A22
         </td>
         
         <td>
@@ -504,7 +504,7 @@ type_ids list. The referenced entry must be a non-array reference type.
   
       <tr>
         <td>
-          B23
+          A23
         </td>
         
         <td>
@@ -640,9 +640,10 @@ type_ids list. The referenced entry must be a non-array reference type.
         </td>
         
         <td>
-           A register which stores the result of a <code>new-instance</code>
-           instruction must not be used if the same <code>new-instance</code>
-           instruction is subsequently encountered.
+          A register which holds the result of a <code>new-instance</code>code>
+          instruction must not be used if the same
+          <code>new-instance</code>code> instruction is again executed before
+          the instance is initialized.           
         </td>
   
         <td>

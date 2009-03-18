@@ -29,8 +29,6 @@ public class HeapCharBufferTest extends CharBufferTest {
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
 
     @TestTargetNew(

@@ -16,7 +16,6 @@
 package tests.api.java.util;
 
 import dalvik.annotation.TestTargetNew;
-import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass; 
 import dalvik.annotation.KnownFailure;
@@ -194,6 +193,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.lang.Appendable.class}
     )
+    @AndroidOnly("the RI trows an exception that makes no sense. See comment.")
     public void test_ConstructorLjava_lang_Appendable() {
         MockAppendable ma = new MockAppendable();
         Formatter f1 = new Formatter(ma);
@@ -267,6 +267,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.lang.String.class}
     )
+    @KnownFailure("The Exception is not thrown on linux if the user is root")
     public void test_ConstructorLjava_lang_String() throws IOException {
         Formatter f = null;
         try {
@@ -284,7 +285,7 @@ public class FormatterTest extends TestCase {
         assertEquals(0, fileWithContent.length());
         f.close();
 
-        // FIXME This exception will not be thrown out on linux.
+        // FIXME This exception will not be thrown on linux if the user is root.
         try {
             f = new Formatter(readOnly.getPath());
             fail("should throw FileNotFoundException");
@@ -313,6 +314,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.lang.String.class, java.lang.String.class}
     )
+    @KnownFailure("The Exception is not thrown on linux if the user is root")
     public void test_ConstructorLjava_lang_StringLjava_lang_String()
             throws IOException {
         Formatter f = null;
@@ -345,7 +347,7 @@ public class FormatterTest extends TestCase {
         assertEquals(0, fileWithContent.length());
         f.close();
 
-        // FIXME This exception will not be thrown out on linux.
+        // FIXME This exception will not be thrown on linux if the user is root.
         try {
             f = new Formatter(readOnly.getPath(), "UTF-16BE");
             fail("should throw FileNotFoundException");
@@ -374,6 +376,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.lang.String.class, java.lang.String.class, java.util.Locale.class}
     )
+    @KnownFailure("The Exception is not thrown on linux if the user is root")
     public void test_ConstructorLjava_lang_StringLjava_lang_StringLjava_util_Locale()
             throws IOException {
         Formatter f = null;
@@ -414,6 +417,7 @@ public class FormatterTest extends TestCase {
         assertEquals(0, fileWithContent.length());
         f.close();
 
+        // FIXME This exception will not be thrown on linux if the user is root.
         try {
             f = new Formatter(readOnly.getPath(), Charset.defaultCharset()
                     .name(), Locale.ITALY);
@@ -444,6 +448,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.io.File.class}
     )
+    @KnownFailure("The Exception is not thrown on linux if the user is root")
     public void test_ConstructorLjava_io_File() throws IOException {
         Formatter f = null;
         try {
@@ -461,7 +466,7 @@ public class FormatterTest extends TestCase {
         assertEquals(0, fileWithContent.length());
         f.close();
 
-        // FIXME This exception will not be thrown out on linux.
+        // FIXME This exception will not be thrown on linux if the user is root.
         try {
             f = new Formatter(readOnly);
             fail("should throw FileNotFoundException");
@@ -490,6 +495,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.io.File.class, java.lang.String.class}
     )
+    @KnownFailure("The Exception is not thrown on linux if the user is root")
     public void test_ConstructorLjava_io_FileLjava_lang_String()
             throws IOException {
         Formatter f = null;
@@ -508,7 +514,7 @@ public class FormatterTest extends TestCase {
         assertEquals(0, fileWithContent.length());
         f.close();
 
-        // FIXME This exception will not be thrown out on linux.
+        // FIXME This exception will not be thrown on linux if the user is root.
         try {
             f = new Formatter(readOnly, Charset.defaultCharset().name());
             fail("should throw FileNotFoundException");
@@ -563,6 +569,7 @@ public class FormatterTest extends TestCase {
         method = "Formatter",
         args = {java.io.File.class, java.lang.String.class, java.util.Locale.class}
     )
+    @KnownFailure("The Exception is not thrown on linux if the user is root")
     public void test_ConstructorLjava_io_FileLjava_lang_StringLjava_util_Locale()
             throws IOException {
         Formatter f = null;
@@ -601,7 +608,7 @@ public class FormatterTest extends TestCase {
         assertEquals(0, fileWithContent.length());
         f.close();
 
-        // FIXME This exception will not be thrown out on linux.
+        // FIXME This exception will not be thrown on linux if the user is root.
         try {
             f = new Formatter(readOnly.getPath(), Charset.defaultCharset()
                     .name(), Locale.ITALY);
@@ -2021,7 +2028,7 @@ public class FormatterTest extends TestCase {
         method = "format",
         args = {java.lang.String.class, java.lang.Object[].class}
     )
-    @KnownFailure("Conversion for japanese locale works improperly")
+    @AndroidOnly("Icu data for Czech locale differs a bit from the RI")
     public void test_formatLjava_lang_String$Ljava_lang_Object_DateTimeConversion() {
         Formatter f = null;
         Date now = new Date(1147327147578L);
@@ -2223,25 +2230,25 @@ public class FormatterTest extends TestCase {
                 
         };
         
-        final Object[][] lowerCaseJapanTriple = {
-                {0L,                        'a', "\u6728"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'a', "\u65e5"}, //$NON-NLS-2$
-                {-1000L,                    'a', "\u6728"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'a', "\u6728"}, //$NON-NLS-2$
-                {paris,                     'a', "\u6708"}, //$NON-NLS-2$
-                {china,                     'a', "\u6708"}, //$NON-NLS-2$
+        final Object[][] lowerCaseCzechTriple = {
+                {0L,                        'a', "\u010dt"}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'a', "ne"}, //$NON-NLS-2$
+                {-1000L,                    'a', "\u010dt"}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'a', "\u010dt"}, //$NON-NLS-2$
+                {paris,                     'a', "po"}, //$NON-NLS-2$
+                {china,                     'a', "po"}, //$NON-NLS-2$
                 {0L,                        'b', "1"}, //$NON-NLS-2$
                 {Long.MAX_VALUE,            'b', "8"}, //$NON-NLS-2$
                 {-1000L,                    'b', "1"}, //$NON-NLS-2$
                 {new Date(1147327147578L),  'b', "5"}, //$NON-NLS-2$
                 {paris,                     'b', "5"}, //$NON-NLS-2$
                 {china,                     'b', "5"}, //$NON-NLS-2$
-                {0L,                        'c', "\u6728 1 01 08:00:00 CST 1970"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'c', "\u65e5 8 17 15:12:55 CST 292278994"}, //$NON-NLS-2$
-                {-1000L,                    'c', "\u6728 1 01 07:59:59 CST 1970"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'c', "\u6728 5 11 13:59:07 CST 2006"}, //$NON-NLS-2$
-                {paris,                     'c', "\u6708 5 08 12:00:00 CEST 2006"}, //$NON-NLS-2$
-                {china,                     'c', "\u6708 5 08 12:00:00 GMT-08:00 2006"}, //$NON-NLS-2$
+                {0L,                        'c', "\u010dt I 01 08:00:00 CST 1970"}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'c', "ne VIII 17 15:12:55 CST 292278994"}, //$NON-NLS-2$
+                {-1000L,                    'c', "\u010dt I 01 07:59:59 CST 1970"}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'c', "\u010dt V 11 13:59:07 CST 2006"}, //$NON-NLS-2$
+                {paris,                     'c', "po V 08 12:00:00 CEST 2006"}, //$NON-NLS-2$
+                {china,                     'c', "po V 08 12:00:00 GMT-08:00 2006"}, //$NON-NLS-2$
                 {0L,                        'd', "01"}, //$NON-NLS-2$
                 {Long.MAX_VALUE,            'd', "17"}, //$NON-NLS-2$
                 {-1000L,                    'd', "01"}, //$NON-NLS-2$
@@ -2254,12 +2261,12 @@ public class FormatterTest extends TestCase {
                 {new Date(1147327147578L),  'e', "11"}, //$NON-NLS-2$
                 {paris,                     'e', "8"}, //$NON-NLS-2$
                 {china,                     'e', "8"}, //$NON-NLS-2$
-                {0L,                        'h', "1"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'h', "8"}, //$NON-NLS-2$
-                {-1000L,                    'h', "1"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'h', "5"}, //$NON-NLS-2$
-                {paris,                     'h', "5"}, //$NON-NLS-2$
-                {china,                     'h', "5"}, //$NON-NLS-2$
+                {0L,                        'h', "I"}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'h', "VIII"}, //$NON-NLS-2$
+                {-1000L,                    'h', "I"}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'h', "V"}, //$NON-NLS-2$
+                {paris,                     'h', "V"}, //$NON-NLS-2$
+                {china,                     'h', "V"}, //$NON-NLS-2$
                 {0L,                        'j', "001"}, //$NON-NLS-2$
                 {Long.MAX_VALUE,            'j', "229"}, //$NON-NLS-2$
                 {-1000L,                    'j', "001"}, //$NON-NLS-2$
@@ -2284,18 +2291,18 @@ public class FormatterTest extends TestCase {
                 {new Date(1147327147578L),  'm', "05"}, //$NON-NLS-2$
                 {paris,                     'm', "05"}, //$NON-NLS-2$
                 {china,                     'm', "05"}, //$NON-NLS-2$
-                {0L,                        'p', "\u5348\u524d"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'p', "\u5348\u5f8c"}, //$NON-NLS-2$
-                {-1000L,                    'p', "\u5348\u524d"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'p', "\u5348\u5f8c"}, //$NON-NLS-2$
-                {paris,                     'p', "\u5348\u5f8c"}, //$NON-NLS-2$
-                {china,                     'p', "\u5348\u5f8c"}, //$NON-NLS-2$
-                {0L,                        'r', "08:00:00 \u5348\u524d"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'r', "03:12:55 \u5348\u5f8c"}, //$NON-NLS-2$
-                {-1000L,                    'r', "07:59:59 \u5348\u524d"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'r', "01:59:07 \u5348\u5f8c"}, //$NON-NLS-2$
-                {paris,                     'r', "12:00:00 \u5348\u5f8c"}, //$NON-NLS-2$
-                {china,                     'r', "12:00:00 \u5348\u5f8c"}, //$NON-NLS-2$
+                {0L,                        'p', "dop."}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'p', "odp."}, //$NON-NLS-2$
+                {-1000L,                    'p', "dop."}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'p', "odp."}, //$NON-NLS-2$
+                {paris,                     'p', "odp."}, //$NON-NLS-2$
+                {china,                     'p', "odp."}, //$NON-NLS-2$
+                {0L,                        'r', "08:00:00 DOP."}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'r', "03:12:55 ODP."}, //$NON-NLS-2$
+                {-1000L,                    'r', "07:59:59 DOP."}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'r', "01:59:07 ODP."}, //$NON-NLS-2$
+                {paris,                     'r', "12:00:00 ODP."}, //$NON-NLS-2$
+                {china,                     'r', "12:00:00 ODP."}, //$NON-NLS-2$
                 {0L,                        's', "0"}, //$NON-NLS-2$
                 {Long.MAX_VALUE,            's', "9223372036854775"}, //$NON-NLS-2$
                 {-1000L,                    's', "-1"}, //$NON-NLS-2$
@@ -2337,10 +2344,10 @@ public class FormatterTest extends TestCase {
                             lowerCaseFranceTriple[i][output], f.toString());
 
             f = new Formatter(Locale.GERMAN);
-            f.format(Locale.JAPAN, formatSpecifier, lowerCaseJapanTriple[i][input]);
+            f.format(new Locale("cs", "CZ"), formatSpecifier, lowerCaseCzechTriple[i][input]);
             assertEquals("Format pattern: " + formatSpecifier //$NON-NLS-2$
-                            + " Argument: " + lowerCaseJapanTriple[i][input], //$NON-NLS-2$
-                            lowerCaseJapanTriple[i][output], f.toString());
+                            + " Argument: " + lowerCaseCzechTriple[i][input], //$NON-NLS-2$
+                            lowerCaseCzechTriple[i][output], f.toString());
 
             // test '%T'
             f = new Formatter(Locale.GERMAN);
@@ -2358,10 +2365,10 @@ public class FormatterTest extends TestCase {
                                     .toUpperCase(Locale.US), f.toString());
 
             f = new Formatter(Locale.GERMAN);
-            f.format(Locale.JAPAN, formatSpecifierUpper, lowerCaseJapanTriple[i][input]);
+            f.format(new Locale("cs", "CZ"), formatSpecifierUpper, lowerCaseCzechTriple[i][input]);
             assertEquals("Format pattern: " + formatSpecifierUpper //$NON-NLS-2$
-                            + " Argument: " + lowerCaseJapanTriple[i][input], //$NON-NLS-2$
-                            ((String)lowerCaseJapanTriple[i][output])
+                            + " Argument: " + lowerCaseCzechTriple[i][input], //$NON-NLS-2$
+                            ((String)lowerCaseCzechTriple[i][output])
                                     .toUpperCase(Locale.US), f.toString());
         }
 
@@ -2565,19 +2572,19 @@ public class FormatterTest extends TestCase {
                 
         };
 
-        final Object[][] upperCaseJapanTriple = {
-                {0L,                        'A', "\u6728\u66dc\u65e5"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'A', "\u65e5\u66dc\u65e5"}, //$NON-NLS-2$
-                {-1000L,                    'A', "\u6728\u66dc\u65e5"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'A', "\u6728\u66dc\u65e5"}, //$NON-NLS-2$
-                {paris,                     'A', "\u6708\u66dc\u65e5"}, //$NON-NLS-2$
-                {china,                     'A', "\u6708\u66dc\u65e5"}, //$NON-NLS-2$
-                {0L,                        'B', "1\u6708"}, //$NON-NLS-2$
-                {Long.MAX_VALUE,            'B', "8\u6708"}, //$NON-NLS-2$
-                {-1000L,                    'B', "1\u6708"}, //$NON-NLS-2$
-                {new Date(1147327147578L),  'B', "5\u6708"}, //$NON-NLS-2$
-                {paris,                     'B', "5\u6708"}, //$NON-NLS-2$
-                {china,                     'B', "5\u6708"}, //$NON-NLS-2$
+        final Object[][] upperCaseCzechTriple = {
+                {0L,                        'A', "\u010ctvrtek"}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'A', "Ned\u011ble"}, //$NON-NLS-2$
+                {-1000L,                    'A', "\u010ctvrtek"}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'A', "\u010ctvrtek"}, //$NON-NLS-2$
+                {paris,                     'A', "Pond\u011bl\u00ed"}, //$NON-NLS-2$
+                {china,                     'A', "Pond\u011bl\u00ed"}, //$NON-NLS-2$
+                {0L,                        'B', "leden"}, //$NON-NLS-2$
+                {Long.MAX_VALUE,            'B', "srpen"}, //$NON-NLS-2$
+                {-1000L,                    'B', "leden"}, //$NON-NLS-2$
+                {new Date(1147327147578L),  'B', "kv\u011bten"}, //$NON-NLS-2$
+                {paris,                     'B', "kv\u011bten"}, //$NON-NLS-2$
+                {china,                     'B', "kv\u011bten"}, //$NON-NLS-2$
                 {0L,                        'C', "19"}, //$NON-NLS-2$
                 {Long.MAX_VALUE,            'C', "2922789"}, //$NON-NLS-2$
                 {-1000L,                    'C', "19"}, //$NON-NLS-2$
@@ -2673,19 +2680,19 @@ public class FormatterTest extends TestCase {
                         continue;
                     }
                     // test '%t'
-                    f = new Formatter(Locale.JAPAN);
-                    f.format(formatSpecifier, upperCaseJapanTriple[i][input]);
+                    f = new Formatter(new Locale("cs", "CZ"));
+                    f.format(formatSpecifier, upperCaseCzechTriple[i][input]);
                     assertEquals("Format pattern: " + formatSpecifier //$NON-NLS-2$
-                            + " Argument: " + upperCaseJapanTriple[i][input], //$NON-NLS-2$
-                            upperCaseJapanTriple[i][output], f.toString());
+                            + " Argument: " + upperCaseCzechTriple[i][input], //$NON-NLS-2$
+                            upperCaseCzechTriple[i][output], f.toString());
 
-                    f = new Formatter(Locale.JAPAN);
+                    f = new Formatter(new Locale("cs", "CZ"));
                     f.format(Locale.GERMAN, formatSpecifier, upperCaseGermanTriple[i][input]);
                     assertEquals("Format pattern: " + formatSpecifier //$NON-NLS-2$
                             + " Argument: " + upperCaseGermanTriple[i][input], //$NON-NLS-2$
                             upperCaseGermanTriple[i][output], f.toString());
 
-                    f = new Formatter(Locale.JAPAN);
+                    f = new Formatter(new Locale("cs", "CZ"));
                     f.format(Locale.FRANCE, formatSpecifier, upperCaseFranceTriple[i][input]);
                     assertEquals("Format pattern: " + formatSpecifier //$NON-NLS-2$
                             + " Argument: " + upperCaseFranceTriple[i][input], //$NON-NLS-2$
@@ -2700,10 +2707,10 @@ public class FormatterTest extends TestCase {
                                     .toUpperCase(Locale.US), f.toString());
 
                     f = new Formatter(Locale.GERMAN);
-                    f.format(Locale.JAPAN, formatSpecifierUpper, upperCaseJapanTriple[i][input]);
+                    f.format(new Locale("cs", "CZ"), formatSpecifierUpper, upperCaseCzechTriple[i][input]);
                     assertEquals("Format pattern: " + formatSpecifierUpper //$NON-NLS-2$
-                            + " Argument: " + upperCaseJapanTriple[i][input], //$NON-NLS-2$
-                            ((String)upperCaseJapanTriple[i][output])
+                            + " Argument: " + upperCaseCzechTriple[i][input], //$NON-NLS-2$
+                            ((String)upperCaseCzechTriple[i][output])
                                     .toUpperCase(Locale.US), f.toString());
 
                     f = new Formatter(Locale.GERMAN);
@@ -2766,6 +2773,7 @@ public class FormatterTest extends TestCase {
         method = "format",
         args = {java.lang.String.class, java.lang.Object[].class}
     )
+    @KnownFailure("flaky! results. differs if debugger is attached.")
     public void test_formatLjava_lang_String$LBigInteger() {
         final Object[][] tripleD = {
                 {new BigInteger("123456789012345678901234567890"),          "%d",       "123456789012345678901234567890"}, //$NON-NLS-2$

@@ -17,8 +17,7 @@
 
 package org.apache.harmony.archive.tests.java.util.jar;
 
-import dalvik.annotation.AndroidOnly;
-import dalvik.annotation.BrokenTest;
+import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
@@ -47,13 +46,12 @@ public class JarExecTest extends junit.framework.TestCase {
      * 
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Regression functional test. Exception checking missed.",
         method = "putNextEntry",
         args = {java.util.zip.ZipEntry.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_1562() throws Exception {
         // create the manifest
         Manifest man = new Manifest();
@@ -92,13 +90,12 @@ public class JarExecTest extends junit.framework.TestCase {
      * @throws Exception in case of troubles
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "JarOutputStream",
         args = {java.io.OutputStream.class, java.util.jar.Manifest.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_jar_class_path() throws Exception {
         File fooJar = File.createTempFile("hyts_", ".jar");
         File barJar = File.createTempFile("hyts_", ".jar");
@@ -169,13 +166,12 @@ public class JarExecTest extends junit.framework.TestCase {
      * @throws Exception in case of troubles
      */
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "JarOutputStream",
         args = {java.io.OutputStream.class, java.util.jar.Manifest.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_main_class_in_another_jar() throws Exception {
         File fooJar = File.createTempFile("hyts_", ".jar");
         File barJar = File.createTempFile("hyts_", ".jar");
@@ -213,13 +209,12 @@ public class JarExecTest extends junit.framework.TestCase {
     }
 
     @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
+        level = TestLevel.ADDITIONAL,
         notes = "Functional test.",
         method = "JarOutputStream",
         args = {java.io.OutputStream.class, java.util.jar.Manifest.class}
     )
-    @BrokenTest("Support_Exec.execJava is not so simple to use: Harmony Test cannot be easily adapted.")
-    @AndroidOnly("dalvik vm specific")
+    @KnownFailure("Maybe not a failure, but dalvikvm -jar is not supported (, as yet).")
     public void test_classpath() throws Exception {
         File resources = Support_Resources.createTempFolder();
 

@@ -548,7 +548,7 @@ bool dvmInterpHandleFillArrayData(ArrayObject* arrayObj, const u2* arrayData)
     width = arrayData[1];
     size = arrayData[2] | (((u4)arrayData[3]) << 16);
 
-    if (size != arrayObj->length) {
+    if (size > arrayObj->length) {
         dvmThrowException("Ljava/lang/ArrayIndexOutOfBoundsException;", NULL);
         return false;
     }

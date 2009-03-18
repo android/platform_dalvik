@@ -17,11 +17,11 @@
 
 package org.apache.harmony.nio.tests.java.nio.channels;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -719,6 +719,7 @@ public class ServerSocketChannelTest extends TestCase {
         method = "accept",
         args = {}
     )
+    @AndroidOnly("seems to run on newer RI versions")
     public void test_accept_Security() throws IOException {
         this.clientChannel.configureBlocking(true);
         this.serverChannel.configureBlocking(true);
@@ -868,7 +869,6 @@ public class ServerSocketChannelTest extends TestCase {
         method = "socket",
         args = {}
     )
-    @KnownFailure("Fixed in ToT")
     public void test_socket_getLocalPort() throws IOException {
         // regression test for Harmony-4961
         serverChannel.socket().bind(localAddr1);

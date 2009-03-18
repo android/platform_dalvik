@@ -49,15 +49,6 @@ import junit.framework.TestCase;
 
 public class KeyPairGenerator3Test extends TestCase {
 
-    /**
-     * Constructor for KeyPairGenerator3Test.
-     * 
-     * @param arg0
-     */
-    public KeyPairGenerator3Test(String arg0) {
-        super(arg0);
-    }
-
     private static String validProviderName = null;
 
     public static Provider validProvider = null;

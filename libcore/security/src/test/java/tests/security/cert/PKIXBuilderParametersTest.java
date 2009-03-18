@@ -84,14 +84,6 @@ public class PKIXBuilderParametersTest extends TestCase {
             + "-----END CERTIFICATE-----\n";
 
     /**
-     * Constructor for PKIXBuilderParametersTest.
-     * @param name
-     */
-    public PKIXBuilderParametersTest(String name) {
-        super(name);
-    }
-
-    /**
      * Test #1 for <code>PKIXBuilderParameters(Set, CertSelector)</code>
      * constructor<br>
      * Assertion: creates an instance of <code>PKIXBuilderParameters</code>

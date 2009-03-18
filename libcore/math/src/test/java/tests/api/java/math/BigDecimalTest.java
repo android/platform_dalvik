@@ -21,6 +21,7 @@ import dalvik.annotation.TestTargets;
 import dalvik.annotation.TestLevel;
 import dalvik.annotation.TestTargetNew;
 import dalvik.annotation.TestTargetClass;
+import dalvik.annotation.AndroidOnly;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -1287,10 +1288,11 @@ public class BigDecimalTest extends junit.framework.TestCase {
      */
     @TestTargetNew(
         level = TestLevel.PARTIAL,
-        notes = "SUN JDK fails the Zero Test: has scale 4 for BigDecimal('0.0000')",
+        notes = "The RI fails the Zero Test: has scale 4 for BigDecimal('0.0000')",
         method = "stripTrailingZeros",
         args = {}
     )
+    @AndroidOnly("Stripping trailing zeroes from 0.000 value doesn't work on RI. See below")
     public void test_stripTrailingZero() {
         BigDecimal sixhundredtest = new BigDecimal("600.0");
         assertTrue("stripTrailingZero failed for 600.0",

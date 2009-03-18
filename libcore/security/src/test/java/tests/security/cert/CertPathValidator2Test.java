@@ -16,9 +16,9 @@
  */
 
 /**
-* @author Vera Y. Petrashkova
-* @version $Revision$
-*/
+ * @author Vera Y. Petrashkova
+ * @version $Revision$
+ */
 
 package tests.security.cert;
 
@@ -42,14 +42,14 @@ import java.security.cert.CertPathParameters;
 import java.security.cert.CertPathValidator;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.PKIXParameters;
+
 /**
  * Tests for CertPathValidator class constructors and methods
- * 
  */
 @TestTargetClass(CertPathValidator.class)
 public class CertPathValidator2Test extends TestCase {
     private static final String defaultAlg = "CertPB";
-    
+
     public static final String CertPathValidatorProviderClass = "org.apache.harmony.security.tests.support.cert.MyCertPathValidatorSpi";
 
     private static final String[] invalidValues = SpiEngUtils.invalidValues;
@@ -69,9 +69,8 @@ public class CertPathValidator2Test extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         mProv = (new SpiEngUtils()).new MyProvider("MyCertPathValidatorProvider",
-                "Provider for testing", CertPathValidator1Test.srvCertPathValidator
-                        .concat(".").concat(defaultAlg),
-                CertPathValidatorProviderClass);
+                "Provider for testing", CertPathValidator1Test.srvCertPathValidator.concat(".")
+                        .concat(defaultAlg), CertPathValidatorProviderClass);
         Security.insertProviderAt(mProv, 1);
     }
 
@@ -83,51 +82,37 @@ public class CertPathValidator2Test extends TestCase {
         Security.removeProvider(mProv.getName());
     }
 
-    /**
-     * Constructor for CertPathValidator2Test.
-     * 
-     * @param arg0
-     */
-    public CertPathValidator2Test(String arg0) {
-        super(arg0);
-    }
-
-    private void checkResult(CertPathValidator certV) 
-            throws CertPathValidatorException, 
+    private void checkResult(CertPathValidator certV) throws CertPathValidatorException,
             InvalidAlgorithmParameterException {
         String dt = CertPathValidator.getDefaultType();
         String propName = "certpathvalidator.type";
-        for (int i = 0; i <invalidValues.length; i++) {
+        for (int i = 0; i < invalidValues.length; i++) {
             Security.setProperty(propName, invalidValues[i]);
             assertEquals("Incorrect default type", CertPathValidator.getDefaultType(),
                     invalidValues[i]);
         }
         Security.setProperty(propName, dt);
-        assertEquals("Incorrect default type", CertPathValidator.getDefaultType(),
-                dt);       certV.validate(null, null);
-       try {
-           certV.validate(null, null);           
-       } catch (CertPathValidatorException e) {
-       }
-       try {
-           certV.validate(null, null);           
-       } catch (InvalidAlgorithmParameterException e) {
-       }
+        assertEquals("Incorrect default type", CertPathValidator.getDefaultType(), dt);
+        certV.validate(null, null);
+        try {
+            certV.validate(null, null);
+        } catch (CertPathValidatorException e) {
+        }
+        try {
+            certV.validate(null, null);
+        } catch (InvalidAlgorithmParameterException e) {
+        }
     }
 
     /**
-     * Test for <code>getInstance(String algorithm)</code> method 
-     * Assertions:
-     * throws NullPointerException when algorithm is null 
-     * throws NoSuchAlgorithmException when algorithm  is not available
-     * returns CertPathValidator object
+     * Test for <code>getInstance(String algorithm)</code> method Assertions:
+     * throws NullPointerException when algorithm is null throws
+     * NoSuchAlgorithmException when algorithm is not available returns
+     * CertPathValidator object
      */
-    @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "",
-        method = "getInstance",
-        args = {java.lang.String.class}
-    )
+    @TestTargetNew(level = TestLevel.COMPLETE, notes = "", method = "getInstance", args = {
+        java.lang.String.class
+    })
     public void testGetInstance01() throws NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, CertPathValidatorException {
         try {
@@ -139,8 +124,8 @@ public class CertPathValidator2Test extends TestCase {
         for (int i = 0; i < invalidValues.length; i++) {
             try {
                 CertPathValidator.getInstance(invalidValues[i]);
-                fail("NoSuchAlgorithmException must be thrown (type: ".concat(
-                        invalidValues[i]).concat(")"));
+                fail("NoSuchAlgorithmException must be thrown (type: ".concat(invalidValues[i])
+                        .concat(")"));
             } catch (NoSuchAlgorithmException e) {
             }
         }
@@ -154,23 +139,19 @@ public class CertPathValidator2Test extends TestCase {
     }
 
     /**
-     * Test for <code>getInstance(String algorithm, String provider)</code> method
-     * Assertions: 
-     * throws NullPointerException when algorithm is null 
-     * throws NoSuchAlgorithmException when algorithm  is not available
-     * throws IllegalArgumentException when provider is null or empty; 
-     * throws NoSuchProviderException when provider is available; 
-     * returns CertPathValidator object
+     * Test for <code>getInstance(String algorithm, String provider)</code>
+     * method Assertions: throws NullPointerException when algorithm is null
+     * throws NoSuchAlgorithmException when algorithm is not available throws
+     * IllegalArgumentException when provider is null or empty; throws
+     * NoSuchProviderException when provider is available; returns
+     * CertPathValidator object
      */
-    @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "",
-        method = "getInstance",
-        args = {java.lang.String.class, java.lang.String.class}
-    )
-    public void testGetInstance02() throws NoSuchAlgorithmException,
-            NoSuchProviderException, IllegalArgumentException,
-            InvalidAlgorithmParameterException, CertPathValidatorException {
+    @TestTargetNew(level = TestLevel.COMPLETE, notes = "", method = "getInstance", args = {
+            java.lang.String.class, java.lang.String.class
+    })
+    public void testGetInstance02() throws NoSuchAlgorithmException, NoSuchProviderException,
+            IllegalArgumentException, InvalidAlgorithmParameterException,
+            CertPathValidatorException {
         try {
             CertPathValidator.getInstance(null, mProv.getName());
             fail("NullPointerException or NoSuchAlgorithmException must be thrown when algorithm is null");
@@ -179,10 +160,9 @@ public class CertPathValidator2Test extends TestCase {
         }
         for (int i = 0; i < invalidValues.length; i++) {
             try {
-                CertPathValidator.getInstance(invalidValues[i], mProv
-                        .getName());
-                fail("NoSuchAlgorithmException must be thrown (type: ".concat(
-                        invalidValues[i]).concat(")"));
+                CertPathValidator.getInstance(invalidValues[i], mProv.getName());
+                fail("NoSuchAlgorithmException must be thrown (type: ".concat(invalidValues[i])
+                        .concat(")"));
             } catch (NoSuchAlgorithmException e) {
             }
         }
@@ -204,43 +184,33 @@ public class CertPathValidator2Test extends TestCase {
         for (int i = 0; i < validValues.length; i++) {
             for (int j = 1; j < invalidValues.length; j++) {
                 try {
-                    CertPathValidator.getInstance(validValues[i],
-                            invalidValues[j]);
-                    fail("NoSuchProviderException must be thrown (type: "
-                            .concat(validValues[i]).concat(" provider: ")
-                            .concat(invalidValues[j]).concat(")"));
+                    CertPathValidator.getInstance(validValues[i], invalidValues[j]);
+                    fail("NoSuchProviderException must be thrown (type: ".concat(validValues[i])
+                            .concat(" provider: ").concat(invalidValues[j]).concat(")"));
                 } catch (NoSuchProviderException e) {
                 }
             }
         }
         CertPathValidator cerPV;
         for (int i = 0; i < validValues.length; i++) {
-            cerPV = CertPathValidator.getInstance(validValues[i], mProv
-                    .getName());
+            cerPV = CertPathValidator.getInstance(validValues[i], mProv.getName());
             assertEquals("Incorrect type", cerPV.getAlgorithm(), validValues[i]);
-            assertEquals("Incorrect provider", cerPV.getProvider().getName(),
-                    mProv.getName());
+            assertEquals("Incorrect provider", cerPV.getProvider().getName(), mProv.getName());
             checkResult(cerPV);
         }
     }
 
     /**
      * Test for <code>getInstance(String algorithm, Provider provider)</code>
-     * method 
-     * Assertions: 
-     * throws NullPointerException when algorithm is null 
-     * throws NoSuchAlgorithmException when algorithm  is not available
-     * throws IllegalArgumentException when provider is null; 
-     * returns CertPathValidator object
+     * method Assertions: throws NullPointerException when algorithm is null
+     * throws NoSuchAlgorithmException when algorithm is not available throws
+     * IllegalArgumentException when provider is null; returns CertPathValidator
+     * object
      */
-    @TestTargetNew(
-        level = TestLevel.COMPLETE,
-        notes = "",
-        method = "getInstance",
-        args = {java.lang.String.class, java.security.Provider.class}
-    )
-    public void testGetInstance03() throws NoSuchAlgorithmException,
-            IllegalArgumentException,
+    @TestTargetNew(level = TestLevel.COMPLETE, notes = "", method = "getInstance", args = {
+            java.lang.String.class, java.security.Provider.class
+    })
+    public void testGetInstance03() throws NoSuchAlgorithmException, IllegalArgumentException,
             InvalidAlgorithmParameterException, CertPathValidatorException {
         try {
             CertPathValidator.getInstance(null, mProv);
@@ -251,8 +221,8 @@ public class CertPathValidator2Test extends TestCase {
         for (int i = 0; i < invalidValues.length; i++) {
             try {
                 CertPathValidator.getInstance(invalidValues[i], mProv);
-                fail("NoSuchAlgorithmException must be thrown (type: ".concat(
-                        invalidValues[i]).concat(")"));
+                fail("NoSuchAlgorithmException must be thrown (type: ".concat(invalidValues[i])
+                        .concat(")"));
             } catch (NoSuchAlgorithmException e) {
             }
         }
@@ -273,35 +243,33 @@ public class CertPathValidator2Test extends TestCase {
             checkResult(cerPV);
         }
     }
-    
-    @TestTargetNew(
-            level=TestLevel.PARTIAL_COMPLETE,
-            method="validate",
-            args={CertPath.class,CertPathParameters.class}
-    )
+
+    @TestTargetNew(level = TestLevel.PARTIAL_COMPLETE, method = "validate", args = {
+            CertPath.class, CertPathParameters.class
+    })
     public void testValidate() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
         MyCertPath mCP = new MyCertPath(new byte[0]);
-        CertPathParameters params = new PKIXParameters(TestUtils.getTrustAnchorSet()); 
+        CertPathParameters params = new PKIXParameters(TestUtils.getTrustAnchorSet());
         CertPathValidator certPV = CertPathValidator.getInstance(defaultAlg);
         try {
             certPV.validate(mCP, params);
         } catch (InvalidAlgorithmParameterException e) {
-            fail("unexpected exception: " + e); 
+            fail("unexpected exception: " + e);
         } catch (CertPathValidatorException e) {
             fail("unexpected exception: " + e);
         }
         try {
             certPV.validate(null, params);
             fail("NullPointerException must be thrown");
-        } catch(InvalidAlgorithmParameterException e) {
+        } catch (InvalidAlgorithmParameterException e) {
             fail("unexpected exception: " + e);
         } catch (CertPathValidatorException e) {
             // ok
-        }        
+        }
         try {
             certPV.validate(mCP, null);
             fail("InvalidAlgorithmParameterException must be thrown");
-        } catch(InvalidAlgorithmParameterException e) {
+        } catch (InvalidAlgorithmParameterException e) {
             // ok
         } catch (CertPathValidatorException e) {
             fail("unexpected exception");

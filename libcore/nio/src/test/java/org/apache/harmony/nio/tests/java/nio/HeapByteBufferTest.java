@@ -26,15 +26,10 @@ public class HeapByteBufferTest extends ByteBufferTest {
     
     protected void setUp() throws Exception {   
         super.setUp();
-        capacity = BUFFER_LENGTH;
-        buf = ByteBuffer.allocate(BUFFER_LENGTH);
-        baseBuf = buf;
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
-        buf = null;
-        baseBuf = null;
     }
     
     /**
@@ -54,36 +49,5 @@ public class HeapByteBufferTest extends ByteBufferTest {
         } catch (IllegalArgumentException e) {
             // expected 
         }
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Verifies isDirect method with not direct buffer.",
-        method = "isDirect",
-        args = {}
-    )
-    public void testIsDirect() {
-        assertFalse(buf.isDirect());
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Verifies that hasArray returns true value.",
-        method = "hasArray",
-        args = {}
-    )
-    public void testHasArray() {
-        assertTrue(buf.hasArray());
-        assertNotNull(buf.array());
-    }
-
-    @TestTargetNew(
-        level = TestLevel.PARTIAL_COMPLETE,
-        notes = "Verifies isReadOnly method with non read only buffer.",
-        method = "isReadOnly",
-        args = {}
-    )
-    public void testIsReadOnly() {
-        assertFalse(buf.isReadOnly());
     }
 }

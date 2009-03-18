@@ -38,18 +38,6 @@ import java.security.cert.CRLException;
 @TestTargetClass(CRLException.class)
 public class CRLExceptionTest extends TestCase {
 
-    public static void main(String[] args) {
-    }
-
-    /**
-     * Constructor for CRLExceptionTests.
-     * 
-     * @param arg0
-     */
-    public CRLExceptionTest(String arg0) {
-        super(arg0);
-    }
-
     private static String[] msgs = {
             "",
             "Check new message",
