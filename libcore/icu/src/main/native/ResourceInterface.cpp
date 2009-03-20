@@ -1207,7 +1207,7 @@ endOfCalendar:
         intCurrencySymbol = env->NewStringUTF("XXX");
     }
     if(currencySymbol == NULL) {
-		// creating string explicitly with the UTF-8 encoding of string "\u00a4"
+        // creating new string explicitly with the UTF-8 encoding of "\u00a4"
         currencySymbol = env->NewStringUTF("\xc2\xa4");
     }
     counter += 2;
