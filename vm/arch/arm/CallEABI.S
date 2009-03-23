@@ -239,7 +239,12 @@ DBG strcs   ip, [r8]                    @ DEBUG DEBUG
 
     @ call the method
     ldr     ip, [r4, #8]                @ func
+#ifdef __ARM_HAVE_BLX
     blx     ip
+#else
+    mov     lr, pc
+    bx      ip
+#endif
 
     @ We're back, result is in r0 or (for long/double) r0-r1.
     @

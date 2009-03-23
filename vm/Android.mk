@@ -227,10 +227,23 @@ ifeq ($(TARGET_ARCH),arm)
 		arch/arm/CallOldABI.S \
 		arch/arm/CallEABI.S \
 		arch/arm/HintsEABI.c
-  # TODO: select sources for ARMv4 vs. ARMv5TE
-  LOCAL_SRC_FILES += \
-		mterp/out/InterpC-armv5te.c.arm \
-		mterp/out/InterpAsm-armv5te.S
+  #
+  # The armv4 configation in mterp is actually armv4t, it's just
+  # wrongly named
+  # 
+  # TODO: Rename mterp/config-armv4 and mterp/armv4 (to armv4t)
+  #       then remove this ifeq.
+  # 
+  ifeq ($(TARGET_ARCH_VERSION),armv4t)
+    LOCAL_SRC_FILES += \
+		mterp/out/InterpC-armv4.c.arm \
+		mterp/out/InterpAsm-armv4.S
+  else
+    # Select architecture specific sources (armv4,armv5te etc)
+    LOCAL_SRC_FILES += \
+		mterp/out/InterpC-$(TARGET_ARCH_VERSION).c.arm \
+		mterp/out/InterpAsm-$(TARGET_ARCH_VERSION).S 
+  endif
   LOCAL_SHARED_LIBRARIES += libdl
 else
   ifeq ($(TARGET_ARCH),x86)
