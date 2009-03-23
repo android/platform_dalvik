@@ -227,10 +227,10 @@ ifeq ($(TARGET_ARCH),arm)
 		arch/arm/CallOldABI.S \
 		arch/arm/CallEABI.S \
 		arch/arm/HintsEABI.c
-  # TODO: select sources for ARMv4 vs. ARMv5TE
+  # Select architecture specific sources (armv4,armv5te etc)
   LOCAL_SRC_FILES += \
-		mterp/out/InterpC-armv5te.c.arm \
-		mterp/out/InterpAsm-armv5te.S
+		mterp/out/InterpC-$(TARGET_ARCH_VERSION).c.arm \
+		mterp/out/InterpAsm-$(TARGET_ARCH_VERSION).S
   LOCAL_SHARED_LIBRARIES += libdl
 else
   ifeq ($(TARGET_ARCH),x86)
