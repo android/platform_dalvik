@@ -215,7 +215,7 @@ LOCAL_C_INCLUDES += \
 	external/zlib \
 	$(KERNEL_HEADERS)
 
-
+ 
 ifeq ($(TARGET_SIMULATOR),true)
   LOCAL_LDLIBS += -lpthread -ldl
   ifeq ($(HOST_OS),linux)
@@ -250,7 +250,23 @@ ifeq ($(TARGET_ARCH),arm)
   endif
   LOCAL_SHARED_LIBRARIES += libdl
 else
-  ifeq ($(TARGET_ARCH),x86)
+  ifeq ($(TARGET_ARCH_VERSION),x86-atom)
+	# use FFI for now, then use custom
+	# version rather than FFI
+        $(warning compiling for x86-atom)
+
+	LOCAL_SRC_FILES += arch/x86-atom/CallABI.S \
+			   arch/x86-atom/HintsABI.c
+
+	LOCAL_SRC_FILES += \
+			mterp/out/InterpC-x86-atom.c \
+			mterp/out/InterpAsm-x86-atom.S
+
+    ifneq ($(TARGET_SIMULATOR),true)
+	LOCAL_SHARED_LIBRARIES += libdl
+    endif
+
+  else ifeq ($(TARGET_ARCH),x86)
     LOCAL_SRC_FILES += \
 		arch/x86/Call386ABI.S \
 		arch/x86/Hints386ABI.c
