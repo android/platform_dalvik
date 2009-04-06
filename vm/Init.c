@@ -524,7 +524,6 @@ static void freeAssertionCtrl(void)
     free(gDvm.assertionCtrl);
 }
 
-
 /*
  * Process an argument vector full of options.  Unlike standard C programs,
  * argv[0] does not contain the name of the program.

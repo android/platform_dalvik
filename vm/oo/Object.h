@@ -24,6 +24,7 @@
 
 /* fwd decl */
 struct DataObject;
+struct InitiatingLoaderList;
 struct ClassObject;
 struct StringObject;
 struct ArrayObject;
@@ -34,6 +35,7 @@ struct StaticField;
 struct InstField;
 struct Field;
 typedef struct DataObject DataObject;
+typedef struct InitiatingLoaderList InitiatingLoaderList;
 typedef struct ClassObject ClassObject;
 typedef struct StringObject StringObject;
 typedef struct ArrayObject ArrayObject;
@@ -246,6 +248,18 @@ struct ArrayObject {
 };
 
 /*
+ * For classes created early and thus probably in the zygote, the
+ * InitiatingLoaderList is kept in gDvm. Later classes use the structure in
+ * Object Class. This helps keep zygote pages shared.
+ */
+struct InitiatingLoaderList {
+    /* a list of initiating loader Objects; grown and initialized on demand */
+    Object**  initiatingLoaders;
+    /* count of loaders in the above list */
+    int       initiatingLoaderCount;
+};
+
+/*
  * Class objects have many additional fields.  This is used for both
  * classes and interfaces, including synthesized classes (arrays and
  * primitive types).
@@ -316,8 +330,9 @@ struct ClassObject {
     Object*         classLoader;
 
     /* initiating class loader list */
-    Object**        initiatingLoaders;
-    int             initiatingLoaderCount;
+    /* NOTE: for classes with low serialNumber, these are unused, and the
+       values are kept in a table in gDvm. */
+    InitiatingLoaderList initiatingLoaderList;
 
     /* array of interfaces this class implements directly */
     int             interfaceCount;

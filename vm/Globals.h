@@ -57,6 +57,11 @@ typedef enum ExecutionMode {
 } ExecutionMode;
 
 /*
+ * An estimate of how many classes will be in the zygote.
+ */
+#define ZYGOTE_CLASS_CUTOFF 2000
+
+/*
  * All fields are initialized to zero.
  *
  * Storage allocated here must be freed by a subsystem shutdown function or
@@ -140,6 +145,13 @@ struct DvmGlobals {
      * as a count of loaded classes.
      */
     volatile int classSerialNumber;
+
+    /*
+     * Classes with a low classSerialNumber are probably in the zygote, and
+     * their InitiatingLoaderList is not used, to promote sharing. The list is
+     * kept here instead.
+     */
+    InitiatingLoaderList initiatingLoaderList[ZYGOTE_CLASS_CUTOFF];
 
     /*
      * Interned strings.
