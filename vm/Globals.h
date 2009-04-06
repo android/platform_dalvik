@@ -142,6 +142,13 @@ struct DvmGlobals {
     volatile int classSerialNumber;
 
     /*
+     * Classes with a low classSerialNumber are probably in the zygote, and
+     * their InitiatingLoaderList is not used, to promote sharing. The list is
+     * kept here instead.
+     */
+    InitiatingLoaderList* initiatingLoaderList;
+
+    /*
      * Interned strings.
      */
     HashTable*  internedStrings;
