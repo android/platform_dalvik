@@ -151,6 +151,9 @@ Since the ultimate goal of this test is to catch an unusual situation
 may not be worth the performance hit.
 */
 
+#define INITIAL_CLASS_SERIAL_NUMBER 0x50000000
+#define ZYGOTE_CLASS_CUTOFF 2000
+
 static ClassPathEntry* processClassPath(const char* pathStr, bool isBootstrap);
 static void freeCpeArray(ClassPathEntry* cpe);
 
@@ -289,8 +292,15 @@ bool dvmClassStartup(void)
      * Class serial number.  We start with a high value to make it distinct
      * in binary dumps (e.g. hprof).
      */
-    gDvm.classSerialNumber = 0x50000000;
+    gDvm.classSerialNumber = INITIAL_CLASS_SERIAL_NUMBER;
 
+    /* Set up the table we'll use for tracking initiating loaders for
+     * early classes.
+     * If it's NULL, we just fall back to the InitiatingLoaderList in the
+     * ClassObject, so it's not fatal to fail this allocation.
+     */
+    gDvm.initiatingLoaderList =
+        calloc(ZYGOTE_CLASS_CUTOFF, sizeof(InitiatingLoaderList));
 
     /* This placeholder class is used while a ClassObject is
      * loading/linking so those not in the know can still say
@@ -342,6 +352,8 @@ void dvmClassShutdown(void)
     gDvm.bootClassPath = NULL;
 
     dvmLinearAllocDestroy(NULL);
+
+    free(gDvm.initiatingLoaderList);
 }
 
 
@@ -793,6 +805,18 @@ typedef struct ClassMatchCriteria {
 
 #define kInitLoaderInc  4       /* must be power of 2 */
 
+static InitiatingLoaderList *dvmGetInitiatingLoaderList(ClassObject* clazz)
+{
+    assert(clazz->serialNumber > INITIAL_CLASS_SERIAL_NUMBER);
+    int classIndex = clazz->serialNumber-INITIAL_CLASS_SERIAL_NUMBER;
+    if (gDvm.initiatingLoaderList != NULL &&
+        classIndex < ZYGOTE_CLASS_CUTOFF) {
+        return &(gDvm.initiatingLoaderList[classIndex]);
+    } else {
+        return &(clazz->initiatingLoaderList);
+    }
+}
+
 /*
  * Determine if "loader" appears in clazz' initiating loader list.
  *
@@ -816,9 +840,13 @@ bool dvmLoaderInInitiatingList(const ClassObject* clazz, const Object* loader)
     /*
      * Scan the list for a match.  The list is expected to be short.
      */
+    /* Cast to remove the const from clazz, but use const loaderList */
+    ClassObject* nonConstClazz = (ClassObject*) clazz;
+    const InitiatingLoaderList *loaderList =
+        dvmGetInitiatingLoaderList(nonConstClazz);
     int i;
-    for (i = clazz->initiatingLoaderCount-1; i >= 0; --i) {
-        if (clazz->initiatingLoaders[i] == loader) {
+    for (i = loaderList->initiatingLoaderCount-1; i >= 0; --i) {
+        if (loaderList->initiatingLoaders[i] == loader) {
             //LOGI("+++ found initiating match %p in %s\n",
             //    loader, clazz->descriptor);
             return true;
@@ -850,10 +878,10 @@ void dvmAddInitiatingLoader(ClassObject* clazz, Object* loader)
          * pretty minor, and probably outweighs the O(n^2) hit for
          * checking before every add, so we may not want to do this.
          */
-        if (false && dvmLoaderInInitiatingList(clazz, loader)) {
-            LOGW("WOW: simultaneous add of initiating class loader\n");
-            goto bail_unlock;
-        }
+        //if (dvmLoaderInInitiatingList(clazz, loader)) {
+        //    LOGW("WOW: simultaneous add of initiating class loader\n");
+        //    goto bail_unlock;
+        //}
 
         /*
          * The list never shrinks, so we just keep a count of the
@@ -863,25 +891,26 @@ void dvmAddInitiatingLoader(ClassObject* clazz, Object* loader)
          * The pointer is initially NULL, so we *do* want to call realloc
          * when count==0.
          */
-        if ((clazz->initiatingLoaderCount & (kInitLoaderInc-1)) == 0) {
+        InitiatingLoaderList *loaderList = dvmGetInitiatingLoaderList(clazz);
+        if ((loaderList->initiatingLoaderCount & (kInitLoaderInc-1)) == 0) {
             Object** newList;
 
-            newList = (Object**) realloc(clazz->initiatingLoaders,
-                        (clazz->initiatingLoaderCount + kInitLoaderInc)
+            newList = (Object**) realloc(loaderList->initiatingLoaders,
+                        (loaderList->initiatingLoaderCount + kInitLoaderInc)
                          * sizeof(Object*));
             if (newList == NULL) {
                 /* this is mainly a cache, so it's not the EotW */
                 assert(false);
                 goto bail_unlock;
             }
-            clazz->initiatingLoaders = newList;
+            loaderList->initiatingLoaders = newList;
 
             //LOGI("Expanded init list to %d (%s)\n",
-            //    clazz->initiatingLoaderCount+kInitLoaderInc,
+            //    loaderList->initiatingLoaderCount+kInitLoaderInc,
             //    clazz->descriptor);
         }
-
-        clazz->initiatingLoaders[clazz->initiatingLoaderCount++] = loader;
+        loaderList->initiatingLoaders[loaderList->initiatingLoaderCount++] =
+            loader;
 
 bail_unlock:
         dvmHashTableUnlock(gDvm.loadedClasses);
@@ -1877,8 +1906,9 @@ void dvmFreeClassInnards(ClassObject* clazz)
         dvmLinearFree(clazz->classLoader, virtualMethods);
     }
 
-    clazz->initiatingLoaderCount = -1;
-    NULL_AND_FREE(clazz->initiatingLoaders);
+    InitiatingLoaderList *loaderList = dvmGetInitiatingLoaderList(clazz);
+    loaderList->initiatingLoaderCount = -1;
+    NULL_AND_FREE(loaderList->initiatingLoaders);
 
     clazz->interfaceCount = -1;
     NULL_AND_LINEAR_FREE(clazz->interfaces);
