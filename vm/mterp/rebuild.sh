@@ -19,7 +19,8 @@
 # generated as part of the build.
 #
 set -e
-for arch in portstd portdbg allstubs armv4t armv5te armv5te-vfp armv7-a x86; do TARGET_ARCH_EXT=$arch make -f Makefile-mterp; done
+
+for arch in portstd portdbg allstubs armv4t armv5te armv5te-vfp armv7-a x86 x86-atom; do TARGET_ARCH_EXT=$arch make -f Makefile-mterp; done
 
 # These aren't actually used, so just go ahead and remove them.  The correct
 # approach is to prevent them from being generated in the first place, but

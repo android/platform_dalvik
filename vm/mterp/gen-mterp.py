@@ -33,7 +33,6 @@ opcode_locations = {}
 asm_stub_text = []
 label_prefix = ".L"         # use ".L" to hide labels from gdb
 
-
 # Exception class.
 class DataParseError(SyntaxError):
     "Failure when parsing data file"
