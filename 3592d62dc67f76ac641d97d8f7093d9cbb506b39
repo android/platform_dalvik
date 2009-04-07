@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAO3///9g\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-04-07T22:18:56Z",
+      "side": 0,
+      "message": "Nothing changed, omit this from patch set.",
+      "revId": "3592d62dc67f76ac641d97d8f7093d9cbb506b39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

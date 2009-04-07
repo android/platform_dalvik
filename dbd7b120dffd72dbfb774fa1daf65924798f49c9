@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAO3///9c\u003d",
+        "filename": "vm/Globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-04-07T22:18:56Z",
+      "side": 1,
+      "message": "It should be possible to \"print gDvm\" from gdb and not be completely overwhelmed.  This should be changed to a pointer, and the storage allocated/freed on the heap in startup/shutdown functions.  The ZYGOTE_CLASS_CUTOFF constant can then move into the .c file.",
+      "revId": "dbd7b120dffd72dbfb774fa1daf65924798f49c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3///9Y\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-04-07T22:18:56Z",
+      "side": 1,
+      "message": "Please format to match the rest of the file, and make it \"static\" if possible, i.e.:\n\nstatic InitiatingLoaderList* dvmGetInitiatingLoaderList(...)\n{\n    ...",
+      "revId": "dbd7b120dffd72dbfb774fa1daf65924798f49c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
