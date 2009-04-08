@@ -33,6 +33,23 @@
       "revId": "dbd7b120dffd72dbfb774fa1daf65924798f49c9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3///84\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-04-08T23:37:47Z",
+      "side": 1,
+      "message": "\"clazz\" decl needs to be const?\n\ndalvik/vm/oo/Class.c:834: warning: passing argument 1 of \u0027dvmGetInitiatingLoaderList\u0027 discards qualifiers from pointer target type",
+      "revId": "dbd7b120dffd72dbfb774fa1daf65924798f49c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
