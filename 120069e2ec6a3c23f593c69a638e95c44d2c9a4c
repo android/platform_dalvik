@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPH///+w\u003d",
+        "filename": "vm/Globals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-04-15T21:57:16Z",
+      "side": 1,
+      "message": "This got copied to oo/Class.c but not removed from here.  Might cause a redefinition warning?",
+      "revId": "120069e2ec6a3c23f593c69a638e95c44d2c9a4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH///+s\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-04-15T21:57:16Z",
+      "side": 1,
+      "message": "Use calloc(ZYGOTE_CLASS_CUTOFF, sizeof(InitiatingLoaderList)).  Does the memset to zero for you, so you don\u0027t need the if !\u003d null then memset part.",
+      "revId": "120069e2ec6a3c23f593c69a638e95c44d2c9a4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
