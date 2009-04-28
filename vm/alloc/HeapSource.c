@@ -52,6 +52,10 @@ static void setIdealFootprint(size_t max);
         assert(gHs == gDvm.gcHeap->heapSource); \
     } while (0)
 
+/* ALSO defined in system/core/libcutils/mspace.c
+ */
+#define COPY_SHARED_HEAP 0
+
 #define DEBUG_HEAP_SOURCE 0
 #if DEBUG_HEAP_SOURCE
 #define HSTRACE(...)  LOG(LOG_INFO, LOG_TAG "-hs", __VA_ARGS__)
@@ -368,6 +372,14 @@ addNewHeap(HeapSource *hs, mspace *msp, size_t mspAbsoluteMaxSize)
         mspace_set_max_allowed_footprint(msp, mspace_footprint(msp));
     }
 
+#ifdef COPY_SHARED_HEAP
+    if (hs->numHeaps == 1) {
+        assert(gDvm.zygote);
+        mspace *msp = hs->heaps[0].msp;
+        copy_contiguous_mspace_data(msp);
+    }
+#endif
+
     /* Put the new heap in the list, at heaps[0].
      * Shift existing heaps down.
      */
@@ -383,6 +395,45 @@ fail:
     }
     return false;
 }
+
+#ifdef COPY_SHARED_HEAP
+static void
+dvmDiffZygoteHeapsHandler(const void *chunkptr, size_t chunklen,
+                                     const void *userptr, size_t userlen,
+                                     void *msp)
+{
+  if (userptr == NULL) {
+    /* Check to see if it used to be allocated in the old bitmap */
+  } else {
+    /* compare the data */
+    size_t i;
+    u4 *oldmem = (u4 *)chunkptr_in_copy((mspace)msp, userptr);
+    for (i = 0; i < userlen/sizeof(void *); i++) {
+      if (((u4 *)userptr)[i] != oldmem[i]) {
+        LOGV("Chunk 0x%08x[%d]: %s 0x%08x[%d] / 0x%08x / 0x%08x / 0x%08x\n",
+             chunkptr, chunklen,
+             dvmHeapSourceContains(((Object *)userptr)->clazz) ?
+               ((Object *)userptr)->clazz->descriptor : "thing",
+             userptr,
+             i * sizeof(void *),
+             &((u4 *)userptr)[i], oldmem[i], ((u4 *)userptr)[i]
+             );
+      }
+    }
+  }
+}
+
+/*
+ * Compare the objects in the live heap against the objects in the snapshot.
+ */
+void
+dvmDiffZygoteHeaps()
+{
+  HeapSource *hs = gHs; // use a local to avoid the implicit "volatile"
+  Heap *zHeap = &(hs->heaps[hs->numHeaps-1]); // <<< assert it's been copied! Break out into "some heap" function and "last heap" call to it.
+  mspace_walk_heap(zHeap->msp, (void *)&dvmDiffZygoteHeapsHandler, zHeap->msp);
+}
+#endif
 
 /*
  * Initializes the heap source; must be called before any other
