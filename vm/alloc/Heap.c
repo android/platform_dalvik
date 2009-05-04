@@ -317,7 +317,7 @@ static void gcForMalloc(bool collectSoftReferences)
      */
     LOGD_HEAP("dvmMalloc initiating GC%s\n",
             collectSoftReferences ? "(collect SoftReferences)" : "");
-    dvmCollectGarbageInternal(collectSoftReferences);
+    dvmCollectGarbageInternal(collectSoftReferences, GC_FOR_MALLOC);
 }
 
 /* Try as hard as possible to allocate some memory.
@@ -715,7 +715,8 @@ size_t dvmObjectSizeInHeap(const Object *obj)
  * way to enforce this is to refuse to GC on an allocation made by the
  * JDWP thread -- we have to expand the heap or fail.
  */
-void dvmCollectGarbageInternal(bool collectSoftReferences)
+void dvmCollectGarbageInternal(bool collectSoftReferences,
+                               enum GcReason reason)
 {
     GcHeap *gcHeap = gDvm.gcHeap;
     Object *softReferences;
@@ -757,7 +758,8 @@ void dvmCollectGarbageInternal(bool collectSoftReferences)
     }
     gcHeap->gcStartTime = now;
 
-    LOGV_HEAP("GC starting -- suspending threads\n");
+    LOGV_HEAP("GC starting: reason %d\n", reason);
+    LOGV_HEAP("GC suspending threads\n");
 
     dvmSuspendAllThreads(SUSPEND_FOR_GC);
 
@@ -1019,11 +1021,11 @@ void dvmCollectGarbageInternal(bool collectSoftReferences)
     }
     gcElapsedTime = (dvmGetRelativeTimeUsec() - gcHeap->gcStartTime) / 1000;
     if (gcElapsedTime < 10000) {
-        LOGD("GC freed %d objects / %zd bytes in %dms\n",
-                numFreed, sizeFreed, (int)gcElapsedTime);
+        LOGD("GC(%d) freed %d objects / %zd bytes in %dms\n",
+                reason, numFreed, sizeFreed, (int)gcElapsedTime);
     } else {
-        LOGD("GC freed %d objects / %zd bytes in %d sec\n",
-                numFreed, sizeFreed, (int)(gcElapsedTime / 1000));
+        LOGD("GC(%d) freed %d objects / %zd bytes in %d sec\n",
+                reason, numFreed, sizeFreed, (int)(gcElapsedTime / 1000));
     }
     dvmLogGcStats(numFreed, sizeFreed, gcElapsedTime);
 
@@ -1053,7 +1055,7 @@ void hprofDumpHeap(const char* fileName)
 
     gDvm.gcHeap->hprofDumpOnGc = true;
     gDvm.gcHeap->hprofFileName = fileName;
-    dvmCollectGarbageInternal(false);
+    dvmCollectGarbageInternal(false, GC_HPROF);
 
     dvmUnlockMutex(&gDvm.gcHeapLock);
 }
