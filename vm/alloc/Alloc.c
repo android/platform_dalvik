@@ -267,7 +267,7 @@ void dvmCollectGarbage(bool collectSoftReferences)
     dvmLockHeap();
 
     LOGVV("Explicit GC\n");
-    dvmCollectGarbageInternal(collectSoftReferences);
+    dvmCollectGarbageInternal(collectSoftReferences, GC_USER);
 
     dvmUnlockHeap();
 }
