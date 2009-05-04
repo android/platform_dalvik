@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQn///7s\u003d",
+        "filename": "vm/alloc/Heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2009-05-04T19:28:39Z",
+      "side": 1,
+      "message": "Maybe put a small comment describing the meaning of each of these?",
+      "revId": "f3fac31a6518dd9cf380aebbf1ab96a4d8789841",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
