@@ -52,9 +52,17 @@ void dvmHeapShutdown(void);
 size_t dvmObjectSizeInHeap(const Object *obj);
 #endif
 
+enum GcReason {
+    GC_FOR_MALLOC = 0,
+    GC_USER = 1,
+    GC_EXTERNAL_ALLOC = 2,
+    GC_HPROF = 3
+};
+
 /*
  * Run the garbage collector without doing any locking.
  */
-void dvmCollectGarbageInternal(bool collectSoftReferences);
+void dvmCollectGarbageInternal(bool collectSoftReferences,
+                               enum GcReason reason);
 
 #endif  // _DALVIK_ALLOC_HEAP
