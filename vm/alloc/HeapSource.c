@@ -787,6 +787,50 @@ dvmHeapSourceFree(void *ptr)
 }
 
 /*
+ * Frees the first numPtrs objects in the ptrs list, none of which may be NULL.
+ */
+void
+dvmHeapSourceFreeList(size_t numPtrs, void **ptrs)
+{
+    Heap *heap;
+
+    HS_BOILERPLATE();
+
+    if (numPtrs == 0) {
+        return;
+    }
+
+    assert(ptrs != NULL);
+    assert(*ptrs != NULL);
+    heap = ptr2heap(gHs, *ptrs);
+
+    if (heap != NULL) {
+        size_t i;
+        for (i = 0; i < numPtrs; i++) {
+            assert(ptrs[i] != NULL);
+            assert(ptr2heap(gHs, ptrs[i]) == heap);
+            countFree(heap, ptrs[i], true);
+        }
+        /* Only free objects that are in the active heap.
+         * Touching old heaps would pull pages into this process.
+         */
+        if (heap == gHs->heaps) {
+            void *merged = ptrs[0];
+            for (i = 1; i < numPtrs; i++) {
+                assert(merged != NULL);
+                assert(ptrs[i] != NULL);
+                if (mspace_merge_objects(heap->msp, merged, ptrs[i]) == NULL) {
+                    mspace_free(heap->msp, merged);
+                    merged = ptrs[i];
+                }
+            }
+            assert(merged != NULL);
+            mspace_free(heap->msp, merged);
+        }
+    }
+}
+
+/*
  * Returns true iff <ptr> was allocated from the heap source.
  */
 bool
