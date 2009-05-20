@@ -105,6 +105,14 @@ void *dvmHeapSourceAllocAndGrow(size_t n);
 void dvmHeapSourceFree(void *ptr);
 
 /*
+ * Frees the first numPtrs objects in the ptrs list. The list must
+ * contain addresses all in the same mspace, and must be in increasing
+ * order. This implies that there are no duplicates, and no entries
+ * are NULL.
+ */
+void dvmHeapSourceFreeList(size_t numPtrs, void **ptrs);
+
+/*
  * Returns true iff <ptr> was allocated from the heap source.
  */
 bool dvmHeapSourceContains(const void *ptr);
