@@ -725,6 +725,7 @@ void dvmCollectGarbageInternal(bool collectSoftReferences)
     u8 now;
     s8 timeSinceLastGc;
     s8 gcElapsedTime;
+
     int numFreed;
     size_t sizeFreed;
 

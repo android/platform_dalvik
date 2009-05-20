@@ -105,6 +105,11 @@ void *dvmHeapSourceAllocAndGrow(size_t n);
 void dvmHeapSourceFree(void *ptr);
 
 /*
+ * Frees the first numPtrs objects in the ptrs list, none of which may be NULL.
+ */
+void dvmHeapSourceFreeList(size_t numPtrs, void **ptrs);
+
+/*
  * Returns true iff <ptr> was allocated from the heap source.
  */
 bool dvmHeapSourceContains(const void *ptr);

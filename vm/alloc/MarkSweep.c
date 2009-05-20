@@ -1198,6 +1198,7 @@ sweepBitmapCallback(size_t numPtrs, void **ptrs, const void *finger, void *arg)
 {
     const ClassObject *const classJavaLangClass = gDvm.classJavaLangClass;
     size_t i;
+    void **pps = ptrs;
 
     for (i = 0; i < numPtrs; i++) {
         DvmHeapChunk *hc;
@@ -1206,7 +1207,7 @@ sweepBitmapCallback(size_t numPtrs, void **ptrs, const void *finger, void *arg)
         /* The pointers we're getting back are DvmHeapChunks, not
          * Objects.
          */
-        hc = (DvmHeapChunk *)*ptrs++;
+        hc = (DvmHeapChunk *)*pps++;
         obj = (Object *)chunk2ptr(hc);
 
 #if WITH_OBJECT_HEADERS
@@ -1260,11 +1261,8 @@ sweepBitmapCallback(size_t numPtrs, void **ptrs, const void *finger, void *arg)
 #endif
         }
 #endif
-
-//TODO: provide a heapsource function that takes a list of pointers to free
-//      and call it outside of this loop.
-        dvmHeapSourceFree(hc);
     }
+    dvmHeapSourceFreeList(numPtrs, ptrs);
 
     return true;
 }
