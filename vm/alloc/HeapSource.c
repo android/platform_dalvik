@@ -787,6 +787,82 @@ dvmHeapSourceFree(void *ptr)
 }
 
 /*
+ * Frees the first numPtrs objects in the ptrs list. The list must
+ * contain addresses all in the same mspace, and must be in increasing
+ * order. This implies that there are no duplicates, and no entries
+ * are NULL.
+ */
+void
+dvmHeapSourceFreeList(size_t numPtrs, void **ptrs)
+{
+    Heap *heap;
+
+    HS_BOILERPLATE();
+
+    if (numPtrs == 0) {
+        return;
+    }
+
+    assert(ptrs != NULL);
+    assert(*ptrs != NULL);
+    heap = ptr2heap(gHs, *ptrs);
+    if (heap != NULL) {
+        mspace *msp = heap->msp;
+        // Calling mspace_free on shared heaps disrupts sharing too
+        // much. For heap[0] -- the 'active heap' -- we call
+        // mspace_free, but on the other heaps we only do some
+        // accounting.
+        if (heap == gHs->heaps) {
+            // mspace_merge_objects takes two allocated objects, and
+            // if the second immediately follows the first, will merge
+            // them, returning a larger object occupying the same
+            // memory. This is a local operation, and doesn't require
+            // dlmalloc to manipulate any freelists. It's pretty
+            // inexpensive compared to free().
+
+            // ptrs is an array of objects all in memory order, and if
+            // client code has been allocating lots of short-lived
+            // objects, this is likely to contain runs of objects all
+            // now garbage, and thus highly amenable to this optimization.
+
+            // Unroll the 0th iteration around the loop below,
+            // countFree ptrs[0] and initializing merged.
+            assert(ptrs[0] != NULL);
+            assert(ptr2heap(gHs, ptrs[0]) == heap);
+            countFree(heap, ptrs[0], true);
+            void *merged = ptrs[0];
+
+            size_t i;
+            for (i = 1; i < numPtrs; i++) {
+                assert(merged != NULL);
+                assert(ptrs[i] != NULL);
+                assert((intptr_t)merged < (intptr_t)ptrs[i]);
+                assert(ptr2heap(gHs, ptrs[i]) == heap);
+                countFree(heap, ptrs[i], true);
+                // Try to merge. If it works, merged now includes the
+                // memory of ptrs[i]. If it doesn't, free merged, and
+                // see if ptrs[i] starts a new run of adjacent
+                // objects to merge.
+                if (mspace_merge_objects(msp, merged, ptrs[i]) == NULL) {
+                    mspace_free(msp, merged);
+                    merged = ptrs[i];
+                }
+            }
+            assert(merged != NULL);
+            mspace_free(msp, merged);
+        } else {
+            // This is not an 'active heap'. Only do the accounting.
+            size_t i;
+            for (i = 0; i < numPtrs; i++) {
+                assert(ptrs[i] != NULL);
+                assert(ptr2heap(gHs, ptrs[i]) == heap);
+                countFree(heap, ptrs[i], true);
+            }
+        }
+    }
+}
+
+/*
  * Returns true iff <ptr> was allocated from the heap source.
  */
 bool
