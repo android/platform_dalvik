@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///+k\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "Rather than looping over all of the pointers twice in the active heap case (which is the common case for pointers to be freed), can you call countFree() in the \"active\" loop, and have a separate loop for non-active heaps?  Should help with cache behavior.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///+Y\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "May be good to cache heap-\u003emsp for this block, to avoid numPtrs+X potential dereferences:\n\n mspace *msp \u003d heap-\u003emsp;",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///+g\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "Would gcc generate better code if the loops used an advancing pointer rather than an index?  (I don\u0027t actually know)",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///98\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "Maybe also\n\n assert((intptr_t)merged \u003c (intptr_t)ptrs[i])",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///+c\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "Please add a comment here, describing the guts of this optimization.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///94\u003d",
+        "filename": "vm/alloc/HeapSource.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "Also: pointers must be in strictly increasing address-order (implying no duplicates), and must all be from the same heap.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///90\u003d",
+        "filename": "vm/alloc/MarkSweep.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-01T23:32:58Z",
+      "side": 1,
+      "message": "\"pps\" doesn\u0027t really mean anything.  I\u0027d suggest calling this \"savedPtrs\" or \"origPtrs\", passing it to FreeList(), and letting the loop continue to operate on \"ptrs\".",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
