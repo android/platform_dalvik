@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///88\u003d",
+        "filename": "vm/alloc/MarkSweep.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2009-06-02T20:59:11Z",
+      "side": 1,
+      "message": "Maybe add a TODO to investigate folding this into the loop, but I wouldn\u0027t worry about combining the loops in this change.  It should still be a win.",
+      "revId": "9a5d9ce836fe137af5f6de9397279e8603ce4900",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
