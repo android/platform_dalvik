@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH////g\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "Done.\n\nI wish I knew for sure that making the loop more complex didn\u0027t lose more than helping the cache wins ..\n\nIf we ever do deep profiling here and it matters, we\u0027ll maybe find out.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///+Y\u003d",
         "filename": "vm/alloc/HeapSource.c",
         "patchSetId": 2
@@ -30,6 +47,23 @@
       "writtenOn": "2009-06-01T23:32:58Z",
       "side": 1,
       "message": "May be good to cache heap-\u003emsp for this block, to avoid numPtrs+X potential dereferences:\n\n mspace *msp \u003d heap-\u003emsp;",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH////I\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "Done.",
       "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -53,6 +87,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///+8\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "I sure don\u0027t know either. I find code with a for loop and a hand-hewn parallel ptr++ value to be less robust than using the index to .. index into whatever parallel arrays there are. I try to keep that gun away from my foot.\n\nAgain, maybe someone will profile and tell me it matters, but absent knowledge I\u0027m ok trusting that the compiler won\u0027t make a total hash of this, and imho it\u0027s more maintainable this way.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///98\u003d",
         "filename": "vm/alloc/HeapSource.c",
         "patchSetId": 2
@@ -64,6 +115,23 @@
       "writtenOn": "2009-06-01T23:32:58Z",
       "side": 1,
       "message": "Maybe also\n\n assert((intptr_t)merged \u003c (intptr_t)ptrs[i])",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH////E\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "This won\u0027t break if that\u0027s not true, but it\u0027ll keep us from being a bunch of idiots if we do break it, so yeah. And it does protect against duplicates.\n\nDone.",
       "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -87,6 +155,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///+c\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "Done.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///94\u003d",
         "filename": "vm/alloc/HeapSource.h",
         "patchSetId": 2
@@ -104,6 +189,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH////Q\u003d",
+        "filename": "vm/alloc/HeapSource.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "What you say is certainly a requirement for the merge loop to be most efficient, makes the code easier, and keep me away from premature generalization, which I am sometimes prone to. So sure.\n\nDone.",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///90\u003d",
         "filename": "vm/alloc/MarkSweep.c",
         "patchSetId": 2
@@ -115,6 +217,23 @@
       "writtenOn": "2009-06-01T23:32:58Z",
       "side": 1,
       "message": "\"pps\" doesn\u0027t really mean anything.  I\u0027d suggest calling this \"savedPtrs\" or \"origPtrs\", passing it to FreeList(), and letting the loop continue to operate on \"ptrs\".",
+      "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH////o\u003d",
+        "filename": "vm/alloc/MarkSweep.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-06-02T20:37:02Z",
+      "side": 1,
+      "message": "Done.",
       "revId": "9ad4017e16d62971d1d8503b1d5646dd2c28f923",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
