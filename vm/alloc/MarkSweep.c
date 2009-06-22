@@ -15,6 +15,7 @@
  */
 
 #include "Dalvik.h"
+#include "alloc/clz.h"
 #include "alloc/HeapBitmap.h"
 #include "alloc/HeapInternal.h"
 #include "alloc/HeapSource.h"
@@ -430,30 +431,39 @@ static void scanStaticFields(const ClassObject *clazz, GcMarkContext *ctx)
 static void scanInstanceFields(const DataObject *obj, ClassObject *clazz,
         GcMarkContext *ctx)
 {
-//TODO: Optimize this by avoiding walking the superclass chain
-    while (clazz != NULL) {
-        InstField *f;
-        int i;
-
-        /* All of the fields that contain object references
-         * are guaranteed to be at the beginning of the ifields list.
-         */
-        f = clazz->ifields;
-        for (i = 0; i < clazz->ifieldRefCount; i++) {
-            /* Mark the array or object reference.
-             * May be NULL.
-             *
-             * Note that, per the comment on struct InstField,
-             * f->byteOffset is the offset from the beginning of
-             * obj, not the offset into obj->instanceData.
-             */
-            markObject(dvmGetFieldObject((Object*)obj, f->byteOffset), ctx);
-            f++;
+    if (clazz->refOffsets != CLASS_WALK_SUPER) {
+        unsigned int refOffsets = clazz->refOffsets;
+        while (refOffsets != 0) {
+            const int rshift = CLZ(refOffsets);
+            refOffsets &= ~(CLASS_HIGH_BIT >> rshift);
+            markObject(dvmGetFieldObject((Object*)obj,
+                                         CLASS_OFFSET_FROM_CLZ(rshift)), ctx);
         }
+    } else {
+        while (clazz != NULL) {
+            InstField *f;
+            int i;
 
-        /* This will be NULL when we hit java.lang.Object
-         */
-        clazz = clazz->super;
+            /* All of the fields that contain object references
+             * are guaranteed to be at the beginning of the ifields list.
+             */
+            f = clazz->ifields;
+            for (i = 0; i < clazz->ifieldRefCount; i++) {
+                /* Mark the array or object reference.
+                 * May be NULL.
+                 *
+                 * Note that, per the comment on struct InstField,
+                 * f->byteOffset is the offset from the beginning of
+                 * obj, not the offset into obj->instanceData.
+                 */
+                markObject(dvmGetFieldObject((Object*)obj, f->byteOffset), ctx);
+                f++;
+            }
+
+            /* This will be NULL when we hit java.lang.Object
+             */
+            clazz = clazz->super;
+        }
     }
 }
 

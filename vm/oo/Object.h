@@ -134,6 +134,33 @@ typedef enum PrimitiveType {
 #define PRIM_TYPE_TO_LETTER "ZCFDBSIJV"     /* must match order in enum */
 
 /*
+ * Definitions for packing refOffsets in ClassObject.
+ */
+/*
+ * A magic value for refOffsets. Ignore the bits and walk the super
+ * chain when this is the value.
+ * [This is an unlikely "natural" value, since it would be 30 non-ref instance
+ * fields followed by 2 ref instance fields.]
+ */
+#define CLASS_WALK_SUPER ((unsigned int)(3))
+#define CLASS_SMALLEST_OFFSET (sizeof(struct Object))
+#define CLASS_BITS_PER_WORD (sizeof(unsigned long int) * 8)
+#define CLASS_OFFSET_ALIGNMENT 4
+#define CLASS_HIGH_BIT ((unsigned int)1 << (CLASS_BITS_PER_WORD - 1))
+/*
+ * Return a single bit, or zero if the encoding can't encode the offset.
+ */
+#define CLASS_BIT_FROM_OFFSET(byteOffset) \
+    (CLASS_HIGH_BIT >> \
+      (((unsigned int)(byteOffset) - CLASS_SMALLEST_OFFSET) / \
+       CLASS_OFFSET_ALIGNMENT))
+/*
+ * Return an offset, given a bit number as returned from CLZ.
+ */
+#define CLASS_OFFSET_FROM_CLZ(rshift) \
+    (((int)(rshift) * CLASS_OFFSET_ALIGNMENT) + CLASS_SMALLEST_OFFSET)
+
+/*
  * This defines the amount of space we leave for field slots in the
  * java.lang.Class definition.  If we alter the class to have more than
  * this many fields, the VM will abort at startup.
@@ -399,6 +426,9 @@ struct ClassObject {
     int             ifieldCount;
     int             ifieldRefCount; // number of fields that are object refs
     InstField*      ifields;
+
+    /* bitmap of offsets of ifields */
+    u4 refOffsets;
 
     /* source file name, if known */
     const char*     sourceFile;
