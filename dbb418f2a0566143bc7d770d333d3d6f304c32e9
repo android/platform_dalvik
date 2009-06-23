@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZn///50\u003d",
+        "filename": "vm/alloc/MarkSweep.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-06-23T22:53:34Z",
+      "side": 1,
+      "message": "If refOffsets is zero, the result of CLZ is undefined.  Will that be a problem?",
+      "revId": "dbb418f2a0566143bc7d770d333d3d6f304c32e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZn///54\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 4261,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-06-23T22:53:34Z",
+      "side": 1,
+      "message": "need 4-space indents",
+      "revId": "dbb418f2a0566143bc7d770d333d3d6f304c32e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
