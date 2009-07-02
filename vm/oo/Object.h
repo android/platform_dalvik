@@ -147,6 +147,7 @@ typedef enum PrimitiveType {
 #define CLASS_BITS_PER_WORD (sizeof(unsigned long int) * 8)
 #define CLASS_OFFSET_ALIGNMENT 4
 #define CLASS_HIGH_BIT ((unsigned int)1 << (CLASS_BITS_PER_WORD - 1))
+
 /*
  * Return a single bit, or zero if the encoding can't encode the offset.
  */
@@ -159,6 +160,17 @@ typedef enum PrimitiveType {
  */
 #define CLASS_OFFSET_FROM_CLZ(rshift) \
     (((int)(rshift) * CLASS_OFFSET_ALIGNMENT) + CLASS_SMALLEST_OFFSET)
+
+/*
+ * Definitions for packing staticOffsets in ClassObject.
+ */
+/*
+ * A magic value for staticOffsets. Ignore the bits and walk the class's
+ * sfields when this is the value.
+ * [This is an unlikely "natural" value, since it would be 30 non-ref
+ * fields followed by 2 ref fields.]
+ */
+#define CLASS_WALK_STATIC ((unsigned int)(3))
 
 /*
  * This defines the amount of space we leave for field slots in the
@@ -429,6 +441,9 @@ struct ClassObject {
 
     /* bitmap of offsets of ifields */
     u4 refOffsets;
+
+    /* bitmap of offsets of static fields */
+    u4 staticOffsets;
 
     /* source file name, if known */
     const char*     sourceFile;

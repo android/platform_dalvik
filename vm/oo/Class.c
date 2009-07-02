@@ -1727,6 +1727,7 @@ static ClassObject* loadClassFromDex0(DvmDex* pDvmDex,
         DexField field;
 
         newClass->sfieldCount = count;
+        newClass->staticOffsets = CLASS_WALK_STATIC;
         newClass->sfields =
             (StaticField*) calloc(count, sizeof(StaticField));
         for (i = 0; i < count; i++) {
@@ -4275,6 +4276,26 @@ noverify:
             f++;
         }
     }
+
+    assert(clazz->staticOffsets == CLASS_WALK_STATIC);
+    u4 staticOffsets = 0;
+    StaticField *f = clazz->sfields;
+    size_t i;
+    for (i = 0; i < clazz->sfieldCount; i++) {
+        char c = f->field.signature[0];
+        if (c == '[' || c == 'L') {
+            /* It's an array or class reference.
+             */
+            if (i >= CLASS_BITS_PER_WORD) {
+                staticOffsets = CLASS_WALK_STATIC;
+                break;
+            }
+            staticOffsets |= (CLASS_HIGH_BIT >> i);
+        }
+        f++;
+    }
+    clazz->staticOffsets = staticOffsets;
+    // LOGD("Class %s has static bits 0x%08x", clazz->descriptor, clazz->staticOffsets);
 
     if (dvmCheckException(self)) {
         /*

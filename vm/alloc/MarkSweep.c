@@ -412,17 +412,25 @@ static void scanStaticFields(const ClassObject *clazz, GcMarkContext *ctx)
 {
     StaticField *f;
     int i;
-
-    //TODO: Optimize this with a bit vector or something
-    f = clazz->sfields;
-    for (i = 0; i < clazz->sfieldCount; i++) {
-        char c = f->field.signature[0];
-        if (c == '[' || c == 'L') {
-            /* It's an array or class reference.
-             */
+    if (clazz->staticOffsets != CLASS_WALK_STATIC) {
+        unsigned int staticOffsets = clazz->staticOffsets;
+        while (staticOffsets != 0) {
+            const int rshift = CLZ(staticOffsets);
+            staticOffsets &= ~(CLASS_HIGH_BIT >> rshift);
+            f = &clazz->sfields[rshift];
             markObject((Object *)f->value.l, ctx);
         }
-        f++;
+    } else {
+        f = clazz->sfields;
+        for (i = 0; i < clazz->sfieldCount; i++) {
+            char c = f->field.signature[0];
+            if (c == '[' || c == 'L') {
+                /* It's an array or class reference.
+                 */
+                markObject((Object *)f->value.l, ctx);
+            }
+            f++;
+        }
     }
 }
 
