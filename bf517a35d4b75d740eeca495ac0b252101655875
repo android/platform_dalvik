@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAan///64\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2009-07-08T23:11:08Z",
+      "side": 1,
+      "message": "This isn\u0027t necessary and might confuse someone.\n\nAt this point, the instance fields haven\u0027t been assigned to their final positions, and effectively don\u0027t yet exist.  The class object itself isn\u0027t even treated as a java.lang.Class yet.",
+      "revId": "bf517a35d4b75d740eeca495ac0b252101655875",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
