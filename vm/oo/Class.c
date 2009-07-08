@@ -4203,6 +4203,7 @@ noverify:
 
     clazz->status = CLASS_INITIALIZING;
     clazz->initThreadId = self->threadId;
+    clazz->refOffsets = CLASS_WALK_SUPER;
     dvmUnlockObject(self, (Object*) clazz);
 
     /* init our superclass */
@@ -4214,6 +4215,44 @@ noverify:
             /* wake up anybody who started waiting while we were unlocked */
             dvmLockObject(self, (Object*) clazz);
             goto bail_notify;
+        }
+    }
+
+    /* Set the bitmap of reference offsets. Except for class Object,
+     * start with the superclass offsets.
+     */
+    if (clazz->super != NULL) {
+        clazz->refOffsets = clazz->super->refOffsets;
+    } else {
+        clazz->refOffsets = 0;
+    }
+    /*
+     * If our superclass overflowed, we don't stand a chance.
+     */
+    if (clazz->refOffsets != CLASS_WALK_SUPER) {
+        InstField *f;
+        int i;
+
+        /* All of the fields that contain object references
+         * are guaranteed to be at the beginning of the ifields list.
+         */
+        f = clazz->ifields;
+        for (i = 0; i < clazz->ifieldRefCount; i++) {
+          /*
+           * Note that, per the comment on struct InstField,
+           * f->byteOffset is the offset from the beginning of
+           * obj, not the offset into obj->instanceData.
+           */
+          assert(f->byteOffset >= CLASS_SMALLEST_OFFSET);
+          assert((f->btyeOffset & (CLASS_OFFSET_ALIGNMENT - 1)) == 0);
+          u4 newBit = CLASS_BIT_FROM_OFFSET(f->byteOffset);
+          if (newBit != 0) {
+              clazz->refOffsets |= newBit;
+          } else {
+              clazz->refOffsets = CLASS_WALK_SUPER;
+              break;
+          }
+          f++;
         }
     }
 
