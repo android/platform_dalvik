@@ -170,6 +170,8 @@ static void loadSFieldFromDex(ClassObject* clazz,
     const DexField* pDexSField, StaticField* sfield);
 static void loadIFieldFromDex(ClassObject* clazz,
     const DexField* pDexIField, InstField* field);
+static bool precacheReferenceOffsets(ClassObject* clazz);
+static void computeRefOffsets(ClassObject* clazz);
 static void freeMethodInnards(Method* meth);
 static bool createVtable(ClassObject* clazz);
 static bool createIftable(ClassObject* clazz);
@@ -1433,6 +1435,13 @@ static ClassObject* findClassNoInit(const char* descriptor, Object* loader,
         clazz->initThreadId = self->threadId;
 
         /*
+         * It shouldn't be possible for the GC to see an instance
+         * before computeRefOffsets is called, but if it does, make
+         * sure it walks the class chain to find other Java objects.
+         */
+        clazz->refOffsets = CLASS_WALK_SUPER;
+
+        /*
          * Add to hash table so lookups succeed.
          *
          * [Are circular references possible when linking a class?]
@@ -2146,7 +2155,7 @@ static void loadIFieldFromDex(ClassObject* clazz,
 /*
  * Cache java.lang.ref.Reference fields and methods.
  */
-static bool precacheReferenceOffsets(ClassObject *clazz)
+static bool precacheReferenceOffsets(ClassObject* clazz)
 {
     Method *meth;
     int i;
@@ -2241,6 +2250,49 @@ static bool precacheReferenceOffsets(ClassObject *clazz)
 #endif
 
     return true;
+}
+
+
+/*
+ * Set the bitmap of reference offsets, refOffsets, from the ifields
+ * list.
+ */
+static void computeRefOffsets(ClassObject* clazz)
+{
+    if (clazz->super != NULL) {
+        clazz->refOffsets = clazz->super->refOffsets;
+    } else {
+        clazz->refOffsets = 0;
+    }
+    /*
+     * If our superclass overflowed, we don't stand a chance.
+     */
+    if (clazz->refOffsets != CLASS_WALK_SUPER) {
+        InstField *f;
+        int i;
+
+        /* All of the fields that contain object references
+         * are guaranteed to be at the beginning of the ifields list.
+         */
+        f = clazz->ifields;
+        for (i = 0; i < clazz->ifieldRefCount; i++) {
+          /*
+           * Note that, per the comment on struct InstField,
+           * f->byteOffset is the offset from the beginning of
+           * obj, not the offset into obj->instanceData.
+           */
+          assert(f->byteOffset >= CLASS_SMALLEST_OFFSET);
+          assert((f->btyeOffset & (CLASS_OFFSET_ALIGNMENT - 1)) == 0);
+          u4 newBit = CLASS_BIT_FROM_OFFSET(f->byteOffset);
+          if (newBit != 0) {
+              clazz->refOffsets |= newBit;
+          } else {
+              clazz->refOffsets = CLASS_WALK_SUPER;
+              break;
+          }
+          f++;
+        }
+    }
 }
 
 
@@ -2610,6 +2662,13 @@ bail_during_resolve:
             }
         }
     }
+
+    /*
+     * Compact the offsets the GC has to examine into a bitmap, if
+     * possible.  (This has to happen after Reference.referent is
+     * massaged in precacheReferenceOffsets.)
+     */
+    computeRefOffsets(clazz);
 
     /*
      * Done!
