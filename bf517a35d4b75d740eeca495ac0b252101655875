@@ -16,6 +16,23 @@
       "revId": "bf517a35d4b75d740eeca495ac0b252101655875",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///94\u003d",
+        "filename": "vm/oo/Object.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2009-07-13T20:13:25Z",
+      "side": 1,
+      "message": "The results of \u003e\u003e are undefined if the right-hand-side is greater than or equal to than [in this case] 32. This macro should check for that condition.",
+      "revId": "bf517a35d4b75d740eeca495ac0b252101655875",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
