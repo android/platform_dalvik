@@ -245,7 +245,9 @@ public class JCESecretKeyFactory
             if (keySpec instanceof DESKeySpec)
             {
                 DESKeySpec desKeySpec = (DESKeySpec)keySpec;
-                return new SecretKeySpec(desKeySpec.getKey(), "DES");
+                byte[] key = desKeySpec.getKey();
+                DESParameters.setOddParity(key);
+                return new SecretKeySpec(key, "DES");
             }
 
             return super.engineGenerateSecret(keySpec);
