@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 FILES=`ls $1/*.data | sed "s/^\\(.*\\).data$/\\1/"`
 
