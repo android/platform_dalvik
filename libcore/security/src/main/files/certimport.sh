@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # This script was tested to work with bouncycastle 1.32.
 
 set -x
