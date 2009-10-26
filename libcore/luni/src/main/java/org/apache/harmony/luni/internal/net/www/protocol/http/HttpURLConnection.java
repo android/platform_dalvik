@@ -1551,9 +1551,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection {
         int redirect = 0;
         while (true) {
             // send the request and process the results
-            if (!sendRequest()) {
-                return;
-            }
+            boolean repeatable = sendRequest();
             // proxy authorization failed ?
             if (responseCode == HTTP_PROXY_AUTH) {
                 if (!usingProxy()) {
@@ -1606,6 +1604,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection {
                 // continue to send request
                 continue;
             }
+            if (!repeatable) return;
             /*
              * See if there is a server redirect to the URL, but only handle 1
              * level of URL redirection from the server to avoid being caught in
