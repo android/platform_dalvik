@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAo3///aY\u003d",
+        "filename": "vm/Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2009-11-12T19:01:21Z",
+      "side": 1,
+      "message": "Rather than a #define, wouldn\u0027t it be a bit cleaner to use the TARGET_ARCH_VERSION convention?",
+      "revId": "95bdf46d12465fe1a6341ca0c5d2d0bff3417183",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAo3///aU\u003d",
+        "filename": "vm/Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2009-11-12T19:01:21Z",
+      "side": 1,
+      "message": "Leading tab",
+      "revId": "95bdf46d12465fe1a6341ca0c5d2d0bff3417183",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAo3///aQ\u003d",
+        "filename": "vm/arch/x86-atom/CallABI.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2009-11-12T19:01:21Z",
+      "side": 1,
+      "message": "Validity check has been removed here.  Fix comment..",
+      "revId": "95bdf46d12465fe1a6341ca0c5d2d0bff3417183",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAo3///aM\u003d",
+        "filename": "vm/arch/x86-atom/HintsABI.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2009-11-12T19:01:21Z",
+      "side": 1,
+      "message": "Formatting.",
+      "revId": "95bdf46d12465fe1a6341ca0c5d2d0bff3417183",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAo3///aI\u003d",
+        "filename": "vm/mterp/x86-atom/binopDivRemLong.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2009-11-12T19:01:21Z",
+      "side": 1,
+      "message": "Remove the old, dead code.",
+      "revId": "95bdf46d12465fe1a6341ca0c5d2d0bff3417183",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAo3///aE\u003d",
+        "filename": "vm/mterp/x86-atom/binopDivRemLong2Addr.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2009-11-12T19:01:21Z",
+      "side": 1,
+      "message": "Remove the old, dead code.",
+      "revId": "95bdf46d12465fe1a6341ca0c5d2d0bff3417183",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
