@@ -32,7 +32,7 @@ default_op_dir = None
 opcode_locations = {}
 asm_stub_text = []
 label_prefix = ".L"         # use ".L" to hide labels from gdb
-
+label_prefix_2 = "L"
 
 # Exception class.
 class DataParseError(SyntaxError):
@@ -267,6 +267,7 @@ def emitAsmHeader(outfp, dict):
     outfp.write("    .balign %d\n" % handler_size_bytes)
     # Emit a label so that gdb will say the right thing.  We prepend an
     # underscore so the symbol name doesn't clash with the OpCode enum.
+    outfp.write(label_prefix_2 + "_%(opcode)s:\n" % dict)
     outfp.write(label_prefix + "_%(opcode)s: /* 0x%(opnum)02x */\n" % dict)
 
 #
