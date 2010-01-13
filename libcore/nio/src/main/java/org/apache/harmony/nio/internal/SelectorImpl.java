@@ -216,6 +216,14 @@ final class SelectorImpl extends AbstractSelector {
         return true;
     }
 
+    private boolean isConnectionPending(SelectionKeyImpl key) {
+        SelectableChannel channel = key.channel();
+        if (channel instanceof SocketChannel) {
+            return ((SocketChannel) channel).isConnectionPending();
+        }
+        return true;
+    }
+
     // Prepares and adds channels to list for selection
     private void prepareChannels() {
         readableFDs.add(sourcefd);        
@@ -227,7 +235,7 @@ final class SelectorImpl extends AbstractSelector {
                 SelectionKeyImpl key = (SelectionKeyImpl) i.next();
                 key.oldInterestOps = key.interestOps();
                 boolean isReadableChannel = ((SelectionKey.OP_ACCEPT | SelectionKey.OP_READ) & key.oldInterestOps) != 0;
-                boolean isWritableChannel = ((SelectionKey.OP_CONNECT | SelectionKey.OP_WRITE) & key.oldInterestOps) != 0;
+                boolean isWritableChannel = (((isConnectionPending(key) ? SelectionKey.OP_CONNECT : 0) | SelectionKey.OP_WRITE) & key.oldInterestOps) != 0;
                 SelectableChannel channel = key.channel();                  
                 if (isReadableChannel) {
                     readChannelList.add(channel.keyFor(this));
