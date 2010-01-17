@@ -84,6 +84,8 @@ typedef enum ClassFlags {
     CLASS_ISPHANTOMREFERENCE = (1<<26), // class is a phantom reference
 
     CLASS_MULTIPLE_DEFS     = (1<<25),  // DEX verifier: defs in multiple DEXs
+    CLASS_SEEN              = (1<<24),  // DEX verifier: class has been seen by
+                                        // the verifier
 
     /* unlike the others, these can be present in the optimized DEX file */
     CLASS_ISOPTIMIZED       = (1<<17),  // class may contain opt instrs

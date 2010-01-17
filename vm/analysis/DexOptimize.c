@@ -1346,7 +1346,12 @@ static bool loadAllClasses(DvmDex* pDvmDex)
             LOGD("DexOpt: '%s' has an earlier definition; blocking out\n",
                 classDescriptor);
             SET_CLASS_FLAG(newClass, CLASS_MULTIPLE_DEFS);
+        } else if (IS_CLASS_FLAG_SET(newClass, CLASS_SEEN)) {
+            LOGD("DexOpt: dex file has multiple definitions for '%s'; "
+                "blocking out\n", classDescriptor);
+            SET_CLASS_FLAG(newClass, CLASS_MULTIPLE_DEFS);
         } else {
+            SET_CLASS_FLAG(newClass, CLASS_SEEN);
             loaded++;
         }
     }
@@ -1463,7 +1468,9 @@ static void optimizeLoadedClasses(DexFile* pDexFile)
             {
                 LOGV("DexOpt: not optimizing '%s': not verified\n",
                     classDescriptor);
-            } else if (clazz->pDvmDex->pDexFile != pDexFile) {
+            } else if (clazz->pDvmDex->pDexFile != pDexFile ||
+                IS_CLASS_FLAG_SET(clazz, CLASS_MULTIPLE_DEFS))
+            {
                 /* shouldn't be here -- verifier should have caught */
                 LOGD("DexOpt: not optimizing '%s': multiple definitions\n",
                     classDescriptor);
