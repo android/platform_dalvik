@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAr3///lE\u003d",
+        "filename": "vm/Android.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-01-20T21:42:25Z",
+      "side": 1,
+      "message": "trailing space",
+      "revId": "d8beed8a93d74c137ec3913323d44600f80041ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///lA\u003d",
+        "filename": "vm/Android.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-01-20T21:42:25Z",
+      "side": 1,
+      "message": "FWIW, this file is significantly different in ToT.  This change will need to be redone there.\n\nThe equivalent, in \"Dvm.mk\", now looks like:\n\nifeq ($(dvm_arch),x86)\n  ifeq ($(dvm_os),linux)\n    MTERP_ARCH_KNOWN :\u003d true\n    LOCAL_SRC_FILES +\u003d \\\n        arch/x86/Call386ABI.S \\\n        arch/x86/Hints386ABI.c \\\n        mterp/out/InterpC-x86.c \\\n        mterp/out/InterpAsm-x86.S\n  endif\nendif\n\nWe\u0027ll need to deal with that on our end.",
+      "revId": "d8beed8a93d74c137ec3913323d44600f80041ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///lI\u003d",
+        "filename": "vm/mterp/Makefile-mterp",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-01-20T21:42:25Z",
+      "side": 1,
+      "message": "The makefile structure has changed considerably in ToT.\n\n../../Android.mk is probably not necessary\n\n../Android.mk is probably not sufficient (might need \"../*.mk\")",
+      "revId": "d8beed8a93d74c137ec3913323d44600f80041ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///k8\u003d",
+        "filename": "vm/mterp/gen-mterp.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-01-20T21:42:25Z",
+      "side": 1,
+      "message": "I don\u0027t think we want this on all platforms.  Particularly on ARM the stack unwinding works best if it can find the \"fake\" entry point, and I think the \u0027L\u0027 labels will mess that up (which is why I went to \".L\").  This change should not go in.",
+      "revId": "d8beed8a93d74c137ec3913323d44600f80041ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
