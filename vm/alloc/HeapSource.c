@@ -1495,6 +1495,7 @@ dvmTrackExternalAllocation(size_t n)
     HeapSource *hs = gHs;
     size_t overhead;
     bool ret = false;
+    int try = 0;
 
     /* gHs caches an entry in gDvm.gcHeap;  we need to hold the
      * heap lock if we're going to look at it.
@@ -1505,12 +1506,67 @@ dvmTrackExternalAllocation(size_t n)
     assert(hs->externalLimit >= hs->externalBytesAllocated);
 
     if (!externalAllocPossible(hs, n)) {
-        LOGE_HEAP("%zd-byte external allocation "
-                "too large for this process.\n", n);
-        goto out;
+        LOGE_HEAP("Heap Massage needed "
+                  "(%zd-byte external allocation too big)\n", n);
+
+        /* Try to manipulate the heap using the same variants of GC as
+         * used below
+         */
+
+        bool run = true; /* while heap manipulation *may* work */
+
+        while (!externalAllocPossible(hs,n) && run ) {
+            try++;
+
+            switch (try) {
+            case 1: {
+                LOGE_HEAP("Full GC (don't collect SoftReferences)\n");
+                gcForExternalAlloc(false);
+                break;
+                }
+            case 2: {
+                LOGE_HEAP("Full GC (collect SoftReferences)\n");
+                gcForExternalAlloc(true);
+                break;
+                }
+            case 3: {
+                size_t mSizes[HEAP_SOURCE_MAX_HEAP_COUNT];
+                LOGE_HEAP("Try and trim Heap Source\n");
+                memset(mSizes, 0, sizeof(mSizes));
+                dvmHeapSourceTrim(mSizes, HEAP_SOURCE_MAX_HEAP_COUNT);
+                break;
+                }
+            default: {
+                LOGE_HEAP("Heap Massage was unsuccessful for %zd-bytes!\n", n);
+                run = false;
+                break;
+                }
+            }
+
+            /* The heap has been changed, let the changes take effect...make
+             * sure that other threads get allowed in to fully process the heap
+             * changes to ensure they propagate.
+            */
+            dvmUnlockHeap();
+            usleep(1000);
+            dvmLockHeap();
+        }
     }
 
-    /* Try "allocating" using the existing "free space".
+    /* Final check to see if heap manipulation above has worked
+     * or not...
+     */
+    if (!externalAllocPossible(hs, n)) {
+        LOGE_HEAP("Heap Massage has failed...\n");
+        ret = false;
+        goto out;
+    } else {
+        if (try > 0) {
+            LOGE_HEAP("Heap Massage was successful...\n");
+        }
+    }
+
+    /* It is possible, try "allocating" using the existing "free space".
      */
     HSTRACE("EXTERNAL alloc %zu (%zu < %zu)\n",
             n, hs->externalBytesAllocated, hs->externalLimit);
