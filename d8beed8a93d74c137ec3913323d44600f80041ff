@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAr3///k0\u003d",
+        "filename": "vm/mterp/config-x86-atom",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-01-20T21:44:40Z",
+      "side": 1,
+      "message": "Should this be copyright AOSP rather than Intel?  Looks like everything else is AOSP (though I haven\u0027t examined all files).",
+      "revId": "d8beed8a93d74c137ec3913323d44600f80041ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAr3///k8\u003d",
         "filename": "vm/mterp/gen-mterp.py",
         "patchSetId": 4
