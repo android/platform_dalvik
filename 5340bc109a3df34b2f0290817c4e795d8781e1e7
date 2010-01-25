@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAr3///Ss\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2010-01-25T23:13:17Z",
+      "side": 1,
+      "message": "Do you have evidence that this case 3 ever helps?\nI don\u0027t see anything that this side-effects which is any input to externalAllocPossible.",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///So\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1551,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2010-01-25T23:13:17Z",
+      "side": 1,
+      "message": "This will wait for all of the enqueueing of Reference objects, and for all finalize() methods to run. In general, that won\u0027t release any storage unless those calls cause a GC.\n\nAre there cases where this proved necessary?",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///Sg\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2010-01-25T23:13:17Z",
+      "side": 1,
+      "message": "It\u0027s unclear to me how these changes interact with the code below, which also calls gcForExternalAlloc.",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///Sk\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1001707
+      },
+      "writtenOn": "2010-01-25T23:13:17Z",
+      "side": 1,
+      "message": "Is this ever reached, with the new code?\nWhy didn\u0027t this suffice before? What cases used to fail, and will now succeed?",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
