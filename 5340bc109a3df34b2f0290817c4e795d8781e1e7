@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAr3///OM\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1003202
+      },
+      "writtenOn": "2010-01-26T10:09:27Z",
+      "side": 1,
+      "message": "You are right, this should be removed. With the code in patch set 1, this seemed to help, but just because the extra delay gave more time to the finalizer thread. Replacing the delay with dvmRunFinalizationSync(), we no longer see any cases where case 3 helps.",
+      "parentUuid": "AAAAr3///Ss\u003d",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAr3///So\u003d",
         "filename": "vm/alloc/HeapSource.c",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2010-01-25T23:13:17Z",
       "side": 1,
       "message": "This will wait for all of the enqueueing of Reference objects, and for all finalize() methods to run. In general, that won\u0027t release any storage unless those calls cause a GC.\n\nAre there cases where this proved necessary?",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///OQ\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1551,
+      "author": {
+        "id": 1003202
+      },
+      "writtenOn": "2010-01-26T10:09:27Z",
+      "side": 1,
+      "message": "The reason why this entire patch helps is that it calls GC, which releases some objects which hold references to tracked external allocations, which are freed in the finalizer (only Bitmaps in Donut, more things in newer code).\nWithout waiting for finalization, calling GC will not free any memory counted towards the total allocation limit.",
+      "parentUuid": "AAAAr3///So\u003d",
       "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAr3///OU\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1003202
+      },
+      "writtenOn": "2010-01-26T10:09:27Z",
+      "side": 1,
+      "message": "This code frees up memory counted towards the total allocation limit. If the heap contains collectable objects which would free up external allocations when finalized, these are still counted towards the total allocation limit if GC is not forced. This would cause externalAllocPossible to fail, and the call to gcForExternalAlloc would never be reached.",
+      "parentUuid": "AAAAr3///Sg\u003d",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAr3///Sk\u003d",
         "filename": "vm/alloc/HeapSource.c",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2010-01-25T23:13:17Z",
       "side": 1,
       "message": "Is this ever reached, with the new code?\nWhy didn\u0027t this suffice before? What cases used to fail, and will now succeed?",
+      "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3///OI\u003d",
+        "filename": "vm/alloc/HeapSource.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1003202
+      },
+      "writtenOn": "2010-01-26T10:09:27Z",
+      "side": 1,
+      "message": "This is probably almost never reached with the new code (the heap lock is released while waiting for finalization, so I guess another thread could cause us to reach this), but it was not reached when needed in the previous code either, as the check for total heap size failed without trying a GC.",
+      "parentUuid": "AAAAr3///Sk\u003d",
       "revId": "5340bc109a3df34b2f0290817c4e795d8781e1e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
