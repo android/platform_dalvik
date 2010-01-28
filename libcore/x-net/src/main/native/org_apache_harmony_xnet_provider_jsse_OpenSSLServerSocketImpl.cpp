@@ -90,6 +90,7 @@ static void org_apache_harmony_xnet_provider_jsse_OpenSSLServerSocketImpl_init(J
         jboolean iscopy = JNI_FALSE;
         jbyte* randseed = env->GetByteArrayElements(seed, &iscopy);
         RAND_seed((unsigned char*) randseed, 1024);
+        env->ReleaseByteArrayElements(seed, randseed, 0);
     } else {
         RAND_load_file("/dev/urandom", 1024);
     }
@@ -249,6 +250,7 @@ static void org_apache_harmony_xnet_provider_jsse_OpenSSLServerSocketImpl_setena
     ctx = (SSL_CTX*)env->GetIntField(object, field_ssl_ctx);
     str = env->GetStringUTFChars(controlstring, 0);
     ret = SSL_CTX_set_cipher_list(ctx, str);
+    env->ReleaseStringUTFChars(controlstring, str);
 
     if(ret == 0) {
         jclass exClass = env->FindClass("java/lang/IllegalArgumentException");
