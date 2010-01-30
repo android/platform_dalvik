@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAr3//++k\u003d",
+        "filename": "libcore/x-net/src/main/java/org/apache/harmony/xnet/provider/jsse/OpenSSLSessionImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2010-01-30T18:24:46Z",
+      "side": 0,
+      "message": "note that this is OpenSSLSocketImpl, not OpenSSLSessionImpl; it\u0027s trying to ensure mutual exclusion with native method calls made in the *other* class.\n\ni already have an internal bug to look into this, but i\u0027m still not certain that the mutual exclusion isn\u0027t necessary. (my bug suggests we look into synchronizing on instances instead... you\u0027d imagine we only need to ensure that the two classes aren\u0027t both mutating the same OpenSSLSessionImpl at the same time [Socket has-a Session].)",
+      "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
