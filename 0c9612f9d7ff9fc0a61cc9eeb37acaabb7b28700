@@ -16,6 +16,24 @@
       "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3//+8g\u003d",
+        "filename": "libcore/x-net/src/main/java/org/apache/harmony/xnet/provider/jsse/OpenSSLSessionImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2010-02-01T07:44:32Z",
+      "side": 0,
+      "message": "We recognize that it is synchronizing on the OpenSSLSocketImpl.class. Synchronizing on some other class in a finalizer is a bit scary as it easily leads to dead locks.\nSynchronizing on the instance makes much more sense. OTOH synchronizing on the OpenSocketImpl instance is not necessary as the socket-has-a-session. Whenever the socket instance lives the session instance lives and cannot be garbage. Right?",
+      "parentUuid": "AAAAr3//++k\u003d",
+      "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
