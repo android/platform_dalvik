@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAr3//9/4\u003d",
+        "filename": "vm/Dvm.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-02-22T20:34:24Z",
+      "side": 1,
+      "message": "Hmm, no TARGET_ARCH_VARIANT set for sim-eng.\n\nTwo thoughts:\n\n(1) Is there value in having variant-specific versions of Call386ABI.S?  On the one hand it\u0027s pretty straightforward code, on the other I don\u0027t know if ABI variations are expected.\n\n(2) Might make more sense to patch this up earlier, e.g. in Android.mk:\n\nifeq ($(TARGET_ARCH_VARIANT),)\n    TARGET_ARCH_VARIANT :\u003d $(TARGET_ARCH)\nendif\n\n(Tried it, seems to work.  Another route would be to fail noisily if it\u0027s not set, and then add an entry for sim-eng somewhere.  Will solicit input.)",
+      "revId": "5dff6fe94644c48508dcdcf61304eceabef5a9ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
