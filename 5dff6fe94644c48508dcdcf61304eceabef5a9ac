@@ -16,6 +16,23 @@
       "revId": "5dff6fe94644c48508dcdcf61304eceabef5a9ac",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAr3//9/k\u003d",
+        "filename": "vm/mterp/x86-atom/OP_MONITOR_EXIT.S",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2010-02-22T21:00:14Z",
+      "side": 1,
+      "message": "Note for the future: our ARM/x86 implementation were buggy -- the PC must be advanced before the exception is thrown.  The C code is correct (mterp/c/OP_MONITOR_EXIT.c).",
+      "revId": "5dff6fe94644c48508dcdcf61304eceabef5a9ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
