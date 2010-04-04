@@ -264,7 +264,7 @@ static bool verifyMap(VerifierData* vdata, const RegisterMap* pMap)
             return false;
         }
 
-        u1 val;
+        u1 val=0;
         int i;
 
         for (i = 0; i < vdata->method->registersSize; i++) {
