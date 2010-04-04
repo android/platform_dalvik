@@ -43,7 +43,7 @@ HANDLE_OPCODE(OP_EXECUTE_INLINE /*vB, {vD, vE, vF, vG}, inline@CCCC*/)
             arg0 = GET_REGISTER(vdst & 0x0f);
             /* fall through */
         default:        // case 0
-            ;
+            arg0 = arg1 = arg2 = arg3 = 0;
         }
 
 #if INTERP_TYPE == INTERP_DBG
