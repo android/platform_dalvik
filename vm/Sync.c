@@ -354,8 +354,14 @@ static void lockMonitor(Thread* self, Monitor* mon)
         if (pthread_mutex_trylock(&mon->lock) != 0) {
             /* mutex is locked, switch to wait status and sleep on it */
             oldStatus = dvmChangeStatus(self, THREAD_MONITOR);
+#ifdef WITH_MONITOR_TRACKING
+            self->waitingObj = mon->obj;
+#endif
             cc = pthread_mutex_lock(&mon->lock);
             assert(cc == 0);
+#ifdef WITH_MONITOR_TRACKING
+            self->waitingObj = NULL;
+#endif
             dvmChangeStatus(self, oldStatus);
         }
 
@@ -778,7 +784,9 @@ void dvmLockObject(Thread* self, Object *obj)
                  * to wait on another thread.
                  */
                 oldStatus = dvmChangeStatus(self, THREAD_MONITOR);
-
+#ifdef WITH_MONITOR_TRACKING
+                self->waitingObj = obj;
+#endif
                 /* Spin until the other thread lets go.
                  */
                 sleepDelay = 0;
@@ -794,6 +802,9 @@ void dvmLockObject(Thread* self, Object *obj)
                             LOG_THIN("(%d) lock 0x%08x surprise-fattened\n",
                                      threadId, (uint)&obj->lock);
                             dvmChangeStatus(self, oldStatus);
+#ifdef WITH_MONITOR_TRACKING
+                            self->waitingObj = NULL;
+#endif
                             goto fat_lock;
                         }
 
@@ -818,6 +829,9 @@ void dvmLockObject(Thread* self, Object *obj)
                 /* We've got the thin lock; let the VM know that we're
                  * done waiting.
                  */
+#ifdef WITH_MONITOR_TRACKING
+                self->waitingObj = NULL;
+#endif
                 dvmChangeStatus(self, oldStatus);
 
                 /* Fatten the lock.  Note this relinquishes ownership.

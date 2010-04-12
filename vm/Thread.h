@@ -195,6 +195,7 @@ typedef struct Thread {
 #ifdef WITH_MONITOR_TRACKING
     /* objects locked by this thread; most recent is at head of list */
     struct LockedObjectData* pLockedObjects;
+    Object* waitingObj;
 #endif
 
 #ifdef WITH_ALLOC_LIMITS
@@ -452,6 +453,9 @@ typedef struct LockedObjectData {
     /* number of times it has been locked recursively (zero-based ref count) */
     int             recursionCount;
 
+#ifdef WITH_MONITOR_TRACKING
+    u8              timeFirstLocked;
+#endif
     /* stack trace at point of initial acquire */
     u4              stackDepth;
     int*            rawStackTrace;

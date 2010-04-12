@@ -3233,6 +3233,9 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
     int priority;               // java.lang.Thread priority
     int policy;                 // pthread policy
     struct sched_param sp;      // pthread scheduling parameters
+#ifdef WITH_MONITOR_TRACKING
+    Object* vmThread;
+#endif
 
     threadObj = thread->threadObj;
     if (threadObj == NULL) {
@@ -3274,6 +3277,11 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
     if (groupName == NULL)
         groupName = strdup("(BOGUS GROUP)");
 
+#ifdef WITH_MONITOR_TRACKING
+    vmThread = dvmGetFieldObject(threadObj,
+                    gDvm.offJavaLangThread_vmThread);
+#endif
+
     assert(thread->status < NELEM(kStatusNames));
     dvmPrintDebugMessage(target,
         "\"%s\"%s prio=%d tid=%d %s\n",
@@ -3283,21 +3291,39 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
         "  | group=\"%s\" sCount=%d dsCount=%d s=%c obj=%p self=%p\n",
         groupName, thread->suspendCount, thread->dbgSuspendCount,
         thread->isSuspended ? 'Y' : 'N', thread->threadObj, thread);
+#ifdef WITH_MONITOR_TRACKING
+    dvmPrintDebugMessage(target,
+        "  | sysTid=%d nice=%d sched=%d/%d cgrp=%s handle=%d vmthread=%p\n",
+        thread->systemTid, getpriority(PRIO_PROCESS, thread->systemTid),
+        policy, sp.sched_priority, schedulerGroupBuf, (int)thread->handle, vmThread);
+#else
     dvmPrintDebugMessage(target,
         "  | sysTid=%d nice=%d sched=%d/%d cgrp=%s handle=%d\n",
         thread->systemTid, getpriority(PRIO_PROCESS, thread->systemTid),
         policy, sp.sched_priority, schedulerGroupBuf, (int)thread->handle);
+#endif
 
 #ifdef WITH_MONITOR_TRACKING
     if (!isRunning) {
+      if (thread->waitingObj != NULL) {
+        dvmPrintDebugMessage(target,
+            "  | waitMonitor=%p (%s) \n",
+            thread->waitingObj, thread->waitingObj->clazz->descriptor);
+      }
+      if (vmThread != NULL && IS_LOCK_FAT(&(vmThread->lock))) {
+        dvmPrintDebugMessage(target,
+            "  | threadMonitor=%p (%s) \n",
+            vmThread->lock, vmThread->clazz->descriptor);
+
+      }
         LockedObjectData* lod = thread->pLockedObjects;
         if (lod != NULL)
             dvmPrintDebugMessage(target, "  | monitors held:\n");
         else
             dvmPrintDebugMessage(target, "  | monitors held: <none>\n");
         while (lod != NULL) {
-            dvmPrintDebugMessage(target, "  >  %p[%d] (%s)\n",
-                lod->obj, lod->recursionCount, lod->obj->clazz->descriptor);
+            dvmPrintDebugMessage(target, "  >  %p[%d] (%s) @%lld\n",
+                lod->obj, lod->recursionCount, lod->obj->clazz->descriptor, lod->timeFirstLocked);
             lod = lod->next;
         }
     }
@@ -3427,6 +3453,9 @@ void dvmAddToMonitorList(Thread* self, Object* obj, bool withTrace)
     }
     newLod->obj = obj;
     newLod->recursionCount = 0;
+#ifdef WITH_MONITOR_TRACKING
+    newLod->timeFirstLocked = dvmGetRelativeTimeNsec();
+#endif
 
     if (withTrace) {
         trace = dvmFillInStackTraceRaw(self, &depth);
