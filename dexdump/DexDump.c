@@ -225,20 +225,14 @@ static const char* quotedVisibility(u4 accessFlags)
 
 /*
  * Count the number of '1' bits in a word.
- *
- * Having completed this, I'm ready for an interview at Google.
- *
- * TODO? there's a parallel version w/o loops.  Performance not currently
- * important.
  */
 static int countOnes(u4 val)
 {
     int count = 0;
 
-    while (val != 0) {
-        val &= val-1;
-        count++;
-    }
+    val = val - ((val >> 1) & 0x55555555);
+    val = (val & 0x33333333) + ((val >> 2) & 0x33333333);
+    count = ((val + (val >> 4) & 0x0F0F0F0F) * 0x01010101) >> 24;
 
     return count;
 }
