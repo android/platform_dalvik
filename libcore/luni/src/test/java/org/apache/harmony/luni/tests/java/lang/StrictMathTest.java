@@ -1293,8 +1293,8 @@ public class StrictMathTest extends junit.framework.TestCase {
         method = "tanh",
         args = {double.class}
     )
-    @KnownFailure(value = "bug 2139334")
     public void test_tanh_D() {
+        final long SIGN_BIT = Double.doubleToLongBits(-0.0);
         // Test for special situations
         assertTrue(Double.isNaN(StrictMath.tanh(Double.NaN)));
         assertEquals("Should return +1.0", +1.0, StrictMath
@@ -1305,7 +1305,8 @@ public class StrictMathTest extends junit.framework.TestCase {
                 .doubleToLongBits(StrictMath.tanh(0.0)));
         assertEquals(Double.doubleToLongBits(+0.0), Double
                 .doubleToLongBits(StrictMath.tanh(+0.0)));
-        assertEquals(Double.doubleToLongBits(-0.0), Double
+        // StrictMath.tanh(-0.0) can return either -0.0 or +0.0, depending on hardware and compilation options
+        assertEquals(Double.doubleToLongBits(+0.0), ~SIGN_BIT & Double
                 .doubleToLongBits(StrictMath.tanh(-0.0)));
 
         assertEquals("Should return 1.0", 1.0, StrictMath.tanh(1234.56), 0D);
