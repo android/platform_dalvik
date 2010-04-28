@@ -52,6 +52,24 @@
       "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAx3///qw\u003d",
+        "filename": "libcore/x-net/src/main/java/org/apache/harmony/xnet/provider/jsse/OpenSSLSessionImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2010-04-28T18:19:22Z",
+      "side": 0,
+      "message": "Do you have the details on how to reproduce that crash and could you share that with us?",
+      "parentUuid": "AAAAx3///rI\u003d",
+      "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
