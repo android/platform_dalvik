@@ -34,6 +34,24 @@
       "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAx3///rI\u003d",
+        "filename": "libcore/x-net/src/main/java/org/apache/harmony/xnet/provider/jsse/OpenSSLSessionImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2010-04-28T17:48:06Z",
+      "side": 0,
+      "message": "I investigating removing this by first looking at why it was added. It turns out there is a reproducible native crash related to the improper sharing of native SSL_SESSIONs between unrelated SSL_CTXs. It wasn\u0027t quite understood at the time but this locking prevented the crash. In order to remove the locking, the OpenSSL native code has to be fixed as well. This is active work in progress.",
+      "parentUuid": "AAAAr3//+8g\u003d",
+      "revId": "0c9612f9d7ff9fc0a61cc9eeb37acaabb7b28700",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
