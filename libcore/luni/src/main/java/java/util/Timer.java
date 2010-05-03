@@ -204,7 +204,7 @@ public class Timer {
         @Override
         public void run() {
             while (true) {
-                TimerTask task;
+                TimerTask task = null;
                 synchronized (this) {
                     // need to check cancelled inside the synchronized block
                     if (cancelled) {
