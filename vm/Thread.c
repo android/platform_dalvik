@@ -32,10 +32,6 @@
 
 #include <cutils/sched_policy.h>
 
-#if defined(HAVE_PRCTL)
-#include <sys/prctl.h>
-#endif
-
 /* desktop Linux needs a little help with gettid() */
 #if defined(HAVE_GETTID) && !defined(HAVE_ANDROID_OS)
 #define __KERNEL__
@@ -1252,7 +1248,6 @@ static bool createFakeRunFrame(Thread* thread)
  */
 static void setThreadName(const char *threadName)
 {
-#if defined(HAVE_PRCTL)
     int hasAt = 0;
     int hasDot = 0;
     const char *s = threadName;
@@ -1267,8 +1262,8 @@ static void setThreadName(const char *threadName)
     } else {
         s = threadName + len - 15;
     }
-    prctl(PR_SET_NAME, (unsigned long) s, 0, 0, 0);
-#endif
+    if (pthread_setname_np(pthread_self(), s) != 0)
+        LOGW("Unable to set the name of the current thread\n");
 }
 
 /*
