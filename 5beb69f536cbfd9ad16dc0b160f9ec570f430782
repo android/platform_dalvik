@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAzX//+50\u003d",
+        "filename": "vm/Thread.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000411
+      },
+      "writtenOn": "2010-06-10T01:12:05Z",
+      "side": 1,
+      "message": "I\u0027m not sure this function is used on all the platforms that Dalvik can be built for. Maybe the HAVE_PRCTL check would still be needed here ?",
+      "revId": "5beb69f536cbfd9ad16dc0b160f9ec570f430782",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
