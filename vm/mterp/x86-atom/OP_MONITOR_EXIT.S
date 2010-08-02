@@ -21,7 +21,7 @@
     * For: monitor-exit
     *
     * Description: Release a monitor for the indicated object. If this instruction needs
-    *              to throw an execption, it must do so as if teh pc has already
+    *              to throw an execption, it must do so as if the pc has already
     *              advanced pased the instruction.
     *
     * Format: AA|op (11x)

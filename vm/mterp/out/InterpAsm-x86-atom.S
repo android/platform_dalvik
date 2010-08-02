@@ -14968,14 +14968,14 @@ OP_IF_LEZ_2f:
     *
     * Format:
     *
-    * Syntax: vAA, {vC, vD, vE, vF}, inline@BBBB
+    * Syntax: A, {vC, vD, vE, vF}, inline@BBBB
     */
 
     FETCH       1, %ecx                 # %ecx<- BBBB
     movl        rGLUE, %eax             # %eax<- MterpGlue pointer
     addl        $offGlue_retval, %eax  # %eax<- &glue->retval
     EXPORT_PC
-    shr         $4, rINST              # rINST<- B
+    shr         $4, rINST              # rINST<- A
     movl        %eax, -8(%esp)          # push parameter glue->retval
     lea         -24(%esp), %esp
     jmp         .LOP_EXECUTE_INLINE_continue
@@ -18331,10 +18331,10 @@ dvmAsmInstructionJmpTable = .LdvmAsmInstructionJmpTable
 .long .L_OP_UNUSED_E9
 .long .L_OP_UNUSED_EA
 .long .L_OP_UNUSED_EB
-.long .L_OP_UNUSED_EC
+.long .L_OP_BREAKPOINT
 .long .L_OP_THROW_VERIFICATION_ERROR
 .long .L_OP_EXECUTE_INLINE
-.long .L_OP_UNUSED_EF
+.long .L_OP_EXECUTE_INLINE_RANGE
 .long .L_OP_INVOKE_DIRECT_EMPTY
 .long .L_OP_UNUSED_F1
 .long .L_OP_IGET_QUICK

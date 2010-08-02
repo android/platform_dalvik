@@ -14,7 +14,7 @@
     */
 
    /*
-    * File: OP_EXECUTE_INLINE.S
+    * File: OP_EXECUTE_INLINE_RANGE.S
     *
     * Code: Executes a "native inline" instruction. Uses no substitutions.
     *
@@ -25,14 +25,14 @@
     *
     * Format:
     *
-    * Syntax: A, {vC, vD, vE, vF}, inline@BBBB
+    * Syntax: AA, {vCCCC..v(CCCC+AA-1)}, inline@BBBB
     */
 
+    call common_abort
     FETCH       1, %ecx                 # %ecx<- BBBB
     movl        rGLUE, %eax             # %eax<- MterpGlue pointer
     addl        $$offGlue_retval, %eax  # %eax<- &glue->retval
     EXPORT_PC
-    shr         $$4, rINST              # rINST<- A
     movl        %eax, -8(%esp)          # push parameter glue->retval
     lea         -24(%esp), %esp
     jmp         .L${opcode}_continue
@@ -54,24 +54,20 @@
     je          3f                      # handle three args
 4:
     movl        %edx, rINST             # rINST<- FEDC
-    and         $$0xf000, rINST         # isolate F
-    shr         $$10, rINST
+    addl        $$3,  rINST             # isolate F
     movl        (rFP, rINST), rINST     # rINST<- vF
     movl        rINST, 12(%esp)         # push parameter vF
 3:
     movl        %edx, rINST             # rINST<- FEDC
-    and         $$0x0f00, rINST         # isolate E
-    shr         $$6, rINST
+    addl        $$2,  rINST             # isolate E
     movl        (rFP, rINST), rINST     # rINST<- vE
     movl        rINST, 8(%esp)          # push parameter E
 2:
     movl        %edx, rINST             # rINST<- FEDC
-    and         $$0x00f0, rINST         # isolate D
-    shr         $$2, rINST
+    addl        $$1,  rINST             # isolate D
     movl        (rFP, rINST), rINST     # rINST<- vD
     movl        rINST, 4(%esp)          # push parameter D
 1:
-    and         $$0x000f, %edx          # isolate C
     movl        (rFP, %edx, 4), %edx    # rINST<- vC
     movl        %edx, (%esp)            # push parameter C
 0:
