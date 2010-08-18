@@ -37,7 +37,7 @@ cd "${oldwd}"
 jarfile=dx.jar
 libdir="$progdir"
 if [ ! -r "$libdir/$jarfile" ]; then
-    libdir=`dirname "$progdir"`/tools/lib
+    libdir=`dirname "$progdir"`/platforms-tools/lib
 fi
 
 if [ ! -r "$libdir/$jarfile" ]; then
