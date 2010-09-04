@@ -1076,16 +1076,16 @@ extern "C" {
  *
  * Note these are the only symbols exported for JNI by the VM.
  */
-jint JNI_GetDefaultJavaVMInitArgs(void*);
-jint JNI_CreateJavaVM(JavaVM**, JNIEnv**, void*);
-jint JNI_GetCreatedJavaVMs(JavaVM**, jsize, jsize*);
+JNIEXPORT jint JNI_GetDefaultJavaVMInitArgs(void*);
+JNIEXPORT jint JNI_CreateJavaVM(JavaVM**, JNIEnv**, void*);
+JNIEXPORT jint JNI_GetCreatedJavaVMs(JavaVM**, jsize, jsize*);
 
 /*
  * Prototypes for functions exported by loadable shared libs.  These are
  * called by JNI, not provided by JNI.
  */
-jint JNI_OnLoad(JavaVM* vm, void* reserved);
-void JNI_OnUnload(JavaVM* vm, void* reserved);
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved);
+JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved);
 
 #ifdef __cplusplus
 }

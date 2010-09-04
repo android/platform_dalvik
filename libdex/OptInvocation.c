@@ -116,6 +116,7 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
  *
  * Returns 0 on success, errno on failure.
  */
+DEX_EXPORT
 int dexOptCreateEmptyHeader(int fd)
 {
     DexOptHeader optHdr;

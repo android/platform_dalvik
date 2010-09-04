@@ -43,7 +43,12 @@ typedef float           jfloat;         /* 32-bit IEEE 754 */
 typedef double          jdouble;        /* 64-bit IEEE 754 */
 #endif
 
+#if defined(ANDROID)
+/* Use GCC visibility */
+#define JNIEXPORT __attribute__((visibility("default")))
+#else
 #define JNIEXPORT
+#endif
 #define JNIIMPORT
 #define JNICALL
 

@@ -26,6 +26,7 @@
 #
 LOCAL_CFLAGS += -fstrict-aliasing -Wstrict-aliasing=2 -fno-align-jumps
 #LOCAL_CFLAGS += -DUSE_INDIRECT_REF
+LOCAL_CFLAGS += -include "dalvikdefines.h"
 
 #
 # Optional features.  These may impact the size or performance of the VM.
@@ -64,6 +65,7 @@ ifeq ($(dvm_make_debug_vm),true)
   # - GDB helpers enabled
   # - LOGV
   # - assert()
+  # - full ELF symbols
   #
   LOCAL_CFLAGS += -DWITH_INSTR_CHECKS
   LOCAL_CFLAGS += -DWITH_EXTRA_OBJECT_VALIDATION
@@ -83,6 +85,7 @@ else  # !dvm_make_debug_vm
   # - all development features disabled
   # - compiler optimizations enabled (redundant for "release" builds)
   # - (debugging and profiling still enabled)
+  # - minimize ELF symbols to reduce code size by 10%
   #
   #LOCAL_CFLAGS += -DNDEBUG -DLOG_NDEBUG=1
   # "-O2" is redundant for device (release) but useful for sim (debug)
@@ -91,6 +94,8 @@ else  # !dvm_make_debug_vm
   LOCAL_CFLAGS += -DDVM_SHOW_EXCEPTION=1
   # if you want to try with assertions on the device, add:
   #LOCAL_CFLAGS += -UNDEBUG -DDEBUG=1 -DLOG_NDEBUG=1 -DWITH_DALVIK_ASSERT
+  # use GCC Visibility to reduce the footprint of runtime library
+  LOCAL_CFLAGS += -fvisibility=hidden
 endif  # !dvm_make_debug_vm
 
 # bug hunting: checksum and verify interpreted stack when making JNI calls
