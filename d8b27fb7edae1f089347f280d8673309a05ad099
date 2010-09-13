@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAA7X///TY\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-09-13T18:47:08Z",
+      "side": 1,
+      "message": "Doesn\u0027t follow coding style here or below: need space after keywords, and open braces shouldn\u0027t generally go on their own lines. (Yes, there are style violations immediately above this. We should fix them, eventually.)",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAA7X///Vg\u003d",
         "filename": "vm/Init.c",
         "patchSetId": 1
