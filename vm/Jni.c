@@ -4255,6 +4255,7 @@ void dvmLateEnableCheckedJni(void)
 /*
  * Not supported.
  */
+DVM_EXPORT
 jint JNI_GetDefaultJavaVMInitArgs(void* vm_args)
 {
     return JNI_ERR;
@@ -4265,6 +4266,7 @@ jint JNI_GetDefaultJavaVMInitArgs(void* vm_args)
  *
  * We always have zero or one.
  */
+DVM_EXPORT
 jint JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs)
 {
     if (gDvm.vmList != NULL) {
@@ -4286,6 +4288,7 @@ jint JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs)
  * The current thread becomes the main VM thread.  We return immediately,
  * which effectively means the caller is executing in a native method.
  */
+DVM_EXPORT
 jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args)
 {
     const JavaVMInitArgs* args = (JavaVMInitArgs*) vm_args;

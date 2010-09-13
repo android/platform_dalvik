@@ -508,6 +508,7 @@ bool dvmOptimizeDexFile(int fd, off_t dexOffset, long dexLength,
  *
  * Returns "true" on success.
  */
+DVM_EXPORT
 bool dvmContinueOptimization(int fd, off_t dexOffset, long dexLength,
     const char* fileName, u4 modWhen, u4 crc, bool isBootstrap)
 {

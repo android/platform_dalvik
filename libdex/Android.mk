@@ -44,8 +44,25 @@ dex_include_files := \
 ifneq ($(SDK_ONLY),true)  # SDK_only doesn't need device version
 
 include $(CLEAR_VARS)
+
+# Make a debugging version when building the simulator (if not told
+# otherwise) and when explicitly asked.
+dvm_make_debug_vm := false
+ifeq ($(strip $(DEBUG_DALVIK_VM)),)
+  ifeq ($(dvm_simulator),true)
+    dvm_make_debug_vm := true
+  endif
+else
+  dvm_make_debug_vm := $(DEBUG_DALVIK_VM)
+endif
+
 LOCAL_SRC_FILES := $(dex_src_files)
 LOCAL_C_INCLUDES += $(dex_include_files)
+LOCAL_CFLAGS += -include "dalvikdefines.h"
+ifeq ($(dvm_make_debug_vm),false)
+  # hide ELF symbols to reduce code size
+  LOCAL_CFLAGS += -fvisibility=hidden
+endif
 LOCAL_MODULE := libdex
 include $(BUILD_STATIC_LIBRARY)
 
@@ -60,5 +77,6 @@ endif # !SDK_ONLY
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(dex_src_files)
 LOCAL_C_INCLUDES += $(dex_include_files)
+LOCAL_CFLAGS += -include "dalvikdefines.h"
 LOCAL_MODULE := libdex
 include $(BUILD_HOST_STATIC_LIBRARY)
