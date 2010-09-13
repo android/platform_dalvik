@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAA7X///Vg\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2010-09-13T17:17:02Z",
+      "side": 1,
+      "message": "size?",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7X///Vk\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2010-09-13T17:17:02Z",
+      "side": 1,
+      "message": "leak",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7X///Vc\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2010-09-13T17:17:02Z",
+      "side": 1,
+      "message": "buffer overrun",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7X///VY\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2010-09-13T17:17:02Z",
+      "side": 1,
+      "message": "why did you allocate this at all?",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7X///VQ\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2010-09-13T17:17:02Z",
+      "side": 1,
+      "message": "(and the same points here.)",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
