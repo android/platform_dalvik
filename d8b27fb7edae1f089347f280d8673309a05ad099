@@ -70,6 +70,23 @@
     },
     {
       "key": {
+        "uuid": "AAAA7X///Ng\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1000411
+      },
+      "writtenOn": "2010-09-14T15:35:11Z",
+      "side": 1,
+      "message": "strcat / strcpy should never be used in any production code. Use strlcat / strlcpy instead.\n\nBesides, this is gross and broken.",
+      "revId": "d8b27fb7edae1f089347f280d8673309a05ad099",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAA7X///VY\u003d",
         "filename": "vm/Init.c",
         "patchSetId": 1
