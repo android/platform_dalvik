@@ -712,12 +712,10 @@ static int dvmProcessOptions(int argc, const char* const argv[],
             free(gDvm.classPathStr); /* in case we have compiled-in default */
             gDvm.classPathStr = strdup(argv[++i]);
 
-        } else if (strncmp(argv[i], "-Xbootclasspath", sizeof("-Xbootclasspath")-1) == 0)
-        {
+        } else if (strncmp(argv[i], "-Xbootclasspath", sizeof("-Xbootclasspath")-1) == 0) {
             /* set bootclasspath */
             const char* path = argv[i] + sizeof("-Xbootclasspath")-1;
-            if(*path == ':')
-            {
+            if (*path == ':') {
                 path += 1;
                 if (*path == '\0') {
                     dvmFprintf(stderr, "Missing bootclasspath path list\n");
@@ -726,43 +724,38 @@ static int dvmProcessOptions(int argc, const char* const argv[],
                 free(gDvm.bootClassPathStr);
                 gDvm.bootClassPathStr = strdup(path);
             }
-            /* TODO: support -Xbootclasspath/a and /p, which append or
-             * prepend to the default bootclasspath.  We set the default bootclasspath.  We set the default
+            /*
+             * TODO: support -Xbootclasspath/a and /p, which append or
+             * prepend to the default bootclasspath.  We set the default
              * path earlier.
              */
-            else if(*path == '/' && *(path + 1) == 'a' && *(path + 2) == ':')
-            {
-                char* apPath = strdup(path + 2);
-                char* allPath = (char *)malloc(strlen(gDvm.bootClassPathStr) + strlen(apPath));
+            else if (*path == '/' && *(path + 1) == 'a' && *(path + 2) == ':') {
+                int appSize = strlen(path + 2), originSize = strlen(gDvm.bootClassPathStr);
 
                 if (*(path+3) == '\0') {
-                    dvmFprintf(stderr, "Missing bootclasspath path list\n");
+                    dvmFprintf(stderr, "Missing appending bootclasspath path list\n");
                     return -1;
                 }
 
-                allPath = strdup(gDvm.bootClassPathStr);
-                strcat(allPath, apPath);
-                free(gDvm.bootClassPathStr);
-                free(apPath);
-                gDvm.bootClassPathStr = allPath;
+                gDvm.bootClassPathStr = (char *) realloc(gDvm.bootClassPathStr, originSize + appSize + 1);
+                strcat(gDvm.bootClassPathStr, path + 2);
             }
-            else if(*path == '/' && *(path + 1) == 'p' && *(path + 2) == ':')
-            {
-                char* prepPath = strdup(path + 3);
-                char* allPath = (char *)malloc(strlen(gDvm.bootClassPathStr) + strlen(prepPath));
+            else if (*path == '/' && *(path + 1) == 'p' && *(path + 2) == ':') {
+                int preSize = strlen(path + 3), originSize = strlen(gDvm.bootClassPathStr);
 
                 if (*(path+3) == '\0') {
-                    dvmFprintf(stderr, "Missing bootclasspath path list\n");
+                    dvmFprintf(stderr, "Missing prepending bootclasspath path list\n");
                     return -1;
                 }
-                allPath = strdup(prepPath);
+                char* allPath;
+
+                allPath = strdup(path + 3);
+                allPath = (char *) realloc(allPath, preSize + originSize + 2);
                 strcat(allPath, ":");
                 strcat(allPath, gDvm.bootClassPathStr);
                 free(gDvm.bootClassPathStr);
-                free(prepPath);
                 gDvm.bootClassPathStr = allPath;
             }
-
         } else if (strncmp(argv[i], "-D", 2) == 0) {
             /* set property */
             dvmAddCommandLineProperty(argv[i] + 2);
