@@ -739,6 +739,8 @@ static int dvmProcessOptions(int argc, const char* const argv[],
 
                 gDvm.bootClassPathStr = (char *) realloc(gDvm.bootClassPathStr, originSize + appSize + 1);
                 strcat(gDvm.bootClassPathStr, path + 2);
+                /*Make sure it ends with null termination*/
+                *(gDvm.bootClassPathStr + appSize + originSize) = '\0';
             }
             else if (*path == '/' && *(path + 1) == 'p' && *(path + 2) == ':') {
                 int preSize = strlen(path + 3), originSize = strlen(gDvm.bootClassPathStr);
@@ -755,6 +757,8 @@ static int dvmProcessOptions(int argc, const char* const argv[],
                 strcat(allPath, gDvm.bootClassPathStr);
                 free(gDvm.bootClassPathStr);
                 gDvm.bootClassPathStr = allPath;
+                /*Make sure it ends with null termination*/
+                *(gDvm.bootClassPathStr + preSize + originSize + 1) = '\0';
             }
         } else if (strncmp(argv[i], "-D", 2) == 0) {
             /* set property */
