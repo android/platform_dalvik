@@ -750,7 +750,7 @@ static int dvmProcessOptions(int argc, const char* const argv[],
                     return -1;
                 }
                 char* allPath;
-
+ 
                 allPath = strdup(path + 3);
                 allPath = (char *) realloc(allPath, preSize + originSize + 2);
                 strcat(allPath, ":");
