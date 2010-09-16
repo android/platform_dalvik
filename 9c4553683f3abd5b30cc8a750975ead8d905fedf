@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAA7n///7Y\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-09-16T00:07:18Z",
+      "side": 1,
+      "message": "I think the logic to detect the various modes is pretty tortuous. Why not just three strncmp() clauses with the three different option names?",
+      "revId": "9c4553683f3abd5b30cc8a750975ead8d905fedf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7n///7U\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-09-16T00:07:18Z",
+      "side": 1,
+      "message": "I\u0027d use asprintf() for clarity instead of all this manual allocation and concatenation. Ditto below.",
+      "revId": "9c4553683f3abd5b30cc8a750975ead8d905fedf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
