@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAA7n///x4\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-09-16T19:31:39Z",
+      "side": 1,
+      "message": "Please don\u0027t reformat preexisting code. Thanks.",
+      "revId": "092c8904be086d090f224c6df1bdfca313fe9073",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7n///xw\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-09-16T19:31:39Z",
+      "side": 1,
+      "message": "Android (and Dalvik even moreso) prefers lines less than 80 characters, unless that results in unreadable code (hence the two-line if clause above).",
+      "revId": "092c8904be086d090f224c6df1bdfca313fe9073",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA7n///x0\u003d",
+        "filename": "vm/Init.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-09-16T19:31:39Z",
+      "side": 1,
+      "message": "This section and the next aren\u0027t indented correctly. (Four spaces per level.)",
+      "revId": "092c8904be086d090f224c6df1bdfca313fe9073",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
