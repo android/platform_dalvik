@@ -17,6 +17,7 @@
  * Read-only access to Zip archives, with minimal heap allocation.
  */
 #include "ZipArchive.h"
+#include "DexFile.h"
 
 #include <zlib.h>
 
@@ -25,6 +26,9 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 /*
  * Zip file constants.
@@ -601,7 +605,7 @@ bail:
  */
 bool dexZipExtractEntryToFile(const ZipArchive* pArchive,
     const ZipEntry entry, int fd)
-{
+{    
     bool result = false;
     int ent = entryToIndex(pArchive, entry);
     if (ent < 0)
@@ -611,12 +615,16 @@ bool dexZipExtractEntryToFile(const ZipArchive* pArchive,
     int method;
     long uncompLen, compLen;
     off_t offset;
+    u4 entryCrcVal = 0;
+    int skipByte = sizeof(DexOptHeader);
 
     if (!dexZipGetEntryInfo(pArchive, entry, &method, &uncompLen, &compLen,
-            &offset, NULL, NULL))
+            &offset, NULL, &entryCrcVal))
     {
         goto bail;
     }
+
+retry:
 
     if (method == kCompressStored) {
         ssize_t actual;
@@ -635,6 +643,38 @@ bool dexZipExtractEntryToFile(const ZipArchive* pArchive,
     } else {
         if (!inflateToFile(fd, basePtr+offset, uncompLen, compLen))
             goto bail;
+    }
+
+	/*skip the size of DexOptHeader*/
+    if (lseek(fd, skipByte, SEEK_SET) != skipByte) {
+        LOGE("failed to skip opt header\n");
+        goto bail;
+    }
+
+	/*Extracted data's CRC*/
+    u4 dataCrcVal = crc32(0L, Z_NULL, 0);
+    int readCount;
+    char readBuf[32768];
+
+    while ((readCount = read(fd, readBuf, sizeof(readBuf)))) {
+        if (readCount < 0) {
+            LOGW("read(fd=%d, length=%d) failed: %s\n", fd, sizeof(readBuf), strerror(errno));
+            goto bail;
+        }
+        dataCrcVal = crc32(dataCrcVal, readBuf, readCount);
+        /*end of file*/
+        if (readCount < sizeof(readBuf))
+            break;
+    }
+
+    if (dataCrcVal != entryCrcVal) {
+        printf("DexOpt: source file CRC mismatch (%08x vs %08x), retry\n", entryCrcVal, dataCrcVal);
+        
+        if (lseek(fd, skipByte, SEEK_SET) != skipByte) {
+            LOGE("failed to skip opt header\n");
+            goto bail;
+        }
+        goto retry;
     }
 
     result = true;
