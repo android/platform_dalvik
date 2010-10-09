@@ -523,6 +523,24 @@ static bool prepareCpe(ClassPathEntry* cpe, bool isBootstrap)
 }
 
 /*
+ * Redundant cpes from class path string may exist. For gDvm.bootClassPathStr,
+ * if user uses -Xbootclasspath/a or /p with typo may result in redundant
+ * cpe, and dalvik will crash in prepareCpe(). Thus, we need to Check whether 
+ * there are redundant cpes and drop from the list before they cause dalvik 
+ * vm to crash.
+ */
+static bool isRedundantCpe(const char* fileName, const ClassPathEntry* cpe)
+{
+    while (cpe->kind != kCpeLastEntry) {
+        if (strcmp(fileName, cpe->fileName) == 0)
+            return true;
+        cpe++;
+    }
+
+    return false;
+}
+
+/*
  * Convert a colon-separated list of directories, Zip files, and DEX files
  * into an array of ClassPathEntry structs.
  *
@@ -591,7 +609,11 @@ static ClassPathEntry* processClassPath(const char* pathStr, bool isBootstrap)
             cpe[idx].fileName = NULL;
             cpe[idx].ptr = NULL;
 
-            if (!prepareCpe(&tmp, isBootstrap)) {
+            if (isRedundantCpe(tmp.fileName, cpe)) {
+                /* redundant cpe, drop from list and continue on */
+                free(tmp.fileName);
+            }
+            else if (!prepareCpe(&tmp, isBootstrap)) {
                 /* drop from list and continue on */
                 free(tmp.fileName);
             } else {
