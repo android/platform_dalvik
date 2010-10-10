@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAA73///Ek\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2010-10-10T17:01:40Z",
+      "side": 1,
+      "message": "Stray whitespace.",
+      "revId": "ee1b6c3c825b4f5d485ab5e6b62881819e57df27",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
