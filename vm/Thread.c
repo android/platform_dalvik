@@ -31,6 +31,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <cutils/properties.h>
 
 #if defined(HAVE_PRCTL)
 #include <sys/prctl.h>
@@ -1713,6 +1714,31 @@ static void threadExitUncaughtException(Thread* self, Object* group)
     exception = dvmGetException(self);
     dvmAddTrackedAlloc(exception, self);
     dvmClearException(self);
+
+#if WITH_HPROF
+    if (exception != NULL &&
+        strcmp(exception->clazz->descriptor, "Ljava/lang/OutOfMemoryError;") == 0) {
+        char* hprofFileBuf = (char*) malloc(PROPERTY_VALUE_MAX + 128);
+        int len = 0;
+
+        if (hprofFileBuf != NULL) {
+            memset(hprofFileBuf, 0x00, PROPERTY_VALUE_MAX + 128);
+            len = property_get("dalvik.vm.oome-hprof-file", hprofFileBuf, "");
+
+            if (len != 0) {
+                int result;
+                sprintf(&hprofFileBuf[len], "-tm%d-pid%d.hprof", (int) time(NULL), (int) getpid());
+                LOGI("Uncaught exception is OutOfMemoryError, dumping VM heap to file %s\n",
+                      hprofFileBuf);
+                result = hprofDumpHeap(hprofFileBuf, false);
+                if (result != 0) {
+                    LOGW("Failure during heap dump -- check log output for details");
+                }
+            }
+            free(hprofFileBuf);
+        }
+    }
+#endif
 
     /*
      * Get the Thread's "uncaughtHandler" object.  Use it if non-NULL;
