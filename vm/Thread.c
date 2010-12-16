@@ -3429,6 +3429,8 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
     struct sched_param sp;      // pthread scheduling parameters
     char schedstatBuf[64];      // contents of /proc/[pid]/task/[tid]/schedstat
     int schedstatFd;
+    char stackBuf[64];          // contents of /proc/[tid]/stack
+    int stackFd;
 
     threadObj = thread->threadObj;
     if (threadObj == NULL) {
@@ -3530,6 +3532,27 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
         dvmDumpRunningThreadStack(target, thread);
     else
         dvmDumpThreadStack(target, thread);
+
+    snprintf(stackBuf, sizeof(stackBuf), "/proc/%d/stack", thread->systemTid);
+    stackFd = open(stackBuf, O_RDONLY);
+    if (stackFd >= 0) {
+
+        int nBytes;
+
+        dvmPrintDebugMessage(target,"----- begin kernel stack %d-----\n", thread->systemTid);
+        // header for readability
+        strncat(stackBuf, ":\n", sizeof(stackBuf) - strlen(stackBuf) - 1);
+	dvmPrintDebugMessage(target, stackBuf);
+
+	while ((nBytes = read(stackFd, stackBuf, sizeof(stackBuf) - 1)) > 0) {
+                stackBuf[nBytes] = '\0';
+                dvmPrintDebugMessage(target, stackBuf);
+	}
+
+	dvmPrintDebugMessage(target,"\n----- end kernel stack %d-----\n\n", thread->systemTid);
+	close(stackFd);
+
+    }
 
     free(threadName);
     free(groupName);
