@@ -1642,6 +1642,26 @@ gcForExternalAlloc(bool collectSoftReferences)
     dvmCollectGarbageInternal(collectSoftReferences, GC_EXTERNAL_ALLOC);
 }
 
+static void waitForHeapWorker(void) {
+    dvmUnlockHeap();
+    dvmChangeStatus(NULL, THREAD_VMWAIT);
+    dvmLockMutex(&gDvm.heapWorkerLock);
+
+    /* Wake up the heap worker */
+    dvmSignalHeapWorker(false);
+
+    /* Wait 40 ms for the heap worker to finish. */
+    struct timeval now;
+    gettimeofday(&now, (struct timezone *) NULL);
+    struct timespec wakeupTime;
+    wakeupTime.tv_sec = now.tv_sec;
+    wakeupTime.tv_nsec = (now.tv_usec + 40 * 1000L) * 1000L;
+    pthread_cond_timedwait(&gDvm.heapWorkerIdleCond, &gDvm.heapWorkerLock, &wakeupTime);
+    dvmUnlockMutex(&gDvm.heapWorkerLock);
+    dvmChangeStatus(NULL, THREAD_RUNNING);
+    dvmLockHeap();
+}
+
 /*
  * Returns true if there is enough unused storage to perform an
  * external allocation of the specified size.  If there insufficient
@@ -1677,6 +1697,14 @@ static bool externalAllocPossible(const HeapSource *hs, size_t n)
      * make trimming more effective.
      */
     gcForExternalAlloc(true);
+    if (externalBytesAvailable(hs, n)) {
+        return true;
+    }
+    /* The heap may have changed, let the changes take effect...give
+     * all pending garbage collection activities and finalization
+     * some time to be processed.
+     */
+    waitForHeapWorker();
     if (externalBytesAvailable(hs, n)) {
         return true;
     }
