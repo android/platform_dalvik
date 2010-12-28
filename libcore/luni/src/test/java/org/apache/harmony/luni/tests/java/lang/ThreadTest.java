@@ -1999,7 +1999,10 @@ public class ThreadTest extends junit.framework.TestCase {
 
         while (!sem.hasQueuedThreads()){}
         
+        long start = System.currentTimeMillis();
+        while(start + 1000 > System.currentTimeMillis()) {}
         assertEquals(Thread.State.WAITING, th.getState());
+
         synchronized (lock) {
             sem.release();
             long start = System.currentTimeMillis();
