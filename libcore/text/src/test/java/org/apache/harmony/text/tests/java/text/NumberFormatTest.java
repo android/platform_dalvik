@@ -153,7 +153,7 @@ public class NumberFormatTest extends TestCase {
         Locale chLocale = new Locale("de", "CH");
         // END android-added
 
-        Locale[] requiredLocales = {usLocale, chLocale};
+        Locale[] requiredLocales = {usLocale, arLocale, chLocale};
         if (!Support_Locale.areLocalesAvailable(requiredLocales)) {
             // locale dependent test, bug 1943269
             return;
