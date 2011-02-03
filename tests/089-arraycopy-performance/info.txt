@@ -1,0 +1,2 @@
+This is a test to verify that System.arraycopy gives reasonably performance
+in different scenarious.
