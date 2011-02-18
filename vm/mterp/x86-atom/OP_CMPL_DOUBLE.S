@@ -17,4 +17,4 @@
     * File: OP_CMPL_DOUBLE.S
     */
 
-%include "x86-atom/OP_CMPL_FLOAT.S" { "sod":"l" }
+%include "x86-atom/OP_CMPL_FLOAT.S" { "sod":"d" }

@@ -17,4 +17,4 @@
     * File: OP_CMPG_DOUBLE.S
     */
 
-%include "x86-atom/OP_CMPL_FLOAT.S" { "nan":"$0x1", "sod":"l"}
+%include "x86-atom/OP_CMPL_FLOAT.S" { "nan":"$0x1", "sod":"d"}

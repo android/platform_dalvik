@@ -45,7 +45,7 @@
     shl         $$1, %eax               # shift for byte offset
     movl        %eax, %edx              # %edx<- offset
     lea         8(%esp), %esp
-    jle         common_periodicChecks2  # do backward branch
+    jle         common_periodicChecks_backwardBranch  # do backward branch
     jmp         .L${opcode}_finish
 %break
 .L${opcode}_finish:

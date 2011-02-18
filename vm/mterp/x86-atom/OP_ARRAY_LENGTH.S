@@ -31,10 +31,10 @@
     movl        rINST, %eax             # %eax<- BA
     shr         $$4, %eax               # %eax<- B
     andl        $$15, rINST             # rINST<- A
-    FFETCH_ADV  1, %edx                 # %edx<- next instruction hi; fetch, advance
     GET_VREG    %eax                    # %eax<- vB
-    testl       %eax, %eax              # check for null array object
+    cmp         $$0, %eax               # check for null array object
     je          common_errNullObject    # handle null array object
+    FFETCH_ADV  1, %edx                 # %edx<- next instruction hi; fetch, advance
     movl        offArrayObject_length(%eax), %eax # %eax<- array length
     movl        %eax, (rFP, rINST, 4)   # vA<- %eax; array length
     FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp

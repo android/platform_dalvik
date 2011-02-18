@@ -38,15 +38,9 @@
 
     FETCH_BB    1, %ecx                 # %ecx<- BB
     FETCH_CC    1, %edx                 # %edx<- CC
-
-    fld$sod     (rFP, %edx, 4)
-    fld$sod     (rFP, %ecx, 4)
-
-    fucompp
-    fnstsw      %ax
-    sahf
-
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
+    movs$sod    (rFP, %ecx, 4), %xmm0   # %xmm0<- vBB
+    comis$sod   (rFP, %edx, 4), %xmm0   # do comparison
     ja          .L${opcode}_greater
     jp          .L${opcode}_finalNan
     jz          .L${opcode}_final

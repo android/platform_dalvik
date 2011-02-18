@@ -20,7 +20,7 @@
     *
     * For: const/4
     *
-    * Description: Move the given literal value (right-sign-extended to 32
+    * Description: Move the given literal value (right-zero-extended to 32
     *              bits) into the specified register.
     *
     * Format: B|A|op (11n)
@@ -30,9 +30,8 @@
 
     movl        rINST, %edx             # %edx<- BA
     andl        $$15, rINST             # rINST<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next i nstruction hi; fetch, advance
     shl         $$24, %edx              # %edx<- B000
-    addl        $$2, rPC                  # update PC
     sar         $$28, %edx              # %edx<- right-zero-extended B
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     SET_VREG    %edx, rINST             # vA<- %edx; literal
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp

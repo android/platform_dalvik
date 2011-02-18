@@ -17,4 +17,4 @@
     * File: OP_XOR_INT_2ADDR.S
     */
 
-%include "x86-atom/binop2addr.S" {"instr":"xor     %edx, (rFP, rINST, 4)"}
+%include "x86-atom/binop2addr.S" {"instr":"xor     %edx, %ecx"}

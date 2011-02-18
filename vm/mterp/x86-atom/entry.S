@@ -46,13 +46,6 @@
     */
 
     .macro      MTERP_EXIT
-    #lea                40(%ebp), %esp          # correct stack pointer
-    #movl       24(%ebp), %edi          # restore %edi
-    #movl       28(%ebp), %esi          # restore %esi
-    #movl       32(%ebp), %ebx          # restore %ebx
-    #movl       36(%ebp), %ebp          # restore caller base pointer
-    #ret                                        # return
-
     lea         40(%esp), %esp          # correct stack pointer
     movl        -16(%esp), %edi         # restore %edi
     movl        -12(%esp), %esi         # restore %esi
@@ -360,11 +353,11 @@ dvmAsmInstructionJmpTable = .LdvmAsmInstructionJmpTable
 .long .L_OP_SHL_INT_LIT8
 .long .L_OP_SHR_INT_LIT8
 .long .L_OP_USHR_INT_LIT8
-.long .L_OP_UNUSED_E3
-.long .L_OP_UNUSED_E4
-.long .L_OP_UNUSED_E5
-.long .L_OP_UNUSED_E6
-.long .L_OP_UNUSED_E7
+.long .L_OP_IGET_VOLATILE
+.long .L_OP_IPUT_VOLATILE
+.long .L_OP_SGET_VOLATILE
+.long .L_OP_SPUT_VOLATILE
+.long .L_OP_IGET_OBJECT_VOLATILE
 .long .L_OP_IGET_WIDE_VOLATILE
 .long .L_OP_IPUT_WIDE_VOLATILE
 .long .L_OP_SGET_WIDE_VOLATILE
@@ -385,7 +378,7 @@ dvmAsmInstructionJmpTable = .LdvmAsmInstructionJmpTable
 .long .L_OP_INVOKE_VIRTUAL_QUICK_RANGE
 .long .L_OP_INVOKE_SUPER_QUICK
 .long .L_OP_INVOKE_SUPER_QUICK_RANGE
-.long .L_OP_UNUSED_FC
-.long .L_OP_UNUSED_FD
-.long .L_OP_UNUSED_FE
+.long .L_OP_IPUT_OBJECT_VOLATILE
+.long .L_OP_SGET_OBJECT_VOLATILE
+.long .L_OP_SPUT_OBJECT_VOLATILE
 .long .L_OP_UNUSED_FF

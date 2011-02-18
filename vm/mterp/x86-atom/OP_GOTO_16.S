@@ -30,5 +30,5 @@
 
     FETCHs      1, %edx                 # %edx<- ssssAAAA (sign-extended)
     shl         $$1, %edx               # %edx is doubled to get the byte offset
-    js          common_periodicChecks2  # do check on backwards branch
+    js          common_periodicChecks_backwardBranch  # do check on backwards branch
     FINISH_RB   %edx, %ecx              # jump to next instruction

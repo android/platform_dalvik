@@ -17,4 +17,4 @@
     * File: OP_XOR_INT.S
     */
 
-%include "x86-atom/binop.S" {"instr":"xor     (rFP, %edx, 4), %ecx"}
+%include "x86-atom/binop.S" {"instr":"xor     %edx, %ecx"}

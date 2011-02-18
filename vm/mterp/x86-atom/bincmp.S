@@ -39,6 +39,6 @@
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $$1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
