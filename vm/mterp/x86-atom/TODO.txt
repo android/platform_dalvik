@@ -1,17 +1,4 @@
 Items requiring attention:
 
-(hi) Add gc card marking to aput/iput/sput/new_filled_array
-(hi) Correct stack overflow handling (dvmCleanupStackOverflow takes an
-     additional argument now)
-(hi) "debugger active" test in common_periodicChecks must handle
-     the case where glue->pDebuggerActive is a NULL pointer (used to
-     skip a memory load when debugger support is completely disabled)
-(hi) WITH_DEBUGGER and WITH_PROFILER are no longer defined (but are
-     assumed to be enabled)
-
-(md) Correct OP_MONITOR_EXIT (need to adjust PC before throw)
-(md) OP_THROW needs to export the PC
-
 (lo) Implement OP_BREAKPOINT
-(lo) Implement OP_EXECUTE_INLINE_RANGE
 (lo) Implement OP_*_VOLATILE (12 instructions)

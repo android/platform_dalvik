@@ -17,4 +17,4 @@
     * File: OP_OR_INT.S
     */
 
-%include "x86-atom/binop.S" {"instr":"or (rFP, %edx, 4), %ecx"}
+%include "x86-atom/binop.S" {"instr":"or %edx, %ecx"}

@@ -32,5 +32,5 @@ LOP_GOTO.S:
 
     movsbl      rINSTbl, %edx           # %edx<- +AA
     shl         $$1, %edx               # %edx is shifted for byte offset
-    js          common_periodicChecks2  # do check on backwards branch
+    js          common_periodicChecks_backwardBranch  # do check on backwards branch
     FINISH_RB   %edx, %ecx              # jump to next instruction

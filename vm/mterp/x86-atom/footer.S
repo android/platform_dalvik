@@ -34,26 +34,22 @@ common_periodicChecks:
     movl        rGLUE, %edx             # %edx<- pMterpGlue
     movl        %ebx, -4(%esp)          # save %ebx to the stack
     movl        offGlue_pSelfSuspendCount(%edx), %ebx # %ebx<- pSuspendCount (int)
-#if defined(WITH_DEBUGGER)
+4:
     movl        offGlue_pDebuggerActive(%edx), %eax # %eax<- pDebuggerActive
-    movl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
-    and         $$7, %eax               # %eax<- mask for boolean (just how many bits does it take?)
-#endif
+    testl       %eax, %eax
+    je          5f
+    movzbl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
+5:
     cmp         $$0, (%ebx)             # check if suspend is pending
     jne         2f                      # handle suspend
-#if defined(WITH_DEBUGGER) || defined(WITH_PROFILER)
-#if defined(WITH_PROFILER)
     movl        offGlue_pActiveProfilers(%edx), %ebx # %ebx<- activeProfilers (int)
-    or          (%ebx), %eax            # %eax<- merge activeProfilers and debuggerActive
-#else
-    cmp         $$0, %eax               # check for debuggerActive
-#endif
-    jne         3f                      # debugger or profiler active; switch interp
-#endif
+    orl         (%ebx), %eax            # %eax<- merge activeProfilers and debuggerActive
     movl        -8(%esp), %edx          # %edx<- restore %edx
+    jne         3f                      # debugger or profiler active; switch interp
     movl        -4(%esp), %ebx          # %ebx<- restore %ebx
     ret                                 # return
 2:                                      # check suspended
+    EXPORT_PC
     movl        offGlue_self(%edx), %eax # %eax<- glue->self
     movl        %eax, -12(%esp)         # push parameter boolean
     lea         -12(%esp), %esp
@@ -62,11 +58,12 @@ common_periodicChecks:
     movl        4(%esp), %edx           # %edx<- restore %edx
     movl        8(%esp), %ebx           # %ebx<- restore %ebx
     lea         12(%esp), %esp
-    ret                                 # return
+    ret
 3:                                      # debugger/profiler enabled, bail out
-    add         -8(%esp), rPC           # rPC<- pc adjustments
-    movl        %ecx, offGlue_entryPoint(%edx) # glue->entryPoint<- reentry type
-    movl        $$1, %edx               # switch to interp == true
+    leal        (rPC, %edx, 2), rPC     # adjust pc to show target
+    movl        rGLUE, %ecx             # %ecx<- pMterpGlue
+    movb        $$kInterpEntryInstr, offGlue_entryPoint(%ecx)
+    movl        $$1, %edx               # switch interpreter
     jmp         common_gotoBail         # bail
 
    /*
@@ -78,25 +75,21 @@ common_periodicChecks:
     *  %edx is PC adjustment in bytes
     */
 
-common_periodicChecks2:
+common_periodicChecks_backwardBranch:
+    EXPORT_PC
     movl        rGLUE, %ecx             # %ecx<- pMterpGlue
     movl        offGlue_pSelfSuspendCount(%ecx), rINST # %ebx<- pSuspendCount (int)
-#if defined(WITH_DEBUGGER)
-    movl offGlue_pDebuggerActive(%ecx), %eax # %eax<- pDebuggerActive
-    movl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
-    and         $$7, %eax               # %eax<- mask for boolean (just how many bits does it take?)
-#endif
+4:
+    movl        offGlue_pDebuggerActive(%ecx), %eax # %eax<- pDebuggerActive
+    testl       %eax, %eax              # test for NULL pointer
+    je          5f
+    movzbl      (%eax), %eax            # %eax<- get debuggerActive count
+5:
     cmp         $$0, (rINST)            # check if suspend is pending
     jne         2f                      # handle suspend
-#if defined(WITH_DEBUGGER) || defined(WITH_PROFILER)
-#if defined(WITH_PROFILER)
     movl        offGlue_pActiveProfilers(%ecx), rINST # %edx<- activeProfilers (int)
-    or          (rINST), %eax           # %eax<- merge activeProfilers and debuggerActive
-#else
-    cmp         $$0, %eax               # check for debuggerActive
-#endif
+    orl          (rINST), %eax           # %eax<- merge activeProfilers and debuggerActive
     jne         3f                      # debugger or profiler active; switch interp
-#endif
     FINISH_RB   %edx, %ecx              # jump to next instruction
 2:                                      # check suspended
     movl        offGlue_self(%ecx), %eax# %eax<- glue->self
@@ -107,14 +100,12 @@ common_periodicChecks2:
                                         # return: bool
     movl        rINST, %edx             # %edx<- restore %edx
     lea         12(%esp), %esp
-    FINISH_RB   %edx, %ecx              # jump to next instruction
-
+    FINISH_RB   %edx, %ecx
 3:                                      # debugger/profiler enabled, bail out
-    add         -8(%esp), rPC           # rPC<- pc adjustments
-    movl        $$kInterpEntryInstr, offGlue_entryPoint(%ecx) # glue->entryPoint<- reentry type
-    movl        $$1, %edx               # switch to interp<- true
+    leal        (rPC, %edx, 2), rPC     # adjust pc to show target
+    movb        $$kInterpEntryInstr, offGlue_entryPoint(%ecx)
+    movl        $$1, %edx               # switch interpreter
     jmp         common_gotoBail         # bail
-
 
    /*
     * The equivalent of "goto bail", this calls through the "bail handler".
@@ -333,13 +324,13 @@ dalvik_mterp:
     jne         common_exceptionThrown  # handle exception
     FGETOP_JMP  3, %edx                 # jump to next instruction; getop, jmp
 
-.LstackOverflow:  # %ecx=methodToCall
-    movl        %ecx, -4(%esp)          # push parameter method to call
+.LstackOverflow:
+    movl        %ecx, -4(%esp)          # push method to call
     movl        rGLUE, %ecx             # %ecx<- pMterpGlue
     movl        offGlue_self(%ecx), %ecx # %ecx<- glue->self
     movl        %ecx, -8(%esp)          # push parameter self
     lea         -8(%esp), %esp
-    call        dvmHandleStackOverflow  # call: (Thread* self, Method* method)
+    call        dvmHandleStackOverflow  # call: (Thread* self, Method *meth)
                                         # return: void
     lea         8(%esp), %esp
     jmp         common_exceptionThrown  # handle exception
@@ -361,22 +352,15 @@ common_returnFromMethod:
 
     movl        rGLUE, rINST            # %ecx<- pMterpGlue
     movl        offGlue_pSelfSuspendCount(rINST), %edx # %ebx<- pSuspendCount (int)
-#if defined(WITH_DEBUGGER)
     movl        offGlue_pDebuggerActive(rINST), %eax # %eax<- pDebuggerActive
     movl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
     and         $$7, %eax               # %eax<- mask for boolean (just how many bits does it take?)
-#endif
     cmp         $$0, (%edx)             # check if suspend is pending
     jne         2f                      # handle suspend
-#if defined(WITH_DEBUGGER) || defined(WITH_PROFILER)
-#if defined(WITH_PROFILER)
     movl        offGlue_pActiveProfilers(rINST), %edx # %edx<- activeProfilers (int)
     or          (%edx), %eax            # %eax<- merge activeProfilers and debuggerActive
-#else
     cmp         $$0, %eax               # check for debuggerActive
-#endif
     jne         3f                      # debugger or profiler active; switch interp
-#endif
     jmp         4f
 2:                                      # check suspended
     movl        offGlue_self(rINST), %eax# %eax<- glue->self
@@ -564,7 +548,7 @@ common_abort:
     jmp         .LdeadFood
 
 .LdeadFood:
-.word 0xdeadf00d
+.int 0xdeadf00d
 
    /*
     * Invalid array index.

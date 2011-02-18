@@ -17,4 +17,4 @@
     * File: OP_SUB_INT_2ADDR.S
     */
 
-%include "x86-atom/binop2addr.S" {"instr":"subl     %edx, (rFP, rINST, 4)"}
+%include "x86-atom/binop2addr.S" {"instr":"subl     %edx, %ecx"}

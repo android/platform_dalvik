@@ -17,4 +17,4 @@
     * File: OP_AND_INT_2ADDR.S
     */
 
-%include "x86-atom/binop2addr.S" {"instr":"andl     %edx, (rFP, rINST, 4)"}
+%include "x86-atom/binop2addr.S" {"instr":"andl     %edx, %ecx"}

@@ -33,12 +33,13 @@
 
     movl        rINST, %edx             # %edx<- BA
     shr         $$4, %edx               # %edx<- B
-    #FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    OLD_JMP_1   1, %eax
-    andl $$15, rINST  # rINST<- A
-    OLD_JMP_2  %eax
+    andl        $$15, rINST             # rINST<- A
+    movl        rINST, %ecx             # %ecx<- A
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %edx                    # %edx<- vB
-    OLD_JMP_3   1
-    $instr    # %ecx<- vA op vB
-    #FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
-    OLD_JMP_4   %eax
+    GET_VREG    %ecx                    # %ecx<- vA
+    $instr                              # %ecx<- vA op vB
+    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+

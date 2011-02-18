@@ -50,6 +50,7 @@
 
 .L${opcode}_finish:
     movl        %edx, sReg0             # save &vBB[vCC]
+    movl        %eax, sReg1             # save object head
     movl        offObject_clazz(rINST), %edx # %edx<- obj->clazz
     movl        %edx, -8(%esp)          # push parameter obj->clazz
     movl        offObject_clazz(%eax), %eax # %eax<- arrayObj->clazz
@@ -59,10 +60,17 @@
                                         # call: ClassObject* elemClass, ClassObject* arrayClass)
                                         # return: bool
     lea         8(%esp), %esp
-    cmp         $$0, %eax               # check for invalid array value
+    testl       %eax, %eax              # check for invalid array value
     je          common_errArrayStore    # handle invalid array value
     movl        sReg0, %edx             # restore &vBB[vCC]
-
+    movl        rINST, offArrayObject_contents(%edx)
+    movl        rGLUE, %eax
+    FFETCH_ADV  2, %ecx                 # %ecx<- next instruction hi; fetch, advance
+    movl        offGlue_cardTable(%eax), %eax # get card table base
+    movl        sReg1, %edx             # restore object head
+    shrl        $$GC_CARD_SHIFT, %edx   # object head to card number
+    movb        %al, (%eax, %edx)       # mark card using object head
+    FGETOP_JMP  2, %ecx                 # jump to next instruction; getop, jmp
 .L${opcode}_skip_check:
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     movl        rINST, offArrayObject_contents(%edx)

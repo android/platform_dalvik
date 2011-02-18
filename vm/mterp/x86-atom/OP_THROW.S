@@ -28,6 +28,7 @@
     */
 
     movl        rGLUE, %eax             # %eax<- pMterpGlue
+    EXPORT_PC                           # export the pc
     GET_VREG    rINST                   # rINST<- vAA
     cmp         $$0, rINST              # check for null
     movl        offGlue_self(%eax), %ecx # %ecx<- glue->self
