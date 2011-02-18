@@ -34,6 +34,57 @@
       "revId": "74c8bd058a097de60a4246657964dae5a7b00f64",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA+3//4Ok\u003d",
+        "filename": "vm/mterp/config-x86-atom",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2011-02-18T18:43:57Z",
+      "side": 1,
+      "message": "Why is this being converted to a C stub?",
+      "revId": "74c8bd058a097de60a4246657964dae5a7b00f64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA+3//4Ow\u003d",
+        "filename": "vm/mterp/x86-atom/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2011-02-18T18:43:57Z",
+      "side": 1,
+      "message": "Note tabs snuck in in a couple of places; this is one.",
+      "revId": "74c8bd058a097de60a4246657964dae5a7b00f64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA+3//4O0\u003d",
+        "filename": "vm/mterp/x86-atom/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2011-02-18T18:43:57Z",
+      "side": 1,
+      "message": "Should remove the WITH_DEBUGGER and WITH_PROFILER here as well.",
+      "revId": "74c8bd058a097de60a4246657964dae5a7b00f64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
