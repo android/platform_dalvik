@@ -17,10 +17,9 @@
 
 package org.apache.harmony.luni.tests.java.lang;
 
-import dalvik.annotation.KnownFailure;
 import dalvik.annotation.TestLevel;
-import dalvik.annotation.TestTargetClass;
 import dalvik.annotation.TestTargetNew;
+import dalvik.annotation.TestTargetClass;
 
 @TestTargetClass(Math.class) 
 public class MathTest extends junit.framework.TestCase {
@@ -1104,7 +1103,6 @@ public class MathTest extends junit.framework.TestCase {
         method = "tanh",
         args = {double.class}
     )
-    @KnownFailure(value = "bug 2139334")
     public void test_tanh_D() {
         // Test for special situations
         assertTrue("Should return NaN", Double.isNaN(Math.tanh(Double.NaN)));
