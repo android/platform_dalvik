@@ -60,7 +60,6 @@ op-start x86-atom
 #op OP_APUT_SHORT c
 #op OP_APUT_WIDE c
 #op OP_ARRAY_LENGTH c
-#op OP_BREAKPOINT c
 #op OP_CHECK_CAST c
 #op OP_CMPG_DOUBLE c
 #op OP_CMPG_FLOAT c
@@ -91,7 +90,6 @@ op-start x86-atom
 #op OP_DOUBLE_TO_FLOAT c
 #op OP_DOUBLE_TO_INT c
 #op OP_DOUBLE_TO_LONG c
-#op OP_EXECUTE_INLINE_RANGE c
 #op OP_EXECUTE_INLINE c
 #op OP_FILL_ARRAY_DATA c
 #op OP_FILLED_NEW_ARRAY_RANGE c
@@ -259,19 +257,7 @@ op-start x86-atom
 #op OP_UNUSED_73 c
 #op OP_UNUSED_79 c
 #op OP_UNUSED_7A c
-#op OP_UNUSED_E3 c
-#op OP_UNUSED_E4 c
-#op OP_UNUSED_E5 c
-#op OP_UNUSED_E6 c
-#op OP_UNUSED_E7 c
-#op OP_UNUSED_E8 c
-#op OP_UNUSED_E9 c
-#op OP_UNUSED_EA c
-#op OP_UNUSED_EB c
 #op OP_UNUSED_F1 c
-#op OP_UNUSED_FC c
-#op OP_UNUSED_FD c
-#op OP_UNUSED_FE c
 #op OP_UNUSED_FF c
 #op OP_USHR_INT_2ADDR c
 #op OP_USHR_INT_LIT8 c
@@ -284,7 +270,10 @@ op-start x86-atom
 #op OP_XOR_INT c
 #op OP_XOR_LONG_2ADDR c
 #op OP_XOR_LONG c
+
 # TODO: provide native implementations
+op OP_BREAKPOINT c
+op OP_EXECUTE_INLINE_RANGE c
 op OP_IGET_VOLATILE c
 op OP_IPUT_VOLATILE c
 op OP_SGET_VOLATILE c
@@ -297,6 +286,7 @@ op OP_IGET_WIDE_VOLATILE c
 op OP_IPUT_WIDE_VOLATILE c
 op OP_SGET_WIDE_VOLATILE c
 op OP_SPUT_WIDE_VOLATILE c
+
 op-end
 
 # arch-specific entry point to interpreter

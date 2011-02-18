@@ -32,37 +32,37 @@
 
 %default {"div":"1"}
     movl        rINST, %ecx             # %ecx<- BA
-    shr         $$4, %ecx               # %ecx<- B
     andl        $$15, rINST             # rINST<- A, to be used as dest
     movl        rINST, %eax             # %eax<- A
-    GET_VREG    %ecx                    # %edx<- vB
-    testl       %ecx, %ecx               # check for divide by zero
+    shr         $$4, %ecx               # %ecx<- B
     GET_VREG    %eax                    # %eax<- vA
-    jz          common_errDivideByZero  # handle divide by zero
+    GET_VREG    %ecx                    # %edx<- vB
+    cmp         $$0, %ecx               # check for divide by zero
+    je          common_errDivideByZero  # handle divide by zero
     cmpl        $$-1, %ecx              # handle -1 special case divide error
-    jnz         .L${opcode}_continue
-    cmpl        $$0x80000000, %eax       # handle min int special case divide error
+    jne         .L${opcode}_noerror
+    cmpl        $$0x80000000,%eax       # handle min int special case divide error
     je         .L${opcode}_break
-
-.L${opcode}_continue:
+.L${opcode}_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
      .if  $div
-    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     SET_VREG    %eax rINST              # vAA<- %eax (quotient)
-    FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
     .else
-    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     SET_VREG    %edx rINST              # vAA<- %edx (remainder)
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
     .endif
+    jmp         .L${opcode}_break2
+    #FFETCH_ADV 1, %edx  # %ecx<- next instruction hi; fetch, advance
+    #FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
 
 %break
 .L${opcode}_break:
-    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     .if  $div
     movl        $$0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $$0, (rFP, rINST, 4)    # vAA<- 0
     .endif
+.L${opcode}_break2:
+    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
+

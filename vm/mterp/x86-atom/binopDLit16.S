@@ -35,37 +35,32 @@
     movl        rINST, %eax             # %eax<- BA
     shr         $$4, %eax               # %eax<- B
     FETCHs      1, %ecx                 # %ecx<- +CCCC, sign-extended literal
-    testl       %ecx, %ecx              # check for divide by zero
+    cmp         $$0, %ecx               # check for divide by zero
     GET_VREG    %eax                    # %eax<- vB
     je          common_errDivideByZero  # handle divide by zero
-    addl        $$4, rPC                # update PC
     andl        $$15, rINST             # rINST<- A
     cmpl        $$-1, %ecx              # handle -1 special case divide error
-    jnz         .L${opcode}_continue
+    jne         .L${opcode}_noerror
     cmpl        $$0x80000000,%eax       # handle min int special case divide error
-    je          .L${opcode}_break
-.L${opcode}_continue:
+    je         .L${opcode}_break
+.L${opcode}_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
+    #FFETCH_ADV 2, %ecx                 # %ecx<- next instruction hi; fetch, advance
     .if  $div
-    movzbl      (rPC), %edx
-    SET_VREG    %eax, rINST             # vA<- %eax (quotient)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+    SET_VREG    %eax rINST              # vA<- %eax (quotient)
     .else
-    movzbl      (rPC), %eax
-    SET_VREG    %edx, rINST             # vA<- %edx (remainder)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %eax, 4)
+    SET_VREG    %edx rINST              # vA<- %edx (remainder)
     .endif
+    jmp         .L${opcode}_break2
 
 %break
 .L${opcode}_break:
-    movzbl      (rPC), %edx
     .if  $div
     movl        $$0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $$0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+.L${opcode}_break2:
+
+    FINISH      2                       # jump to next instruction

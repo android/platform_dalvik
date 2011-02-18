@@ -32,37 +32,34 @@
 
 %default {"div":"1"}
 
-    FETCH_CCs   1, %ecx                 # %ecx<- +CC, sign-extended literal
-    testl       %ecx, %ecx              # handle -1 special case divide error
     FETCH_BB    1, %eax                 # %eax<- BB
-    jz          common_errDivideByZero  # handle divide by zero
-    addl        $$4, rPC                # update PC
-    cmpl        $$-1, %ecx
+    FETCH_CCs   1, %ecx                 # %ecx<- +CC, sign-extended literal
+    cmp         $$0, %ecx               # check for divide by zero
     GET_VREG    %eax                    # %eax<- vBB
-    jnz         .L${opcode}_continue
+    je          common_errDivideByZero  # handle divide by zero
+
+    cmpl        $$-1, %ecx              # handle -1 special case divide error
+    jne         .L${opcode}_noerror
     cmpl        $$0x80000000,%eax       # handle min int special case divide error
-    je          .L${opcode}_break
-.L${opcode}_continue:
+    je         .L${opcode}_break
+.L${opcode}_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
+    #FFETCH_ADV 2, %ecx                 # %ecx<- next instruction hi; fetch, advance
     .if  $div
-    movzbl      (rPC), %edx
-    SET_VREG    %eax, rINST             # vA<- %eax (quotient)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+    SET_VREG    %eax rINST              # vAA<- %eax (quotient)
     .else
-    movzbl      (rPC), %eax
-    SET_VREG    %edx, rINST             # vA<- %edx (remainder)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %eax, 4)
+    SET_VREG    %edx rINST              # vAA<- %edx (remainder)
     .endif
+    jmp         .L${opcode}_break2
 %break
 .L${opcode}_break:
-    movzbl      (rPC), %edx
     .if  $div
     movl        $$0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $$0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+
+.L${opcode}_break2:
+    FINISH      2                       # jump to next instruction
+    #FGETOP_JMP 2, %ecx                 # jump to next instruction; getop, jmp

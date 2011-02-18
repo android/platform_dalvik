@@ -17,13 +17,4 @@
     * File: OP_MUL_INT_2ADDR.S
     */
 
-    movl        rINST, %edx             # %edx<- BA
-    shr         $$4, %edx               # %edx<- B
-    andl        $$15, rINST             # rINST<- A
-    movl        rINST, %ecx             # %ecx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    GET_VREG    %ecx                    # %ecx<- vA
-    imul        (rFP, %edx, 4), %ecx    # %ecx<- vA * vB
-    addl        $$2, rPC                  # update PC
-    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+%include "x86-atom/binop2addr.S" {"instr":"imul     %edx, %ecx"}

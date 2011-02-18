@@ -17,4 +17,4 @@
     * File: OP_ADD_INT.S
     */
 
-%include "x86-atom/binop.S" {"instr":"addl     (rFP, %edx, 4), %ecx"}
+%include "x86-atom/binop.S" {"instr":"addl     %edx, %ecx"}

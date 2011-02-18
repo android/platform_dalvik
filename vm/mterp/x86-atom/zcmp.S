@@ -38,7 +38,7 @@
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 

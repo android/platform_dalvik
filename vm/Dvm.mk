@@ -286,7 +286,7 @@ ifeq ($(dvm_arch),arm)
 		compiler/template/out/CompilerTemplateAsm-$(dvm_arch_variant).S
   endif
 endif
-
+dvm_arch_variant=x86-atom
 ifeq ($(dvm_arch),x86)
   ifeq ($(dvm_os),linux)
     MTERP_ARCH_KNOWN := true

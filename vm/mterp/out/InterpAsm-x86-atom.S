@@ -295,44 +295,6 @@
     jmp         *dvmAsmInstructionJmpTable(,\_rFinish, 4)
     .endm
 
-    .macro      FGETOP_JMP2 _rFinish
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(,\_rFinish, 4)
-    .endm
-
-    .macro      OLD_JMP_1 _count _rFinish
-    movzbl      (\_count*2)(rPC), \_rFinish
-    shl         $6, \_rFinish
-    .endm
-
-    .macro      OLD_JMP_2 _rFinish
-    addl        $dvmAsmInstructionStart,\_rFinish
-    .endm
-
-    .macro      OLD_JMP_3 _count
-    addl        $(\_count*2), rPC
-    .endm
-
-    .macro      OLD_JMP_4 _rFinish
-    movzbl      1(rPC), rINST
-    jmp         *\_rFinish
-    .endm
-
-    .macro      OLD_JMP_A_1 _reg _rFinish
-    movzbl      (rPC, \_reg), \_rFinish
-    shl         $6, \_rFinish
-    .endm
-
-    .macro      OLD_JMP_A_2 _rFinish
-    addl        $dvmAsmInstructionStart,\_rFinish
-    .endm
-
-    .macro      OLD_JMP_A_3 _reg _rFinish
-    addl        \_reg, rPC
-    movzbl      1(rPC, \_reg), rINST
-    jmp         *\_rFinish
-    .endm
-
    /*
     * Macro pair attempts to speed up FETCH_INST, GET_INST_OPCODE and GOTO_OPCODE
     * by using a jump table. _rFinish and _reg should must be the same register for
@@ -1361,7 +1323,7 @@ dalvik_inst:
     *
     * For: const/4
     *
-    * Description: Move the given literal value (right-sign-extended to 32
+    * Description: Move the given literal value (right-zero-extended to 32
     *              bits) into the specified register.
     *
     * Format: B|A|op (11n)
@@ -1371,12 +1333,12 @@ dalvik_inst:
 
     movl        rINST, %edx             # %edx<- BA
     andl        $15, rINST             # rINST<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next i nstruction hi; fetch, advance
     shl         $24, %edx              # %edx<- B000
-    addl        $2, rPC                  # update PC
     sar         $28, %edx              # %edx<- right-zero-extended B
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     SET_VREG    %edx, rINST             # vA<- %edx; literal
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
 /* ------------------------------ */
     .balign 64
 .L_OP_CONST_16: /* 0x13 */
@@ -2046,10 +2008,10 @@ dalvik_inst:
     movl        rINST, %eax             # %eax<- BA
     shr         $4, %eax               # %eax<- B
     andl        $15, rINST             # rINST<- A
-    FFETCH_ADV  1, %edx                 # %edx<- next instruction hi; fetch, advance
     GET_VREG    %eax                    # %eax<- vB
-    testl       %eax, %eax              # check for null array object
+    cmp         $0, %eax               # check for null array object
     je          common_errNullObject    # handle null array object
+    FFETCH_ADV  1, %edx                 # %edx<- next instruction hi; fetch, advance
     movl        offArrayObject_length(%eax), %eax # %eax<- array length
     movl        %eax, (rFP, rINST, 4)   # vA<- %eax; array length
     FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
@@ -2448,7 +2410,7 @@ LOP_GOTO.S:
 
     movsbl      rINSTbl, %edx           # %edx<- +AA
     shl         $1, %edx               # %edx is shifted for byte offset
-    js          common_periodicChecks2  # do check on backwards branch
+    js          common_periodicChecks_backwardBranch  # do check on backwards branch
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
 /* ------------------------------ */
@@ -2487,7 +2449,7 @@ LOP_GOTO.S:
 
     FETCHs      1, %edx                 # %edx<- ssssAAAA (sign-extended)
     shl         $1, %edx               # %edx is doubled to get the byte offset
-    js          common_periodicChecks2  # do check on backwards branch
+    js          common_periodicChecks_backwardBranch  # do check on backwards branch
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
 /* ------------------------------ */
@@ -2529,7 +2491,7 @@ LOP_GOTO.S:
     shl         $16, %ecx              # prepare to create +AAAAAAAA
     or          %ecx, %edx              # %edx<- +AAAAAAAA
     shl         $1, %edx               # %edx is doubled to get the byte offset
-    jc          common_periodicChecks2  # do check on backwards branch
+    jle          common_periodicChecks_backwardBranch  # do check on backwards branch
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
 /* ------------------------------ */
@@ -2582,7 +2544,7 @@ LOP_GOTO.S:
     shl         $1, %eax               # shift for byte offset
     movl        %eax, %edx              # %edx<- offset
     lea         8(%esp), %esp
-    jle         common_periodicChecks2  # do backward branch
+    jle         common_periodicChecks_backwardBranch  # do backward branch
     jmp         .LOP_PACKED_SWITCH_finish
 
 /* ------------------------------ */
@@ -2655,7 +2617,7 @@ LOP_GOTO.S:
     shl         $1, %eax               # shift for byte offset
     movl        %eax, %edx              # %edx<- offset
     lea         8(%esp), %esp
-    jle         common_periodicChecks2  # do backward branch
+    jle         common_periodicChecks_backwardBranch  # do backward branch
     jmp         .LOP_SPARSE_SWITCH_finish
 
 
@@ -2702,15 +2664,9 @@ LOP_GOTO.S:
 
     FETCH_BB    1, %ecx                 # %ecx<- BB
     FETCH_CC    1, %edx                 # %edx<- CC
-
-    flds     (rFP, %edx, 4)
-    flds     (rFP, %ecx, 4)
-
-    fucompp
-    fnstsw      %ax
-    sahf
-
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
+    movss    (rFP, %ecx, 4), %xmm0   # %xmm0<- vBB
+    comiss   (rFP, %edx, 4), %xmm0   # do comparison
     ja          .LOP_CMPL_FLOAT_greater
     jp          .LOP_CMPL_FLOAT_finalNan
     jz          .LOP_CMPL_FLOAT_final
@@ -2783,15 +2739,9 @@ LOP_GOTO.S:
 
     FETCH_BB    1, %ecx                 # %ecx<- BB
     FETCH_CC    1, %edx                 # %edx<- CC
-
-    flds     (rFP, %edx, 4)
-    flds     (rFP, %ecx, 4)
-
-    fucompp
-    fnstsw      %ax
-    sahf
-
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
+    movss    (rFP, %ecx, 4), %xmm0   # %xmm0<- vBB
+    comiss   (rFP, %edx, 4), %xmm0   # do comparison
     ja          .LOP_CMPG_FLOAT_greater
     jp          .LOP_CMPG_FLOAT_finalNan
     jz          .LOP_CMPG_FLOAT_final
@@ -2865,15 +2815,9 @@ LOP_GOTO.S:
 
     FETCH_BB    1, %ecx                 # %ecx<- BB
     FETCH_CC    1, %edx                 # %edx<- CC
-
-    fldl     (rFP, %edx, 4)
-    fldl     (rFP, %ecx, 4)
-
-    fucompp
-    fnstsw      %ax
-    sahf
-
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
+    movsd    (rFP, %ecx, 4), %xmm0   # %xmm0<- vBB
+    comisd   (rFP, %edx, 4), %xmm0   # do comparison
     ja          .LOP_CMPL_DOUBLE_greater
     jp          .LOP_CMPL_DOUBLE_finalNan
     jz          .LOP_CMPL_DOUBLE_final
@@ -2947,15 +2891,9 @@ LOP_GOTO.S:
 
     FETCH_BB    1, %ecx                 # %ecx<- BB
     FETCH_CC    1, %edx                 # %edx<- CC
-
-    fldl     (rFP, %edx, 4)
-    fldl     (rFP, %ecx, 4)
-
-    fucompp
-    fnstsw      %ax
-    sahf
-
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
+    movsd    (rFP, %ecx, 4), %xmm0   # %xmm0<- vBB
+    comisd   (rFP, %edx, 4), %xmm0   # do comparison
     ja          .LOP_CMPG_DOUBLE_greater
     jp          .LOP_CMPG_DOUBLE_finalNan
     jz          .LOP_CMPG_DOUBLE_final
@@ -3078,7 +3016,7 @@ LOP_GOTO.S:
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3148,7 +3086,7 @@ LOP_GOTO.S:
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3218,7 +3156,7 @@ LOP_GOTO.S:
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3288,7 +3226,7 @@ LOP_GOTO.S:
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3358,7 +3296,7 @@ LOP_GOTO.S:
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3428,7 +3366,7 @@ LOP_GOTO.S:
                                         # comparison is true
     FETCHs      1, %edx                 # %edx<- +CCCC, Branch offset
     sal         $1, %edx
-    js          common_periodicChecks2
+    js          common_periodicChecks_backwardBranch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3497,7 +3435,7 @@ LOP_GOTO.S:
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3576,7 +3514,7 @@ OP_IF_EQZ_2f:
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3655,7 +3593,7 @@ OP_IF_NEZ_2f:
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3734,7 +3672,7 @@ OP_IF_LTZ_2f:
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3813,7 +3751,7 @@ OP_IF_GEZ_2f:
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -3892,7 +3830,7 @@ OP_IF_GTZ_2f:
     * Inline common_backwardBranch
     */
 
-    js          common_periodicChecks2  # jump on backwards branch
+    js          common_periodicChecks_backwardBranch  # jump on backwards branch
 1:
     FINISH_RB   %edx, %ecx              # jump to next instruction
 
@@ -5804,26 +5742,6 @@ OP_IF_LEZ_2f:
     * limitations under the License.
     */
 
-   /*
-    * File: OP_IPUT_OBJECT.S
-    */
-
-/* File: x86-atom/OP_IPUT.S */
-   /* Copyright (C) 2008 The Android Open Source Project
-    *
-    * Licensed under the Apache License, Version 2.0 (the "License");
-    * you may not use this file except in compliance with the License.
-    * You may obtain a copy of the License at
-    *
-    * http://www.apache.org/licenses/LICENSE-2.0
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
-
     /*
     * File: OP_IPUT.S
     *
@@ -5846,7 +5764,6 @@ OP_IF_LEZ_2f:
     *         op vA, vB, field@CCCC
     */
 
-
     movl        rGLUE, %edx             # %edx<- pMterpGlue
     movl        offGlue_methodClassDex(%edx), %edx # %edx<- pDvmDex
     FETCH       1, %ecx                 # %ecx<- CCCC
@@ -5856,7 +5773,6 @@ OP_IF_LEZ_2f:
     jne         .LOP_IPUT_OBJECT_finish2
     movl        rGLUE, %edx             # %edx<- pMterpGlue
     jmp         .LOP_IPUT_OBJECT_finish
-
 
 /* ------------------------------ */
     .balign 64
@@ -6682,26 +6598,6 @@ OP_IF_LEZ_2f:
 
    /*
     * File: OP_SPUT_OBJECT.S
-    */
-
-/* File: x86-atom/OP_SPUT.S */
-   /* Copyright (C) 2008 The Android Open Source Project
-    *
-    * Licensed under the Apache License, Version 2.0 (the "License");
-    * you may not use this file except in compliance with the License.
-    * You may obtain a copy of the License at
-    *
-    * http://www.apache.org/licenses/LICENSE-2.0
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
-
-   /*
-    * File: OP_SPUT.S
     *
     * Code: Generic 32-bit static field "put" operation. Uses no substitutions.
     *
@@ -6720,11 +6616,10 @@ OP_IF_LEZ_2f:
     movl        offGlue_methodClassDex(%edx), %ecx # %ecx<- pDvmDex
     FETCH       1, %eax                 # %eax<- BBBB
     movl        offDvmDex_pResFields(%ecx), %ecx # %ecx<- pResFields
-    cmp         $0, (%ecx, %eax, 4)    # check for null ptr; resolved StaticField ptr
-    movl        (%ecx, %eax, 4), %ecx   # %ecx<- resolved StaticField ptr
+    cmp         $0, (%ecx, %eax, 4)    # check for null ptr; resolved StaticField
+    movl        (%ecx, %eax, 4), %ecx   # %ecx<- resolved StaticField
     je          .LOP_SPUT_OBJECT_resolve
     jmp         .LOP_SPUT_OBJECT_finish
-
 
 /* ------------------------------ */
     .balign 64
@@ -9085,17 +8980,14 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-
-
     FETCH_BB    1, %ecx                 # %ecx<- BB
-    OLD_JMP_1   2, %eax
-    OLD_JMP_2   %eax
     FETCH_CC    1, %edx                 # %edx<- CC
-    OLD_JMP_3   2
+    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
-    addl     (rFP, %edx, 4), %ecx                              # %ecx<- vBB op vCC
+    GET_VREG    %edx                    # %edx<- vCC
+    addl     %edx, %ecx                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    OLD_JMP_4   %eax
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
 
 
 /* ------------------------------ */
@@ -9153,17 +9045,14 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-
-
     FETCH_BB    1, %ecx                 # %ecx<- BB
-    OLD_JMP_1   2, %eax
-    OLD_JMP_2   %eax
     FETCH_CC    1, %edx                 # %edx<- CC
-    OLD_JMP_3   2
+    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
-    subl     (rFP, %edx, 4), %ecx                              # %ecx<- vBB op vCC
+    GET_VREG    %edx                    # %edx<- vCC
+    subl     %edx, %ecx                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    OLD_JMP_4   %eax
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
 
 
 /* ------------------------------ */
@@ -9187,10 +9076,33 @@ OP_IF_LEZ_2f:
 
    /*
     * File: OP_MUL_INT.S
+    */
+
+/* File: x86-atom/binop.S */
+   /* Copyright (C) 2008 The Android Open Source Project
     *
-    * Code: 32-bit multiply operation.  Performs "%ecx = %ecx * %edx"
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
     *
-    * Description: Perform a multiplication operation on two source registers
+    * http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+
+   /*
+    * File: binop.S
+    *
+    * Code: Generic 32-bit binary operation.  Provides an "instr" line to
+    *       specify an instruction that performs "%ecx = %ecx op %edx"
+    *
+    * For: add-int, and-int, mul-int, or-int, sub-int, xor-int
+    *
+    * Description: Perform a binary operation on two source registers
     *              and store the result in a destination register.
     *
     * Format: AA|op CC|BB (23x)
@@ -9202,10 +9114,11 @@ OP_IF_LEZ_2f:
     FETCH_CC    1, %edx                 # %edx<- CC
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
-    addl        $4, rPC                  # update PC
-    imul        (rFP, %edx, 4), %ecx    # %ecx<- vBB * vCC
+    GET_VREG    %edx                    # %edx<- vCC
+    imul     %edx, %ecx                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -9263,29 +9176,25 @@ OP_IF_LEZ_2f:
     */
 
 
-
-    FETCH_CC    1, %ecx                 # %ecx<- CC
     FETCH_BB    1, %eax                 # %eax<- BB
-    GET_VREG    %ecx                    # %ecx<- vCC
-    testl       %ecx, %ecx
+    FETCH_CC    1, %ecx                 # %ecx<- CC
     GET_VREG    %eax                    # %eax<- vBB
+    GET_VREG    %ecx                    # %ecx<- vCC
+    cmp         $0, %ecx               # check for divide by zero
     je          common_errDivideByZero  # handle divide by zero
     cmpl        $-1, %ecx              # handle -1 special case divide error
-    jnz         .LOP_DIV_INT_continue
+    jne         .LOP_DIV_INT_noerror
     cmpl        $0x80000000,%eax       # handle min int special case divide error
     je         .LOP_DIV_INT_break
-.LOP_DIV_INT_continue:
+.LOP_DIV_INT_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
     .if  1
-    FFETCH_ADV 2 %edx
     SET_VREG    %eax rINST              # vAA<- %eax (quotient)
-    FGETOP_JMP  2 %edx
     .else
-    FFETCH_ADV  2 %eax
-    SET_VREG %edx rINST  # vAA<- %edx (remainder)
-    FGETOP_JMP  2 %eax
+    SET_VREG    %edx rINST              # vAA<- %edx (remainder)
     .endif
+    jmp         .LOP_DIV_INT_break2
 
 
 /* ------------------------------ */
@@ -9344,29 +9253,25 @@ OP_IF_LEZ_2f:
     */
 
 
-
-    FETCH_CC    1, %ecx                 # %ecx<- CC
     FETCH_BB    1, %eax                 # %eax<- BB
-    GET_VREG    %ecx                    # %ecx<- vCC
-    testl       %ecx, %ecx
+    FETCH_CC    1, %ecx                 # %ecx<- CC
     GET_VREG    %eax                    # %eax<- vBB
+    GET_VREG    %ecx                    # %ecx<- vCC
+    cmp         $0, %ecx               # check for divide by zero
     je          common_errDivideByZero  # handle divide by zero
     cmpl        $-1, %ecx              # handle -1 special case divide error
-    jnz         .LOP_REM_INT_continue
+    jne         .LOP_REM_INT_noerror
     cmpl        $0x80000000,%eax       # handle min int special case divide error
     je         .LOP_REM_INT_break
-.LOP_REM_INT_continue:
+.LOP_REM_INT_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
     .if  0
-    FFETCH_ADV 2 %edx
     SET_VREG    %eax rINST              # vAA<- %eax (quotient)
-    FGETOP_JMP  2 %edx
     .else
-    FFETCH_ADV  2 %eax
-    SET_VREG %edx rINST  # vAA<- %edx (remainder)
-    FGETOP_JMP  2 %eax
+    SET_VREG    %edx rINST              # vAA<- %edx (remainder)
     .endif
+    jmp         .LOP_REM_INT_break2
 
 
 /* ------------------------------ */
@@ -9424,17 +9329,14 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-
-
     FETCH_BB    1, %ecx                 # %ecx<- BB
-    OLD_JMP_1   2, %eax
-    OLD_JMP_2   %eax
     FETCH_CC    1, %edx                 # %edx<- CC
-    OLD_JMP_3   2
+    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
-    andl     (rFP, %edx, 4), %ecx                              # %ecx<- vBB op vCC
+    GET_VREG    %edx                    # %edx<- vCC
+    andl     %edx, %ecx                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    OLD_JMP_4   %eax
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
 
 
 /* ------------------------------ */
@@ -9492,17 +9394,14 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-
-
     FETCH_BB    1, %ecx                 # %ecx<- BB
-    OLD_JMP_1   2, %eax
-    OLD_JMP_2   %eax
     FETCH_CC    1, %edx                 # %edx<- CC
-    OLD_JMP_3   2
+    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
-    or (rFP, %edx, 4), %ecx                              # %ecx<- vBB op vCC
+    GET_VREG    %edx                    # %edx<- vCC
+    or %edx, %ecx                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    OLD_JMP_4   %eax
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
 
 
 /* ------------------------------ */
@@ -9560,17 +9459,14 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-
-
     FETCH_BB    1, %ecx                 # %ecx<- BB
-    OLD_JMP_1   2, %eax
-    OLD_JMP_2   %eax
     FETCH_CC    1, %edx                 # %edx<- CC
-    OLD_JMP_3   2
+    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
-    xor     (rFP, %edx, 4), %ecx                              # %ecx<- vBB op vCC
+    GET_VREG    %edx                    # %edx<- vCC
+    xor     %edx, %ecx                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    OLD_JMP_4   %eax
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
 
 
 /* ------------------------------ */
@@ -9628,15 +9524,15 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-    FETCH_CC    1, %ecx                 # %ecx<- CC
     FETCH_BB    1, %edx                 # %edx<- BB
+    FETCH_CC    1, %ecx                 # %ecx<- CC
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
-    addl        $4, rPC                  # update PC
-    GET_VREG    %ecx                    # %ecx<- vCC
     GET_VREG    %edx                    # %edx<- vBB
+    GET_VREG    %ecx                    # %ecx<- vCC
     sal     %cl, %edx                              # %edx<- vBB op +CC
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -9693,15 +9589,15 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-    FETCH_CC    1, %ecx                 # %ecx<- CC
     FETCH_BB    1, %edx                 # %edx<- BB
+    FETCH_CC    1, %ecx                 # %ecx<- CC
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
-    addl        $4, rPC                  # update PC
-    GET_VREG    %ecx                    # %ecx<- vCC
     GET_VREG    %edx                    # %edx<- vBB
+    GET_VREG    %ecx                    # %ecx<- vCC
     sar     %cl, %edx                              # %edx<- vBB op +CC
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -9758,15 +9654,15 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, vBB, vCC
     */
 
-    FETCH_CC    1, %ecx                 # %ecx<- CC
     FETCH_BB    1, %edx                 # %edx<- BB
+    FETCH_CC    1, %ecx                 # %ecx<- CC
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
-    addl        $4, rPC                  # update PC
-    GET_VREG    %ecx                    # %ecx<- vCC
     GET_VREG    %edx                    # %edx<- vBB
+    GET_VREG    %ecx                    # %ecx<- vCC
     shr     %cl, %edx                              # %edx<- vBB op +CC
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -11044,15 +10940,16 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %edx             # %edx<- BA
     shr         $4, %edx               # %edx<- B
-    #FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    OLD_JMP_1   1, %eax
-    andl $15, rINST  # rINST<- A
-    OLD_JMP_2  %eax
+    andl        $15, rINST             # rINST<- A
+    movl        rINST, %ecx             # %ecx<- A
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %edx                    # %edx<- vB
-    OLD_JMP_3   1
-    addl     %edx,  (rFP, rINST, 4)    # %ecx<- vA op vB
-    #FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
-    OLD_JMP_4   %eax
+    GET_VREG    %ecx                    # %ecx<- vA
+    addl     %edx, %ecx                              # %ecx<- vA op vB
+    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+
 
 
 /* ------------------------------ */
@@ -11114,15 +11011,16 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %edx             # %edx<- BA
     shr         $4, %edx               # %edx<- B
-    #FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    OLD_JMP_1   1, %eax
-    andl $15, rINST  # rINST<- A
-    OLD_JMP_2  %eax
+    andl        $15, rINST             # rINST<- A
+    movl        rINST, %ecx             # %ecx<- A
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %edx                    # %edx<- vB
-    OLD_JMP_3   1
-    subl     %edx, (rFP, rINST, 4)    # %ecx<- vA op vB
-    #FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
-    OLD_JMP_4   %eax
+    GET_VREG    %ecx                    # %ecx<- vA
+    subl     %edx, %ecx                              # %ecx<- vA op vB
+    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+
 
 
 /* ------------------------------ */
@@ -11148,16 +11046,53 @@ OP_IF_LEZ_2f:
     * File: OP_MUL_INT_2ADDR.S
     */
 
+/* File: x86-atom/binop2addr.S */
+   /* Copyright (C) 2008 The Android Open Source Project
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    * http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+
+   /*
+    * File: binop2addr.S
+    *
+    * Code: Generic 32-bit "/2addr" binary operation.  Provides an
+    *       "instr" line to specify an instruction that performs
+    *       "%ecx = %ecx op %edx".
+    *
+    * For: add-int/2addr, and-int/2addr, mul-int/2addr, or-int/2addr,
+    *      sub-int/2addr, xor-int/2addr
+    *
+    * Description: Perform a binary operation on two sources registers
+    *              and store the result in the first source register
+    *
+    * Format: B|A|op (12x)
+    *
+    * Syntax: op vA, vB
+    */
+
     movl        rINST, %edx             # %edx<- BA
     shr         $4, %edx               # %edx<- B
     andl        $15, rINST             # rINST<- A
     movl        rINST, %ecx             # %ecx<- A
     FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
+    GET_VREG    %edx                    # %edx<- vB
     GET_VREG    %ecx                    # %ecx<- vA
-    imul        (rFP, %edx, 4), %ecx    # %ecx<- vA * vB
-    addl        $2, rPC                  # update PC
+    imul     %edx, %ecx                              # %ecx<- vA op vB
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+
+
 
 /* ------------------------------ */
     .balign 64
@@ -11216,30 +11151,28 @@ OP_IF_LEZ_2f:
     */
 
     movl        rINST, %ecx             # %ecx<- BA
-    shr         $4, %ecx               # %ecx<- B
     andl        $15, rINST             # rINST<- A, to be used as dest
     movl        rINST, %eax             # %eax<- A
-    GET_VREG    %ecx                    # %edx<- vB
-    testl       %ecx, %ecx               # check for divide by zero
+    shr         $4, %ecx               # %ecx<- B
     GET_VREG    %eax                    # %eax<- vA
-    jz          common_errDivideByZero  # handle divide by zero
+    GET_VREG    %ecx                    # %edx<- vB
+    cmp         $0, %ecx               # check for divide by zero
+    je          common_errDivideByZero  # handle divide by zero
     cmpl        $-1, %ecx              # handle -1 special case divide error
-    jnz         .LOP_DIV_INT_2ADDR_continue
-    cmpl        $0x80000000, %eax       # handle min int special case divide error
+    jne         .LOP_DIV_INT_2ADDR_noerror
+    cmpl        $0x80000000,%eax       # handle min int special case divide error
     je         .LOP_DIV_INT_2ADDR_break
-
-.LOP_DIV_INT_2ADDR_continue:
+.LOP_DIV_INT_2ADDR_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
      .if  1
-    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     SET_VREG    %eax rINST              # vAA<- %eax (quotient)
-    FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
     .else
-    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     SET_VREG    %edx rINST              # vAA<- %edx (remainder)
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
     .endif
+    jmp         .LOP_DIV_INT_2ADDR_break2
+    #FFETCH_ADV 1, %edx  # %ecx<- next instruction hi; fetch, advance
+    #FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
 
 
 
@@ -11300,30 +11233,28 @@ OP_IF_LEZ_2f:
     */
 
     movl        rINST, %ecx             # %ecx<- BA
-    shr         $4, %ecx               # %ecx<- B
     andl        $15, rINST             # rINST<- A, to be used as dest
     movl        rINST, %eax             # %eax<- A
-    GET_VREG    %ecx                    # %edx<- vB
-    testl       %ecx, %ecx               # check for divide by zero
+    shr         $4, %ecx               # %ecx<- B
     GET_VREG    %eax                    # %eax<- vA
-    jz          common_errDivideByZero  # handle divide by zero
+    GET_VREG    %ecx                    # %edx<- vB
+    cmp         $0, %ecx               # check for divide by zero
+    je          common_errDivideByZero  # handle divide by zero
     cmpl        $-1, %ecx              # handle -1 special case divide error
-    jnz         .LOP_REM_INT_2ADDR_continue
-    cmpl        $0x80000000, %eax       # handle min int special case divide error
+    jne         .LOP_REM_INT_2ADDR_noerror
+    cmpl        $0x80000000,%eax       # handle min int special case divide error
     je         .LOP_REM_INT_2ADDR_break
-
-.LOP_REM_INT_2ADDR_continue:
+.LOP_REM_INT_2ADDR_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
      .if  0
-    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     SET_VREG    %eax rINST              # vAA<- %eax (quotient)
-    FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
     .else
-    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     SET_VREG    %edx rINST              # vAA<- %edx (remainder)
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
     .endif
+    jmp         .LOP_REM_INT_2ADDR_break2
+    #FFETCH_ADV 1, %edx  # %ecx<- next instruction hi; fetch, advance
+    #FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
 
 
 
@@ -11386,15 +11317,16 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %edx             # %edx<- BA
     shr         $4, %edx               # %edx<- B
-    #FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    OLD_JMP_1   1, %eax
-    andl $15, rINST  # rINST<- A
-    OLD_JMP_2  %eax
+    andl        $15, rINST             # rINST<- A
+    movl        rINST, %ecx             # %ecx<- A
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %edx                    # %edx<- vB
-    OLD_JMP_3   1
-    andl     %edx, (rFP, rINST, 4)    # %ecx<- vA op vB
-    #FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
-    OLD_JMP_4   %eax
+    GET_VREG    %ecx                    # %ecx<- vA
+    andl     %edx, %ecx                              # %ecx<- vA op vB
+    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+
 
 
 /* ------------------------------ */
@@ -11456,15 +11388,16 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %edx             # %edx<- BA
     shr         $4, %edx               # %edx<- B
-    #FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    OLD_JMP_1   1, %eax
-    andl $15, rINST  # rINST<- A
-    OLD_JMP_2  %eax
+    andl        $15, rINST             # rINST<- A
+    movl        rINST, %ecx             # %ecx<- A
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %edx                    # %edx<- vB
-    OLD_JMP_3   1
-    or %edx, (rFP, rINST, 4)    # %ecx<- vA op vB
-    #FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
-    OLD_JMP_4   %eax
+    GET_VREG    %ecx                    # %ecx<- vA
+    or %edx, %ecx                              # %ecx<- vA op vB
+    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+
 
 
 /* ------------------------------ */
@@ -11526,15 +11459,16 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %edx             # %edx<- BA
     shr         $4, %edx               # %edx<- B
-    #FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
-    OLD_JMP_1   1, %eax
-    andl $15, rINST  # rINST<- A
-    OLD_JMP_2  %eax
+    andl        $15, rINST             # rINST<- A
+    movl        rINST, %ecx             # %ecx<- A
+    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %edx                    # %edx<- vB
-    OLD_JMP_3   1
-    xor     %edx, (rFP, rINST, 4)    # %ecx<- vA op vB
-    #FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
-    OLD_JMP_4   %eax
+    GET_VREG    %ecx                    # %ecx<- vA
+    xor     %edx, %ecx                              # %ecx<- vA op vB
+    SET_VREG    %ecx, rINST             # vAA<- %ecx; result
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
+
 
 
 /* ------------------------------ */
@@ -11595,15 +11529,15 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %ecx             # %ecx<- BA
     shr         $4, %ecx               # %ecx<- B
-    FFETCH_ADV  1, %eax                 # %ecx<- next i nstruction hi; fetch, advance
     andl        $15, rINST             # rINST<- A
-    addl        $2, rPC                  # update PC
     movl        rINST, %edx             # %edx<- A
+    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vB
     GET_VREG    %edx                    # %edx<- vA
     sal     %cl, %edx                              # %edx<- vA op vB
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -11663,15 +11597,15 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %ecx             # %ecx<- BA
     shr         $4, %ecx               # %ecx<- B
-    FFETCH_ADV  1, %eax                 # %ecx<- next i nstruction hi; fetch, advance
     andl        $15, rINST             # rINST<- A
-    addl        $2, rPC                  # update PC
     movl        rINST, %edx             # %edx<- A
+    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vB
     GET_VREG    %edx                    # %edx<- vA
     sar     %cl, %edx                              # %edx<- vA op vB
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -11731,15 +11665,15 @@ OP_IF_LEZ_2f:
 
     movl        rINST, %ecx             # %ecx<- BA
     shr         $4, %ecx               # %ecx<- B
-    FFETCH_ADV  1, %eax                 # %ecx<- next i nstruction hi; fetch, advance
     andl        $15, rINST             # rINST<- A
-    addl        $2, rPC                  # update PC
     movl        rINST, %edx             # %edx<- A
+    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vB
     GET_VREG    %edx                    # %edx<- vA
     shr     %cl, %edx                              # %edx<- vA op vB
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+
 
 /* ------------------------------ */
     .balign 64
@@ -11801,13 +11735,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     paddq   %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -11869,13 +11802,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     psubq    %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -12130,13 +12062,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     pand   %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -12198,13 +12129,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     por %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -12266,13 +12196,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     pxor   %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -12762,13 +12691,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     addsd   %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -12830,13 +12758,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     subsd   %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -12898,13 +12825,12 @@ OP_IF_LEZ_2f:
     movl        rINST, %edx             # %edx<- BA
     shr         $4, rINST              # rINST<- B
     andl        $15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     mulsd   %xmm1, %xmm0                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction
+
 
 /* ------------------------------ */
     .balign 64
@@ -13108,6 +13034,7 @@ OP_IF_LEZ_2f:
     subl        %ecx, %edx              # %edx<- +CCCC sub vB
     SET_VREG    %edx, rINST             # vA<- %edx; result
     FINISH      2                       # jump to next instruction
+
 /* ------------------------------ */
     .balign 64
 .L_OP_MUL_INT_LIT16: /* 0xd2 */
@@ -13236,29 +13163,24 @@ OP_IF_LEZ_2f:
     movl        rINST, %eax             # %eax<- BA
     shr         $4, %eax               # %eax<- B
     FETCHs      1, %ecx                 # %ecx<- +CCCC, sign-extended literal
-    testl       %ecx, %ecx              # check for divide by zero
+    cmp         $0, %ecx               # check for divide by zero
     GET_VREG    %eax                    # %eax<- vB
     je          common_errDivideByZero  # handle divide by zero
-    addl        $4, rPC                # update PC
     andl        $15, rINST             # rINST<- A
     cmpl        $-1, %ecx              # handle -1 special case divide error
-    jnz         .LOP_DIV_INT_LIT16_continue
+    jne         .LOP_DIV_INT_LIT16_noerror
     cmpl        $0x80000000,%eax       # handle min int special case divide error
-    je          .LOP_DIV_INT_LIT16_break
-.LOP_DIV_INT_LIT16_continue:
+    je         .LOP_DIV_INT_LIT16_break
+.LOP_DIV_INT_LIT16_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
+    #FFETCH_ADV 2, %ecx                 # %ecx<- next instruction hi; fetch, advance
     .if  1
-    movzbl      (rPC), %edx
-    SET_VREG    %eax, rINST             # vA<- %eax (quotient)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+    SET_VREG    %eax rINST              # vA<- %eax (quotient)
     .else
-    movzbl      (rPC), %eax
-    SET_VREG    %edx, rINST             # vA<- %edx (remainder)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %eax, 4)
+    SET_VREG    %edx rINST              # vA<- %edx (remainder)
     .endif
+    jmp         .LOP_DIV_INT_LIT16_break2
 
 
 
@@ -13322,29 +13244,24 @@ OP_IF_LEZ_2f:
     movl        rINST, %eax             # %eax<- BA
     shr         $4, %eax               # %eax<- B
     FETCHs      1, %ecx                 # %ecx<- +CCCC, sign-extended literal
-    testl       %ecx, %ecx              # check for divide by zero
+    cmp         $0, %ecx               # check for divide by zero
     GET_VREG    %eax                    # %eax<- vB
     je          common_errDivideByZero  # handle divide by zero
-    addl        $4, rPC                # update PC
     andl        $15, rINST             # rINST<- A
     cmpl        $-1, %ecx              # handle -1 special case divide error
-    jnz         .LOP_REM_INT_LIT16_continue
+    jne         .LOP_REM_INT_LIT16_noerror
     cmpl        $0x80000000,%eax       # handle min int special case divide error
-    je          .LOP_REM_INT_LIT16_break
-.LOP_REM_INT_LIT16_continue:
+    je         .LOP_REM_INT_LIT16_break
+.LOP_REM_INT_LIT16_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
+    #FFETCH_ADV 2, %ecx                 # %ecx<- next instruction hi; fetch, advance
     .if  0
-    movzbl      (rPC), %edx
-    SET_VREG    %eax, rINST             # vA<- %eax (quotient)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+    SET_VREG    %eax rINST              # vA<- %eax (quotient)
     .else
-    movzbl      (rPC), %eax
-    SET_VREG    %edx, rINST             # vA<- %edx (remainder)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %eax, 4)
+    SET_VREG    %edx rINST              # vA<- %edx (remainder)
     .endif
+    jmp         .LOP_REM_INT_LIT16_break2
 
 
 
@@ -13780,30 +13697,26 @@ OP_IF_LEZ_2f:
     */
 
 
-    FETCH_CCs   1, %ecx                 # %ecx<- +CC, sign-extended literal
-    testl       %ecx, %ecx              # handle -1 special case divide error
     FETCH_BB    1, %eax                 # %eax<- BB
-    jz          common_errDivideByZero  # handle divide by zero
-    addl        $4, rPC                # update PC
-    cmpl        $-1, %ecx
+    FETCH_CCs   1, %ecx                 # %ecx<- +CC, sign-extended literal
+    cmp         $0, %ecx               # check for divide by zero
     GET_VREG    %eax                    # %eax<- vBB
-    jnz         .LOP_DIV_INT_LIT8_continue
+    je          common_errDivideByZero  # handle divide by zero
+
+    cmpl        $-1, %ecx              # handle -1 special case divide error
+    jne         .LOP_DIV_INT_LIT8_noerror
     cmpl        $0x80000000,%eax       # handle min int special case divide error
-    je          .LOP_DIV_INT_LIT8_break
-.LOP_DIV_INT_LIT8_continue:
+    je         .LOP_DIV_INT_LIT8_break
+.LOP_DIV_INT_LIT8_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
+    #FFETCH_ADV 2, %ecx                 # %ecx<- next instruction hi; fetch, advance
     .if  1
-    movzbl      (rPC), %edx
-    SET_VREG    %eax, rINST             # vA<- %eax (quotient)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+    SET_VREG    %eax rINST              # vAA<- %eax (quotient)
     .else
-    movzbl      (rPC), %eax
-    SET_VREG    %edx, rINST             # vA<- %edx (remainder)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %eax, 4)
+    SET_VREG    %edx rINST              # vAA<- %edx (remainder)
     .endif
+    jmp         .LOP_DIV_INT_LIT8_break2
 
 
 /* ------------------------------ */
@@ -13863,30 +13776,26 @@ OP_IF_LEZ_2f:
     */
 
 
-    FETCH_CCs   1, %ecx                 # %ecx<- +CC, sign-extended literal
-    testl       %ecx, %ecx              # handle -1 special case divide error
     FETCH_BB    1, %eax                 # %eax<- BB
-    jz          common_errDivideByZero  # handle divide by zero
-    addl        $4, rPC                # update PC
-    cmpl        $-1, %ecx
+    FETCH_CCs   1, %ecx                 # %ecx<- +CC, sign-extended literal
+    cmp         $0, %ecx               # check for divide by zero
     GET_VREG    %eax                    # %eax<- vBB
-    jnz         .LOP_REM_INT_LIT8_continue
+    je          common_errDivideByZero  # handle divide by zero
+
+    cmpl        $-1, %ecx              # handle -1 special case divide error
+    jne         .LOP_REM_INT_LIT8_noerror
     cmpl        $0x80000000,%eax       # handle min int special case divide error
-    je          .LOP_REM_INT_LIT8_break
-.LOP_REM_INT_LIT8_continue:
+    je         .LOP_REM_INT_LIT8_break
+.LOP_REM_INT_LIT8_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
+    #FFETCH_ADV 2, %ecx                 # %ecx<- next instruction hi; fetch, advance
     .if  0
-    movzbl      (rPC), %edx
-    SET_VREG    %eax, rINST             # vA<- %eax (quotient)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+    SET_VREG    %eax rINST              # vAA<- %eax (quotient)
     .else
-    movzbl      (rPC), %eax
-    SET_VREG    %edx, rINST             # vA<- %edx (remainder)
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %eax, 4)
+    SET_VREG    %edx rINST              # vAA<- %edx (remainder)
     .endif
+    jmp         .LOP_REM_INT_LIT8_break2
 
 
 /* ------------------------------ */
@@ -14534,11 +14443,31 @@ OP_IF_LEZ_2f:
 /* ------------------------------ */
     .balign 64
 .L_OP_BREAKPOINT: /* 0xec */
-/* File: x86-atom/OP_BREAKPOINT.S */
-/* File: x86/unused.S */
-    jmp     common_abort
+   /* Copyright (C) 2008 The Android Open Source Project
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    * http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
 
+   /*
+    * File: stub.S
+    */
 
+    SAVE_PC_FP_TO_GLUE %edx             # save program counter and frame pointer
+    pushl       rGLUE                   # push parameter glue
+    call        dvmMterp_OP_BREAKPOINT      # call c-based implementation
+    lea         4(%esp), %esp
+    LOAD_PC_FP_FROM_GLUE                # restore program counter and frame pointer
+    FINISH_A                            # jump to next instruction
 /* ------------------------------ */
     .balign 64
 .L_OP_THROW_VERIFICATION_ERROR: /* 0xed */
@@ -14573,16 +14502,16 @@ OP_IF_LEZ_2f:
     * Syntax: op vAA, ref@BBBB
     */
 
-    movl        rGLUE, %edx                 # %edx<- pMterpGlue
-    movl        offGlue_method(%edx), %ecx  # %ecx<- glue->method
-    EXPORT_PC                               # in case an exception is thrown
-    FETCH       1, %eax                     # %eax<- BBBB
-    movl        %eax, -4(%esp)              # push parameter BBBB; ref
-    movl        rINST, -8(%esp)             # push parameter AA
-    movl        %ecx, -12(%esp)             # push parameter glue->method
+    movl        rGLUE, %edx            		# %edx<- pMterpGlue
+    movl        offGlue_method(%edx), %ecx 	# %ecx<- glue->method
+    EXPORT_PC                          	  	# in case an exception is thrown
+    FETCH       1, %eax                 	# %eax<- BBBB
+    movl        %eax, -4(%esp)          	# push parameter BBBB; ref
+    movl        rINST, -8(%esp)          	# push parameter AA
+    movl        %ecx, -12(%esp)          	# push parameter glue->method
     lea         -12(%esp), %esp
-    call        dvmThrowVerificationError   # call: (const Method* method, int kind, int ref)
-    jmp     common_exceptionThrown      # failed; handle exception
+    call        dvmThrowVerificationError	# call: (const Method* method, int kind, int ref)
+    jmp 	common_exceptionThrown  	# failed; handle exception
 
 /* ------------------------------ */
     .balign 64
@@ -14615,14 +14544,14 @@ OP_IF_LEZ_2f:
     *
     * Format:
     *
-    * Syntax: A, {vC, vD, vE, vF}, inline@BBBB
+    * Syntax: vAA, {vC, vD, vE, vF}, inline@BBBB
     */
 
     FETCH       1, %ecx                 # %ecx<- BBBB
     movl        rGLUE, %eax             # %eax<- MterpGlue pointer
     addl        $offGlue_retval, %eax  # %eax<- &glue->retval
     EXPORT_PC
-    shr         $4, rINST              # rINST<- A
+    shr         $4, rINST              # rINST<- B
     movl        %eax, -8(%esp)          # push parameter glue->retval
     lea         -24(%esp), %esp
     jmp         .LOP_EXECUTE_INLINE_continue
@@ -14630,8 +14559,7 @@ OP_IF_LEZ_2f:
 /* ------------------------------ */
     .balign 64
 .L_OP_EXECUTE_INLINE_RANGE: /* 0xef */
-/* File: x86-atom/OP_EXECUTE_INLINE_RANGE.S */
-   /* Copyright (C) 2010 The Android Open Source Project
+   /* Copyright (C) 2008 The Android Open Source Project
     *
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -14647,28 +14575,15 @@ OP_IF_LEZ_2f:
     */
 
    /*
-    * File: OP_EXECUTE_INLINE_RANGE.S
-    *
-    * Code: Executes a "native inline" instruction. Uses no substitutions.
-    *
-    * For: execute-inline
-    *
-    * Description: Executes a "native inline" instruction. This instruction
-    *              is generated by the optimizer.
-    *
-    * Format:
-    *
-    * Syntax: AA, {vCCCC..v(CCCC+AA-1)}, inline@BBBB
+    * File: stub.S
     */
 
-    FETCH       1, %ecx                 # %ecx<- BBBB
-    movl        rGLUE, %eax             # %eax<- MterpGlue pointer
-    addl        $offGlue_retval, %eax  # %eax<- &glue->retval
-    EXPORT_PC
-    movl        %eax, -8(%esp)          # push parameter glue->retval
-    lea         -24(%esp), %esp
-    jmp         .LOP_EXECUTE_INLINE_RANGE_continue
-
+    SAVE_PC_FP_TO_GLUE %edx             # save program counter and frame pointer
+    pushl       rGLUE                   # push parameter glue
+    call        dvmMterp_OP_EXECUTE_INLINE_RANGE      # call c-based implementation
+    lea         4(%esp), %esp
+    LOAD_PC_FP_FROM_GLUE                # restore program counter and frame pointer
+    FINISH_A                            # jump to next instruction
 /* ------------------------------ */
     .balign 64
 .L_OP_INVOKE_DIRECT_EMPTY: /* 0xf0 */
@@ -15010,26 +14925,6 @@ OP_IF_LEZ_2f:
     */
 
    /*
-    * File: OP_IPUT_OBJECT_QUICK.S
-    */
-
-/* File: x86-atom/OP_IPUT_QUICK.S */
-   /* Copyright (C) 2008 The Android Open Source Project
-    *
-    * Licensed under the Apache License, Version 2.0 (the "License");
-    * you may not use this file except in compliance with the License.
-    * You may obtain a copy of the License at
-    *
-    * http://www.apache.org/licenses/LICENSE-2.0
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
-
-   /*
     * File: OP_IPUT_QUICK.S
     * Code: Optimization for iput
     *
@@ -15050,8 +14945,14 @@ OP_IF_LEZ_2f:
     FFETCH_ADV  2, %edx                 # %edx<- next instruction hi; fetch, advance
     GET_VREG    rINST                   # rINST<- vA
     movl        rINST, (%eax, %ecx)     # object field<- vA
+    testl 	rINST, rINST		# did we write a null object
+    je          1f
+    movl	rGLUE, %ecx             # get glue
+    movl	offGlue_cardTable(%ecx), %ecx # get card table base
+    shrl	$GC_CARD_SHIFT, %eax   # get gc card index
+    movb        %cl, (%eax, %ecx)       # mark gc card in table
+1:
     FGETOP_JMP  2, %edx                 # jump to next instruction; getop, jmp
-
 
 /* ------------------------------ */
     .balign 64
@@ -15809,8 +15710,14 @@ dvmAsmSisterStart:
 .LOP_FILLED_NEW_ARRAY_continue:
     movl        offClassObject_descriptor(%eax), %eax # %eax<- arrayClass->descriptor
     movzbl      1(%eax), %eax           # %eax<- descriptor[1]
-    cmp         $'I', %eax             # check if array of ints
+    cmpb         $'I', %al             # check if array of ints
+    je	        1f
+    cmpb         $'L', %al
+    je          1f
+    cmpb         $'[', %al
     jne         .LOP_FILLED_NEW_ARRAY_notimpl     # jump to not implemented
+1:
+    movl	%eax, sReg0             # save type
     movl        rINST, -12(%esp)        # push parameter length
     movl        %eax, -16(%esp)         # push parameter descriptor[1]
     movl        $ALLOC_DONT_TRACK, -8(%esp) # push parameter to allocate flags
@@ -15863,6 +15770,14 @@ dvmAsmSisterStart:
     jns         1b                      # or continue at 2
     .endif
 2:
+    cmpb        $'I', sReg0            # check for int array
+    je          3f
+    movl        rGLUE, %ecx             # %ecx<- MterpGlue pointer
+    movl        offGlue_retval(%ecx), %eax # Object head
+    movl        offGlue_cardTable(%ecx), %ecx # card table base
+    shrl        $GC_CARD_SHIFT, %eax   # convert to card num
+    movb        %cl,(%ecx, %eax)        # mark card based on object head
+3:
     FINISH      3                       # jump to next instruction
 
    /*
@@ -15913,8 +15828,14 @@ dvmAsmSisterStart:
 .LOP_FILLED_NEW_ARRAY_RANGE_continue:
     movl        offClassObject_descriptor(%eax), %eax # %eax<- arrayClass->descriptor
     movzbl      1(%eax), %eax           # %eax<- descriptor[1]
-    cmp         $'I', %eax             # check if array of ints
+    cmpb         $'I', %al             # check if array of ints
+    je	        1f
+    cmpb         $'L', %al
+    je          1f
+    cmpb         $'[', %al
     jne         .LOP_FILLED_NEW_ARRAY_RANGE_notimpl     # jump to not implemented
+1:
+    movl	%eax, sReg0             # save type
     movl        rINST, -12(%esp)        # push parameter length
     movl        %eax, -16(%esp)         # push parameter descriptor[1]
     movl        $ALLOC_DONT_TRACK, -8(%esp) # push parameter to allocate flags
@@ -15967,6 +15888,14 @@ dvmAsmSisterStart:
     jns         1b                      # or continue at 2
     .endif
 2:
+    cmpb        $'I', sReg0            # check for int array
+    je          3f
+    movl        rGLUE, %ecx             # %ecx<- MterpGlue pointer
+    movl        offGlue_retval(%ecx), %eax # Object head
+    movl        offGlue_cardTable(%ecx), %ecx # card table base
+    shrl        $GC_CARD_SHIFT, %eax   # convert to card num
+    movb        %cl,(%ecx, %eax)        # mark card based on object head
+3:
     FINISH      3                       # jump to next instruction
 
    /*
@@ -16069,6 +15998,7 @@ dvmAsmSisterStart:
 
 .LOP_APUT_OBJECT_finish:
     movl        %edx, sReg0             # save &vBB[vCC]
+    movl        %eax, sReg1             # save object head
     movl        offObject_clazz(rINST), %edx # %edx<- obj->clazz
     movl        %edx, -8(%esp)          # push parameter obj->clazz
     movl        offObject_clazz(%eax), %eax # %eax<- arrayObj->clazz
@@ -16078,10 +16008,17 @@ dvmAsmSisterStart:
                                         # call: ClassObject* elemClass, ClassObject* arrayClass)
                                         # return: bool
     lea         8(%esp), %esp
-    cmp         $0, %eax               # check for invalid array value
+    testl       %eax, %eax               # check for invalid array value
     je          common_errArrayStore    # handle invalid array value
     movl        sReg0, %edx             # restore &vBB[vCC]
-
+    movl        rINST, offArrayObject_contents(%edx)
+    movl        rGLUE, %eax
+    FFETCH_ADV  2, %ecx                 # %ecx<- next instruction hi; fetch, advance
+    movl        offGlue_cardTable(%eax), %eax # get card table base
+    movl        sReg1, %edx             # restore object head
+    shrl        $GC_CARD_SHIFT, %edx	# object head to card number
+    movb        %al, (%eax, %edx)       # mark card using object head
+    FGETOP_JMP  2, %ecx                 # jump to next instruction; getop, jmp
 .LOP_APUT_OBJECT_skip_check:
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     movl        rINST, offArrayObject_contents(%edx)
@@ -16362,10 +16299,17 @@ dvmAsmSisterStart:
     cmp         $0, %ecx               # check for null object
     je          common_errNullObject    # handle null object
     movl        offInstField_byteOffset(%eax), %edx # %edx<- field offset
-    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    rINST                   # rINST<- vA
-    movl     rINST, (%edx, %ecx)     # object field<- vA
-    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
+    movl        rINST, (%edx, %ecx)     # object field<- vA
+    FFETCH_ADV  2, %edx                 # %edx<- next instruction hi; fetch, advance
+    movl 	rGLUE, %eax             # get glue
+    movl        offGlue_cardTable(%eax), %eax # get card table base
+    testl       rINST, rINST            # test if we stored a null value
+    je          1f                     # skip card mark if null stored
+    shrl        $GC_CARD_SHIFT, %ecx   # set obeject head to card number
+    movb        %al, (%eax, %ecx)
+1:
+    FGETOP_JMP  2, %edx                 # jump to next instruction; getop, jmp
 
 /* continuation for OP_IPUT_BOOLEAN */
 
@@ -16700,7 +16644,17 @@ dvmAsmSisterStart:
 .LOP_SPUT_OBJECT_finish:
     FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    rINST                   # rINST<- vAA
+
+
     movl        rINST, offStaticField_value(%ecx) # field value<- vAA
+    testl	rINST, rINST            # stored null object ptr?
+    je 	        1f
+    movl        rGLUE, %edx             # get glue
+    movl 	offField_clazz(%ecx), %ecx # ecx<- field->clazz
+    movl        offGlue_cardTable(%edx), %edx # get card table base
+    shrl        $GC_CARD_SHIFT, %ecx   # head to card number
+    movb	%dl, (%edx, %ecx)       # mark card
+1:
     FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp
 
 /* continuation for OP_SPUT_BOOLEAN */
@@ -17207,22 +17161,24 @@ dvmAsmSisterStart:
 
 /* continuation for OP_DIV_INT */
 .LOP_DIV_INT_break:
-    FFETCH_ADV  2 %eax
     .if  1
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    FGETOP_JMP  2 %eax
+.LOP_DIV_INT_break2:
+    FINISH      2                       # jump to next instruction
+
 /* continuation for OP_REM_INT */
 .LOP_REM_INT_break:
-    FFETCH_ADV  2 %eax
     .if  0
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    FGETOP_JMP  2 %eax
+.LOP_REM_INT_break2:
+    FINISH      2                       # jump to next instruction
+
 /* continuation for OP_MUL_LONG */
 
    /*
@@ -17290,23 +17246,27 @@ dvmAsmSisterStart:
 
 /* continuation for OP_DIV_INT_2ADDR */
 .LOP_DIV_INT_2ADDR_break:
-    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     .if  1
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
+.LOP_DIV_INT_2ADDR_break2:
+    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
+
 
 /* continuation for OP_REM_INT_2ADDR */
 .LOP_REM_INT_2ADDR_break:
-    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     .if  0
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
+.LOP_REM_INT_2ADDR_break2:
+    FFETCH_ADV  1, %edx                 # %ecx<- next instruction hi; fetch, advance
     FGETOP_JMP  1, %edx                 # jump to next instruction; getop, jmp
+
 
 /* continuation for OP_MUL_LONG_2ADDR */
 
@@ -17375,47 +17335,49 @@ dvmAsmSisterStart:
 
 /* continuation for OP_DIV_INT_LIT16 */
 .LOP_DIV_INT_LIT16_break:
-    movzbl      (rPC), %edx
     .if  1
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+.LOP_DIV_INT_LIT16_break2:
+
+    FINISH      2                       # jump to next instruction
 
 /* continuation for OP_REM_INT_LIT16 */
 .LOP_REM_INT_LIT16_break:
-    movzbl      (rPC), %edx
     .if  0
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+.LOP_REM_INT_LIT16_break2:
+
+    FINISH      2                       # jump to next instruction
 
 /* continuation for OP_DIV_INT_LIT8 */
 .LOP_DIV_INT_LIT8_break:
-    movzbl      (rPC), %edx
     .if  1
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+
+.LOP_DIV_INT_LIT8_break2:
+    FINISH      2                       # jump to next instruction
+    #FGETOP_JMP 2, %ecx                 # jump to next instruction; getop, jmp
 
 /* continuation for OP_REM_INT_LIT8 */
 .LOP_REM_INT_LIT8_break:
-    movzbl      (rPC), %edx
     .if  0
     movl        $0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(, %edx, 4)
+
+.LOP_REM_INT_LIT8_break2:
+    FINISH      2                       # jump to next instruction
+    #FGETOP_JMP 2, %ecx                 # jump to next instruction; getop, jmp
 
 /* continuation for OP_EXECUTE_INLINE */
 
@@ -17453,44 +17415,6 @@ dvmAsmSisterStart:
     movl        rINST, 4(%esp)          # push parameter D
 1:
     and         $0x000f, %edx          # isolate C
-    movl        (rFP, %edx, 4), %edx    # rINST<- vC
-    movl        %edx, (%esp)            # push parameter C
-0:
-    shl         $4, %ecx
-    movl        $gDvmInlineOpsTable, %eax # %eax<- address for table of inline operations
-    call        *(%eax, %ecx)           # call function
-
-    cmp         $0, %eax               # check boolean result of inline
-    FFETCH_ADV  3, %eax                 # %eax<- next instruction hi; fetch, advance
-    lea         24(%esp), %esp          # update stack pointer
-    je          common_exceptionThrown  # handle exception
-    FGETOP_JMP  3, %eax                 # jump to next instruction; getop, jmp
-/* continuation for OP_EXECUTE_INLINE_RANGE */
-
-   /*
-    * Extract args, call function.
-    *  rINST = #of args (0-4)
-    *  %ecx = call index
-    */
-
-.LOP_EXECUTE_INLINE_RANGE_continue:
-    FETCH       2, %edx                 # %edx<- FEDC
-    cmp         $1, rINST              # determine number of arguments
-    jl          0f                      # handle zero args
-    je          1f                      # handle one arg
-    cmp         $3, rINST
-    jl          2f                      # handle two args
-    je          3f                      # handle three args
-4:
-    movl        12(rFP, %edx, 4), rINST     # rINST<- vF
-    movl        rINST, 12(%esp)         # push parameter vF
-3:
-    movl        8(rFP, %edx, 4), rINST     # rINST<- vE
-    movl        rINST, 8(%esp)          # push parameter E
-2:
-    movl        4(rFP, %edx, 4), rINST     # rINST<- vD
-    movl        rINST, 4(%esp)          # push parameter D
-1:
     movl        (rFP, %edx, 4), %edx    # rINST<- vC
     movl        %edx, (%esp)            # push parameter C
 0:
@@ -17557,13 +17481,6 @@ dvmAsmSisterEnd:
     */
 
     .macro      MTERP_EXIT
-    #lea                40(%ebp), %esp          # correct stack pointer
-    #movl       24(%ebp), %edi          # restore %edi
-    #movl       28(%ebp), %esi          # restore %esi
-    #movl       32(%ebp), %ebx          # restore %ebx
-    #movl       36(%ebp), %ebp          # restore caller base pointer
-    #ret                                        # return
-
     lea         40(%esp), %esp          # correct stack pointer
     movl        -16(%esp), %edi         # restore %edi
     movl        -12(%esp), %esi         # restore %esi
@@ -17871,11 +17788,11 @@ dvmAsmInstructionJmpTable = .LdvmAsmInstructionJmpTable
 .long .L_OP_SHL_INT_LIT8
 .long .L_OP_SHR_INT_LIT8
 .long .L_OP_USHR_INT_LIT8
-.long .L_OP_UNUSED_E3
-.long .L_OP_UNUSED_E4
-.long .L_OP_UNUSED_E5
-.long .L_OP_UNUSED_E6
-.long .L_OP_UNUSED_E7
+.long .L_OP_IGET_VOLATILE
+.long .L_OP_IPUT_VOLATILE
+.long .L_OP_SGET_VOLATILE
+.long .L_OP_SPUT_VOLATILE
+.long .L_OP_IGET_OBJECT_VOLATILE
 .long .L_OP_IGET_WIDE_VOLATILE
 .long .L_OP_IPUT_WIDE_VOLATILE
 .long .L_OP_SGET_WIDE_VOLATILE
@@ -17896,9 +17813,9 @@ dvmAsmInstructionJmpTable = .LdvmAsmInstructionJmpTable
 .long .L_OP_INVOKE_VIRTUAL_QUICK_RANGE
 .long .L_OP_INVOKE_SUPER_QUICK
 .long .L_OP_INVOKE_SUPER_QUICK_RANGE
-.long .L_OP_UNUSED_FC
-.long .L_OP_UNUSED_FD
-.long .L_OP_UNUSED_FE
+.long .L_OP_IPUT_OBJECT_VOLATILE
+.long .L_OP_SGET_OBJECT_VOLATILE
+.long .L_OP_SPUT_OBJECT_VOLATILE
 .long .L_OP_UNUSED_FF
 
 /* File: x86-atom/footer.S */
@@ -17938,26 +17855,22 @@ common_periodicChecks:
     movl        rGLUE, %edx             # %edx<- pMterpGlue
     movl        %ebx, -4(%esp)          # save %ebx to the stack
     movl        offGlue_pSelfSuspendCount(%edx), %ebx # %ebx<- pSuspendCount (int)
-#if defined(WITH_DEBUGGER)
+4:
     movl        offGlue_pDebuggerActive(%edx), %eax # %eax<- pDebuggerActive
-    movl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
-    and         $7, %eax               # %eax<- mask for boolean (just how many bits does it take?)
-#endif
+    testl       %eax, %eax
+    je          5f
+    movzbl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
+5:
     cmp         $0, (%ebx)             # check if suspend is pending
     jne         2f                      # handle suspend
-#if defined(WITH_DEBUGGER) || defined(WITH_PROFILER)
-#if defined(WITH_PROFILER)
     movl        offGlue_pActiveProfilers(%edx), %ebx # %ebx<- activeProfilers (int)
-    or          (%ebx), %eax            # %eax<- merge activeProfilers and debuggerActive
-#else
-    cmp         $0, %eax               # check for debuggerActive
-#endif
-    jne         3f                      # debugger or profiler active; switch interp
-#endif
+    orl         (%ebx), %eax            # %eax<- merge activeProfilers and debuggerActive
     movl        -8(%esp), %edx          # %edx<- restore %edx
+    jne         3f                      # debugger or profiler active; switch interp
     movl        -4(%esp), %ebx          # %ebx<- restore %ebx
     ret                                 # return
 2:                                      # check suspended
+    EXPORT_PC
     movl        offGlue_self(%edx), %eax # %eax<- glue->self
     movl        %eax, -12(%esp)         # push parameter boolean
     lea         -12(%esp), %esp
@@ -17966,11 +17879,12 @@ common_periodicChecks:
     movl        4(%esp), %edx           # %edx<- restore %edx
     movl        8(%esp), %ebx           # %ebx<- restore %ebx
     lea         12(%esp), %esp
-    ret                                 # return
+    ret
 3:                                      # debugger/profiler enabled, bail out
-    add         -8(%esp), rPC           # rPC<- pc adjustments
-    movl        %ecx, offGlue_entryPoint(%edx) # glue->entryPoint<- reentry type
-    movl        $1, %edx               # switch to interp == true
+    leal        (rPC, %edx, 2), rPC     # adjust pc to show target
+    movl        rGLUE, %ecx             # %ecx<- pMterpGlue
+    movb        $kInterpEntryInstr, offGlue_entryPoint(%ecx)
+    movl        $1, %edx               # switch interpreter
     jmp         common_gotoBail         # bail
 
    /*
@@ -17982,25 +17896,21 @@ common_periodicChecks:
     *  %edx is PC adjustment in bytes
     */
 
-common_periodicChecks2:
+common_periodicChecks_backwardBranch:
+    EXPORT_PC
     movl        rGLUE, %ecx             # %ecx<- pMterpGlue
     movl        offGlue_pSelfSuspendCount(%ecx), rINST # %ebx<- pSuspendCount (int)
-#if defined(WITH_DEBUGGER)
-    movl offGlue_pDebuggerActive(%ecx), %eax # %eax<- pDebuggerActive
-    movl        (%eax), %eax            # %eax<- get debuggerActive (boolean)
-    and         $7, %eax               # %eax<- mask for boolean (just how many bits does it take?)
-#endif
+4:
+    movl 	offGlue_pDebuggerActive(%ecx), %eax # %eax<- pDebuggerActive
+    testl       %eax, %eax              # test for NULL pointer
+    je          5f
+    movzbl      (%eax), %eax            # %eax<- get debuggerActive count
+5:
     cmp         $0, (rINST)            # check if suspend is pending
     jne         2f                      # handle suspend
-#if defined(WITH_DEBUGGER) || defined(WITH_PROFILER)
-#if defined(WITH_PROFILER)
     movl        offGlue_pActiveProfilers(%ecx), rINST # %edx<- activeProfilers (int)
-    or          (rINST), %eax           # %eax<- merge activeProfilers and debuggerActive
-#else
-    cmp         $0, %eax               # check for debuggerActive
-#endif
+    orl          (rINST), %eax           # %eax<- merge activeProfilers and debuggerActive
     jne         3f                      # debugger or profiler active; switch interp
-#endif
     FINISH_RB   %edx, %ecx              # jump to next instruction
 2:                                      # check suspended
     movl        offGlue_self(%ecx), %eax# %eax<- glue->self
@@ -18011,14 +17921,12 @@ common_periodicChecks2:
                                         # return: bool
     movl        rINST, %edx             # %edx<- restore %edx
     lea         12(%esp), %esp
-    FINISH_RB   %edx, %ecx              # jump to next instruction
-
+    FINISH_RB   %edx, %ecx
 3:                                      # debugger/profiler enabled, bail out
-    add         -8(%esp), rPC           # rPC<- pc adjustments
-    movl        $kInterpEntryInstr, offGlue_entryPoint(%ecx) # glue->entryPoint<- reentry type
-    movl        $1, %edx               # switch to interp<- true
+    leal        (rPC, %edx, 2), rPC     # adjust pc to show target
+    movb        $kInterpEntryInstr, offGlue_entryPoint(%ecx)
+    movl        $1, %edx               # switch interpreter
     jmp         common_gotoBail         # bail
-
 
    /*
     * The equivalent of "goto bail", this calls through the "bail handler".
@@ -18238,13 +18146,14 @@ dalvik_mterp:
     FGETOP_JMP  3, %edx                 # jump to next instruction; getop, jmp
 
 .LstackOverflow:
+    movl        %ecx, -4(%esp)          # push method to call
     movl        rGLUE, %ecx             # %ecx<- pMterpGlue
     movl        offGlue_self(%ecx), %ecx # %ecx<- glue->self
-    movl        %ecx, -4(%esp)          # push parameter self
-    lea         -4(%esp), %esp
-    call        dvmHandleStackOverflow  # call: (Thread* self)
+    movl        %ecx, -8(%esp)          # push parameter self
+    lea         -8(%esp), %esp
+    call        dvmHandleStackOverflow  # call: (Thread* self, Method *meth)
                                         # return: void
-    lea         4(%esp), %esp
+    lea         8(%esp), %esp
     jmp         common_exceptionThrown  # handle exception
 #ifdef ASSIST_DEBUGGER
 #endif
@@ -18381,7 +18290,7 @@ common_exceptionThrown:
     movl        %eax, -4(%esp)          # save %eax for later
     movl        %ecx, -12(%esp)         # push parameter 2 glue->self
     lea         -12(%esp), %esp
-    call        dvmCleanupStackOverflow # call: (Thread* self)
+    call        dvmCleanupStackOverflow # call: (Thread* self, Object* exception)
                                         # return: void
     lea         12(%esp), %esp
     movl        -4(%esp), %eax          # %eax<- restore %eax
@@ -18431,7 +18340,7 @@ common_exceptionThrown:
     je          1f                      #
     movl        %edx, -12(%esp)         # push parameter 1 glue->self
     lea         -12(%esp), %esp
-    call        dvmCleanupStackOverflow # call: (Thread* self)
+    call        dvmCleanupStackOverflow # call: (Thread* self, Object* exception)
                                         # return: void
     lea         12(%esp), %esp
 
@@ -18467,7 +18376,7 @@ common_abort:
     jmp         .LdeadFood
 
 .LdeadFood:
-.word 0xdeadf00d
+.int 0xdeadf00d
 
    /*
     * Invalid array index.

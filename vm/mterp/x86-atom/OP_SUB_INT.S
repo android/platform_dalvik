@@ -17,4 +17,4 @@
     * File: OP_SUB_INT.S
     */
 
-%include "x86-atom/binop.S" {"instr":"subl     (rFP, %edx, 4), %ecx"}
+%include "x86-atom/binop.S" {"instr":"subl     %edx, %ecx"}
