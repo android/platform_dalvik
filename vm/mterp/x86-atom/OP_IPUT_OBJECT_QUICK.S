@@ -14,7 +14,31 @@
     */
 
    /*
-    * File: OP_IPUT_OBJECT_QUICK.S
+    * File: OP_IPUT_QUICK.S
+    * Code: Optimization for iput
+    *
+    * For: iput-quick
+    *
+    * Format: B|A|op CCCC (22c)
+    *
+    * Syntax: op vA, vB, offset@CCCC
     */
 
-%include "x86-atom/OP_IPUT_QUICK.S"
+    movl        rINST, %eax             # %eax<- BA
+    shr         $$4, %eax               # %eax<- B
+    and         $$15, rINST             # rINST<- A
+    GET_VREG    %eax                    # %eax<- vB; object to operate on
+    FETCH       1, %ecx                 # %ecx<- CCCC; field byte offset
+    cmp         $$0, %eax               # check if object is null
+    je          common_errNullObject    # handle null object
+    FFETCH_ADV  2, %edx                 # %edx<- next instruction hi; fetch, advance
+    GET_VREG    rINST                   # rINST<- vA
+    movl        rINST, (%eax, %ecx)     # object field<- vA
+    testl       rINST, rINST            # did we write a null object
+    je          1f
+    movl        rGLUE, %ecx             # get glue
+    movl        offGlue_cardTable(%ecx), %ecx # get card table base
+    shrl        $$GC_CARD_SHIFT, %eax   # get gc card index
+    movb        %cl, (%eax, %ecx)       # mark gc card in table
+1:
+    FGETOP_JMP  2, %edx                 # jump to next instruction; getop, jmp

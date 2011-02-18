@@ -80,8 +80,14 @@
 .L${opcode}_continue:
     movl        offClassObject_descriptor(%eax), %eax # %eax<- arrayClass->descriptor
     movzbl      1(%eax), %eax           # %eax<- descriptor[1]
-    cmp         $$'I', %eax             # check if array of ints
+    cmpb        $$'I', %al             # check if array of ints
+    je          1f
+    cmpb        $$'L', %al
+    je          1f
+    cmpb        $$'[', %al
     jne         .L${opcode}_notimpl     # jump to not implemented
+1:
+    movl        %eax, sReg0             # save type
     movl        rINST, -12(%esp)        # push parameter length
     movl        %eax, -16(%esp)         # push parameter descriptor[1]
     movl        $$ALLOC_DONT_TRACK, -8(%esp) # push parameter to allocate flags
@@ -134,6 +140,14 @@
     jns         1b                      # or continue at 2
     .endif
 2:
+    cmpb        $$'I', sReg0            # check for int array
+    je          3f
+    movl        rGLUE, %ecx             # %ecx<- MterpGlue pointer
+    movl        offGlue_retval(%ecx), %eax # Object head
+    movl        offGlue_cardTable(%ecx), %ecx # card table base
+    shrl        $$GC_CARD_SHIFT, %eax   # convert to card num
+    movb        %cl,(%ecx, %eax)        # mark card based on object head
+3:
     FINISH      3                       # jump to next instruction
 
    /*

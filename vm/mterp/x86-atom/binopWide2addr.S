@@ -34,10 +34,8 @@
     movl        rINST, %edx             # %edx<- BA
     shr         $$4, rINST              # rINST<- B
     andl        $$15, %edx              # %edx<- A
-    FFETCH_ADV  1, %eax                 # %eax<- next instruction hi; fetch, advance
     movq        (rFP, rINST, 4), %xmm1  # %xmm1<- vB
     movq        (rFP, %edx, 4), %xmm0   # %xmm0<- vA
     $instr                              # %xmm0<- vA op vB
     movq        %xmm0, (rFP, %edx, 4)   # vA<- %xmm0; result
-    #FINISH      1                      # jump to next instruction
-    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp
+    FINISH      1                       # jump to next instruction

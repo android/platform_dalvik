@@ -29,14 +29,11 @@
     * Syntax: op vAA, vBB, vCC
     */
 
-
-
     FETCH_BB    1, %ecx                 # %ecx<- BB
-    OLD_JMP_1   2, %eax
-    OLD_JMP_2   %eax
     FETCH_CC    1, %edx                 # %edx<- CC
-    OLD_JMP_3   2
+    FFETCH_ADV  2, %eax                 # %eax<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vBB
+    GET_VREG    %edx                    # %edx<- vCC
     $instr                              # %ecx<- vBB op vCC
     SET_VREG    %ecx, rINST             # vAA<- %ecx; result
-    OLD_JMP_4   %eax
+    FGETOP_JMP  2, %eax                 # jump to next instruction; getop, jmp

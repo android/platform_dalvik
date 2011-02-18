@@ -32,12 +32,11 @@
 
     movl        rINST, %ecx             # %ecx<- BA
     shr         $$4, %ecx               # %ecx<- B
-    FFETCH_ADV  1, %eax                 # %ecx<- next i nstruction hi; fetch, advance
     andl        $$15, rINST             # rINST<- A
-    addl        $$2, rPC                  # update PC
     movl        rINST, %edx             # %edx<- A
+    FFETCH_ADV  1, %eax                 # %ecx<- next instruction hi; fetch, advance
     GET_VREG    %ecx                    # %ecx<- vB
     GET_VREG    %edx                    # %edx<- vA
     $instr                              # %edx<- vA op vB
     SET_VREG    %edx, rINST             # vAA<- %edx; result
-    FGETOP_JMP2 %eax                    # jump to next instruction; getop, jmp
+    FGETOP_JMP  1, %eax                 # jump to next instruction; getop, jmp

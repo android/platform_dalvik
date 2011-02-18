@@ -25,14 +25,14 @@
     *
     * Format:
     *
-    * Syntax: A, {vC, vD, vE, vF}, inline@BBBB
+    * Syntax: vAA, {vC, vD, vE, vF}, inline@BBBB
     */
 
     FETCH       1, %ecx                 # %ecx<- BBBB
     movl        rGLUE, %eax             # %eax<- MterpGlue pointer
     addl        $$offGlue_retval, %eax  # %eax<- &glue->retval
     EXPORT_PC
-    shr         $$4, rINST              # rINST<- A
+    shr         $$4, rINST              # rINST<- B
     movl        %eax, -8(%esp)          # push parameter glue->retval
     lea         -24(%esp), %esp
     jmp         .L${opcode}_continue

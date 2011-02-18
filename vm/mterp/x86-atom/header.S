@@ -288,44 +288,6 @@
     jmp         *dvmAsmInstructionJmpTable(,\_rFinish, 4)
     .endm
 
-    .macro      FGETOP_JMP2 _rFinish
-    movzbl      1(rPC), rINST
-    jmp         *dvmAsmInstructionJmpTable(,\_rFinish, 4)
-    .endm
-
-    .macro      OLD_JMP_1 _count _rFinish
-    movzbl      (\_count*2)(rPC), \_rFinish
-    shl         $$${handler_size_bits}, \_rFinish
-    .endm
-
-    .macro      OLD_JMP_2 _rFinish
-    addl        $$dvmAsmInstructionStart,\_rFinish
-    .endm
-
-    .macro      OLD_JMP_3 _count
-    addl        $$(\_count*2), rPC
-    .endm
-
-    .macro      OLD_JMP_4 _rFinish
-    movzbl      1(rPC), rINST
-    jmp         *\_rFinish
-    .endm
-
-    .macro      OLD_JMP_A_1 _reg _rFinish
-    movzbl      (rPC, \_reg), \_rFinish
-    shl         $$${handler_size_bits}, \_rFinish
-    .endm
-
-    .macro      OLD_JMP_A_2 _rFinish
-    addl        $$dvmAsmInstructionStart,\_rFinish
-    .endm
-
-    .macro      OLD_JMP_A_3 _reg _rFinish
-    addl        \_reg, rPC
-    movzbl      1(rPC, \_reg), rINST
-    jmp         *\_rFinish
-    .endm
-
    /*
     * Macro pair attempts to speed up FETCH_INST, GET_INST_OPCODE and GOTO_OPCODE
     * by using a jump table. _rFinish and _reg should must be the same register for

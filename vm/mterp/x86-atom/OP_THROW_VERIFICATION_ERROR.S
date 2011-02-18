@@ -28,13 +28,13 @@
     * Syntax: op vAA, ref@BBBB
     */
 
-    movl        rGLUE, %edx                 # %edx<- pMterpGlue
-    movl        offGlue_method(%edx), %ecx  # %ecx<- glue->method
-    EXPORT_PC                               # in case an exception is thrown
-    FETCH       1, %eax                     # %eax<- BBBB
-    movl        %eax, -4(%esp)              # push parameter BBBB; ref
-    movl        rINST, -8(%esp)             # push parameter AA
-    movl        %ecx, -12(%esp)             # push parameter glue->method
+    movl        rGLUE, %edx                  # %edx<- pMterpGlue
+    movl        offGlue_method(%edx), %ecx   # %ecx<- glue->method
+    EXPORT_PC                                # in case an exception is thrown
+    FETCH       1, %eax                      # %eax<- BBBB
+    movl        %eax, -4(%esp)               # push parameter BBBB; ref
+    movl        rINST, -8(%esp)              # push parameter AA
+    movl        %ecx, -12(%esp)              # push parameter glue->method
     lea         -12(%esp), %esp
-    call        dvmThrowVerificationError   # call: (const Method* method, int kind, int ref)
-    jmp     common_exceptionThrown      # failed; handle exception
+    call        dvmThrowVerificationError    # call: (const Method* method, int kind, int ref)
+    jmp         common_exceptionThrown       # failed; handle exception

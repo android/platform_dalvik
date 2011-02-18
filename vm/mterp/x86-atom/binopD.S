@@ -31,35 +31,31 @@
 
 %default {"div":"1"}
 
-
-    FETCH_CC    1, %ecx                 # %ecx<- CC
     FETCH_BB    1, %eax                 # %eax<- BB
-    GET_VREG    %ecx                    # %ecx<- vCC
-    testl       %ecx, %ecx
+    FETCH_CC    1, %ecx                 # %ecx<- CC
     GET_VREG    %eax                    # %eax<- vBB
+    GET_VREG    %ecx                    # %ecx<- vCC
+    cmp         $$0, %ecx               # check for divide by zero
     je          common_errDivideByZero  # handle divide by zero
     cmpl        $$-1, %ecx              # handle -1 special case divide error
-    jnz         .L${opcode}_continue
+    jne         .L${opcode}_noerror
     cmpl        $$0x80000000,%eax       # handle min int special case divide error
     je         .L${opcode}_break
-.L${opcode}_continue:
+.L${opcode}_noerror:
     cdq                                 # sign-extend %eax to %edx
     idiv        %ecx                    # divide %edx:%eax by %ecx
     .if  $div
-    FFETCH_ADV 2 %edx
     SET_VREG    %eax rINST              # vAA<- %eax (quotient)
-    FGETOP_JMP  2 %edx
     .else
-    FFETCH_ADV  2 %eax
-    SET_VREG %edx rINST  # vAA<- %edx (remainder)
-    FGETOP_JMP  2 %eax
+    SET_VREG    %edx rINST              # vAA<- %edx (remainder)
     .endif
+    jmp         .L${opcode}_break2
 %break
 .L${opcode}_break:
-    FFETCH_ADV  2 %eax
     .if  $div
     movl        $$0x80000000, (rFP, rINST, 4) # vAA<- min int
     .else
     movl        $$0, (rFP, rINST, 4)    # vAA<- 0
     .endif
-    FGETOP_JMP  2 %eax
+.L${opcode}_break2:
+    FINISH      2                       # jump to next instruction
