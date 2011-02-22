@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAA+3//4Cs\u003d",
+        "filename": "vm/mterp/x86-atom/OP_ADD_FLOAT_2ADDR.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2011-02-22T15:16:20Z",
+      "side": 1,
+      "message": "Gerrit artifact?",
+      "revId": "f8f23d402dc1eef107995b29ad4d91ee5b4e1c34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA+3//4CU\u003d",
+        "filename": "vm/mterp/x86-atom/OP_ADD_INT_LIT16.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2011-02-22T15:16:20Z",
+      "side": 1,
+      "message": "Ditto?",
+      "revId": "f8f23d402dc1eef107995b29ad4d91ee5b4e1c34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAA+3//4B4\u003d",
+        "filename": "vm/mterp/x86-atom/TODO.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2011-02-22T15:16:20Z",
+      "side": 1,
+      "message": "Probably want to leave this as a TODO for a native implementation of OP_EXECUTE_INLINE_RANGE.",
+      "revId": "f8f23d402dc1eef107995b29ad4d91ee5b4e1c34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
