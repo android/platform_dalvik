@@ -396,7 +396,7 @@ addNewHeap(HeapSource *hs, mspace msp, size_t mspAbsoluteMaxSize)
     } else {
         void *sbrk0 = contiguous_mspace_sbrk0(hs->heaps[0].msp);
         char *base = (char *)ALIGN_UP_TO_PAGE_SIZE(sbrk0);
-        size_t overhead = base - hs->heaps[0].base;
+        size_t overhead = base - hs->heapBase;
 
         assert(((size_t)hs->heaps[0].base & (SYSTEM_PAGE_SIZE - 1)) == 0);
         if (overhead + HEAP_MIN_FREE >= hs->absoluteMaxSize) {
@@ -405,7 +405,7 @@ addNewHeap(HeapSource *hs, mspace msp, size_t mspAbsoluteMaxSize)
                     overhead, hs->absoluteMaxSize);
             return false;
         }
-        hs->heaps[0].absoluteMaxSize = overhead;
+        hs->heaps[0].absoluteMaxSize = base - hs->heaps[0].base;
         hs->heaps[0].limit = base;
         heap.absoluteMaxSize = hs->absoluteMaxSize - overhead;
         heap.msp = createMspace(base, HEAP_MIN_FREE, heap.absoluteMaxSize);
