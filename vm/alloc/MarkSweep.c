@@ -590,8 +590,8 @@ static void scanGrayObjects(GcMarkContext *ctx)
     footprint = dvmHeapSourceGetValue(HS_FOOTPRINT, NULL, 0);
     baseCard = &h->cardTableBase[0];
     limitCard = dvmCardFromAddr((u1 *)dvmHeapSourceGetBase() + footprint);
-    assert(limitCard <= &h->cardTableBase[h->cardTableLength]);
-    for (card = baseCard; card != limitCard; ++card) {
+    assert(limitCard < &h->cardTableBase[h->cardTableLength]);
+    for (card = baseCard; card <= limitCard; ++card) {
         if (*card == GC_CARD_DIRTY) {
             /*
              * The card is dirty.  Scan all of the objects that
