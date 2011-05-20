@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAABBH///8Y\u003d",
+        "filename": "vm/Jni.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 3859,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2011-05-20T20:03:28Z",
+      "side": 1,
+      "message": "This will crash.  For \"self\" to be non-NULL, the thread must be attached to the VM already, and none of this would be executing.\n\nargs-\u003egroup must be a global reference, which means the VM doesn\u0027t need a JNIEnv* to decode it.  Change the first arg from \"self-\u003ejniEnv\" to \"NULL\".\n\nIt\u0027d probably be wise to note this situation in the header comment for dvmDecodeIndirectRef(), to ensure that somebody doesn\u0027t try to use \"env\" in the kIndirectKindGlobal case.",
+      "revId": "1c2a6f2555a1e0128a4efcd935804a198fba9960",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
