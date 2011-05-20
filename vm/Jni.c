@@ -566,6 +566,8 @@ static inline ReferenceTable* getLocalRefTable(JNIEnv* env)
  * reference may be local, global, or weak-global.
  *
  * If "jobj" is NULL or an invalid indirect reference, this returns NULL.
+ *
+ * Note "env" may be NULL when decoding global references.
  */
 Object* dvmDecodeIndirectRef(JNIEnv* env, jobject jobj)
 {
@@ -3856,7 +3858,7 @@ static jint attachThread(JavaVM* vm, JNIEnv** p_env, void* thr_args,
         argsCopy.version = args->version;
         argsCopy.name = args->name;
         if (args->group != NULL)
-            argsCopy.group = args->group;
+            argsCopy.group = dvmDecodeIndirectRef(NULL, args->group);
         else
             argsCopy.group = dvmGetMainThreadGroup();
     }
