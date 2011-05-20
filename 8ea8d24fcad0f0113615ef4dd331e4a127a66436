@@ -1,0 +1,9 @@
+Change-Id: I8ea8d24fcad0f0113615ef4dd331e4a127a66436
+Verified+1: Jean-Baptiste Queru <jbq@google.com>
+Code-Review+1: Johan Redestig <johan.redestig@sonyericsson.com>
+Code-Review+2: Elliott Hughes <enh@google.com>
+Submitted-by: Jean-Baptiste Queru <jbq@google.com>
+Submitted-at: Tue, 15 Jun 2010 12:16:05 -0700
+Reviewed-on: https://review.source.android.com/15267
+Project: platform/dalvik
+Branch: refs/heads/master

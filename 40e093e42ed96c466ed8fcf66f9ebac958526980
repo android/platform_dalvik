@@ -1,0 +1,8 @@
+Change-Id: I40e093e42ed96c466ed8fcf66f9ebac958526980
+Code-Review+2: Dan Bornstein <danfuzz@android.com>
+Verified+1: Jean-Baptiste Queru <jbq@google.com>
+Submitted-by: Jean-Baptiste Queru <jbq@google.com>
+Submitted-at: Mon, 24 Aug 2009 14:00:21 -0700
+Reviewed-on: https://review.source.android.com/10758
+Project: platform/dalvik
+Branch: refs/heads/master

@@ -1,0 +1,8 @@
+Change-Id: Ice6a21fbe955d8c4cc8469d4d8b06aa833039029
+Code-Review+2: Jean-Baptiste Queru <jbq@google.com>
+Verified+1: Jean-Baptiste Queru <jbq@google.com>
+Submitted-by: Jean-Baptiste Queru <jbq@google.com>
+Submitted-at: Fri, 07 Aug 2009 16:38:11 -0700
+Reviewed-on: https://review.source.android.com/10058
+Project: platform/dalvik
+Branch: refs/heads/master

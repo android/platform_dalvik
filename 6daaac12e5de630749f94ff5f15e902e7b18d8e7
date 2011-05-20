@@ -1,0 +1,8 @@
+Change-Id: I0329488498bf129802afa81e4ba23bf2204d68d3
+Code-Review+2: Andy McFadden <fadden@android.com>
+Verified+1: Jean-Baptiste Queru <jbq@google.com>
+Submitted-by: Jean-Baptiste Queru <jbq@google.com>
+Submitted-at: Thu, 27 Aug 2009 11:40:51 -0700
+Reviewed-on: https://review.source.android.com/10635
+Project: platform/dalvik
+Branch: refs/heads/master
