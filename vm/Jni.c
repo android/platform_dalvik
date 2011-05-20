@@ -3856,7 +3856,7 @@ static jint attachThread(JavaVM* vm, JNIEnv** p_env, void* thr_args,
         argsCopy.version = args->version;
         argsCopy.name = args->name;
         if (args->group != NULL)
-            argsCopy.group = args->group;
+            argsCopy.group = dvmDecodeIndirectRef(self->jniEnv, args->group);
         else
             argsCopy.group = dvmGetMainThreadGroup();
     }
