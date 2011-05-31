@@ -70,15 +70,18 @@ bool dvmStdioConverterStartup(void)
 
     if (pipe(pipeStorage->stdoutPipe) != 0) {
         LOGW("pipe failed: %s\n", strerror(errno));
+        free(pipeStorage);
         return false;
     }
     if (pipe(pipeStorage->stderrPipe) != 0) {
         LOGW("pipe failed: %s\n", strerror(errno));
+        free(pipeStorage);
         return false;
     }
 
     if (dup2(pipeStorage->stdoutPipe[1], kFilenoStdout) != kFilenoStdout) {
         LOGW("dup2(1) failed: %s\n", strerror(errno));
+        free(pipeStorage);
         return false;
     }
     close(pipeStorage->stdoutPipe[1]);
@@ -88,6 +91,7 @@ bool dvmStdioConverterStartup(void)
     /* (don't need this on the sim anyway) */
     if (dup2(pipeStorage->stderrPipe[1], kFilenoStderr) != kFilenoStderr) {
         LOGW("dup2(2) failed: %d %s\n", errno, strerror(errno));
+        free(pipeStorage);
         return false;
     }
     close(pipeStorage->stderrPipe[1]);
