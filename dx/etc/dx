@@ -36,11 +36,15 @@ cd "${oldwd}"
 
 jarfile=dx.jar
 libdir="$progdir"
+
 if [ ! -r "$libdir/$jarfile" ]; then
+    # set dx.jar location for the SDK case
     libdir=`dirname "$progdir"`/platform-tools/lib
 fi
 
+
 if [ ! -r "$libdir/$jarfile" ]; then
+    # set dx.jar location for the Android tree case
     libdir=`dirname "$progdir"`/framework
 fi
 

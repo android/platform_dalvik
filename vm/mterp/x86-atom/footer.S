@@ -333,14 +333,15 @@ dalvik_mterp:
     jne         common_exceptionThrown  # handle exception
     FGETOP_JMP  3, %edx                 # jump to next instruction; getop, jmp
 
-.LstackOverflow:
+.LstackOverflow:  # %ecx=methodToCall
+    movl        %ecx, -4(%esp)          # push parameter method to call
     movl        rGLUE, %ecx             # %ecx<- pMterpGlue
     movl        offGlue_self(%ecx), %ecx # %ecx<- glue->self
-    movl        %ecx, -4(%esp)          # push parameter self
-    lea         -4(%esp), %esp
-    call        dvmHandleStackOverflow  # call: (Thread* self)
+    movl        %ecx, -8(%esp)          # push parameter self
+    lea         -8(%esp), %esp
+    call        dvmHandleStackOverflow  # call: (Thread* self, Method* method)
                                         # return: void
-    lea         4(%esp), %esp
+    lea         8(%esp), %esp
     jmp         common_exceptionThrown  # handle exception
 #ifdef ASSIST_DEBUGGER
 #endif
@@ -477,7 +478,7 @@ common_exceptionThrown:
     movl        %eax, -4(%esp)          # save %eax for later
     movl        %ecx, -12(%esp)         # push parameter 2 glue->self
     lea         -12(%esp), %esp
-    call        dvmCleanupStackOverflow # call: (Thread* self)
+    call        dvmCleanupStackOverflow # call: (Thread* self, Object* exception)
                                         # return: void
     lea         12(%esp), %esp
     movl        -4(%esp), %eax          # %eax<- restore %eax
@@ -527,7 +528,7 @@ common_exceptionThrown:
     je          1f                      #
     movl        %edx, -12(%esp)         # push parameter 1 glue->self
     lea         -12(%esp), %esp
-    call        dvmCleanupStackOverflow # call: (Thread* self)
+    call        dvmCleanupStackOverflow # call: (Thread* self, Object* exception)
                                         # return: void
     lea         12(%esp), %esp
 

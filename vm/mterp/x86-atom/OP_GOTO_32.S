@@ -33,5 +33,5 @@
     shl         $$16, %ecx              # prepare to create +AAAAAAAA
     or          %ecx, %edx              # %edx<- +AAAAAAAA
     shl         $$1, %edx               # %edx is doubled to get the byte offset
-    jc          common_periodicChecks2  # do check on backwards branch
+    jle          common_periodicChecks2  # do check on backwards branch
     FINISH_RB   %edx, %ecx              # jump to next instruction

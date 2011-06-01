@@ -91,12 +91,6 @@ CallABI_ENTER:
     lea         (%esp), %ebp
 
    /*
-    * Update and align (16 bytes) stack pointer
-    */
-
-    lea         -32(%esp), %esp
-
-   /*
     * Check if argInfo is valid. Is always valid so should remove this check?
     */
 
@@ -107,19 +101,12 @@ CallABI_ENTER:
     subl        %ecx, %esp              # %esp<- expanded for arg region
 
    /*
-    * Is the alignment right?
+    * Prepare for 16 byte alignment
     */
 
-#if 1
-    test        $4, %esp
-    jnz         1f
-    subl        $4, %esp
-1:
-    test        $8, %esp
-    jnz         1f
-    subl        $8, %esp
-1:
-#endif
+    and         $0xfffffff0, %esp
+    subl        $24, %esp
+
 
     movl        8(%ebp), %eax           # %eax<- clazz
     cmpl        $0, %eax                # Check virtual or static
@@ -158,13 +145,13 @@ CallABI_ENTER:
     */
 
     cmpl        $3,%ebx
-    je  S8
+    je          S8
     cmpl        $4,%ebx
     je          S4
     cmpl        $7,%ebx
     je          S1
     cmpl        $6,%ebx
-    jne S2
+    jne         S2
 U2:
     movzwl      %ax, %eax
     movl        %eax, (%ecx)            # save 32-bit return

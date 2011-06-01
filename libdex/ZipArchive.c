@@ -341,7 +341,7 @@ int dexZipOpenArchive(const char* fileName, ZipArchive* pArchive)
 
     memset(pArchive, 0, sizeof(ZipArchive));
 
-    fd = open(fileName, O_RDONLY, 0);
+    fd = open(fileName, O_RDONLY | O_BINARY, 0);
     if (fd < 0) {
         err = errno ? errno : -1;
         LOGV("Unable to open '%s': %s\n", fileName, strerror(err));
