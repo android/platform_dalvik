@@ -72,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "AAABB3///wk\u003d",
+        "filename": "vm/mterp/x86-atom/OP_CMPL_FLOAT.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2011-06-02T16:48:28Z",
+      "side": 1,
+      "message": "would it be better to use the canonical NaN 0x7fc00000?",
+      "revId": "f8f23d402dc1eef107995b29ad4d91ee5b4e1c34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAA+3//4B4\u003d",
         "filename": "vm/mterp/x86-atom/TODO.txt",
         "patchSetId": 3
