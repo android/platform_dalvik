@@ -89,6 +89,40 @@
     },
     {
       "key": {
+        "uuid": "AAABB3///wU\u003d",
+        "filename": "vm/mterp/x86-atom/OP_CONST_4.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2011-06-02T17:30:10Z",
+      "side": 1,
+      "message": "Actually, the const/4 instruction should indeed sign-extend the top bit. I\u0027m not an x86 expert, but it looks to me like the actual implementation is correct, but the comment here and on the (marked) line below are incorrect.",
+      "revId": "f8f23d402dc1eef107995b29ad4d91ee5b4e1c34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAABB3///wQ\u003d",
+        "filename": "vm/mterp/x86-atom/OP_CONST_4.S",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000369
+      },
+      "writtenOn": "2011-06-02T17:30:10Z",
+      "side": 1,
+      "message": "Here.",
+      "revId": "f8f23d402dc1eef107995b29ad4d91ee5b4e1c34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAA+3//4B4\u003d",
         "filename": "vm/mterp/x86-atom/TODO.txt",
         "patchSetId": 3
