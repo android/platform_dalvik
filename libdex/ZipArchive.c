@@ -341,6 +341,9 @@ int dexZipOpenArchive(const char* fileName, ZipArchive* pArchive)
 
     memset(pArchive, 0, sizeof(ZipArchive));
 
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
     fd = open(fileName, O_RDONLY | O_BINARY, 0);
     if (fd < 0) {
         err = errno ? errno : -1;
