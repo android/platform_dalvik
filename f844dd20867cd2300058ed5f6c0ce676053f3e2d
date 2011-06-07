@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAABB3///LQ\u003d",
+        "filename": "libdex/CmdUtils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001100
+      },
+      "writtenOn": "2011-06-07T08:09:42Z",
+      "side": 1,
+      "message": "This works but looks a bit convoluted. May I suggest simply:\n\n #ifndef O_BINARY\n #define O_BINARY 0\n #endif\n\nPut it at the top of the file after the includes and you\u0027re all set.",
+      "revId": "f844dd20867cd2300058ed5f6c0ce676053f3e2d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
