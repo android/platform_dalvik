@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAABCH///1c\u003d",
+        "filename": "vm/oo/Class.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 2083,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2011-06-08T16:32:40Z",
+      "side": 1,
+      "message": "whitespace.",
+      "revId": "debd970c50a8ad0a4319e9189c6ddd1564caf069",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
