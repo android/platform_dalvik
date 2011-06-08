@@ -2080,7 +2080,8 @@ static void loadMethodFromDex(ClassObject* clazz, const DexMethod* pDexMethod,
     meth->clazz = clazz;
     meth->jniArgInfo = 0;
 
-    if (dvmCompareNameDescriptorAndMethod("finalize", "()V", meth) == 0) {
+    if (!IS_CLASS_FLAG_SET(clazz, CLASS_ISFINALIZABLE) && 
+         (dvmCompareNameDescriptorAndMethod("finalize", "()V", meth) == 0)) {
         SET_CLASS_FLAG(clazz, CLASS_ISFINALIZABLE);
     }
 
