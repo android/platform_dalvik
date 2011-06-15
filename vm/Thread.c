@@ -3178,6 +3178,43 @@ ThreadStatus dvmChangeStatus(Thread* self, ThreadStatus newStatus)
 }
 
 /*
+ * Update thread status to THREAD_RUNNING, but only if not pending
+ * suspension.
+ *
+ * The "self" argument, which may be NULL, is accepted as an optimization.
+ *
+ * Returns false if status could not be changed to THREAD_RUNNING
+ * due to a pending suspension.
+ */
+bool dvmChangeStatusToRunning(Thread* self)
+{
+    ThreadStatus oldStatus;
+
+    if (self == NULL)
+        self = dvmThreadSelf();
+
+    oldStatus = self->status;
+    assert(oldStatus != THREAD_RUNNING);
+
+    if (self->suspendCount != 0) {
+        return false;
+    }
+
+    /* Change status to THREAD_RUNNING */
+    android_atomic_acquire_store(THREAD_RUNNING, &self->status);
+
+    /* Check suspendcount again */
+    if (self->suspendCount != 0) {
+        /* Go back to the old status again. */
+        android_atomic_acquire_store(oldStatus, &self->status);
+        return false;
+    }
+    LOGVV("threadid=%d: (status %d -> %d)\n",
+        self->threadId, self->status, newStatus);
+    return true;
+}
+
+/*
  * Get a statically defined thread group from a field in the ThreadGroup
  * Class object.  Expected arguments are "mMain" and "mSystem".
  */

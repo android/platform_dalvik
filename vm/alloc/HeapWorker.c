@@ -207,7 +207,20 @@ static void lockMutex(pthread_mutex_t *mu)
         assert(self != NULL);
         oldStatus = dvmChangeStatus(self, THREAD_VMWAIT);
         dvmLockMutex(mu);
-        dvmChangeStatus(self, oldStatus);
+        if (oldStatus == THREAD_RUNNING) {
+            while(!dvmChangeStatusToRunning(self) ) {
+                /*
+                 * It was not possible to change status due to suspension
+                 * pending. Release the lock while we suspend.
+                 */
+                dvmUnlockMutex(mu);
+                dvmCheckSuspendPending(self);
+                dvmLockMutex(mu);
+            }
+        } else {
+            dvmChangeStatus(self, oldStatus);
+        }
+
     }
 }
 

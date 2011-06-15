@@ -340,6 +340,17 @@ INLINE bool dvmCheckSuspendQuick(Thread* self) {
 ThreadStatus dvmChangeStatus(Thread* self, ThreadStatus newStatus);
 
 /*
+ * Update thread status to THREAD_RUNNING, but only if not pending
+ * suspension.
+ *
+ * The "self" argument, which may be NULL, is accepted as an optimization.
+ *
+ * Returns false if status could not be changed to THREAD_RUNNING
+ * due to a pending suspension.
+ */
+bool dvmChangeStatusToRunning(Thread* self);
+
+/*
  * Initialize a mutex.
  */
 INLINE void dvmInitMutex(pthread_mutex_t* pMutex)
