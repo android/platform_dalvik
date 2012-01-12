@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAACAn///9M\u003d",
+        "filename": "tests/091-deep-interface-hierarchy/src/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-01-12T22:37:00Z",
+      "side": 1,
+      "message": "This file will need a copyright/license notice. Please use the one from e.g. tests/090-loop-formation/src/Main.java with the year adjusted to 2012. Thanks :)",
+      "revId": "a91359ae8b9d07610926da8b73ecef9be2268a4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
