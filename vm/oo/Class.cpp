@@ -3071,11 +3071,49 @@ static bool createIftable(ClassObject* clazz)
 
         /* add entries for the interface's superinterfaces */
         for (int j = 0; j < interf->iftableCount; j++) {
-            clazz->iftable[idx++].clazz = interf->iftable[j].clazz;
+            int k;
+            ClassObject *cand;
+
+            cand = interf->iftable[j].clazz;
+
+            /*
+             * Check if this interface was already added and add only if new.
+             * This is to avoid a potential blowup in the number of
+             * interfaces for sufficiently complicated interface hierarchies.
+             * This has quadratic runtime in the number of interfaces.
+             * However, in common cases with little interface inheritance, this
+             * doesn't make much of a difference.
+             */
+            for (k = 0; k < idx; k++)
+                if (clazz->iftable[k].clazz == cand)
+                    break;
+
+            if (k == idx)
+                clazz->iftable[idx++].clazz = cand;
         }
     }
 
-    assert(idx == ifCount);
+    assert(idx <= ifCount);
+
+    /*
+     * Adjust the ifCount. We could reallocate the interface memory here,
+     * but it's probably not worth the effort, the important thing here
+     * is to avoid the interface blowup and keep the ifCount low.
+     */
+
+    if (false) {
+        if (idx != ifCount) {
+            int newIfCount = idx;
+            InterfaceEntry* oldmem = clazz->iftable;
+
+            clazz->iftable = (InterfaceEntry*) dvmLinearAlloc(clazz->classLoader,
+                            sizeof(InterfaceEntry) * newIfCount);
+            memcpy(clazz->iftable, oldmem, sizeof(InterfaceEntry) * newIfCount);
+            dvmLinearFree(clazz->classLoader, oldmem);
+        }
+    }
+
+    ifCount = idx;
 
     if (false) {
         /*
