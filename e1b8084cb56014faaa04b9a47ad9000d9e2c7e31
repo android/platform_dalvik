@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAACCX///+s\u003d",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2012-01-13T18:26:39Z",
+      "side": 1,
+      "message": "There should be no tabs here or below.",
+      "revId": "e1b8084cb56014faaa04b9a47ad9000d9e2c7e31",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACCX///+k\u003d",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2012-01-13T18:26:39Z",
+      "side": 1,
+      "message": "These should have better names than StringObj and StringObj2 even if it\u0027s just \"seinfoObj\" and \"niceNameObj\"",
+      "revId": "e1b8084cb56014faaa04b9a47ad9000d9e2c7e31",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
