@@ -20,6 +20,10 @@
 #include "Dalvik.h"
 #include "native/InternalNativePriv.h"
 
+#ifdef HAVE_SELINUX
+#include <selinux/android.h>
+#endif
+
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -355,6 +359,23 @@ static int setCapabilities(int64_t permitted, int64_t effective)
     return 0;
 }
 
+#ifdef HAVE_SELINUX
+/*
+ * Set SELinux security context.
+ *
+ * Returns 0 on success, -1 on failure.
+ */
+static int setSELinuxContext(uid_t uid, bool isSystemServer,
+                             const char *seInfo, const char *niceName)
+{
+#ifdef HAVE_ANDROID_OS
+    return selinux_android_setcontext(uid, isSystemServer, seInfo, niceName);
+#else
+    return 0;
+#endif
+}
+#endif
+
 /*
  * Utility routine to fork zygote and specialize the child process.
  */
@@ -368,6 +389,10 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     u4 debugFlags = args[3];
     ArrayObject *rlimits = (ArrayObject *)args[4];
     int64_t permittedCapabilities, effectiveCapabilities;
+#ifdef HAVE_SELINUX
+    char *seInfo = NULL;
+    char *niceName = NULL;
+#endif
 
     if (isSystemServer) {
         /*
@@ -381,6 +406,24 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         effectiveCapabilities = args[7] | (int64_t) args[8] << 32;
     } else {
         permittedCapabilities = effectiveCapabilities = 0;
+#ifdef HAVE_SELINUX
+        StringObject* seInfoObj = (StringObject*)args[5];
+        if (seInfoObj) {
+            seInfo = dvmCreateCstrFromString(seInfoObj);
+            if (!seInfo) {
+                LOGE("seInfo dvmCreateCstrFromString failed");
+                dvmAbort();
+            }
+        }
+        StringObject* niceNameObj = (StringObject*)args[6];
+        if (niceNameObj) {
+            niceName = dvmCreateCstrFromString(niceNameObj);
+            if (!niceName) {
+                LOGE("niceName dvmCreateCstrFromString failed");
+                dvmAbort();
+            }
+        }
+#endif
     }
 
     if (!gDvm.zygote) {
@@ -453,6 +496,16 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
             dvmAbort();
         }
 
+#ifdef HAVE_SELINUX
+        err = setSELinuxContext(uid, isSystemServer, seInfo, niceName);
+        if (err < 0) {
+            LOGE("cannot set SELinux context: %s\n", strerror(errno));
+            dvmAbort();
+        }
+        free(seInfo);
+        free(niceName);
+#endif
+
         /*
          * Our system thread ID has changed.  Get the new one.
          */
@@ -470,13 +523,17 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         }
     } else if (pid > 0) {
         /* the parent process */
+#ifdef HAVE_SELINUX
+        free(seInfo);
+        free(niceName);
+#endif
     }
 
     return pid;
 }
 
 /* native public static int forkAndSpecialize(int uid, int gid,
- *     int[] gids, int debugFlags);
+ *     int[] gids, int debugFlags, String seInfo, String niceName);
  */
 static void Dalvik_dalvik_system_Zygote_forkAndSpecialize(const u4* args,
     JValue* pResult)
@@ -535,7 +592,7 @@ static void Dalvik_dalvik_system_Zygote_execShell(
 const DalvikNativeMethod dvm_dalvik_system_Zygote[] = {
     { "nativeFork", "()I",
       Dalvik_dalvik_system_Zygote_fork },
-    { "nativeForkAndSpecialize", "(II[II[[I)I",
+    { "nativeForkAndSpecialize", "(II[II[[ILjava/lang/String;Ljava/lang/String;)I",
       Dalvik_dalvik_system_Zygote_forkAndSpecialize },
     { "nativeForkSystemServer", "(II[II[[IJJ)I",
       Dalvik_dalvik_system_Zygote_forkSystemServer },
