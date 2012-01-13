@@ -598,6 +598,10 @@ static Object* convertReturnType(Object* valueObj, ClassObject* methodReturn)
     }
     LOGV("HEY: converting valueObj from [%s to [%s",
         srcElemClass->descriptor, dstElemClass->descriptor);
+#ifdef LOG_NDEBUG
+    // variable defined but not used => breakage on -Werror
+    (void)srcElemClass;
+#endif
 
     ArrayObject* srcArray = (ArrayObject*) valueObj;
     u4 length = srcArray->length;
@@ -1101,9 +1105,9 @@ static const u1* searchEncodedAnnotation(const ClassObject* clazz,
     const u1* ptr, const char* name)
 {
     DexFile* pDexFile = clazz->pDvmDex->pDexFile;
-    u4 typeIdx, size;
+    u4 /*typeIdx,*/ size;
 
-    typeIdx = readUleb128(&ptr);
+    /*typeIdx =*/ readUleb128(&ptr);
     size = readUleb128(&ptr);
     //printf("#####   searching ptr=%p type=%u size=%u\n", ptr, typeIdx, size);
 

@@ -757,6 +757,12 @@ done:
             dvmThrowInterruptedException(NULL);
         }
     }
+#ifdef NDEBUG
+    // ret is used only in assert() statements ==> not used in
+    // NDEBUG builds at all, causing variable defined but not
+    // used warning, breaking the build with -Werror
+    (void)ret;
+#endif
 }
 
 /*

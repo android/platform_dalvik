@@ -89,6 +89,10 @@ hprof_class_object_id hprofLookupClassId(const ClassObject *clazz)
     val = dvmHashTableLookup(gClassHashTable, computeClassHash(clazz),
             (void *)clazz, classCmp, true);
     assert(val != NULL);
+#ifdef NDEBUG
+    // variable defined but not used warning breaks -Werror
+    (void)val;
+#endif
 
     dvmHashTableUnlock(gClassHashTable);
 

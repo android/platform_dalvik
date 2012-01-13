@@ -196,6 +196,12 @@ static void* stdioConverterThreadStart(void* arg)
 
     /* change back for shutdown sequence */
     dvmChangeStatus(NULL, THREAD_RUNNING);
+#ifdef NDEBUG
+    // cc is used only in assert() statements -> not used in NDEBUG
+    // mode - causing variable defined but not used warning,
+    // breaking the build with -Werror
+    (void)cc;
+#endif
     return NULL;
 }
 

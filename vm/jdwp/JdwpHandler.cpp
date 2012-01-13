@@ -964,9 +964,12 @@ static JdwpError handleOR_EnableCollection(JdwpState* state,
 static JdwpError handleOR_IsCollected(JdwpState* state,
     const u1* buf, int dataLen, ExpandBuf* pReply)
 {
+#ifndef LOG_NDEBUG
     ObjectId objectId;
 
-    objectId = dvmReadObjectId(&buf);
+    objectId =
+#endif
+               dvmReadObjectId(&buf);
     LOGV("  Req IsCollected(0x%llx)", objectId);
 
     // TODO: currently returning false; must integrate with GC
@@ -1172,9 +1175,9 @@ static JdwpError handleTR_FrameCount(JdwpState* state,
 static JdwpError handleTR_CurrentContendedMonitor(JdwpState* state,
     const u1* buf, int dataLen, ExpandBuf* pReply)
 {
-    ObjectId threadId;
+    //ObjectId threadId;
 
-    threadId = dvmReadObjectId(&buf);
+    /*threadId =*/ dvmReadObjectId(&buf);
 
     // TODO: create an Object to represent the monitor (we're currently
     // just using a raw Monitor struct in the VM)
@@ -1557,8 +1560,11 @@ static JdwpError handleER_Set(JdwpState* state,
 static JdwpError handleER_Clear(JdwpState* state,
     const u1* buf, int dataLen, ExpandBuf* pReply)
 {
+#ifndef LOG_NDEBUG
     u1 eventKind;
-    eventKind = read1(&buf);
+    eventKind =
+#endif
+                read1(&buf);
     u4 requestId = read4BE(&buf);
 
     LOGV("  Req to clear eventKind=%d requestId=%#x", eventKind, requestId);

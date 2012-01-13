@@ -1042,7 +1042,9 @@ static void verifyAndOptimizeClasses(DexFile* pDexFile, bool doVerify,
 static void verifyAndOptimizeClass(DexFile* pDexFile, ClassObject* clazz,
     const DexClassDef* pClassDef, bool doVerify, bool doOpt)
 {
+#ifndef LOG_NDEBUG
     const char* classDescriptor;
+#endif
     bool verified = false;
 
     if (clazz->pDvmDex->pDexFile != pDexFile) {
@@ -1058,7 +1060,9 @@ static void verifyAndOptimizeClass(DexFile* pDexFile, ClassObject* clazz,
         return;
     }
 
+#ifndef LOG_NDEBUG
     classDescriptor = dexStringByTypeIdx(pDexFile, pClassDef->classIdx);
+#endif
 
     /*
      * First, try to verify it.

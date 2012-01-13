@@ -4385,6 +4385,11 @@ static bool verifyInstruction(const Method* meth, InsnFlags* insnFlags,
             valueType = primitiveTypeToRegType(
                                     resClass->elementClass->primitiveType);
             assert(valueType != kRegTypeUnknown);
+#ifdef NDEBUG
+            // assert is optimized out, leaving valueType defined but
+            // not used, causing a compiler warning -> error on -Werror
+            (void)valueType;
+#endif
 
             /*
              * Now verify if the element width in the table matches the element

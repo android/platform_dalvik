@@ -2149,6 +2149,10 @@ void dvmDetachCurrentThread()
             // cond var guarded by threadListLock, which we already hold
             cc = pthread_cond_signal(&gDvm.vmExitCond);
             assert(cc == 0);
+#ifdef NDEBUG
+            // not used -> variable defined but not used warning
+            (void)cc;
+#endif
         }
     }
 
@@ -2706,6 +2710,10 @@ void dvmResumeAllThreads(SuspendCause why)
     lockThreadSuspendCount();
     cc = pthread_cond_broadcast(&gDvm.threadSuspendCountCond);
     assert(cc == 0);
+#ifdef NDEBUG
+    // not used -> variable defined but not used warning
+    (void)cc;
+#endif
     unlockThreadSuspendCount();
 
     LOG_THREAD("threadid=%d: ResumeAll complete", self->threadId);
@@ -2755,6 +2763,10 @@ void dvmUndoDebuggerSuspensions()
     lockThreadSuspendCount();
     cc = pthread_cond_broadcast(&gDvm.threadSuspendCountCond);
     assert(cc == 0);
+#ifdef NDEBUG
+    // not used -> variable defined but not used warning
+    (void)cc;
+#endif
     unlockThreadSuspendCount();
 
     unlockThreadSuspend();

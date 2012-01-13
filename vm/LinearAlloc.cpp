@@ -524,6 +524,12 @@ static void updatePages(Object* classLoader, void* mem, int direction)
     }
 
     dvmUnlockMutex(&pHdr->lock);
+#ifdef NDEBUG
+    // cc is used only in assert() statements -> not used
+    // in NDEBUG mode -> variable defined but not used
+    // warning (or error with -Werror)
+    (void)cc;
+#endif
 }
 
 /*
