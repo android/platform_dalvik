@@ -26,7 +26,7 @@ endif
 
 include $(LOCAL_PATH)/Dvm.mk
 
-LOCAL_SHARED_LIBRARIES += liblog libcutils libnativehelper libz libdl
+LOCAL_SHARED_LIBRARIES += libselinux liblog libcutils libnativehelper libz libdl
 
 LOCAL_STATIC_LIBRARIES += libdex
 
