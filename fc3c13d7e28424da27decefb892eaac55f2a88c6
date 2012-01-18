@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAACFH///+8\u003d",
+        "filename": "vm/ReconfigureDvm.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-01-18T22:18:49Z",
+      "side": 1,
+      "message": "is this library available for Mac OS? do we require it on the host as well as the target?",
+      "revId": "fc3c13d7e28424da27decefb892eaac55f2a88c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACFH///+4\u003d",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-01-18T22:18:49Z",
+      "side": 1,
+      "message": "this needs some #ifdef love.",
+      "revId": "fc3c13d7e28424da27decefb892eaac55f2a88c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACFH///+0\u003d",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-01-18T22:18:49Z",
+      "side": 1,
+      "message": "NULL checks for dvmCreateCstrFromString failures?",
+      "revId": "fc3c13d7e28424da27decefb892eaac55f2a88c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACFH///+w\u003d",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-01-18T22:18:49Z",
+      "side": 1,
+      "message": "this is safe because we\u0027re always forking a single-threaded process, so we know no-one held the native heap lock at fork time?",
+      "revId": "fc3c13d7e28424da27decefb892eaac55f2a88c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
