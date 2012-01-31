@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAACen////8\u003d",
+        "filename": "vm/mterp/cstubs/entry.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-01-31T18:14:53Z",
+      "side": 1,
+      "message": "This should stay void - see general comments below regarding \"changedInterp\"",
+      "revId": "bf08d50c7a01a4c30559dd2ee9511c28fb1365a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACen////4\u003d",
+        "filename": "vm/mterp/cstubs/entry.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-01-31T18:14:53Z",
+      "side": 1,
+      "message": "ditto.",
+      "revId": "bf08d50c7a01a4c30559dd2ee9511c28fb1365a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACen////0\u003d",
+        "filename": "vm/mterp/cstubs/entry.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-01-31T18:14:53Z",
+      "side": 1,
+      "message": "Prior to ICS we had a separate \"debug\" interpreter to handle debugging and profiling activities.  From ICS onwards, all interpreters are expected to handle these events, so we no longer have the concept of changing interpreters.  Before, dvmMterpStdBail would either exit the interpreter instance, or switch to the debug interpreter.  Now it should only exit - so let\u0027s not add back \"changeInterp\".",
+      "revId": "bf08d50c7a01a4c30559dd2ee9511c28fb1365a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACen////w\u003d",
+        "filename": "vm/mterp/cstubs/stubdefs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-01-31T18:14:53Z",
+      "side": 1,
+      "message": "dvmMterpStdBail(self)",
+      "revId": "bf08d50c7a01a4c30559dd2ee9511c28fb1365a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
