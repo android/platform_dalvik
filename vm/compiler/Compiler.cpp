@@ -313,9 +313,15 @@ static void resetCodeCache(void)
      * Wipe out the code cache content to force immediate crashes if
      * stale JIT'ed code is invoked.
      */
+#ifdef __mips__
+    memset((char *) gDvmJit.codeCache + gDvmJit.templateSize,
+           0x66, /* invalid opcode for mips */
+           gDvmJit.codeCacheByteUsed - gDvmJit.templateSize);
+#else
     memset((char *) gDvmJit.codeCache + gDvmJit.templateSize,
            0,
            gDvmJit.codeCacheByteUsed - gDvmJit.templateSize);
+#endif
     dvmCompilerCacheFlush((intptr_t) gDvmJit.codeCache,
                           (intptr_t) gDvmJit.codeCache +
                           gDvmJit.codeCacheByteUsed, 0);
