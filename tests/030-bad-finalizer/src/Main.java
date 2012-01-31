@@ -14,7 +14,9 @@ public class Main {
         System.gc();
 
         for (int i = 0; i < 8; i++) {
-            BadFinalizer.snooze(5000);
+            // The finalizer timeout is 10s. Sleep midway between 3.333s and 5s
+            // for the best chance of getting exactly 2 GC messages out
+            BadFinalizer.snooze(4166);
             System.out.println("Requesting another GC.");
             System.gc();
         }
