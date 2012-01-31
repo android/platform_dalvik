@@ -6,7 +6,7 @@ HANDLE_OPCODE(OP_PACKED_SWITCH /*vAA, +BBBB*/)
 
         vsrc1 = INST_AA(inst);
         offset = FETCH(1) | (((s4) FETCH(2)) << 16);
-        ILOGV("|packed-switch v%d +0x%04x", vsrc1, vsrc2);
+        ILOGV("|packed-switch v%d +0x%04x", vsrc1, offset);
         switchData = pc + offset;       // offset in 16-bit units
 #ifndef NDEBUG
         if (switchData < curMethod->insns ||
