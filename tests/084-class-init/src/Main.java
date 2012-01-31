@@ -14,7 +14,26 @@
  * limitations under the License.
  */
 
+import java.util.concurrent.Semaphore;
+
 public class Main {
+
+    // semaphore to serialise thread output
+    private static final Semaphore sem = new Semaphore(1);
+
+    static void lock() {
+        try {
+            sem.acquire();
+        }
+        catch (InterruptedException ie) {
+            System.err.println("sleep interrupted");
+        }
+    }
+
+    static void unlock() {
+        sem.release();
+    }
+
     public static void main(String[] args) {
         checkExceptions();
         checkTiming();
@@ -54,6 +73,8 @@ public class Main {
         FieldThread fieldThread = new FieldThread();
         MethodThread methodThread = new MethodThread();
 
+        lock(); // Take the semaphore before fieldThread and methodThread start
+
         fieldThread.start();
         methodThread.start();
 
@@ -88,6 +109,7 @@ public class Main {
 
             /* let MethodThread print first */
             Main.sleep(400);
+            lock();		// Wait for methodThread to finish printing
             System.out.println("Fields (child thread): " +
                 field0 + field1 + field2 + field3);
         }
@@ -100,6 +122,7 @@ public class Main {
 
             /* use a method that shouldn't be accessible yet */
             SlowInit.printMsg("MethodThread message");
+            unlock();		// Tell fieldThread  it may print
         }
     }
 }

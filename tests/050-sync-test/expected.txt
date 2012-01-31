@@ -4,26 +4,25 @@ GONE
 
 Count Test
 going: 1
-going: 1
-going: 1
-going: 1
-going: 1
-going: 1
-going: 1
-going: 1
-going: 1
-going: 1
-Final result: 10
 going: 2
-going: 2
-going: 2
-going: 2
-going: 2
-going: 2
-going: 2
-going: 2
-going: 2
-going: 2
+going: 3
+going: 4
+going: 5
+going: 6
+going: 7
+going: 8
+going: 9
+going: 10
+going: 11
+going: 12
+going: 13
+going: 14
+going: 15
+going: 16
+going: 17
+going: 18
+going: 19
+going: 20
 Final result: 20
 main: all done
 

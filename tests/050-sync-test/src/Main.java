@@ -58,6 +58,8 @@ public class Main {
             System.out.println("INTERRUPT!");
             ie.printStackTrace();
         }
+        System.out.print("Final result: ");
+        System.out.println(one.getCount());
         System.out.println("main: all done");
     }
 
@@ -79,6 +81,10 @@ class CpuThread extends Thread {
     static int mCount = 0;
     int mNumber;
 
+    public int getCount() {
+	return mCount;
+    }
+
     CpuThread(int num) {
         super("CpuThread " + num);
         mNumber = num;
@@ -92,8 +98,6 @@ class CpuThread extends Thread {
             output(mNumber);
         }
 
-        System.out.print("Final result: ");
-        System.out.println(mCount);
     }
 
     void output(int num) {
@@ -105,15 +109,15 @@ class CpuThread extends Thread {
             int i, count;
 
             count = mCount;
+            count++;
 
             System.out.print("going: ");
-            System.out.println(num);
+            System.out.println(count);
 
             /* burn CPU; adjust end value so we exceed scheduler quantum */
             for (int j = 0; j < 5000; j++)
                 ;
 
-            count++;
             mCount = count;
         }
     }

@@ -41,8 +41,12 @@ public class Main {
      */
     static class MyThread extends Thread {
         private static int mCount = 0;
+	static Object mSyncable = new Object();
         public void run() {
-            System.out.println("running " + (mCount++));
+	    synchronized (mSyncable)
+	    {
+		System.out.println("running " + (mCount++));
+	    }
         }
     }
 }
