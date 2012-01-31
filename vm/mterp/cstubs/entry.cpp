@@ -2,7 +2,7 @@
  * Handler function table, one entry per opcode.
  */
 #undef H
-#define H(_op) dvmMterp_##_op
+#define H(_op) (const void *)dvmMterp_##_op
 DEFINE_GOTO_TABLE(gDvmMterpHandlers)
 
 #undef H
@@ -17,16 +17,16 @@ DEFINE_GOTO_TABLE(gDvmMterpHandlerNames)
  *
  * This is only used for the "allstubs" variant.
  */
-void dvmMterpStdRun(Thread* self)
+bool dvmMterpStdRun(Thread* self)
 {
     jmp_buf jmpBuf;
 
-    self->bailPtr = &jmpBuf;
+    self->interpSave.bailPtr = &jmpBuf;
 
     /* We exit via a longjmp */
     if (setjmp(jmpBuf)) {
         LOGVV("mterp threadid=%d returning", dvmThreadSelf()->threadId);
-        return
+        return false;
     }
 
     /* run until somebody longjmp()s out */
@@ -40,8 +40,8 @@ void dvmMterpStdRun(Thread* self)
          * FINISH code.  For allstubs, we must do an explicit check
          * in the interpretation loop.
          */
-        if (self-interpBreak.ctl.subMode) {
-            dvmCheckBefore(pc, fp, self, curMethod);
+        if (self->interpBreak.ctl.subMode) {
+            dvmCheckBefore(pc, fp, self);
         }
         Handler handler = (Handler) gDvmMterpHandlers[inst & 0xff];
         (void) gDvmMterpHandlerNames;   /* avoid gcc "defined but not used" */
@@ -54,8 +54,8 @@ void dvmMterpStdRun(Thread* self)
 /*
  * C mterp exit point.  Call here to bail out of the interpreter.
  */
-void dvmMterpStdBail(Thread* self)
+void dvmMterpStdBail(Thread* self, bool changeInterp)
 {
-    jmp_buf* pJmpBuf = self->bailPtr;
+    jmp_buf* pJmpBuf = (jmp_buf *)self->interpSave.bailPtr;
     longjmp(*pJmpBuf, 1);
 }
