@@ -9,6 +9,13 @@ public class Main {
     public static boolean aInitialized = false;
     public static boolean bInitialized = false;
 
+    static Object mSyncable = new Object();
+    static int mSeq = 0;
+
+    public synchronized static int getSeq() {
+	return mSeq++;
+    }
+
     static public void main(String[] args) {
         Thread thread1, thread2;
 
@@ -32,7 +39,7 @@ public class Main {
 
 class A {
     static {
-        System.out.println("A initializing...");
+        System.out.println(Main.getSeq() + " initializing...");
         try { Thread.sleep(3000); } catch (InterruptedException ie) { }
         new B();
         System.out.println("A initialized");
@@ -42,7 +49,7 @@ class A {
 
 class B {
     static {
-        System.out.println("B initializing...");
+        System.out.println(Main.getSeq() + " initializing...");
         try { Thread.sleep(3000); } catch (InterruptedException ie) { }
         new A();
         System.out.println("B initialized");
