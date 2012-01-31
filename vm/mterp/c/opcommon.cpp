@@ -525,7 +525,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst,                                        \
             dvmGetField##_ftype(obj, ifield->byteOffset));                  \
-        ILOGV("+ IGET '%s'=0x%08llx", ifield->field.name,                   \
+        ILOGV("+ IGET '%s'=0x%08llx", ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -552,7 +552,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst,                                        \
             dvmGetField##_ftype(obj, ifield->byteOffset));                  \
-        ILOGV("+ IGET '%s'=0x%08llx", ifield->field.name,                   \
+        ILOGV("+ IGET '%s'=0x%08llx", ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(5);
@@ -596,7 +596,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         dvmSetField##_ftype(obj, ifield->byteOffset,                        \
             GET_REGISTER##_regsize(vdst));                                  \
-        ILOGV("+ IPUT '%s'=0x%08llx", ifield->field.name,                   \
+        ILOGV("+ IPUT '%s'=0x%08llx", ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -623,7 +623,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         dvmSetField##_ftype(obj, ifield->byteOffset,                        \
             GET_REGISTER##_regsize(vdst));                                  \
-        ILOGV("+ IPUT '%s'=0x%08llx", ifield->field.name,                   \
+        ILOGV("+ IPUT '%s'=0x%08llx", ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(5);
@@ -673,7 +673,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst, dvmGetStaticField##_ftype(sfield));    \
         ILOGV("+ SGET '%s'=0x%08llx",                                       \
-            sfield->field.name, (u8)GET_REGISTER##_regsize(vdst));          \
+            sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(2);
 
@@ -696,7 +696,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst, dvmGetStaticField##_ftype(sfield));    \
         ILOGV("+ SGET '%s'=0x%08llx",                                       \
-            sfield->field.name, (u8)GET_REGISTER##_regsize(vdst));          \
+            sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(4);
 
@@ -719,7 +719,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         dvmSetStaticField##_ftype(sfield, GET_REGISTER##_regsize(vdst));    \
         ILOGV("+ SPUT '%s'=0x%08llx",                                       \
-            sfield->field.name, (u8)GET_REGISTER##_regsize(vdst));          \
+            sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(2);
 
@@ -742,6 +742,6 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         dvmSetStaticField##_ftype(sfield, GET_REGISTER##_regsize(vdst));    \
         ILOGV("+ SPUT '%s'=0x%08llx",                                       \
-            sfield->field.name, (u8)GET_REGISTER##_regsize(vdst));          \
+            sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(4);
