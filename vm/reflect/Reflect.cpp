@@ -901,6 +901,9 @@ int dvmConvertPrimitiveValue(PrimitiveType srcType,
     };
 
     enum Conversion conv;
+#ifdef ARCH_HAVE_ALIGNED_DOUBLES
+    double ret;
+#endif
 
     assert((srcType != PRIM_VOID) && (srcType != PRIM_NOT));
     assert((dstType != PRIM_VOID) && (dstType != PRIM_NOT));
@@ -978,9 +981,15 @@ int dvmConvertPrimitiveValue(PrimitiveType srcType,
         case OK4:  *dstPtr = *srcPtr;                                   return 1;
         case OK8:  *(s8*) dstPtr = *(s8*)srcPtr;                        return 2;
         case ItoJ: *(s8*) dstPtr = (s8) (*(s4*) srcPtr);                return 2;
+#ifndef ARCH_HAVE_ALIGNED_DOUBLES
         case ItoD: *(double*) dstPtr = (double) (*(s4*) srcPtr);        return 2;
         case JtoD: *(double*) dstPtr = (double) (*(long long*) srcPtr); return 2;
         case FtoD: *(double*) dstPtr = (double) (*(float*) srcPtr);     return 2;
+#else
+        case ItoD: ret = (double) (*(s4*) srcPtr); memcpy(dstPtr, &ret, 8); return 2;
+        case JtoD: ret = (double) (*(long long*) srcPtr); memcpy(dstPtr, &ret, 8); return 2;
+        case FtoD: ret = (double) (*(float*) srcPtr); memcpy(dstPtr, &ret, 8); return 2;
+#endif
         case ItoF: *(float*) dstPtr = (float) (*(int*) srcPtr);         return 1;
         case JtoF: *(float*) dstPtr = (float) (*(long long*) srcPtr);   return 1;
         case bad: {
