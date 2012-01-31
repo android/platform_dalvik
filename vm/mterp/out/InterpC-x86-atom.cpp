@@ -2234,7 +2234,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
             DUMP_REGS(methodToCall, newFp, true);   // show input args
 
             if (self->interpBreak.ctl.subMode != 0) {
-                dvmReportPreNativeInvoke(methodToCall, self, fp);
+                dvmReportPreNativeInvoke(methodToCall, self, newSaveArea->prevFrame);
             }
 
             ILOGD("> native <-- %s.%s %s", methodToCall->clazz->descriptor,
@@ -2248,7 +2248,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
             (*methodToCall->nativeFunc)(newFp, &retval, methodToCall, self);
 
             if (self->interpBreak.ctl.subMode != 0) {
-                dvmReportPostNativeInvoke(methodToCall, self, fp);
+                dvmReportPostNativeInvoke(methodToCall, self, newSaveArea->prevFrame);
             }
 
             /* pop frame off */
