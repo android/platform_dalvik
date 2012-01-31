@@ -40,7 +40,7 @@
  * data structures.  Some versions of gcc will hold small enumerated types
  * in a char instead of an int.
  */
-#if defined(__ARM_EABI__)
+#if defined(__ARM_EABI__) || defined(__mips__)
 # define MTERP_NO_UNALIGN_64
 #endif
 #if defined(HAVE_SHORT_ENUMS)

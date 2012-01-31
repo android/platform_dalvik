@@ -74,7 +74,8 @@ typedef enum JitInstructionSetType {
     DALVIK_JIT_ARM,
     DALVIK_JIT_THUMB,
     DALVIK_JIT_THUMB2,
-    DALVIK_JIT_IA32
+    DALVIK_JIT_IA32,
+    DALVIK_JIT_MIPS
 } JitInstructionSetType;
 
 /* Description of a compiled trace. */
@@ -107,6 +108,9 @@ typedef struct CompilerWorkOrder {
 /* Chain cell for predicted method invocation */
 typedef struct PredictedChainingCell {
     u4 branch;                  /* Branch to chained destination */
+#ifdef __mips__
+    u4 delay_slot;              /* nop goes here */
+#endif
     const ClassObject *clazz;   /* key for prediction */
     const Method *method;       /* to lookup native PC from dalvik PC */
     const ClassObject *stagedClazz;   /* possible next key for prediction */
