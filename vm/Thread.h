@@ -92,7 +92,7 @@ union InterpBreak {
 #ifndef DVM_NO_ASM_INTERP
         void* curHandlerTable;
 #else
-        void* unused;
+        int32_t    unused1;
 #endif
     } ctl;
 };
