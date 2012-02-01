@@ -452,6 +452,8 @@ static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
     }
 #endif
 
+#define FINISH_BKPT(_opcode)       /* FIXME? */
+#define DISPATCH_EXTENDED(_opcode) /* FIXME? */
 
 /*
  * The "goto label" statements turn into function calls followed by
@@ -488,7 +490,7 @@ static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
  * As a special case, "goto bail" turns into a longjmp.
  */
 #define GOTO_bail()                                                         \
-    dvmMterpStdBail(self, false);
+    dvmMterpStdBail(self)
 
 /*
  * Periodically check for thread suspension.
@@ -3015,7 +3017,7 @@ OP_END
  * Handler function table, one entry per opcode.
  */
 #undef H
-#define H(_op) dvmMterp_##_op
+#define H(_op) (const void*) dvmMterp_##_op
 DEFINE_GOTO_TABLE(gDvmMterpHandlers)
 
 #undef H
@@ -3034,12 +3036,12 @@ void dvmMterpStdRun(Thread* self)
 {
     jmp_buf jmpBuf;
 
-    self->bailPtr = &jmpBuf;
+    self->interpSave.bailPtr = &jmpBuf;
 
     /* We exit via a longjmp */
     if (setjmp(jmpBuf)) {
         LOGVV("mterp threadid=%d returning", dvmThreadSelf()->threadId);
-        return
+        return;
     }
 
     /* run until somebody longjmp()s out */
@@ -3053,8 +3055,8 @@ void dvmMterpStdRun(Thread* self)
          * FINISH code.  For allstubs, we must do an explicit check
          * in the interpretation loop.
          */
-        if (self-interpBreak.ctl.subMode) {
-            dvmCheckBefore(pc, fp, self, curMethod);
+        if (self->interpBreak.ctl.subMode) {
+            dvmCheckBefore(pc, fp, self);
         }
         Handler handler = (Handler) gDvmMterpHandlers[inst & 0xff];
         (void) gDvmMterpHandlerNames;   /* avoid gcc "defined but not used" */
@@ -3069,7 +3071,7 @@ void dvmMterpStdRun(Thread* self)
  */
 void dvmMterpStdBail(Thread* self)
 {
-    jmp_buf* pJmpBuf = self->bailPtr;
+    jmp_buf* pJmpBuf = (jmp_buf*) self->interpSave.bailPtr;
     longjmp(*pJmpBuf, 1);
 }
 

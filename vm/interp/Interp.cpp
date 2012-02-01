@@ -1483,8 +1483,10 @@ void updateInterpBreak(Thread* thread, ExecutionSubModes subMode, bool enable)
             newValue.ctl.breakFlags |= kInterpSingleStep;
         if (newValue.ctl.subMode & SAFEPOINT_BREAK_MASK)
             newValue.ctl.breakFlags |= kInterpSafePoint;
+#ifndef DVM_NO_ASM_INTERP
         newValue.ctl.curHandlerTable = (newValue.ctl.breakFlags) ?
             thread->altHandlerTable : thread->mainHandlerTable;
+#endif
     } while (dvmQuasiAtomicCas64(oldValue.all, newValue.all,
              &thread->interpBreak.all) != 0);
 }
@@ -1556,12 +1558,16 @@ void dvmCheckInterpStateConsistency()
     Thread* thread;
     uint8_t breakFlags;
     uint8_t subMode;
+#ifndef DVM_NO_ASM_INTERP
     void* handlerTable;
+#endif
 
     dvmLockThreadList(self);
     breakFlags = self->interpBreak.ctl.breakFlags;
     subMode = self->interpBreak.ctl.subMode;
+#ifndef DVM_NO_ASM_INTERP
     handlerTable = self->interpBreak.ctl.curHandlerTable;
+#endif
     for (thread = gDvm.threadList; thread != NULL; thread = thread->next) {
         if (subMode != thread->interpBreak.ctl.subMode) {
             ALOGD("Warning: subMode mismatch - %#x:%#x, tid[%d]",
@@ -1571,11 +1577,13 @@ void dvmCheckInterpStateConsistency()
             ALOGD("Warning: breakFlags mismatch - %#x:%#x, tid[%d]",
                 breakFlags,thread->interpBreak.ctl.breakFlags,thread->threadId);
          }
+#ifndef DVM_NO_ASM_INTERP
         if (handlerTable != thread->interpBreak.ctl.curHandlerTable) {
             ALOGD("Warning: curHandlerTable mismatch - %#x:%#x, tid[%d]",
                 (int)handlerTable,(int)thread->interpBreak.ctl.curHandlerTable,
                 thread->threadId);
          }
+#endif
 #if defined(WITH_JIT)
          if (thread->pJitProfTable != gDvmJit.pProfTable) {
              ALOGD("Warning: pJitProfTable mismatch - %#x:%#x, tid[%d]",
