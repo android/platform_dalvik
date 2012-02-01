@@ -35,15 +35,9 @@ extern "C" bool dvmCheckAsmConstants(void);
 /*
  * Local entry and exit points.  The platform-specific implementation must
  * provide these two.
- *
- * dvmMterpStdRun() returns the "changeInterp" argument from dvmMterpStdBail(),
- * indicating whether we want to bail out of the interpreter or just switch
- * between "standard" and "debug" mode.
- *
- * The "mterp" interpreter is always "standard".
  */
-extern "C" bool dvmMterpStdRun(Thread* self);
-extern "C" void dvmMterpStdBail(Thread* self, bool changeInterp);
+extern "C" void dvmMterpStdRun(Thread* self);
+extern "C" void dvmMterpStdBail(Thread* self);
 
 /*
  * Helper for common_printMethod(), invoked from the assembly
