@@ -1,0 +1,327 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAACv3////g\u003d",
+        "filename": "vm/arch/mips/HintsO32.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "This appears to be identical to the Arm version.  Once the MIPS Jit code is integrated, we\u0027re going to want to do a cleanup pass to to consolidate similar code.  Please insert a \"TODO\" comment here as a reminder that this is a candidate.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////c\u003d",
+        "filename": "vm/compiler/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "This probably ought to go in codegen/\u003carch\u003e/ArchUtility.cpp.  Could you add dvmCompilerCacheClear() in both codegen/mips/ArchUtility.cpp and codegen/arm/ArchUtility.cpp.  Ideally, we should avoid architecture-specific #ifdefs in the architecture-independent code.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////Y\u003d",
+        "filename": "vm/compiler/codegen/mips/Assemble.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Remove left-over Arm #define and comments.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////U\u003d",
+        "filename": "vm/compiler/codegen/mips/Assemble.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "It looks like you\u0027re only using kFmtBitBlt, kFmtSfp and kFmtDfp.  Please remove the code for the Arm-specific formats that you\u0027re not using.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////Q\u003d",
+        "filename": "vm/compiler/codegen/mips/Assemble.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Please update comment to describe MIPs chaining operatin.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////M\u003d",
+        "filename": "vm/compiler/codegen/mips/Codegen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Remove Arm #if defined()",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////I\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenCommon.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Please delete unneeded code - it will make it easier to identify what we\u0027ll need to pull up when we do the architecture dependent/dependent cleanup pass.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////E\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Delete commented-out line.  And, a suggestion: in the Arm code, opCondBranch is a branch on an existing condtion code, whereas you\u0027ve got a combined compare-and-branch.  Arm\u0027s Thumb2 also has a couple of compare-and-branch (Cbz, Cbnz) opcodes.  The original thought behind the opRegReg(), opRegImm(), opCondBranch(), etc. wrappers was to hide the details of the instruction selection and be somewhat target independent.  Rather than adding \"opCondBranchMips()\", I\u0027d rather we had something ilke \"opCompareBranch()\" - which I could then also use in the Arm code for Cbz, Cbnz.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3////A\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Could you fix this comment to describe the MIPs sequence?",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+8\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Remove stale #if",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+4\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1990,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Arm-specific comment.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+0\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Delete Arm-specific comment.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+w\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2625,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Arm-specific comment",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+s\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3360,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Please replace Arm example with MIPs example sequence.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+o\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4204,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Replace with MIPs example.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACv3///+k\u003d",
+        "filename": "vm/compiler/codegen/mips/CodegenDriver.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4860,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "return DALVIK_JIT_MIPS (if you use this, otherwise delete it.)",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACw3////8\u003d",
+        "filename": "vm/compiler/codegen/mips/Mips32/Gen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Replace Arm sequence in comment with MIPs sequence.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACw3////4\u003d",
+        "filename": "vm/compiler/codegen/mips/MipsLIR.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Please replace the Arm register usage \u0026 runtime conventions comment with the MIPs usage.  This is one of the most important and most frequently referenced comment blocks.  This would also be the place to mention any general endianness issues \u0026 gotchas.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACw3////0\u003d",
+        "filename": "vm/compiler/codegen/mips/RallocUtil.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-02-08T18:44:11Z",
+      "side": 1,
+      "message": "Remove above comment.  (Should probably also be removed from the Arm RallocUtil.cpp - I\u0027ll take care of that later.)  We should just use the register usage and conventions in MipsLIR.h and ArmLIR.h as the source of truth.",
+      "revId": "1fc04ca5b2ca02805a6b56d01e00cba4d9a4fd69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
