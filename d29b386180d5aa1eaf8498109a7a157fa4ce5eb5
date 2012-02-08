@@ -16,6 +16,24 @@
       "revId": "d29b386180d5aa1eaf8498109a7a157fa4ce5eb5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAACx3////8\u003d",
+        "filename": "vm/reflect/Reflect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1003296
+      },
+      "writtenOn": "2012-02-08T20:29:00Z",
+      "side": 1,
+      "message": "The marcro can be set in vm/Dvm.mk under the architecture specific part. The MIPS specific patch uses it.\nhttps://android-review.googlesource.com/#/c/31827/",
+      "parentUuid": "AAACe3////M\u003d",
+      "revId": "d29b386180d5aa1eaf8498109a7a157fa4ce5eb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
