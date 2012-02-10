@@ -28,3 +28,10 @@ int dvmCompilerCacheFlush(long start, long end, long flags)
 {
     return 0;
 }
+
+/* Target-specific cache clearing */
+void dvmCompilerCacheClear(char *start, size_t size)
+{
+    /* 0 is an invalid opcode for x86. */
+    memset(start, 0, size);
+}

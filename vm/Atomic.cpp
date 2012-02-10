@@ -226,6 +226,81 @@ int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr)
 #elif __sh__
 #define NEED_QUASIATOMICS 1
 
+#elif __mips__
+
+// on the device, we implement the 64-bit atomic operations through
+// mutex locking. normally, this is bad because we must initialize
+// a pthread_mutex_t before being able to use it, and this means
+// having to do an initialization check on each function call, and
+// that's where really ugly things begin...
+//
+// BUT, as a special twist, we take advantage of the fact that in our
+// pthread library, a mutex is simply a volatile word whose value is always
+// initialized to 0. In other words, simply declaring a static mutex
+// object initializes it !
+//
+// another twist is that we use a small array of mutexes to dispatch
+// the contention locks from different memory addresses
+//
+
+#include <pthread.h>
+
+#define  SWAP_LOCK_COUNT  32U
+static pthread_mutex_t  _swap_locks[SWAP_LOCK_COUNT];
+
+#define  SWAP_LOCK(addr)   \
+   &_swap_locks[((unsigned)(void*)(addr) >> 3U) % SWAP_LOCK_COUNT]
+
+
+int64_t dvmQuasiAtomicSwap64(int64_t value, volatile int64_t* addr)
+{
+    int64_t oldValue;
+    pthread_mutex_t*  lock = SWAP_LOCK(addr);
+
+    pthread_mutex_lock(lock);
+
+    oldValue = *addr;
+    *addr    = value;
+
+    pthread_mutex_unlock(lock);
+    return oldValue;
+}
+
+/* Same as dvmQuasiAtomicSwap64 - mutex handles barrier */
+int64_t dvmQuasiAtomicSwap64Sync(int64_t value, volatile int64_t* addr)
+{
+    return dvmQuasiAtomicSwap64(value, addr);
+}
+
+int dvmQuasiAtomicCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr)
+{
+    int result;
+    pthread_mutex_t*  lock = SWAP_LOCK(addr);
+
+    pthread_mutex_lock(lock);
+
+    if (*addr == oldvalue) {
+        *addr  = newvalue;
+        result = 0;
+    } else {
+        result = 1;
+    }
+    pthread_mutex_unlock(lock);
+    return result;
+}
+
+int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr)
+{
+    int64_t result;
+    pthread_mutex_t*  lock = SWAP_LOCK(addr);
+
+    pthread_mutex_lock(lock);
+    result = *addr;
+    pthread_mutex_unlock(lock);
+    return result;
+}
+
 #else
 #error "Unsupported atomic operations for this platform"
 #endif
