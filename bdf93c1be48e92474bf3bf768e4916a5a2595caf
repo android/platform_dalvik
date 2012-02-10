@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAC1X////8\u003d",
+        "filename": "vm/oo/Class.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2917,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-02-10T22:12:28Z",
+      "side": 1,
+      "message": "dvmCheckMethodAccess(clazz, superMeth) ?",
+      "revId": "bdf93c1be48e92474bf3bf768e4916a5a2595caf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
