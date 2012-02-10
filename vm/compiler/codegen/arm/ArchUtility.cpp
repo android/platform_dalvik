@@ -425,3 +425,10 @@ int dvmCompilerCacheFlush(long start, long end, long flags)
 {
     return cacheflush(start, end, flags);
 }
+
+/* Target-specific cache clearing */
+void dvmCompilerCacheClear(char *start, size_t size)
+{
+    /* 0 is an invalid opcode for arm. */
+    memset(start, 0, size);
+}

@@ -20,7 +20,7 @@
 #
 set -e
 
-for arch in portable allstubs armv5te armv5te-vfp armv7-a armv7-a-neon x86 x86-atom; do TARGET_ARCH_EXT=$arch make -f Makefile-mterp; done
+for arch in portable allstubs armv5te armv5te-vfp armv7-a armv7-a-neon mips x86 x86-atom; do TARGET_ARCH_EXT=$arch make -f Makefile-mterp; done
 
 # These aren't actually used, so just go ahead and remove them.  The correct
 # approach is to prevent them from being generated in the first place, but

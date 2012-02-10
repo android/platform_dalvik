@@ -3431,15 +3431,26 @@ void dvmNukeThread(Thread* thread)
      * The target thread can continue to execute between the two signals.
      * (The first just causes debuggerd to attach to it.)
      */
-    LOGD("threadid=%d: sending two SIGSTKFLTs to threadid=%d (tid=%d) to"
+
+#ifdef SIGSTKFLT
+#define SIG SIGSTKFLT
+#define SIGNAME "SIGSTKFLT"
+#elif defined(SIGEMT)
+#define SIG SIGEMT
+#define SIGNAME "SIGEMT"
+#else
+#error No signal available for dvmNukeThread
+#endif
+
+    LOGD("threadid=%d: sending two " SIGNAME "s to threadid=%d (tid=%d) to"
          " cause debuggerd dump",
         dvmThreadSelf()->threadId, thread->threadId, thread->systemTid);
-    killResult = pthread_kill(thread->handle, SIGSTKFLT);
+    killResult = pthread_kill(thread->handle, SIG);
     if (killResult != 0) {
         LOGD("NOTE: pthread_kill #1 failed: %s", strerror(killResult));
     }
     usleep(2 * 1000 * 1000);    // TODO: timed-wait until debuggerd attaches
-    killResult = pthread_kill(thread->handle, SIGSTKFLT);
+    killResult = pthread_kill(thread->handle, SIG);
     if (killResult != 0) {
         LOGD("NOTE: pthread_kill #2 failed: %s", strerror(killResult));
     }
