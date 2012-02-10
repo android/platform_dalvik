@@ -34,6 +34,24 @@
       "revId": "d29b386180d5aa1eaf8498109a7a157fa4ce5eb5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAC1H////U\u003d",
+        "filename": "vm/reflect/Reflect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-02-10T22:04:20Z",
+      "side": 1,
+      "message": "should we make this a HAVE_ in with the other HAVE_s instead? (and invert the sense, since it\u0027s MIPS that doesn\u0027t HAVE_ the ability to load unaligned doubles.)\n\nseems like we\u0027re going to need this in more places than just dalvik.",
+      "parentUuid": "AAACx3////8\u003d",
+      "revId": "d29b386180d5aa1eaf8498109a7a157fa4ce5eb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
