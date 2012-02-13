@@ -52,6 +52,24 @@
       "revId": "d29b386180d5aa1eaf8498109a7a157fa4ce5eb5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAC1X////w\u003d",
+        "filename": "vm/reflect/Reflect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1003296
+      },
+      "writtenOn": "2012-02-13T23:46:45Z",
+      "side": 1,
+      "message": "I will use ARCH_HAVE_ALIGNED_DOUBLES and resubmit the patch. Let me know if you want me to add ARCH_MIPS_HAVE_ALIGNED_DOUBLES macro instead...",
+      "parentUuid": "AAAC1H////U\u003d",
+      "revId": "d29b386180d5aa1eaf8498109a7a157fa4ce5eb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
