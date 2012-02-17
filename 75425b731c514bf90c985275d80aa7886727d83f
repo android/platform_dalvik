@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAADB3////c\u003d",
+        "filename": "vm/mterp/out/InterpC-allstubs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4349,
+      "author": {
+        "id": 1000660
+      },
+      "writtenOn": "2012-02-17T18:43:50Z",
+      "side": 1,
+      "message": "From here to the end of the file, the matching code has been deleted in Google\u0027s internal master branch.",
+      "revId": "75425b731c514bf90c985275d80aa7886727d83f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
