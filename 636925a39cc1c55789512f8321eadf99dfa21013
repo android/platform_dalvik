@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAFLH///zw\u003d",
+        "filename": "vm/Thread.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-01T22:15:32Z",
+      "side": 1,
+      "message": "this isn\u0027t quite right. really we want /proc/pid/task/tid/stack for this particular thread. but that doesn\u0027t work right on ARM anyway, except for the calling thread (which is obviously going to show that you\u0027re in the bowels of read(2) anyway).\n\ni\u0027ve hacked something similar to this for non-ARM into the internal dalvik-dev branch anyway. but a real implementation is going to need either ARM kernel changes, or for us to throw signals at the threads and have them read their own kernel stacks --- except then we\u0027re back to the position where we\u0027re in the bowels of read(2). basically, on ARM, this stuff is only useful on non-SMP hardware. 1990 called...",
+      "revId": "636925a39cc1c55789512f8321eadf99dfa21013",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
