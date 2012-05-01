@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAFKn///2g\u003d",
+        "filename": "tests/088-array-copy-concurrent-gc/src/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2012-05-01T08:32:14Z",
+      "side": 1,
+      "message": "nit: space after //",
+      "revId": "2c233a555d4e47e2f0632324ba1c24c580f3a67c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFKn///2c\u003d",
+        "filename": "tests/089-arraycopy-performance/src/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2012-05-01T08:32:14Z",
+      "side": 1,
+      "message": "I\u0027m worried that a time expectation will quickly grow stale. Maybe this makes sense as a dalvik performance regression benchmark at http://code.google.com/p/dalvik/?",
+      "revId": "2c233a555d4e47e2f0632324ba1c24c580f3a67c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
