@@ -1250,6 +1250,7 @@ std::string dvmStartup(int argc, const char* const argv[],
     /*
      * Initialize components.
      */
+    dvmQuasiAtomicsStartup();
     if (!dvmAllocTrackerStartup()) {
         return "dvmAllocTrackerStartup failed";
     }
@@ -1744,6 +1745,8 @@ void dvmShutdown()
     delete gDvm.properties;
 
     freeAssertionCtrl();
+
+    dvmQuasiAtomicsShutdown();
 
     /*
      * We want valgrind to report anything we forget to free as "definitely

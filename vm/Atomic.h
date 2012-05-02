@@ -23,6 +23,9 @@
 #include <cutils/atomic.h>          /* use common Android atomic ops */
 #include <cutils/atomic-inline.h>   /* and some uncommon ones */
 
+void dvmQuasiAtomicsStartup();
+void dvmQuasiAtomicsShutdown();
+
 /*
  * NOTE: Two "quasiatomic" operations on the exact same memory address
  * are guaranteed to operate atomically with respect to each other,
