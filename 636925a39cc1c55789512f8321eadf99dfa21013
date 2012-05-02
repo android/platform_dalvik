@@ -16,6 +16,24 @@
       "revId": "636925a39cc1c55789512f8321eadf99dfa21013",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFHn///64\u003d",
+        "filename": "vm/Thread.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1004254
+      },
+      "writtenOn": "2012-05-02T06:16:05Z",
+      "side": 1,
+      "message": "Wouldn\u0027t the stack trace of the thread handling the thrown signal be that of signal handling trace (asynchronous soft interrupts)?\n   \n  Anyways, thanks for path correction and yes i haven\u0027t had any use of this patch on recent ARM dual cores.",
+      "parentUuid": "AAAFLH///zw\u003d",
+      "revId": "636925a39cc1c55789512f8321eadf99dfa21013",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
