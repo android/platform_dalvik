@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAFKn///sU\u003d",
+        "filename": "vm/Atomic.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000483
+      },
+      "writtenOn": "2012-05-02T00:41:39Z",
+      "side": 1,
+      "message": "4-space indents in here?",
+      "revId": "4f63877297163b774bbb6be8c47fa05aac13a2cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
