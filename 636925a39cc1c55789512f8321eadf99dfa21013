@@ -34,6 +34,24 @@
       "revId": "636925a39cc1c55789512f8321eadf99dfa21013",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFLH///rc\u003d",
+        "filename": "vm/Thread.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T17:42:16Z",
+      "side": 1,
+      "message": "yes, but the signal would cancel the original system call and when the signal handler gets round to looking at the \u0027stack\u0027 file, it would see its own call to read(2) reflected back at it.\n\nstill, this works pretty nicely on MIPS and x86, so thanks for the idea!",
+      "parentUuid": "AAAFHn///64\u003d",
+      "revId": "636925a39cc1c55789512f8321eadf99dfa21013",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
