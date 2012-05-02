@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAFK3///0g\u003d",
+        "filename": "vm/Android.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T01:04:06Z",
+      "side": 1,
+      "message": "spaces, not tabs.",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFLH///yw\u003d",
+        "filename": "vm/Atomic.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T01:04:06Z",
+      "side": 1,
+      "message": "why did you go for the pthread implementation over the spinlock implementation? should we kill the spinlock implementation, move the pthread implementation into the NEED_QUASIATOMIC block at the bottom, and have non-LRDEX ARM and MIPS and x86 all fall through to that?\n\n(my primary concern here is that i don\u0027t want two copies of this code in the same file. but if i can kill the spinlock stuff at the same time, that\u0027s even better.)\n\nactually, i\u0027ll do this for you: https://android-review.googlesource.com/36034",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFLH///yA\u003d",
+        "filename": "vm/Dvm.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T01:04:06Z",
+      "side": 1,
+      "message": "consistent use of tabs.",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFK3///0k\u003d",
+        "filename": "vm/arch/mips/CallO32.S",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T01:04:06Z",
+      "side": 1,
+      "message": "please add missing copyright header.",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFLH///x8\u003d",
+        "filename": "vm/arch/mips/HintsO32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T01:04:06Z",
+      "side": 1,
+      "message": "please add missing copyright header.",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFLH///ws\u003d",
+        "filename": "vm/mterp/mips/debug.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-02T01:04:06Z",
+      "side": 1,
+      "message": "copyright header.",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
