@@ -313,9 +313,9 @@ static void resetCodeCache(void)
      * Wipe out the code cache content to force immediate crashes if
      * stale JIT'ed code is invoked.
      */
-    memset((char *) gDvmJit.codeCache + gDvmJit.templateSize,
-           0,
-           gDvmJit.codeCacheByteUsed - gDvmJit.templateSize);
+    dvmCompilerCacheClear((char *) gDvmJit.codeCache + gDvmJit.templateSize,
+                          gDvmJit.codeCacheByteUsed - gDvmJit.templateSize);
+
     dvmCompilerCacheFlush((intptr_t) gDvmJit.codeCache,
                           (intptr_t) gDvmJit.codeCache +
                           gDvmJit.codeCacheByteUsed, 0);

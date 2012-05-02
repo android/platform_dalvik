@@ -25,6 +25,7 @@ from string import Template
 interp_defs_file = "../../libdex/DexOpcodes.h" # need opcode list
 kNumPackedOpcodes = 256 # TODO: Derive this from DexOpcodes.h.
 
+splitops = False
 verbose = False
 handler_size_bits = -1000
 handler_size_bytes = -1000
@@ -217,7 +218,18 @@ def opEnd(tokens):
     in_op_start = 2
 
     loadAndEmitOpcodes()
+    if splitops == False:
+        if generate_alt_table:
+            loadAndEmitAltOpcodes()
+            if style == "jump-table":
+                emitJmpTable("dvmAsmInstructionStart", label_prefix);
+                emitJmpTable("dvmAsmAltInstructionStart", alt_label_prefix);
 
+def genaltop(tokens):
+    if in_op_start != 2:
+       raise DataParseError("alt-op can be specified only after op-end")
+    if len(tokens) != 1:
+        raise DataParseError("opEnd takes no arguments")
     if generate_alt_table:
         loadAndEmitAltOpcodes()
         if style == "jump-table":
@@ -307,7 +319,6 @@ def loadAndEmitOpcodes():
         asm_fp.write("    .balign 4\n")
         asm_fp.write("dvmAsmSisterStart:\n")
         asm_fp.writelines(sister_list)
-
         asm_fp.write("\n    .size   dvmAsmSisterStart, .-dvmAsmSisterStart\n")
         asm_fp.write("    .global dvmAsmSisterEnd\n")
         asm_fp.write("dvmAsmSisterEnd:\n\n")
@@ -593,6 +604,10 @@ try:
                 opEntry(tokens)
             elif tokens[0] == "handler-style":
                 setHandlerStyle(tokens)
+            elif tokens[0] == "alt-ops":
+                genaltop(tokens)
+            elif tokens[0] == "split-ops":
+                splitops = True
             else:
                 raise DataParseError, "unrecognized command '%s'" % tokens[0]
             if style == None:

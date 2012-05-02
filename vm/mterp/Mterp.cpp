@@ -52,7 +52,11 @@ bool dvmCheckAsmConstants()
      * which one did, but if any one is too big the total size will
      * overflow.
      */
+#if defined(__mips__)
+    const int width = 128;
+#else
     const int width = 64;
+#endif
     int interpSize = (uintptr_t) dvmAsmInstructionEnd -
                      (uintptr_t) dvmAsmInstructionStart;
     if (interpSize != 0 && interpSize != kNumPackedOpcodes*width) {

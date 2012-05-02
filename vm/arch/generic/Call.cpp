@@ -47,6 +47,14 @@ static ffi_type* getFfiType(char sigType)
     }
 }
 
+/* We will call this generic function if there are no hints */
+#ifdef __mips__
+#define dvmPlatformInvoke dvmPlatformInvokeFFI
+
+extern "C" void dvmPlatformInvoke(void* pEnv, ClassObject* clazz, int argInfo,
+    int argc, const u4* argv, const char* signature, void* func, JValue* pResult);
+#endif
+
 /*
  * Call "func" with the specified arguments.
  *

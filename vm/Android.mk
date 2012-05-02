@@ -71,6 +71,7 @@ ifeq ($(WITH_JIT),true)
     LOCAL_MODULE := libdvm_assert
     include $(BUILD_SHARED_LIBRARY)
 
+  ifneq ($(dvm_arch),mips)    # MIPS support for self-verification is incomplete
     # Derivation #2
     # Enable assert and self-verification
     include $(LOCAL_PATH)/ReconfigureDvm.mk
@@ -80,6 +81,7 @@ ifeq ($(WITH_JIT),true)
                     -DWITH_SELF_VERIFICATION $(target_smp_flag)
     LOCAL_MODULE := libdvm_sv
     include $(BUILD_SHARED_LIBRARY)
+  endif # dvm_arch!=mips
 
     # Derivation #3
     # Compile out the JIT
