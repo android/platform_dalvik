@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAFHn///4A\u003d",
+        "filename": "vm/Atomic.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1003296
+      },
+      "writtenOn": "2012-05-02T19:09:17Z",
+      "side": 1,
+      "message": "I verified CL 36034 patch on the MIPS build. I dont see any issues with this. So I will remove the MIPS changes in this file and resubmit the patch. I will also take care of your comments in the next patch",
+      "parentUuid": "AAAFLH///yw\u003d",
+      "revId": "15847bca7309c23294971620ad009d73a714aac1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAFLH///yA\u003d",
         "filename": "vm/Dvm.mk",
         "patchSetId": 4
