@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAFHn///3g\u003d",
+        "filename": "vm/Common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1003296
+      },
+      "writtenOn": "2012-05-03T01:18:51Z",
+      "side": 1,
+      "message": "Since Dalvik widens byte, char and short to int, this comment is true. However the way char is represented in 4 bytes varies on Little and Big-Endian. Hence the below fix for Big-Endian is required.",
+      "parentUuid": "AAAFLH///wc\u003d",
+      "revId": "18983fdd6b46fe1190501671a046e76e031e1ab4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAFLH///wg\u003d",
         "filename": "vm/Common.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2012-05-02T01:09:36Z",
       "side": 1,
       "message": "spaces, not tabs.",
+      "revId": "18983fdd6b46fe1190501671a046e76e031e1ab4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFHn///3Q\u003d",
+        "filename": "vm/Common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1003296
+      },
+      "writtenOn": "2012-05-03T01:18:51Z",
+      "side": 1,
+      "message": "Will submit another patch to fix the tabs.",
+      "parentUuid": "AAAFLH///wg\u003d",
       "revId": "18983fdd6b46fe1190501671a046e76e031e1ab4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
