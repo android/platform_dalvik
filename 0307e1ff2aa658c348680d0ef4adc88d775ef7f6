@@ -16,6 +16,24 @@
       "revId": "0307e1ff2aa658c348680d0ef4adc88d775ef7f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAFYH///wM\u003d",
+        "filename": "vm/Sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-05-09T19:03:15Z",
+      "side": 1,
+      "message": "s/that the check is/that the check is *in*/",
+      "parentUuid": "AAAFLH///9M\u003d",
+      "revId": "0307e1ff2aa658c348680d0ef4adc88d775ef7f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
