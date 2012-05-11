@@ -410,7 +410,7 @@ static void *gcDaemonThread(void* arg)
         bool trim = false;
         if (gHs->gcThreadTrimNeeded) {
             int result = dvmRelativeCondWait(&gHs->gcThreadCond, &gHs->gcThreadMutex,
-                    HEAP_TRIM_IDLE_TIME_SECONDS, 0);
+                    HEAP_TRIM_IDLE_TIME_SECONDS * 1000, 0);
             if (result == ETIMEDOUT) {
                 /* Timed out waiting for a GC request, schedule a heap trim. */
                 trim = true;
