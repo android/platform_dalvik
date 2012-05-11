@@ -302,6 +302,7 @@ void dvmCollectGarbage()
     dvmLockHeap();
     dvmWaitForConcurrentGcToComplete();
     dvmCollectGarbageInternal(GC_EXPLICIT);
+    dvmHeapSourceTrimHeaps();
     dvmUnlockHeap();
 }
 
