@@ -29,20 +29,20 @@
     stmfd   sp!, {r0-r3}
     mov     r0, r2
     mov     r1, r6
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}
 
-    mov     lr, pc
-    ldr     pc, [r2, #offMethod_nativeFunc]
+    ldr     ip, [r2, #offMethod_nativeFunc]
+    blx     ip
 
     ldmfd   sp!, {r0-r1}
-    mov     lr, pc
-    ldr     pc, .LdvmFastNativeMethodTraceExit
+    ldr     ip, .LdvmFastNativeMethodTraceExit
+    blx     ip
     b       212f
 121:
-    mov     lr, pc
-    ldr     pc, [r2, #offMethod_nativeFunc]
+    ldr     ip, [r2, #offMethod_nativeFunc]
+    blx     ip
 212:
 
     @ native return; r10=newSaveArea
@@ -68,7 +68,7 @@
 #if defined(WITH_JIT_TUNING)
     mov     r0, #kCallsiteInterpreted
 #endif
-    mov     pc, r1
+    bx      r1
 
 /*
  * On entry:
@@ -85,7 +85,7 @@
     ldr     r1, .LdvmMterpCommonExceptionThrown @ PIC way of getting &func
     ldr     rIBASE, .LdvmAsmInstructionStart    @ same as above
     mov     rPC, r0                 @ reload the faulting Dalvik address
-    mov     pc, r1                  @ branch to dvmMterpCommonExceptionThrown
+    bx      r1                  @ branch to dvmMterpCommonExceptionThrown
 
     .align  2
 .LdvmAsmInstructionStart:

@@ -170,8 +170,8 @@ dvmCompiler_TEMPLATE_RETURN:
     stmfd   sp!, {r0-r2,lr}             @ preserve live registers
     mov     r0, r6
     @ r0=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceExit
+    ldr     ip, .LdvmFastMethodTraceExit
+    blx     ip
     ldmfd   sp!, {r0-r2,lr}             @ restore live registers
 #endif
     SAVEAREA_FROM_FP(r0, rFP)           @ r0<- saveArea (old)
@@ -272,8 +272,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NO_OPT:
     stmfd   sp!, {r0-r3}                    @ preserve r0-r3
     mov     r1, r6
     @ r0=methodToCall, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}                    @ restore r0-r3
 #endif
 
@@ -281,7 +281,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NO_OPT:
 #if defined(WITH_JIT_TUNING)
     mov     r0, #kInlineCacheMiss
 #endif
-    mov     pc, r10                         @ dvmJitToInterpTraceSelectNoChain
+    bx      r10                         @ dvmJitToInterpTraceSelectNoChain
+ 
 
 /* ------------------------------ */
     .balign 4
@@ -330,8 +331,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_CHAIN:
     stmfd   sp!, {r0-r2,lr}             @ preserve clobbered live registers
     mov     r1, r6
     @ r0=methodToCall, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r2,lr}             @ restore registers
 #endif
 
@@ -453,8 +454,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE:
     mov     r0, r2
     mov     r1, r6
     @ r0=JNIMethod, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}                @ restore r0-r3
 #endif
 
@@ -463,8 +464,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE:
 #if defined(TEMPLATE_INLINE_PROFILING)
     ldmfd   sp!, {r0-r1}                @ restore r2 and r6
     @ r0=JNIMethod, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastNativeMethodTraceExit
+    ldr     ip, .LdvmFastNativeMethodTraceExit
+    blx     ip
 #endif
     @ native return; r10=newSaveArea
     @ equivalent to dvmPopJniLocals
@@ -514,8 +515,8 @@ dvmCompiler_TEMPLATE_CMPG_DOUBLE:
     /* op vAA, vBB, vCC */
     push    {r0-r3}                     @ save operands
     mov     r11, lr                     @ save return address
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cdcmple       @ PIC way of "bl __aeabi_cdcmple"
+    ldr     ip, .L__aeabi_cdcmple       @ PIC way of "bl __aeabi_cdcmple"
+    blx     ip
     bhi     .LTEMPLATE_CMPG_DOUBLE_gt_or_nan       @ C set and Z clear, disambiguate
     mvncc   r0, #0                      @ (less than) r1<- -1
     moveq   r0, #0                      @ (equal) r1<- 0, trumps less than
@@ -528,8 +529,8 @@ dvmCompiler_TEMPLATE_CMPG_DOUBLE:
 .LTEMPLATE_CMPG_DOUBLE_gt_or_nan:
     pop     {r2-r3}                     @ restore operands in reverse order
     pop     {r0-r1}                     @ restore operands in reverse order
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cdcmple       @ r0<- Z set if eq, C clear if <
+    ldr     ip, .L__aeabi_cdcmple       @ r0<- Z set if eq, C clear if <
+    blx     ip
     movcc   r0, #1                      @ (greater than) r1<- 1
     bxcc    r11
     mov     r0, #1                            @ r1<- 1 or -1 for NaN
@@ -558,8 +559,8 @@ dvmCompiler_TEMPLATE_CMPL_DOUBLE:
     /* op vAA, vBB, vCC */
     push    {r0-r3}                     @ save operands
     mov     r11, lr                     @ save return address
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cdcmple       @ PIC way of "bl __aeabi_cdcmple"
+    ldr     ip, .L__aeabi_cdcmple       @ PIC way of "bl __aeabi_cdcmple"
+    blx     ip
     bhi     .LTEMPLATE_CMPL_DOUBLE_gt_or_nan       @ C set and Z clear, disambiguate
     mvncc   r0, #0                      @ (less than) r1<- -1
     moveq   r0, #0                      @ (equal) r1<- 0, trumps less than
@@ -572,8 +573,8 @@ dvmCompiler_TEMPLATE_CMPL_DOUBLE:
 .LTEMPLATE_CMPL_DOUBLE_gt_or_nan:
     pop     {r2-r3}                     @ restore operands in reverse order
     pop     {r0-r1}                     @ restore operands in reverse order
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cdcmple       @ r0<- Z set if eq, C clear if <
+    ldr     ip, .L__aeabi_cdcmple       @ r0<- Z set if eq, C clear if <
+    blx     ip
     movcc   r0, #1                      @ (greater than) r1<- 1
     bxcc    r11
     mvn     r0, #0                            @ r1<- 1 or -1 for NaN
@@ -622,8 +623,8 @@ dvmCompiler_TEMPLATE_CMPG_FLOAT:
     mov     r9, r0                      @ Save copies - we may need to redo
     mov     r10, r1
     mov     r11, lr                     @ save return address
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cfcmple       @ cmp <=: C clear if <, Z set if eq
+    ldr     ip, .L__aeabi_cfcmple       @ cmp <=: C clear if <, Z set if eq
+    blx     ip
     bhi     .LTEMPLATE_CMPG_FLOAT_gt_or_nan       @ C set and Z clear, disambiguate
     mvncc   r0, #0                      @ (less than) r0<- -1
     moveq   r0, #0                      @ (equal) r0<- 0, trumps less than
@@ -634,8 +635,8 @@ dvmCompiler_TEMPLATE_CMPG_FLOAT:
 .LTEMPLATE_CMPG_FLOAT_gt_or_nan:
     mov     r0, r10                     @ restore in reverse order
     mov     r1, r9
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cfcmple       @ r0<- Z set if eq, C clear if <
+    ldr     ip, .L__aeabi_cfcmple       @ r0<- Z set if eq, C clear if <
+    blx     ip
     movcc   r0, #1                      @ (greater than) r1<- 1
     bxcc    r11
     mov     r0, #1                            @ r1<- 1 or -1 for NaN
@@ -684,8 +685,8 @@ dvmCompiler_TEMPLATE_CMPL_FLOAT:
     mov     r9, r0                      @ Save copies - we may need to redo
     mov     r10, r1
     mov     r11, lr                     @ save return address
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cfcmple       @ cmp <=: C clear if <, Z set if eq
+    ldr     ip, .L__aeabi_cfcmple       @ cmp <=: C clear if <, Z set if eq
+    blx     ip
     bhi     .LTEMPLATE_CMPL_FLOAT_gt_or_nan       @ C set and Z clear, disambiguate
     mvncc   r0, #0                      @ (less than) r0<- -1
     moveq   r0, #0                      @ (equal) r0<- 0, trumps less than
@@ -696,8 +697,8 @@ dvmCompiler_TEMPLATE_CMPL_FLOAT:
 .LTEMPLATE_CMPL_FLOAT_gt_or_nan:
     mov     r0, r10                     @ restore in reverse order
     mov     r1, r9
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cfcmple       @ r0<- Z set if eq, C clear if <
+    ldr     ip, .L__aeabi_cfcmple       @ r0<- Z set if eq, C clear if <
+    blx     ip
     movcc   r0, #1                      @ (greater than) r1<- 1
     bxcc    r11
     mvn     r0, #0                            @ r1<- 1 or -1 for NaN
@@ -1239,8 +1240,8 @@ dvmCompiler_TEMPLATE_RETURN_PROF:
     stmfd   sp!, {r0-r2,lr}             @ preserve live registers
     mov     r0, r6
     @ r0=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceExit
+    ldr     ip, .LdvmFastMethodTraceExit
+    blx     ip
     ldmfd   sp!, {r0-r2,lr}             @ restore live registers
 #endif
     SAVEAREA_FROM_FP(r0, rFP)           @ r0<- saveArea (old)
@@ -1345,8 +1346,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NO_OPT_PROF:
     stmfd   sp!, {r0-r3}                    @ preserve r0-r3
     mov     r1, r6
     @ r0=methodToCall, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}                    @ restore r0-r3
 #endif
 
@@ -1354,7 +1355,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NO_OPT_PROF:
 #if defined(WITH_JIT_TUNING)
     mov     r0, #kInlineCacheMiss
 #endif
-    mov     pc, r10                         @ dvmJitToInterpTraceSelectNoChain
+    bx      r10                         @ dvmJitToInterpTraceSelectNoChain
+ 
 
 #undef TEMPLATE_INLINE_PROFILING
 
@@ -1407,8 +1409,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_CHAIN_PROF:
     stmfd   sp!, {r0-r2,lr}             @ preserve clobbered live registers
     mov     r1, r6
     @ r0=methodToCall, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r2,lr}             @ restore registers
 #endif
 
@@ -1538,8 +1540,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
     mov     r0, r2
     mov     r1, r6
     @ r0=JNIMethod, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}                @ restore r0-r3
 #endif
 
@@ -1548,8 +1550,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
 #if defined(TEMPLATE_INLINE_PROFILING)
     ldmfd   sp!, {r0-r1}                @ restore r2 and r6
     @ r0=JNIMethod, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastNativeMethodTraceExit
+    ldr     ip, .LdvmFastNativeMethodTraceExit
+    blx     ip
 #endif
     @ native return; r10=newSaveArea
     @ equivalent to dvmPopJniLocals
@@ -1611,20 +1613,20 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
     stmfd   sp!, {r0-r3}
     mov     r0, r2
     mov     r1, r6
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}
 
-    mov     lr, pc
-    ldr     pc, [r2, #offMethod_nativeFunc]
+    ldr     ip, [r2, #offMethod_nativeFunc]
+    blx     ip
 
     ldmfd   sp!, {r0-r1}
-    mov     lr, pc
-    ldr     pc, .LdvmFastNativeMethodTraceExit
+    ldr     ip, .LdvmFastNativeMethodTraceExit
+    blx     ip
     b       212f
 121:
-    mov     lr, pc
-    ldr     pc, [r2, #offMethod_nativeFunc]
+    ldr     ip, [r2, #offMethod_nativeFunc]
+    blx     ip
 212:
 
     @ native return; r10=newSaveArea
@@ -1650,7 +1652,7 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
 #if defined(WITH_JIT_TUNING)
     mov     r0, #kCallsiteInterpreted
 #endif
-    mov     pc, r1
+    bx      r1
 
 /*
  * On entry:
@@ -1667,7 +1669,7 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
     ldr     r1, .LdvmMterpCommonExceptionThrown @ PIC way of getting &func
     ldr     rIBASE, .LdvmAsmInstructionStart    @ same as above
     mov     rPC, r0                 @ reload the faulting Dalvik address
-    mov     pc, r1                  @ branch to dvmMterpCommonExceptionThrown
+    bx      r1                  @ branch to dvmMterpCommonExceptionThrown
 
     .align  2
 .LdvmAsmInstructionStart:

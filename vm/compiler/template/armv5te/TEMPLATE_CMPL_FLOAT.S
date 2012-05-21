@@ -36,8 +36,8 @@
     mov     r9, r0                      @ Save copies - we may need to redo
     mov     r10, r1
     mov     r11, lr                     @ save return address
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cfcmple       @ cmp <=: C clear if <, Z set if eq
+    ldr     ip, .L__aeabi_cfcmple       @ cmp <=: C clear if <, Z set if eq
+    blx     ip
     bhi     .L${opcode}_gt_or_nan       @ C set and Z clear, disambiguate
     mvncc   r0, #0                      @ (less than) r0<- -1
     moveq   r0, #0                      @ (equal) r0<- 0, trumps less than
@@ -48,8 +48,8 @@
 .L${opcode}_gt_or_nan:
     mov     r0, r10                     @ restore in reverse order
     mov     r1, r9
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cfcmple       @ r0<- Z set if eq, C clear if <
+    ldr     ip, .L__aeabi_cfcmple       @ r0<- Z set if eq, C clear if <
+    blx     ip
     movcc   r0, #1                      @ (greater than) r1<- 1
     bxcc    r11
     $naninst                            @ r1<- 1 or -1 for NaN

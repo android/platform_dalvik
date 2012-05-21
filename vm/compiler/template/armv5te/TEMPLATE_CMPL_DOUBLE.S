@@ -16,8 +16,8 @@
     /* op vAA, vBB, vCC */
     push    {r0-r3}                     @ save operands
     mov     r11, lr                     @ save return address
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cdcmple       @ PIC way of "bl __aeabi_cdcmple"
+    ldr     ip, .L__aeabi_cdcmple       @ PIC way of "bl __aeabi_cdcmple"
+    blx     ip
     bhi     .L${opcode}_gt_or_nan       @ C set and Z clear, disambiguate
     mvncc   r0, #0                      @ (less than) r1<- -1
     moveq   r0, #0                      @ (equal) r1<- 0, trumps less than
@@ -30,8 +30,8 @@
 .L${opcode}_gt_or_nan:
     pop     {r2-r3}                     @ restore operands in reverse order
     pop     {r0-r1}                     @ restore operands in reverse order
-    mov     lr, pc
-    ldr     pc, .L__aeabi_cdcmple       @ r0<- Z set if eq, C clear if <
+    ldr     ip, .L__aeabi_cdcmple       @ r0<- Z set if eq, C clear if <
+    blx     ip
     movcc   r0, #1                      @ (greater than) r1<- 1
     bxcc    r11
     $naninst                            @ r1<- 1 or -1 for NaN

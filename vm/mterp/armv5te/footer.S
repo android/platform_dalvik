@@ -684,8 +684,8 @@ dalvik_mterp:
 
     cmp     lr, #0                      @ any special SubModes active?
     bne     11f                         @ go handle them if so
-    mov     lr, pc                      @ set return addr
-    ldr     pc, [r2, #offMethod_nativeFunc] @ pc<- methodToCall->nativeFunc
+    ldr     ip, [r2, #offMethod_nativeFunc] @ pc<- methodToCall->nativeFunc
+    blx     ip
 7:
 
     @ native return; r10=newSaveArea
@@ -711,8 +711,8 @@ dalvik_mterp:
     ldmfd   sp, {r0-r3}                 @ refresh.  NOTE: no sp autoincrement
 
     @ Call the native method
-    mov     lr, pc                      @ set return addr
-    ldr     pc, [r2, #offMethod_nativeFunc] @ pc<- methodToCall->nativeFunc
+    ldr     ip, [r2, #offMethod_nativeFunc] @ pc<- methodToCall->nativeFunc
+    blx     ip
 
     @ Restore the pre-call arguments
     ldmfd   sp!, {r0-r3}                @ r2<- methodToCall (others unneeded)

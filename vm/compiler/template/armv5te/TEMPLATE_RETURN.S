@@ -9,8 +9,8 @@
     stmfd   sp!, {r0-r2,lr}             @ preserve live registers
     mov     r0, r6
     @ r0=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceExit
+    ldr     ip, .LdvmFastMethodTraceExit
+    blx     ip
     ldmfd   sp!, {r0-r2,lr}             @ restore live registers
 #endif
     SAVEAREA_FROM_FP(r0, rFP)           @ r0<- saveArea (old)

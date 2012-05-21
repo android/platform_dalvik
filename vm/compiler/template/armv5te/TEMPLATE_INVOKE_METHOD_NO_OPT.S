@@ -48,8 +48,8 @@
     stmfd   sp!, {r0-r3}                    @ preserve r0-r3
     mov     r1, r6
     @ r0=methodToCall, r1=rSELF
-    mov     lr, pc
-    ldr     pc, .LdvmFastMethodTraceEnter
+    ldr     ip, .LdvmFastMethodTraceEnter
+    blx     ip
     ldmfd   sp!, {r0-r3}                    @ restore r0-r3
 #endif
 
@@ -57,4 +57,5 @@
 #if defined(WITH_JIT_TUNING)
     mov     r0, #kInlineCacheMiss
 #endif
-    mov     pc, r10                         @ dvmJitToInterpTraceSelectNoChain
+    bx      r10                         @ dvmJitToInterpTraceSelectNoChain
+ 
