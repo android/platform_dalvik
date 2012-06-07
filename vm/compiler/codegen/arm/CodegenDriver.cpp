@@ -670,6 +670,7 @@ static bool genArithOpLong(CompilationUnit *cUnit, MIR *mir,
     OpKind firstOp = kOpBkpt;
     OpKind secondOp = kOpBkpt;
     bool callOut = false;
+    bool checkZero = false;
     void *callTgt;
     int retReg = r0;
 
@@ -700,6 +701,7 @@ static bool genArithOpLong(CompilationUnit *cUnit, MIR *mir,
         case OP_DIV_LONG_2ADDR:
             callOut = true;
             retReg = r0;
+            checkZero = true;
             callTgt = (void*)__aeabi_ldivmod;
             break;
         /* NOTE - result is in r2/r3 instead of r0/r1 */
@@ -708,6 +710,7 @@ static bool genArithOpLong(CompilationUnit *cUnit, MIR *mir,
             callOut = true;
             callTgt = (void*)__aeabi_ldivmod;
             retReg = r2;
+            checkZero = true;
             break;
         case OP_AND_LONG_2ADDR:
         case OP_AND_LONG:
@@ -746,9 +749,14 @@ static bool genArithOpLong(CompilationUnit *cUnit, MIR *mir,
     } else {
         // Adjust return regs in to handle case of rem returning r2/r3
         dvmCompilerFlushAllRegs(cUnit);   /* Send everything to home location */
+        loadValueDirectWideFixed(cUnit, rlSrc2, r2, r3);
         loadValueDirectWideFixed(cUnit, rlSrc1, r0, r1);
         LOAD_FUNC_ADDR(cUnit, r14lr, (int) callTgt);
-        loadValueDirectWideFixed(cUnit, rlSrc2, r2, r3);
+        if (checkZero) {
+            int tReg = r12; // Using fixed registers during call sequence
+            opRegRegReg(cUnit, kOpOr, tReg, r2, r3);
+            genRegImmCheck(cUnit, kArmCondEq, tReg, 0, mir->offset, NULL);
+        }
         opReg(cUnit, kOpBlx, r14lr);
         dvmCompilerClobberCallRegs(cUnit);
         if (retReg == r0)
