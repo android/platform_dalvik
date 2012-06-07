@@ -25,6 +25,7 @@ public class Main {
         b2302318Test();
         b2487514Test();
         b5884080Test();
+        zeroTest();
     }
 
     static void b2296099Test() throws Exception {
@@ -125,6 +126,12 @@ public class Main {
             System.out.println("b5884080 fails: vA is " + vA +
                                " (expecting 100001)");
         }
+    }
+
+    static void zeroTest() throws Exception {
+        ZeroTests zt = new ZeroTests();
+        zt.longDivTest();
+        zt.longModTest();
     }
 }
 
