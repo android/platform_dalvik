@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAGe3///pM\u003d",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1003185
+      },
+      "writtenOn": "2012-06-12T00:11:15Z",
+      "side": 1,
+      "message": "off topic: eww. That\u0027s too bad. Seems like lots of other static fields like outputResources should be reset.\n\nEven better, make this stuff non-static so you don\u0027t have thread safety problems.",
+      "revId": "5e90165d5918f18aec0964bc475f4064e9143599",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
