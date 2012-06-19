@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAGw3////4\u003d",
+        "filename": "vm/compiler/template/armv5te/TEMPLATE_INVOKE_METHOD_NO_OPT.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1010307
+      },
+      "writtenOn": "2012-06-19T18:01:47Z",
+      "side": 1,
+      "message": "Nit - stray line.",
+      "revId": "0be4df56e9ea13552d553163608b2ee3cbde56f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAGwn////g\u003d",
         "filename": "vm/compiler/template/out/CompilerTemplateAsm-armv5te-vfp.S",
         "patchSetId": 1
