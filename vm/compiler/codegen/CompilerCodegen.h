@@ -26,7 +26,11 @@
 bool dvmCompilerDoWork(CompilerWorkOrder *work);
 
 /* Lower middle-level IR to low-level IR */
+#ifndef ARCH_IA32
 void dvmCompilerMIR2LIR(CompilationUnit *cUnit);
+#else /* ARCH_IA32 */
+void dvmCompilerMIR2LIR(CompilationUnit *cUnit, JitTranslationInfo* info);
+#endif
 
 /* Lower middle-level IR to low-level IR for the whole method */
 void dvmCompilerMethodMIR2LIR(CompilationUnit *cUnit);

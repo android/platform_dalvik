@@ -78,8 +78,8 @@ while true; do
 done
 
 if [ "x$INTERP" = "x" ]; then
-    INTERP="fast" # TODO: change this to "jit" when the x86 jit is merged.
-    msg "Using fast interpreter by default"
+    INTERP="jit"
+    msg "Using jit by default"
 fi
 
 if [ "$OPTIMIZE" = "y" ]; then

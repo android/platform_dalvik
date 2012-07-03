@@ -42,7 +42,7 @@
     movzwl    offMethod_methodIndex(%eax),%eax  # eax<- baseMethod->methodIndex
     testl     %ecx,%ecx                 # null this?
     je        common_errNullObject      # go if so
-    movl      offObject_clazz(%ecx),%ecx  # ecx<- thisPtr->clazz
-    movl      offClassObject_vtable(%ecx),%ecx # ecx<- thisPtr->clazz->vtable
-    movl      (%ecx,%eax,4),%eax        # eax<- vtable[methodIndex]
+    movl      offObject_clazz(%ecx),%edx  # edx<- thisPtr->clazz
+    movl      offClassObject_vtable(%edx),%edx # edx<- thisPtr->clazz->vtable
+    movl      (%edx,%eax,4),%eax        # eax<- vtable[methodIndex]
     jmp       common_invokeMethod${routine}

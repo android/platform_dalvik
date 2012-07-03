@@ -46,11 +46,19 @@ dvmMterpStdRun:
     movl    offThread_curFrame(%ecx),rFP
     movl    offThread_curHandlerTable(%ecx),rIBASE
 
-/* Remember %esp for future "longjmp" */
+    /* Remember %esp for future "longjmp" */
     movl    %esp,offThread_bailPtr(%ecx)
 
-   /* Normal case: start executing the instruction at rPC */
+    /* Fetch next instruction before potential jump */
     FETCH_INST
+#if defined(WITH_JIT)
+    GET_JIT_PROF_TABLE %ecx %eax
+    movl        $$0, offThread_inJitCodeCache(%ecx)
+    cmpl        $$0, %eax
+    jne         common_updateProfile # set up %ebx & %edx & rPC
+#endif
+
+   /* Normal case: start executing the instruction at rPC */
     GOTO_NEXT
 
     .global dvmMterpStdBail
@@ -72,7 +80,7 @@ dvmMterpStdRun:
 dvmMterpStdBail:
     movl    4(%esp),%ecx                 # grab self
     movl    8(%esp),%eax                 # changeInterp to return reg
-    movl    offThread_bailPtr(%ecx),%esp   # Restore "setjmp" esp
+    movl    offThread_bailPtr(%ecx),%esp # Restore "setjmp" esp
     movl    %esp,%ebp
     addl    $$(FRAME_SIZE-4), %ebp       # Restore %ebp at point of setjmp
     movl    EDI_SPILL(%ebp),%edi
@@ -82,6 +90,18 @@ dvmMterpStdBail:
     pop     %ebp                         # restore caller's ebp
     ret                                  # return to dvmMterpStdRun's caller
 
+
+#ifdef WITH_JIT
+    .global     dvmNcgInvokeInterpreter
+    .type       dvmNcgInvokeInterpreter, %function
+/* input: start of method in %eax */
+dvmNcgInvokeInterpreter:
+    movl        %eax, rPC
+    movl   rSELF, %ecx
+    movl   offThread_curHandlerTable(%ecx),rIBASE
+    FETCH_INST_R %ecx                    # %edx<- opcode
+    GOTO_NEXT_R %ecx                    # start executing the instruction at rPC
+#endif
 
 /*
  * Strings

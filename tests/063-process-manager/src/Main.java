@@ -14,7 +14,7 @@ public class Main {
 
     static private void child() throws Exception {
         System.out.println("spawning child");
-        ProcessBuilder pb = new ProcessBuilder("/system/bin/sleep", "5");
+        ProcessBuilder pb = new ProcessBuilder("sleep", "5");
         Process proc = pb.start();
         Thread.sleep(1000);
         checkManager();

@@ -92,6 +92,10 @@ ifeq ($(WITH_JIT),true)
     LOCAL_MODULE := libdvm_interp
     include $(BUILD_SHARED_LIBRARY)
 
+  ifeq ($(dvm_arch),x86)    # For x86, we enable JIT on host too
+    # restore WITH_JIT = true for host dalvik build
+    WITH_JIT := true
+  endif # dvm_arch==x86
 endif
 
 #
@@ -108,7 +112,11 @@ ifeq ($(WITH_HOST_DALVIK),true)
     # Note: HOST_ARCH_VARIANT isn't defined.
     dvm_arch_variant := $(HOST_ARCH)
 
-    WITH_JIT := false
+    # We always want the x86 JIT.
+    ifeq ($(dvm_arch),x86)
+        WITH_JIT := true
+    endif
+
     include $(LOCAL_PATH)/Dvm.mk
 
     LOCAL_SHARED_LIBRARIES += libcrypto libssl libicuuc libicui18n

@@ -643,6 +643,8 @@ static JitEntry *lookupAndAdd(const u2* dPC, bool callerLocked,
              */
             android_atomic_release_store((int32_t)dPC,
                  (volatile int32_t *)(void *)&gDvmJit.pJitEntryTable[idx].dPC);
+            /* for simulator mode, we need to initialized codeAddress to null */
+            gDvmJit.pJitEntryTable[idx].codeAddress = NULL;
             gDvmJit.pJitEntryTable[idx].dPC = dPC;
             gDvmJit.jitTableEntriesUsed++;
         } else {
@@ -796,7 +798,15 @@ void dvmCheckJit(const u2* pc, Thread* self)
             if (lastPC == NULL) break;
             /* Grow the trace around the last PC if jitState is kJitTSelect */
             dexDecodeInstruction(lastPC, &decInsn);
-
+#if TRACE_OPCODE_FILTER
+            /* Only add JIT support opcode to trace. End the trace if
+             * this opcode is not supported.
+             */
+            if (!dvmIsOpcodeSupportedByJit(decInsn.opcode)) {
+                self->jitState = kJitTSelectEnd;
+                break;
+            }
+#endif
             /*
              * Treat {PACKED,SPARSE}_SWITCH as trace-ending instructions due
              * to the amount of space it takes to generate the chaining

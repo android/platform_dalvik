@@ -31,6 +31,10 @@
 #include "mterp/Mterp.h"
 #include "Hash.h"
 
+#if defined(WITH_JIT)
+#include "compiler/codegen/Optimizer.h"
+#endif
+
 #define kMinHeapStartSize   (1*1024*1024)
 #define kMinHeapSize        (2*1024*1024)
 #define kMaxHeapSize        (1*1024*1024*1024)
@@ -133,6 +137,9 @@ static void usage(const char* progName)
     dvmFprintf(stderr, "  -Xjitblocking\n");
     dvmFprintf(stderr, "  -Xjitmethod:signature[,signature]* "
                        "(eg Ljava/lang/String\\;replace)\n");
+    dvmFprintf(stderr, "  -Xjitclass:classname[,classname]*\n");
+    dvmFprintf(stderr, "  -Xjitoffset:offset[,offset]\n");
+    dvmFprintf(stderr, "  -Xjitconfig:filename\n");
     dvmFprintf(stderr, "  -Xjitcheckcg\n");
     dvmFprintf(stderr, "  -Xjitverbose\n");
     dvmFprintf(stderr, "  -Xjitprofile\n");
@@ -229,16 +236,16 @@ static void showVersion()
  * Returns 0 (a useless size) if "s" is malformed or specifies a low or
  * non-evenly-divisible value.
  */
-static size_t parseMemOption(const char *s, size_t div)
+static size_t parseMemOption(const char* s, size_t div)
 {
     /* strtoul accepts a leading [+-], which we don't want,
      * so make sure our string starts with a decimal digit.
      */
     if (isdigit(*s)) {
-        const char *s2;
+        const char* s2;
         size_t val;
 
-        val = strtoul(s, (char **)&s2, 10);
+        val = strtoul(s, (char* *)&s2, 10);
         if (s2 != s) {
             /* s2 should be pointing just after the number.
              * If this is the end of the string, the user
@@ -549,11 +556,11 @@ static void freeAssertionCtrl()
 
 #if defined(WITH_JIT)
 /* Parse -Xjitop to selectively turn on/off certain opcodes for JIT */
-static void processXjitop(const char *opt)
+static void processXjitop(const char* opt)
 {
     if (opt[7] == ':') {
-        const char *startPtr = &opt[8];
-        char *endPtr = NULL;
+        const char* startPtr = &opt[8];
+        char* endPtr = NULL;
 
         do {
             long startValue, endValue;
@@ -602,15 +609,50 @@ static void processXjitop(const char *opt)
     }
 }
 
-/* Parse -Xjitmethod to selectively turn on/off certain methods for JIT */
-static void processXjitmethod(const char *opt)
-{
-    char *buf = strdup(&opt[12]);
-    char *start, *end;
-
-    gDvmJit.methodTable = dvmHashTableCreate(8, NULL);
-
+/* Parse -Xjitoffset to selectively turn on/off traces with certain offsets for JIT */
+static void processXjitoffset(const char* opt) {
+    gDvmJit.num_entries_pcTable = 0;
+    char* buf = strdup(opt);
+    char* start, *end;
     start = buf;
+    int idx = 0;
+    do {
+        end = strchr(start, ',');
+        if (end) {
+            *end = 0;
+        }
+
+        dvmFprintf(stderr, "processXjitoffset start = %s\n", start);
+        char* tmp = strdup(start);
+        gDvmJit.pcTable[idx++] = atoi(tmp);
+        free(tmp);
+        if (idx >= COMPILER_PC_OFFSET_SIZE) {
+            dvmFprintf(stderr, "processXjitoffset: ignore entries beyond %d\n", COMPILER_PC_OFFSET_SIZE);
+            break;
+        }
+        if (end) {
+            start = end + 1;
+        } else {
+            break;
+        }
+    } while (1);
+    gDvmJit.num_entries_pcTable = idx;
+    free(buf);
+}
+
+/* Parse -Xjitmethod to selectively turn on/off certain methods for JIT */
+static void processXjitmethod(const char* opt, bool isMethod) {
+    char* buf = strdup(opt);
+
+    if (isMethod && gDvmJit.methodTable == NULL) {
+        gDvmJit.methodTable = dvmHashTableCreate(8, NULL);
+    }
+    if (!isMethod && gDvmJit.classTable == NULL) {
+        gDvmJit.classTable = dvmHashTableCreate(8, NULL);
+    }
+
+    char* start = buf;
+    char* end;
     /*
      * Break comma-separated method signatures and enter them into the hash
      * table individually.
@@ -624,10 +666,9 @@ static void processXjitmethod(const char *opt)
         }
 
         hashValue = dvmComputeUtf8Hash(start);
+        dvmHashTableLookup(isMethod ? gDvmJit.methodTable : gDvmJit.classTable,
+                           hashValue, strdup(start), (HashCompareFunc) strcmp, true);
 
-        dvmHashTableLookup(gDvmJit.methodTable, hashValue,
-                           strdup(start),
-                           (HashCompareFunc) strcmp, true);
         if (end) {
             start = end + 1;
         } else {
@@ -635,6 +676,88 @@ static void processXjitmethod(const char *opt)
         }
     } while (1);
     free(buf);
+}
+
+/* The format of jit_config.list:
+   EXCLUDE or INCLUDE
+   CLASS
+   prefix1 ...
+   METHOD
+   prefix 1 ...
+   OFFSET
+   index ... //each pair is a range, if pcOff falls into a range, JIT
+*/
+static int processXjitconfig(const char* opt) {
+   FILE* fp = fopen(opt, "r");
+   if (fp == NULL) {
+       return -1;
+   }
+
+   char fLine[500];
+   bool startClass = false, startMethod = false, startOffset = false;
+   gDvmJit.num_entries_pcTable = 0;
+   int idx = 0;
+
+   while (fgets(fLine, 500, fp) != NULL) {
+       char* curLine = strtok(fLine, " \t\r\n");
+       /* handles keyword CLASS, METHOD, INCLUDE, EXCLUDE */
+       if (!strncmp(curLine, "CLASS", 5)) {
+           startClass = true;
+           startMethod = false;
+           startOffset = false;
+           continue;
+       }
+       if (!strncmp(curLine, "METHOD", 6)) {
+           startMethod = true;
+           startClass = false;
+           startOffset = false;
+           continue;
+       }
+       if (!strncmp(curLine, "OFFSET", 6)) {
+           startOffset = true;
+           startMethod = false;
+           startClass = false;
+           continue;
+       }
+       if (!strncmp(curLine, "EXCLUDE", 7)) {
+          gDvmJit.includeSelectedMethod = false;
+          continue;
+       }
+       if (!strncmp(curLine, "INCLUDE", 7)) {
+          gDvmJit.includeSelectedMethod = true;
+          continue;
+       }
+       if (!startMethod && !startClass && !startOffset) {
+         continue;
+       }
+
+        int hashValue = dvmComputeUtf8Hash(curLine);
+        if (startMethod) {
+            if (gDvmJit.methodTable == NULL) {
+                gDvmJit.methodTable = dvmHashTableCreate(8, NULL);
+            }
+            dvmHashTableLookup(gDvmJit.methodTable, hashValue,
+                               strdup(curLine),
+                               (HashCompareFunc) strcmp, true);
+        } else if (startClass) {
+            if (gDvmJit.classTable == NULL) {
+                gDvmJit.classTable = dvmHashTableCreate(8, NULL);
+            }
+            dvmHashTableLookup(gDvmJit.classTable, hashValue,
+                               strdup(curLine),
+                               (HashCompareFunc) strcmp, true);
+        } else if (startOffset) {
+           int tmpInt = atoi(curLine);
+           gDvmJit.pcTable[idx++] = tmpInt;
+           if (idx >= COMPILER_PC_OFFSET_SIZE) {
+               printf("processXjitoffset: ignore entries beyond %d\n", COMPILER_PC_OFFSET_SIZE);
+               break;
+           }
+        }
+   }
+   gDvmJit.num_entries_pcTable = idx;
+   fclose(fp);
+   return 0;
 }
 #endif
 
@@ -954,8 +1077,14 @@ static int processOptions(int argc, const char* const argv[],
 #ifdef WITH_JIT
         } else if (strncmp(argv[i], "-Xjitop", 7) == 0) {
             processXjitop(argv[i]);
-        } else if (strncmp(argv[i], "-Xjitmethod", 11) == 0) {
-            processXjitmethod(argv[i]);
+        } else if (strncmp(argv[i], "-Xjitmethod:", 12) == 0) {
+            processXjitmethod(argv[i] + strlen("-Xjitmethod:"), true);
+        } else if (strncmp(argv[i], "-Xjitclass:", 11) == 0) {
+            processXjitmethod(argv[i] + strlen("-Xjitclass:"), false);
+        } else if (strncmp(argv[i], "-Xjitoffset:", 12) == 0) {
+            processXjitoffset(argv[i] + strlen("-Xjitoffset:"));
+        } else if (strncmp(argv[i], "-Xjitconfig:", 12) == 0) {
+            processXjitconfig(argv[i] + strlen("-Xjitconfig:"));
         } else if (strncmp(argv[i], "-Xjitblocking", 13) == 0) {
           gDvmJit.blockingMode = true;
         } else if (strncmp(argv[i], "-Xjitthreshold:", 15) == 0) {
@@ -968,6 +1097,8 @@ static int processOptions(int argc, const char* const argv[],
           gDvmJit.checkCallGraph = true;
           /* Need to enable blocking mode due to stack crawling */
           gDvmJit.blockingMode = true;
+        } else if (strncmp(argv[i], "-Xjitdumpbin", 12) == 0) {
+          gDvmJit.printBinary = true;
         } else if (strncmp(argv[i], "-Xjitverbose", 12) == 0) {
           gDvmJit.printMe = true;
         } else if (strncmp(argv[i], "-Xjitprofile", 12) == 0) {
@@ -1099,6 +1230,15 @@ static void setCommandLineDefaults()
      */
 #if defined(WITH_JIT)
     gDvm.executionMode = kExecutionModeJit;
+    gDvmJit.num_entries_pcTable = 0;
+    gDvmJit.includeSelectedMethod = false;
+    gDvmJit.includeSelectedOffset = false;
+    gDvmJit.methodTable = NULL;
+    gDvmJit.classTable = NULL;
+
+    gDvm.constInit = false;
+    gDvm.commonInit = false;
+    gDvmJit.disableOpt = 1<<kMethodInlining;
 #else
     gDvm.executionMode = kExecutionModeInterpFast;
 #endif

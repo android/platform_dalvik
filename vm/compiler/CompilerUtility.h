@@ -73,7 +73,7 @@ void dvmDumpResourceMask(struct LIR *lir, u8 mask, const char *prefix);
 void dvmDumpBlockBitVector(const GrowableList *blocks, char *msg,
                            const BitVector *bv, int length);
 void dvmGetBlockName(struct BasicBlock *bb, char *name);
-int dvmCompilerCacheFlush(long start, long end, long flags);
+void dvmCompilerCacheFlush(long start, long end, long flags);
 void dvmCompilerCacheClear(char *start, size_t size);
 
 

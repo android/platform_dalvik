@@ -1347,8 +1347,9 @@ void dvmJitUnchainAll()
             }
         }
 
-        if (lowAddress && highAddress)
-                dvmCompilerCacheFlush((long)lowAddress, (long)highAddress, 0);
+        if (lowAddress && highAddress) {
+            dvmCompilerCacheFlush((long)lowAddress, (long)highAddress, 0);
+        }
 
         UPDATE_CODE_CACHE_PATCHES();
 

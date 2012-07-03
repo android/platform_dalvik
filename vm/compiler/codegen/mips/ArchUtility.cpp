@@ -343,9 +343,9 @@ void dvmCompilerCodegenDump(CompilationUnit *cUnit)
 }
 
 /* Target-specific cache flushing */
-int dvmCompilerCacheFlush(long start, long end, long flags)
+void dvmCompilerCacheFlush(long start, long end, long flags)
 {
-    return cacheflush(start, end, flags);
+    cacheflush(start, end, flags);
 }
 
 /* Target-specific cache clearing */

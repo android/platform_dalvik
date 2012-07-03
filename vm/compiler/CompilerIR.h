@@ -18,6 +18,9 @@
 #define DALVIK_VM_COMPILER_IR_H_
 
 #include "codegen/Optimizer.h"
+#ifdef ARCH_IA32
+#include "CompilerUtility.h"
+#endif
 
 typedef enum RegisterClass {
     kCoreReg,
@@ -199,6 +202,9 @@ typedef struct CompilationUnit {
     int numBlocks;
     GrowableList blockList;
     const Method *method;
+#ifdef ARCH_IA32
+    int exceptionBlockId;               // the block corresponding to exception handling
+#endif
     const JitTraceDescription *traceDesc;
     LIR *firstLIRInsn;
     LIR *lastLIRInsn;
