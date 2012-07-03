@@ -51,8 +51,8 @@ will also have an associated spill location (mostly useful for those assigned
 to callee save registers).
 
   nick     reg   purpose
-  rPC      edi   interpreted program counter, used for fetching instructions
-  rFP      esi   interpreted frame pointer, used for accessing locals and args
+  rPC      esi   interpreted program counter, used for fetching instructions
+  rFP      edi   interpreted frame pointer, used for accessing locals and args
   rINSTw   bx    first 16-bit code of current instruction
   rINSTbl  bl    opcode portion of instruction word
   rINSTbh  bh    high byte of inst word, usually contains src/tgt reg names
@@ -99,7 +99,14 @@ Notes:
 #define OUT_ARG2       (  8)
 #define OUT_ARG1       (  4)
 #define OUT_ARG0       (  0)  /* <- dvmMterpStdRun esp */
+#if defined(WITH_JIT)
+/* for spill region: increase size by 48 (to keep 16-byte alignment) */
+/* 76 + 48 = 124 */
+#define JIT_SPILL      (-56)
+#define FRAME_SIZE     124
+#else
 #define FRAME_SIZE     76
+#endif
 
 #define SPILL(reg) movl reg##,reg##_SPILL(%ebp)
 #define UNSPILL(reg) movl reg##_SPILL(%ebp),reg
@@ -147,6 +154,10 @@ Notes:
  */
 .macro EXPORT_PC
     movl     rPC, (-sizeofStackSaveArea + offStackSaveArea_currentPc)(rFP)
+.endm
+
+.macro GET_PC
+    movl     (-sizeofStackSaveArea + offStackSaveArea_currentPc)(rFP), rPC
 .endm
 
 /*
@@ -248,6 +259,13 @@ Notes:
 #define sReg0 LOCAL0_OFFSET(%ebp)
 #define sReg1 LOCAL1_OFFSET(%ebp)
 #define sReg2 LOCAL2_OFFSET(%ebp)
+
+   /*
+    * x86 JIT Helpers
+    */
+
+    .macro dumpSwitch _regData _regScratch1 _regScratch2
+    .endm
 
    /*
     * Hard coded helper values.

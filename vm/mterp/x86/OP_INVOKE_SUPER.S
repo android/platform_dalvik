@@ -19,8 +19,9 @@
     .if       (!$isrange)
     andl      $$0xf,rINST               # rINST<- D (or stays CCCC)
     .endif
-    GET_VREG_R  rINST rINST             # rINST<- "this" ptr
-    testl     rINST,rINST               # null "this"?
+    GET_VREG_R  %edx rINST             # %edx<- "this" ptr
+    testl     %edx,%edx                # null "this"?
+    SPILL_TMP1(%edx)
     je        common_errNullObject      # yes, throw
     movl      offMethod_clazz(%eax),%eax # eax<- method->clazz
     testl     %ecx,%ecx                 # already resolved?
@@ -32,11 +33,13 @@
      */
 .L${opcode}_continue:
     movl    offClassObject_super(%eax),%eax   # eax<- method->clazz->super
-    movzwl  offMethod_methodIndex(%ecx),%ecx  # ecx<- baseMthod->methodIndex
-    cmpl    offClassObject_vtableCount(%eax),%ecx # compare(methodIndex,vtableCount)
+    movzwl  offMethod_methodIndex(%ecx),%edx  # edx<- baseMthod->methodIndex
+    cmpl    offClassObject_vtableCount(%eax),%edx # compare(methodIndex,vtableCount)
     jae     .L${opcode}_nsm           # method not present in superclass
     movl    offClassObject_vtable(%eax),%eax   # eax<- ...clazz->super->vtable
-    movl    (%eax,%ecx,4),%eax        # eax<- vtable[methodIndex]
+    movl    (%eax,%edx,4),%eax        # eax<- vtable[methodIndex]
+    UNSPILL_TMP1(%edx)
+    movl    %edx, %ecx
     jmp     common_invokeMethod${routine}
 
 
@@ -45,7 +48,7 @@
      * eax = method->clazz
     */
 .L${opcode}_resolve:
-    SPILL_TMP1(%eax)                    # method->clazz
+    SPILL_TMP2(%eax)                    # method->clazz
     movl    %eax,OUT_ARG0(%esp)         # arg0<- method->clazz
     movzwl  2(rPC),%ecx                 # ecx<- BBBB
     movl    $$METHOD_VIRTUAL,OUT_ARG2(%esp)  # arg2<- resolver method type
@@ -53,7 +56,7 @@
     call    dvmResolveMethod            # eax<- call(clazz, ref, flags)
     testl   %eax,%eax                   # got null?
     movl    %eax,%ecx                   # ecx<- resolved base method
-    UNSPILL_TMP1(%eax)                  # restore method->clazz
+    UNSPILL_TMP2(%eax)                  # restore method->clazz
     jne     .L${opcode}_continue        # good to go - continue
     jmp     common_exceptionThrown      # handle exception
 

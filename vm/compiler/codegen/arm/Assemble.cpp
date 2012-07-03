@@ -1955,14 +1955,13 @@ void dvmJitUnchainAll()
 {
     u4* lowAddress = NULL;
     u4* highAddress = NULL;
-    unsigned int i;
     if (gDvmJit.pJitEntryTable != NULL) {
         COMPILER_TRACE_CHAINING(LOGD("Jit Runtime: unchaining all"));
         dvmLockMutex(&gDvmJit.tableLock);
 
         UNPROTECT_CODE_CACHE(gDvmJit.codeCache, gDvmJit.codeCacheByteUsed);
 
-        for (i = 0; i < gDvmJit.jitTableSize; i++) {
+        for (size_t i = 0; i < gDvmJit.jitTableSize; i++) {
             if (gDvmJit.pJitEntryTable[i].dPC &&
                 !gDvmJit.pJitEntryTable[i].u.info.isMethodEntry &&
                 gDvmJit.pJitEntryTable[i].codeAddress &&

@@ -1314,10 +1314,12 @@ bool dvmCompileMethod(const Method *method, JitTranslationInfo *info)
     /* Perform SSA transformation for the whole method */
     dvmCompilerMethodSSATransformation(&cUnit);
 
+#ifndef ARCH_IA32
     dvmCompilerInitializeRegAlloc(&cUnit);  // Needs to happen after SSA naming
 
     /* Allocate Registers using simple local allocation scheme */
     dvmCompilerLocalRegAlloc(&cUnit);
+#endif
 
     /* Convert MIR to LIR, etc. */
     dvmCompilerMethodMIR2LIR(&cUnit);
@@ -1536,6 +1538,10 @@ static bool compileLoop(CompilationUnit *cUnit, unsigned int startOffset,
      */
     dvmCompilerInsertBackwardChaining(cUnit);
 
+#if defined(ARCH_IA32)
+    /* Convert MIR to LIR, etc. */
+    dvmCompilerMIR2LIR(cUnit, info);
+#else
     dvmCompilerInitializeRegAlloc(cUnit);
 
     /* Allocate Registers using simple local allocation scheme */
@@ -1543,6 +1549,7 @@ static bool compileLoop(CompilationUnit *cUnit, unsigned int startOffset,
 
     /* Convert MIR to LIR, etc. */
     dvmCompilerMIR2LIR(cUnit);
+#endif
 
     /* Loop contains never executed blocks / heavy instructions */
     if (cUnit->quitLoopMode) {
@@ -1602,6 +1609,23 @@ bail:
     dvmCompilerArenaReset();
     return dvmCompileTrace(desc, numMaxInsts, info, bailPtr,
                            optHints | JIT_OPT_NO_LOOP);
+}
+
+static bool searchClassTablePrefix(const Method* method) {
+    if (gDvmJit.classTable == NULL) {
+        return false;
+    }
+    HashIter iter;
+    HashTable* pTab = gDvmJit.classTable;
+    for (dvmHashIterBegin(pTab, &iter); !dvmHashIterDone(&iter);
+        dvmHashIterNext(&iter))
+    {
+        const char* str = (const char*) dvmHashIterData(&iter);
+        if (strncmp(method->clazz->descriptor, str, strlen(str)) == 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*
@@ -1674,6 +1698,12 @@ bool dvmCompileTrace(JitTraceDescription *desc, int numMaxInsts,
     dvmInitGrowableList(blockList, 8);
 
     /* Identify traces that we don't want to compile */
+    if (gDvmJit.classTable) {
+        bool classFound = searchClassTablePrefix(desc->method);
+        if (gDvmJit.classTable && gDvmJit.includeSelectedMethod != classFound) {
+            return false;
+        }
+    }
     if (gDvmJit.methodTable) {
         int len = strlen(desc->method->clazz->descriptor) +
                   strlen(desc->method->name) + 1;
@@ -1734,8 +1764,12 @@ bool dvmCompileTrace(JitTraceDescription *desc, int numMaxInsts,
          * 2) If includeSelectedMethod == true, the method does not match the
          *    full and partial signature stored in the hash table.
          */
-        if (gDvmJit.includeSelectedMethod != methodFound) {
+        if (gDvmJit.methodTable && gDvmJit.includeSelectedMethod != methodFound) {
+#ifdef ARCH_IA32
+            return false;
+#else
             cUnit.allSingleStep = true;
+#endif
         } else {
             /* Compile the trace as normal */
 
@@ -1744,6 +1778,22 @@ bool dvmCompileTrace(JitTraceDescription *desc, int numMaxInsts,
                 cUnit.printMe = true;
             }
         }
+    }
+
+    // Each pair is a range, check whether curOffset falls into a range.
+    bool includeOffset = (gDvmJit.num_entries_pcTable < 2);
+    for (int pcOff = 0; pcOff < gDvmJit.num_entries_pcTable; ) {
+        if (pcOff+1 >= gDvmJit.num_entries_pcTable) {
+          break;
+        }
+        if (curOffset >= gDvmJit.pcTable[pcOff] && curOffset <= gDvmJit.pcTable[pcOff+1]) {
+            includeOffset = true;
+            break;
+        }
+        pcOff += 2;
+    }
+    if (!includeOffset) {
+        return false;
     }
 
     /* Allocate the entry block */
@@ -2056,17 +2106,24 @@ bool dvmCompileTrace(JitTraceDescription *desc, int numMaxInsts,
 
     dvmCompilerNonLoopAnalysis(&cUnit);
 
+#ifndef ARCH_IA32
     dvmCompilerInitializeRegAlloc(&cUnit);  // Needs to happen after SSA naming
+#endif
 
     if (cUnit.printMe) {
         dvmCompilerDumpCompilationUnit(&cUnit);
     }
 
+#ifndef ARCH_IA32
     /* Allocate Registers using simple local allocation scheme */
     dvmCompilerLocalRegAlloc(&cUnit);
 
     /* Convert MIR to LIR, etc. */
     dvmCompilerMIR2LIR(&cUnit);
+#else /* ARCH_IA32 */
+    /* Convert MIR to LIR, etc. */
+    dvmCompilerMIR2LIR(&cUnit, info);
+#endif
 
     /* Convert LIR into machine code. Loop for recoverable retries */
     do {

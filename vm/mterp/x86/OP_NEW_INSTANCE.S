@@ -14,8 +14,12 @@
     movzwl    2(rPC),%eax               # eax<- BBBB
     movl      offThread_methodClassDex(%ecx),%ecx  # ecx<- pDvmDex
     SPILL(rIBASE)
+    SPILL_TMP2(%ebx)
     movl      offDvmDex_pResClasses(%ecx),%ecx # ecx<- pDvmDex->pResClasses
     EXPORT_PC
+#if defined(WITH_JIT)
+    lea       (%ecx,%eax,4),%ebx        # ebx <- &resolved class
+#endif
     movl      (%ecx,%eax,4),%ecx        # ecx<- resolved class
     testl     %ecx,%ecx                 # resolved?
     je        .L${opcode}_resolve       # no, go do it
@@ -26,13 +30,47 @@
     movl      $$ALLOC_DONT_TRACK,OUT_ARG1(%esp)
     movl     %ecx,OUT_ARG0(%esp)
     call     dvmAllocObject             # eax<- new object
-    FETCH_INST_OPCODE 2 %ecx
-    UNSPILL(rIBASE)
     testl    %eax,%eax                  # success?
     je       common_exceptionThrown     # no, bail out
+#if defined(WITH_JIT)
+        /*
+     * The JIT needs the class to be fully resolved before it can
+     * include this instruction in a trace.
+     */
+    movl    rSELF, %ecx
+    movl    offThread_subMode(%ecx), %ecx
+    andl    $$kSubModeJitTraceBuild, %ecx # under construction?
+    jne     .L${opcode}_jitCheck
+#endif
+.L${opcode}_end:
+    UNSPILL_TMP2(%ebx)
     SET_VREG %eax rINST
+    UNSPILL(rIBASE)
+    FETCH_INST_OPCODE 2 %ecx
     ADVANCE_PC 2
     GOTO_NEXT_R %ecx
+
+#if defined(WITH_JIT)
+    /*
+     * Check to see if we need to stop the trace building early.
+     * eax: new object
+     */
+.L${opcode}_jitCheck:
+    cmp     $$0, (%ebx)                   # okay?
+    jne     .L${opcode}_end        # yes, finish
+    SPILL_TMP1(%eax)                     # preserve new object
+    movl    rSELF, %ecx
+    movl    %ecx, OUT_ARG0(%esp)
+    movl    rPC, OUT_ARG1(%esp)
+    call    dvmJitEndTraceSelect         # (self, pc)
+    UNSPILL_TMP1(%eax)
+    UNSPILL_TMP2(%ebx)
+    SET_VREG %eax rINST                  # vAA <- new object
+    UNSPILL(rIBASE)
+    FETCH_INST_OPCODE 2 %ecx
+    ADVANCE_PC 2
+    GOTO_NEXT_R %ecx
+#endif
 
     /*
      * Class initialization required.

@@ -27,6 +27,7 @@
 
 #define COMPILER_WORK_QUEUE_SIZE        100
 #define COMPILER_IC_PATCH_QUEUE_SIZE    64
+#define COMPILER_PC_OFFSET_SIZE         100
 
 /* Architectural-independent parameters for predicted chains */
 #define PREDICTED_CHAIN_CLAZZ_INIT       0
@@ -110,6 +111,8 @@ typedef struct PredictedChainingCell {
     u4 branch;                  /* Branch to chained destination */
 #ifdef __mips__
     u4 delay_slot;              /* nop goes here */
+#elif defined(ARCH_IA32)
+    u4 branch2;                 /* IA32 branch instr may be > 32 bits */
 #endif
     const ClassObject *clazz;   /* key for prediction */
     const Method *method;       /* to lookup native PC from dalvik PC */
@@ -245,5 +248,6 @@ extern "C" void *dvmCompilerGetInterpretTemplate();
 JitInstructionSetType dvmCompilerGetInterpretTemplateSet();
 u8 dvmGetRegResourceMask(int reg);
 void dvmDumpCFG(struct CompilationUnit *cUnit, const char *dirPrefix);
+bool dvmIsOpcodeSupportedByJit(Opcode opcode);
 
 #endif  // DALVIK_VM_COMPILER_H_

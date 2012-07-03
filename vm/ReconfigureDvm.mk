@@ -19,11 +19,6 @@ dvm_os := $(TARGET_OS)
 dvm_arch := $(TARGET_ARCH)
 dvm_arch_variant := $(TARGET_ARCH_VARIANT)
 
-# for now, disable x86-atom variant
-ifeq ($(dvm_arch_variant),x86-atom)
-dvm_arch_variant := x86
-endif
-
 include $(LOCAL_PATH)/Dvm.mk
 
 LOCAL_SHARED_LIBRARIES += liblog libcutils libnativehelper libz libdl libcorkscrew

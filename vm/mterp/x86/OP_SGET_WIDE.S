@@ -11,6 +11,12 @@
     movzwl    2(rPC),%eax                        # eax<- field ref BBBB
     movl      offThread_methodClassDex(%ecx),%ecx  # ecx<- DvmDex
     movl      offDvmDex_pResFields(%ecx),%ecx    # ecx<- dvmDex->pResFields
+#if defined(WITH_JIT)
+    movl      %ecx, TMP_SPILL1(%ebp)
+    lea       (%ecx,%eax,4),%ecx
+    movl      %ecx, TMP_SPILL2(%ebp)
+    movl      TMP_SPILL1(%ebp), %ecx
+#endif
     movl      (%ecx,%eax,4),%eax                 # eax<- resolved StaticField ptr
     testl     %eax,%eax                          # resolved entry null?
     je        .L${opcode}_resolve                # if not, make it so
@@ -38,5 +44,11 @@
     call     dvmResolveStaticField              # eax<- resolved StaticField ptr
     UNSPILL(rIBASE)
     testl    %eax,%eax
-    jne      .L${opcode}_finish                 # success, continue
-    jmp      common_exceptionThrown             # no, handle exception
+    je      common_exceptionThrown             # no, handle exception
+#if defined(WITH_JIT)
+    movl      TMP_SPILL2(%ebp), %ecx
+    SPILL(rIBASE)
+    call     common_verifyField
+    UNSPILL(rIBASE)
+#endif
+    jmp      .L${opcode}_finish                 # success, continue
