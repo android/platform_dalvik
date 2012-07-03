@@ -21,6 +21,10 @@
 #include "Dalvik.h"
 #include "interp/Jit.h"
 #include "CompilerInternals.h"
+#ifdef ARCH_IA32
+#include "codegen/x86/Translator.h"
+#include "codegen/x86/Lower.h"
+#endif
 
 extern "C" void dvmCompilerTemplateStart(void);
 extern "C" void dmvCompilerTemplateEnd(void);
@@ -187,6 +191,7 @@ bool dvmCompilerSetupCodeCache(void)
     /* This can be found through "dalvik-jit-code-cache" in /proc/<pid>/maps */
     // LOGD("Code cache starts at %p", gDvmJit.codeCache);
 
+#ifndef ARCH_IA32
     /* Copy the template code into the beginning of the code cache */
     int templateSize = (intptr_t) dmvCompilerTemplateEnd -
                        (intptr_t) dvmCompilerTemplateStart;
@@ -216,6 +221,16 @@ bool dvmCompilerSetupCodeCache(void)
         LOGE("Failed to remove the write permission for the code cache");
         dvmAbort();
     }
+#else
+    gDvmJit.codeCacheByteUsed = 0;
+    stream = (char*)gDvmJit.codeCache + gDvmJit.codeCacheByteUsed;
+    LOGV("codeCache = %p stream = %p before initJIT", gDvmJit.codeCache, stream);
+    streamStart = stream;
+    initJIT(NULL, NULL);
+    gDvmJit.templateSize = (stream - streamStart);
+    gDvmJit.codeCacheByteUsed = (stream - streamStart);
+    LOGV("stream = %p after initJIT", stream);
+#endif
 
     return true;
 }
@@ -316,9 +331,12 @@ static void resetCodeCache(void)
     dvmCompilerCacheClear((char *) gDvmJit.codeCache + gDvmJit.templateSize,
                           gDvmJit.codeCacheByteUsed - gDvmJit.templateSize);
 
+#ifndef ARCH_IA32
+    /* cacheflush is needed for ARM, but not for IA32 (coherent icache) */
     dvmCompilerCacheFlush((intptr_t) gDvmJit.codeCache,
                           (intptr_t) gDvmJit.codeCache +
                           gDvmJit.codeCacheByteUsed, 0);
+#endif
 
     PROTECT_CODE_CACHE(gDvmJit.codeCache, gDvmJit.codeCacheByteUsed);
 

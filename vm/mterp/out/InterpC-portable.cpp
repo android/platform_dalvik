@@ -2974,7 +2974,7 @@ HANDLE_OPCODE(OP_EXECUTE_INLINE /*vB, {vD, vE, vF, vG}, inline@CCCC*/)
             ;
         }
 
-        if (self->interpBreak.ctl.subMode & kSubModeDebuggerActive) {
+        if (self->interpBreak.ctl.subMode & kSubModeDebugProfile) {
             if (!dvmPerformInlineOp4Dbg(arg0, arg1, arg2, arg3, &retval, ref))
                 GOTO_exceptionThrown();
         } else {
@@ -3019,7 +3019,7 @@ HANDLE_OPCODE(OP_EXECUTE_INLINE_RANGE /*{vCCCC..v(CCCC+AA-1)}, inline@BBBB*/)
             ;
         }
 
-        if (self->interpBreak.ctl.subMode & kSubModeDebuggerActive) {
+        if (self->interpBreak.ctl.subMode & kSubModeDebugProfile) {
             if (!dvmPerformInlineOp4Dbg(arg0, arg1, arg2, arg3, &retval, ref))
                 GOTO_exceptionThrown();
         } else {

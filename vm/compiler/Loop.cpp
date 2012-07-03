@@ -728,12 +728,15 @@ void dvmCompilerInsertBackwardChaining(CompilationUnit *cUnit)
      * code will be generated along the backward branch to honor the suspend
      * requests.
      */
+#ifndef ARCH_IA32
 #if !defined(WITH_SELF_VERIFICATION)
     if (gDvmJit.profileMode != kTraceProfilingContinuous &&
         gDvmJit.profileMode != kTraceProfilingPeriodicOn) {
         return;
     }
 #endif
+#endif
+
     /*
      * In self-verification or profiling mode, the backward branch is altered
      * to go to the backward chaining cell. Without using the backward chaining

@@ -991,24 +991,6 @@ void dvmDumpRegs(const Method* method, const u4* framePtr, bool inOnly)
  */
 
 /*
- * Construct an s4 from two consecutive half-words of switch data.
- * This needs to check endianness because the DEX optimizer only swaps
- * half-words in instruction stream.
- *
- * "switchData" must be 32-bit aligned.
- */
-#if __BYTE_ORDER == __LITTLE_ENDIAN
-static inline s4 s4FromSwitchData(const void* switchData) {
-    return *(s4*) switchData;
-}
-#else
-static inline s4 s4FromSwitchData(const void* switchData) {
-    u2* data = switchData;
-    return data[0] | (((s4) data[1]) << 16);
-}
-#endif
-
-/*
  * Find the matching case.  Returns the offset to the handler instructions.
  *
  * Returns 3 if we don't find a match (it's the size of the packed-switch
@@ -1963,7 +1945,9 @@ void dvmInterpret(Thread* self, const Method* method, JValue* pResult)
     if (gDvm.executionMode == kExecutionModeInterpFast)
         stdInterp = dvmMterpStd;
 #if defined(WITH_JIT)
-    else if (gDvm.executionMode == kExecutionModeJit)
+    else if (gDvm.executionMode == kExecutionModeJit ||
+             gDvm.executionMode == kExecutionModeNcgO0 ||
+             gDvm.executionMode == kExecutionModeNcgO1)
         stdInterp = dvmMterpStd;
 #endif
     else

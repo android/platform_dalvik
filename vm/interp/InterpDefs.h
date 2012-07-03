@@ -105,4 +105,22 @@ static inline bool dvmJitHideTranslation()
 
 #endif
 
+/*
+ * Construct an s4 from two consecutive half-words of switch data.
+ * This needs to check endianness because the DEX optimizer only swaps
+ * half-words in instruction stream.
+ *
+ * "switchData" must be 32-bit aligned.
+ */
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+static inline s4 s4FromSwitchData(const void* switchData) {
+    return *(s4*) switchData;
+}
+#else
+static inline s4 s4FromSwitchData(const void* switchData) {
+    u2* data = switchData;
+    return data[0] | (((s4) data[1]) << 16);
+}
+#endif
+
 #endif  // DALVIK_INTERP_DEFS_H_

@@ -19,9 +19,9 @@ dvm_os := $(TARGET_OS)
 dvm_arch := $(TARGET_ARCH)
 dvm_arch_variant := $(TARGET_ARCH_VARIANT)
 
-# for now, disable x86-atom variant
+# now only have one x86 variant
 ifeq ($(dvm_arch_variant),x86-atom)
-dvm_arch_variant := x86
+  dvm_arch_variant := x86
 endif
 
 include $(LOCAL_PATH)/Dvm.mk

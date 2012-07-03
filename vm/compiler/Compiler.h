@@ -27,6 +27,7 @@
 
 #define COMPILER_WORK_QUEUE_SIZE        100
 #define COMPILER_IC_PATCH_QUEUE_SIZE    64
+#define COMPILER_PC_OFFSET_SIZE         100
 
 /* Architectural-independent parameters for predicted chains */
 #define PREDICTED_CHAIN_CLAZZ_INIT       0
@@ -47,6 +48,10 @@
 #define PROTECT_CODE_CACHE_ATTRS       (PROT_READ | PROT_EXEC)
 #define UNPROTECT_CODE_CACHE_ATTRS     (PROT_READ | PROT_EXEC | PROT_WRITE)
 
+#ifdef ARCH_IA32
+#define UNPROTECT_CODE_CACHE(addr, size)
+#define PROTECT_CODE_CACHE(addr, size)
+#else
 /* Acquire the lock before removing PROT_WRITE from the specified mem region */
 #define UNPROTECT_CODE_CACHE(addr, size)                                       \
     {                                                                          \
@@ -64,6 +69,7 @@
                  (PROTECT_CODE_CACHE_ATTRS));                                  \
         dvmUnlockMutex(&gDvmJit.codeCacheProtectionLock);                      \
     }
+#endif
 
 #define SINGLE_STEP_OP(opcode)                                                 \
     (gDvmJit.includeSelectedOp !=                                              \
@@ -110,6 +116,8 @@ typedef struct PredictedChainingCell {
     u4 branch;                  /* Branch to chained destination */
 #ifdef __mips__
     u4 delay_slot;              /* nop goes here */
+#elif defined(ARCH_IA32)
+    u4 branch2;                 /* IA32 branch instr may be > 32 bits */
 #endif
     const ClassObject *clazz;   /* key for prediction */
     const Method *method;       /* to lookup native PC from dalvik PC */
@@ -245,5 +253,6 @@ extern "C" void *dvmCompilerGetInterpretTemplate();
 JitInstructionSetType dvmCompilerGetInterpretTemplateSet();
 u8 dvmGetRegResourceMask(int reg);
 void dvmDumpCFG(struct CompilationUnit *cUnit, const char *dirPrefix);
+bool dvmIsOpcodeSupportedByJit(Opcode opcode);
 
 #endif  // DALVIK_VM_COMPILER_H_

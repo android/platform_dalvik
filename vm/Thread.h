@@ -303,6 +303,10 @@ struct Thread {
     pthread_mutex_t   callbackMutex;
     SafePointCallback callback;
     void*             callbackArg;
+
+#if defined(ARCH_IA32) && defined(WITH_JIT)
+    u4 spillRegion[MAX_SPILL_JIT_IA];
+#endif
 };
 
 /* start point for an internal thread; mimics pthread args */
