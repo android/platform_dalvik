@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAHFn///ho\u003d",
+        "filename": "vm/compiler/codegen/arm/CodegenDriver.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2012-07-03T19:17:10Z",
+      "side": 1,
+      "message": "Thanks for catching this.  This code only tests the low word for zero.  Should be something like:\n\nif (checkZero) {\n  int tReg \u003d r12;  // Using fixed registers during call sequence\n  opRegRegReg(cUnit, kOpOr, tReg, r2, r3);\n  genRegImmCheck(cUnit, kArmCondEq, tReg, 0, mir-\u003eoffset, NULL);\n}\n\nAlso, minor issue, but would probably want to go ahead and reorder the argument loading to grab rlSrc2 before rlSrc1 to minimize the load/use penalty.",
+      "revId": "a23424119c1ca171e5c0764c2de5a195ff2aded3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
