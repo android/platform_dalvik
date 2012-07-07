@@ -1,0 +1,888 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAHJX///wg\u003d",
+        "filename": "vm/compiler/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "I\u0027d prefer that the implementation of dvmCompilerCacheFlush was a nop than #ifdef-ing around the callers.",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///wc\u003d",
+        "filename": "vm/compiler/Compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "Add a comment to explain why protections are used on x86.",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///wY\u003d",
+        "filename": "vm/compiler/CompilerIR.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "I don\u0027t follow the comment. This is the landing pad for all exceptions?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///wU\u003d",
+        "filename": "vm/compiler/Frontend.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vw\u003d",
+        "filename": "vm/compiler/codegen/x86/CodegenInterface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "For IA?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vs\u003d",
+        "filename": "vm/compiler/codegen/x86/libenc/encoder.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vo\u003d",
+        "filename": "vm/compiler/codegen/x86/libenc/encoder.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vk\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3405,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vg\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vc\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3458,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vY\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3515,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vU\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3571,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vQ\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3600,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vM\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3627,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vI\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3656,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vE\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3683,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///vA\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3712,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///u8\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3739,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///u4\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3768,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///u0\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3846,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uw\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 3880,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///us\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 6901,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uo\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 6920,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uk\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 6939,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///ug\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 7630,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uc\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 7659,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uY\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 8359,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uU\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 8388,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uQ\u003d",
+        "filename": "vm/mterp/out/InterpAsm-x86.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 26591,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uM\u003d",
+        "filename": "vm/mterp/x86/OP_ADD_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uI\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movsd rather than movq?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uE\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movsd?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///uA\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///t8\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movq rather than movsd?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///t4\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movq again",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///t0\u003d",
+        "filename": "vm/mterp/x86/OP_SGET.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tw\u003d",
+        "filename": "vm/mterp/x86/OP_SGET.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///ts\u003d",
+        "filename": "vm/mterp/x86/OP_SGET_WIDE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///to\u003d",
+        "filename": "vm/mterp/x86/OP_SPUT_WIDE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tk\u003d",
+        "filename": "vm/mterp/x86/OP_SPUT_WIDE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tg\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movq rather than movsd?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tc\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movq again",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tY\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tU\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movsd rather than movq?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tQ\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "movq again",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tM\u003d",
+        "filename": "vm/mterp/x86/bincmp.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "testl %eax, %eax ?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tI\u003d",
+        "filename": "vm/mterp/x86/entry.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "testl %eax, %eax?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tE\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///tA\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "I agree with the TODO, if a signal were delivered here Dalvik would break. Is there a reason to believe this shouldn\u0027t gate the change?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///s4\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///s8\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJX///s0\u003d",
+        "filename": "vm/mterp/x86/zcmp.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-07-07T03:07:07Z",
+      "side": 1,
+      "message": "testl %eax, %eax ?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
