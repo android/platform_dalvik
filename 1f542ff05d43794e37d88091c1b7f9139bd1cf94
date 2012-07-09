@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJ3///4I\u003d",
+        "filename": "vm/compiler/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "Sure. We should be able to add this.",
+      "parentUuid": "AAAHJX///wg\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///wc\u003d",
         "filename": "vm/compiler/Compiler.h",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJ3///4E\u003d",
+        "filename": "vm/compiler/Compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "Arm needs this. We have no implementation here. We will add some comments.",
+      "parentUuid": "AAAHJX///wc\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///wY\u003d",
         "filename": "vm/compiler/CompilerIR.h",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "I don\u0027t follow the comment. This is the landing pad for all exceptions?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///4A\u003d",
+        "filename": "vm/compiler/CompilerIR.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "This block won\u0027t always be needed to handle exceptions, but yes it is the landing point for exception handling that eventually punts to the FI.",
+      "parentUuid": "AAAHJX///wY\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -81,6 +135,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "For IA?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///38\u003d",
+        "filename": "vm/compiler/codegen/x86/CodegenInterface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "Yes, these comments need updating.",
+      "parentUuid": "AAAHJX///vw\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -529,6 +601,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJ3///30\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "We might be able to use movsd here. Movq is based on some previous implementation. We will experiment with this change.",
+      "parentUuid": "AAAHJX///uI\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///uE\u003d",
         "filename": "vm/mterp/x86/OP_MUL_DOUBLE.S",
         "patchSetId": 1
@@ -540,6 +630,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "movsd?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///3w\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "AAAHJX///uE\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -580,6 +688,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJ3///3s\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "We might be able to use movsd here. Movq is based on some previous implementation. We will experiment with this change.",
+      "parentUuid": "AAAHJX///t8\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///t4\u003d",
         "filename": "vm/mterp/x86/OP_MUL_DOUBLE_2ADDR.S",
         "patchSetId": 1
@@ -591,6 +717,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "movq again",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///3o\u003d",
+        "filename": "vm/mterp/x86/OP_MUL_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "AAAHJX///t4\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -699,6 +843,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJ3///3k\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "We might be able to use movsd here. Movq is based on some previous implementation. We will experiment with this change.",
+      "parentUuid": "AAAHJX///tg\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///tc\u003d",
         "filename": "vm/mterp/x86/OP_SUB_DOUBLE.S",
         "patchSetId": 1
@@ -710,6 +872,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "movq again",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///3g\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "AAAHJX///tc\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -750,6 +930,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJ3///3c\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "We might be able to use movsd here. Movq is based on some previous implementation. We will experiment with this change.",
+      "parentUuid": "AAAHJX///tU\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///tQ\u003d",
         "filename": "vm/mterp/x86/OP_SUB_DOUBLE_2ADDR.S",
         "patchSetId": 1
@@ -761,6 +959,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "movq again",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///3Y\u003d",
+        "filename": "vm/mterp/x86/OP_SUB_DOUBLE_2ADDR.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "AAAHJX///tQ\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -829,6 +1045,24 @@
       "writtenOn": "2012-07-07T03:07:07Z",
       "side": 1,
       "message": "I agree with the TODO, if a signal were delivered here Dalvik would break. Is there a reason to believe this shouldn\u0027t gate the change?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJ3///3M\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000706
+      },
+      "writtenOn": "2012-07-09T22:36:29Z",
+      "side": 1,
+      "message": "Ian, can you point to the signal issue? I think these comments are no longer valid and just needed removing.",
+      "parentUuid": "AAAHJX///tA\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
