@@ -50,9 +50,6 @@ op-start mips
 # OP_BREAKPOINT needs explicit testing
     op OP_BREAKPOINT c
 
-# OP_DISPATCH_FF needs explicit testing
-    op OP_DISPATCH_FF c
-
 op-end
 
 # "helper" code for C; include if you use any of the C stubs (this generates

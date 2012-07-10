@@ -481,37 +481,6 @@ save_callsiteinfo:
 #endif
 
 /*
- * Common code for jumbo method invocation.
- * NOTE: this adjusts rPC to account for the difference in instruction width.
- * As a result, the savedPc in the stack frame will not be wholly accurate. So
- * long as that is only used for source file line number calculations, we're
- * okay.
- */
-common_invokeMethodJumboNoThis:
-#if defined(WITH_JIT)
- /* On entry: a0 is "Method* methodToCall */
-    li       rOBJ, 0                     # clear "this"
-#endif
-common_invokeMethodJumbo:
- /* On entry: a0 is "Method* methodToCall, rOBJ is "this" */
-.LinvokeNewJumbo:
-#if defined(WITH_JIT)
-    lhu      a1, offThread_subMode(rSELF)
-    andi     a1, kSubModeJitTraceBuild
-    beqz     a1, 1f
-    JAL(save_callsiteinfo)
-#endif
-/* prepare to copy args to "outs" area of current frame */
-1:
-    add      rPC, rPC, 4          # adjust pc to make return consistent
-    FETCH(a2, 1)
-    SAVEAREA_FROM_FP(rBIX, rFP)   # rBIX <- stack save area
-    beqz     a2, .LinvokeArgsDone  # if no args, skip the rest
-    FETCH(a1, 2)                  # a1 <- CCCC
-    b         .LinvokeRangeArgs   # handle args like invoke range
-
-
-/*
  * Common code for method invocation with range.
  *
  * On entry:
