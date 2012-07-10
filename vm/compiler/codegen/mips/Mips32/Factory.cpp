@@ -161,7 +161,7 @@ static MipsLIR *opNone(CompilationUnit *cUnit, OpKind op)
             opcode = kMipsB;
             break;
         default:
-            LOGE("Jit: bad case in opNone");
+            ALOGE("Jit: bad case in opNone");
             dvmCompilerAbort(cUnit);
     }
     res = newLIR0(cUnit, opcode);
@@ -214,7 +214,7 @@ static MipsLIR *opRegImm(CompilationUnit *cUnit, OpKind op, int rDestSrc1,
             return opRegRegImm(cUnit, op, rDestSrc1, rDestSrc1, value);
             break;
         default:
-            LOGE("Jit: bad case in opRegImm");
+            ALOGE("Jit: bad case in opRegImm");
             dvmCompilerAbort(cUnit);
             break;
     }
@@ -264,7 +264,7 @@ static MipsLIR *opRegRegReg(CompilationUnit *cUnit, OpKind op, int rDest,
             opcode = kMipsSrav;
             break;
         default:
-            LOGE("Jit: bad case in opRegRegReg");
+            ALOGE("Jit: bad case in opRegRegReg");
             dvmCompilerAbort(cUnit);
             break;
     }
@@ -342,7 +342,7 @@ static MipsLIR *opRegRegImm(CompilationUnit *cUnit, OpKind op, int rDest,
             opcode = kMipsMul;
             break;
         default:
-            LOGE("Jit: bad case in opRegRegImm");
+            ALOGE("Jit: bad case in opRegRegImm");
             dvmCompilerAbort(cUnit);
             break;
     }
@@ -401,7 +401,7 @@ static MipsLIR *opRegReg(CompilationUnit *cUnit, OpKind op, int rDestSrc1,
         case kOp2Char:
              return newLIR3(cUnit, kMipsAndi, rDestSrc1, rSrc2, 0xFFFF);
         default:
-            LOGE("Jit: bad case in opRegReg");
+            ALOGE("Jit: bad case in opRegReg");
             dvmCompilerAbort(cUnit);
             break;
     }
@@ -466,7 +466,7 @@ static MipsLIR *loadBaseIndexed(CompilationUnit *cUnit, int rBase,
             opcode = kMipsLb;
             break;
         default:
-            LOGE("Jit: bad case in loadBaseIndexed");
+            ALOGE("Jit: bad case in loadBaseIndexed");
             dvmCompilerAbort(cUnit);
     }
 
@@ -525,7 +525,7 @@ static MipsLIR *storeBaseIndexed(CompilationUnit *cUnit, int rBase,
             opcode = kMipsSb;
             break;
         default:
-            LOGE("Jit: bad case in storeBaseIndexed");
+            ALOGE("Jit: bad case in storeBaseIndexed");
             dvmCompilerAbort(cUnit);
     }
     res = newLIR3(cUnit, opcode, rSrc, 0, tReg);
@@ -654,7 +654,7 @@ static MipsLIR *loadBaseDispBody(CompilationUnit *cUnit, MIR *mir, int rBase,
             opcode = kMipsLb;
             break;
         default:
-            LOGE("Jit: bad case in loadBaseIndexedBody");
+            ALOGE("Jit: bad case in loadBaseIndexedBody");
             dvmCompilerAbort(cUnit);
     }
 
@@ -767,7 +767,7 @@ static MipsLIR *storeBaseDispBody(CompilationUnit *cUnit, int rBase,
             opcode = kMipsSb;
             break;
         default:
-            LOGE("Jit: bad case in storeBaseIndexedBody");
+            ALOGE("Jit: bad case in storeBaseIndexedBody");
             dvmCompilerAbort(cUnit);
     }
 
@@ -925,7 +925,7 @@ static inline MipsLIR *genRegImmCheck(CompilationUnit *cUnit,
         } else if (cond == kMipsCondGe) {
             opc = kMipsBgez;
         } else {
-            LOGE("Jit: bad case in genRegImmCheck");
+            ALOGE("Jit: bad case in genRegImmCheck");
             dvmCompilerAbort(cUnit);
         }
         branch = opCompareBranch(cUnit, opc, reg, -1);
@@ -936,11 +936,11 @@ static inline MipsLIR *genRegImmCheck(CompilationUnit *cUnit,
             branch = opCompareBranch(cUnit, kMipsBne, tReg, r_ZERO);
             dvmCompilerFreeTemp(cUnit, tReg);
         } else {
-            LOGE("Jit: bad case in genRegImmCheck");
+            ALOGE("Jit: bad case in genRegImmCheck");
             dvmCompilerAbort(cUnit);
         }
     } else {
-        LOGE("Jit: bad case in genRegImmCheck");
+        ALOGE("Jit: bad case in genRegImmCheck");
         dvmCompilerAbort(cUnit);
     }
 
@@ -952,7 +952,7 @@ static inline MipsLIR *genRegImmCheck(CompilationUnit *cUnit,
             branch->generic.target = (LIR *) exceptionLabel;
             return exceptionLabel;
         } else {
-            LOGE("Catch blocks not handled yet");
+            ALOGE("Catch blocks not handled yet");
             dvmAbort();
             return NULL;
         }

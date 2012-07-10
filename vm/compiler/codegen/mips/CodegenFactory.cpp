@@ -296,7 +296,7 @@ static MipsLIR *genRegRegCheck(CompilationUnit *cUnit,
         MipsLIR *branch = opCompareBranch(cUnit, kMipsBeqz, tReg, -1);
         genCheckCommon(cUnit, dOffset, branch, pcrLabel);
     } else {
-        LOGE("Unexpected condition in genRegRegCheck: %d\n", (int) cond);
+        ALOGE("Unexpected condition in genRegRegCheck: %d\n", (int) cond);
         dvmAbort();
     }
     return res;

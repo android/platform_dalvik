@@ -455,11 +455,11 @@ static AssemblerStatus assembleInstructions(CompilationUnit *cUnit,
             intptr_t target = targetLIR->generic.offset;
             int delta = target - pc;
             if (delta & 0x3) {
-                LOGE("PC-rel distance is not multiple of 4: %d", delta);
+                ALOGE("PC-rel distance is not multiple of 4: %d", delta);
                 dvmAbort();
             }
             if (delta > 131068 || delta < -131069) {
-                LOGE("Unconditional branch distance out of range: %d", delta);
+                ALOGE("Unconditional branch distance out of range: %d", delta);
                 dvmAbort();
             }
             lir->operands[0] = delta >> 2;
@@ -469,11 +469,11 @@ static AssemblerStatus assembleInstructions(CompilationUnit *cUnit,
             intptr_t target = targetLIR->generic.offset;
             int delta = target - pc;
             if (delta & 0x3) {
-                LOGE("PC-rel distance is not multiple of 4: %d", delta);
+                ALOGE("PC-rel distance is not multiple of 4: %d", delta);
                 dvmAbort();
             }
             if (delta > 131068 || delta < -131069) {
-                LOGE("Conditional branch distance out of range: %d", delta);
+                ALOGE("Conditional branch distance out of range: %d", delta);
                 dvmAbort();
             }
             lir->operands[1] = delta >> 2;
@@ -483,11 +483,11 @@ static AssemblerStatus assembleInstructions(CompilationUnit *cUnit,
             intptr_t target = targetLIR->generic.offset;
             int delta = target - pc;
             if (delta & 0x3) {
-                LOGE("PC-rel distance is not multiple of 4: %d", delta);
+                ALOGE("PC-rel distance is not multiple of 4: %d", delta);
                 dvmAbort();
             }
             if (delta > 131068 || delta < -131069) {
-                LOGE("Conditional branch distance out of range: %d", delta);
+                ALOGE("Conditional branch distance out of range: %d", delta);
                 dvmAbort();
             }
             lir->operands[2] = delta >> 2;
@@ -497,7 +497,7 @@ static AssemblerStatus assembleInstructions(CompilationUnit *cUnit,
             /* ensure PC-region branch can be used */
             assert((curPC & 0xF0000000) == (target & 0xF0000000));
             if (target & 0x3) {
-                LOGE("Jump target is not multiple of 4: %d", target);
+                ALOGE("Jump target is not multiple of 4: %d", target);
                 dvmAbort();
             }
             lir->operands[0] =  target >> 2;
@@ -721,7 +721,7 @@ static void matchSignatureBreakpoint(const CompilationUnit *cUnit,
                 }
             }
             if (j == gDvmJit.signatureBreakpointSize) {
-                LOGD("Signature match starting from offset %#x (%d words)",
+                ALOGD("Signature match starting from offset %#x (%d words)",
                      i*4, gDvmJit.signatureBreakpointSize);
                 int descSize = getTraceDescriptionSize(cUnit->traceDesc);
                 JitTraceDescription *newCopy =
@@ -816,7 +816,7 @@ void dvmCompilerAssembleLIR(CompilationUnit *cUnit, JitTranslationInfo *info)
     /* Allocate enough space for the code block */
     cUnit->codeBuffer = (unsigned char *)dvmCompilerNew(chainCellOffset, true);
     if (cUnit->codeBuffer == NULL) {
-        LOGE("Code buffer allocation failure");
+        ALOGE("Code buffer allocation failure");
         info->discardResult = true;
         return;
     }
@@ -846,7 +846,7 @@ void dvmCompilerAssembleLIR(CompilationUnit *cUnit, JitTranslationInfo *info)
         case kRetryHalve:
             return;
         default:
-             LOGE("Unexpected assembler status: %d", cUnit->assemblerStatus);
+             ALOGE("Unexpected assembler status: %d", cUnit->assemblerStatus);
              dvmAbort();
     }
 
@@ -961,7 +961,7 @@ void* dvmJitChain(void* tgtAddr, u4* branchAddr)
         gDvmJit.translationChains++;
 
         COMPILER_TRACE_CHAINING(
-            LOGD("Jit Runtime: chaining 0x%x to 0x%x",
+            ALOGD("Jit Runtime: chaining 0x%x to 0x%x",
                  (int) branchAddr, (int) tgtAddr & -2));
 
         newInst = assembleChainingBranch((int) tgtAddr & -2, 0);
@@ -1125,7 +1125,7 @@ const Method *dvmJitToPatchPredictedChain(const Method *method,
 
     if ((baseAddr & 0xF0000000) != (tgtAddr & 0xF0000000)) {
         COMPILER_TRACE_CHAINING(
-            LOGD("Jit Runtime: predicted chain %p to distant target %s ignored",
+            ALOGD("Jit Runtime: predicted chain %p to distant target %s ignored",
                  cell, method->name));
         goto done;
     }
@@ -1137,7 +1137,7 @@ const Method *dvmJitToPatchPredictedChain(const Method *method,
     if ((tgtAddr == 0) ||
         ((void*)tgtAddr == dvmCompilerGetInterpretTemplate())) {
         COMPILER_TRACE_CHAINING(
-            LOGD("Jit Runtime: predicted chain %p to method %s%s delayed",
+            ALOGD("Jit Runtime: predicted chain %p to method %s%s delayed",
                  cell, method->clazz->descriptor, method->name));
         goto done;
     }
@@ -1187,7 +1187,7 @@ void dvmCompilerPatchInlineCache(void)
 
     UNPROTECT_CODE_CACHE(gDvmJit.codeCache, gDvmJit.codeCacheByteUsed);
 
-    //LOGD("Number of IC patch work orders: %d", gDvmJit.compilerICPatchIndex);
+    //ALOGD("Number of IC patch work orders: %d", gDvmJit.compilerICPatchIndex);
 
     /* Initialize the min/max address range */
     minAddr = (PredictedChainingCell *)
@@ -1207,7 +1207,7 @@ void dvmCompilerPatchInlineCache(void)
         cellContent->clazz = clazz;
 
         COMPILER_TRACE_CHAINING(
-            LOGD("Jit Runtime: predicted chain %p from %s to %s (%s) "
+            ALOGD("Jit Runtime: predicted chain %p from %s to %s (%s) "
                  "patched",
                  cellAddr,
                  cellAddr->clazz->descriptor,
@@ -1297,11 +1297,11 @@ static u4* unchainSingle(JitEntry *trace)
 #endif
                 default:
                     targetOffset = 0; // make gcc happy
-                    LOGE("Unexpected chaining type: %d", i);
+                    ALOGE("Unexpected chaining type: %d", i);
                     dvmAbort();  // dvmAbort OK here - can't safely recover
             }
             COMPILER_TRACE_CHAINING(
-                LOGD("Jit Runtime: unchaining %#x", (int)pChainCells));
+                ALOGD("Jit Runtime: unchaining %#x", (int)pChainCells));
             /*
              * Code sequence for a chaining cell is:
              *     lw   a0, offset(rSELF)
@@ -1326,7 +1326,7 @@ void dvmJitUnchainAll()
     u4* highAddress = NULL;
     unsigned int i;
     if (gDvmJit.pJitEntryTable != NULL) {
-        COMPILER_TRACE_CHAINING(LOGD("Jit Runtime: unchaining all"));
+        COMPILER_TRACE_CHAINING(ALOGD("Jit Runtime: unchaining all"));
         dvmLockMutex(&gDvmJit.tableLock);
 
         UNPROTECT_CODE_CACHE(gDvmJit.codeCache, gDvmJit.codeCacheByteUsed);
@@ -1386,12 +1386,12 @@ static int dumpTraceProfile(JitEntry *p, bool silent, bool reset,
 
     if (p->codeAddress == NULL) {
         if (!silent)
-            LOGD("TRACEPROFILE NULL");
+            ALOGD("TRACEPROFILE NULL");
         return 0;
     }
     if (p->codeAddress == dvmCompilerGetInterpretTemplate()) {
         if (!silent)
-            LOGD("TRACEPROFILE INTERPRET_ONLY");
+            ALOGD("TRACEPROFILE INTERPRET_ONLY");
         return 0;
     }
 
@@ -1421,7 +1421,7 @@ static int dumpTraceProfile(JitEntry *p, bool silent, bool reset,
                        method->accessFlags,
                        addrToLineCb, NULL, &addrToLine);
 
-    LOGD("TRACEPROFILE 0x%08x % 10d %5.2f%% [%#x(+%d), %d] %s%s;%s",
+    ALOGD("TRACEPROFILE 0x%08x % 10d %5.2f%% [%#x(+%d), %d] %s%s;%s",
          (int) getTraceBase(p),
          count,
          ((float ) count) / sum * 100.0,
@@ -1446,7 +1446,7 @@ static int dumpTraceProfile(JitEntry *p, bool silent, bool reset,
             desc->trace[idx+JIT_TRACE_CUR_METHOD-1].info.meta;
         char *methodDesc = dexProtoCopyMethodDescriptor(&method->prototype);
         /* Print the callee info in the trace */
-        LOGD("    -> %s%s;%s", method->clazz->descriptor, method->name,
+        ALOGD("    -> %s%s;%s", method->clazz->descriptor, method->name,
              methodDesc);
     }
 
@@ -1519,7 +1519,7 @@ void dvmCompilerSortAndPrintTraceProfiles()
         sum = 1;
     }
 
-    LOGD("JIT: Average execution count -> %d",(int)(sum / numTraces));
+    ALOGD("JIT: Average execution count -> %d",(int)(sum / numTraces));
 
     /* Dump the sorted entries. The count of each trace will be reset to 0. */
     for (i=0; i < gDvmJit.jitTableSize; i++) {
@@ -1794,12 +1794,12 @@ assert(0); /* MIPSTODO retarg func */
             data = *((u4*) addr);
             break;
         default:
-            LOGE("*** ERROR: BAD SIZE IN selfVerificationLoad: %d", size);
+            ALOGE("*** ERROR: BAD SIZE IN selfVerificationLoad: %d", size);
             data = 0;
             dvmAbort();
     }
 
-    //LOGD("*** HEAP LOAD: Addr: %#x Data: %#x Size: %d", addr, data, size);
+    //ALOGD("*** HEAP LOAD: Addr: %#x Data: %#x Size: %d", addr, data, size);
     return data;
 }
 
@@ -1824,7 +1824,7 @@ assert(0); /* MIPSTODO retarg func */
         }
     }
 
-    //LOGD("*** HEAP LOAD DOUBLEWORD: Addr: %#x Data: %#x Data2: %#x",
+    //ALOGD("*** HEAP LOAD DOUBLEWORD: Addr: %#x Data: %#x Data2: %#x",
     //    addr, data, data2);
     return (((s8) data2) << 32) | data;
 }
@@ -1845,7 +1845,7 @@ assert(0); /* MIPSTODO retarg func */
     int maskedAddr = addr & 0xFFFFFFFC;
     int alignment = addr & 0x3;
 
-    //LOGD("*** HEAP STORE: Addr: %#x Data: %#x Size: %d", addr, data, size);
+    //ALOGD("*** HEAP STORE: Addr: %#x Data: %#x Size: %d", addr, data, size);
 
     for (heapSpacePtr = shadowSpace->heapSpace;
          heapSpacePtr != shadowSpace->heapSpaceTail; heapSpacePtr++) {
@@ -1876,7 +1876,7 @@ assert(0); /* MIPSTODO retarg func */
             *((u4*) addr) = data;
             break;
         default:
-            LOGE("*** ERROR: BAD SIZE IN selfVerificationSave: %d", size);
+            ALOGE("*** ERROR: BAD SIZE IN selfVerificationSave: %d", size);
             dvmAbort();
     }
 }
@@ -1894,7 +1894,7 @@ assert(0); /* MIPSTODO retarg func */
     int data2 = double_data >> 32;
     bool store1 = false, store2 = false;
 
-    //LOGD("*** HEAP STORE DOUBLEWORD: Addr: %#x Data: %#x, Data2: %#x",
+    //ALOGD("*** HEAP STORE DOUBLEWORD: Addr: %#x Data: %#x, Data2: %#x",
     //    addr, data, data2);
 
     for (heapSpacePtr = shadowSpace->heapSpace;
@@ -2008,7 +2008,7 @@ assert(0); /* MIPSTODO retarg func */
 
     if ((insn & kMemOp2) == kMemOp2) {
         insn = (insn << 16) | (insn >> 16);
-        //LOGD("*** THUMB2 - Addr: %#x Insn: %#x", lr, insn);
+        //ALOGD("*** THUMB2 - Addr: %#x Insn: %#x", lr, insn);
 
         int opcode12 = (insn >> 20) & 0xFFF;
         int opcode6 = (insn >> 6) & 0x3F;
@@ -2093,7 +2093,7 @@ assert(0); /* MIPSTODO retarg func */
                     if (insn & 0x400000) rt |= 0x10;
                     rt = rt << 1;
                 } else {
-                    LOGE("*** ERROR: UNRECOGNIZED VECTOR MEM OP: %x", opcode4);
+                    ALOGE("*** ERROR: UNRECOGNIZED VECTOR MEM OP: %x", opcode4);
                     dvmAbort();
                 }
                 rt += 14;
@@ -2126,7 +2126,7 @@ assert(0); /* MIPSTODO retarg func */
                 offset = 0;
                 break;
             default:
-                LOGE("*** ERROR: UNRECOGNIZED THUMB2 MEM OP: %x", opcode12);
+                ALOGE("*** ERROR: UNRECOGNIZED THUMB2 MEM OP: %x", opcode12);
                 offset = 0;
                 dvmAbort();
         }
@@ -2134,7 +2134,7 @@ assert(0); /* MIPSTODO retarg func */
         // Handle the decoded mem op accordingly
         if (store) {
             if (size == kSVVariable) {
-                LOGD("*** THUMB2 STMIA CURRENTLY UNUSED (AND UNTESTED)");
+                ALOGD("*** THUMB2 STMIA CURRENTLY UNUSED (AND UNTESTED)");
                 int i;
                 int regList = insn & 0xFFFF;
                 for (i = 0; i < 16; i++) {
@@ -2155,7 +2155,7 @@ assert(0); /* MIPSTODO retarg func */
             }
         } else {
             if (size == kSVVariable) {
-                LOGD("*** THUMB2 LDMIA CURRENTLY UNUSED (AND UNTESTED)");
+                ALOGD("*** THUMB2 LDMIA CURRENTLY UNUSED (AND UNTESTED)");
                 int i;
                 int regList = insn & 0xFFFF;
                 for (i = 0; i < 16; i++) {
@@ -2176,7 +2176,7 @@ assert(0); /* MIPSTODO retarg func */
             }
         }
     } else {
-        //LOGD("*** THUMB - Addr: %#x Insn: %#x", lr, insn);
+        //ALOGD("*** THUMB - Addr: %#x Insn: %#x", lr, insn);
 
         // Update the link register
         selfVerificationMemRegStore(sp, old_lr+2, 13);
@@ -2276,7 +2276,7 @@ assert(0); /* MIPSTODO retarg func */
                 offset = 0;
                 break;
             default:
-                LOGE("*** ERROR: UNRECOGNIZED THUMB MEM OP: %x", opcode5);
+                ALOGE("*** ERROR: UNRECOGNIZED THUMB MEM OP: %x", opcode5);
                 offset = 0;
                 dvmAbort();
         }
