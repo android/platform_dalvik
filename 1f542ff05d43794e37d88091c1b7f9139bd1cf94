@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAHJH///Rg\u003d",
+        "filename": "vm/Init.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-07-11T21:42:55Z",
+      "side": 1,
+      "message": "the usual idiom in dalvik is:\n\n  opt + strlen(\"-Xjitoffset:\")\n\nbecause then you don\u0027t need these comments.",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJH///Rc\u003d",
+        "filename": "vm/ReconfigureDvm.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-07-11T21:42:55Z",
+      "side": 1,
+      "message": "so just remove this cruft (and all other references to x86-atom)?",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///wg\u003d",
         "filename": "vm/compiler/Compiler.cpp",
         "patchSetId": 1
@@ -72,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHJH///RY\u003d",
+        "filename": "vm/compiler/Compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-07-11T21:42:55Z",
+      "side": 1,
+      "message": "why doesn\u0027t x86 need this?",
+      "parentUuid": "AAAHJ3///4E\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///wY\u003d",
         "filename": "vm/compiler/CompilerIR.h",
         "patchSetId": 1
@@ -124,6 +176,23 @@
     },
     {
       "key": {
+        "uuid": "AAAHJH///RU\u003d",
+        "filename": "vm/compiler/Frontend.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-07-11T21:42:55Z",
+      "side": 1,
+      "message": "move this into the for loop header.",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///vw\u003d",
         "filename": "vm/compiler/codegen/x86/CodegenInterface.cpp",
         "patchSetId": 1
@@ -153,6 +222,23 @@
       "side": 1,
       "message": "Yes, these comments need updating.",
       "parentUuid": "AAAHJX///vw\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJH///RQ\u003d",
+        "filename": "vm/compiler/codegen/x86/libenc/README.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-07-11T21:42:55Z",
+      "side": 1,
+      "message": "i think you\u0027ll need to edit the dalvik/NOTICE file so it includes any licenses used in these files.",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -1063,6 +1149,24 @@
       "side": 1,
       "message": "Ian, can you point to the signal issue? I think these comments are no longer valid and just needed removing.",
       "parentUuid": "AAAHJX///tA\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAHJH///Rk\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-07-11T21:42:55Z",
+      "side": 1,
+      "message": "isn\u0027t the problem that if you receive a signal between the \"lea 4(%esp), %esp\" and the \"lea -4(%esp), %esp)\" in cases like this, signal handling will clobber stuff [that it doesn\u0027t know is] on the stack?",
+      "parentUuid": "AAAHJ3///3M\u003d",
       "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
