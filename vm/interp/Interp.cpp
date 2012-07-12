@@ -1042,7 +1042,7 @@ s4 dvmInterpHandlePackedSwitch(const u2* switchData, s4 testVal)
     firstKey = *switchData++;
     firstKey |= (*switchData++) << 16;
 
-    if (testVal < firstKey || testVal >= firstKey + size) {
+    if (testVal < firstKey || testVal > firstKey + (size - 1)) {
         LOGVV("Value %d not found in switch (%d-%d)",
             testVal, firstKey, firstKey+size-1);
         return kInstrLen;
