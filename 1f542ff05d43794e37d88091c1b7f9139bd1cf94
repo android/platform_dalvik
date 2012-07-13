@@ -1173,6 +1173,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHRH////4\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000297
+      },
+      "writtenOn": "2012-07-13T16:11:37Z",
+      "side": 1,
+      "message": "seems not an issue to me, the old value is not necessary for late r use. \nJust weird to me why we need a esp+4 firstly, then esp-4, seems both can be removed.",
+      "parentUuid": "AAAHJH///Rk\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///s4\u003d",
         "filename": "vm/mterp/x86/footer.S",
         "patchSetId": 1
