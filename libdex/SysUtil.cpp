@@ -331,7 +331,7 @@ int sysChangeMapAccess(void* addr, size_t length, int wantReadWrite,
      * (The address must be page-aligned, the length doesn't need to be,
      * but we do need to ensure we cover the same range.)
      */
-    u1* alignAddr = (u1*) ((int) addr & ~(SYSTEM_PAGE_SIZE-1));
+    u1* alignAddr = (u1*) ((uintptr_t) addr & ~(SYSTEM_PAGE_SIZE-1));
     size_t alignLength = length + ((u1*) addr - alignAddr);
 
     //ALOGI("%p/%zd --> %p/%zd", addr, length, alignAddr, alignLength);

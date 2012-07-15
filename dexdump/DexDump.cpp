@@ -1518,7 +1518,7 @@ bail:
  */
 static inline const u1* align32(const u1* ptr)
 {
-    return (u1*) (((int) ptr + 3) & ~0x03);
+    return (u1*) (((uintptr_t) ptr + 3) & ~0x03);
 }
 
 

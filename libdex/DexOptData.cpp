@@ -30,7 +30,7 @@
  */
 static bool isValidPointer(const void* ptr, const void* start, const void* end)
 {
-    return (ptr >= start) && (ptr < end) && (((u4) ptr & 7) == 0);
+    return (ptr >= start) && (ptr < end) && (((uintptr_t) ptr & 7) == 0);
 }
 
 /* (documented in header file) */
