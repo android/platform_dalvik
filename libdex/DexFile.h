@@ -756,7 +756,7 @@ DEX_INLINE const DexTry* dexGetTries(const DexCode* pCode) {
     const u2* insnsEnd = &pCode->insns[pCode->insnsSize];
 
     // Round to four bytes.
-    if ((((u4) insnsEnd) & 3) != 0) {
+    if ((((uintptr_t) insnsEnd) & 3) != 0) {
         insnsEnd++;
     }
 

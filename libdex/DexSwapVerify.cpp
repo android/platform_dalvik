@@ -1842,7 +1842,7 @@ static void* swapCodeItem(const CheckState* state, void* ptr) {
     if (item->triesSize == 0) {
         ptr = insns;
     } else {
-        if ((((u4) insns) & 3) != 0) {
+        if ((((uintptr_t) insns) & 3) != 0) {
             // Four-byte alignment for the tries. Verify the spacer is a 0.
             if (*insns != 0) {
                 ALOGE("Non-zero padding: %#x", (u4) *insns);
