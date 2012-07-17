@@ -1191,6 +1191,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHY3////w\u003d",
+        "filename": "vm/mterp/x86/footer.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1013850
+      },
+      "writtenOn": "2012-07-17T18:44:46Z",
+      "side": 1,
+      "message": "the \"lea -4($esp), %esp\" at line 154 and \"lea 4(%esp), %esp\" at line 159 are a pair. These two esp adjustment seems from our legacy code and might be removed safely. We will do further testing.\n\nThe purpose of \"lea 4(esp), %esp\" at line 149 is to recover the esp update due to the x86 function calling convention, which is correct and should be remained.",
+      "parentUuid": "AAAHRH////4\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///s4\u003d",
         "filename": "vm/mterp/x86/footer.S",
         "patchSetId": 1
