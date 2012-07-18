@@ -301,15 +301,6 @@ ifeq ($(dvm_arch),x86)
   endif
 endif
 
-ifeq ($(dvm_arch),sh)
-  MTERP_ARCH_KNOWN := true
-  LOCAL_SRC_FILES += \
-		arch/sh/CallSH4ABI.S \
-		arch/generic/Hints.cpp \
-		mterp/out/InterpC-allstubs.cpp \
-		mterp/out/InterpAsm-allstubs.S
-endif
-
 ifeq ($(MTERP_ARCH_KNOWN),false)
   # unknown architecture, try to use FFI
   LOCAL_C_INCLUDES += external/libffi/$(dvm_os)-$(dvm_arch)
