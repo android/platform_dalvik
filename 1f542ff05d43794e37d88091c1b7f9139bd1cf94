@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "AAAHqX///8M\u003d",
+        "filename": "vm/compiler/Compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2012-07-19T22:05:11Z",
+      "side": 1,
+      "message": "This isn\u0027t so much an issue of Arm needing this - but rather is important for debug.  The Arm JIT initially did not mprotect the code cache, but this was added after hitting several very difficult to debug code cache corruption bugs.  I would prefer to see the code cache protected when not actively installing a translation or performing a chain operation.",
+      "parentUuid": "AAAHJ3///4E\u003d",
+      "revId": "1f542ff05d43794e37d88091c1b7f9139bd1cf94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAHJX///wY\u003d",
         "filename": "vm/compiler/CompilerIR.h",
         "patchSetId": 1
