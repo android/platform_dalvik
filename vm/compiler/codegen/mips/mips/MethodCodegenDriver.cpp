@@ -16,6 +16,6 @@
 
 void dvmCompilerMethodMIR2LIR(CompilationUnit *cUnit)
 {
-    LOGE("Method-based JIT not supported for the Mips target");
+    ALOGE("Method-based JIT not supported for the Mips target");
     dvmAbort();
 }

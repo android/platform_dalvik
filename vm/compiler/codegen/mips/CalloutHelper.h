@@ -84,6 +84,13 @@ const Method *dvmJitToPatchPredictedChain(const Method *method,
                                           const ClassObject *clazz);
 
 /*
+ * Switch dispatch offset calculation for OP_PACKED_SWITCH & OP_SPARSE_SWITCH
+ * Used in CodegenDriver.c
+ * static s8 findPackedSwitchIndex(const u2* switchData, int testVal, int pc);
+ * static s8 findSparseSwitchIndex(const u2* switchData, int testVal, int pc);
+ */
+
+/*
  * Resolve interface callsites - OP_INVOKE_INTERFACE & OP_INVOKE_INTERFACE_RANGE
  *
  * Originally declared in mterp/common/FindInterface.h and only comment it here

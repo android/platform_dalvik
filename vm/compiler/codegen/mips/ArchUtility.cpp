@@ -204,7 +204,7 @@ void dvmDumpResourceMask(LIR *lir, u8 mask, const char *prefix)
         }
     }
     if (buf[0]) {
-        LOGD("%s: %s", prefix, buf);
+        ALOGD("%s: %s", prefix, buf);
     }
 }
 
@@ -227,68 +227,68 @@ void dvmDumpLIRInsn(LIR *arg, unsigned char *baseAddr)
     /* Handle pseudo-ops individually, and all regular insns as a group */
     switch(lir->opcode) {
         case kMipsChainingCellBottom:
-            LOGD("-------- end of chaining cells (0x%04x)", offset);
+            ALOGD("-------- end of chaining cells (0x%04x)", offset);
             break;
         case kMipsPseudoBarrier:
-            LOGD("-------- BARRIER");
+            ALOGD("-------- BARRIER");
             break;
         case kMipsPseudoExtended:
             /* intentional fallthrough */
         case kMipsPseudoSSARep:
-            DUMP_SSA_REP(LOGD("-------- %s", (char *) dest));
+            DUMP_SSA_REP(ALOGD("-------- %s", (char *) dest));
             break;
         case kMipsPseudoChainingCellBackwardBranch:
-            LOGD("L%p:", lir);
-            LOGD("-------- chaining cell (backward branch): 0x%04x", dest);
+            ALOGD("L%p:", lir);
+            ALOGD("-------- chaining cell (backward branch): 0x%04x", dest);
             break;
         case kMipsPseudoChainingCellNormal:
-            LOGD("L%p:", lir);
-            LOGD("-------- chaining cell (normal): 0x%04x", dest);
+            ALOGD("L%p:", lir);
+            ALOGD("-------- chaining cell (normal): 0x%04x", dest);
             break;
         case kMipsPseudoChainingCellHot:
-            LOGD("L%p:", lir);
-            LOGD("-------- chaining cell (hot): 0x%04x", dest);
+            ALOGD("L%p:", lir);
+            ALOGD("-------- chaining cell (hot): 0x%04x", dest);
             break;
         case kMipsPseudoChainingCellInvokePredicted:
-            LOGD("L%p:", lir);
-            LOGD("-------- chaining cell (predicted): %s%s",
+            ALOGD("L%p:", lir);
+            ALOGD("-------- chaining cell (predicted): %s%s",
                  dest ? ((Method *) dest)->clazz->descriptor : "",
                  dest ? ((Method *) dest)->name : "N/A");
             break;
         case kMipsPseudoChainingCellInvokeSingleton:
-            LOGD("L%p:", lir);
-            LOGD("-------- chaining cell (invoke singleton): %s%s/%p",
+            ALOGD("L%p:", lir);
+            ALOGD("-------- chaining cell (invoke singleton): %s%s/%p",
                  ((Method *)dest)->clazz->descriptor,
                  ((Method *)dest)->name,
                  ((Method *)dest)->insns);
             break;
         case kMipsPseudoEntryBlock:
-            LOGD("-------- entry offset: 0x%04x", dest);
+            ALOGD("-------- entry offset: 0x%04x", dest);
             break;
         case kMipsPseudoDalvikByteCodeBoundary:
-            LOGD("-------- dalvik offset: 0x%04x @ %s", dest,
+            ALOGD("-------- dalvik offset: 0x%04x @ %s", dest,
                  (char *) lir->operands[1]);
             break;
         case kMipsPseudoExitBlock:
-            LOGD("-------- exit offset: 0x%04x", dest);
+            ALOGD("-------- exit offset: 0x%04x", dest);
             break;
         case kMipsPseudoPseudoAlign4:
-            LOGD("%p (%04x): .align4", baseAddr + offset, offset);
+            ALOGD("%p (%04x): .align4", baseAddr + offset, offset);
             break;
         case kMipsPseudoPCReconstructionCell:
-            LOGD("L%p:", lir);
-            LOGD("-------- reconstruct dalvik PC : 0x%04x @ +0x%04x", dest,
+            ALOGD("L%p:", lir);
+            ALOGD("-------- reconstruct dalvik PC : 0x%04x @ +0x%04x", dest,
                  lir->operands[1]);
             break;
         case kMipsPseudoPCReconstructionBlockLabel:
             /* Do nothing */
             break;
         case kMipsPseudoEHBlockLabel:
-            LOGD("Exception_Handling:");
+            ALOGD("Exception_Handling:");
             break;
         case kMipsPseudoTargetLabel:
         case kMipsPseudoNormalBlockLabel:
-            LOGD("L%p:", lir);
+            ALOGD("L%p:", lir);
             break;
         default:
             if (lir->flags.isNop && !dumpNop) {
@@ -298,7 +298,7 @@ void dvmDumpLIRInsn(LIR *arg, unsigned char *baseAddr)
                             baseAddr, 256);
             buildInsnString(EncodingMap[lir->opcode].fmt, lir, buf, baseAddr,
                             256);
-            LOGD("%p (%04x): %08x %-9s%s%s",
+            ALOGD("%p (%04x): %08x %-9s%s%s",
                  baseAddr + offset, offset, *(u4 *)(baseAddr + offset), opName, buf,
                  lir->flags.isNop ? "(nop)" : "");
             break;
@@ -317,25 +317,25 @@ void dvmDumpLIRInsn(LIR *arg, unsigned char *baseAddr)
 /* Dump instructions and constant pool contents */
 void dvmCompilerCodegenDump(CompilationUnit *cUnit)
 {
-    LOGD("Dumping LIR insns");
+    ALOGD("Dumping LIR insns");
     LIR *lirInsn;
     MipsLIR *mipsLIR;
 
-    LOGD("installed code is at %p", cUnit->baseAddr);
-    LOGD("total size is %d bytes", cUnit->totalSize);
+    ALOGD("installed code is at %p", cUnit->baseAddr);
+    ALOGD("total size is %d bytes", cUnit->totalSize);
     for (lirInsn = cUnit->firstLIRInsn; lirInsn; lirInsn = lirInsn->next) {
         dvmDumpLIRInsn(lirInsn, (unsigned char *) cUnit->baseAddr);
     }
     for (lirInsn = cUnit->classPointerList; lirInsn; lirInsn = lirInsn->next) {
         mipsLIR = (MipsLIR *) lirInsn;
-        LOGD("%p (%04x): .class (%s)",
+        ALOGD("%p (%04x): .class (%s)",
              (char*)cUnit->baseAddr + mipsLIR->generic.offset,
              mipsLIR->generic.offset,
              ((CallsiteInfo *) mipsLIR->operands[0])->classDescriptor);
     }
     for (lirInsn = cUnit->literalList; lirInsn; lirInsn = lirInsn->next) {
         mipsLIR = (MipsLIR *) lirInsn;
-        LOGD("%p (%04x): .word (%#x)",
+        ALOGD("%p (%04x): .word (%#x)",
              (char*)cUnit->baseAddr + mipsLIR->generic.offset,
              mipsLIR->generic.offset,
              mipsLIR->operands[0]);
