@@ -172,7 +172,7 @@ def loadAndEmitOpcodes():
     # point dvmAsmInstructionStart at the first handler or stub
     asm_fp.write("\n    .global dvmCompilerTemplateStart\n")
     asm_fp.write("    .type   dvmCompilerTemplateStart, %function\n")
-    asm_fp.write("    .text\n\n")
+    asm_fp.write("    .section .data.rel.ro\n\n")
     asm_fp.write("dvmCompilerTemplateStart:\n\n")
 
     for i in xrange(len(opcodes)):

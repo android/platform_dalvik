@@ -4,7 +4,7 @@
  * ===========================================================================
  */
 
-    .text
+    .section .data.rel.ro
     .align  2
 .LinvokeNative:
     @ Prep for the native call

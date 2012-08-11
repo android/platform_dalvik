@@ -60,6 +60,7 @@
     ldr     r0, [rFP, ip, lsl #2]       @ r0<- vC
 0:
     ldr     rINST, .L${opcode}_table    @ table of InlineOperation
+5:  add     rINST, pc
     ldr     pc, [rINST, r10, lsl #4]    @ sizeof=16, "func" is first entry
     @ (not reached)
 
@@ -95,4 +96,4 @@
 
 
 .L${opcode}_table:
-    .word   gDvmInlineOpsTable
+    .word   PCREL_REF(gDvmInlineOpsTable,5b)

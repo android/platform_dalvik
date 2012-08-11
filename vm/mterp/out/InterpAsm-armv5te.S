@@ -319,12 +319,15 @@ dvmMterpStdRun:
 
 .Lbad_arg:
     ldr     r0, strBadEntryPoint
+0:  add     r0, pc
     @ r1 holds value of entryPoint
     bl      printf
     bl      dvmAbort
     .fnend
     .size   dvmMterpStdRun, .-dvmMterpStdRun
 
+strBadEntryPoint:
+    .word   PCREL_REF(.LstrBadEntryPoint,0b)
 
     .global dvmMterpStdBail
     .type   dvmMterpStdBail, %function
@@ -346,12 +349,6 @@ dvmMterpStdBail:
     add     sp, sp, #4                      @ un-align 64
     ldmfd   sp!, {r4-r10,fp,pc}             @ restore 9 regs and return
 
-
-/*
- * String references.
- */
-strBadEntryPoint:
-    .word   .LstrBadEntryPoint
 
 
     .global dvmAsmInstructionStart
@@ -8381,6 +8378,7 @@ dvmAsmSisterStart:
      */
 .LOP_FILLED_NEW_ARRAY_notimpl:
     ldr     r0, .L_strFilledNewArrayNotImpl_OP_FILLED_NEW_ARRAY
+3:  add     r0, pc
     bl      dvmThrowInternalError
     b       common_exceptionThrown
 
@@ -8390,7 +8388,7 @@ dvmAsmSisterStart:
      */
 
 .L_strFilledNewArrayNotImpl_OP_FILLED_NEW_ARRAY:
-    .word   .LstrFilledNewArrayNotImpl
+    .word   PCREL_REF(.LstrFilledNewArrayNotImpl,3b)
 
 /* continuation for OP_FILLED_NEW_ARRAY_RANGE */
 
@@ -8465,6 +8463,7 @@ dvmAsmSisterStart:
      */
 .LOP_FILLED_NEW_ARRAY_RANGE_notimpl:
     ldr     r0, .L_strFilledNewArrayNotImpl_OP_FILLED_NEW_ARRAY_RANGE
+3:  add     r0, pc
     bl      dvmThrowInternalError
     b       common_exceptionThrown
 
@@ -8474,7 +8473,7 @@ dvmAsmSisterStart:
      */
 
 .L_strFilledNewArrayNotImpl_OP_FILLED_NEW_ARRAY_RANGE:
-    .word   .LstrFilledNewArrayNotImpl
+    .word   PCREL_REF(.LstrFilledNewArrayNotImpl,3b)
 
 /* continuation for OP_CMPL_FLOAT */
 
@@ -9989,6 +9988,7 @@ d2l_doconv:
     ldr     r0, [rFP, ip, lsl #2]       @ r0<- vC
 0:
     ldr     rINST, .LOP_EXECUTE_INLINE_table    @ table of InlineOperation
+5:  add     rINST, pc
     ldr     pc, [rINST, r10, lsl #4]    @ sizeof=16, "func" is first entry
     @ (not reached)
 
@@ -10024,7 +10024,7 @@ d2l_doconv:
 
 
 .LOP_EXECUTE_INLINE_table:
-    .word   gDvmInlineOpsTable
+    .word   PCREL_REF(gDvmInlineOpsTable,5b)
 
 /* continuation for OP_EXECUTE_INLINE_RANGE */
 
@@ -10049,6 +10049,7 @@ d2l_doconv:
     GET_VREG(r0, ip)                    @ r0<- vBase[0]
 0:
     ldr     r9, .LOP_EXECUTE_INLINE_RANGE_table       @ table of InlineOperation
+5:  add     r9, pc
     ldr     pc, [r9, r10, lsl #4]       @ sizeof=16, "func" is first entry
     @ (not reached)
 
@@ -10086,7 +10087,7 @@ d2l_doconv:
 
 
 .LOP_EXECUTE_INLINE_RANGE_table:
-    .word   gDvmInlineOpsTable
+    .word   PCREL_REF(gDvmInlineOpsTable,5b)
 
 
 /* continuation for OP_INVOKE_OBJECT_INIT_RANGE */
@@ -17031,7 +17032,9 @@ common_exceptionThrown:
     ldr     r3, [r3, #offClassObject_descriptor]
     @
     ldr     r2, strExceptionNotCaughtLocally
+0:  add     r2, pc
     ldr     r1, strLogTag
+1:  add     r1, pc
     mov     r0, #3                      @ LOG_DEBUG
     bl      __android_log_print
 #endif
@@ -17041,6 +17044,10 @@ common_exceptionThrown:
     bl      dvmReleaseTrackedAlloc      @ release the exception
     b       common_gotoBail             @ bail out
 
+strExceptionNotCaughtLocally:
+    .word   PCREL_REF(.LstrExceptionNotCaughtLocally,0b)
+strLogTag:
+    .word   PCREL_REF(.LstrLogTag,1b)
 
     /*
      * Exception handling, calls through "glue code".
@@ -17108,8 +17115,12 @@ common_errArrayIndex:
 common_errDivideByZero:
     EXPORT_PC()
     ldr     r0, strDivideByZero
+0:  add     r0, pc
     bl      dvmThrowArithmeticException
     b       common_exceptionThrown
+
+strDivideByZero:
+    .word   PCREL_REF(.LstrDivideByZero,0b)
 
 /*
  * Attempt to allocate an array with a negative size.
@@ -17159,11 +17170,15 @@ common_abort:
     .macro  SQUEAK num
 common_squeak\num:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
-    ldr     r0, strSqueak
+    ldr     r0, strSqueak\num
+0:  add     r0, pc
     mov     r1, #\num
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strSqueak\num:
+    .word   PCREL_REF(.LstrSqueak,0b)
     .endm
 
     SQUEAK  0
@@ -17180,9 +17195,13 @@ common_printNum:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     mov     r1, r0
     ldr     r0, strSqueak
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strSqueak:
+    .word   PCREL_REF(.LstrSqueak,0b)
 
 /*
  * Print a newline, preserving registers.
@@ -17190,9 +17209,13 @@ common_printNum:
 common_printNewline:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     ldr     r0, strNewline
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strNewline:
+    .word   PCREL_REF(.LstrNewline,0b)
 
     /*
      * Print the 32-bit quantity in r0 as a hex value, preserving registers.
@@ -17201,9 +17224,13 @@ common_printHex:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     mov     r1, r0
     ldr     r0, strPrintHex
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strPrintHex:
+    .word   PCREL_REF(.LstrPrintHex,0b)
 
 /*
  * Print the 64-bit quantity in r0-r1, preserving registers.
@@ -17213,9 +17240,13 @@ common_printLong:
     mov     r3, r1
     mov     r2, r0
     ldr     r0, strPrintLong
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strPrintLong:
+    .word   PCREL_REF(.LstrPrintLong,0b)
 
 /*
  * Print full method info.  Pass the Method* in r0.  Preserves regs.
@@ -17271,25 +17302,6 @@ dvmConfigureFP:
 #endif
 
 
-/*
- * String references, must be close to the code that uses them.
- */
-    .align  2
-strDivideByZero:
-    .word   .LstrDivideByZero
-strLogTag:
-    .word   .LstrLogTag
-strExceptionNotCaughtLocally:
-    .word   .LstrExceptionNotCaughtLocally
-
-strNewline:
-    .word   .LstrNewline
-strSqueak:
-    .word   .LstrSqueak
-strPrintHex:
-    .word   .LstrPrintHex
-strPrintLong:
-    .word   .LstrPrintLong
 
 /*
  * Zero-terminated ASCII string data.

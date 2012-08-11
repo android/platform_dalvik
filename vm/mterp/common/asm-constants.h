@@ -320,3 +320,9 @@ MTERP_CONSTANT(kInterpSafePoint,          0x02)
 
 MTERP_CONSTANT(DBG_METHOD_ENTRY,          0x04)
 MTERP_CONSTANT(DBG_METHOD_EXIT,           0x08)
+
+#if defined(__thumb__)
+#define PCREL_REF(sym,label) sym-(label+4)
+#else
+#define PCREL_REF(sym,label) sym-(label+8)
+#endif

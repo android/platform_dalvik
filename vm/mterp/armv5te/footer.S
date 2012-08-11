@@ -930,7 +930,9 @@ common_exceptionThrown:
     ldr     r3, [r3, #offClassObject_descriptor]
     @
     ldr     r2, strExceptionNotCaughtLocally
+0:  add     r2, pc
     ldr     r1, strLogTag
+1:  add     r1, pc
     mov     r0, #3                      @ LOG_DEBUG
     bl      __android_log_print
 #endif
@@ -940,6 +942,10 @@ common_exceptionThrown:
     bl      dvmReleaseTrackedAlloc      @ release the exception
     b       common_gotoBail             @ bail out
 
+strExceptionNotCaughtLocally:
+    .word   PCREL_REF(.LstrExceptionNotCaughtLocally,0b)
+strLogTag:
+    .word   PCREL_REF(.LstrLogTag,1b)
 
     /*
      * Exception handling, calls through "glue code".
@@ -1007,8 +1013,12 @@ common_errArrayIndex:
 common_errDivideByZero:
     EXPORT_PC()
     ldr     r0, strDivideByZero
+0:  add     r0, pc
     bl      dvmThrowArithmeticException
     b       common_exceptionThrown
+
+strDivideByZero:
+    .word   PCREL_REF(.LstrDivideByZero,0b)
 
 /*
  * Attempt to allocate an array with a negative size.
@@ -1058,11 +1068,15 @@ common_abort:
     .macro  SQUEAK num
 common_squeak\num:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
-    ldr     r0, strSqueak
+    ldr     r0, strSqueak\num
+0:  add     r0, pc
     mov     r1, #\num
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strSqueak\num:
+    .word   PCREL_REF(.LstrSqueak,0b)
     .endm
 
     SQUEAK  0
@@ -1079,9 +1093,13 @@ common_printNum:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     mov     r1, r0
     ldr     r0, strSqueak
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strSqueak:
+    .word   PCREL_REF(.LstrSqueak,0b)
 
 /*
  * Print a newline, preserving registers.
@@ -1089,9 +1107,13 @@ common_printNum:
 common_printNewline:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     ldr     r0, strNewline
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strNewline:
+    .word   PCREL_REF(.LstrNewline,0b)
 
     /*
      * Print the 32-bit quantity in r0 as a hex value, preserving registers.
@@ -1100,9 +1122,13 @@ common_printHex:
     stmfd   sp!, {r0, r1, r2, r3, ip, lr}
     mov     r1, r0
     ldr     r0, strPrintHex
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strPrintHex:
+    .word   PCREL_REF(.LstrPrintHex,0b)
 
 /*
  * Print the 64-bit quantity in r0-r1, preserving registers.
@@ -1112,9 +1138,13 @@ common_printLong:
     mov     r3, r1
     mov     r2, r0
     ldr     r0, strPrintLong
+0:  add     r0, pc
     bl      printf
     ldmfd   sp!, {r0, r1, r2, r3, ip, lr}
     bx      lr
+
+strPrintLong:
+    .word   PCREL_REF(.LstrPrintLong,0b)
 
 /*
  * Print full method info.  Pass the Method* in r0.  Preserves regs.
@@ -1170,25 +1200,6 @@ dvmConfigureFP:
 #endif
 
 
-/*
- * String references, must be close to the code that uses them.
- */
-    .align  2
-strDivideByZero:
-    .word   .LstrDivideByZero
-strLogTag:
-    .word   .LstrLogTag
-strExceptionNotCaughtLocally:
-    .word   .LstrExceptionNotCaughtLocally
-
-strNewline:
-    .word   .LstrNewline
-strSqueak:
-    .word   .LstrSqueak
-strPrintHex:
-    .word   .LstrPrintHex
-strPrintLong:
-    .word   .LstrPrintLong
 
 /*
  * Zero-terminated ASCII string data.

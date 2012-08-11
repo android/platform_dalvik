@@ -423,7 +423,7 @@ Big Endian mode */
 
     .global dvmCompilerTemplateStart
     .type   dvmCompilerTemplateStart, %function
-    .text
+    .section .data.rel.ro
 
 dvmCompilerTemplateStart:
 
@@ -3266,7 +3266,7 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
  * ===========================================================================
  */
 
-    .text
+    .section .data.rel.ro
     .align  4
 .LinvokeNative:
     # Prep for the native call
