@@ -52,6 +52,7 @@
     GET_VREG(r0, ip)                    @ r0<- vBase[0]
 0:
     ldr     r9, .L${opcode}_table       @ table of InlineOperation
+5:  add     r9, pc
     ldr     pc, [r9, r10, lsl #4]       @ sizeof=16, "func" is first entry
     @ (not reached)
 
@@ -89,5 +90,5 @@
 
 
 .L${opcode}_table:
-    .word   gDvmInlineOpsTable
+    .word   PCREL_REF(gDvmInlineOpsTable,5b)
 

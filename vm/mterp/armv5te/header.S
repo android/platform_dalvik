@@ -194,3 +194,9 @@ unspecified registers or condition codes.
 #if defined(WITH_JIT)
 #include "../common/jit-config.h"
 #endif
+
+#if defined(__thumb__)
+#define PCREL_REF(sym,label)	sym-(label+4)
+#else
+#define PCREL_REF(sym,label)	sym-(label+8)
+#endif

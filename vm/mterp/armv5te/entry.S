@@ -95,12 +95,15 @@ dvmMterpStdRun:
 
 .Lbad_arg:
     ldr     r0, strBadEntryPoint
+0:  add     r0, pc
     @ r1 holds value of entryPoint
     bl      printf
     bl      dvmAbort
     .fnend
     .size   dvmMterpStdRun, .-dvmMterpStdRun
 
+strBadEntryPoint:
+    .word   PCREL_REF(.LstrBadEntryPoint,0b)
 
     .global dvmMterpStdBail
     .type   dvmMterpStdBail, %function
@@ -122,9 +125,3 @@ dvmMterpStdBail:
     add     sp, sp, #4                      @ un-align 64
     ldmfd   sp!, {r4-r10,fp,pc}             @ restore 9 regs and return
 
-
-/*
- * String references.
- */
-strBadEntryPoint:
-    .word   .LstrBadEntryPoint
