@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIR3///+k\u003d",
+        "filename": "vm/mterp/common/asm-constants.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2012-08-11T21:15:45Z",
+      "side": 1,
+      "message": "The convention for this file is to have one space between \u0027#\u0027 and \u0027define\u0027 (see lines 43-50 for example). Can you please add one space?",
+      "revId": "b5308598edebd476d3c6e65b7e5843a177e0d02e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIR3///+g\u003d",
+        "filename": "vm/mterp/common/asm-constants.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2012-08-11T21:15:45Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "b5308598edebd476d3c6e65b7e5843a177e0d02e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
