@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAIR3////I\u003d",
+        "filename": "vm/compiler/template/gen-template.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2012-08-11T20:37:34Z",
+      "side": 1,
+      "message": "nice.  :-)",
+      "revId": "d8a41e717f4cfad34c07d61ee310caf4b2f0d049",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIR3///+w\u003d",
+        "filename": "vm/mterp/armv5te/header.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2012-08-11T20:37:34Z",
+      "side": 1,
+      "message": "Is there any reason why the PCREL_REF definions can\u0027t be put into asm-constants.h, instead of spreading the definitions all throughout the code?",
+      "revId": "d8a41e717f4cfad34c07d61ee310caf4b2f0d049",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAIR3///+s\u003d",
+        "filename": "vm/mterp/armv5te/header.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2012-08-11T20:37:34Z",
+      "side": 1,
+      "message": "for consistency with the rest of the code, please do not use tabs.  (here, line 201, and lots of other files in this change)",
+      "revId": "d8a41e717f4cfad34c07d61ee310caf4b2f0d049",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
