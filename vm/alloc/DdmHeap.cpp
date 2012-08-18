@@ -23,6 +23,7 @@
 #include "alloc/Heap.h"
 #include "alloc/HeapInternal.h"
 #include "alloc/DdmHeap.h"
+#include "alloc/DlMalloc.h"
 #include "alloc/HeapSource.h"
 
 #define DEFAULT_HEAP_ID  1
@@ -173,6 +174,7 @@ enum HpsgKind {
     ((u1)((((kind) & 0x7) << 3) | ((solidity) & 0x7)))
 
 struct HeapChunkContext {
+    void* startOfNextMemoryChunk;
     u1 *buf;
     u1 *p;
     u1 *pieceLenField;
@@ -205,36 +207,25 @@ static void flush_hpsg_chunk(HeapChunkContext *ctx)
     ctx->pieceLenField = NULL;
 }
 
-static void heap_chunk_callback(const void *chunkptr, size_t chunklen,
-                                const void *userptr, size_t userlen, void *arg)
-{
-    HeapChunkContext *ctx = (HeapChunkContext *)arg;
-    u1 state;
-
-    UNUSED_PARAMETER(userlen);
-
-    assert((chunklen & (ALLOCATION_UNIT_SIZE-1)) == 0);
-
+static void append_chunk(HeapChunkContext *ctx, u1 state, void* ptr, size_t length) {
     /* Make sure there's enough room left in the buffer.
      * We need to use two bytes for every fractional 256
-     * allocation units used by the chunk.
+     * allocation units used by the chunk and 17 bytes for
+     * any header.
      */
     {
-        size_t needed = (((chunklen/ALLOCATION_UNIT_SIZE + 255) / 256) * 2);
+        size_t needed = (((length/ALLOCATION_UNIT_SIZE + 255) / 256) * 2) + 17;
         size_t bytesLeft = ctx->bufLen - (size_t)(ctx->p - ctx->buf);
         if (bytesLeft < needed) {
             flush_hpsg_chunk(ctx);
         }
-
         bytesLeft = ctx->bufLen - (size_t)(ctx->p - ctx->buf);
         if (bytesLeft < needed) {
-            ALOGW("chunk is too big to transmit (chunklen=%zd, %zd bytes)",
-                chunklen, needed);
+            ALOGW("chunk is too big to transmit (length=%zd, %zd bytes)",
+                  length, needed);
             return;
         }
     }
-
-//TODO: notice when there's a gap and start a new heap, or at least a new range.
     if (ctx->needHeader) {
         /*
          * Start a new HPSx chunk.
@@ -247,7 +238,7 @@ static void heap_chunk_callback(const void *chunkptr, size_t chunklen,
         *ctx->p++ = 8;
 
         /* [u4]: virtual address of segment start */
-        set4BE(ctx->p, (uintptr_t)chunkptr); ctx->p += 4;
+        set4BE(ctx->p, (uintptr_t)ptr); ctx->p += 4;
 
         /* [u4]: offset of this piece (relative to the virtual address) */
         set4BE(ctx->p, 0); ctx->p += 4;
@@ -261,80 +252,123 @@ static void heap_chunk_callback(const void *chunkptr, size_t chunklen,
 
         ctx->needHeader = false;
     }
-
-    /* Determine the type of this chunk.
-     */
-    if (userptr == NULL) {
-        /* It's a free chunk.
-         */
-        state = HPSG_STATE(SOLIDITY_FREE, 0);
-    } else {
-        const Object *obj = (const Object *)userptr;
-        /* If we're looking at the native heap, we'll just return
-         * (SOLIDITY_HARD, KIND_NATIVE) for all allocated chunks
-         */
-        bool native = ctx->type == CHUNK_TYPE("NHSG");
-
-        /* It's an allocated chunk.  Figure out what it is.
-         */
-//TODO: if ctx.merge, see if this chunk is different from the last chunk.
-//      If it's the same, we should combine them.
-        if (!native && dvmIsValidObject(obj)) {
-            ClassObject *clazz = obj->clazz;
-            if (clazz == NULL) {
-                /* The object was probably just created
-                 * but hasn't been initialized yet.
-                 */
-                state = HPSG_STATE(SOLIDITY_HARD, KIND_OBJECT);
-            } else if (dvmIsTheClassClass(clazz)) {
-                state = HPSG_STATE(SOLIDITY_HARD, KIND_CLASS_OBJECT);
-            } else if (IS_CLASS_FLAG_SET(clazz, CLASS_ISARRAY)) {
-                if (IS_CLASS_FLAG_SET(clazz, CLASS_ISOBJECTARRAY)) {
-                    state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_4);
-                } else {
-                    switch (clazz->elementClass->primitiveType) {
-                    case PRIM_BOOLEAN:
-                    case PRIM_BYTE:
-                        state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_1);
-                        break;
-                    case PRIM_CHAR:
-                    case PRIM_SHORT:
-                        state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_2);
-                        break;
-                    case PRIM_INT:
-                    case PRIM_FLOAT:
-                        state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_4);
-                        break;
-                    case PRIM_DOUBLE:
-                    case PRIM_LONG:
-                        state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_8);
-                        break;
-                    default:
-                        assert(!"Unknown GC heap object type");
-                        state = HPSG_STATE(SOLIDITY_HARD, KIND_UNKNOWN);
-                        break;
-                    }
-                }
-            } else {
-                state = HPSG_STATE(SOLIDITY_HARD, KIND_OBJECT);
-            }
-        } else {
-            obj = NULL; // it's not actually an object
-            state = HPSG_STATE(SOLIDITY_HARD, KIND_NATIVE);
-        }
-    }
-
     /* Write out the chunk description.
      */
-    chunklen /= ALLOCATION_UNIT_SIZE;   // convert to allocation units
-    ctx->totalAllocationUnits += chunklen;
-    while (chunklen > 256) {
+    length /= ALLOCATION_UNIT_SIZE;   // convert to allocation units
+    ctx->totalAllocationUnits += length;
+    while (length > 256) {
         *ctx->p++ = state | HPSG_PARTIAL;
         *ctx->p++ = 255;     // length - 1
-        chunklen -= 256;
+        length -= 256;
     }
     *ctx->p++ = state;
-    *ctx->p++ = chunklen - 1;
+    *ctx->p++ = length - 1;
+}
+
+/*
+ * Called by dlmalloc_inspect_all. If used_bytes != 0 then start is
+ * the start of a malloc-ed piece of memory of size used_bytes. If
+ * start is 0 then start is the beginning of any free space not
+ * including dlmalloc's book keeping and end the start of the next
+ * dlmalloc chunk. Regions purely containing book keeping don't
+ * callback.
+ */
+static void heap_chunk_callback(void* start, void* end, size_t used_bytes,
+                                void* arg)
+{
+    u1 state;
+    HeapChunkContext *ctx = (HeapChunkContext *)arg;
+    UNUSED_PARAMETER(end);
+
+    if (used_bytes == 0) {
+        if (start == NULL) {
+            // Reset for start of new heap.
+            ctx->startOfNextMemoryChunk = NULL;
+            flush_hpsg_chunk(ctx);
+        }
+        // Only process in use memory so that free region information
+        // also includes dlmalloc book keeping.
+        return;
+    }
+
+    /* If we're looking at the native heap, we'll just return
+     * (SOLIDITY_HARD, KIND_NATIVE) for all allocated chunks
+     */
+    bool native = ctx->type == CHUNK_TYPE("NHSG");
+
+    if (ctx->startOfNextMemoryChunk != NULL) {
+        // Transmit any pending free memory. Native free memory of
+        // over kMaxFreeLen could be because of the use of mmaps, so
+        // don't report. If not free memory then start a new segment.
+        bool flush = true;
+        if (start > ctx->startOfNextMemoryChunk) {
+            const size_t kMaxFreeLen = 2 * SYSTEM_PAGE_SIZE;
+            void* freeStart = ctx->startOfNextMemoryChunk;
+            void* freeEnd = start;
+            size_t freeLen = (char*)freeEnd - (char*)freeStart;
+            if (!native || freeLen < kMaxFreeLen) {
+                append_chunk(ctx, HPSG_STATE(SOLIDITY_FREE, 0),
+                             freeStart, freeLen);
+                flush = false;
+            }
+        }
+        if (flush) {
+            ctx->startOfNextMemoryChunk = NULL;
+            flush_hpsg_chunk(ctx);
+        }
+    }
+    const Object *obj = (const Object *)start;
+
+    /* It's an allocated chunk.  Figure out what it is.
+     */
+//TODO: if ctx.merge, see if this chunk is different from the last chunk.
+//      If it's the same, we should combine them.
+    if (!native && dvmIsValidObject(obj)) {
+        ClassObject *clazz = obj->clazz;
+        if (clazz == NULL) {
+            /* The object was probably just created
+             * but hasn't been initialized yet.
+             */
+            state = HPSG_STATE(SOLIDITY_HARD, KIND_OBJECT);
+        } else if (dvmIsTheClassClass(clazz)) {
+            state = HPSG_STATE(SOLIDITY_HARD, KIND_CLASS_OBJECT);
+        } else if (IS_CLASS_FLAG_SET(clazz, CLASS_ISARRAY)) {
+            if (IS_CLASS_FLAG_SET(clazz, CLASS_ISOBJECTARRAY)) {
+                state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_4);
+            } else {
+                switch (clazz->elementClass->primitiveType) {
+                case PRIM_BOOLEAN:
+                case PRIM_BYTE:
+                    state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_1);
+                    break;
+                case PRIM_CHAR:
+                case PRIM_SHORT:
+                    state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_2);
+                    break;
+                case PRIM_INT:
+                case PRIM_FLOAT:
+                    state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_4);
+                    break;
+                case PRIM_DOUBLE:
+                case PRIM_LONG:
+                    state = HPSG_STATE(SOLIDITY_HARD, KIND_ARRAY_8);
+                    break;
+                default:
+                    assert(!"Unknown GC heap object type");
+                    state = HPSG_STATE(SOLIDITY_HARD, KIND_UNKNOWN);
+                    break;
+                }
+            }
+        } else {
+            state = HPSG_STATE(SOLIDITY_HARD, KIND_OBJECT);
+        }
+    } else {
+        obj = NULL; // it's not actually an object
+        state = HPSG_STATE(SOLIDITY_HARD, KIND_NATIVE);
+    }
+    append_chunk(ctx, state, start, used_bytes + HEAP_SOURCE_CHUNK_OVERHEAD);
+    ctx->startOfNextMemoryChunk =
+        (char*)start + used_bytes + HEAP_SOURCE_CHUNK_OVERHEAD;
 }
 
 enum HpsgWhen {
@@ -352,8 +386,6 @@ enum HpsgWhat {
  * (((maximum_heap_size / ALLOCATION_UNIT_SIZE) + 255) / 256) * 2
  */
 #define HPSx_CHUNK_SIZE (16384 - 16)
-
-extern "C" void dlmalloc_walk_heap(void(*)(const void*, size_t, const void*, size_t, void*),void*);
 
 static void walkHeap(bool merge, bool native)
 {
@@ -380,7 +412,7 @@ static void walkHeap(bool merge, bool native)
     ctx.p = ctx.buf;
     ctx.needHeader = true;
     if (native) {
-        dlmalloc_walk_heap(heap_chunk_callback, (void *)&ctx);
+        dlmalloc_inspect_all(heap_chunk_callback, (void*)&ctx);
     } else {
         dvmHeapSourceWalk(heap_chunk_callback, (void *)&ctx);
     }
