@@ -22,7 +22,6 @@
 /* dlmalloc uses one size_t per allocated chunk.
  */
 #define HEAP_SOURCE_CHUNK_OVERHEAD         (1 * sizeof (size_t))
-#define HEAP_SOURCE_WORST_CHUNK_OVERHEAD   (32 * sizeof (size_t))
 
 /* The largest number of separate heaps we can handle.
  */
@@ -157,9 +156,8 @@ void dvmHeapSourceGrowForUtilization(void);
  * Walks over the heap source and passes every allocated and
  * free chunk to the callback.
  */
-void dvmHeapSourceWalk(void(*callback)(const void *chunkptr, size_t chunklen,
-                                      const void *userptr, size_t userlen,
-                                      void *arg),
+void dvmHeapSourceWalk(void(*callback)(void* start, void* end,
+                                       size_t used_bytes, void* arg),
                        void *arg);
 /*
  * Gets the number of heaps available in the heap source.
