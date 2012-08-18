@@ -179,17 +179,6 @@ static void *tryMalloc(size_t size)
 {
     void *ptr;
 
-    /* Don't try too hard if there's no way the allocation is
-     * going to succeed.  We have to collect SoftReferences before
-     * throwing an OOME, though.
-     */
-    if (size >= gDvm.heapGrowthLimit) {
-        ALOGW("%zd byte allocation exceeds the %zd byte maximum heap size",
-             size, gDvm.heapGrowthLimit);
-        ptr = NULL;
-        goto collect_soft_refs;
-    }
-
 //TODO: figure out better heuristics
 //    There will be a lot of churn if someone allocates a bunch of
 //    big objects in a row, and we hit the frag case each time.
@@ -255,7 +244,6 @@ static void *tryMalloc(size_t size)
      * been collected and cleared before throwing an OOME.
      */
 //TODO: wait for the finalizers from the previous GC to finish
-collect_soft_refs:
     LOGI_HEAP("Forcing collection of SoftReferences for %zu-byte allocation",
             size);
     gcForMalloc(true);
