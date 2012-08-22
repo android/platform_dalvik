@@ -204,17 +204,15 @@ static void *tryMalloc(size_t size)
          * lock, wait for the GC to complete, and retrying allocating.
          */
         dvmWaitForConcurrentGcToComplete();
-        ptr = dvmHeapSourceAlloc(size);
-        if (ptr != NULL) {
-            return ptr;
-        }
+    } else {
+      /*
+       * Another failure.  Our thread was starved or there may be too
+       * many live objects.  Try a foreground GC.  This will have no
+       * effect if the concurrent GC is already running.
+       */
+      gcForMalloc(false);
     }
-    /*
-     * Another failure.  Our thread was starved or there may be too
-     * many live objects.  Try a foreground GC.  This will have no
-     * effect if the concurrent GC is already running.
-     */
-    gcForMalloc(false);
+
     ptr = dvmHeapSourceAlloc(size);
     if (ptr != NULL) {
         return ptr;
@@ -701,8 +699,9 @@ void dvmCollectGarbageInternal(const GcSpec* spec)
  * suspend when the GC thread calls dvmUnlockHeap before dvmResumeAllThreads,
  * but there's no risk of deadlock.)
  */
-void dvmWaitForConcurrentGcToComplete()
+bool dvmWaitForConcurrentGcToComplete()
 {
+    bool waited = gDvm.gcHeap->gcRunning;
     Thread *self = dvmThreadSelf();
     assert(self != NULL);
     u4 start = dvmGetRelativeTimeMsec();
@@ -715,4 +714,5 @@ void dvmWaitForConcurrentGcToComplete()
     if (end - start > 0) {
         ALOGD("WAIT_FOR_CONCURRENT_GC blocked %ums", end - start);
     }
+    return waited;
 }

@@ -92,7 +92,7 @@ void dvmCollectGarbageInternal(const GcSpec *spec);
  * re-acquires the heap lock.  After returning, no garbage collection
  * will be in progress and the heap lock will be held by the caller.
  */
-void dvmWaitForConcurrentGcToComplete(void);
+bool dvmWaitForConcurrentGcToComplete(void);
 
 /*
  * Returns true iff <obj> points to a valid allocated object.
