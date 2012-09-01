@@ -790,6 +790,7 @@ public final class DexMerger {
         codeOut.writeUnsignedShort(code.getOutsSize());
 
         Code.Try[] tries = code.getTries();
+        Code.CatchHandler[] catchHandlers = code.getCatchHandlers();
         codeOut.writeUnsignedShort(tries.length);
 
         int debugInfoOffset = code.getDebugInfoOffset();
@@ -812,16 +813,39 @@ public final class DexMerger {
             if (newInstructions.length % 2 == 1) {
                 codeOut.writeShort((short) 0); // padding
             }
-            for (Code.Try tryItem : tries) {
-                codeOut.writeInt(tryItem.getStartAddress());
-                codeOut.writeUnsignedShort(tryItem.getInstructionCount());
-                codeOut.writeUnsignedShort(tryItem.getHandlerOffset());
-            }
-            Code.CatchHandler[] catchHandlers = code.getCatchHandlers();
-            codeOut.writeUleb128(catchHandlers.length);
-            for (Code.CatchHandler catchHandler : catchHandlers) {
-                transformEncodedCatchHandler(catchHandler, indexMap);
-            }
+
+            /*
+             * We can't write the tries until we've written the catch handlers.
+             * Unfortunately they're in the opposite order in the dex file so we
+             * need to transform them out-of-order.
+             */
+            DexBuffer.Section triesSection = dexOut.open(codeOut.getPosition());
+            codeOut.skip(tries.length * SizeOf.TRY_ITEM);
+            int[] offsets = transformCatchHandlers(indexMap, catchHandlers);
+            transformTries(triesSection, tries, offsets);
+        }
+    }
+
+    /**
+     * Writes the catch handlers to {@code codeOut} and returns their indices.
+     */
+    private int[] transformCatchHandlers(IndexMap indexMap, Code.CatchHandler[] catchHandlers) {
+        int baseOffset = codeOut.getPosition();
+        codeOut.writeUleb128(catchHandlers.length);
+        int[] offsets = new int[catchHandlers.length];
+        for (int i = 0; i < catchHandlers.length; i++) {
+            offsets[i] = codeOut.getPosition() - baseOffset;
+            transformEncodedCatchHandler(catchHandlers[i], indexMap);
+        }
+        return offsets;
+    }
+
+    private void transformTries(DexBuffer.Section out, Code.Try[] tries,
+            int[] catchHandlerOffsets) {
+        for (Code.Try tryItem : tries) {
+            out.writeInt(tryItem.getStartAddress());
+            out.writeUnsignedShort(tryItem.getInstructionCount());
+            out.writeUnsignedShort(catchHandlerOffsets[tryItem.getCatchHandlerIndex()]);
         }
     }
 

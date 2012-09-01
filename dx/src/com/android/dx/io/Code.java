@@ -67,12 +67,12 @@ public final class Code {
     public static class Try {
         final int startAddress;
         final int instructionCount;
-        final int handlerOffset;
+        final int catchHandlerIndex;
 
-        Try(int startAddress, int instructionCount, int handlerOffset) {
+        Try(int startAddress, int instructionCount, int catchHandlerIndex) {
             this.startAddress = startAddress;
             this.instructionCount = instructionCount;
-            this.handlerOffset = handlerOffset;
+            this.catchHandlerIndex = catchHandlerIndex;
         }
 
         public int getStartAddress() {
@@ -83,8 +83,12 @@ public final class Code {
             return instructionCount;
         }
 
-        public int getHandlerOffset() {
-            return handlerOffset;
+        /**
+         * Returns this try's catch handler <strong>index</strong>. Note that
+         * this is distinct from the its catch handler <strong>offset</strong>.
+         */
+        public int getCatchHandlerIndex() {
+            return catchHandlerIndex;
         }
     }
 
@@ -92,11 +96,13 @@ public final class Code {
         final int[] typeIndexes;
         final int[] addresses;
         final int catchAllAddress;
+        final int offset;
 
-        public CatchHandler(int[] typeIndexes, int[] addresses, int catchAllAddress) {
+        public CatchHandler(int[] typeIndexes, int[] addresses, int catchAllAddress, int offset) {
             this.typeIndexes = typeIndexes;
             this.addresses = addresses;
             this.catchAllAddress = catchAllAddress;
+            this.offset = offset;
         }
 
         public int[] getTypeIndexes() {
@@ -109,6 +115,10 @@ public final class Code {
 
         public int getCatchAllAddress() {
             return catchAllAddress;
+        }
+
+        public int getOffset() {
+            return offset;
         }
     }
 }

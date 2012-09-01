@@ -100,4 +100,11 @@ public final class SizeOf {
      * offset uint
      */
     public static final int MAP_ITEM = USHORT + USHORT + UINT + UINT;
+
+    /**
+     * start_addr uint
+     * insn_count ushort
+     * handler_off ushort
+     */
+    public static final int TRY_ITEM = UINT + USHORT + USHORT;
 }
