@@ -453,6 +453,70 @@ static void applyLoadHoisting(CompilationUnit *cUnit,
     }
 }
 
+/*
+ * Find all vmul and vadd that can be replaced with a vmla
+ */
+static void applyMultiplyArithmeticOpts(CompilationUnit *cUnit,
+                                ArmLIR *headLIR,
+                                ArmLIR *tailLIR) {
+    ArmLIR *thisLIR = NULL;
+
+    for (thisLIR = headLIR;
+         thisLIR != tailLIR;
+         thisLIR = NEXT_LIR(thisLIR)) {
+
+        if(thisLIR->opcode == kThumb2Vmuld && !thisLIR->flags.isNop) {
+
+            /* Find next that is not nop and not pseudo code */
+            ArmLIR *nextLIR = NULL;
+            for(nextLIR = NEXT_LIR(thisLIR);
+                nextLIR != tailLIR;
+                nextLIR = NEXT_LIR(nextLIR)) {
+                if (!nextLIR->flags.isNop && !isPseudoOpcode(nextLIR->opcode)) {
+                    break;
+                }
+            }
+
+            if(nextLIR == tailLIR) {
+                return;
+            }
+
+            if(nextLIR->opcode == kThumb2Vaddd &&
+               nextLIR->operands[0] == nextLIR->operands[1] &&
+               nextLIR->operands[2] == thisLIR->operands[0]) {
+
+                /*
+                 * Found vmuld & vadd, use vmla.f64 instead
+                 *
+                 *    vmuld     d9, d9, d10
+                 *    vaddd     d8, d8, d9
+                 *
+                 * Result:
+                 *    vmla.f64  d8, d9, d10
+                 */
+
+                ArmLIR* newLIR = (ArmLIR *)dvmCompilerNew(sizeof(ArmLIR), true);
+                newLIR->opcode = kThumb2Vmlad;
+                newLIR->operands[0] = nextLIR->operands[0];
+                newLIR->operands[1] = thisLIR->operands[1];
+                newLIR->operands[2] = thisLIR->operands[2];
+                dvmCompilerSetupResourceMasks(newLIR);
+                dvmCompilerInsertLIRBefore((LIR *) nextLIR, (LIR *) newLIR);
+
+                thisLIR->flags.isNop = true;
+                nextLIR->flags.isNop = true;
+
+                /*
+                 * Avoid looping through nops already identified.
+                 * Continue directly after the updated instruction
+                 * instead.
+                 */
+                thisLIR = nextLIR;
+            }
+        }
+    }
+}
+
 void dvmCompilerApplyLocalOptimizations(CompilationUnit *cUnit, LIR *headLIR,
                                         LIR *tailLIR)
 {
@@ -462,5 +526,8 @@ void dvmCompilerApplyLocalOptimizations(CompilationUnit *cUnit, LIR *headLIR,
     }
     if (!(gDvmJit.disableOpt & (1 << kLoadHoisting))) {
         applyLoadHoisting(cUnit, (ArmLIR *) headLIR, (ArmLIR *) tailLIR);
+    }
+    if (!(gDvmJit.disableOpt & (1 << kMultiplyArithmetic))) {
+        applyMultiplyArithmeticOpts(cUnit, (ArmLIR *) headLIR, (ArmLIR* ) tailLIR);
     }
 }
