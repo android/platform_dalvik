@@ -453,6 +453,112 @@ static void applyLoadHoisting(CompilationUnit *cUnit,
     }
 }
 
+/*
+ * Find all lsl/lsr and add that can be replaced with a
+ * combined lsl/lsr + add
+ */
+static void applyShiftArithmeticOpts(CompilationUnit *cUnit,
+                                     ArmLIR *headLIR,
+                                     ArmLIR *tailLIR) {
+    ArmLIR *thisLIR = NULL;
+
+    for (thisLIR = headLIR;
+         thisLIR != tailLIR;
+         thisLIR = NEXT_LIR(thisLIR)) {
+
+        if(thisLIR->flags.isNop) {
+            continue;
+        }
+
+        if(thisLIR->opcode == kThumb2LslRRI5 || thisLIR->opcode == kThumb2LsrRRI5 ||
+           thisLIR->opcode == kThumbLslRRI5 || thisLIR->opcode == kThumbLsrRRI5) {
+
+            /* Find next that is not nop and not pseudo code */
+            ArmLIR *nextLIR = NULL;
+            for(nextLIR = NEXT_LIR(thisLIR);
+                nextLIR != tailLIR;
+                nextLIR = NEXT_LIR(nextLIR)) {
+                if (!nextLIR->flags.isNop && !isPseudoOpcode(nextLIR->opcode)) {
+                    break;
+                }
+            }
+
+            if(nextLIR == tailLIR) {
+                return;
+            }
+
+            if(nextLIR->opcode == kThumb2AddRRR &&
+               nextLIR->operands[3] == 0 &&
+               (nextLIR->operands[1] == thisLIR->operands[0] ||
+                nextLIR->operands[2] == thisLIR->operands[0])) {
+
+                /*
+                 *  Found lsl/lsr & add, use barrel shifter for add instead
+                 *
+                 *   (1) Normal case
+                 *   [lsl/lsr] r9, r1, #x
+                 *   [add]     r0, r2, r9
+                 *
+                 *   (2) Changing place of args for add
+                 *   [lsl/lsr] r9, r1, #x
+                 *   [add]     r0, r9, r2
+                 *
+                 *   (3) Using r1 and r1 shifted as args for add
+                 *   [lsl/lsr] r9, r1, #x
+                 *   [add]     r0, r1, r9
+                 *
+                 *   (4) Using r1 and r1 shifted as args for add, variant 2
+                 *   [lsl/lsr] r9, r1, #x
+                 *   [add]     r0, r9, r1
+                 *
+                 *   Result:
+                 *   [add]     rDest, rSrc1, rSrc2, [lsl/lsr] x
+                 */
+
+                int type = kArmLsl;
+                if(thisLIR->opcode == kThumb2LsrRRI5 || thisLIR->opcode == kThumbLsrRRI5) {
+                    type = kArmLsr;
+                }
+
+                /* For most cases keep original rSrc1 */
+                int rSrc1 = nextLIR->operands[1];
+
+                if(thisLIR->operands[0] == nextLIR->operands[1]) {
+                    /* Case 2 & 4: move original rSrc2 to rScr1 since
+                       reg to be shifted need to be in rSrc2 */
+                    rSrc1 = nextLIR->operands[2];
+                }
+
+                /* Reg to be shifted need to be in rSrc2 */
+                int rSrc2 = thisLIR->operands[1];
+
+                /* Encode type of shift and amount */
+                int shift = ((thisLIR->operands[2] & 0x1f) << 2) | type;
+
+                /* Keep rDest, but change rSrc1, rSrc2 and use shift */
+                ArmLIR* newLIR = (ArmLIR *)dvmCompilerNew(sizeof(ArmLIR), true);
+                newLIR->opcode = nextLIR->opcode;
+                newLIR->operands[0] = nextLIR->operands[0];
+                newLIR->operands[1] = rSrc1;
+                newLIR->operands[2] = rSrc2;
+                newLIR->operands[3] = shift;
+                dvmCompilerSetupResourceMasks(newLIR);
+                dvmCompilerInsertLIRBefore((LIR *) nextLIR, (LIR *) newLIR);
+
+                thisLIR->flags.isNop = true;
+                nextLIR->flags.isNop = true;
+
+                /*
+                 * Avoid looping through nops already identified.
+                 * Continue directly after the updated instruction
+                 * instead.
+                 */
+                thisLIR = nextLIR;
+            }
+        }
+    }
+}
+
 void dvmCompilerApplyLocalOptimizations(CompilationUnit *cUnit, LIR *headLIR,
                                         LIR *tailLIR)
 {
@@ -462,5 +568,8 @@ void dvmCompilerApplyLocalOptimizations(CompilationUnit *cUnit, LIR *headLIR,
     }
     if (!(gDvmJit.disableOpt & (1 << kLoadHoisting))) {
         applyLoadHoisting(cUnit, (ArmLIR *) headLIR, (ArmLIR *) tailLIR);
+    }
+    if (!(gDvmJit.disableOpt & (1 << kShiftArithmetic))) {
+        applyShiftArithmeticOpts(cUnit, (ArmLIR *) headLIR, (ArmLIR* ) tailLIR);
     }
 }
