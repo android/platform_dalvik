@@ -2259,10 +2259,7 @@ static bool handleEasyMultiply(CompilationUnit *cUnit,
     } else {
         // Reverse subtract: (src << (shift + 1)) - src.
         assert(powerOfTwoMinusOne);
-        // TODO: rsb dst, src, src lsl#lowestSetBit(lit + 1)
-        int tReg = dvmCompilerAllocTemp(cUnit);
-        opRegRegImm(cUnit, kOpLsl, tReg, rlSrc.lowReg, lowestSetBit(lit + 1));
-        opRegRegReg(cUnit, kOpSub, rlResult.lowReg, tReg, rlSrc.lowReg);
+        genMultiplyByShiftAndReverseSubtract(cUnit, rlSrc, rlResult, lowestSetBit(lit + 1));
     }
     storeValue(cUnit, rlDest, rlResult);
     return true;
