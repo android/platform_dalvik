@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAJ/3///3M\u003d",
+        "filename": "vm/Init.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-10-10T00:30:11Z",
+      "side": 1,
+      "message": "oops?",
+      "revId": "0c2dc522d0e120f346cf0a40c8cf0c93346131c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
