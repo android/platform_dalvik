@@ -16,6 +16,24 @@
       "revId": "0c2dc522d0e120f346cf0a40c8cf0c93346131c2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAJ/n///1E\u003d",
+        "filename": "vm/Init.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1013855
+      },
+      "writtenOn": "2012-10-10T00:51:40Z",
+      "side": 1,
+      "message": "No oops, this was intentional. The short method inlining needs some native support even though optimization is at MIR level (for example dealing with mispredicted callee for virtual invokes). The native support is not in this patch.",
+      "parentUuid": "AAAJ/3///3M\u003d",
+      "revId": "0c2dc522d0e120f346cf0a40c8cf0c93346131c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
