@@ -307,10 +307,9 @@ static void genMonitorExit(CompilationUnit *cUnit, MIR *mir)
     // Is lock unheld on lock or held by us (==threadId) on unlock?
     opRegRegImm(cUnit, kOpAnd, r7, r2,
                 (LW_HASH_STATE_MASK << LW_HASH_STATE_SHIFT));
-    opRegImm(cUnit, kOpLsl, r3, LW_LOCK_OWNER_SHIFT); // Align owner
     newLIR3(cUnit, kThumb2Bfc, r2, LW_HASH_STATE_SHIFT,
             LW_LOCK_OWNER_SHIFT - 1);
-    opRegReg(cUnit, kOpSub, r2, r3);
+    opRegRegRegShift(cUnit, kOpSub, r2, r2, r3, encodeShift(kArmLsl, LW_LOCK_OWNER_SHIFT)); // Align owner
     hopBranch = opCondBranch(cUnit, kArmCondNe);
     dvmCompilerGenMemBarrier(cUnit, kSY);
     storeWordDisp(cUnit, r1, offsetof(Object, lock), r7);
