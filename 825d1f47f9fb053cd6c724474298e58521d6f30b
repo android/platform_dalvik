@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAKR3///1w\u003d",
+        "filename": "vm/interp/Interp.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-10-16T01:07:08Z",
+      "side": 1,
+      "message": "well spotted! i\u0027ve changed this code to be in terms of \u0027index\u0027 (testVal - firstKey) like the compiler. that avoids overflow just as well, but i think it\u0027s a little bit clearer.",
+      "revId": "825d1f47f9fb053cd6c724474298e58521d6f30b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
