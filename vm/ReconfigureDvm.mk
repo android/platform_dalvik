@@ -21,13 +21,14 @@ dvm_arch_variant := $(TARGET_ARCH_VARIANT)
 
 include $(LOCAL_PATH)/Dvm.mk
 
-LOCAL_SHARED_LIBRARIES += liblog libcutils libnativehelper libz libdl libcorkscrew
-
-ifeq ($(HAVE_SELINUX),true)
-LOCAL_C_INCLUDES += external/libselinux/include
-LOCAL_SHARED_LIBRARIES += libselinux
-LOCAL_CFLAGS += -DHAVE_SELINUX
-endif # HAVE_SELINUX
+LOCAL_SHARED_LIBRARIES += \
+	liblog \
+	libcutils \
+	libnativehelper \
+	libz \
+	libdl \
+	libcorkscrew \
+	libselinux
 
 LOCAL_STATIC_LIBRARIES += libdex
 

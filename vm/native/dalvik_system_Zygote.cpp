@@ -20,9 +20,7 @@
 #include "Dalvik.h"
 #include "native/InternalNativePriv.h"
 
-#ifdef HAVE_SELINUX
 #include <selinux/android.h>
-#endif
 
 #include <signal.h>
 #include <sys/types.h>
@@ -361,7 +359,6 @@ static int setCapabilities(int64_t permitted, int64_t effective)
     return 0;
 }
 
-#ifdef HAVE_SELINUX
 /*
  * Set SELinux security context.
  *
@@ -376,7 +373,6 @@ static int setSELinuxContext(uid_t uid, bool isSystemServer,
     return 0;
 #endif
 }
-#endif
 
 /*
  * Utility routine to fork zygote and specialize the child process.
@@ -391,10 +387,8 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     u4 debugFlags = args[3];
     ArrayObject *rlimits = (ArrayObject *)args[4];
     int64_t permittedCapabilities, effectiveCapabilities;
-#ifdef HAVE_SELINUX
     char *seInfo = NULL;
     char *niceName = NULL;
-#endif
 
     if (isSystemServer) {
         /*
@@ -408,7 +402,6 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         effectiveCapabilities = args[7] | (int64_t) args[8] << 32;
     } else {
         permittedCapabilities = effectiveCapabilities = 0;
-#ifdef HAVE_SELINUX
         StringObject* seInfoObj = (StringObject*)args[5];
         if (seInfoObj) {
             seInfo = dvmCreateCstrFromString(seInfoObj);
@@ -425,7 +418,6 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
                 dvmAbort();
             }
         }
-#endif
     }
 
     if (!gDvm.zygote) {
@@ -510,7 +502,6 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
             dvmAbort();
         }
 
-#ifdef HAVE_SELINUX
         err = setSELinuxContext(uid, isSystemServer, seInfo, niceName);
         if (err < 0) {
             ALOGE("cannot set SELinux context: %s\n", strerror(errno));
@@ -521,7 +512,6 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         // lock when we forked.
         free(seInfo);
         free(niceName);
-#endif
 
         /*
          * Our system thread ID has changed.  Get the new one.
@@ -540,10 +530,8 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         }
     } else if (pid > 0) {
         /* the parent process */
-#ifdef HAVE_SELINUX
         free(seInfo);
         free(niceName);
-#endif
     }
 
     return pid;
