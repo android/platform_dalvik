@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAKdn////s\u003d",
+        "filename": "vm/ReconfigureDvm.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-10-17T16:07:55Z",
+      "side": 1,
+      "message": "|sort?",
+      "revId": "7aa468bcd5979647f17d0c79c6d6c1e8928c2457",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
