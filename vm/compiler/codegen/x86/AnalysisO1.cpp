@@ -3717,7 +3717,7 @@ int beforeCall(const char* target) { //spill all live registers
        (!strcmp(target, "dvmAllocArrayByClass")) ||
        (!strcmp(target, "dvmAllocPrimitiveArray")) ||
        (!strcmp(target, "dvmInterpHandleFillArrayData")) ||
-       (!strcmp(target, "dvmFindInterfaceMethodInCache2")) ||
+       (!strcmp(target, "dvmFindInterfaceMethodInCache")) ||
        (!strcmp(target, "dvmNcgHandlePackedSwitch")) ||
        (!strcmp(target, "dvmNcgHandleSparseSwitch")) ||
        (!strcmp(target, "dvmCanPutArrayElement")) ||

@@ -102,17 +102,3 @@ s4 dvmJitHandleSparseSwitch(const s4* keys, u2 size, s4 testVal)
     LOGVV("Value %d not found in switch", testVal);
     return 2*3; //bytecode sparse_switch is 6(2*3) bytes long
 }
-/*
- * Look up an interface on a class using the cache.
- */
-/*INLINE*/ Method* dvmFindInterfaceMethodInCache2(ClassObject* thisClass,
-    u4 methodIdx, const Method* method, DvmDex* methodClassDex)
-{
-#define ATOMIC_CACHE_CALC \
-    dvmInterpFindInterfaceMethod(thisClass, methodIdx, method, methodClassDex)
-
-    return (Method*) ATOMIC_CACHE_LOOKUP(methodClassDex->pInterfaceCache,
-                DEX_INTERFACE_CACHE_SIZE, thisClass, methodIdx);
-
-#undef ATOMIC_CACHE_CALC
-}

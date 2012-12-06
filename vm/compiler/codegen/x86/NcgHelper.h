@@ -23,11 +23,6 @@ s4 dvmNcgHandleSparseSwitch(const s4*, u2, s4);
 s4 dvmJitHandlePackedSwitch(const s4*, s4, u2, s4);
 s4 dvmJitHandleSparseSwitch(const s4*, u2, s4);
 /*
- * Look up an interface on a class using the cache.
- */
-Method* dvmFindInterfaceMethodInCache2(ClassObject* thisClass,
-    u4 methodIdx, const Method* method, DvmDex* methodClassDex);
-/*
  * Find an interface method.
  */
 #if 0
