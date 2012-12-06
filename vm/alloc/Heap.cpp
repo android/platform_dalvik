@@ -31,6 +31,13 @@
 #include <limits.h>
 #include <errno.h>
 
+/* Do not trigger foreground GC for allocations larger than 128KB
+ * If the requested size is too big, it is highly likely that
+ * we can successfully allocate resource after GC without growing the heap.
+ * 128KB is choosen experimentally. Please take a look at the bug 920596
+ */
+#define MAX_FOREGROUND_GC_THRESHOLD (128 * 1024)
+
 static const GcSpec kGcForMallocSpec = {
     true,  /* isPartial */
     false,  /* isConcurrent */
@@ -205,10 +212,12 @@ static void *tryMalloc(size_t size)
          */
         dvmWaitForConcurrentGcToComplete();
     } else {
-      /*
-       * Try a foreground GC since a concurrent GC is not currently running.
-       */
-      gcForMalloc(false);
+      if (size < MAX_FOREGROUND_GC_THRESHOLD) {
+          /*
+           * Try a foreground GC since a concurrent GC is not currently running.
+           */
+          gcForMalloc(false);
+      }
     }
 
     ptr = dvmHeapSourceAlloc(size);
@@ -223,10 +232,12 @@ static void *tryMalloc(size_t size)
     if (ptr != NULL) {
         size_t newHeapSize;
 
+        /* Grow a little bit more so we won't get unsuccessful
+         * allocation in the near future.
+         */
+        dvmHeapSourceGrowForUtilization();
+
         newHeapSize = dvmHeapSourceGetIdealFootprint();
-//TODO: may want to grow a little bit more so that the amount of free
-//      space is equal to the old free space + the utilization slop for
-//      the new allocation.
         LOGI_HEAP("Grow heap (frag case) to "
                 "%zu.%03zuMB for %zu-byte allocation",
                 FRACTIONAL_MB(newHeapSize), size);
