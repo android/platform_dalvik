@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M5Dm8ONU",
+        "filename": "vm/alloc/Heap.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-12-11T17:51:34Z",
+      "side": 1,
+      "message": "i\u0027ll leave irogers to decide on GC policy, but i think if we do go this way, we should rename this. it\u0027s really the *MAX* allocation that will still cause a foreground GC. so either this name and this comment is the wrong way round, or the code that uses this later got the conditional back to front...",
+      "revId": "b7f61c6110714e63dc712c7561a9f5399c968236",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
