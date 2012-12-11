@@ -16,6 +16,23 @@
       "revId": "b7f61c6110714e63dc712c7561a9f5399c968236",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M16bRDh8",
+        "filename": "vm/alloc/Heap.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-12-11T18:12:34Z",
+      "side": 1,
+      "message": "From the comment on MIN_FOREGROUND_GC_THRESHOLD this should be a \u003e\u003d test. You are forcing foreground GCs only for small allocations.",
+      "revId": "b7f61c6110714e63dc712c7561a9f5399c968236",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
