@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "M1kcrDYM",
+        "filename": "vm/alloc/Heap.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1017038
+      },
+      "writtenOn": "2012-12-12T00:21:50Z",
+      "side": 1,
+      "message": "Thanks for pointing that out. Yes. I think this should be MAX_FOREGROUND_GC_THRESHOLD. I will make a new patchset.",
+      "parentUuid": "M5Dm8ONU",
+      "revId": "b7f61c6110714e63dc712c7561a9f5399c968236",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "M16bRDh8",
         "filename": "vm/alloc/Heap.cpp",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2012-12-11T18:12:34Z",
       "side": 1,
       "message": "From the comment on MIN_FOREGROUND_GC_THRESHOLD this should be a \u003e\u003d test. You are forcing foreground GCs only for small allocations.",
+      "revId": "b7f61c6110714e63dc712c7561a9f5399c968236",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M1qco8YU",
+        "filename": "vm/alloc/Heap.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1017038
+      },
+      "writtenOn": "2012-12-12T00:21:50Z",
+      "side": 1,
+      "message": "This does what I intended. The naming was just wrong.",
+      "parentUuid": "M16bRDh8",
       "revId": "b7f61c6110714e63dc712c7561a9f5399c968236",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
