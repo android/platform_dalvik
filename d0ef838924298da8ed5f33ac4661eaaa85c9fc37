@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "M718uMZQ",
+        "filename": "tests/004-annotations/build",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1014629
+      },
+      "writtenOn": "2012-12-15T07:05:23Z",
+      "side": 1,
+      "message": "commented out?",
+      "revId": "d0ef838924298da8ed5f33ac4661eaaa85c9fc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M7x9L2Vo",
+        "filename": "tests/004-annotations/build",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1014629
+      },
+      "writtenOn": "2012-12-15T07:05:23Z",
+      "side": 1,
+      "message": "I think if the --output for dx ends with .jar, you can save this step",
+      "revId": "d0ef838924298da8ed5f33ac4661eaaa85c9fc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "M1y4wPqM",
         "filename": "vm/reflect/Annotation.cpp",
         "patchSetId": 1
