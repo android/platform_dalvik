@@ -16,6 +16,24 @@
       "revId": "d0ef838924298da8ed5f33ac4661eaaa85c9fc37",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M5Oxtnow",
+        "filename": "vm/reflect/Annotation.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-12-15T05:06:40Z",
+      "side": 1,
+      "message": "if you don\u0027t trust me, trust fadden\u0027s original on L850 :-)",
+      "parentUuid": "M1y4wPqM",
+      "revId": "d0ef838924298da8ed5f33ac4661eaaa85c9fc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
