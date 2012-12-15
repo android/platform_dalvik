@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "M1y4wPqM",
+        "filename": "vm/reflect/Annotation.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2012-12-15T03:35:06Z",
+      "side": 1,
+      "message": "just to double check, the argument is supposed to be the array type, not the array element type?",
+      "revId": "d0ef838924298da8ed5f33ac4661eaaa85c9fc37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
