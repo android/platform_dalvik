@@ -1303,6 +1303,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
     pthread_t threadHandle;
     int cc = pthread_create(&threadHandle, &threadAttr, interpThreadStart,
                             newThread);
+    pthread_attr_destroy(&threadAttr);
     dvmChangeStatus(self, oldStatus);
 
     if (cc != 0) {
@@ -1659,12 +1660,14 @@ bool dvmCreateInternalThread(pthread_t* pHandle, const char* name,
     if (pthread_create(pHandle, &threadAttr, internalThreadStart,
             pArgs) != 0)
     {
+        pthread_attr_destroy(&threadAttr);
         ALOGE("internal thread creation failed");
         free(pArgs->name);
         free(pArgs);
         return false;
     }
 
+    pthread_attr_destroy(&threadAttr);
     /*
      * Wait for the child to start.  This gives us an opportunity to make
      * sure that the thread started correctly, and allows our caller to
