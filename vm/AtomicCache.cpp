@@ -49,8 +49,10 @@ AtomicCache* dvmAllocAtomicCache(int numEntries)
 
     newCache->entryAlloc = calloc(1,
         sizeof(AtomicCacheEntry) * numEntries + CPU_CACHE_WIDTH);
-    if (newCache->entryAlloc == NULL)
+    if (newCache->entryAlloc == NULL) {
+        free(newCache);
         return NULL;
+    }
 
     /*
      * Adjust storage to align on a 32-byte boundary.  Each entry is 16 bytes

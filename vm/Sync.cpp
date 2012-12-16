@@ -103,6 +103,7 @@ Monitor* dvmCreateMonitor(Object* obj)
     }
     if (((u4)mon & 7) != 0) {
         ALOGE("Misaligned monitor: %p", mon);
+        free(mon);
         dvmAbort();
     }
     mon->obj = obj;
