@@ -16,6 +16,24 @@
       "revId": "672e1df971215d078d759e4ff340a56c3371a1d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "M1xY8bDM",
+        "filename": "vm/Sync.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2012-12-17T07:11:52Z",
+      "side": 1,
+      "message": "allocations are always 8 byte aligned.. if not the world is very broken and I\u0027m not sure freeing is going to help. In any case its rearranging the deck chairs on the titanic.",
+      "parentUuid": "M4VHvCRE",
+      "revId": "672e1df971215d078d759e4ff340a56c3371a1d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
