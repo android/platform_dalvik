@@ -132,7 +132,7 @@ int sysLoadFileInShmem(int fd, MemMapping* pMap)
     actual = read(fd, memPtr, length);
     if (actual != length) {
         ALOGE("only read %d of %d bytes", (int) actual, (int) length);
-        sysReleaseShmem(pMap);
+        munmap(memPtr, length);
         return -1;
     }
 
