@@ -453,3 +453,146 @@ static void genMultiplyByTwoBitMultiplier(CompilationUnit *cUnit,
         opRegRegImm(cUnit, kOpLsl, rlResult.lowReg, rlResult.lowReg, firstBit);
     }
 }
+
+/*
+ * Generate array load.
+ * For wide array access using scale, combine add with shift.
+ * When using offset, use ldr instruction with offset capabilities.
+ */
+static void genArrayGet(CompilationUnit *cUnit, MIR *mir, OpSize size,
+                        RegLocation rlArray, RegLocation rlIndex,
+                        RegLocation rlDest, int scale)
+{
+    RegisterClass regClass = dvmCompilerRegClassBySize(size);
+    int lenOffset = OFFSETOF_MEMBER(ArrayObject, length);
+    int dataOffset = OFFSETOF_MEMBER(ArrayObject, contents);
+    RegLocation rlResult;
+    rlArray = loadValue(cUnit, rlArray, kCoreReg);
+    rlIndex = loadValue(cUnit, rlIndex, kCoreReg);
+    int regPtr;
+
+    /* null object? */
+    ArmLIR * pcrLabel = NULL;
+
+    if (!(mir->OptimizationFlags & MIR_IGNORE_NULL_CHECK)) {
+        pcrLabel = genNullCheck(cUnit, rlArray.sRegLow,
+                                rlArray.lowReg, mir->offset, NULL);
+    }
+
+    regPtr = dvmCompilerAllocTemp(cUnit);
+
+    if (!(mir->OptimizationFlags & MIR_IGNORE_RANGE_CHECK)) {
+        int regLen = dvmCompilerAllocTemp(cUnit);
+        /* Get len */
+        loadWordDisp(cUnit, rlArray.lowReg, lenOffset, regLen);
+        genBoundsCheck(cUnit, rlIndex.lowReg, regLen, mir->offset,
+                       pcrLabel);
+        dvmCompilerFreeTemp(cUnit, regLen);
+    }
+    if ((size == kLong) || (size == kDouble)) {
+        int rNewIndex = dvmCompilerAllocTemp(cUnit);
+        if (scale) {
+            /* Combine add with shift */
+            opRegRegRegShift(cUnit, kOpAdd, rNewIndex, rlArray.lowReg,
+                             rlIndex.lowReg, encodeShift(kArmLsl, scale));
+        } else {
+            opRegRegReg(cUnit, kOpAdd, rNewIndex, regPtr, rlIndex.lowReg);
+        }
+        rlResult = dvmCompilerEvalLoc(cUnit, rlDest, regClass, true);
+
+        HEAP_ACCESS_SHADOW(true);
+        /* Use data offset */
+        loadPair(cUnit, rNewIndex, dataOffset, rlResult.lowReg, rlResult.highReg);
+        HEAP_ACCESS_SHADOW(false);
+
+        dvmCompilerFreeTemp(cUnit, rNewIndex);
+        dvmCompilerFreeTemp(cUnit, regPtr);
+        storeValueWide(cUnit, rlDest, rlResult);
+    } else {
+        /* regPtr -> array data */
+        opRegRegImm(cUnit, kOpAdd, regPtr, rlArray.lowReg, dataOffset);
+
+        rlResult = dvmCompilerEvalLoc(cUnit, rlDest, regClass, true);
+
+        HEAP_ACCESS_SHADOW(true);
+        loadBaseIndexed(cUnit, regPtr, rlIndex.lowReg, rlResult.lowReg,
+                        scale, size);
+        HEAP_ACCESS_SHADOW(false);
+
+        dvmCompilerFreeTemp(cUnit, regPtr);
+        storeValue(cUnit, rlDest, rlResult);
+    }
+}
+
+/*
+ * Generate array store.
+ * For wide array access using scale, combine add with shift.
+ * When using offset, use str instruction with offset capabilities.
+ */
+static void genArrayPut(CompilationUnit *cUnit, MIR *mir, OpSize size,
+                        RegLocation rlArray, RegLocation rlIndex,
+                        RegLocation rlSrc, int scale)
+{
+    RegisterClass regClass = dvmCompilerRegClassBySize(size);
+    int lenOffset = OFFSETOF_MEMBER(ArrayObject, length);
+    int dataOffset = OFFSETOF_MEMBER(ArrayObject, contents);
+
+    int regPtr;
+    rlArray = loadValue(cUnit, rlArray, kCoreReg);
+    rlIndex = loadValue(cUnit, rlIndex, kCoreReg);
+
+    if (dvmCompilerIsTemp(cUnit, rlArray.lowReg)) {
+        dvmCompilerClobber(cUnit, rlArray.lowReg);
+        regPtr = rlArray.lowReg;
+    } else {
+        regPtr = dvmCompilerAllocTemp(cUnit);
+        genRegCopy(cUnit, regPtr, rlArray.lowReg);
+    }
+
+    /* null object? */
+    ArmLIR * pcrLabel = NULL;
+
+    if (!(mir->OptimizationFlags & MIR_IGNORE_NULL_CHECK)) {
+        pcrLabel = genNullCheck(cUnit, rlArray.sRegLow, rlArray.lowReg,
+                                mir->offset, NULL);
+    }
+
+    if (!(mir->OptimizationFlags & MIR_IGNORE_RANGE_CHECK)) {
+        int regLen = dvmCompilerAllocTemp(cUnit);
+        //NOTE: max live temps(4) here.
+        /* Get len */
+        loadWordDisp(cUnit, rlArray.lowReg, lenOffset, regLen);
+        genBoundsCheck(cUnit, rlIndex.lowReg, regLen, mir->offset,
+                       pcrLabel);
+        dvmCompilerFreeTemp(cUnit, regLen);
+    }
+    /* at this point, regPtr points to array, 2 live temps */
+    if ((size == kLong) || (size == kDouble)) {
+        //TODO: need specific wide routine that can handle fp regs
+        int rNewIndex = dvmCompilerAllocTemp(cUnit);
+        if (scale) {
+            opRegRegRegShift(cUnit, kOpAdd, rNewIndex, rlArray.lowReg,
+                             rlIndex.lowReg, encodeShift(kArmLsl, scale));
+        } else {
+            opRegRegReg(cUnit, kOpAdd, rNewIndex, regPtr, rlIndex.lowReg);
+        }
+        rlSrc = loadValueWide(cUnit, rlSrc, regClass);
+
+        HEAP_ACCESS_SHADOW(true);
+        storePair(cUnit, rNewIndex, dataOffset, rlSrc.lowReg, rlSrc.highReg);
+        HEAP_ACCESS_SHADOW(false);
+
+        dvmCompilerFreeTemp(cUnit, rNewIndex);
+        dvmCompilerFreeTemp(cUnit, regPtr);
+    } else {
+        /* regPtr -> array data */
+        opRegImm(cUnit, kOpAdd, regPtr, dataOffset);
+
+        rlSrc = loadValue(cUnit, rlSrc, regClass);
+
+        HEAP_ACCESS_SHADOW(true);
+        storeBaseIndexed(cUnit, regPtr, rlIndex.lowReg, rlSrc.lowReg,
+                         scale, size);
+        HEAP_ACCESS_SHADOW(false);
+    }
+}

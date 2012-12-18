@@ -1152,9 +1152,19 @@ static void storePair(CompilationUnit *cUnit, int base, int lowReg, int highReg)
     storeBaseDispWide(cUnit, base, 0, lowReg, highReg);
 }
 
+static void storePair(CompilationUnit *cUnit, int base, int displacement, int lowReg, int highReg)
+{
+    storeBaseDispWide(cUnit, base, displacement, lowReg, highReg);
+}
+
 static void loadPair(CompilationUnit *cUnit, int base, int lowReg, int highReg)
 {
     loadBaseDispWide(cUnit, NULL, base, 0, lowReg, highReg, INVALID_SREG);
+}
+
+static void loadPair(CompilationUnit *cUnit, int base, int displacement, int lowReg, int highReg)
+{
+    loadBaseDispWide(cUnit, NULL, base, displacement, lowReg, highReg, INVALID_SREG);
 }
 
 /*
