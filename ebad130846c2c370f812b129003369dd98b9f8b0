@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "NFB.qrNY",
+        "filename": "vm/native/java_lang_Runtime.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2012-12-20T23:54:55Z",
+      "side": 1,
+      "message": "I worry about the semantics here. we set the global LD_LIBRARY_PATH but this can be called on different threads with different class loaders with different load library paths. it would seem ideal if we have a per dlopen extra argument to pass what the caller needs. (also we have dlopen() calls in other native threads that can observe the LD_LIBRARY_PATH changing)",
+      "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
