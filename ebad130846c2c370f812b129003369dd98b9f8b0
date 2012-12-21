@@ -16,6 +16,24 @@
       "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFTsw2qA",
+        "filename": "vm/native/java_lang_Runtime.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-12-21T00:38:58Z",
+      "side": 1,
+      "message": "yeah, i meant to add \"synchronized\" to nativeLoad.\n\ni deliberately did it this way because (a) it means no need to change frameworks/base but also (b) if someone _wants_ to try to be clever with PathClassLoader, they can.\n\nthe obvious alternative would be to lose this nativeLoad change and instead add an API that frameworks/base calls when it sets up the apk ClassLoader to also set the effective LD_LIBRARY_PATH. the advantage is that we don\u0027t have to think about what path is in effect at any given time --- it\u0027s the one the system chose. the disadvantage is that if someone wanted to be clever at run time, this bug remains unfixed for them, and they still need to manually dance around pulling in libraries in order.",
+      "parentUuid": "NFB.qrNY",
+      "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
