@@ -16,6 +16,24 @@
       "revId": "483eedc3f30dcaf7ddb2f1b928db8608d9d38ffe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NGAUiYVY",
+        "filename": "vm/Jni.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-12-21T22:19:03Z",
+      "side": 1,
+      "message": "arse!\n\ngood job one of us can read...",
+      "parentUuid": "NFSr8-ao",
+      "revId": "483eedc3f30dcaf7ddb2f1b928db8608d9d38ffe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
