@@ -70,6 +70,24 @@
       "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NGB-z1-8",
+        "filename": "vm/native/java_lang_Runtime.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-12-21T01:10:38Z",
+      "side": 1,
+      "message": "does that work for multiple apks in the same process? won\u0027t they need a ClassLoader each, if they each have native code?",
+      "parentUuid": "NFL-KeD0",
+      "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
