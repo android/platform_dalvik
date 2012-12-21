@@ -34,6 +34,24 @@
       "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NFfuckng",
+        "filename": "vm/native/java_lang_Runtime.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2012-12-21T00:47:09Z",
+      "side": 1,
+      "message": "the trade-off with having something like dlopen_with_custom_ld_library_path is that with this current fix, i don\u0027t just fix System.loadLibrary --- i fix native dlopen(3) calls too.\n\ni\u0027ve tested srhines\u0027 .apks and a small random selection of games (including a Unity game) plus Firefox, and everything works for me.",
+      "parentUuid": "NFTsw2qA",
+      "revId": "ebad130846c2c370f812b129003369dd98b9f8b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
