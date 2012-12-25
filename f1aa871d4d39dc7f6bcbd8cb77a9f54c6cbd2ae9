@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "NP6Vk1Qk",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1014554
+      },
+      "writtenOn": "2012-12-25T15:03:38Z",
+      "side": 1,
+      "message": "* pMethInfo-\u003esignature must be free()ed by the caller.",
+      "revId": "f1aa871d4d39dc7f6bcbd8cb77a9f54c6cbd2ae9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "NP4VcOUw",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1014554
+      },
+      "writtenOn": "2012-12-25T15:03:38Z",
+      "side": 1,
+      "message": "It looks ugly. Any better way?",
+      "revId": "f1aa871d4d39dc7f6bcbd8cb77a9f54c6cbd2ae9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
