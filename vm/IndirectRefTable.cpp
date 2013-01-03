@@ -185,7 +185,7 @@ Object* IndirectRefTable::get(IndirectRef iref) const {
 
 static int findObject(const Object* obj, int bottomIndex, int topIndex,
         const IndirectRefSlot* table) {
-    for (int i = bottomIndex; i < topIndex; ++i) {
+    for (int i = topIndex - 1; i >= bottomIndex; --i) {
         if (table[i].obj == obj) {
             return i;
         }
