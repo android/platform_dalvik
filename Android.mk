@@ -22,7 +22,6 @@ subdirs := $(addprefix $(LOCAL_PATH)/,$(addsuffix /Android.mk, \
 		dexlist \
 		dexopt \
 		dexdump \
-		dvz \
 		dx \
 		tools \
 		unit-tests \
