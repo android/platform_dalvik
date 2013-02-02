@@ -16594,7 +16594,6 @@ common_exceptionThrown:
 
     movl       offThread_method(%ecx), %eax # %eax = self->method
     movl       offMethod_insns(%eax), %eax  # %eax = self->method->insn
-    # ldrh    lr, [rSELF, #offThread_subMode]  @ lr<- subMode flags  # TODO
     movl       rPC, %ecx
     subl       %eax, %ecx              # %ecx = pc - self->method->insn
     sar        $1, %ecx                # adjust %ecx for code offset

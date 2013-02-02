@@ -851,7 +851,6 @@ common_exceptionThrown:
     lw       a1, offThread_method(rSELF)
     move     a0, rSELF
     lw       a1, offMethod_insns(a1)
-    lhu      ra, offThread_subMode(rSELF)
     move     a2, rOBJ
     subu     a1, rPC, a1
     sra      a1, a1, 1
