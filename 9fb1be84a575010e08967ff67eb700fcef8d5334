@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "PfuRw2v0",
+        "filename": "vm/reflect/Proxy.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-02-05T20:27:09Z",
+      "side": 1,
+      "message": "the bug in the old code is that newClass would be null by the time we got here in the failure case, so we\u0027d not release that tracked reference.",
+      "revId": "9fb1be84a575010e08967ff67eb700fcef8d5334",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
