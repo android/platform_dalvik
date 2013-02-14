@@ -699,6 +699,10 @@ bool dvmCompilerLoopOpt(CompilationUnit *cUnit)
                                           false /* isIterative */);
     DEBUG_LOOP(dumpIVList(cUnit);)
 
+    /* Check if we can suppress suspend checks */
+    if (cUnit->numInsts <= LOOP_SUPPRESS_SUSPEND_THRESHOLD)
+        loopAnalysis->suppressSuspend = true;
+
     /* Only optimize array accesses for simple counted loop for now */
     if (!isSimpleCountedLoop(cUnit))
         return false;

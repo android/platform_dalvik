@@ -1461,8 +1461,8 @@ static bool handleFmt10t_Fmt20t_Fmt30t(CompilationUnit *cUnit, MIR *mir,
     /* backward branch? */
     bool backwardBranch = (bb->taken->startOffset <= mir->offset);
 
-    if (backwardBranch &&
-        (gDvmJit.genSuspendPoll || cUnit->jitMode == kJitLoop)) {
+    if (backwardBranch && (gDvmJit.genSuspendPoll ||
+        (cUnit->jitMode == kJitLoop && !cUnit->loopAnalysis->suppressSuspend))) {
         genSuspendPoll(cUnit, mir);
     }
 
@@ -2105,8 +2105,8 @@ static bool handleFmt21t(CompilationUnit *cUnit, MIR *mir, BasicBlock *bb,
     /* backward branch? */
     bool backwardBranch = (bb->taken->startOffset <= mir->offset);
 
-    if (backwardBranch &&
-        (gDvmJit.genSuspendPoll || cUnit->jitMode == kJitLoop)) {
+    if (backwardBranch && (gDvmJit.genSuspendPoll ||
+        (cUnit->jitMode == kJitLoop && !cUnit->loopAnalysis->suppressSuspend))) {
         genSuspendPoll(cUnit, mir);
     }
 
@@ -2606,8 +2606,8 @@ static bool handleFmt22t(CompilationUnit *cUnit, MIR *mir, BasicBlock *bb,
     /* backward branch? */
     bool backwardBranch = (bb->taken->startOffset <= mir->offset);
 
-    if (backwardBranch &&
-        (gDvmJit.genSuspendPoll || cUnit->jitMode == kJitLoop)) {
+    if (backwardBranch && (gDvmJit.genSuspendPoll ||
+        (cUnit->jitMode == kJitLoop && !cUnit->loopAnalysis->suppressSuspend))) {
         genSuspendPoll(cUnit, mir);
     }
 
