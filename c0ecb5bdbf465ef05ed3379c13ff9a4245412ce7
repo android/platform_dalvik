@@ -34,6 +34,24 @@
       "revId": "c0ecb5bdbf465ef05ed3379c13ff9a4245412ce7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3pwFS8w",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2013-02-15T20:24:46Z",
+      "side": 1,
+      "message": "Addressed this comment in https://android-review.googlesource.com/51697",
+      "parentUuid": "P3iuIWio",
+      "revId": "c0ecb5bdbf465ef05ed3379c13ff9a4245412ce7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
