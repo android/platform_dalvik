@@ -52,6 +52,23 @@
       "revId": "c0ecb5bdbf465ef05ed3379c13ff9a4245412ce7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3p-m3dA",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1013508
+      },
+      "writtenOn": "2013-02-15T22:38:39Z",
+      "side": 1,
+      "message": "eek, doing the bind mounts here for multiuser external storage is probably going to need CAP_SYS_ADMIN.  did we test that external storage works with this change?",
+      "revId": "c0ecb5bdbf465ef05ed3379c13ff9a4245412ce7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
