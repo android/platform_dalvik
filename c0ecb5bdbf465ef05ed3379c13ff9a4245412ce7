@@ -69,6 +69,24 @@
       "revId": "c0ecb5bdbf465ef05ed3379c13ff9a4245412ce7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "P3kqLBdA",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2013-02-16T00:12:40Z",
+      "side": 1,
+      "message": "Verified no problems.",
+      "parentUuid": "P3p-m3dA",
+      "revId": "c0ecb5bdbf465ef05ed3379c13ff9a4245412ce7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
