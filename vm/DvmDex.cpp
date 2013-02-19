@@ -79,6 +79,8 @@ static DvmDex* allocateAuxStructures(DexFile* pDexFile)
 
     pDvmDex->pInterfaceCache = dvmAllocAtomicCache(DEX_INTERFACE_CACHE_SIZE);
 
+    pthread_mutex_init(&pDvmDex->modLock, NULL);
+
     return pDvmDex;
 }
 
@@ -196,6 +198,8 @@ void dvmDexFileFree(DvmDex* pDvmDex)
     dvmFreeAtomicCache(pDvmDex->pInterfaceCache);
     sysReleaseShmem(&pDvmDex->memMap);
     munmap(pDvmDex, totalSize);
+
+    pthread_mutex_destroy(&pDvmDex->modLock);
 }
 
 
