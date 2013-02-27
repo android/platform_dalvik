@@ -2856,6 +2856,8 @@ int parseOptions(int argc, char **argv)
  */
 int main(int argc, char** argv)
 {
+    int processed = 0;
+
     gOptions.threshold = -1;
 
     // Parse the options
@@ -2888,10 +2890,18 @@ int main(int argc, char** argv)
         TraceData data2;
         DataKeys* d2 = parseDataKeys(&data2, gOptions.diffFileName, &sum2);
 
-        createDiff(d2, sum2, dataKeys, sumThreadTime);
+	if (d2) {
+             createDiff(d2, sum2, dataKeys, sumThreadTime);
+             freeDataKeys(d2);
+             processed = 1;
+        }
+        else {
+             fprintf(stderr, "Warning, '%s' does not exist or is invalid, performing full dump",
+                        gOptions.diffFileName);
+        }
+    }
 
-        freeDataKeys(d2);
-    } else {
+    if (!processed) {
         MethodEntry** methods = parseMethodEntries(dataKeys);
         profileTrace(&data1, methods, dataKeys->numMethods, sumThreadTime);
         if (gOptions.graphFileName != NULL) {
