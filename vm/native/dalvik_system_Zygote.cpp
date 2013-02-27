@@ -37,7 +37,9 @@
 #include <cutils/multiuser.h>
 #include <sched.h>
 #include <sys/utsname.h>
-#include <linux/capability.h>
+#ifdef HAVE_ANDROID_OS
+#include <sys/capability.h>
+#endif
 
 #if defined(HAVE_PRCTL)
 # include <sys/prctl.h>
