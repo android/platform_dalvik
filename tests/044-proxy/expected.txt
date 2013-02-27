@@ -1,3 +1,7 @@
+ReturnsAndArgPassing.testProxyReturns RUNNING
+ReturnsAndArgPassing.testProxyReturns PASSED
+ReturnsAndArgPassing.testProxyArgPassing RUNNING
+ReturnsAndArgPassing.testProxyArgPassing PASSED
 Invoke public abstract void Shapes.circle(int)
  0: 3
 --- circle 3
@@ -45,15 +49,15 @@ Invoke public abstract void Shapes.upCheck() throws java.lang.InterruptedExcepti
  (no args)
 Got expected ie
 
-Proxy methods: [public native boolean $Proxy0.equals(java.lang.Object), public native int $Proxy0.hashCode(), public native java.lang.String $Proxy0.toString(), public native int $Proxy0.rectangle(int,int), public native int $Proxy0.square(int,int), public native int $Proxy0.trapezoid(int,double,int), public native java.lang.String $Proxy0.blob(), public native void $Proxy0.circle(int), public native void $Proxy0.upCheck(), public native void $Proxy0.upChuck(), public native double $Proxy0.blue(int), public native R0aa $Proxy0.checkMe(), public native int $Proxy0.green(double), public native int $Proxy0.mauve(java.lang.String), public native int $Proxy0.red(float)]
+Proxy interfaces: [interface Quads, interface Colors]
+Proxy methods: [public native java.lang.String $Proxy1.blob(), public native double $Proxy1.blue(int), public native R0a $Proxy1.checkMe(), public native R0aa $Proxy1.checkMe(), public native R0base $Proxy1.checkMe(), public native void $Proxy1.circle(int), public native boolean $Proxy1.equals(java.lang.Object), public native int $Proxy1.green(double), public native int $Proxy1.hashCode(), public native int $Proxy1.mauve(java.lang.String), public native int $Proxy1.rectangle(int,int), public native int $Proxy1.red(float), public native int $Proxy1.square(int,int), public native java.lang.String $Proxy1.toString(), public native int $Proxy1.trapezoid(int,double,int), public native void $Proxy1.upCheck(), public native void $Proxy1.upChuck()]
 Decl annos: []
-Param annos (1) : [[]]
-Proxy fields: [private static java.lang.Throwable[][] $Proxy0.throws]
+Param annos (0) : []
 Dupe threw expected exception
-Clash threw expected exception
-Clash2 threw expected exception
-Clash3 threw expected exception
-Clash4 threw expected exception
+Clash did not throw expected exception
+Clash2 did not throw expected exception
+Clash3 did not throw expected exception
+Clash4 did not throw expected exception
 Invoke public abstract void InterfaceW1.throwFunky()
  (no args)
 Got expected UTE
@@ -78,3 +82,11 @@ Got expected exception
 Invoke public abstract void InterfaceW1.bothThrowBase() throws BaseException,SubException,SubSubException
  (no args)
 Got expected exception
+Proxy methods: [public native boolean $Proxy7.equals(java.lang.Object), public native int $Proxy7.hashCode(), public native java.lang.String $Proxy7.toString(), public native java.lang.String $Proxy7.foo(), public native java.lang.Object $Proxy7.foo()]
+Invocation of public abstract java.lang.String NarrowingTest$I2.foo()
+Invoking foo using I2 type: hello
+Invocation of public abstract java.lang.Object NarrowingTest$I1.foo()
+Invoking foo using I1 type: 1
+Invocation of public abstract java.lang.String NarrowingTest$I2.foo()
+Got expected exception
+Proxy narrowed invocation return type passed

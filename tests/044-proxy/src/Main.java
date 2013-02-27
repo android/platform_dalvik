@@ -19,11 +19,13 @@
  */
 public class Main {
     public static void main(String[] args) {
+        ReturnsAndArgPassing.main(null);
         BasicTest.main(null);
         Clash.main(null);
         Clash2.main(null);
         Clash3.main(null);
         Clash4.main(null);
         WrappedThrow.main(null);
+        NarrowingTest.main(null);
     }
 }

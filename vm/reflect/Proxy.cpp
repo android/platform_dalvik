@@ -723,7 +723,7 @@ static bool returnTypesAreCompatible(Method* subMethod, Method* baseMethod)
 
     baseClass = dvmFindClass(baseSig, baseMethod->clazz->classLoader);
     subClass = dvmFindClass(subSig, subMethod->clazz->classLoader);
-    bool result = dvmInstanceof(subClass, baseClass);
+    bool result = dvmInstanceof(baseClass, subClass);
     return result;
 }
 
@@ -793,6 +793,9 @@ static ArrayObject* boxMethodArgs(const Method* method, const u4* args)
 
     /* count args */
     size_t argCount = dexProtoGetParameterCount(&method->prototype);
+
+    if (argCount == 0)
+      return NULL;
 
     /* allocate storage */
     ArrayObject* argArray = dvmAllocArrayByClass(gDvm.classJavaLangObjectArray,
