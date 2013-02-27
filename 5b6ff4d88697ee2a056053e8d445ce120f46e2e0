@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "QVZPdxAI",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-02-27T00:42:22Z",
+      "side": 1,
+      "message": "why do we need this? linux has sys/capability too.",
+      "revId": "5b6ff4d88697ee2a056053e8d445ce120f46e2e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
