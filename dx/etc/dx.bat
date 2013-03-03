@@ -22,23 +22,19 @@ REM Set up prog to be the path of this script, including following symlinks,
 REM and set up progdir to be the fully-qualified pathname of its directory.
 set prog=%~f0
 
-REM Change current directory to where dx is, to avoid issues with directories
-REM containing whitespaces.
-cd /d %~dp0
-
 rem Check we have a valid Java.exe in the path.
 set java_exe=
-call ..\tools\lib\find_java.bat
+call %~dp0..\tools\lib\find_java.bat
 if not defined java_exe goto :EOF
 
 set jarfile=dx.jar
-set frameworkdir=
+set frameworkdir=%~dp0
 
 if exist %frameworkdir%%jarfile% goto JarFileOk
-    set frameworkdir=lib\
+    set frameworkdir=%~dp0lib\
 
 if exist %frameworkdir%%jarfile% goto JarFileOk
-    set frameworkdir=..\framework\
+    set frameworkdir=%~dp0..\framework\
 
 :JarFileOk
 
