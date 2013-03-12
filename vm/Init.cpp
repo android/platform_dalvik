@@ -28,6 +28,13 @@
 #include <linux/fs.h>
 #include <cutils/fs.h>
 #include <unistd.h>
+#ifdef HAVE_ANDROID_OS
+#include <sys/prctl.h>
+#include <linux/filter.h>
+#include <linux/seccomp.h>
+#include <sys/utsname.h>
+#include <sys/types.h>
+#endif
 
 #include "Dalvik.h"
 #include "test/Test.h"
@@ -51,7 +58,7 @@ extern int jniRegisterSystemMethods(JNIEnv* env);
 static bool registerSystemNatives(JNIEnv* pEnv);
 static bool initJdwp();
 static bool initZygote();
-
+static void assertSeccompSupport();
 
 /* global state */
 struct DvmGlobals gDvm;
@@ -1380,6 +1387,8 @@ std::string dvmStartup(int argc, const char* const argv[],
 
     assert(gDvm.initializing);
 
+    assertSeccompSupport();
+
     ALOGV("VM init args (%d):", argc);
     for (int i = 0; i < argc; i++) {
         ALOGV("  %d: '%s'", i, argv[i]);
@@ -2092,4 +2101,86 @@ void dvmAbort()
     abort();
 
     /* notreached */
+}
+
+#ifdef HAVE_ANDROID_OS
+#define DENY BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_KILL)
+
+/*
+ * Apply a DENY ALL seccomp filter, and try to perform an operation.
+ * If seccomp is configured, this program will crash with a SIGSYS
+ * "bad syscall"
+ */
+static void test_seccomp() {
+    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) < 0) {
+        exit(0);
+    }
+
+    struct sock_filter filter[] = { DENY };
+    struct sock_fprog prog;
+    memset(&prog, 0, sizeof(prog));
+    prog.len = sizeof(filter) / sizeof(filter[0]);
+    prog.filter = filter;
+
+    if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog) < 0) {
+        exit(0);
+    }
+
+    _exit(0);  // should crash with SYGSYS
+}
+
+/*
+ * Returns true if the current runtime supports seccomp filters,
+ * or false otherwise.
+ */
+static bool supportsSeccomp() {
+    pid_t pid = fork();
+    if (pid == -1) {
+        return false;
+    }
+    if (pid == 0) {
+        // child
+        test_seccomp();
+        exit(0);
+    }
+
+    int status;
+    waitpid(pid, &status, 0);
+    return WIFSIGNALED(status) && (WTERMSIG(status) == SIGSYS);
+}
+#endif
+
+/*
+ * Require Linux kernels >= 3.5 to have seccomp compiled into them.
+ */
+static void assertSeccompSupport() {
+#if !defined(__arm__) && !defined(__i386__) && !defined(__x86_64__)
+    // Seccomp support is only available for ARM and x86.
+    return;
+#endif
+
+#ifdef HAVE_ANDROID_OS
+    int major;
+    int minor;
+    struct utsname uts;
+    if (uname(&uts) == -1) {
+        return;
+    }
+
+    if (sscanf(uts.release, "%d.%d", &major, &minor) != 2) {
+        return;
+    }
+
+    // Kernels before 3.5 don't have seccomp
+    if ((major < 3) || ((major == 3) && (minor < 5))) {
+        return;
+    }
+
+    if (supportsSeccomp()) {
+        return;
+    }
+
+    ALOGE("FATAL ERROR: Please enable seccomp support in your kernel (CONFIG_SECCOMP_FILTER=y)");
+    exit(1);
+#endif
 }
