@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "Rf3cUmL4",
+        "filename": "vm/Init.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2183,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-03-12T18:44:28Z",
+      "side": 1,
+      "message": "how are you going to stop them just deleting these lines? wouldn\u0027t a CTS test be more effective?",
+      "revId": "6f452f3b3d6b047d908b99624ebf6dd14d2050f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
