@@ -16,6 +16,24 @@
       "revId": "6f452f3b3d6b047d908b99624ebf6dd14d2050f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "RgWqyiyY",
+        "filename": "vm/Init.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2183,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2013-03-12T18:52:26Z",
+      "side": 1,
+      "message": "Ya, a CTS test is the right approach.  This was intended as a stopgap.  \n\nBut you\u0027re right. Let me try to write the CTS first, and get back to you.",
+      "parentUuid": "Rf3cUmL4",
+      "revId": "6f452f3b3d6b047d908b99624ebf6dd14d2050f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
