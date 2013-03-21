@@ -34,7 +34,7 @@ progdir=`pwd`
 prog="${progdir}"/`basename "${prog}"`
 
 export JAVA="java"
-export JAVAC="javac -target 1.5"
+export JAVAC="javac -target 1.5 -source 1.5"
 export RUN="${progdir}/etc/push-and-run-test-jar"
 
 info="info.txt"
