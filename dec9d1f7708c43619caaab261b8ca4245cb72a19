@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "SNmwjO2w",
+        "filename": "dx/src/com/android/dx/cf/direct/DirectClassFile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-03-21T17:26:24Z",
+      "side": 1,
+      "message": "s/6/7/",
+      "revId": "dec9d1f7708c43619caaab261b8ca4245cb72a19",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "SNkzBn04",
+        "filename": "dx/src/com/android/dx/cf/direct/DirectClassFile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-03-21T17:26:24Z",
+      "side": 1,
+      "message": "i think we need some testing of our behavior on invokedynamic before we make this change. do we reject such class files in a clear way? were there other changes in version 51 that we need to take into account?",
+      "revId": "dec9d1f7708c43619caaab261b8ca4245cb72a19",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "SNmzG22k",
+        "filename": "tests/run-test",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-03-21T17:26:24Z",
+      "side": 1,
+      "message": "this is an unrelated change. i\u0027ve uploaded it separately: https://android-review.googlesource.com/54291",
+      "revId": "dec9d1f7708c43619caaab261b8ca4245cb72a19",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
