@@ -291,56 +291,74 @@ int common_fp_to_long(bool isDouble, u2 vA, u2 vB) {
         load_fp_stack_VR(OpndSize_32, vB); //flds
     }
 
-    load_fp_stack_global_data_API("valuePosInfLong", OpndSize_64);
+    //Check if it is the special Negative Infinity value
     load_fp_stack_global_data_API("valueNegInfLong", OpndSize_64);
-
-    //ST(0) ST(1) ST(2) --> LintMin LintMax value
-    compare_fp_stack(true, 2, false/*isDouble*/); //ST(2)
-    //ST(0) ST(1) --> LintMax value
+    //Stack status: ST(0) ST(1) --> LlongMin value
+    compare_fp_stack(true, 1, false/*isDouble*/); // Pops ST(1)
     conditional_jump(Condition_AE, ".float_to_long_negInf", true);
     rememberState(1);
-    compare_fp_stack(true, 1, false/*isDouble*/); //ST(1)
+
+    //Check if it is the special Positive Infinity value
+    load_fp_stack_global_data_API("valuePosInfLong", OpndSize_64);
+    //Stack status: ST(0) ST(1) --> LlongMax value
+    compare_fp_stack(true, 1, false/*isDouble*/); // Pops ST(1)
     rememberState(2);
-    //ST(0) --> value
     conditional_jump(Condition_C, ".float_to_long_nanInf", true);
-    //fnstcw, orw, fldcw, xorw
+
+    //Normal Case
+    //We want to truncate to 0 for conversion. That will be rounding mode 0x11
     load_effective_addr(-2, PhysicalReg_ESP, true, PhysicalReg_ESP, true);
     store_fpu_cw(false/*checkException*/, 0, PhysicalReg_ESP, true);
+    //Change control word to rounding mode 11:
     alu_binary_imm_mem(OpndSize_16, or_opc, 0xc00, 0, PhysicalReg_ESP, true);
+    //Load the control word
     load_fpu_cw(0, PhysicalReg_ESP, true);
+    //Reset the control word
     alu_binary_imm_mem(OpndSize_16, xor_opc, 0xc00, 0, PhysicalReg_ESP, true);
+    //Perform the actual conversion
     store_int_fp_stack_VR(true/*pop*/, OpndSize_64, vA); //fistpll
-    //fldcw
+    // Restore the original control word
     load_fpu_cw(0, PhysicalReg_ESP, true);
     load_effective_addr(2, PhysicalReg_ESP, true, PhysicalReg_ESP, true);
     rememberState(3);
+    /* NOTE: We do not need to pop out the original value we pushed
+     * since load_fpu_cw above already clears the stack for
+     * normal values.
+     */
     unconditional_jump(".float_to_long_okay", true);
+
+    //We can be here for positive infinity or NaN. Check parity bit
     insertLabel(".float_to_long_nanInf", true);
     conditional_jump(Condition_NP, ".float_to_long_posInf", true);
-    //fstpl??
     goToState(2);
-
+    //Save corresponding Long NaN value
     load_global_data_API("valueNanLong", OpndSize_64, 1, false);
-
     set_virtual_reg(vA, OpndSize_64, 1, false);
     transferToState(3);
+    //Pop out the original value we pushed
+    compare_fp_stack(true, 0, false/*isDouble*/); //ST(0)
     unconditional_jump(".float_to_long_okay", true);
-    insertLabel(".float_to_long_posInf", true);
-    //fstpl
-    goToState(2);
 
+    insertLabel(".float_to_long_posInf", true);
+    goToState(2);
+    //Save corresponding Long Positive Infinity value
     load_global_data_API("valuePosInfLong", OpndSize_64, 2, false);
     set_virtual_reg(vA, OpndSize_64, 2, false);
     transferToState(3);
+    //Pop out the original value we pushed
+    compare_fp_stack(true, 0, false/*isDouble*/); //ST(0)
     unconditional_jump(".float_to_long_okay", true);
+
     insertLabel(".float_to_long_negInf", true);
     //fstpl
-    //fstpl
     goToState(1);
-
+    //Load corresponding Long Negative Infinity value
     load_global_data_API("valueNegInfLong", OpndSize_64, 3, false);
     set_virtual_reg(vA, OpndSize_64, 3, false);
     transferToState(3);
+    //Pop out the original value we pushed
+    compare_fp_stack(true, 0, false/*isDouble*/); //ST(0)
+
     insertLabel(".float_to_long_okay", true);
     return 0;
 }
