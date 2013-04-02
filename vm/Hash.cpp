@@ -72,17 +72,18 @@ HashTable* dvmHashTableCreate(size_t initialSize, HashFreeFunc freeFunc)
 void dvmHashTableClear(HashTable* pHashTable)
 {
     HashEntry* pEnt;
-    int i;
+    HashFreeFunc freeFunc = pHashTable->freeFunc;
+    int i, tableSize = pHashTable->tableSize;
 
     pEnt = pHashTable->pEntries;
-    for (i = 0; i < pHashTable->tableSize; i++, pEnt++) {
+    for (i = 0; i < tableSize; i++, pEnt++) {
         if (pEnt->data == HASH_TOMBSTONE) {
             // nuke entry
             pEnt->data = NULL;
         } else if (pEnt->data != NULL) {
             // call free func then nuke entry
-            if (pHashTable->freeFunc != NULL)
-                (*pHashTable->freeFunc)(pEnt->data);
+            if (freeFunc != NULL)
+                (*freeFunc)(pEnt->data);
             pEnt->data = NULL;
         }
     }
@@ -109,9 +110,9 @@ void dvmHashTableFree(HashTable* pHashTable)
  */
 static int countTombStones(HashTable* pHashTable)
 {
-    int i, count;
+    int i, count, tableSize = pHashTable->tableSize;
 
-    for (count = i = 0; i < pHashTable->tableSize; i++) {
+    for (count = i = 0; i < tableSize; i++) {
         if (pHashTable->pEntries[i].data == HASH_TOMBSTONE)
             count++;
     }
@@ -132,7 +133,7 @@ static int countTombStones(HashTable* pHashTable)
 static bool resizeHash(HashTable* pHashTable, int newSize)
 {
     HashEntry* pNewEntries;
-    int i;
+    int i, tableSize = pHashTable->tableSize;
 
     assert(countTombStones(pHashTable) == pHashTable->numDeadEntries);
     //ALOGI("before: dead=%d", pHashTable->numDeadEntries);
@@ -141,7 +142,7 @@ static bool resizeHash(HashTable* pHashTable, int newSize)
     if (pNewEntries == NULL)
         return false;
 
-    for (i = 0; i < pHashTable->tableSize; i++) {
+    for (i = 0; i < tableSize; i++) {
         void* data = pHashTable->pEntries[i].data;
         if (data != NULL && data != HASH_TOMBSTONE) {
             int hashValue = pHashTable->pEntries[i].hashValue;
@@ -290,9 +291,7 @@ bool dvmHashTableRemove(HashTable* pHashTable, u4 itemHash, void* item)
  */
 int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
 {
-    int i, val, tableSize;
-
-    tableSize = pHashTable->tableSize;
+    int i, val, tableSize = pHashTable->tableSize;
 
     for (i = 0; i < tableSize; i++) {
         HashEntry* pEnt = &pHashTable->pEntries[i];
@@ -320,9 +319,7 @@ int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
  */
 int dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg)
 {
-    int i, val, tableSize;
-
-    tableSize = pHashTable->tableSize;
+    int i, val, tableSize = pHashTable->tableSize;
 
     for (i = 0; i < tableSize; i++) {
         HashEntry* pEnt = &pHashTable->pEntries[i];
