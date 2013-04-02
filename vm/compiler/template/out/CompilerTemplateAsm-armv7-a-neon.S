@@ -520,9 +520,8 @@ dvmCompiler_TEMPLATE_MUL_LONG:
     mul     ip, r2, r1                  @  ip<- ZxW
     umull   r9, r10, r2, r0             @  r9/r10 <- ZxX
     mla     r2, r0, r3, ip              @  r2<- YxX + (ZxW)
-    add     r10, r2, r10                @  r10<- r10 + low(ZxW + (YxX))
-    mov     r0,r9
-    mov     r1,r10
+    mov     r0, r9
+    add     r1, r2, r10                 @  r1<- r10 + low(ZxW + (YxX))
     bx      lr
 
 /* ------------------------------ */
@@ -1264,23 +1263,22 @@ dvmCompiler_TEMPLATE_STRING_INDEXOF:
      *    r1:   char to match
      *    r2:   Starting offset in string data
      */
-
+    ldr    r3, [r0, #STRING_FIELDOFF_VALUE]
     ldr    r7, [r0, #STRING_FIELDOFF_OFFSET]
     ldr    r8, [r0, #STRING_FIELDOFF_COUNT]
-    ldr    r0, [r0, #STRING_FIELDOFF_VALUE]
 
     /*
      * At this point, we have:
-     *    r0: object pointer
      *    r1: char to match
      *    r2: starting offset
+     *    r3: object pointer (final result -> r0)
      *    r7: offset
      *    r8: string length
      */
 
      /* Build pointer to start of string data */
-     add   r0, #16
-     add   r0, r0, r7, lsl #1
+     add   r3, #16
+     add   r0, r3, r7, lsl #1
 
      /* Save a copy of starting data in r7 */
      mov   r7, r0
