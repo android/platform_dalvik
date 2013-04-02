@@ -38,8 +38,10 @@ static void visitHashTable(RootVisitor *visitor, HashTable *table,
 {
     assert(visitor != NULL);
     assert(table != NULL);
+
+    int tableSize = table->tableSize;
     dvmHashTableLock(table);
-    for (int i = 0; i < table->tableSize; ++i) {
+    for (int i = 0; i < tableSize; i++) {
         HashEntry *entry = &table->pEntries[i];
         if (entry->data != NULL && entry->data != HASH_TOMBSTONE) {
             (*visitor)(&entry->data, 0, type, arg);
@@ -56,7 +58,9 @@ static void visitReferenceTable(RootVisitor *visitor, ReferenceTable *table,
 {
     assert(visitor != NULL);
     assert(table != NULL);
-    for (Object **entry = table->table; entry < table->nextEntry; ++entry) {
+
+    Object** nextEntry = table->nextEntry;
+    for (Object **entry = table->table; entry < nextEntry; ++entry) {
         assert(entry != NULL);
         (*visitor)(entry, threadId, type, arg);
     }
@@ -100,13 +104,14 @@ static void visitThreadStack(RootVisitor *visitor, Thread *thread, void *arg)
                 int addr = saveArea->xtra.currentPc - method->insns;
                 regVector = dvmRegisterMapGetLine(pMap, addr);
             }
+            size_t registersSize = method->registersSize;
             if (regVector == NULL) {
                 /*
                  * Either there was no register map or there is no
                  * info for the current PC.  Perform a conservative
                  * scan.
                  */
-                for (size_t i = 0; i < method->registersSize; ++i) {
+                for (size_t i = 0; i < registersSize; ++i) {
                     if (dvmIsValidObject((Object *)fp[i])) {
                         (*visitor)(&fp[i], threadId, ROOT_JAVA_FRAME, arg);
                     }
@@ -121,7 +126,7 @@ static void visitThreadStack(RootVisitor *visitor, Thread *thread, void *arg)
                  * A '1' bit indicates a live reference.
                  */
                 u2 bits = 1 << 1;
-                for (size_t i = 0; i < method->registersSize; ++i) {
+                for (size_t i = 0; i < registersSize; ++i) {
                     bits >>= 1;
                     if (bits == 1) {
                         /* set bit 9 so we can tell when we're empty */

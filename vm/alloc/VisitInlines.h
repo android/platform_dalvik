@@ -117,7 +117,8 @@ static void visitArrayObject(Visitor *visitor, Object *obj, void *arg)
     if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISOBJECTARRAY)) {
         ArrayObject *array = (ArrayObject *)obj;
         Object **contents = (Object **)(void *)array->contents;
-        for (size_t i = 0; i < array->length; ++i) {
+        size_t length = array->length;
+        for (size_t i = 0; i < length; ++i) {
             (*visitor)(&contents[i], arg);
         }
     }
