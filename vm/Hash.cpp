@@ -71,20 +71,29 @@ HashTable* dvmHashTableCreate(size_t initialSize, HashFreeFunc freeFunc)
  */
 void dvmHashTableClear(HashTable* pHashTable)
 {
-    HashEntry* pEnt;
-    int i;
+    HashEntry* pEntry;
+    HashEntry* pEnd;
+    HashFreeFunc freeFunc = pHashTable->freeFunc;
 
-    pEnt = pHashTable->pEntries;
-    for (i = 0; i < pHashTable->tableSize; i++, pEnt++) {
-        if (pEnt->data == HASH_TOMBSTONE) {
+    int tableSize = pHashTable->tableSize;
+    void *data;
+
+    pEntry = pHashTable->pEntries;
+    pEnd = pEntry + tableSize;
+    data = pEntry->data;
+
+    while (pEntry < pEnd) {
+        if (data == HASH_TOMBSTONE) {
             // nuke entry
-            pEnt->data = NULL;
-        } else if (pEnt->data != NULL) {
+            pEntry->data = NULL;
+        } else if (data != NULL) {
             // call free func then nuke entry
-            if (pHashTable->freeFunc != NULL)
-                (*pHashTable->freeFunc)(pEnt->data);
-            pEnt->data = NULL;
+            if (freeFunc != NULL)
+                (*freeFunc)(data);
+            pEntry->data = NULL;
         }
+        pEntry++;
+        data = pEntry->data;
     }
 
     pHashTable->numEntries = 0;
@@ -109,9 +118,9 @@ void dvmHashTableFree(HashTable* pHashTable)
  */
 static int countTombStones(HashTable* pHashTable)
 {
-    int i, count;
+    int i, count, tableSize = pHashTable->tableSize;
 
-    for (count = i = 0; i < pHashTable->tableSize; i++) {
+    for (count = i = 0; i < tableSize; i++) {
         if (pHashTable->pEntries[i].data == HASH_TOMBSTONE)
             count++;
     }
@@ -131,8 +140,11 @@ static int countTombStones(HashTable* pHashTable)
  */
 static bool resizeHash(HashTable* pHashTable, int newSize)
 {
+    HashEntry* pEntry;
+    HashEntry* pEnd;
     HashEntry* pNewEntries;
-    int i;
+    int tableSize = pHashTable->tableSize;
+    void *data;
 
     assert(countTombStones(pHashTable) == pHashTable->numDeadEntries);
     //ALOGI("before: dead=%d", pHashTable->numDeadEntries);
@@ -141,10 +153,13 @@ static bool resizeHash(HashTable* pHashTable, int newSize)
     if (pNewEntries == NULL)
         return false;
 
-    for (i = 0; i < pHashTable->tableSize; i++) {
-        void* data = pHashTable->pEntries[i].data;
+    pEntry = pHashTable->pEntries;
+    pEnd = pEntry + tableSize;
+    data = pEntry->data;
+
+    while (pEntry < pEnd) {
         if (data != NULL && data != HASH_TOMBSTONE) {
-            int hashValue = pHashTable->pEntries[i].hashValue;
+            int hashValue = pEntry->hashValue;
             int newIdx;
 
             /* probe for new spot, wrapping around */
@@ -155,6 +170,8 @@ static bool resizeHash(HashTable* pHashTable, int newSize)
             pNewEntries[newIdx].hashValue = hashValue;
             pNewEntries[newIdx].data = data;
         }
+        pEntry++;
+        data = pEntry->data;
     }
 
     free(pHashTable->pEntries);
@@ -177,6 +194,7 @@ void* dvmHashTableLookup(HashTable* pHashTable, u4 itemHash, void* item,
     HashEntry* pEntry;
     HashEntry* pEnd;
     void* result = NULL;
+    void *data;
 
     assert(pHashTable->tableSize > 0);
     assert(item != HASH_TOMBSTONE);
@@ -185,10 +203,11 @@ void* dvmHashTableLookup(HashTable* pHashTable, u4 itemHash, void* item,
     /* jump to the first entry and probe for a match */
     pEntry = &pHashTable->pEntries[itemHash & (pHashTable->tableSize-1)];
     pEnd = &pHashTable->pEntries[pHashTable->tableSize];
-    while (pEntry->data != NULL) {
-        if (pEntry->data != HASH_TOMBSTONE &&
+    data = pEntry->data;
+    while (data != NULL) {
+        if (data != HASH_TOMBSTONE &&
             pEntry->hashValue == itemHash &&
-            (*cmpFunc)(pEntry->data, item) == 0)
+            (*cmpFunc)(data, item) == 0)
         {
             /* match */
             //ALOGD("+++ match on entry %d", pEntry - pHashTable->pEntries);
@@ -201,11 +220,11 @@ void* dvmHashTableLookup(HashTable* pHashTable, u4 itemHash, void* item,
                 break;      /* edge case - single-entry table */
             pEntry = pHashTable->pEntries;
         }
-
+        data = pEntry->data;
         //ALOGI("+++ look probing %d...", pEntry - pHashTable->pEntries);
     }
 
-    if (pEntry->data == NULL) {
+    if (data == NULL) {
         if (doAdd) {
             pEntry->hashValue = itemHash;
             pEntry->data = item;
@@ -236,7 +255,7 @@ void* dvmHashTableLookup(HashTable* pHashTable, u4 itemHash, void* item,
             assert(result == NULL);
         }
     } else {
-        result = pEntry->data;
+        result = data;
     }
 
     return result;
@@ -251,14 +270,16 @@ bool dvmHashTableRemove(HashTable* pHashTable, u4 itemHash, void* item)
 {
     HashEntry* pEntry;
     HashEntry* pEnd;
+    void *data;
 
     assert(pHashTable->tableSize > 0);
 
     /* jump to the first entry and probe for a match */
     pEntry = &pHashTable->pEntries[itemHash & (pHashTable->tableSize-1)];
     pEnd = &pHashTable->pEntries[pHashTable->tableSize];
-    while (pEntry->data != NULL) {
-        if (pEntry->data == item) {
+    data = pEntry->data;
+    while (data != NULL) {
+        if (data == item) {
             //ALOGI("+++ stepping on entry %d", pEntry - pHashTable->pEntries);
             pEntry->data = HASH_TOMBSTONE;
             pHashTable->numEntries--;
@@ -272,6 +293,7 @@ bool dvmHashTableRemove(HashTable* pHashTable, u4 itemHash, void* item)
                 break;      /* edge case - single-entry table */
             pEntry = pHashTable->pEntries;
         }
+        data = pEntry->data;
 
         //ALOGI("+++ del probing %d...", pEntry - pHashTable->pEntries);
     }
@@ -290,17 +312,20 @@ bool dvmHashTableRemove(HashTable* pHashTable, u4 itemHash, void* item)
  */
 int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
 {
-    int i, val, tableSize;
+    HashEntry* pEntry;
+    HashEntry* pEnd;
+    int tableSize = pHashTable->tableSize;
+    void *data;
 
-    tableSize = pHashTable->tableSize;
+    pEntry = pHashTable->pEntries;
+    pEnd = pEntry + tableSize;
+    data = pEntry->data;
 
-    for (i = 0; i < tableSize; i++) {
-        HashEntry* pEnt = &pHashTable->pEntries[i];
-
-        if (pEnt->data != NULL && pEnt->data != HASH_TOMBSTONE) {
-            val = (*func)(pEnt->data);
+    while (pEntry < pEnd) {
+        if (data != NULL && data != HASH_TOMBSTONE) {
+            int val = (*func)(data);
             if (val == 1) {
-                pEnt->data = HASH_TOMBSTONE;
+                pEntry->data = HASH_TOMBSTONE;
                 pHashTable->numEntries--;
                 pHashTable->numDeadEntries++;
             }
@@ -308,6 +333,8 @@ int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
                 return val;
             }
         }
+        pEntry++;
+        data = pEntry->data;
     }
     return 0;
 }
@@ -320,24 +347,29 @@ int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
  */
 int dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg)
 {
-    int i, val, tableSize;
+    HashEntry* pEntry;
+    HashEntry* pEnd;
+    int tableSize = pHashTable->tableSize;
+    void *data;
 
-    tableSize = pHashTable->tableSize;
+    pEntry = pHashTable->pEntries;
+    pEnd = pEntry + tableSize;
+    data = pEntry->data;
 
-    for (i = 0; i < tableSize; i++) {
-        HashEntry* pEnt = &pHashTable->pEntries[i];
-
-        if (pEnt->data != NULL && pEnt->data != HASH_TOMBSTONE) {
-            val = (*func)(pEnt->data, arg);
+    while (pEntry < pEnd) {
+        if (data != NULL && data != HASH_TOMBSTONE) {
+            int val = (*func)(data, arg);
             if (val != 0)
                 return val;
         }
+        pEntry++;
+        data = pEntry->data;
     }
 
     return 0;
 }
 
-
+#if 0
 /*
  * Look up an entry, counting the number of times we have to probe.
  *
@@ -419,3 +451,5 @@ void dvmHashTableProbeCount(HashTable* pHashTable, HashCalcFunc calcFunc,
         minProbe, maxProbe, totalProbe, numEntries, pHashTable->tableSize,
         (float) totalProbe / (float) numEntries);
 }
+
+#endif
