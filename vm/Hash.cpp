@@ -75,7 +75,7 @@ void dvmHashTableClear(HashTable* pHashTable)
     int i;
 
     pEnt = pHashTable->pEntries;
-    for (i = 0; i < pHashTable->tableSize; i++, pEnt++) {
+    for (i = pHashTable->tableSize; --i >= 0; pEnt++) {
         if (pEnt->data == HASH_TOMBSTONE) {
             // nuke entry
             pEnt->data = NULL;
@@ -109,9 +109,9 @@ void dvmHashTableFree(HashTable* pHashTable)
  */
 static int countTombStones(HashTable* pHashTable)
 {
-    int i, count;
+    int i, count = 0;
 
-    for (count = i = 0; i < pHashTable->tableSize; i++) {
+    for (i = pHashTable->tableSize; --i >= 0;) {
         if (pHashTable->pEntries[i].data == HASH_TOMBSTONE)
             count++;
     }
@@ -141,7 +141,7 @@ static bool resizeHash(HashTable* pHashTable, int newSize)
     if (pNewEntries == NULL)
         return false;
 
-    for (i = 0; i < pHashTable->tableSize; i++) {
+    for (i = pHashTable->tableSize; --i >= 0;) {
         void* data = pHashTable->pEntries[i].data;
         if (data != NULL && data != HASH_TOMBSTONE) {
             int hashValue = pHashTable->pEntries[i].hashValue;
@@ -290,11 +290,9 @@ bool dvmHashTableRemove(HashTable* pHashTable, u4 itemHash, void* item)
  */
 int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
 {
-    int i, val, tableSize;
+    int i, val;
 
-    tableSize = pHashTable->tableSize;
-
-    for (i = 0; i < tableSize; i++) {
+    for (i = pHashTable->tableSize; --i >= 0;) {
         HashEntry* pEnt = &pHashTable->pEntries[i];
 
         if (pEnt->data != NULL && pEnt->data != HASH_TOMBSTONE) {
@@ -320,11 +318,9 @@ int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
  */
 int dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg)
 {
-    int i, val, tableSize;
+    int i, val;
 
-    tableSize = pHashTable->tableSize;
-
-    for (i = 0; i < tableSize; i++) {
+    for (i = pHashTable->tableSize; --i >= 0;) {
         HashEntry* pEnt = &pHashTable->pEntries[i];
 
         if (pEnt->data != NULL && pEnt->data != HASH_TOMBSTONE) {
