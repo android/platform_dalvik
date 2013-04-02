@@ -39,7 +39,7 @@ static void visitHashTable(RootVisitor *visitor, HashTable *table,
     assert(visitor != NULL);
     assert(table != NULL);
     dvmHashTableLock(table);
-    for (int i = 0; i < table->tableSize; ++i) {
+    for (int i = table->tableSize; --i >= 0;) {
         HashEntry *entry = &table->pEntries[i];
         if (entry->data != NULL && entry->data != HASH_TOMBSTONE) {
             (*visitor)(&entry->data, 0, type, arg);
