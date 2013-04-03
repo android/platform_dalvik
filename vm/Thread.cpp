@@ -1276,8 +1276,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
         dvmUnlockThreadList();
         dvmThrowIllegalThreadStateException(
             "thread has already been started");
-        freeThread(newThread);
-        dvmReleaseTrackedAlloc(vmThreadObj, NULL);
+        goto fail;
     }
 
     /*
