@@ -546,4 +546,6 @@ void dvmFreeVfyBasicBlocks(VerifierData* vdata)
         dvmPointerSetFree(block->predecessors);
         free(block);
     }
+
+    free(vdata->basicBlocks);
 }
