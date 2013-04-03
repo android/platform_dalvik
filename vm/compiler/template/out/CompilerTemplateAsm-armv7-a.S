@@ -1415,14 +1415,18 @@ dvmCompiler_TEMPLATE_MONITOR_ENTER:
      */
     ldr     r2, .LdvmLockObject
     mov     r3, #0                       @ Record that we're not returning
+#if !defined(WITH_JIT_TUNING)
+    ldr     lr, .LdvmJitToInterpNoChain
+    str     r3, [r0, #offThread_inJitCodeCache]
+    bx      r2                           @ dvmLockObject(self, obj)
+#else
     str     r3, [r0, #offThread_inJitCodeCache]
     blx     r2                           @ dvmLockObject(self, obj)
     ldr     r2, .LdvmJitToInterpNoChain
     @ Bail to interpreter - no chain [note - r4 still contains rPC]
-#if defined(WITH_JIT_TUNING)
     mov     r0, #kHeavyweightMonitor
-#endif
     bx      r2
+#endif
 
 /* ------------------------------ */
     .balign 4
