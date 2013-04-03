@@ -237,6 +237,10 @@ void* dvmHashTableLookup(HashTable* pHashTable, u4 itemHash, void* item,
         }
     } else {
         result = pEntry->data;
+        if (doAdd) {
+            ALOGE("dvmHashTableLookup: Item was not added!");
+            //dvmAbort();
+        }
     }
 
     return result;
