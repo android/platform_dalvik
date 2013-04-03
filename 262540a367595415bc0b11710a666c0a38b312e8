@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "S9DFdSvY",
+        "filename": "vm/Hash.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1014554
+      },
+      "writtenOn": "2013-04-03T19:32:50Z",
+      "side": 1,
+      "message": "I dont think dvmHashLookup should take care of freeing or deleting the item.\nCaller should check the return value (address) with item.",
+      "revId": "262540a367595415bc0b11710a666c0a38b312e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
