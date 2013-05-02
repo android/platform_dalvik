@@ -16,6 +16,23 @@
       "revId": "301117a2460a342c57e5988cbb0e12cf23c25b07",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UOe9uNQI",
+        "filename": "vm/analysis/VfyBasicBlock.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1014554
+      },
+      "writtenOn": "2013-05-02T01:40:54Z",
+      "side": 1,
+      "message": "dvmFreeBitVector(block-\u003eliveRegs);",
+      "revId": "301117a2460a342c57e5988cbb0e12cf23c25b07",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
