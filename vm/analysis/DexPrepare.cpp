@@ -967,6 +967,10 @@ static bool loadAllClasses(DvmDex* pDvmDex)
         classDescriptor =
             dexStringByTypeIdx(pDvmDex->pDexFile, pClassDef->classIdx);
 
+        // clear out any extraneous flags - in particular, we make to make sure
+        // the CLASS_ISPREVERIFIED flag is not set.
+        ((DexClassDef*)pClassDef)->accessFlags &= ACC_CLASS_MASK;
+
         ALOGV("+++  loading '%s'", classDescriptor);
         //newClass = dvmDefineClass(pDexFile, classDescriptor,
         //        NULL);
