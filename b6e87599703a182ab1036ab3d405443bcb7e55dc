@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "UQP2IYBw",
+        "filename": "vm/analysis/DexPrepare.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-05-03T23:23:59Z",
+      "side": 1,
+      "message": "do we want to do this, or do we want to reject the class?",
+      "revId": "b6e87599703a182ab1036ab3d405443bcb7e55dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
