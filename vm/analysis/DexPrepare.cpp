@@ -967,6 +967,12 @@ static bool loadAllClasses(DvmDex* pDvmDex)
         classDescriptor =
             dexStringByTypeIdx(pDvmDex->pDexFile, pClassDef->classIdx);
 
+        if (pClassDef->accessFlags | ~ACC_CLASS_MASK) {
+            ALOGE("DexOpt: invalid access flags 0x%08x for class '%s'",
+                pClassDef->accessFlags, classDescriptor);
+            return false;
+        }
+
         ALOGV("+++  loading '%s'", classDescriptor);
         //newClass = dvmDefineClass(pDexFile, classDescriptor,
         //        NULL);
