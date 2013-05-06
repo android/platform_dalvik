@@ -70,6 +70,24 @@
       "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UQLMShxQ",
+        "filename": "vm/analysis/DexPrepare.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1010049
+      },
+      "writtenOn": "2013-05-06T17:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "UQBPsE.8",
+      "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
