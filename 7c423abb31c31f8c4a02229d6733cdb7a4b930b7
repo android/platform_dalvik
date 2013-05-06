@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "UQPNTbx4",
+        "filename": "vm/analysis/DexPrepare.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2013-05-06T15:16:21Z",
+      "side": 1,
+      "message": "I read this as \"if (true)\". \u0026 not I ?",
+      "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
