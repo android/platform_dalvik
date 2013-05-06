@@ -16,6 +16,24 @@
       "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UQPNdL-4",
+        "filename": "vm/analysis/DexPrepare.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1010049
+      },
+      "writtenOn": "2013-05-06T17:41:27Z",
+      "side": 1,
+      "message": "I don\u0027t think I get what you\u0027re trying to say?\n\nThis is a bitwise test, to check if any bits not in ACC_CLASS_MASK are set. ACC_CLASS_MASK contains the access flag bits that are specified/allowed for a dex file.\n\nIn particular, it does *not* contain the CLASS_ISPREVERIFIED bit, which we\u0027ve seen being used in a dex file to get around the verifier.",
+      "parentUuid": "UQPNTbx4",
+      "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
