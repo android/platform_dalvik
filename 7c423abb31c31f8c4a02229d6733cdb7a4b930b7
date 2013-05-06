@@ -52,6 +52,24 @@
       "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UQBPsE.8",
+        "filename": "vm/analysis/DexPrepare.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-05-06T17:45:01Z",
+      "side": 1,
+      "message": "(while you\u0027re fixing it, can you make it an explicit !\u003d 0 test?)",
+      "parentUuid": "UQLP7p64",
+      "revId": "7c423abb31c31f8c4a02229d6733cdb7a4b930b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
