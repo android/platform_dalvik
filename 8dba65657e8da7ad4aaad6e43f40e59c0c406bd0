@@ -16,6 +16,24 @@
       "revId": "8dba65657e8da7ad4aaad6e43f40e59c0c406bd0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "UaTz-XSY",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1010049
+      },
+      "writtenOn": "2013-05-08T20:31:11Z",
+      "side": 1,
+      "message": "I had looked at the SWAP macros in particular, which use 0. But other non-macro instances do seem to use NULL. Fixed.",
+      "parentUuid": "UadzwIVg",
+      "revId": "8dba65657e8da7ad4aaad6e43f40e59c0c406bd0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
