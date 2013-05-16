@@ -265,6 +265,13 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj)
          * gDvm.unlinkedJavaLangClass or it could be an object just
          * allocated which hasn't been initialized yet.
          */
+    } else if (!(dvmIsClassVerified(clazz))) {
+        /* In some cases, e.g. one thread is calling createArrayClass() while
+         * this function is in progress, clazz may be not ready to use.
+         *
+         * Add dvmIsClassVerified(clazz) check here to skip the immature
+         * class objects.
+         */
     } else {
         if (dvmIsClassObject(obj)) {
             const ClassObject *thisClass = (const ClassObject *)obj;
