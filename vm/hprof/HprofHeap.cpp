@@ -271,6 +271,15 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj)
             /* obj is a ClassObject.
              */
             int sFieldCount = thisClass->sfieldCount;
+            if (!dvmIsClassVerified(thisClass)) {
+                /* In some cases, e.g. another thread calls createArrayClass()
+                 * while this function is in progress, thisClass may be immature
+                 * and accessing thisClass may lead to SIGSEGV.
+                 *
+                 * We can simply skip the immature thisClass.
+                 */
+                goto skip_obj;
+            }
             if (sFieldCount != 0) {
                 int byteLength = sFieldCount*sizeof(StaticField);
                 /* Create a byte array to reflect the allocation of the
@@ -463,7 +472,7 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj)
             rec->length = savedLen;
         }
     }
-
+skip_obj:
     ctx->objectsInSegment++;
 
     return 0;
