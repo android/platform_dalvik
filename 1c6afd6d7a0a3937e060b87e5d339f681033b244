@@ -16,6 +16,24 @@
       "revId": "1c6afd6d7a0a3937e060b87e5d339f681033b244",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "U5CE6SDo",
+        "filename": "dx/etc/dx.bat",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1012093
+      },
+      "writtenOn": "2013-05-20T19:42:53Z",
+      "side": 1,
+      "message": "I\u0027m guessing that this is the crux of why \"cd /d %~dp0\" was done in the first place.\n\nMy theory is that if the framework dir ends with \\ then Java interprets it as escaping the space that comes next, rather than the space being an argument delimiter.",
+      "parentUuid": "U0rDHmO0",
+      "revId": "1c6afd6d7a0a3937e060b87e5d339f681033b244",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
