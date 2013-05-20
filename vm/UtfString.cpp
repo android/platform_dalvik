@@ -107,10 +107,9 @@ u4 dvmComputeUtf8Hash(const char* utf8Str)
 size_t dvmUtf8Len(const char* utf8Str)
 {
     size_t len = 0;
-    int ic;
+    int ic = *utf8Str;
 
-    while ((ic = *utf8Str++) != '\0') {
-        len++;
+    while (ic != '\0') {
         if ((ic & 0x80) != 0) {
             /* two- or three-byte encoding */
             utf8Str++;
@@ -119,6 +118,9 @@ size_t dvmUtf8Len(const char* utf8Str)
                 utf8Str++;
             }
         }
+        utf8Str++;
+        ic = *utf8Str;
+        len++;
     }
 
     return len;
@@ -141,9 +143,10 @@ static int utf16_utf8ByteLen(const u2* utf16Str, int len)
 {
     int utf8Len = 0;
 
-    while (len--) {
-        unsigned int uic = *utf16Str++;
+    unsigned int uic = *utf16Str;
+    const u2* pEnd = utf16Str + len;
 
+    while (utf16Str++ < pEnd) {
         /*
          * The most common case is (uic > 0 && uic <= 0x7f).
          */
@@ -152,8 +155,11 @@ static int utf16_utf8ByteLen(const u2* utf16Str, int len)
                 utf8Len += 3;
             else /*(uic > 0x7f || uic == 0) */
                 utf8Len += 2;
-        } else
+        } else {
             utf8Len++;
+        }
+
+        uic = *utf16Str;
     }
     return utf8Len;
 }
@@ -168,9 +174,10 @@ static void convertUtf16ToUtf8(char* utf8Str, const u2* utf16Str, int len)
 {
     assert(len >= 0);
 
-    while (len--) {
-        unsigned int uic = *utf16Str++;
+    unsigned int uic = *utf16Str;
+    const u2* pEnd = utf16Str + len;
 
+    while (utf16Str++ < pEnd) {
         /*
          * The most common case is (uic > 0 && uic <= 0x7f).
          */
@@ -186,6 +193,7 @@ static void convertUtf16ToUtf8(char* utf8Str, const u2* utf16Str, int len)
         } else {
             *utf8Str++ = uic;
         }
+        uic = *utf16Str;
     }
 
     *utf8Str = '\0';
@@ -197,9 +205,10 @@ static void convertUtf16ToUtf8(char* utf8Str, const u2* utf16Str, int len)
 static inline u4 computeUtf16Hash(const u2* utf16Str, size_t len)
 {
     u4 hash = 0;
-
-    while (len--)
+    const u2* pEnd = utf16Str + len;
+    while (utf16Str < pEnd) {
         hash = hash * 31 + *utf16Str++;
+    }
 
     return hash;
 }
