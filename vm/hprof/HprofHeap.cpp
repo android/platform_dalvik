@@ -271,6 +271,25 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj)
             /* obj is a ClassObject.
              */
             int sFieldCount = thisClass->sfieldCount;
+            if (!dvmIsClassVerified(thisClass)) {
+                /*
+                 * Skip the immature "thisClass".
+                 *
+                 * In some cases, "thisClass" may be immature
+                 * and accessing it on a multi-core CPU may lead to SIGSEGV:
+                 * one hprof dumping thread is possible to see an immature
+                 * ClassObject in Java heap - even though it may have been
+                 * properly initialized in another CPU core's cache by another
+                 * Java thread.
+                 *
+                 * Take "createArrayClass()" for example, it doesn't hold
+                 * heap lock between leaving "dvmMalloc()" and reaching
+                 * "newClass->status = CLASS_INITIALIZED". And there're
+                 * no other memory barriers to make sure hprof dumping thread
+                 * always see the mature ClassObject.
+                 */
+                goto skip_obj;
+            }
             if (sFieldCount != 0) {
                 int byteLength = sFieldCount*sizeof(StaticField);
                 /* Create a byte array to reflect the allocation of the
@@ -463,7 +482,7 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj)
             rec->length = savedLen;
         }
     }
-
+skip_obj:
     ctx->objectsInSegment++;
 
     return 0;
