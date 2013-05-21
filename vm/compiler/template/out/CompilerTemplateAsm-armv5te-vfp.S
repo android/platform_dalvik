@@ -1974,8 +1974,8 @@ dvmCompiler_TEMPLATE_INVOKE_METHOD_NATIVE_PROF:
 .L__aeabi_cfcmple:
     .word   __aeabi_cfcmple
 
-    .global dmvCompilerTemplateEnd
-dmvCompilerTemplateEnd:
+    .global dvmCompilerTemplateEnd
+dvmCompilerTemplateEnd:
 
 #endif /* WITH_JIT */
 
