@@ -7,7 +7,7 @@
     .section .data.rel.ro
     .align  4
 
-    .global dmvCompilerTemplateEnd
-dmvCompilerTemplateEnd:
+    .global dvmCompilerTemplateEnd
+dvmCompilerTemplateEnd:
 
 #endif /* WITH_JIT */

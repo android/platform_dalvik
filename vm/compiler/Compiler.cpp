@@ -27,7 +27,7 @@
 #endif
 
 extern "C" void dvmCompilerTemplateStart(void);
-extern "C" void dmvCompilerTemplateEnd(void);
+extern "C" void dvmCompilerTemplateEnd(void);
 
 static inline bool workQueueLength(void)
 {
@@ -193,7 +193,7 @@ bool dvmCompilerSetupCodeCache(void)
 
 #ifndef ARCH_IA32
     /* Copy the template code into the beginning of the code cache */
-    int templateSize = (intptr_t) dmvCompilerTemplateEnd -
+    int templateSize = (intptr_t) dvmCompilerTemplateEnd -
                        (intptr_t) dvmCompilerTemplateStart;
     memcpy((void *) gDvmJit.codeCache,
            (void *) dvmCompilerTemplateStart,
