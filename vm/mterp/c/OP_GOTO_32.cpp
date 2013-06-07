@@ -8,8 +8,6 @@ HANDLE_OPCODE(OP_GOTO_32 /*+AAAAAAAA*/)
         else
             ILOGV("|goto/32 +0x%08x", offset);
         ILOGV("> branch taken");
-        if (offset <= 0)    /* allowed to branch to self */
-            PERIODIC_CHECKS(offset);
         FINISH(offset);
     }
 OP_END

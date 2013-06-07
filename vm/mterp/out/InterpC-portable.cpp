@@ -446,19 +446,6 @@ static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
 
 #define GOTO_bail() goto bail;
 
-/*
- * Periodically check for thread suspension.
- *
- * While we're at it, see if a debugger has attached or the profiler has
- * started.  If so, switch to a different "goto" table.
- */
-#define PERIODIC_CHECKS(_pcadj) {                              \
-        if (dvmCheckSuspendQuick(self)) {                                   \
-            EXPORT_PC();  /* need for precise GC */                         \
-            dvmCheckSuspendPending(self);                                   \
-        }                                                                   \
-    }
-
 /* File: c/opcommon.cpp */
 /* forward declarations of goto targets */
 GOTO_TARGET_DECL(filledNewArray, bool methodCallRange);
@@ -565,8 +552,6 @@ GOTO_TARGET_DECL(exceptionThrown);
             ILOGV("|if-%s v%d,v%d,+0x%04x", (_opname), vsrc1, vsrc2,        \
                 branchOffset);                                              \
             ILOGV("> branch taken");                                        \
-            if (branchOffset < 0)                                           \
-                PERIODIC_CHECKS(branchOffset);                              \
             FINISH(branchOffset);                                           \
         } else {                                                            \
             ILOGV("|if-%s v%d,v%d,-", (_opname), vsrc1, vsrc2);             \
@@ -580,8 +565,6 @@ GOTO_TARGET_DECL(exceptionThrown);
             int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
             ILOGV("|if-%s v%d,+0x%04x", (_opname), vsrc1, branchOffset);    \
             ILOGV("> branch taken");                                        \
-            if (branchOffset < 0)                                           \
-                PERIODIC_CHECKS(branchOffset);                              \
             FINISH(branchOffset);                                           \
         } else {                                                            \
             ILOGV("|if-%s v%d,-", (_opname), vsrc1);                        \
@@ -1806,8 +1789,6 @@ HANDLE_OPCODE(OP_GOTO /*+AA*/)
     else
         ILOGV("|goto +0x%02x", ((s1)vdst));
     ILOGV("> branch taken");
-    if ((s1)vdst < 0)
-        PERIODIC_CHECKS((s1)vdst);
     FINISH((s1)vdst);
 OP_END
 
@@ -1821,8 +1802,6 @@ HANDLE_OPCODE(OP_GOTO_16 /*+AAAA*/)
         else
             ILOGV("|goto/16 +0x%04x", offset);
         ILOGV("> branch taken");
-        if (offset < 0)
-            PERIODIC_CHECKS(offset);
         FINISH(offset);
     }
 OP_END
@@ -1838,8 +1817,6 @@ HANDLE_OPCODE(OP_GOTO_32 /*+AAAAAAAA*/)
         else
             ILOGV("|goto/32 +0x%08x", offset);
         ILOGV("> branch taken");
-        if (offset <= 0)    /* allowed to branch to self */
-            PERIODIC_CHECKS(offset);
         FINISH(offset);
     }
 OP_END
@@ -1869,8 +1846,6 @@ HANDLE_OPCODE(OP_PACKED_SWITCH /*vAA, +BBBB*/)
 
         offset = dvmInterpHandlePackedSwitch(switchData, testVal);
         ILOGV("> branch taken (0x%04x)", offset);
-        if (offset <= 0)  /* uncommon */
-            PERIODIC_CHECKS(offset);
         FINISH(offset);
     }
 OP_END
@@ -1900,8 +1875,6 @@ HANDLE_OPCODE(OP_SPARSE_SWITCH /*vAA, +BBBB*/)
 
         offset = dvmInterpHandleSparseSwitch(switchData, testVal);
         ILOGV("> branch taken (0x%04x)", offset);
-        if (offset <= 0)  /* uncommon */
-            PERIODIC_CHECKS(offset);
         FINISH(offset);
     }
 OP_END
@@ -3563,15 +3536,6 @@ GOTO_TARGET(returnFromMethod)
     {
         StackSaveArea* saveArea;
 
-        /*
-         * We must do this BEFORE we pop the previous stack frame off, so
-         * that the GC can see the return value (if any) in the local vars.
-         *
-         * Since this is now an interpreter switch point, we must do it before
-         * we do anything at all.
-         */
-        PERIODIC_CHECKS(0);
-
         ILOGV("> retval=0x%llx (leaving %s.%s %s)",
             retval.j, curMethod->clazz->descriptor, curMethod->name,
             curMethod->shorty);
@@ -3634,8 +3598,6 @@ GOTO_TARGET(exceptionThrown)
     {
         Object* exception;
         int catchRelPc;
-
-        PERIODIC_CHECKS(0);
 
         /*
          * We save off the exception and clear the exception status.  While

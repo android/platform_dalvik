@@ -529,15 +529,6 @@ GOTO_TARGET(returnFromMethod)
     {
         StackSaveArea* saveArea;
 
-        /*
-         * We must do this BEFORE we pop the previous stack frame off, so
-         * that the GC can see the return value (if any) in the local vars.
-         *
-         * Since this is now an interpreter switch point, we must do it before
-         * we do anything at all.
-         */
-        PERIODIC_CHECKS(0);
-
         ILOGV("> retval=0x%llx (leaving %s.%s %s)",
             retval.j, curMethod->clazz->descriptor, curMethod->name,
             curMethod->shorty);
@@ -600,8 +591,6 @@ GOTO_TARGET(exceptionThrown)
     {
         Object* exception;
         int catchRelPc;
-
-        PERIODIC_CHECKS(0);
 
         /*
          * We save off the exception and clear the exception status.  While

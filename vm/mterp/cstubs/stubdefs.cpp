@@ -121,16 +121,3 @@
  */
 #define GOTO_bail()                                                         \
     dvmMterpStdBail(self)
-
-/*
- * Periodically check for thread suspension.
- *
- * While we're at it, see if a debugger has attached or the profiler has
- * started.
- */
-#define PERIODIC_CHECKS(_pcadj) {                              \
-        if (dvmCheckSuspendQuick(self)) {                                   \
-            EXPORT_PC();  /* need for precise GC */                         \
-            dvmCheckSuspendPending(self);                                   \
-        }                                                                   \
-    }

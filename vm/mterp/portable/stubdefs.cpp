@@ -67,16 +67,3 @@
 #define GOTO_invokeMethod(_methodCallRange, _methodToCall, _vsrc1, _vdst) goto invokeMethod;
 
 #define GOTO_bail() goto bail;
-
-/*
- * Periodically check for thread suspension.
- *
- * While we're at it, see if a debugger has attached or the profiler has
- * started.  If so, switch to a different "goto" table.
- */
-#define PERIODIC_CHECKS(_pcadj) {                              \
-        if (dvmCheckSuspendQuick(self)) {                                   \
-            EXPORT_PC();  /* need for precise GC */                         \
-            dvmCheckSuspendPending(self);                                   \
-        }                                                                   \
-    }
