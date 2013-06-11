@@ -2082,17 +2082,6 @@ void dvmAbort()
      */
     dvmPrintNativeBackTrace();
 
-    /*
-     * If we call abort(), all threads in the process receives a SIBABRT.
-     * debuggerd dumps the stack trace of the main thread, whether or not
-     * that was the thread that failed.
-     *
-     * By stuffing a value into a bogus address, we cause a segmentation
-     * fault in the current thread, and get a useful log from debuggerd.
-     * We can also trivially tell the difference between a VM crash and
-     * a deliberate abort by looking at the fault address.
-     */
-    *((char*)0xdeadd00d) = result;
     abort();
 
     /* notreached */
