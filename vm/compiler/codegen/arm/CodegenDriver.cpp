@@ -54,6 +54,7 @@ static bool genConversionCall(CompilationUnit *cUnit, MIR *mir, void *funct,
     RegLocation rlSrc;
     RegLocation rlDest;
     dvmCompilerFlushAllRegs(cUnit);   /* Send everything to home location */
+    LOAD_FUNC_ADDR(cUnit, r2, (int)funct);
     if (srcSize == 1) {
         rlSrc = dvmCompilerGetSrc(cUnit, mir, 0);
         loadValueDirectFixed(cUnit, rlSrc, r0);
@@ -61,7 +62,6 @@ static bool genConversionCall(CompilationUnit *cUnit, MIR *mir, void *funct,
         rlSrc = dvmCompilerGetSrcWide(cUnit, mir, 0, 1);
         loadValueDirectWideFixed(cUnit, rlSrc, r0, r1);
     }
-    LOAD_FUNC_ADDR(cUnit, r2, (int)funct);
     opReg(cUnit, kOpBlx, r2);
     dvmCompilerClobberCallRegs(cUnit);
     if (tgtSize == 1) {
@@ -114,9 +114,9 @@ static bool genArithOpFloatPortable(CompilationUnit *cUnit, MIR *mir,
             return true;
     }
     dvmCompilerFlushAllRegs(cUnit);   /* Send everything to home location */
+    LOAD_FUNC_ADDR(cUnit, r2, (int)funct);
     loadValueDirectFixed(cUnit, rlSrc1, r0);
     loadValueDirectFixed(cUnit, rlSrc2, r1);
-    LOAD_FUNC_ADDR(cUnit, r2, (int)funct);
     opReg(cUnit, kOpBlx, r2);
     dvmCompilerClobberCallRegs(cUnit);
     rlResult = dvmCompilerGetReturn(cUnit);
@@ -750,8 +750,8 @@ static bool genArithOpLong(CompilationUnit *cUnit, MIR *mir,
         // Adjust return regs in to handle case of rem returning r2/r3
         dvmCompilerFlushAllRegs(cUnit);   /* Send everything to home location */
         loadValueDirectWideFixed(cUnit, rlSrc2, r2, r3);
-        loadValueDirectWideFixed(cUnit, rlSrc1, r0, r1);
         LOAD_FUNC_ADDR(cUnit, r14lr, (int) callTgt);
+        loadValueDirectWideFixed(cUnit, rlSrc1, r0, r1);
         if (checkZero) {
             int tReg = r12; // Using fixed registers during call sequence
             opRegRegReg(cUnit, kOpOr, tReg, r2, r3);
@@ -1348,9 +1348,9 @@ static void genPuntToInterp(CompilationUnit *cUnit, unsigned int offset)
 {
     /* r0 = dalvik pc */
     dvmCompilerFlushAllRegs(cUnit);
-    loadConstant(cUnit, r0, (int) (cUnit->method->insns + offset));
     loadWordDisp(cUnit, r6SELF, offsetof(Thread,
                  jitToInterpEntries.dvmJitToInterpPunt), r1);
+    loadConstant(cUnit, r0, (int) (cUnit->method->insns + offset));
     opReg(cUnit, kOpBlx, r1);
 }
 
@@ -1848,9 +1848,9 @@ static bool handleFmt21c_Fmt31c(CompilationUnit *cUnit, MIR *mir)
                 return false;
             }
             dvmCompilerFlushAllRegs(cUnit);   /* Everything to home location */
-            loadConstant(cUnit, r1, (int) classPtr );
             rlSrc = dvmCompilerGetSrc(cUnit, mir, 0);
             rlSrc = loadValue(cUnit, rlSrc, kCoreReg);
+            loadConstant(cUnit, r1, (int) classPtr );
             /* Null? */
             ArmLIR *branch1 = genCmpImmBranch(cUnit, kArmCondEq,
                                               rlSrc.lowReg, 0);
@@ -3262,6 +3262,9 @@ static bool handleFmt35c_3rc(CompilationUnit *cUnit, MIR *mir,
             /* r0 now contains this->clazz */
             genRegCopy(cUnit, r0, r3);
 
+            LOAD_FUNC_ADDR(cUnit, r7,
+                           (intptr_t) dvmFindInterfaceMethodInCache);
+
             /* r1 = BBBB */
             loadConstant(cUnit, r1, dInsn->vB);
 
@@ -3271,8 +3274,6 @@ static bool handleFmt35c_3rc(CompilationUnit *cUnit, MIR *mir,
             /* r3 = pDvmDex */
             loadConstant(cUnit, r3, (int) cUnit->method->clazz->pDvmDex);
 
-            LOAD_FUNC_ADDR(cUnit, r7,
-                           (intptr_t) dvmFindInterfaceMethodInCache);
             opReg(cUnit, kOpBlx, r7);
             /* r0 = calleeMethod (returned from dvmFindInterfaceMethodInCache */
 
