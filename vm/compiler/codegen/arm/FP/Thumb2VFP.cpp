@@ -60,9 +60,144 @@ static bool genArithOpFloat(CompilationUnit *cUnit, MIR *mir,
     return false;
 }
 
+static ArmLIR* genVectorMultiplyAndAccumulate(CompilationUnit *cUnit,
+                                              MIR *vmulMIR,
+                                              MIR *vaddMIR)
+{
+    RegLocation rlSrc1FromVmul;
+    RegLocation rlSrc2FromVmul;
+    RegLocation rlSrc1FromVadd;
+    RegLocation rlDestFromVadd;
+    RegLocation rlResult;
+
+    /* Use reg src1 and src2 from the multiply */
+    if (vmulMIR->ssaRep->numUses == 2) {
+        rlSrc1FromVmul = dvmCompilerGetSrc(cUnit, vmulMIR, 0);
+        rlSrc2FromVmul = dvmCompilerGetSrc(cUnit, vmulMIR, 1);
+    } else if (vmulMIR->ssaRep->numUses == 3) {
+        rlSrc1FromVmul = dvmCompilerGetSrcWide(cUnit, vmulMIR, 0, 1);
+        rlSrc2FromVmul = dvmCompilerGetSrc(cUnit, vmulMIR, 2);
+    } else {
+        rlSrc1FromVmul = dvmCompilerGetSrcWide(cUnit, vmulMIR, 0, 1);
+        rlSrc2FromVmul = dvmCompilerGetSrcWide(cUnit, vmulMIR, 2, 3);
+        assert(vaddMIR->ssaRep->numUses == 4);
+    }
+
+    /* Use reg src1 and dest from the accumulate */
+    if (vaddMIR->ssaRep->numUses > 2) {
+        rlSrc1FromVadd = dvmCompilerGetSrcWide(cUnit, vaddMIR, 0, 1);
+    } else {
+        rlSrc1FromVadd = dvmCompilerGetSrc(cUnit, vaddMIR, 0);
+    }
+    if (vaddMIR->ssaRep->numDefs == 1) {
+        rlDestFromVadd = dvmCompilerGetDest(cUnit, vaddMIR, 0);
+    } else {
+        assert(vaddMIR->ssaRep->numDefs == 2);
+        rlDestFromVadd = dvmCompilerGetDestWide(cUnit, vaddMIR, 0, 1);
+    }
+
+    rlSrc1FromVmul = loadValueWide(cUnit, rlSrc1FromVmul, kFPReg);
+    assert(rlSrc1FromVmul.wide);
+    rlSrc2FromVmul = loadValueWide(cUnit, rlSrc2FromVmul, kFPReg);
+    assert(rlSrc2FromVmul.wide);
+    /*
+     * Make sure that the dest reg for vmla is loaded with the
+     * elements of the accumulate.
+     */
+    rlSrc1FromVadd = loadValueWide(cUnit, rlSrc1FromVadd, kFPReg);
+    assert(rlSrc1FromVadd.wide);
+    rlResult = dvmCompilerEvalLoc(cUnit, rlDestFromVadd, kFPReg, true);
+    assert(rlDestFromVadd.wide);
+    assert(rlResult.wide);
+
+    ArmLIR* vmlaLIR = newLIR3(cUnit,
+                              kThumb2Vmlad,
+                              S2D(rlResult.lowReg, rlResult.highReg),
+                              S2D(rlSrc1FromVmul.lowReg, rlSrc1FromVmul.highReg),
+                              S2D(rlSrc2FromVmul.lowReg, rlSrc2FromVmul.highReg));
+
+    /* Multiply replaced, make sure MIR is not used */
+    vmulMIR->dalvikInsn.opcode = OP_NOP;
+
+    /* Accumulate replaced, make sure MIR is not used */
+    vaddMIR->dalvikInsn.opcode = OP_NOP;
+
+    /*
+     * Make sure that dest is saved, use the
+     * reg location from the accumulate.
+     */
+    storeValueWide(cUnit, rlDestFromVadd, rlResult);
+
+    return vmlaLIR;
+}
+
+static bool checkMIRForSSARegUse(CompilationUnit *cUnit, MIR *mir, int ssaReg)
+{
+    int i;
+    MIR* check;
+    if(mir == NULL) {
+        return false;
+    }
+    for(check = mir; check; check = check->next) {
+       for(i=0; i < check->ssaRep->numUses; i++) {
+          if(check->ssaRep->uses[i] == ssaReg) {
+              return true;
+          }
+       }
+    }
+    return false;
+}
+
+/*
+ * Optimize multiply and accumulate using
+ * Thumb2 Vector Multiply Accumulate.
+ * 1) Multiply dest reg must be defined locally.
+ * 2) Accumulate must use the result from
+ *    the multiply.
+ * 3) Accumulate dest and src1 must be same.
+ * 4) Multiply dest reg must not be used after
+ *    the accumulate.
+ *
+ *      [vmuld]     d1, dX, dX
+ *      [vaddd]     d0, d0, d1
+ *
+ * Result:
+ *      [vmlad]     d0, dX, dX
+ */
+static bool tryGenVectorMultiplyAndAccumulate(CompilationUnit *cUnit, MIR *vmulMIR, MIR *vaddMIR, BasicBlock *bb)
+{
+    assert(vmulMIR);
+    assert(vaddMIR);
+    assert(bb->dataFlowInfo);
+    BitVector* defV = bb->dataFlowInfo->defV;
+    if(defV != NULL &&
+        dvmIsBitSet(defV, vmulMIR->dalvikInsn.vA)) {
+
+        int vmulDestReg = dvmConvertSSARegToDalvik(cUnit, vmulMIR->ssaRep->defs[0]);
+        int vaddDestReg = dvmConvertSSARegToDalvik(cUnit, vaddMIR->ssaRep->defs[0]);
+        int vaddSrc1Reg = dvmConvertSSARegToDalvik(cUnit, vaddMIR->ssaRep->uses[0]);
+        int vaddSrc2Reg;
+        if(vaddMIR->ssaRep->numUses > 2) {
+            vaddSrc2Reg = dvmConvertSSARegToDalvik(cUnit, vaddMIR->ssaRep->uses[2]);
+        } else {
+            vaddSrc2Reg = dvmConvertSSARegToDalvik(cUnit, vaddMIR->ssaRep->uses[1]);
+        }
+
+        if(DECODE_REG(vaddSrc2Reg) == DECODE_REG(vmulDestReg) &&
+           DECODE_REG(vaddSrc1Reg) == DECODE_REG(vaddDestReg)) {
+
+            if(!checkMIRForSSARegUse(cUnit, vaddMIR->next, vmulMIR->ssaRep->defs[0])) {
+                genVectorMultiplyAndAccumulate(cUnit, vmulMIR, vaddMIR);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 static bool genArithOpDouble(CompilationUnit *cUnit, MIR *mir,
                              RegLocation rlDest, RegLocation rlSrc1,
-                             RegLocation rlSrc2)
+                             RegLocation rlSrc2, BasicBlock *bb)
 {
     int op = kThumbBkpt;
     RegLocation rlResult;
@@ -92,6 +227,19 @@ static bool genArithOpDouble(CompilationUnit *cUnit, MIR *mir,
         }
         default:
             return true;
+    }
+
+    if(op == kThumb2Vmuld &&
+       mir->next != NULL &&
+       (mir->next->dalvikInsn.opcode == OP_ADD_DOUBLE ||
+        mir->next->dalvikInsn.opcode == OP_ADD_DOUBLE_2ADDR)) {
+        /*
+         * Found Multiply followed by Accumulate.
+         * Try to optimize using Vector Multiply and Accumulate.
+         */
+        if(tryGenVectorMultiplyAndAccumulate(cUnit, mir, mir->next, bb)) {
+            return false;
+        }
     }
 
     rlSrc1 = loadValueWide(cUnit, rlSrc1, kFPReg);
