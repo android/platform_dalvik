@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a583140_08aba77f",
+        "filename": "vm/oo/Array.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2013-06-14T04:45:05Z",
+      "side": 1,
+      "message": "this comment now seems out of date",
+      "revId": "fa85f184b54d0f1850375c4f559ff4c2569db1cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
