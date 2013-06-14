@@ -1,3 +1,13 @@
+public abstract final
+public abstract final
+public
+public abstract final
+protected
+protected abstract final
+private
+private abstract final
+
+abstract final
 ***** class ClassAttrs:
   name: ClassAttrs
   canonical: ClassAttrs
@@ -11,8 +21,8 @@
   enclosingMeth: null
   modifiers: 1
   package: null
-  declaredClasses: [2] class ClassAttrs$PublicMemberClass, class ClassAttrs$MemberClass
-  member classes: [1] class ClassAttrs$PublicMemberClass
+  declaredClasses: [6] class ClassAttrs$PublicMemberClass, class ClassAttrs$MemberClass, class ClassAttrs$PackagePrivateClass, class ClassAttrs$PrivateClass, class ClassAttrs$ProtectedClass, class ClassAttrs$PublicClass
+  member classes: [3] class ClassAttrs$PublicMemberClass, class ClassAttrs$ProtectedClass, class ClassAttrs$PublicClass
   isAnnotation: false
   isAnonymous: false
   isArray: false

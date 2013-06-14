@@ -436,20 +436,24 @@ static ClassObject* createArrayClass(const char* descriptor, Object* loader)
 
     /*
      * Inherit access flags from the element.  Arrays can't be used as a
-     * superclass or interface, so we want to add "final" and remove
+     * superclass or interface, so we want to add "abstract final" and remove
      * "interface".
-     *
-     * Don't inherit any non-standard flags (e.g., CLASS_FINALIZABLE)
-     * from elementClass.  We assume that the array class does not
-     * override finalize().
      */
-    newClass->accessFlags = ((newClass->elementClass->accessFlags &
-                             ~ACC_INTERFACE) | ACC_FINAL) & JAVA_FLAGS_MASK;
+    int accessFlags = elementClass->accessFlags;
+    if (!gDvm.optimizing) {
+        // If the element class is an inner class, make sure we get the correct access flags.
+        StringObject* className = NULL;
+        dvmGetInnerClass(elementClass, &className, &accessFlags);
+        dvmReleaseTrackedAlloc((Object*) className, NULL);
+    }
+    accessFlags &= JAVA_FLAGS_MASK;
+    accessFlags &= ~ACC_INTERFACE;
+    accessFlags |= ACC_ABSTRACT | ACC_FINAL;
 
     /* Set the flags we determined above.
      * This must happen after accessFlags is set.
      */
-    SET_CLASS_FLAG(newClass, extraFlags);
+    SET_CLASS_FLAG(newClass, accessFlags | extraFlags);
 
     if (!dvmAddClassToHash(newClass)) {
         /*

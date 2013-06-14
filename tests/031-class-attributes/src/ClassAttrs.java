@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
@@ -21,7 +22,31 @@ public class ClassAttrs {
         cinner.showMe();
     }
 
+    public class PublicClass {
+    }
+
+    protected class ProtectedClass {
+    }
+
+    private class PrivateClass {
+    }
+
+    class PackagePrivateClass {
+    }
+
     public static void main() {
+        // https://code.google.com/p/android/issues/detail?id=56267
+        System.out.println(Modifier.toString(int.class.getModifiers()));
+        System.out.println(Modifier.toString(int[].class.getModifiers()));
+        System.out.println(Modifier.toString(PublicClass.class.getModifiers()));
+        System.out.println(Modifier.toString(PublicClass[].class.getModifiers()));
+        System.out.println(Modifier.toString(ProtectedClass.class.getModifiers()));
+        System.out.println(Modifier.toString(ProtectedClass[].class.getModifiers()));
+        System.out.println(Modifier.toString(PrivateClass.class.getModifiers()));
+        System.out.println(Modifier.toString(PrivateClass[].class.getModifiers()));
+        System.out.println(Modifier.toString(PackagePrivateClass.class.getModifiers()));
+        System.out.println(Modifier.toString(PackagePrivateClass[].class.getModifiers()));
+
         printClassAttrs(ClassAttrs.class);
         printClassAttrs(OtherClass.class);
         printClassAttrs(OtherPackageClass.class);
