@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b83224ef_7bb30b06",
+        "filename": "vm/Native.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2013-08-02T23:07:39Z",
+      "side": 1,
+      "message": "shouldn\u0027t we handle JNI_ERR as a special case, that is the code indicating a problem",
+      "revId": "4317627308018200430a0e178f1f6c59158dd9bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
