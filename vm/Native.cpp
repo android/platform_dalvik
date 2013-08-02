@@ -438,11 +438,9 @@ bool dvmLoadNativeCode(const char* pathName, Object* classLoader,
             dvmChangeStatus(self, oldStatus);
             self->classLoaderOverride = prevOverride;
 
-            if (version != JNI_VERSION_1_2 && version != JNI_VERSION_1_4 &&
-                version != JNI_VERSION_1_6)
-            {
-                ALOGW("JNI_OnLoad returned bad version (%d) in %s %p",
-                    version, pathName, classLoader);
+            if (dvmIsBadJniVersion(version)) {
+                *detail = strdup(StringPrintf("Bad JNI version returned from JNI_OnLoad in \"%s\": %d",
+                                              pathName, version).c_str());
                 /*
                  * It's unwise to call dlclose() here, but we can mark it
                  * as bad and ensure that future load attempts will fail.
@@ -455,7 +453,8 @@ bool dvmLoadNativeCode(const char* pathName, Object* classLoader,
                 result = false;
             } else {
                 if (gDvm.verboseJni) {
-                    ALOGI("[Returned from JNI_OnLoad for \"%s\"]", pathName);
+                    ALOGI("[Returned %s from JNI_OnLoad for \"%s\"]",
+                          (result ? "successfully" : "failure"), pathName);
                 }
             }
         }

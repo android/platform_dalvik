@@ -285,6 +285,11 @@ void dvmJniShutdown() {
     dvmClearReferenceTable(&gDvm.jniPinRefTable);
 }
 
+bool dvmIsBadJniVersion(int version) {
+  // We don't support JNI_VERSION_1_1. These are the only other valid versions.
+  return version != JNI_VERSION_1_2 && version != JNI_VERSION_1_4 && version != JNI_VERSION_1_6;
+}
+
 /*
  * Find the JNIEnv associated with the current thread.
  *
@@ -2814,6 +2819,13 @@ static jint attachThread(JavaVM* vm, JNIEnv** p_env, void* thr_args, bool isDaem
         argsCopy.name = NULL;
         argsCopy.group = (jobject) dvmGetMainThreadGroup();
     } else {
+        if (dvmIsBadJniVersion(args->version)) {
+            ALOGE("Bad JNI version passed to %s: %d",
+                  (isDaemon ? "AttachCurrentThreadAsDaemon" : "AttachCurrentThread"),
+                  args->version);
+            return JNI_EVERSION;
+        }
+
         argsCopy.version = args->version;
         argsCopy.name = args->name;
         if (args->group != NULL) {
@@ -2892,7 +2904,8 @@ static jint DetachCurrentThread(JavaVM* vm) {
 static jint GetEnv(JavaVM* vm, void** env, jint version) {
     Thread* self = dvmThreadSelf();
 
-    if (version < JNI_VERSION_1_1 || version > JNI_VERSION_1_6) {
+    if (dvmIsBadJniVersion(version)) {
+        ALOGE("Bad JNI version passed to GetEnv: %d", version);
         return JNI_EVERSION;
     }
 
@@ -3408,7 +3421,8 @@ jint JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs) {
  */
 jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
     const JavaVMInitArgs* args = (JavaVMInitArgs*) vm_args;
-    if (args->version < JNI_VERSION_1_2) {
+    if (dvmIsBadJniVersion(args->version)) {
+        ALOGE("Bad JNI version passed to CreateJavaVM: %d", args->version);
         return JNI_EVERSION;
     }
 

@@ -25,6 +25,8 @@
 bool dvmJniStartup(void);
 void dvmJniShutdown(void);
 
+bool dvmIsBadJniVersion(int version);
+
 /*
  * Our data structures for JNIEnv and JavaVM.
  *
