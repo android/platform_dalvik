@@ -1740,10 +1740,12 @@ static ClassObject* loadClassFromDex0(DvmDex* pDvmDex,
      * Make sure the aren't any "bonus" flags set, since we use them for
      * runtime state.
      */
+    /* bits we can reasonably expect to see set in a DEX access flags field */
+    const uint32_t EXPECTED_FILE_FLAGS = (ACC_CLASS_MASK | CLASS_ISPREVERIFIED | CLASS_ISOPTIMIZED);
     if ((pClassDef->accessFlags & ~EXPECTED_FILE_FLAGS) != 0) {
         ALOGW("Invalid file flags in class %s: %04x",
             descriptor, pClassDef->accessFlags);
-        return NULL;
+        //return NULL;
     }
 
     /*
@@ -1771,7 +1773,7 @@ static ClassObject* loadClassFromDex0(DvmDex* pDvmDex,
     dvmSetClassSerialNumber(newClass);
     newClass->descriptor = descriptor;
     assert(newClass->descriptorAlloc == NULL);
-    SET_CLASS_FLAG(newClass, pClassDef->accessFlags);
+    SET_CLASS_FLAG(newClass, pClassDef->accessFlags & EXPECTED_FILE_FLAGS);
     dvmSetFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, classLoader),
                       (Object *)classLoader);

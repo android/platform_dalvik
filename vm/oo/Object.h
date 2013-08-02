@@ -82,10 +82,6 @@ enum ClassFlags {
     CLASS_ISPREVERIFIED        = (1<<16), // class has been pre-verified
 };
 
-/* bits we can reasonably expect to see set in a DEX access flags field */
-#define EXPECTED_FILE_FLAGS \
-    (ACC_CLASS_MASK | CLASS_ISPREVERIFIED | CLASS_ISOPTIMIZED)
-
 /*
  * Get/set class flags.
  */
