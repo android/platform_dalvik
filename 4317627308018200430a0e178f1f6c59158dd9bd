@@ -16,6 +16,24 @@
       "revId": "4317627308018200430a0e178f1f6c59158dd9bd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b83224ef_9bdeb7f0",
+        "filename": "vm/Native.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-02T23:12:08Z",
+      "side": 1,
+      "message": "yes. we\u0027re missing that internally too, but i\u0027ll fix it here first.",
+      "parentUuid": "b83224ef_7bb30b06",
+      "revId": "4317627308018200430a0e178f1f6c59158dd9bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
