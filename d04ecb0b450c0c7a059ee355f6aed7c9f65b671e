@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b83224ef_735c4ff7",
+        "filename": "vm/Native.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2013-08-03T02:07:41Z",
+      "side": 1,
+      "message": "result \u003d true",
+      "revId": "d04ecb0b450c0c7a059ee355f6aed7c9f65b671e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
