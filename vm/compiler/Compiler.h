@@ -48,6 +48,10 @@
 #define PROTECT_CODE_CACHE_ATTRS       (PROT_READ | PROT_EXEC)
 #define UNPROTECT_CODE_CACHE_ATTRS     (PROT_READ | PROT_EXEC | PROT_WRITE)
 
+#ifdef ARCH_IA32
+#define UNPROTECT_CODE_CACHE(addr, size)
+#define PROTECT_CODE_CACHE(addr, size)
+#else
 /* Acquire the lock before removing PROT_WRITE from the specified mem region */
 #define UNPROTECT_CODE_CACHE(addr, size)                                       \
     {                                                                          \
@@ -65,6 +69,7 @@
                  (PROTECT_CODE_CACHE_ATTRS));                                  \
         dvmUnlockMutex(&gDvmJit.codeCacheProtectionLock);                      \
     }
+#endif
 
 #define SINGLE_STEP_OP(opcode)                                                 \
     (gDvmJit.includeSelectedOp !=                                              \
