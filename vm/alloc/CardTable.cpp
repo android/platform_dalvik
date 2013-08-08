@@ -54,9 +54,12 @@ bool dvmCardTableStartup(size_t heapMaximumSize, size_t growthLimit)
     void *allocBase;
     u1 *biasedBase;
     GcHeap *gcHeap = gDvm.gcHeap;
+    int offset;
     void *heapBase = dvmHeapSourceGetBase();
     assert(gcHeap != NULL);
     assert(heapBase != NULL);
+    /* All zeros is the correct initial value; all clean. */
+    assert(GC_CARD_CLEAN == 0);
 
     /* Set up the card table */
     length = heapMaximumSize / GC_CARD_SIZE;
@@ -69,17 +72,11 @@ bool dvmCardTableStartup(size_t heapMaximumSize, size_t growthLimit)
     gcHeap->cardTableBase = (u1*)allocBase;
     gcHeap->cardTableLength = growthLimit / GC_CARD_SIZE;
     gcHeap->cardTableMaxLength = length;
-    gcHeap->cardTableOffset = 0;
-    /* All zeros is the correct initial value; all clean. */
-    assert(GC_CARD_CLEAN == 0);
-
     biasedBase = (u1 *)((uintptr_t)allocBase -
-                        ((uintptr_t)heapBase >> GC_CARD_SHIFT));
-    if (((uintptr_t)biasedBase & 0xff) != GC_CARD_DIRTY) {
-        int offset = GC_CARD_DIRTY - ((uintptr_t)biasedBase & 0xff);
-        gcHeap->cardTableOffset = offset + (offset < 0 ? 0x100 : 0);
-        biasedBase += gcHeap->cardTableOffset;
-    }
+                       ((uintptr_t)heapBase >> GC_CARD_SHIFT));
+    offset = GC_CARD_DIRTY - ((uintptr_t)biasedBase & 0xff);
+    gcHeap->cardTableOffset = offset + (offset < 0 ? 0x100 : 0);
+    biasedBase += gcHeap->cardTableOffset;
     assert(((uintptr_t)biasedBase & 0xff) == GC_CARD_DIRTY);
     gDvm.biasedCardTableBase = biasedBase;
 
@@ -165,7 +162,7 @@ bool dvmIsValidCard(const u1 *cardAddr)
 }
 
 /*
- * Returns the address of the relevent byte in the card table, given
+ * Returns the address of the relevant byte in the card table, given
  * an address on the heap.
  */
 u1 *dvmCardFromAddr(const void *addr)
