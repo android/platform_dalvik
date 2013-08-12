@@ -296,10 +296,10 @@ ifeq ($(dvm_arch),x86)
     LOCAL_CFLAGS += -DDVM_JMP_TABLE_MTERP=1 \
                     -DMTERP_STUB
     LOCAL_SRC_FILES += \
-		arch/$(dvm_arch_variant)/Call386ABI.S \
-		arch/$(dvm_arch_variant)/Hints386ABI.cpp \
-		mterp/out/InterpC-$(dvm_arch_variant).cpp \
-		mterp/out/InterpAsm-$(dvm_arch_variant).S
+		arch/$(dvm_arch)/Call386ABI.S \
+		arch/$(dvm_arch)/Hints386ABI.cpp \
+		mterp/out/InterpC-$(dvm_arch).cpp \
+		mterp/out/InterpAsm-$(dvm_arch).S
     ifeq ($(WITH_JIT),true)
       LOCAL_CFLAGS += -DARCH_IA32
       LOCAL_SRC_FILES += \
