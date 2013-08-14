@@ -16,6 +16,24 @@
       "revId": "d5104445cc62c731723afae987bbe732accb681d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18bc1031_327f2e6e",
+        "filename": "vm/native/dalvik_system_VMRuntime.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2013-08-14T00:26:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18bc1031_cf055d61",
+      "revId": "d5104445cc62c731723afae987bbe732accb681d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
