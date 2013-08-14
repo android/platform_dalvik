@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18bc1031_cf055d61",
+        "filename": "vm/native/dalvik_system_VMRuntime.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-14T00:15:11Z",
+      "side": 1,
+      "message": "CheckJNI without a space, for consistency.",
+      "revId": "d5104445cc62c731723afae987bbe732accb681d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
