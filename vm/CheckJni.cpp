@@ -136,6 +136,8 @@ static inline bool callNeedsCheck(const u4* args, JValue* pResult,
     return (method->shorty[0] == 'L' && !dvmCheckException(self) && pResult->l != NULL);
 }
 
+#include <openssl/err.h>
+
 /*
  * Check a call into native code.
  */
@@ -143,6 +145,26 @@ void dvmCheckCallJNIMethod(const u4* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     dvmCallJNIMethod(args, pResult, method, self);
+
+
+  const char* file;
+  int line;
+  const char* data;
+  int flags;
+  unsigned long error = ERR_get_error_line_data(&file, &line, &data, &flags);
+
+  if (error != 0) {
+    char message[256];
+    ERR_error_string_n(error, message, sizeof(message));
+    int library = ERR_GET_LIB(error);
+    int reason = ERR_GET_REASON(error);
+    ALOGE("OpenSSL error=%lx library=%x reason=%x (%s:%d): %s %s",
+          error, library, reason, file, line, message,
+          (flags & ERR_TXT_STRING) ? data : "(no data)");
+
+    dvmDumpThread(dvmThreadSelf(), false);
+    dvmAbort();
+  }
     if (callNeedsCheck(args, pResult, method, self)) {
         checkCallResultCommon(args, pResult, method, self);
     }

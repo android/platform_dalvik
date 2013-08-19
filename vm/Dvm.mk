@@ -231,6 +231,7 @@ LOCAL_C_INCLUDES += \
 	dalvik/vm \
 	external/zlib \
 	libcore/include \
+	external/openssl/include \
 
 MTERP_ARCH_KNOWN := false
 
