@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad4bc472_5336ee6a",
+        "filename": "vm/CheckJni.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2013-08-19T22:06:55Z",
+      "side": 1,
+      "message": "2 char vs 4 char indent",
+      "revId": "f4d7b1a3876d5178d393f31becb7e27c41f41d9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
