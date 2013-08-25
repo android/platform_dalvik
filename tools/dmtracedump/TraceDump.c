@@ -925,7 +925,9 @@ static int compareMethods(const void* meth1, const void* meth2)
 
 void sortMethodList(DataKeys* pKeys)
 {
-    qsort(pKeys->methods, pKeys->numMethods, sizeof(MethodEntry),
+    // Windows' qsort exchanges the position of (toplevel) and (unknown).
+    // So we don't sort (toplevel) and (unknown) method.
+    qsort(&pKeys->methods[2], pKeys->numMethods - 2, sizeof(MethodEntry),
         compareMethods);
 }
 
@@ -1186,7 +1188,7 @@ void dumpTrace()
     for (i = 0; i < MAX_THREADS; i++)
         traceData.depth[i] = 2;       // adjust for return from start function
 
-    dataFp = fopen(gOptions.traceFileName, "r");
+    dataFp = fopen(gOptions.traceFileName, "rb");
     if (dataFp == NULL)
         goto bail;
 
@@ -1661,11 +1663,20 @@ void createInclusiveProfileGraphNew(DataKeys* dataKeys)
 {
     // create a temporary file in /tmp
     char path[FILENAME_MAX];
+
+#ifdef WIN32
+    if (gOptions.keepDotFile) {
+        snprintf(path, FILENAME_MAX, "%s.dot", gOptions.graphFileName);
+    } else {
+        snprintf(path, FILENAME_MAX, "C:/temp/dot-%d-%d.dot", (int)time(NULL), rand());
+    }
+#else
     if (gOptions.keepDotFile) {
         snprintf(path, FILENAME_MAX, "%s.dot", gOptions.graphFileName);
     } else {
         snprintf(path, FILENAME_MAX, "/tmp/dot-%d-%d.dot", (int)time(NULL), rand());
     }
+#endif
 
     FILE* file = fopen(path, "w+");
 
@@ -1679,7 +1690,11 @@ void createInclusiveProfileGraphNew(DataKeys* dataKeys)
 
     // now that we have the dot file generate the image
     char command[1024];
+#ifdef WIN32
+    snprintf(command, 1024, "dot -Tpng -o \"%s\" \"%s\"", gOptions.graphFileName, path);
+#else
     snprintf(command, 1024, "dot -Tpng -o '%s' '%s'", gOptions.graphFileName, path);
+#endif
 
     system(command);
 
@@ -2301,7 +2316,7 @@ DataKeys* parseDataKeys(TraceData* traceData, const char* traceFileName, uint64_
     uint64_t currentTime;
     MethodEntry* caller;
 
-    dataFp = fopen(traceFileName, "r");
+    dataFp = fopen(traceFileName, "rb");
     if (dataFp == NULL)
         goto bail;
 
