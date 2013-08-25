@@ -159,7 +159,7 @@ typedef struct UniqueMethodEntry {
  * Entry from the method list.
  */
 typedef struct MethodEntry {
-    unsigned int methodId;
+    int64_t methodId;
     const char* className;
     const char* methodName;
     const char* signature;
@@ -794,9 +794,9 @@ long parseMethods(DataKeys* pKeys, long offset)
     pKeys->methods = (MethodEntry*) malloc(sizeof(MethodEntry) * count);
     if (pKeys->methods == NULL)
         return -1;
-    initMethodEntry(&pKeys->methods[TOPLEVEL_INDEX], 0, "(toplevel)",
+    initMethodEntry(&pKeys->methods[TOPLEVEL_INDEX], -2, "(toplevel)",
         NULL, NULL, NULL, NULL);
-    initMethodEntry(&pKeys->methods[UNKNOWN_INDEX], 0, "(unknown)",
+    initMethodEntry(&pKeys->methods[UNKNOWN_INDEX], -1, "(unknown)",
         NULL, NULL, NULL, NULL);
 
     /*
@@ -925,7 +925,9 @@ static int compareMethods(const void* meth1, const void* meth2)
 
 void sortMethodList(DataKeys* pKeys)
 {
-    qsort(pKeys->methods, pKeys->numMethods, sizeof(MethodEntry),
+    // Windows' qsort exchanges the position of (toplevel) and (unknown).
+    // So we don't sort (toplevel) and (unknown) method.
+    qsort(&pKeys->methods[2], pKeys->numMethods - 2, sizeof(MethodEntry),
         compareMethods);
 }
 
@@ -1186,7 +1188,7 @@ void dumpTrace()
     for (i = 0; i < MAX_THREADS; i++)
         traceData.depth[i] = 2;       // adjust for return from start function
 
-    dataFp = fopen(gOptions.traceFileName, "r");
+    dataFp = fopen(gOptions.traceFileName, "rb");
     if (dataFp == NULL)
         goto bail;
 
@@ -1664,7 +1666,7 @@ void createInclusiveProfileGraphNew(DataKeys* dataKeys)
     if (gOptions.keepDotFile) {
         snprintf(path, FILENAME_MAX, "%s.dot", gOptions.graphFileName);
     } else {
-        snprintf(path, FILENAME_MAX, "/tmp/dot-%d-%d.dot", (int)time(NULL), rand());
+        snprintf(path, FILENAME_MAX, "dot-%d-%d.dot", (int)time(NULL), rand());
     }
 
     FILE* file = fopen(path, "w+");
@@ -1679,7 +1681,7 @@ void createInclusiveProfileGraphNew(DataKeys* dataKeys)
 
     // now that we have the dot file generate the image
     char command[1024];
-    snprintf(command, 1024, "dot -Tpng -o '%s' '%s'", gOptions.graphFileName, path);
+    snprintf(command, 1024, "dot -Tpng -o \"%s\" \"%s\"", gOptions.graphFileName, path);
 
     system(command);
 
@@ -2301,7 +2303,7 @@ DataKeys* parseDataKeys(TraceData* traceData, const char* traceFileName, uint64_
     uint64_t currentTime;
     MethodEntry* caller;
 
-    dataFp = fopen(traceFileName, "r");
+    dataFp = fopen(traceFileName, "rb");
     if (dataFp == NULL)
         goto bail;
 
