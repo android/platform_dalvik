@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d8b5471_d0827cc4",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-26T17:10:48Z",
+      "side": 1,
+      "message": "why does it? (or why doesn\u0027t glibc\u0027s?) this seems odd.",
+      "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b5471_d0691c2e",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-26T17:10:48Z",
+      "side": 1,
+      "message": "or we could just switch to mkstemp(3) and make this better for both platforms.",
+      "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d8b5471_50776c0a",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-26T17:10:48Z",
+      "side": 1,
+      "message": "we can just use \"\" for both here, right?",
+      "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
