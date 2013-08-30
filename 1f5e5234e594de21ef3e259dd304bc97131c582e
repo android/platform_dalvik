@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b21325a0_e401da1b",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1023779
+      },
+      "writtenOn": "2013-08-30T18:01:30Z",
+      "side": 1,
+      "message": "I have no idea why windows does.\n\nBut I may be able to explain why glibc doesn\u0027t.\n\nAs far as I see qsort.c in glibc source code, \nglibc qsort doesn\u0027t include a first element in the range of sorting if a first element is min value.\n\nIt is the reason that qsort of glibc doesn\u0027t exchange (toplevel) and (unkown).",
+      "parentUuid": "2d8b5471_d0827cc4",
+      "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d8b5471_d0691c2e",
         "filename": "tools/dmtracedump/TraceDump.c",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "b21325a0_240db24c",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1023779
+      },
+      "writtenOn": "2013-08-30T18:01:30Z",
+      "side": 1,
+      "message": "mkstemp(3) can\u0027t be use in windows.",
+      "parentUuid": "2d8b5471_d0691c2e",
+      "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d8b5471_50776c0a",
         "filename": "tools/dmtracedump/TraceDump.c",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2013-08-26T17:10:48Z",
       "side": 1,
       "message": "we can just use \"\" for both here, right?",
+      "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b21325a0_0412366a",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1023779
+      },
+      "writtenOn": "2013-08-30T18:01:30Z",
+      "side": 1,
+      "message": "That\u0027s right.",
+      "parentUuid": "2d8b5471_50776c0a",
       "revId": "1f5e5234e594de21ef3e259dd304bc97131c582e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
