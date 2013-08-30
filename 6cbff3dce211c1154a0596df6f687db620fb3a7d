@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b265e52b_773aaa4d",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-30T18:42:31Z",
+      "side": 1,
+      "message": "i guess you\u0027re saying Windows\u0027 qsort isn\u0027t stable, whereas glibc\u0027s is? so isn\u0027t this code here the cause of the qsort problem? that the 0s here need to be unique ids, lower than all the others? can\u0027t we use int64_t instead of \"unsigned int\" and use negative values for (toplevel) and (unknown)?",
+      "revId": "6cbff3dce211c1154a0596df6f687db620fb3a7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
