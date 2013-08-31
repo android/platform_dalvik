@@ -16,6 +16,24 @@
       "revId": "6cbff3dce211c1154a0596df6f687db620fb3a7d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2c75d62_96f76c0b",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1023779
+      },
+      "writtenOn": "2013-08-31T08:57:37Z",
+      "side": 1,
+      "message": "Yes, we can use int64_t and use negative values for (toplevel) and (unknown).\n\n\nRemarks: Both windows\u0027 qsort and glibc\u0027s qsort isn\u0027t stable. \nThe results of glibc\u0027s and windows\u0027 differ because those implementation differs. \nI omit details because it is not important now.",
+      "parentUuid": "b265e52b_773aaa4d",
+      "revId": "6cbff3dce211c1154a0596df6f687db620fb3a7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
