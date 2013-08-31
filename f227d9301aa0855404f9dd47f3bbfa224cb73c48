@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7299ad82_95f7460b",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-08-31T00:49:58Z",
+      "side": 1,
+      "message": "we can lose this part of the change now, right?",
+      "revId": "f227d9301aa0855404f9dd47f3bbfa224cb73c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
