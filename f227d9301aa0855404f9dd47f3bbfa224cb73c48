@@ -16,6 +16,24 @@
       "revId": "f227d9301aa0855404f9dd47f3bbfa224cb73c48",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "92938169_6b45a151",
+        "filename": "tools/dmtracedump/TraceDump.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1023779
+      },
+      "writtenOn": "2013-08-31T08:57:43Z",
+      "side": 1,
+      "message": "Yes, we can.",
+      "parentUuid": "7299ad82_95f7460b",
+      "revId": "f227d9301aa0855404f9dd47f3bbfa224cb73c48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
