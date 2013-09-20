@@ -26,9 +26,6 @@
 #include <sys/mman.h>   // for madvise(), mmap()
 #include <errno.h>
 
-typedef unsigned long Word;
-const size_t kWordSize = sizeof(Word);
-
 /*
  * Returns true if the given object is marked.
  */
