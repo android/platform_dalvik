@@ -18,8 +18,6 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-#define SIZE_MAX UINT_MAX  // TODO: get SIZE_MAX from stdint.h
-
 #include "Dalvik.h"
 #include "alloc/DlMalloc.h"
 #include "alloc/Heap.h"
