@@ -197,8 +197,15 @@ static void Dalvik_java_lang_Class_getDeclaredClasses(const u4* args,
 
         /* count up public classes */
         for (count = 0; count < length; count++) {
-            if (dvmIsPublicClass(pSource[count]))
-                publicCount++;
+            if (dvmIsPublicClass(pSource[count])) {
+                for (int cnt = 0; cnt < pSource[count]->directMethodCount; cnt++) {
+                    Method* meth = &(pSource[count])->directMethods[cnt];
+                    if (dvmIsConstructorMethod(meth) && dvmIsPublicMethod(meth)) {
+                        publicCount++;
+                        break;
+                    }
+                }
+            }
         }
 
         /* create a new array to hold them */
@@ -209,9 +216,15 @@ static void Dalvik_java_lang_Class_getDeclaredClasses(const u4* args,
         /* copy them over */
         for (count = newIdx = 0; count < length; count++) {
             if (dvmIsPublicClass(pSource[count])) {
-                dvmSetObjectArrayElement(newClasses, newIdx,
-                                         (Object *)pSource[count]);
-                newIdx++;
+                for (int cnt = 0; cnt < pSource[count]->directMethodCount; cnt++) {
+                    Method* meth = &(pSource[count])->directMethods[cnt];
+                    if (dvmIsConstructorMethod(meth) && dvmIsPublicMethod(meth)) {
+                        dvmSetObjectArrayElement(newClasses, newIdx,
+                                (Object *)pSource[count]);
+                        newIdx++;
+                        break;
+                    }
+                }
             }
         }
         assert(newIdx == publicCount);
