@@ -1145,7 +1145,7 @@ static Method* verifyInvocationArgs(const Method* meth,
             dvmMethodTypeStr(methodType), pDecInsn->vB,
             classDescriptor, methodName, methodDesc);
         free(methodDesc);
-        if (VERIFY_OK(*pFailure))       /* not set for interface resolve */
+        if ((*pFailure) == VERIFY_ERROR_NONE)    /* not set for interface resolve */
             *pFailure = VERIFY_ERROR_NO_METHOD;
         goto fail;
     }
@@ -2831,7 +2831,7 @@ static void checkFinalFieldAccess(const Method* meth, const Field* field,
 static void checkArrayIndexType(const Method* meth, RegType regType,
     VerifyError* pFailure)
 {
-    if (VERIFY_OK(*pFailure)) {
+    if ((*pFailure) == VERIFY_ERROR_NONE) {
         /*
          * The 1nr types are interchangeable at this level. However,
          * check that a float is not used as the index.
@@ -4846,7 +4846,7 @@ iget_1nr_common:
                 failure = VERIFY_ERROR_GENERIC;
                 break;
             }
-            if (VERIFY_OK(failure)) {
+            if ((failure) == VERIFY_ERROR_NONE) {
                 setRegisterType(workLine, decInsn.vA, dstType);
             }
         }
@@ -4870,7 +4870,7 @@ iget_1nr_common:
                 failure = VERIFY_ERROR_GENERIC;
                 break;
             }
-            if (VERIFY_OK(failure)) {
+            if ((failure) == VERIFY_ERROR_NONE) {
                 assert(!dvmIsPrimitiveClass(fieldClass));
                 setRegisterType(workLine, decInsn.vA,
                     regTypeFromClass(fieldClass));
@@ -5115,7 +5115,7 @@ sget_1nr_common:
                 failure = VERIFY_ERROR_GENERIC;
                 break;
             }
-            if (VERIFY_OK(failure)) {
+            if ((failure) == VERIFY_ERROR_NONE) {
                 setRegisterType(workLine, decInsn.vA, dstType);
             }
         }
