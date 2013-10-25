@@ -94,6 +94,11 @@ dvmPlatformInvoke:
     pushl    %esi
     pushl    %ebx
     subl     $12,%esp
+
+/* force stack alignment. In the case of already aligned SP do nothing */
+    subl     $15,%esp
+    andl     $0xfffffff0,%esp
+
 /* For 386 ABI, argInfo hints should always be valid.  Abort if not. */
     movl     16(%ebp),%ebx
     testl    %ebx,%ebx
