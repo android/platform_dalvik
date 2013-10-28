@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e49184c_86495a8f",
+        "filename": "vm/Dvm.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1010056
+      },
+      "writtenOn": "2013-10-28T22:49:39Z",
+      "side": 1,
+      "message": "No. Please don\u0027t do this. Why not remove the unused functions (or have it not generate those functions)?",
+      "revId": "7d2798a60cd1076525e5eb57180fae077eb6b416",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
