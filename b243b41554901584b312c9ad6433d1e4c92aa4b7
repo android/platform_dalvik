@@ -16,6 +16,24 @@
       "revId": "b243b41554901584b312c9ad6433d1e4c92aa4b7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ed67883_795fd3e8",
+        "filename": "vm/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1013433
+      },
+      "writtenOn": "2013-10-29T23:30:01Z",
+      "side": 1,
+      "message": "Yes it does.",
+      "parentUuid": "5e49184c_089ad05c",
+      "revId": "b243b41554901584b312c9ad6433d1e4c92aa4b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
