@@ -608,4 +608,11 @@ void dvmDumpAllThreadsEx(const DebugOutputTarget* target, bool grabLock);
  */
 void dvmNukeThread(Thread* thread);
 
+/*
+ * Sets the threads name as pointed to by threadName in task_struct->comm.
+ * Note this field has a limited width, and larger values will be truncated
+ * to this width starting from the end.
+ */
+void setThreadName(const char *threadName);
+
 #endif  // DALVIK_THREAD_H_
