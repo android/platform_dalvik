@@ -44,6 +44,8 @@
 # include <sys/prctl.h>
 #endif
 
+#include "Thread.h"
+
 #define ZYGOTE_LOG_TAG "Zygote"
 
 /* must match values in dalvik.system.Zygote */
@@ -670,6 +672,14 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         if (err < 0) {
             ALOGE("cannot set SELinux context: %s\n", strerror(errno));
             dvmAbort();
+        }
+
+        /* Set the comm to a nicer name */
+        if (isSystemServer && !niceName) {
+            setThreadName("system_server");
+        }
+        else {
+            setThreadName(niceName);
         }
         // These free(3) calls are safe because we know we're only ever forking
         // a single-threaded process, so we know no other thread held the heap
