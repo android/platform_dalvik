@@ -22,7 +22,7 @@ dvm_arch_variant := $(TARGET_ARCH_VARIANT)
 include $(LOCAL_PATH)/Dvm.mk
 
 LOCAL_SHARED_LIBRARIES += \
-	libcorkscrew \
+	libbacktrace \
 	libcutils \
 	libdl \
 	liblog \

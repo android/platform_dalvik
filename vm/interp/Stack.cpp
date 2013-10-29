@@ -26,7 +26,7 @@
 #include <stdarg.h>
 
 #ifdef HAVE_ANDROID_OS
-#include <corkscrew/backtrace.h>
+#include <backtrace/Backtrace.h>
 #endif
 
 /*
@@ -1389,23 +1389,15 @@ void dvmDumpRunningThreadStack(const DebugOutputTarget* target, Thread* thread)
 void dvmDumpNativeStack(const DebugOutputTarget* target, pid_t tid)
 {
 #ifdef HAVE_ANDROID_OS
-    const size_t MAX_DEPTH = 32;
-    backtrace_frame_t backtrace[MAX_DEPTH];
-    ssize_t frames = unwind_backtrace_thread(tid, backtrace, 0, MAX_DEPTH);
-    if (frames > 0) {
-        backtrace_symbol_t backtrace_symbols[MAX_DEPTH];
-        get_backtrace_symbols(backtrace, frames, backtrace_symbols);
-
-        for (size_t i = 0; i < size_t(frames); i++) {
-            char line[MAX_BACKTRACE_LINE_LENGTH];
-            format_backtrace_line(i, &backtrace[i], &backtrace_symbols[i],
-                    line, MAX_BACKTRACE_LINE_LENGTH);
-            dvmPrintDebugMessage(target, "  %s\n", line);
-        }
-
-        free_backtrace_symbols(backtrace_symbols, frames);
-    } else {
+    Backtrace* backtrace = Backtrace::Create(-1, tid);
+    if (!backtrace->Unwind(0) || backtrace->NumFrames() == 0) {
         dvmPrintDebugMessage(target, "  (native backtrace unavailable)\n");
+    } else {
+        for (size_t i = 0; i < backtrace->NumFrames(); i++) {
+            dvmPrintDebugMessage(target, "  %s\n",
+                                 backtrace->FormatFrameData(i).c_str());
+        }
     }
+    delete backtrace;
 #endif
 }
