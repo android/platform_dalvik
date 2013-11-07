@@ -15,9 +15,9 @@
      *    a2:   Starting offset in string data
      */
 
+     lw    v0, STRING_FIELDOFF_VALUE(a0)
      lw    t0, STRING_FIELDOFF_OFFSET(a0)
      lw    t1, STRING_FIELDOFF_COUNT(a0)
-     lw    v0, STRING_FIELDOFF_VALUE(a0)
 
     /*
      * At this point, we have:

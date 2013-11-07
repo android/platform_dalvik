@@ -28,12 +28,12 @@
     lw      t0, offStackSaveArea_prevFrame(a0)     # t0<- saveArea->prevFrame
     lbu     t1, offThread_breakFlags(rSELF)        # t1<- breakFlags
     lw      rPC, offStackSaveArea_savedPc(a0)      # rPC<- saveArea->savedPc
+    lw      a2, offStackSaveArea_method - sizeofStackSaveArea(t0)
 #if !defined(WITH_SELF_VERIFICATION)
     lw      t2,  offStackSaveArea_returnAddr(a0)   # t2<- chaining cell ret
 #else
     move    t2, zero                               # disable chaining
 #endif
-    lw      a2, offStackSaveArea_method - sizeofStackSaveArea(t0)
                                                    # a2<- method we're returning to
 #if !defined(WITH_SELF_VERIFICATION)
     beq     a2, zero, 1f                           # bail to interpreter
