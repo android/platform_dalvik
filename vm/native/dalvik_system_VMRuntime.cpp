@@ -555,6 +555,11 @@ static void Dalvik_dalvik_system_VMRuntime_preloadDexCaches(const u4* args, JVal
     RETURN_VOID();
 }
 
+static void Dalvik_dalvik_system_VMRuntime_startProfiler(const u4* args, JValue* pResult)
+{
+   // Not supported on Dalvik
+}
+
 const DalvikNativeMethod dvm_dalvik_system_VMRuntime[] = {
     { "addressOf", "(Ljava/lang/Object;)J",
         Dalvik_dalvik_system_VMRuntime_addressOf },
@@ -592,5 +597,7 @@ const DalvikNativeMethod dvm_dalvik_system_VMRuntime[] = {
         Dalvik_dalvik_system_VMRuntime_updateProcessState },
     { "preloadDexCaches", "()V",
         Dalvik_dalvik_system_VMRuntime_preloadDexCaches },
+    { "startProfiler", "(Ljava/lang/String;)V",
+        Dalvik_dalvik_system_VMRuntime_startProfiler },
     { NULL, NULL, NULL },
 };
