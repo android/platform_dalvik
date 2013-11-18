@@ -19,6 +19,7 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <signal.h>
 #include <limits.h>
 #include <ctype.h>
@@ -30,6 +31,7 @@
 #ifdef HAVE_ANDROID_OS
 #include <sys/prctl.h>
 #endif
+#include <inttypes.h>
 
 #include "Dalvik.h"
 #include "test/Test.h"
@@ -41,9 +43,23 @@
 #include "compiler/codegen/Optimizer.h"
 #endif
 
-#define kMinHeapStartSize   (1*1024*1024)
-#define kMinHeapSize        (2*1024*1024)
-#define kMaxHeapSize        (1*1024*1024*1024)
+#ifndef _LP64
+# define kMinHeapStartSize   (1ULL*1024*1024)
+# define kMinHeapSize        (2ULL*1024*1024)
+#else
+# define kMinHeapStartSize   (1UL*1024*1024)
+# define kMinHeapSize        (2UL*1024*1024)
+#endif
+
+#if defined (WITH_SHIFTREFS)
+# define kMaxHeapSize         (32UL*1024*1024*1024)
+#elif defined(WITH_COMPREFS)
+# define kMaxHeapSize         (4UL*1024*1024*1024)
+#elif defined (_LP64)
+# define kMaxHeapSize         (256UL*1024*1024*1024*1024)
+#else
+# define kMaxHeapSize         (4ULL*1024*1024*1024)
+#endif
 
 /*
  * Register VM-agnostic native methods for system classes.
@@ -242,16 +258,21 @@ static void showVersion()
  * Returns 0 (a useless size) if "s" is malformed or specifies a low or
  * non-evenly-divisible value.
  */
-static size_t parseMemOption(const char* s, size_t div)
+static uint64_t parseMemOption(const char* s, size_t div)
 {
     /* strtoul accepts a leading [+-], which we don't want,
      * so make sure our string starts with a decimal digit.
      */
-    if (isdigit(*s)) {
-        const char* s2;
-        size_t val;
 
-        val = strtoul(s, (char* *)&s2, 10);
+	if (isdigit(*s)) {
+        const char *s2;
+        uint64_t val;
+
+#if defined(_LP64)
+        val = strtoul(s, (char**) &s2, 10);
+#else
+        val = strtoull(s, (char**) &s2, 10);
+#endif
         if (s2 != s) {
             /* s2 should be pointing just after the number.
              * If this is the end of the string, the user
@@ -284,12 +305,13 @@ static size_t parseMemOption(const char* s, size_t div)
                         return 0;
                     }
 
-                    if (val <= SIZE_MAX / mul) {
+                    if (val <= UINT64_MAX / mul)
+                    {
                         val *= mul;
                     } else {
                         /* Clamp to a multiple of 1024.
                          */
-                        val = SIZE_MAX & ~(1024-1);
+                        val = UINT64_MAX & ~(1024-1);
                     }
                 } else {
                     /* There's more than one character after the
@@ -888,14 +910,13 @@ static int processOptions(int argc, const char* const argv[],
             assert(false);
 
         } else if (strncmp(argv[i], "-Xms", 4) == 0) {
-            size_t val = parseMemOption(argv[i]+4, 1024);
+            uint64_t val = parseMemOption(argv[i]+4, 1024);
             if (val != 0) {
                 if (val >= kMinHeapStartSize && val <= kMaxHeapSize) {
                     gDvm.heapStartingSize = val;
                 } else {
-                    dvmFprintf(stderr,
-                        "Invalid -Xms '%s', range is %dKB to %dKB\n",
-                        argv[i], kMinHeapStartSize/1024, kMaxHeapSize/1024);
+                    dvmFprintf(stderr, "Invalid -Xms '%s', range is %" PRIu64 "KB to %" PRIu64 "KB\n",
+                               argv[i], kMinHeapStartSize/1024, kMaxHeapSize/1024);
                     return -1;
                 }
             } else {
@@ -903,14 +924,13 @@ static int processOptions(int argc, const char* const argv[],
                 return -1;
             }
         } else if (strncmp(argv[i], "-Xmx", 4) == 0) {
-            size_t val = parseMemOption(argv[i]+4, 1024);
+            uint64_t val = parseMemOption(argv[i]+4, 1024);
             if (val != 0) {
                 if (val >= kMinHeapSize && val <= kMaxHeapSize) {
                     gDvm.heapMaximumSize = val;
                 } else {
-                    dvmFprintf(stderr,
-                        "Invalid -Xmx '%s', range is %dKB to %dKB\n",
-                        argv[i], kMinHeapSize/1024, kMaxHeapSize/1024);
+                    dvmFprintf(stderr, "Invalid -Xmx '%s', range is %" PRIu64 "KB to %" PRIu64 "KB\n",
+                               argv[i], kMinHeapSize/1024, kMaxHeapSize/1024);
                     return -1;
                 }
             } else {
@@ -918,7 +938,7 @@ static int processOptions(int argc, const char* const argv[],
                 return -1;
             }
         } else if (strncmp(argv[i], "-XX:HeapGrowthLimit=", 20) == 0) {
-            size_t val = parseMemOption(argv[i] + 20, 1024);
+            uint64_t val = parseMemOption(argv[i] + 20, 1024);
             if (val != 0) {
                 gDvm.heapGrowthLimit = val;
             } else {
@@ -926,7 +946,7 @@ static int processOptions(int argc, const char* const argv[],
                 return -1;
             }
         } else if (strncmp(argv[i], "-XX:HeapMinFree=", 16) == 0) {
-            size_t val = parseMemOption(argv[i] + 16, 1024);
+            uint64_t val = parseMemOption(argv[i] + 16, 1024);
             if (val != 0) {
                 gDvm.heapMinFree = val;
             } else {
@@ -934,7 +954,7 @@ static int processOptions(int argc, const char* const argv[],
                 return -1;
             }
         } else if (strncmp(argv[i], "-XX:HeapMaxFree=", 16) == 0) {
-            size_t val = parseMemOption(argv[i] + 16, 1024);
+            uint64_t val = parseMemOption(argv[i] + 16, 1024);
             if (val != 0) {
                 gDvm.heapMaxFree = val;
             } else {
@@ -958,7 +978,7 @@ static int processOptions(int argc, const char* const argv[],
                 return -1;
             }
         } else if (strncmp(argv[i], "-Xss", 4) == 0) {
-            size_t val = parseMemOption(argv[i]+4, 1);
+            uint64_t val = parseMemOption(argv[i]+4, 1);
             if (val != 0) {
                 if (val >= kMinStackSize && val <= kMaxStackSize) {
                     gDvm.stackSize = val;
@@ -976,7 +996,7 @@ static int processOptions(int argc, const char* const argv[],
             }
 
         } else if (strncmp(argv[i], "-XX:mainThreadStackSize=", strlen("-XX:mainThreadStackSize=")) == 0) {
-            size_t val = parseMemOption(argv[i] + strlen("-XX:mainThreadStackSize="), 1);
+            uint64_t val = parseMemOption(argv[i] + strlen("-XX:mainThreadStackSize="), 1);
             if (val != 0) {
                 if (val >= kMinStackSize && val <= kMaxStackSize) {
                     gDvm.mainThreadStackSize = val;
@@ -1240,7 +1260,17 @@ static void setCommandLineDefaults()
      * TODO: base these on a system or application-specific default
      */
     gDvm.heapStartingSize = 2 * 1024 * 1024;  // Spec says 16MB; too big for us.
-    gDvm.heapMaximumSize = 16 * 1024 * 1024;  // Spec says 75% physical mem
+
+#if defined (WITH_SHIFTREFS)
+    gDvm.heapMaximumSize = 16 * 1024 * 1024;  // Spec says 75% physical mem.
+#elif defined(WITH_COMPREFS)
+    gDvm.heapMaximumSize = 16 * 1024 * 1024;
+#elif defined (_LP64)
+    gDvm.heapMaximumSize = 32 * 1024 * 1024;
+#else
+    gDvm.heapMaximumSize = 16 * 1024 * 1024;
+#endif
+
     gDvm.heapGrowthLimit = 0;  // 0 means no growth limit
     gDvm.lowMemoryMode = false;
     gDvm.stackSize = kDefaultStackSize;
@@ -1333,6 +1363,7 @@ static void blockSignals()
 {
     sigset_t mask;
     int cc;
+    (void)cc;
 
     sigemptyset(&mask);
     sigaddset(&mask, SIGQUIT);
@@ -1348,7 +1379,11 @@ static void blockSignals()
         /* TODO: save the old sigaction in a global */
         struct sigaction sa;
         memset(&sa, 0, sizeof(sa));
+#if defined(__aarch64__)
+        sa.sa_handler = (__sighandler_t) busCatcher;
+#else
         sa.sa_sigaction = busCatcher;
+#endif
         sa.sa_flags = SA_SIGINFO;
         cc = sigaction(SIGBUS, &sa, NULL);
         assert(cc == 0);
@@ -1437,7 +1472,9 @@ std::string dvmStartup(int argc, const char* const argv[],
 
     /*
      * Initialize components.
+     *
      */
+    // Initialize quasi atomics.
     dvmQuasiAtomicsStartup();
     if (!dvmAllocTrackerStartup()) {
         return "dvmAllocTrackerStartup failed";
@@ -1585,6 +1622,8 @@ std::string dvmStartup(int argc, const char* const argv[],
         ALOGE("dvmTestHash FAILED");
     if (false /*noisy!*/ && !dvmTestIndirectRefTable())
         ALOGE("dvmTestIndirectRefTable FAILED");
+    if (!dvmTestPlatformInvoke())
+        ALOGE("dvmTestPlatformInvoke FAILED");
 #endif
 
     if (dvmCheckException(dvmThreadSelf())) {
@@ -1644,8 +1683,15 @@ static bool registerSystemNatives(JNIEnv* pEnv)
 
     // Most JNI libraries can just use System.loadLibrary, but you can't
     // if you're the library that implements System.loadLibrary!
+#if defined(_LP64) && defined(__x86_64)
+    // Look for 64bit libraries on the 64bit host build.
+    // TODOAarch64 Assumption here is that builds 64bit x86 builds are only on the host.
+    loadJniLibrary("64javacore");
+    loadJniLibrary("64nativehelper");
+#else
     loadJniLibrary("javacore");
     loadJniLibrary("nativehelper");
+#endif
 
     // Back to run mode.
     self->status = THREAD_RUNNING;
@@ -1757,6 +1803,8 @@ bool dvmInitAfterZygote()
 {
     u8 startHeap, startQuit, startJdwp;
     u8 endHeap, endQuit, endJdwp;
+    (void)startHeap;(void)startQuit;(void)startJdwp;
+    (void)endHeap;(void)endQuit;(void)endJdwp;
 
     startHeap = dvmGetRelativeTimeUsec();
 
@@ -1924,6 +1972,8 @@ int dvmPrepForDexOpt(const char* bootClassPath, DexOptimizerMode dexOptMode,
      * We can't load any classes yet because we may not yet have a source
      * for things like java.lang.Object and java.lang.Class.
      */
+    // Initialize quasi atomics.
+    dvmQuasiAtomicsStartup();
     if (!dvmGcStartup())
         goto fail;
     if (!dvmThreadStartup())
@@ -2093,7 +2143,7 @@ void dvmPrintNativeBackTrace()
 
     size_t i;
     for (i = 0; i < frameCount; ++i) {
-        ALOGW("#%-2d %s", i, strings[i]);
+        ALOGW("#%-2zd %s", i, strings[i]);
     }
     free(strings);
 }

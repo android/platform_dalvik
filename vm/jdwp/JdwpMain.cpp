@@ -444,6 +444,6 @@ s8 dvmJdwpLastDebuggerActivity(JdwpState* state)
     s8 now = dvmJdwpGetNowMsec();
     assert(now >= last);
 
-    ALOGV("+++ debugger interval=%lld", now - last);
+    ALOGV("+++ debugger interval=%"PRId64"", now - last);
     return now - last;
 }

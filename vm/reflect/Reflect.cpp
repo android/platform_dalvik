@@ -695,17 +695,17 @@ fail:
 static void createTargetDescriptor(ArrayObject* args,
     DexStringCache* targetDescriptorCache)
 {
-    ClassObject** argsArray = (ClassObject**)(void*)args->contents;
+    ClassObjectRef* argsArray = (ClassObjectRef*)(void*)args->contents;
     size_t length = 1; /* +1 for the terminating '\0' */
     for (size_t i = 0; i < args->length; ++i) {
-        length += strlen(argsArray[i]->descriptor);
+        length += strlen(dvmRefExpandClazzGlobal(argsArray[i])->descriptor);
     }
 
     dexStringCacheAlloc(targetDescriptorCache, length);
 
     char* at = (char*) targetDescriptorCache->value;
     for (size_t i = 0; i < args->length; ++i) {
-        const char* descriptor = argsArray[i]->descriptor;
+        const char* descriptor = dvmRefExpandClazzGlobal(argsArray[i])->descriptor;
         strcpy(at, descriptor);
         at += strlen(descriptor);
     }
@@ -830,8 +830,17 @@ ArrayObject* dvmGetInterfaces(ClassObject* clazz)
     /*
      * Fill out the array.
      */
+#if !defined(WITH_COMPREFS)
     memcpy(interfaceArray->contents, clazz->interfaces,
            count * sizeof(Object *));
+#else
+    {
+        unsigned int i;
+        for (i = 0; i < count; i++) {
+            dvmSetObjectArrayElement(interfaceArray, i, clazz->interfaces[i]);
+        }
+    }
+#endif
     dvmWriteBarrierArray(interfaceArray, 0, count);
 
     /* caller must call dvmReleaseTrackedAlloc */
@@ -851,7 +860,7 @@ static PrimitiveType getBoxedType(DataObject* arg)
     if (arg == NULL)
         return PRIM_NOT;
 
-    const char* name = arg->clazz->descriptor;
+    const char* name = dvmRefExpandClazzGlobal(arg->clazz)->descriptor;
 
     if (strncmp(name, "Ljava/lang/", kJavaLangLen) != 0)
         return PRIM_NOT;
@@ -970,6 +979,7 @@ int dvmConvertPrimitiveValue(PrimitiveType srcType,
                 case PRIM_DOUBLE: conv = OK8;  break;
                 default:          conv = bad;  break;
             }
+
             break;
         }
         case PRIM_VOID:
@@ -979,14 +989,17 @@ int dvmConvertPrimitiveValue(PrimitiveType srcType,
             break;
         }
     }
-
     switch (conv) {
+#ifndef _LP64
         case OK4:  *dstPtr = *srcPtr;                                   return 1;
+#else
+        case OK4:  *(s8*)(dstPtr) = *srcPtr;                                   return 1;
+#endif
         case OK8:  *(s8*) dstPtr = *(s8*)srcPtr;                        return 2;
         case ItoJ: *(s8*) dstPtr = (s8) (*(s4*) srcPtr);                return 2;
-#ifndef ARCH_HAVE_ALIGNED_DOUBLES
+#if !defined(ARCH_HAVE_ALIGNED_DOUBLES) || defined(_LP64)
         case ItoD: *(double*) dstPtr = (double) (*(s4*) srcPtr);        return 2;
-        case JtoD: *(double*) dstPtr = (double) (*(long long*) srcPtr); return 2;
+        case JtoD: *(double*) dstPtr = (double) (*(s8*) srcPtr); return 2;
         case FtoD: *(double*) dstPtr = (double) (*(float*) srcPtr);     return 2;
 #else
         case ItoD: ret = (double) (*(s4*) srcPtr); memcpy(dstPtr, &ret, 8); return 2;
@@ -994,7 +1007,7 @@ int dvmConvertPrimitiveValue(PrimitiveType srcType,
         case FtoD: ret = (double) (*(float*) srcPtr); memcpy(dstPtr, &ret, 8); return 2;
 #endif
         case ItoF: *(float*) dstPtr = (float) (*(int*) srcPtr);         return 1;
-        case JtoF: *(float*) dstPtr = (float) (*(long long*) srcPtr);   return 1;
+        case JtoF: *(float*) dstPtr = (float) (*(s8*) srcPtr);   return 1;
         case bad: {
             ALOGV("illegal primitive conversion: '%s' to '%s'",
                     dexGetPrimitiveTypeDescriptor(srcType),
@@ -1037,8 +1050,8 @@ int dvmConvertArgument(DataObject* arg, ClassObject* type, s4* destPtr)
                     valuePtr, destPtr);
     } else {
         /* verify object is compatible */
-        if ((arg == NULL) || dvmInstanceof(arg->clazz, type)) {
-            *destPtr = (s4) arg;
+        if (dvmRefIsNull(arg) || dvmInstanceof(dvmRefExpandClazzGlobal(arg->clazz), type)) {
+            *((uintptr_t*)destPtr) = (uintptr_t) arg;
             retVal = 1;
         } else {
             LOGVV("Arg %p (%s) not compatible with %s",
@@ -1120,9 +1133,9 @@ bool dvmUnboxPrimitive(Object* value, ClassObject* returnType,
     PrimitiveType valueIndex;
 
     if (typeIndex == PRIM_NOT) {
-        if (value != NULL && !dvmInstanceof(value->clazz, returnType)) {
+        if (!dvmRefIsNull(value) && !dvmInstanceof(dvmRefExpandClazzGlobal(value->clazz), returnType)) {
             ALOGD("wrong object type: %s %s",
-                value->clazz->descriptor, returnType->descriptor);
+                dvmRefExpandClazzGlobal(value->clazz)->descriptor, returnType->descriptor);
             return false;
         }
         pResult->l = value;
@@ -1194,7 +1207,7 @@ Field* dvmGetFieldFromReflectObj(Object* obj)
     ClassObject* clazz;
     int slot;
 
-    assert(obj->clazz == gDvm.classJavaLangReflectField);
+    assert(dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangReflectField);
     clazz = (ClassObject*)dvmGetFieldObject(obj,
                                 gDvm.offJavaLangReflectField_declClass);
     slot = dvmGetFieldInt(obj, gDvm.offJavaLangReflectField_slot);
@@ -1214,11 +1227,11 @@ Method* dvmGetMethodFromReflectObj(Object* obj)
     ClassObject* clazz;
     int slot;
 
-    if (obj->clazz == gDvm.classJavaLangReflectConstructor) {
+    if (dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangReflectConstructor) {
         clazz = (ClassObject*)dvmGetFieldObject(obj,
                                 gDvm.offJavaLangReflectConstructor_declClass);
         slot = dvmGetFieldInt(obj, gDvm.offJavaLangReflectConstructor_slot);
-    } else if (obj->clazz == gDvm.classJavaLangReflectMethod) {
+    } else if (dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangReflectMethod) {
         clazz = (ClassObject*)dvmGetFieldObject(obj,
                                 gDvm.offJavaLangReflectMethod_declClass);
         slot = dvmGetFieldInt(obj, gDvm.offJavaLangReflectMethod_slot);

@@ -24,6 +24,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <inttypes.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/resource.h>
@@ -760,7 +761,7 @@ bool dvmPrepMainThread()
 
     /* set the VMThread.vmData field to our Thread struct */
     assert(gDvm.offJavaLangVMThread_vmData != 0);
-    dvmSetFieldInt(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u4)thread);
+    dvmSetFieldLong(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u8)thread);
 
     /*
      * Stuff the VMThread back into the Thread.  From this point on, other
@@ -854,7 +855,7 @@ static Thread* allocThread(int interpStackSize)
     }
 #endif
 
-    assert(((u4)stackBottom & 0x03) == 0); // looks like our malloc ensures this
+    assert(((uintptr_t)stackBottom & 0x03) == 0); // looks like our malloc ensures this
     thread->interpStackSize = interpStackSize;
     thread->interpStackStart = stackBottom + interpStackSize;
     thread->interpStackEnd = stackBottom + STACK_OVERFLOW_RESERVE;
@@ -942,6 +943,8 @@ static bool prepareThread(Thread* thread)
     /* Initialize safepoint callback mechanism */
     dvmInitMutex(&thread->callbackMutex);
 
+    /* Initialize the locally cached heapBase. */
+    thread->heapBase = gDvm.heapBase;
     return true;
 }
 
@@ -1159,7 +1162,7 @@ static bool createFakeEntryFrame(Thread* thread)
      * Null out the "String[] args" argument.
      */
     assert(gDvm.methDalvikSystemNativeStart_main->registersSize == 1);
-    u4* framePtr = (u4*) thread->interpSave.curFrame;
+    StackSlot* framePtr = (StackSlot*) thread->interpSave.curFrame;
     framePtr[0] = 0;
 
     return true;
@@ -1299,7 +1302,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
      * As soon as "VMThread.vmData" is assigned, other threads can start
      * making calls into us (e.g. setPriority).
      */
-    dvmSetFieldInt(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u4)newThread);
+    dvmSetFieldLong(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u8)newThread);
     dvmSetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread, vmThreadObj);
 
     /*
@@ -1540,7 +1543,7 @@ static void* interpThreadStart(void* arg)
      * At this point our stack is empty, so somebody who comes looking for
      * stack traces right now won't have much to look at.  This is normal.
      */
-    Method* run = self->threadObj->clazz->vtable[gDvm.voffJavaLangThread_run];
+    Method* run = dvmRefExpandClazzGlobal(self->threadObj->clazz)->vtable[gDvm.voffJavaLangThread_run];
     JValue unused;
 
     ALOGV("threadid=%d: calling run()", self->threadId);
@@ -1604,7 +1607,7 @@ static void threadExitUncaughtException(Thread* self, Object* group)
      * Find the "uncaughtException" method in this object.  The method
      * was declared in the Thread.UncaughtExceptionHandler interface.
      */
-    uncaughtHandler = dvmFindVirtualMethodHierByDescriptor(handlerObj->clazz,
+    uncaughtHandler = dvmFindVirtualMethodHierByDescriptor(dvmRefExpandClazzGlobal(handlerObj->clazz),
             "uncaughtException", "(Ljava/lang/Thread;Ljava/lang/Throwable;)V");
 
     if (uncaughtHandler != NULL) {
@@ -1616,7 +1619,7 @@ static void threadExitUncaughtException(Thread* self, Object* group)
     } else {
         /* should be impossible, but handle it anyway */
         ALOGW("WARNING: no 'uncaughtException' method in class %s",
-            handlerObj->clazz->descriptor);
+                dvmRefExpandClazzGlobal(handlerObj->clazz)->descriptor);
         dvmSetException(self, exception);
         dvmLogExceptionStackTrace();
     }
@@ -1868,7 +1871,7 @@ bool dvmAttachCurrentThread(const JavaVMAttachArgs* pArgs, bool isDaemon)
      * tracked allocation table, so it can't move around on us.
      */
     self->threadObj = threadObj;
-    dvmSetFieldInt(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u4)self);
+    dvmSetFieldLong(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u8)self);
 
     /*
      * Create a string for the thread name.
@@ -2022,7 +2025,7 @@ void dvmDetachCurrentThread()
 
         if (curDepth == 1) {
             /* not expecting a lingering break frame; just look at curFrame */
-            assert(!dvmIsBreakFrame((u4*)self->interpSave.curFrame));
+            assert(!dvmIsBreakFrame((StackSlot*)self->interpSave.curFrame));
             StackSaveArea* ssa = SAVEAREA_FROM_FP(self->interpSave.curFrame);
             if (dvmIsNativeMethod(ssa->method))
                 topIsNative = true;
@@ -2057,7 +2060,7 @@ void dvmDetachCurrentThread()
      */
     if (group != NULL) {
         Method* removeThread =
-            group->clazz->vtable[gDvm.voffJavaLangThreadGroup_removeThread];
+                dvmRefExpandClazzGlobal(group->clazz)->vtable[gDvm.voffJavaLangThreadGroup_removeThread];
         JValue unused;
         dvmCallMethod(self, removeThread, group, &unused, self->threadObj);
     }
@@ -2513,7 +2516,7 @@ static void waitForThreadSuspend(Thread* self, Thread* thread)
     }
 
     if (complained) {
-        ALOGW("threadid=%d: spin on suspend resolved in %lld msec",
+        ALOGW("threadid=%d: spin on suspend resolved in %" PRId64 " msec",
             self->threadId,
             (dvmGetRelativeTimeUsec() - firstStartWhen) / 1000);
         //dvmDumpThread(thread, false);   /* suspended, so dump is safe */
@@ -3039,9 +3042,9 @@ Object* dvmGetMainThreadGroup()
  */
 Thread* dvmGetThreadFromThreadObject(Object* vmThreadObj)
 {
-    int vmData;
+    long vmData;
 
-    vmData = dvmGetFieldInt(vmThreadObj, gDvm.offJavaLangVMThread_vmData);
+    vmData = dvmGetFieldLong(vmThreadObj, gDvm.offJavaLangVMThread_vmData);
 
     if (false) {
         Thread* thread = gDvm.threadList;
@@ -3303,7 +3306,7 @@ static bool shouldShowNativeStack(Thread* thread) {
     // state THREAD_SUSPENDED if they're calling back into the VM, or THREAD_MONITOR
     // if they're blocked on a monitor, or one of the thread-startup states if
     // it's early enough in their life cycle (http://b/7432159).
-    u4* fp = thread->interpSave.curFrame;
+    StackSlot* fp = thread->interpSave.curFrame;
     if (fp == NULL) {
         // The thread has no managed frames, so native frames are all there is.
         return true;

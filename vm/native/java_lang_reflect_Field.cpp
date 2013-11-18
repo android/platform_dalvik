@@ -92,7 +92,7 @@ static Field* validateFieldAccess(Object* obj, ClassObject* declaringClass,
             bool isInstance, samePackage;
 
             if (obj != NULL)
-                isInstance = dvmInstanceof(obj->clazz, callerClass);
+                isInstance = dvmInstanceof(dvmRefExpandClazzGlobal(obj->clazz), callerClass);
             else
                 isInstance = false;
             samePackage = dvmInSamePackage(declaringClass, callerClass);
@@ -433,12 +433,12 @@ static void setFieldValue(Field* field, Object* obj, const JValue* value)
 /*
  * public int getFieldModifiers(Class declaringClass, int slot)
  */
-static void Dalvik_java_lang_reflect_Field_getFieldModifiers(const u4* args,
+static void Dalvik_java_lang_reflect_Field_getFieldModifiers(const StackSlot* args,
     JValue* pResult)
 {
     /* ignore thisPtr in args[0] */
     ClassObject* declaringClass = (ClassObject*) args[1];
-    int slot = args[2];
+    int slot = (int)args[2];
     Field* field;
 
     field = dvmSlotToField(declaringClass, slot);
@@ -451,14 +451,14 @@ static void Dalvik_java_lang_reflect_Field_getFieldModifiers(const u4* args,
  *
  * Primitive types need to be boxed.
  */
-static void Dalvik_java_lang_reflect_Field_getField(const u4* args,
+static void Dalvik_java_lang_reflect_Field_getField(const StackSlot* args,
     JValue* pResult)
 {
     /* ignore thisPtr in args[0] */
     Object* obj = (Object*) args[1];
     ClassObject* declaringClass = (ClassObject*) args[2];
     ClassObject* fieldType = (ClassObject*) args[3];
-    int slot = args[4];
+    int slot = (int)args[4];
     bool noAccessCheck = (args[5] != 0);
     Field* field;
     JValue value;
@@ -486,14 +486,14 @@ static void Dalvik_java_lang_reflect_Field_getField(const u4* args,
  * When assigning into a primitive field we will automatically extract
  * the value from box types.
  */
-static void Dalvik_java_lang_reflect_Field_setField(const u4* args,
+static void Dalvik_java_lang_reflect_Field_setField(const StackSlot* args,
     JValue* pResult)
 {
     /* ignore thisPtr in args[0] */
     Object* obj = (Object*) args[1];
     ClassObject* declaringClass = (ClassObject*) args[2];
     ClassObject* fieldType = (ClassObject*) args[3];
-    int slot = args[4];
+    int slot = (int)args[4];
     bool noAccessCheck = (args[5] != 0);
     Object* valueObj = (Object*) args[6];
     Field* field;
@@ -519,16 +519,16 @@ static void Dalvik_java_lang_reflect_Field_setField(const u4* args,
  * private double getIField(Object o, Class declaringClass,
  *     Class type, int slot, boolean noAccessCheck, char descriptor)
  */
-static void Dalvik_java_lang_reflect_Field_getPrimitiveField(const u4* args,
+static void Dalvik_java_lang_reflect_Field_getPrimitiveField(const StackSlot* args,
     JValue* pResult)
 {
     /* ignore thisPtr in args[0] */
     Object* obj = (Object*) args[1];
     ClassObject* declaringClass = (ClassObject*) args[2];
     ClassObject* fieldType = (ClassObject*) args[3];
-    int slot = args[4];
+    int slot = (int)args[4];
     bool noAccessCheck = (args[5] != 0);
-    jchar descriptor = args[6];
+    jchar descriptor = (jchar)args[6];
     PrimitiveType targetType = dexGetPrimitiveTypeFromDescriptorChar(descriptor);
     const Field* field;
     JValue value;
@@ -559,16 +559,16 @@ static void Dalvik_java_lang_reflect_Field_getPrimitiveField(const u4* args,
  * private void setIField(Object o, Class declaringClass,
  *     Class type, int slot, boolean noAccessCheck, char descriptor, int value)
  */
-static void Dalvik_java_lang_reflect_Field_setPrimitiveField(const u4* args,
+static void Dalvik_java_lang_reflect_Field_setPrimitiveField(const StackSlot* args,
     JValue* pResult)
 {
     /* ignore thisPtr in args[0] */
     Object* obj = (Object*) args[1];
     ClassObject* declaringClass = (ClassObject*) args[2];
     ClassObject* fieldType = (ClassObject*) args[3];
-    int slot = args[4];
+    int slot = (int)args[4];
     bool noAccessCheck = (args[5] != 0);
-    jchar descriptor = args[6];
+    jchar descriptor = (jchar)args[6];
     const s4* valuePtr = (s4*) &args[7];    /* 64-bit vars spill into args[8] */
     PrimitiveType srcType = dexGetPrimitiveTypeFromDescriptorChar(descriptor);
     Field* field;
@@ -603,10 +603,10 @@ static void Dalvik_java_lang_reflect_Field_setPrimitiveField(const u4* args,
  * Return the annotations declared for this field.
  */
 static void Dalvik_java_lang_reflect_Field_getDeclaredAnnotations(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     ClassObject* declaringClass = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     Field* field;
 
     field = dvmSlotToField(declaringClass, slot);
@@ -621,11 +621,11 @@ static void Dalvik_java_lang_reflect_Field_getDeclaredAnnotations(
  * static Annotation getAnnotation(
  *         Class declaringClass, int slot, Class annotationType);
  */
-static void Dalvik_java_lang_reflect_Field_getAnnotation(const u4* args,
+static void Dalvik_java_lang_reflect_Field_getAnnotation(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     ClassObject* annotationClazz = (ClassObject*) args[2];
 
     Field* field = dvmSlotToField(clazz, slot);
@@ -636,11 +636,11 @@ static void Dalvik_java_lang_reflect_Field_getAnnotation(const u4* args,
  * static boolean isAnnotationPresent(
  *         Class declaringClass, int slot, Class annotationType);
  */
-static void Dalvik_java_lang_reflect_Field_isAnnotationPresent(const u4* args,
+static void Dalvik_java_lang_reflect_Field_isAnnotationPresent(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     ClassObject* annotationClazz = (ClassObject*) args[2];
 
     Field* field = dvmSlotToField(clazz, slot);
@@ -652,12 +652,12 @@ static void Dalvik_java_lang_reflect_Field_isAnnotationPresent(const u4* args,
  *
  * Returns the signature annotation.
  */
-static void Dalvik_java_lang_reflect_Field_getSignatureAnnotation(const u4* args,
+static void Dalvik_java_lang_reflect_Field_getSignatureAnnotation(const StackSlot* args,
     JValue* pResult)
 {
     /* ignore thisPtr in args[0] */
     ClassObject* declaringClass = (ClassObject*) args[1];
-    int slot = args[2];
+    int slot = (int) args[2];
     Field* field;
 
     field = dvmSlotToField(declaringClass, slot);

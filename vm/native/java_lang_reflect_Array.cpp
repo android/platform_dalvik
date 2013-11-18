@@ -27,11 +27,11 @@
  *
  * Create a one-dimensional array of Objects.
  */
-static void Dalvik_java_lang_reflect_Array_createObjectArray(const u4* args,
+static void Dalvik_java_lang_reflect_Array_createObjectArray(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* elementClass = (ClassObject*) args[0];
-    int length = args[1];
+    int length = (int)args[1];
 
     assert(elementClass != NULL);       // tested by caller
     if (length < 0) {
@@ -63,7 +63,7 @@ static void Dalvik_java_lang_reflect_Array_createObjectArray(const u4* args,
  * subtract pieces off.  Besides, we want to start with the outermost
  * piece and work our way in.
  */
-static void Dalvik_java_lang_reflect_Array_createMultiArray(const u4* args,
+static void Dalvik_java_lang_reflect_Array_createMultiArray(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* elementClass = (ClassObject*) args[0];

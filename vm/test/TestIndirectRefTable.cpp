@@ -166,7 +166,7 @@ static bool basicTest()
     }
 
     if (irt.capacity() != 3) {
-        ALOGE("expected 3 entries, found %d", irt.capacity());
+        ALOGE("expected 3 entries, found %zu", irt.capacity());
         goto bail;
     }
 
@@ -309,7 +309,7 @@ static bool basicTest()
         goto bail;
     }
     if (irt.capacity() != (size_t)kTableMax) {
-        ALOGE("Expected %d entries, found %d", kTableMax, irt.capacity());
+        ALOGE("Expected %d entries, found %zu", kTableMax, irt.capacity());
         goto bail;
     }
     irt.dump("table with 20 entries, all filled");
@@ -322,7 +322,7 @@ static bool basicTest()
     irt.dump("table with 20 entries, 19 of them holes");
     /* because of removal order, should have 20 entries, 19 of them holes */
     if (irt.capacity() != (size_t)kTableMax) {
-        ALOGE("Expected %d entries (with holes), found %d",
+        ALOGE("Expected %d entries (with holes), found %zu",
                 kTableMax, irt.capacity());
         goto bail;
     }

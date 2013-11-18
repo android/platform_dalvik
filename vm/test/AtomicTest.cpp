@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <cutils/atomic.h>
@@ -62,6 +63,10 @@ static int orTest = 0;
 static int casTest = 0;
 static int failingCasTest = 0;
 static int64_t wideCasTest = 0x6600000077000000LL;
+
+#if defined(_LP64)
+static __int128 veryWideCasTest;
+#endif
 
 /*
  * Get a relative time value.
@@ -122,6 +127,17 @@ static int compareAndSwapWide(int64_t oldVal, int64_t newVal, int64_t* addr)
     return 1;
 }
 
+#if defined(_LP64)
+static int compareAndSwapVeryWide(__int128 oldVal, __int128 newVal, __int128* addr)
+{
+    if (*addr == oldVal) {
+        *addr = newVal;
+        return 0;
+    }
+    return 1;
+}
+#endif
+
 /*
  * Exercise several of the atomic ops.
  */
@@ -153,6 +169,19 @@ static void doAtomicTest(int num)
                 wval = dvmQuasiAtomicRead64(&wideCasTest);
             } while (dvmQuasiAtomicCas64(wval,
                         wval - 0x0000002000000001LL, &wideCasTest) != 0);
+#if defined(_LP64)
+            __int128 vwval;
+            __int128 increment = 0x0000002000000001L;
+            increment = increment << 64 | 0x0000002000000001L;
+            do {
+                vwval = veryWideCasTest;
+            } while (dvmQuasiAtomicCas128(vwval, vwval + increment,
+                    &veryWideCasTest) != 0);
+            do {
+                vwval = veryWideCasTest;
+            } while (dvmQuasiAtomicCas128(vwval, vwval - increment,
+                    &veryWideCasTest) != 0);
+#endif
         } else {
             incr();
             decr();
@@ -175,6 +204,19 @@ static void doAtomicTest(int num)
                 wval = wideCasTest;
             } while (compareAndSwapWide(wval,
                         wval - 0x0000002000000001LL, &wideCasTest) != 0);
+#if defined(_LP64)
+            __int128 vwval;
+            __int128 increment = 0x0000002000000001L;
+            increment = increment << 64 | 0x0000002000000001L;
+            do {
+                vwval = veryWideCasTest;
+            } while (compareAndSwapVeryWide(vwval, vwval + increment,
+                    &veryWideCasTest) != 0);
+            do {
+                vwval = veryWideCasTest;
+            } while (compareAndSwapVeryWide(vwval, vwval - increment,
+                    &veryWideCasTest) != 0);
+#endif
         }
     }
 }
@@ -189,7 +231,7 @@ static void* atomicTest(void* arg)
     pthread_cond_wait(&waitCond, &waitLock);
     pthread_mutex_unlock(&waitLock);
 
-    doAtomicTest((int) arg);
+    doAtomicTest(static_cast<int>((intptr_t)arg));
 
     return NULL;
 }
@@ -270,6 +312,12 @@ bool dvmTestAtomicSpeed()
     void *(*startRoutine)(void*) = atomicTest;
     int64_t startWhen, endWhen;
 
+#if defined(_LP64)
+    // __int128 can't be initialized statically.
+    veryWideCasTest = 0x6600000077000000L;
+    veryWideCasTest = veryWideCasTest << 64 | 0x1100000055000000L;
+#endif
+
 #if defined(__ARM_ARCH__)
     dvmFprintf(stdout, "__ARM_ARCH__ is %d\n", __ARM_ARCH__);
 #endif
@@ -280,7 +328,7 @@ bool dvmTestAtomicSpeed()
 
     int i;
     for (i = 0; i < THREAD_COUNT; i++) {
-        void* arg = (void*) i;
+        void* arg = (void*)(intptr_t) i;
         if (pthread_create(&threads[i], NULL, startRoutine, arg) != 0) {
             dvmFprintf(stderr, "thread create failed\n");
         }
@@ -319,12 +367,19 @@ bool dvmTestAtomicSpeed()
      * addTest = 7500000
      * casTest = 10000000
      * wideCasTest = 0x6600000077000000
+     * veryWideCasTest = 0x66000000770000001100000055000000
      */
     dvmFprintf(stdout, "incTest = %d\n", incTest);
     dvmFprintf(stdout, "decTest = %d\n", decTest);
     dvmFprintf(stdout, "addTest = %d\n", addTest);
     dvmFprintf(stdout, "casTest = %d\n", casTest);
-    dvmFprintf(stdout, "wideCasTest = 0x%llx\n", wideCasTest);
+    dvmFprintf(stdout, "wideCasTest = 0x%" PRIx64 "\n", wideCasTest);
+
+#if defined(_LP64)
+    // There is no 128 bit type for printf, so we shift and print it out.
+    dvmFprintf(stdout, "veryWideCasTest = 0x%016lx%016lx\n", (int64_t)(veryWideCasTest >> 64),
+            (int64_t)(veryWideCasTest & 0xffffffffffffffffL) );
+#endif
 
     /* do again, serially (SMP check) */
     startWhen = getRelativeTimeNsec();

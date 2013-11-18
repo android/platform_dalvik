@@ -52,7 +52,7 @@ static ffi_type* getFfiType(char sigType)
 #define dvmPlatformInvoke dvmPlatformInvokeFFI
 
 extern "C" void dvmPlatformInvoke(void* pEnv, ClassObject* clazz, int argInfo,
-    int argc, const u4* argv, const char* signature, void* func, JValue* pResult);
+    int argc, const StackSlot* argv, const char* signature, void* func, JValue* pResult);
 #endif
 
 /*
@@ -73,7 +73,7 @@ extern "C" void dvmPlatformInvoke(void* pEnv, ClassObject* clazz, int argInfo,
  * every call.
  */
 void dvmPlatformInvoke(void* pEnv, ClassObject* clazz, int argInfo, int argc,
-    const u4* argv, const char* shorty, void* func, JValue* pReturn)
+    const StackSlot* argv, const char* shorty, void* func, JValue* pReturn)
 {
     const int kMaxArgs = argc+2;    /* +1 for env, maybe +1 for clazz */
     ffi_cif cif;

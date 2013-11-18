@@ -93,7 +93,7 @@ IndirectRef IndirectRefTable::add(u4 cookie, Object* obj)
         if (topIndex == alloc_entries_) {
             /* reached end of allocated space; did we hit buffer max? */
             if (topIndex == max_entries_) {
-                ALOGE("JNI ERROR (app bug): %s reference table overflow (max=%d)",
+                ALOGE("JNI ERROR (app bug): %s reference table overflow (max=%zd)",
                         indirectRefKindToString(kind_), max_entries_);
                 return NULL;
             }
@@ -108,7 +108,7 @@ IndirectRef IndirectRefTable::add(u4 cookie, Object* obj)
                     (IndirectRefSlot*) realloc(table_, newSize * sizeof(IndirectRefSlot));
             if (table_ == NULL) {
                 ALOGE("JNI ERROR (app bug): unable to expand %s reference table "
-                        "(from %d to %d, max=%d)",
+                        "(from %zd to %zd, max=%zd)",
                         indirectRefKindToString(kind_),
                         alloc_entries_, newSize, max_entries_);
                 return NULL;

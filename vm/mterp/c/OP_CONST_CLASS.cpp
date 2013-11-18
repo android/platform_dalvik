@@ -12,7 +12,7 @@ HANDLE_OPCODE(OP_CONST_CLASS /*vAA, class@BBBB*/)
             if (clazz == NULL)
                 GOTO_exceptionThrown();
         }
-        SET_REGISTER(vdst, (u4) clazz);
+        SET_REGISTER(vdst, (StackSlot) clazz);
     }
     FINISH(2);
 OP_END

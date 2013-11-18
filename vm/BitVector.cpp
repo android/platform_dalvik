@@ -104,7 +104,7 @@ void dvmSetBit(BitVector* pBits, unsigned int num)
     if (num >= pBits->storageSize * sizeof(u4) * 8) {
         if (!pBits->expandable) {
             ALOGE("Attempt to set bit outside valid range (%d, limit is %d)",
-                num, pBits->storageSize * sizeof(u4) * 8);
+                num, (int) (pBits->storageSize * sizeof(u4) * 8));
             dvmAbort();
         }
 
@@ -113,7 +113,7 @@ void dvmSetBit(BitVector* pBits, unsigned int num)
         assert(newSize > pBits->storageSize);
         pBits->storage = (u4*)realloc(pBits->storage, newSize * sizeof(u4));
         if (pBits->storage == NULL) {
-            ALOGE("BitVector expansion to %d failed", newSize * sizeof(u4));
+            ALOGE("BitVector expansion to %d failed", (int) (newSize * sizeof(u4)) );
             dvmAbort();
         }
         memset(&pBits->storage[pBits->storageSize], 0x00,

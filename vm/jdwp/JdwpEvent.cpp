@@ -663,14 +663,14 @@ void dvmJdwpSetWaitForEventThread(JdwpState* state, ObjectId threadId)
      * go to sleep indefinitely.
      */
     while (state->eventThreadId != 0) {
-        ALOGV("event in progress (0x%llx), 0x%llx sleeping",
+        ALOGV("event in progress (0x%"PRIx64"), 0x%"PRIx64" sleeping",
             state->eventThreadId, threadId);
         waited = true;
         dvmDbgCondWait(&state->eventThreadCond, &state->eventThreadLock);
     }
 
     if (waited || threadId != 0)
-        ALOGV("event token grabbed (0x%llx)", threadId);
+        ALOGV("event token grabbed (0x%"PRIx64")", threadId);
     if (threadId != 0)
         state->eventThreadId = threadId;
 
@@ -690,7 +690,7 @@ void dvmJdwpClearWaitForEventThread(JdwpState* state)
     dvmDbgLockMutex(&state->eventThreadLock);
 
     assert(state->eventThreadId != 0);
-    ALOGV("cleared event token (0x%llx)", state->eventThreadId);
+    ALOGV("cleared event token (0x%"PRIx64")", state->eventThreadId);
 
     state->eventThreadId = 0;
 
@@ -869,7 +869,7 @@ bool dvmJdwpPostLocationEvent(JdwpState* state, const JdwpLocation* pLoc,
 
     ExpandBuf* pReq = NULL;
     if (matchCount != 0) {
-        ALOGV("EVENT: %s(%d total) %s.%s thread=%llx code=%llx)",
+        ALOGV("EVENT: %s(%d total) %s.%s thread=%"PRIx64" code=%"PRIx64")",
             dvmJdwpEventKindStr(matchList[0]->eventKind), matchCount,
             basket.className,
             dvmDbgGetMethodName(pLoc->classId, pLoc->methodId),
@@ -949,7 +949,7 @@ bool dvmJdwpPostThreadChange(JdwpState* state, ObjectId threadId, bool start)
 
     ExpandBuf* pReq = NULL;
     if (matchCount != 0) {
-        ALOGV("EVENT: %s(%d total) thread=%llx)",
+        ALOGV("EVENT: %s(%d total) thread=%"PRIx64")",
             dvmJdwpEventKindStr(matchList[0]->eventKind), matchCount,
             basket.threadId);
 
@@ -1053,17 +1053,17 @@ bool dvmJdwpPostException(JdwpState* state, const JdwpLocation* pThrowLoc,
 
     ExpandBuf* pReq = NULL;
     if (matchCount != 0) {
-        ALOGV("EVENT: %s(%d total) thread=%llx exceptId=%llx caught=%d)",
+        ALOGV("EVENT: %s(%d total) thread=%"PRIx64" exceptId=%"PRIx64" caught=%d)",
             dvmJdwpEventKindStr(matchList[0]->eventKind), matchCount,
             basket.threadId, exceptionId, basket.caught);
-        ALOGV("  throw: %d %llx %x %lld (%s.%s)", pThrowLoc->typeTag,
+        ALOGV("  throw: %d %"PRIx64" %zx %"PRId64" (%s.%s)", pThrowLoc->typeTag,
             pThrowLoc->classId, pThrowLoc->methodId, pThrowLoc->idx,
             dvmDbgGetClassDescriptor(pThrowLoc->classId),
             dvmDbgGetMethodName(pThrowLoc->classId, pThrowLoc->methodId));
         if (pCatchLoc->classId == 0) {
             ALOGV("  catch: (not caught)");
         } else {
-            ALOGV("  catch: %d %llx %x %lld (%s.%s)", pCatchLoc->typeTag,
+            ALOGV("  catch: %d %"PRIx64" %zx %"PRId64" (%s.%s)", pCatchLoc->typeTag,
                 pCatchLoc->classId, pCatchLoc->methodId, pCatchLoc->idx,
                 dvmDbgGetClassDescriptor(pCatchLoc->classId),
                 dvmDbgGetMethodName(pCatchLoc->classId, pCatchLoc->methodId));
@@ -1148,7 +1148,7 @@ bool dvmJdwpPostClassPrepare(JdwpState* state, int tag, RefTypeId refTypeId,
 
     ExpandBuf* pReq = NULL;
     if (matchCount != 0) {
-        ALOGV("EVENT: %s(%d total) thread=%llx)",
+        ALOGV("EVENT: %s(%d total) thread=%"PRIx64")",
             dvmJdwpEventKindStr(matchList[0]->eventKind), matchCount,
             basket.threadId);
 

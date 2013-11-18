@@ -28,6 +28,8 @@
 #include <math.h>                   // needed for fmod, fmodf
 #include "mterp/common/FindInterface.h"
 
+#include <inttypes.h>
+
 /*
  * Configuration defines.  These affect the C implementations, i.e. the
  * portable interpreter(s) and C stubs.
@@ -136,13 +138,13 @@
         char debugStrBuf[128];                                              \
         snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
         if (curMethod != NULL)                                              \
-            ALOG(_level, LOG_TAG"i", "%-2d|%04x%s",                          \
-                self->threadId, (int)(pc - curMethod->insns), debugStrBuf); \
+            ALOG(_level, LOG_TAG"i", "%-2d|%s|%04x%s",                          \
+                self->threadId, curMethod->name, (int)(pc - curMethod->insns), debugStrBuf); \
         else                                                                \
             ALOG(_level, LOG_TAG"i", "%-2d|####%s",                          \
                 self->threadId, debugStrBuf);                               \
     } while(false)
-void dvmDumpRegs(const Method* method, const u4* framePtr, bool inOnly);
+void dvmDumpRegs(const Method* method, const StackSlot* framePtr, bool inOnly);
 # define DUMP_REGS(_meth, _frame, _inOnly) dvmDumpRegs(_meth, _frame, _inOnly)
 static const char kSpacing[] = "            ";
 #else
@@ -229,43 +231,98 @@ static inline void putDoubleToArray(u4* ptr, int idx, double dval)
         (fp[(_idx)]) : (assert(!"bad reg"),1969) )
 # define SET_REGISTER(_idx, _val) \
     ( (_idx) < curMethod->registersSize ? \
-        (fp[(_idx)] = (u4)(_val)) : (assert(!"bad reg"),1969) )
+        (fp[(_idx)] = (StackSlot)(_val)) : (assert(!"bad reg"),1969) )
 # define GET_REGISTER_AS_OBJECT(_idx)       ((Object *)GET_REGISTER(_idx))
-# define SET_REGISTER_AS_OBJECT(_idx, _val) SET_REGISTER(_idx, (s4)_val)
+# define SET_REGISTER_AS_OBJECT(_idx, _val) SET_REGISTER(_idx, (StackSlot)_val)
 # define GET_REGISTER_INT(_idx) ((s4) GET_REGISTER(_idx))
 # define SET_REGISTER_INT(_idx, _val) SET_REGISTER(_idx, (s4)_val)
+
+#ifdef _LP64
+# define GET_REGISTER_WIDE(_idx) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        ((s8)GET_REGISTER(_idx)): (assert(!"bad reg"),1969) )
+# define SET_REGISTER_WIDE(_idx, _val) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        (void)SET_REGISTER((_idx), (_val)) : assert(!"bad reg") )
+# define GET_REGISTER_DOUBLE(_idx) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        (*((double*)&fp[(_idx)])) : (assert(!"bad reg"),1969.0) )
+# define SET_REGISTER_DOUBLE(_idx, _val) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        (void)(*((double*)&fp[(_idx)]) = (_val)): assert(!"bad reg") )
+#else // _LP64
+
 # define GET_REGISTER_WIDE(_idx) \
     ( (_idx) < curMethod->registersSize-1 ? \
         getLongFromArray(fp, (_idx)) : (assert(!"bad reg"),1969) )
 # define SET_REGISTER_WIDE(_idx, _val) \
     ( (_idx) < curMethod->registersSize-1 ? \
         (void)putLongToArray(fp, (_idx), (_val)) : assert(!"bad reg") )
-# define GET_REGISTER_FLOAT(_idx) \
-    ( (_idx) < curMethod->registersSize ? \
-        (*((float*) &fp[(_idx)])) : (assert(!"bad reg"),1969.0f) )
-# define SET_REGISTER_FLOAT(_idx, _val) \
-    ( (_idx) < curMethod->registersSize ? \
-        (*((float*) &fp[(_idx)]) = (_val)) : (assert(!"bad reg"),1969.0f) )
 # define GET_REGISTER_DOUBLE(_idx) \
     ( (_idx) < curMethod->registersSize-1 ? \
         getDoubleFromArray(fp, (_idx)) : (assert(!"bad reg"),1969.0) )
 # define SET_REGISTER_DOUBLE(_idx, _val) \
     ( (_idx) < curMethod->registersSize-1 ? \
         (void)putDoubleToArray(fp, (_idx), (_val)) : assert(!"bad reg") )
-#else
+#endif // _LP64
+
+#if defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+
+# define GET_REGISTER_FLOAT(_idx)           (*(((float*) &fp[(_idx)])+1))
+# define SET_REGISTER_FLOAT(_idx, _val)     (*(((float*) &fp[(_idx)])+1) = (_val))
+# define GET_REGISTER_FLOAT(_idx) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*(((float*) &fp[(_idx)])+1)) : (assert(!"bad reg"),1969.0f) )
+# define SET_REGISTER_FLOAT(_idx, _val) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*(((float*) &fp[(_idx)])+1) = (_val)) : (assert(!"bad reg"),1969.0f) )
+
+#else // defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+
+# define GET_REGISTER_FLOAT(_idx) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*((float*) &fp[(_idx)])) : (assert(!"bad reg"),1969.0f) )
+# define SET_REGISTER_FLOAT(_idx, _val) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*((float*) &fp[(_idx)]) = (_val)) : (assert(!"bad reg"),1969.0f) )
+#endif // defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+
+#else // CHECK_REGISTER_INDICES
+
 # define GET_REGISTER(_idx)                 (fp[(_idx)])
 # define SET_REGISTER(_idx, _val)           (fp[(_idx)] = (_val))
 # define GET_REGISTER_AS_OBJECT(_idx)       ((Object*) fp[(_idx)])
-# define SET_REGISTER_AS_OBJECT(_idx, _val) (fp[(_idx)] = (u4)(_val))
+# define SET_REGISTER_AS_OBJECT(_idx, _val) (fp[(_idx)] = (StackSlot)(_val))
+
+#ifdef _LP64
+
 # define GET_REGISTER_INT(_idx)             ((s4)GET_REGISTER(_idx))
-# define SET_REGISTER_INT(_idx, _val)       SET_REGISTER(_idx, (s4)_val)
+# define SET_REGISTER_INT(_idx, _val)       SET_REGISTER(_idx, (u8)((u4)(_val)))
+# define GET_REGISTER_WIDE(_idx)            ((s8)GET_REGISTER(_idx))
+# define SET_REGISTER_WIDE(_idx, _val)      SET_REGISTER(_idx, _val)
+# define GET_REGISTER_DOUBLE(_idx)          (*((double*)&fp[(_idx)]))
+# define SET_REGISTER_DOUBLE(_idx, _val)    (*((double*)&fp[(_idx)]) = (_val))
+
+#else // _LP64
+
+# define GET_REGISTER_INT(_idx)             ((s4)GET_REGISTER(_idx))
+# define SET_REGISTER_INT(_idx, _val)       SET_REGISTER(_idx, ((s4)(_val)))
 # define GET_REGISTER_WIDE(_idx)            getLongFromArray(fp, (_idx))
 # define SET_REGISTER_WIDE(_idx, _val)      putLongToArray(fp, (_idx), (_val))
-# define GET_REGISTER_FLOAT(_idx)           (*((float*) &fp[(_idx)]))
-# define SET_REGISTER_FLOAT(_idx, _val)     (*((float*) &fp[(_idx)]) = (_val))
 # define GET_REGISTER_DOUBLE(_idx)          getDoubleFromArray(fp, (_idx))
 # define SET_REGISTER_DOUBLE(_idx, _val)    putDoubleToArray(fp, (_idx), (_val))
+
+#endif // _LP64
+
+#if defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+# define GET_REGISTER_FLOAT(_idx)           (*(((float*) &fp[(_idx)])+1))
+# define SET_REGISTER_FLOAT(_idx, _val)     (*(((float*) &fp[(_idx)])+1) = (_val))
+#else
+# define GET_REGISTER_FLOAT(_idx)           (*((float*) &fp[(_idx)]))
+# define SET_REGISTER_FLOAT(_idx, _val)     (*((float*) &fp[(_idx)]) = (_val))
 #endif
+
+#endif // CHECK_REGISTER_INDICES
 
 /*
  * Get 16 bits from the specified offset of the program counter.  We always
@@ -307,7 +364,7 @@ static inline void putDoubleToArray(u4* ptr, int idx, double dval)
  *
  * This is also used to determine the address for precise GC.
  *
- * Assumes existence of "u4* fp" and "const u2* pc".
+ * Assumes existence of "StackSlot* fp" and "const u2* pc".
  */
 #define EXPORT_PC()         (SAVEAREA_FROM_FP(fp)->xtra.currentPc = pc)
 
@@ -323,7 +380,7 @@ static inline void putDoubleToArray(u4* ptr, int idx, double dval)
  */
 static inline bool checkForNull(Object* obj)
 {
-    if (obj == NULL) {
+    if (dvmRefIsNull(obj)) {
         dvmThrowNullPointerException(NULL);
         return false;
     }
@@ -334,9 +391,9 @@ static inline bool checkForNull(Object* obj)
     }
 #endif
 #ifndef NDEBUG
-    if (obj->clazz == NULL || ((u4) obj->clazz) <= 65536) {
+    if (obj->clazz == NULLREF || ((uintptr_t) obj->clazz) <= 65536) {
         /* probable heap corruption */
-        ALOGE("Invalid object class %p (in %p)", obj->clazz, obj);
+        ALOGE("Invalid object class %p (in %p)", dvmRefExpandClazzGlobal(obj->clazz), obj);
         dvmAbort();
     }
 #endif
@@ -352,9 +409,9 @@ static inline bool checkForNull(Object* obj)
  * Use this to check for NULL when the instruction handler doesn't do
  * anything else that can throw an exception.
  */
-static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
+static inline bool checkForNullExportPC(Object* obj, StackSlot* fp, const u2* pc)
 {
-    if (obj == NULL) {
+    if (dvmRefIsNull(obj)) {
         EXPORT_PC();
         dvmThrowNullPointerException(NULL);
         return false;
@@ -366,9 +423,9 @@ static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
     }
 #endif
 #ifndef NDEBUG
-    if (obj->clazz == NULL || ((u4) obj->clazz) <= 65536) {
+    if (obj->clazz == NULLREF || ((StackSlot) obj->clazz) <= 65536) {
         /* probable heap corruption */
-        ALOGE("Invalid object class %p (in %p)", obj->clazz, obj);
+        ALOGE("Invalid object class %p (in %p)", dvmRefExpandClazzGlobal(obj->clazz), obj);
         dvmAbort();
     }
 #endif
@@ -406,6 +463,7 @@ static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
 #define curMethod               self->interpSave.method
 #define methodClassDex          self->interpSave.methodClassDex
 #define debugTrackedRefStart    self->interpSave.debugTrackedRefStart
+#define heapBase                self->heapBase
 
 /* ugh */
 #define STUB_HACK(x) x
@@ -580,7 +638,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         vdst = INST_A(inst);                                                \
         vsrc1 = INST_B(inst);                                               \
         ILOGV("|int-to-%s v%d,v%d", (_opname), vdst, vsrc1);                \
-        SET_REGISTER(vdst, (_type) GET_REGISTER(vsrc1));                    \
+        SET_REGISTER_INT(vdst, (_type) GET_REGISTER_INT(vsrc1));            \
         FINISH(1);
 
 /* NOTE: the comparison result is always a signed 4-byte integer */
@@ -606,15 +664,49 @@ GOTO_TARGET_DECL(exceptionThrown);
         else                                                                \
             result = (_nanVal);                                             \
         ILOGV("+ result=%d", result);                                       \
-        SET_REGISTER(vdst, result);                                         \
+        SET_REGISTER_INT(vdst, result);                                     \
     }                                                                       \
     FINISH(2);
+
+#define HANDLE_OP_IF_EQ(_opcode, _opname, _cmp)                             \
+    HANDLE_OPCODE(_opcode /*vA, vB, +CCCC*/)                                \
+        vsrc1 = INST_A(inst);                                               \
+        vsrc2 = INST_B(inst);                                               \
+        if (GET_REGISTER(vsrc1) _cmp GET_REGISTER(vsrc2)) {         \
+            int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
+            ILOGV("|if-%s v%d,v%d,+0x%04x", (_opname), vsrc1, vsrc2,        \
+                branchOffset);                                              \
+            ILOGV("> branch taken");                                        \
+            if (branchOffset < 0)                                           \
+                PERIODIC_CHECKS(branchOffset);                              \
+            FINISH(branchOffset);                                           \
+        } else {                                                            \
+            ILOGV("|if-%s v%d,v%d,-", (_opname), vsrc1, vsrc2);             \
+            FINISH(2);                                                      \
+        }
+
+#define HANDLE_OP_IF_EQZ(_opcode, _opname, _cmp)                             \
+    HANDLE_OPCODE(_opcode /*vA, vB, +CCCC*/)                                \
+        vsrc1 = INST_AA(inst);                                               \
+        if (GET_REGISTER(vsrc1) _cmp 0) {         \
+            int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
+            ILOGV("|if-%s v%d,+0x%04x", (_opname), vsrc1,        \
+                branchOffset);                                              \
+            ILOGV("> branch taken");                                        \
+            if (branchOffset < 0)                                           \
+                PERIODIC_CHECKS(branchOffset);                              \
+            FINISH(branchOffset);                                           \
+        } else {                                                            \
+            ILOGV("|if-%s v%d -", (_opname), vsrc1);             \
+            FINISH(2);                                                      \
+        }
+
 
 #define HANDLE_OP_IF_XX(_opcode, _opname, _cmp)                             \
     HANDLE_OPCODE(_opcode /*vA, vB, +CCCC*/)                                \
         vsrc1 = INST_A(inst);                                               \
         vsrc2 = INST_B(inst);                                               \
-        if ((s4) GET_REGISTER(vsrc1) _cmp (s4) GET_REGISTER(vsrc2)) {       \
+        if ((s4)GET_REGISTER(vsrc1) _cmp (s4)GET_REGISTER(vsrc2)) {         \
             int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
             ILOGV("|if-%s v%d,v%d,+0x%04x", (_opname), vsrc1, vsrc2,        \
                 branchOffset);                                              \
@@ -661,8 +753,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         ILOGV("|%s-int v%d,v%d", (_opname), vdst, vsrc1);                   \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, secondVal, result;                                 \
-            firstVal = GET_REGISTER(vsrc1);                                 \
-            secondVal = GET_REGISTER(vsrc2);                                \
+            firstVal = GET_REGISTER_INT(vsrc1);                             \
+            secondVal = GET_REGISTER_INT(vsrc2);                            \
             if (secondVal == 0) {                                           \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -676,11 +768,11 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op secondVal;                            \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
             /* non-div/rem case */                                          \
-            SET_REGISTER(vdst,                                              \
-                (s4) GET_REGISTER(vsrc1) _op (s4) GET_REGISTER(vsrc2));     \
+            SET_REGISTER_INT(vdst,                                          \
+                (u4) GET_REGISTER_INT(vsrc1) _op (s4) GET_REGISTER_INT(vsrc2));\
         }                                                                   \
     }                                                                       \
     FINISH(2);
@@ -694,8 +786,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         vsrc1 = srcRegs & 0xff;                                             \
         vsrc2 = srcRegs >> 8;                                               \
         ILOGV("|%s-int v%d,v%d", (_opname), vdst, vsrc1);                   \
-        SET_REGISTER(vdst,                                                  \
-            _cast GET_REGISTER(vsrc1) _op (GET_REGISTER(vsrc2) & 0x1f));    \
+        SET_REGISTER_INT(vdst,                                              \
+            _cast GET_REGISTER_INT(vsrc1) _op (GET_REGISTER_INT(vsrc2) & 0x1f));\
     }                                                                       \
     FINISH(2);
 
@@ -708,7 +800,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             (_opname), vdst, vsrc1, vsrc2);                                 \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, result;                                            \
-            firstVal = GET_REGISTER(vsrc1);                                 \
+            firstVal = GET_REGISTER_INT(vsrc1);                             \
             if ((s2) vsrc2 == 0) {                                          \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -723,10 +815,10 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op (s2) vsrc2;                           \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
             /* non-div/rem case */                                          \
-            SET_REGISTER(vdst, GET_REGISTER(vsrc1) _op (s2) vsrc2);         \
+            SET_REGISTER_INT(vdst, GET_REGISTER_INT(vsrc1) _op (s2) vsrc2); \
         }                                                                   \
         FINISH(2);
 
@@ -742,7 +834,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             (_opname), vdst, vsrc1, vsrc2);                                 \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, result;                                            \
-            firstVal = GET_REGISTER(vsrc1);                                 \
+            firstVal = GET_REGISTER_INT(vsrc1);                             \
             if ((s1) vsrc2 == 0) {                                          \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -756,10 +848,10 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op ((s1) vsrc2);                         \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
-            SET_REGISTER(vdst,                                              \
-                (s4) GET_REGISTER(vsrc1) _op (s1) vsrc2);                   \
+            SET_REGISTER_INT(vdst,                                          \
+                (s4) GET_REGISTER_INT(vsrc1) _op (s1) vsrc2);               \
         }                                                                   \
     }                                                                       \
     FINISH(2);
@@ -774,8 +866,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         vsrc2 = litInfo >> 8;       /* constant */                          \
         ILOGV("|%s-int/lit8 v%d,v%d,#+0x%02x",                              \
             (_opname), vdst, vsrc1, vsrc2);                                 \
-        SET_REGISTER(vdst,                                                  \
-            _cast GET_REGISTER(vsrc1) _op (vsrc2 & 0x1f));                  \
+        SET_REGISTER_INT(vdst,                                              \
+            _cast GET_REGISTER_INT(vsrc1) _op (vsrc2 & 0x1f));              \
     }                                                                       \
     FINISH(2);
 
@@ -786,8 +878,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         ILOGV("|%s-int-2addr v%d,v%d", (_opname), vdst, vsrc1);             \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, secondVal, result;                                 \
-            firstVal = GET_REGISTER(vdst);                                  \
-            secondVal = GET_REGISTER(vsrc1);                                \
+            firstVal = GET_REGISTER_INT(vdst);                              \
+            secondVal = GET_REGISTER_INT(vsrc1);                            \
             if (secondVal == 0) {                                           \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -801,10 +893,10 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op secondVal;                            \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
-            SET_REGISTER(vdst,                                              \
-                (s4) GET_REGISTER(vdst) _op (s4) GET_REGISTER(vsrc1));      \
+            SET_REGISTER_INT(vdst,                                          \
+                (s4) GET_REGISTER_INT(vdst) _op (s4) GET_REGISTER_INT(vsrc1));\
         }                                                                   \
         FINISH(1);
 
@@ -813,8 +905,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         vdst = INST_A(inst);                                                \
         vsrc1 = INST_B(inst);                                               \
         ILOGV("|%s-int-2addr v%d,v%d", (_opname), vdst, vsrc1);             \
-        SET_REGISTER(vdst,                                                  \
-            _cast GET_REGISTER(vdst) _op (GET_REGISTER(vsrc1) & 0x1f));     \
+        SET_REGISTER_INT(vdst,                                              \
+            _cast GET_REGISTER_INT(vdst) _op (GET_REGISTER_INT(vsrc1) & 0x1f));\
         FINISH(1);
 
 #define HANDLE_OP_X_LONG(_opcode, _opname, _op, _chkdiv)                    \
@@ -974,11 +1066,72 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst,                                        \
             ((_type*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)]);      \
-        ILOGV("+ AGET[%d]=%#x", GET_REGISTER(vsrc2), GET_REGISTER(vdst));   \
+        ILOGV("+ AGET[%d]=%08"PRIx64, vdst, (u8)GET_REGISTER(vdst));   \
     }                                                                       \
     FINISH(2);
 
+#if defined(WITH_COMPREFS)
+
+#define HANDLE_OP_AGET_OBJECT(_opcode, _opname, _type, _regsize)            \
+    HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+    {                                                                       \
+        ArrayObject* arrayObj;                                              \
+        u2 arrayInfo;                                                       \
+        EXPORT_PC();                                                        \
+        vdst = INST_AA(inst);                                               \
+        arrayInfo = FETCH(1);                                               \
+        vsrc1 = arrayInfo & 0xff;    /* array ptr */                        \
+        vsrc2 = arrayInfo >> 8;      /* index */                            \
+        ILOGV("|aget%s v%d,v%d,v%d", (_opname), vdst, vsrc1, vsrc2);        \
+        arrayObj = (ArrayObject*) GET_REGISTER(vsrc1);                      \
+        if (!checkForNull((Object*) arrayObj))                              \
+            GOTO_exceptionThrown();                                         \
+        if (GET_REGISTER(vsrc2) >= arrayObj->length) {                      \
+            dvmThrowArrayIndexOutOfBoundsException(                         \
+                arrayObj->length, GET_REGISTER(vsrc2));                     \
+            GOTO_exceptionThrown();                                         \
+        }                                                                   \
+        SET_REGISTER##_regsize(vdst,                                        \
+            (StackSlot)dvmRefExpand(((u4*)((void*)arrayObj->contents))[GET_REGISTER(vsrc2)], heapBase));      \
+        ILOGV("+ AGET[%d]=%"PRIx64, (u4)GET_REGISTER(vsrc2), (u8)GET_REGISTER(vdst));   \
+    }                                                                       \
+    FINISH(2);
+
+#else
+
+#define HANDLE_OP_AGET_OBJECT(_opcode, _opname, _type, _regsize)            \
+                          HANDLE_OP_AGET(_opcode, _opname, _type, _regsize)
+#endif
+
 #define HANDLE_OP_APUT(_opcode, _opname, _type, _regsize)                   \
+    HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+    {                                                                       \
+        ArrayObject* arrayObj;                                              \
+        u2 arrayInfo;                                                       \
+        EXPORT_PC();                                                        \
+        vdst = INST_AA(inst);       /* AA: source value */                  \
+        arrayInfo = FETCH(1);                                               \
+        vsrc1 = arrayInfo & 0xff;   /* BB: array ptr */                     \
+        vsrc2 = arrayInfo >> 8;     /* CC: index */                         \
+        ILOGV("|aput%s v%d,v%d,v%d", (_opname), vdst, vsrc1, vsrc2);        \
+        arrayObj = (ArrayObject*) GET_REGISTER(vsrc1);                      \
+        ILOGV("+ ARRAY=%08"PRIx64, (uint64_t)arrayObj);                     \
+        if (!checkForNull((Object*) arrayObj))                              \
+            GOTO_exceptionThrown();                                         \
+        if (GET_REGISTER(vsrc2) >= arrayObj->length) {                      \
+            dvmThrowArrayIndexOutOfBoundsException(                         \
+                arrayObj->length, GET_REGISTER(vsrc2));                     \
+            GOTO_exceptionThrown();                                         \
+        }                                                                   \
+        ILOGV("+ APUT[%d]=%"PRIx64, (u4)GET_REGISTER(vsrc2), (u8)GET_REGISTER(vdst));\
+        ((_type*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)] =          \
+            GET_REGISTER##_regsize(vdst);                                   \
+    }                                                                       \
+    FINISH(2);
+
+#if defined(WITH_COMPREFS)
+
+#define HANDLE_OP_APUT_OBJECT(_opcode, _opname, _type, _regsize)            \
     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
     {                                                                       \
         ArrayObject* arrayObj;                                              \
@@ -997,11 +1150,16 @@ GOTO_TARGET_DECL(exceptionThrown);
                 arrayObj->length, GET_REGISTER(vsrc2));                     \
             GOTO_exceptionThrown();                                         \
         }                                                                   \
-        ILOGV("+ APUT[%d]=0x%08x", GET_REGISTER(vsrc2), GET_REGISTER(vdst));\
-        ((_type*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)] =          \
-            GET_REGISTER##_regsize(vdst);                                   \
+        ILOGV("+ APUT[%d]=%"PRIx64, (u4)GET_REGISTER(vsrc2), (u8)GET_REGISTER(vdst));\
+        ((u4*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)] =          \
+            dvmRefCompress(GET_REGISTER##_regsize(vdst));                   \
     }                                                                       \
     FINISH(2);
+#else
+
+#define HANDLE_OP_APUT_OBJECT(_opcode, _opname, _type, _regsize)            \
+             HANDLE_OP_APUT(_opcode, _opname, _type, _regsize)
+#endif
 
 /*
  * It's possible to get a bad value out of a field with sub-32-bit stores
@@ -1041,7 +1199,33 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst,                                        \
             dvmGetField##_ftype(obj, ifield->byteOffset));                  \
-        ILOGV("+ IGET '%s'=0x%08llx", ifield->name,                         \
+        ILOGV("+ IGET '%s'=0x%08"PRIx64, ifield->name,                         \
+            (u8) GET_REGISTER##_regsize(vdst));                             \
+    }                                                                       \
+    FINISH(2);
+
+#define HANDLE_IGET_OBJECT_X(_opcode, _opname, _ftype, _regsize)            \
+    HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
+    {                                                                       \
+        InstField* ifield;                                                  \
+        Object* obj;                                                        \
+        EXPORT_PC();                                                        \
+        vdst = INST_A(inst);                                                \
+        vsrc1 = INST_B(inst);   /* object ptr */                            \
+        ref = FETCH(1);         /* field ref */                             \
+        ILOGV("|iget%s v%d,v%d,field@0x%04x", (_opname), vdst, vsrc1, ref); \
+        obj = (Object*) GET_REGISTER(vsrc1);                                \
+        if (!checkForNull(obj))                                             \
+            GOTO_exceptionThrown();                                         \
+        ifield = (InstField*) dvmDexGetResolvedField(methodClassDex, ref);  \
+        if (ifield == NULL) {                                               \
+            ifield = dvmResolveInstField(curMethod->clazz, ref);            \
+            if (ifield == NULL)                                             \
+                GOTO_exceptionThrown();                                     \
+        }                                                                   \
+        SET_REGISTER##_regsize(vdst,                                        \
+            dvmGetField##_ftype##Base(obj, ifield->byteOffset, heapBase));  \
+        ILOGV("+ IGET '%s'=0x%08"PRIx64, ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -1059,7 +1243,26 @@ GOTO_TARGET_DECL(exceptionThrown);
         if (!checkForNullExportPC(obj, fp, pc))                             \
             GOTO_exceptionThrown();                                         \
         SET_REGISTER##_regsize(vdst, dvmGetField##_ftype(obj, ref));        \
-        ILOGV("+ IGETQ %d=0x%08llx", ref,                                   \
+        ILOGV("+ IGETQ %d=0x%08"PRIx64, ref,                                   \
+            (u8) GET_REGISTER##_regsize(vdst));                             \
+    }                                                                       \
+    FINISH(2);
+
+#define HANDLE_IGET_OBJECT_X_QUICK(_opcode, _opname, _ftype, _regsize)      \
+    HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
+    {                                                                       \
+        Object* obj;                                                        \
+        vdst = INST_A(inst);                                                \
+        vsrc1 = INST_B(inst);   /* object ptr */                            \
+        ref = FETCH(1);         /* field offset */                          \
+        ILOGV("|iget%s-quick v%d,v%d,field@+%u",                            \
+            (_opname), vdst, vsrc1, ref);                                   \
+        obj = (Object*) GET_REGISTER(vsrc1);                                \
+        if (!checkForNullExportPC(obj, fp, pc))                             \
+            GOTO_exceptionThrown();                                         \
+        SET_REGISTER##_regsize(vdst,                                        \
+                     dvmGetField##_ftype##Base(obj, ref, heapBase));        \
+        ILOGV("+ IGETQ %d=0x%08"PRIx64, ref,                                   \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -1085,10 +1288,42 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         dvmSetField##_ftype(obj, ifield->byteOffset,                        \
             GET_REGISTER##_regsize(vdst));                                  \
-        ILOGV("+ IPUT '%s'=0x%08llx", ifield->name,                         \
+        ILOGV("+ IPUT '%s'=0x%08"PRIx64, ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
+
+#if defined(WITH_COMPREFS)
+#define HANDLE_IPUT_OBJECT_X(_opcode, _opname, _ftype, _regsize)            \
+    HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
+    {                                                                       \
+        InstField* ifield;                                                  \
+        Object* obj;                                                        \
+        EXPORT_PC();                                                        \
+        vdst = INST_A(inst);                                                \
+        vsrc1 = INST_B(inst);   /* object ptr */                            \
+        ref = FETCH(1);         /* field ref */                             \
+        ILOGV("|iput%s v%d,v%d,field@0x%04x", (_opname), vdst, vsrc1, ref); \
+        obj = (Object*) GET_REGISTER(vsrc1);                                \
+        if (!checkForNull(obj))                                             \
+            GOTO_exceptionThrown();                                         \
+        ifield = (InstField*) dvmDexGetResolvedField(methodClassDex, ref);  \
+        if (ifield == NULL) {                                               \
+            ifield = dvmResolveInstField(curMethod->clazz, ref);            \
+            if (ifield == NULL)                                             \
+                GOTO_exceptionThrown();                                     \
+        }                                                                   \
+        dvmSetField##_ftype##Base(obj, ifield->byteOffset,                  \
+            GET_REGISTER##_regsize(vdst), heapBase);                        \
+        ILOGV("+ IPUT '%s'=0x%08"PRIxPTR, ifield->name,                         \
+            GET_REGISTER##_regsize(vdst));                             \
+    }                                                                       \
+    FINISH(2);
+#else
+
+#define HANDLE_IPUT_OBJECT_X(_opcode, _opname, _ftype, _regsize)            \
+               HANDLE_IPUT_X(_opcode, _opname, _ftype, _regsize)
+#endif
 
 #define HANDLE_IPUT_X_QUICK(_opcode, _opname, _ftype, _regsize)             \
     HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
@@ -1102,8 +1337,9 @@ GOTO_TARGET_DECL(exceptionThrown);
         obj = (Object*) GET_REGISTER(vsrc1);                                \
         if (!checkForNullExportPC(obj, fp, pc))                             \
             GOTO_exceptionThrown();                                         \
+        ILOGD("|v0=%p v1=%p",(void *)GET_REGISTER##_regsize(vdst), (void *)obj);                \
         dvmSetField##_ftype(obj, ref, GET_REGISTER##_regsize(vdst));        \
-        ILOGV("+ IPUTQ %d=0x%08llx", ref,                                   \
+        ILOGV("+ IPUTQ %d=0x%08"PRIx64, ref,                                   \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -1134,7 +1370,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             }                                                               \
         }                                                                   \
         SET_REGISTER##_regsize(vdst, dvmGetStaticField##_ftype(sfield));    \
-        ILOGV("+ SGET '%s'=0x%08llx",                                       \
+        ILOGV("+ SGET '%s'=0x%08"PRIx64,                                       \
             sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(2);
@@ -1157,7 +1393,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             }                                                               \
         }                                                                   \
         dvmSetStaticField##_ftype(sfield, GET_REGISTER##_regsize(vdst));    \
-        ILOGV("+ SPUT '%s'=0x%08llx",                                       \
+        ILOGV("+ SPUT '%s'=0x%08"PRIx64,                                       \
             sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(2);
@@ -1199,11 +1435,10 @@ OP_END
  * next instruction.  Here, these are subroutines that return to the caller.
  */
 
-GOTO_TARGET(filledNewArray, bool methodCallRange, bool)
+GOTO_TARGET(filledNewArray, bool methodCallRange)
     {
         ClassObject* arrayClass;
         ArrayObject* newArray;
-        u4* contents;
         char typeCh;
         int i;
         u4 arg5;
@@ -1269,24 +1504,49 @@ GOTO_TARGET(filledNewArray, bool methodCallRange, bool)
         /*
          * Fill in the elements.  It's legal for vsrc1 to be zero.
          */
-        contents = (u4*)(void*)newArray->contents;
-        if (methodCallRange) {
-            for (i = 0; i < vsrc1; i++)
-                contents[i] = GET_REGISTER(vdst+i);
-        } else {
-            assert(vsrc1 <= 5);
-            if (vsrc1 == 5) {
-                contents[4] = GET_REGISTER(arg5);
-                vsrc1--;
+#if defined(_LP64) || defined(WITH_COMPREFS)
+        if (typeCh == 'L' || typeCh == '[') {
+            ObjectRef* contents = (ObjectRef*)(void*)newArray->contents;
+            if (methodCallRange) {
+                for (i = 0; i < vsrc1; i++)
+                    contents[i] = dvmRefCompress((const Object*) GET_REGISTER(vdst+i));
+            } else {
+                assert(vsrc1 <= 5);
+                if (vsrc1 == 5) {
+                    contents[4] = dvmRefCompress((const Object*)GET_REGISTER(arg5));
+                    vsrc1--;
+                }
+                for (i = 0; i < vsrc1; i++) {
+                    contents[i] = dvmRefCompress((const Object*)GET_REGISTER(vdst & 0x0f));
+                    vdst >>= 4;
+                }
             }
-            for (i = 0; i < vsrc1; i++) {
-                contents[i] = GET_REGISTER(vdst & 0x0f);
-                vdst >>= 4;
+            dvmWriteBarrierArray(newArray, 0, newArray->length);
+        }
+        else
+#endif
+        {
+            u4* contents = (u4*)(void*)newArray->contents;
+            if (methodCallRange) {
+                for (i = 0; i < vsrc1; i++)
+                    contents[i] = GET_REGISTER(vdst+i);
+            } else {
+                assert(vsrc1 <= 5);
+                if (vsrc1 == 5) {
+                    contents[4] = GET_REGISTER(arg5);
+                    vsrc1--;
+                }
+                for (i = 0; i < vsrc1; i++) {
+                    contents[i] = GET_REGISTER(vdst & 0x0f);
+                    vdst >>= 4;
+                }
             }
         }
+#if !defined(_LP64) && !defined(WITH_COMPREFS)
         if (typeCh == 'L' || typeCh == '[') {
             dvmWriteBarrierArray(newArray, 0, newArray->length);
         }
+#endif
 
         retval.l = (Object*)newArray;
     }
@@ -1294,10 +1554,11 @@ GOTO_TARGET(filledNewArray, bool methodCallRange, bool)
 GOTO_TARGET_END
 
 
-GOTO_TARGET(invokeVirtual, bool methodCallRange, bool)
+GOTO_TARGET(invokeVirtual, bool methodCallRange)
     {
         Method* baseMethod;
         Object* thisPtr;
+        ClassObject* thisClass;
 
         EXPORT_PC();
 
@@ -1324,6 +1585,8 @@ GOTO_TARGET(invokeVirtual, bool methodCallRange, bool)
         if (!checkForNull(thisPtr))
             GOTO_exceptionThrown();
 
+        thisClass = dvmRefExpandClazzGlobal(thisPtr->clazz);
+
         /*
          * Resolve the method.  This is the correct method for the static
          * type of the object.  We also verify access permissions here.
@@ -1341,12 +1604,12 @@ GOTO_TARGET(invokeVirtual, bool methodCallRange, bool)
          * Combine the object we found with the vtable offset in the
          * method.
          */
-        assert(baseMethod->methodIndex < thisPtr->clazz->vtableCount);
-        methodToCall = thisPtr->clazz->vtable[baseMethod->methodIndex];
+        assert(baseMethod->methodIndex < thisClass->vtableCount);
+        methodToCall = thisClass->vtable[baseMethod->methodIndex];
 
 #if defined(WITH_JIT) && defined(MTERP_STUB)
         self->methodToCall = methodToCall;
-        self->callsiteClass = thisPtr->clazz;
+        self->callsiteClass = thisClass;
 #endif
 
 #if 0
@@ -1498,7 +1761,7 @@ GOTO_TARGET(invokeInterface, bool methodCallRange)
         if (!checkForNull(thisPtr))
             GOTO_exceptionThrown();
 
-        thisClass = thisPtr->clazz;
+        thisClass = dvmRefExpandClazzGlobal(thisPtr->clazz);
 
         /*
          * Given a class and a method index, find the Method* with the
@@ -1596,7 +1859,7 @@ GOTO_TARGET_END
 GOTO_TARGET(invokeVirtualQuick, bool methodCallRange)
     {
         Object* thisPtr;
-
+        ClassObject* thisClass;
         EXPORT_PC();
 
         vsrc1 = INST_AA(inst);      /* AA (count) or BA (count + arg 5) */
@@ -1622,15 +1885,16 @@ GOTO_TARGET(invokeVirtualQuick, bool methodCallRange)
         if (!checkForNull(thisPtr))
             GOTO_exceptionThrown();
 
+        thisClass = dvmRefExpandClazzGlobal(thisPtr->clazz);
 
         /*
          * Combine the object we found with the vtable offset in the
          * method.
          */
-        assert(ref < (unsigned int) thisPtr->clazz->vtableCount);
-        methodToCall = thisPtr->clazz->vtable[ref];
+        assert(ref < (unsigned int) thisClass->vtableCount);
+        methodToCall = thisClass->vtable[ref];
 #if defined(WITH_JIT) && defined(MTERP_STUB)
-        self->callsiteClass = thisPtr->clazz;
+        self->callsiteClass = thisClass;
         self->methodToCall = methodToCall;
 #endif
 
@@ -1729,7 +1993,7 @@ GOTO_TARGET(returnFromMethod)
          */
         PERIODIC_CHECKS(0);
 
-        ILOGV("> retval=0x%llx (leaving %s.%s %s)",
+        ILOGV("> retval=0x%"PRIx64" (leaving %s.%s %s)",
             retval.j, curMethod->clazz->descriptor, curMethod->name,
             curMethod->shorty);
         //DUMP_REGS(curMethod, fp);
@@ -1741,7 +2005,7 @@ GOTO_TARGET(returnFromMethod)
 #endif
 
         /* back up to previous frame and see if we hit a break */
-        fp = (u4*)saveArea->prevFrame;
+        fp = (StackSlot*)saveArea->prevFrame;
         assert(fp != NULL);
 
         /* Handle any special subMode requirements */
@@ -1806,7 +2070,7 @@ GOTO_TARGET(exceptionThrown)
         dvmClearException(self);
 
         ALOGV("Handling exception %s at %s:%d",
-            exception->clazz->descriptor, curMethod->name,
+            dvmRefExpandClazzGlobal(exception->clazz)->descriptor, curMethod->name,
             dvmLineNumFromPC(curMethod, pc - curMethod->insns));
 
         /*
@@ -1874,7 +2138,7 @@ GOTO_TARGET(exceptionThrown)
             /* falling through to JNI code or off the bottom of the stack */
 #if DVM_SHOW_EXCEPTION >= 2
             ALOGD("Exception %s from %s:%d not caught locally",
-                exception->clazz->descriptor, dvmGetMethodSourceFile(curMethod),
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor, dvmGetMethodSourceFile(curMethod),
                 dvmLineNumFromPC(curMethod, pc - curMethod->insns));
 #endif
             dvmSetException(self, exception);
@@ -1886,7 +2150,7 @@ GOTO_TARGET(exceptionThrown)
         {
             const Method* catchMethod = SAVEAREA_FROM_FP(fp)->method;
             ALOGD("Exception %s thrown from %s:%d to %s:%d",
-                exception->clazz->descriptor, dvmGetMethodSourceFile(curMethod),
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor, dvmGetMethodSourceFile(curMethod),
                 dvmLineNumFromPC(curMethod, pc - curMethod->insns),
                 dvmGetMethodSourceFile(catchMethod),
                 dvmLineNumFromPC(catchMethod, catchRelPc));
@@ -1956,7 +2220,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
         //printf(" --> %s.%s %s\n", methodToCall->clazz->descriptor,
         //    methodToCall->name, methodToCall->shorty);
 
-        u4* outs;
+        StackSlot* outs;
         int i;
 
         /*
@@ -2019,23 +2283,23 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
      */
     {
         StackSaveArea* newSaveArea;
-        u4* newFp;
+        StackSlot* newFp;
 
         ILOGV("> %s%s.%s %s",
             dvmIsNativeMethod(methodToCall) ? "(NATIVE) " : "",
             methodToCall->clazz->descriptor, methodToCall->name,
             methodToCall->shorty);
 
-        newFp = (u4*) SAVEAREA_FROM_FP(fp) - methodToCall->registersSize;
+        newFp = (StackSlot*) SAVEAREA_FROM_FP(fp) - methodToCall->registersSize;
         newSaveArea = SAVEAREA_FROM_FP(newFp);
 
         /* verify that we have enough space */
         if (true) {
             u1* bottom;
-            bottom = (u1*) newSaveArea - methodToCall->outsSize * sizeof(u4);
+            bottom = (u1*) newSaveArea - methodToCall->outsSize * sizeof(StackSlot);
             if (bottom < self->interpStackEnd) {
                 /* stack overflow */
-                ALOGV("Stack overflow on method call (start=%p end=%p newBot=%p(%d) size=%d '%s')",
+                ALOGV("Stack overflow on method call (start=%p end=%p newBot=%p(%zd) size=%d '%s')",
                     self->interpStackStart, self->interpStackEnd, bottom,
                     (u1*) fp - bottom, self->interpStackSize,
                     methodToCall->name);
@@ -2056,7 +2320,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
              * used-before-initialized issues.
              */
             memset(newFp, 0xcc,
-                (methodToCall->registersSize - methodToCall->insSize) * 4);
+                (methodToCall->registersSize - methodToCall->insSize) * sizeof(StackSlot));
         }
 #endif
 
@@ -2140,7 +2404,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
                 GOTO_exceptionThrown();
             }
 
-            ILOGD("> retval=0x%llx (leaving native)", retval.j);
+            ILOGD("> retval=0x%"PRIx64" (leaving native)", retval.j);
             ILOGD("> (return from native %s.%s to %s.%s %s)",
                 methodToCall->clazz->descriptor, methodToCall->name,
                 curMethod->clazz->descriptor, curMethod->name,

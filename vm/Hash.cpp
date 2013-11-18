@@ -318,9 +318,10 @@ int dvmHashForeachRemove(HashTable* pHashTable, HashForeachRemoveFunc func)
  *
  * If "func" returns a nonzero value, terminate early and return the value.
  */
-int dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg)
+intptr_t dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg)
 {
-    int i, val, tableSize;
+    int i, tableSize;
+    intptr_t val;
 
     tableSize = pHashTable->tableSize;
 

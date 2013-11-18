@@ -26,6 +26,7 @@
 #include "Dalvik.h"
 #include "JniInternal.h"
 
+#include <inttypes.h>
 #include <sys/mman.h>
 #include <zlib.h>
 
@@ -61,7 +62,7 @@ static void abortMaybe() {
  *
  * At this point, pResult->l has already been converted to an object pointer.
  */
-static void checkCallResultCommon(const u4* args, const JValue* pResult,
+static void checkCallResultCommon(const StackSlot* args, const JValue* pResult,
         const Method* method, Thread* self)
 {
     assert(pResult->l != NULL);
@@ -77,7 +78,7 @@ static void checkCallResultCommon(const u4* args, const JValue* pResult,
         return;
     }
 
-    ClassObject* objClazz = resultObj->clazz;
+    ClassObject* objClazz = dvmRefExpandClazzGlobal(resultObj->clazz);
 
     /*
      * Make sure that pResult->l is an instance of the type this
@@ -130,7 +131,7 @@ static void checkCallResultCommon(const u4* args, const JValue* pResult,
  * (We don't simply do this at the top of checkCallResultCommon() because
  * this is on the critical path for native method calls.)
  */
-static inline bool callNeedsCheck(const u4* args, JValue* pResult,
+static inline bool callNeedsCheck(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     return (method->shorty[0] == 'L' && !dvmCheckException(self) && pResult->l != NULL);
@@ -139,7 +140,7 @@ static inline bool callNeedsCheck(const u4* args, JValue* pResult,
 /*
  * Check a call into native code.
  */
-void dvmCheckCallJNIMethod(const u4* args, JValue* pResult,
+void dvmCheckCallJNIMethod(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     dvmCallJNIMethod(args, pResult, method, self);
@@ -303,7 +304,7 @@ public:
                 printWarn = true;
             } else {
                 ClassObject* fieldClass = dvmFindLoadedClass(field->signature);
-                ClassObject* objClass = obj->clazz;
+                ClassObject* objClass = dvmRefExpandClazzGlobal(obj->clazz);
 
                 assert(fieldClass != NULL);
                 assert(objClass != NULL);
@@ -351,7 +352,7 @@ public:
          * Check this class and all of its superclasses for a matching field.
          * Don't need to scan interfaces.
          */
-        ClassObject* clazz = obj->clazz;
+        ClassObject* clazz = dvmRefExpandClazzGlobal(obj->clazz);
         while (clazz != NULL) {
             if ((InstField*) fieldID >= clazz->ifields &&
                     (InstField*) fieldID < clazz->ifields + clazz->ifieldCount) {
@@ -362,7 +363,7 @@ public:
         }
 
         ALOGW("JNI WARNING: instance jfieldID %p not valid for class %s (%s)",
-              fieldID, obj->clazz->descriptor, mFunctionName);
+              fieldID, dvmRefExpandClazzGlobal(obj->clazz)->descriptor, mFunctionName);
         showLocation();
         abortMaybe();
     }
@@ -461,9 +462,9 @@ public:
         Object* obj = dvmDecodeIndirectRef(self(), jobj);
         const Method* method = (const Method*) methodID;
 
-        if (!dvmInstanceof(obj->clazz, method->clazz)) {
+        if (!dvmInstanceof(dvmRefExpandClazzGlobal(obj->clazz), method->clazz)) {
             ALOGW("JNI WARNING: can't call %s.%s on instance of %s (%s)",
-                  method->clazz->descriptor, method->name, obj->clazz->descriptor, mFunctionName);
+                    method->clazz->descriptor, method->name, dvmRefExpandClazzGlobal(obj->clazz)->descriptor, mFunctionName);
             showLocation();
             abortMaybe();
         }
@@ -556,7 +557,7 @@ public:
                 } else if (ch == 'I' || ch == 'S') { // jint, jshort
                     StringAppendF(&msg, "%d", va_arg(ap, int));
                 } else if (ch == 'J') { // jlong
-                    StringAppendF(&msg, "%lld", va_arg(ap, jlong));
+                    StringAppendF(&msg, "%" PRId64, va_arg(ap, jlong));
                 } else if (ch == 'Z') { // jboolean
                     StringAppendF(&msg, "%s", va_arg(ap, int) ? "true" : "false");
                 } else if (ch == 'V') { // void
@@ -659,7 +660,7 @@ public:
                     mIndent = 0;
                 }
             } else {
-                ALOGI("JNI: %*s<- %s returned %s", mIndent, "", mFunctionName, msg.c_str());
+                ALOGI("JNI: %*s<- %s returned %s", (int) mIndent, "", mFunctionName, msg.c_str());
             }
         }
 
@@ -751,9 +752,9 @@ private:
             ALOGW("JNI WARNING: %s: jarray is an invalid %s reference (%p)",
                   mFunctionName, indirectRefKindName(jarr), jarr);
             printWarn = true;
-        } else if (obj->clazz->descriptor[0] != '[') {
+        } else if (dvmRefExpandClazzGlobal(obj->clazz)->descriptor[0] != '[') {
             ALOGW("JNI WARNING: %s: jarray arg has wrong type (expected array, got %s)",
-                  mFunctionName, obj->clazz->descriptor);
+                  mFunctionName, dvmRefExpandClazzGlobal(obj->clazz)->descriptor);
             printWarn = true;
         }
 
@@ -971,9 +972,9 @@ private:
             ALOGW("JNI WARNING: %s is an invalid %s reference (%p) (%s)",
                   argName, indirectRefKindName(jobj), jobj, mFunctionName);
             printWarn = true;
-        } else if (obj->clazz != expectedClass) {
+        } else if (dvmRefExpandClazzGlobal(obj->clazz) != expectedClass) {
             ALOGW("JNI WARNING: %s arg has wrong type (expected %s, got %s) (%s)",
-                  argName, expectedClass->descriptor, obj->clazz->descriptor, mFunctionName);
+                  argName, expectedClass->descriptor, dvmRefExpandClazzGlobal(obj->clazz)->descriptor, mFunctionName);
             printWarn = true;
         }
 
@@ -1163,7 +1164,7 @@ struct GuardedCopy {
         const u2* pat = (u2*) fullBuf;
         for (size_t i = sizeof(GuardedCopy) / 2; i < (kGuardLen / 2 - sizeof(GuardedCopy)) / 2; i++) {
             if (pat[i] != kGuardPattern) {
-                ALOGE("JNI: guard pattern(1) disturbed at %p + %d", fullBuf, i*2);
+                ALOGE("JNI: guard pattern(1) disturbed at %p + %zd", fullBuf, i*2);
                 return false;
             }
         }
@@ -1184,7 +1185,7 @@ struct GuardedCopy {
         pat = (u2*) (fullBuf + offset);
         for (size_t i = 0; i < kGuardLen / 4; i++) {
             if (pat[i] != kGuardPattern) {
-                ALOGE("JNI: guard pattern(2) disturbed at %p + %d", fullBuf, offset + i*2);
+                ALOGE("JNI: guard pattern(2) disturbed at %p + %zd", fullBuf, offset + i*2);
                 return false;
             }
         }
@@ -1211,7 +1212,7 @@ private:
     static u1* debugAlloc(size_t len) {
         void* result = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON, -1, 0);
         if (result == MAP_FAILED) {
-            ALOGE("GuardedCopy::create mmap(%d) failed: %s", len, strerror(errno));
+            ALOGE("GuardedCopy::create mmap(%zd) failed: %s", len, strerror(errno));
             dvmAbort();
         }
         return reinterpret_cast<u1*>(result);
@@ -1274,7 +1275,7 @@ static void* createGuardedPACopy(JNIEnv* env, const jarray jarr, jboolean* isCop
     ScopedCheckJniThreadState ts(env);
 
     ArrayObject* arrObj = (ArrayObject*) dvmDecodeIndirectRef(dvmThreadSelf(), jarr);
-    PrimitiveType primType = arrObj->clazz->elementClass->primitiveType;
+    PrimitiveType primType = dvmRefExpandClazzGlobal(arrObj->clazz)->elementClass->primitiveType;
     int len = arrObj->length * dvmPrimitiveTypeWidth(primType);
     void* result = GuardedCopy::create(arrObj->contents, len, true);
     if (isCopy != NULL) {
@@ -1550,7 +1551,7 @@ static jfieldID Check_GetStaticFieldID(JNIEnv* env, jclass clazz,
         CHECK_JNI_ENTRY(kFlag_Default, "Ecf" _type, env, clazz, fieldID, value); \
         sc.checkStaticFieldID(clazz, fieldID); \
         /* "value" arg only used when type == ref */ \
-        sc.checkFieldTypeForSet((jobject)(u4)value, fieldID, _ftype, true); \
+        sc.checkFieldTypeForSet((jobject)(uintptr_t)value, fieldID, _ftype, true); \
         baseEnv(env)->SetStatic##_jname##Field(env, clazz, fieldID, value); \
         CHECK_JNI_EXIT_VOID(); \
     } \
@@ -1558,7 +1559,7 @@ static jfieldID Check_GetStaticFieldID(JNIEnv* env, jclass clazz,
         CHECK_JNI_ENTRY(kFlag_Default, "ELf" _type, env, obj, fieldID, value); \
         sc.checkInstanceFieldID(obj, fieldID); \
         /* "value" arg only used when type == ref */ \
-        sc.checkFieldTypeForSet((jobject)(u4) value, fieldID, _ftype, false); \
+        sc.checkFieldTypeForSet((jobject)(uintptr_t) value, fieldID, _ftype, false); \
         baseEnv(env)->Set##_jname##Field(env, obj, fieldID, value); \
         CHECK_JNI_EXIT_VOID(); \
     }

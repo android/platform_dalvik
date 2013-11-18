@@ -21,6 +21,8 @@
 #include <math.h>                   // needed for fmod, fmodf
 #include "mterp/common/FindInterface.h"
 
+#include <inttypes.h>
+
 /*
  * Configuration defines.  These affect the C implementations, i.e. the
  * portable interpreter(s) and C stubs.
@@ -129,13 +131,13 @@
         char debugStrBuf[128];                                              \
         snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
         if (curMethod != NULL)                                              \
-            ALOG(_level, LOG_TAG"i", "%-2d|%04x%s",                          \
-                self->threadId, (int)(pc - curMethod->insns), debugStrBuf); \
+            ALOG(_level, LOG_TAG"i", "%-2d|%s|%04x%s",                          \
+                self->threadId, curMethod->name, (int)(pc - curMethod->insns), debugStrBuf); \
         else                                                                \
             ALOG(_level, LOG_TAG"i", "%-2d|####%s",                          \
                 self->threadId, debugStrBuf);                               \
     } while(false)
-void dvmDumpRegs(const Method* method, const u4* framePtr, bool inOnly);
+void dvmDumpRegs(const Method* method, const StackSlot* framePtr, bool inOnly);
 # define DUMP_REGS(_meth, _frame, _inOnly) dvmDumpRegs(_meth, _frame, _inOnly)
 static const char kSpacing[] = "            ";
 #else
@@ -222,43 +224,98 @@ static inline void putDoubleToArray(u4* ptr, int idx, double dval)
         (fp[(_idx)]) : (assert(!"bad reg"),1969) )
 # define SET_REGISTER(_idx, _val) \
     ( (_idx) < curMethod->registersSize ? \
-        (fp[(_idx)] = (u4)(_val)) : (assert(!"bad reg"),1969) )
+        (fp[(_idx)] = (StackSlot)(_val)) : (assert(!"bad reg"),1969) )
 # define GET_REGISTER_AS_OBJECT(_idx)       ((Object *)GET_REGISTER(_idx))
-# define SET_REGISTER_AS_OBJECT(_idx, _val) SET_REGISTER(_idx, (s4)_val)
+# define SET_REGISTER_AS_OBJECT(_idx, _val) SET_REGISTER(_idx, (StackSlot)_val)
 # define GET_REGISTER_INT(_idx) ((s4) GET_REGISTER(_idx))
 # define SET_REGISTER_INT(_idx, _val) SET_REGISTER(_idx, (s4)_val)
+
+#ifdef _LP64
+# define GET_REGISTER_WIDE(_idx) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        ((s8)GET_REGISTER(_idx)): (assert(!"bad reg"),1969) )
+# define SET_REGISTER_WIDE(_idx, _val) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        (void)SET_REGISTER((_idx), (_val)) : assert(!"bad reg") )
+# define GET_REGISTER_DOUBLE(_idx) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        (*((double*)&fp[(_idx)])) : (assert(!"bad reg"),1969.0) )
+# define SET_REGISTER_DOUBLE(_idx, _val) \
+    ( (_idx) < curMethod->registersSize-1 ? \
+        (void)(*((double*)&fp[(_idx)]) = (_val)): assert(!"bad reg") )
+#else // _LP64
+
 # define GET_REGISTER_WIDE(_idx) \
     ( (_idx) < curMethod->registersSize-1 ? \
         getLongFromArray(fp, (_idx)) : (assert(!"bad reg"),1969) )
 # define SET_REGISTER_WIDE(_idx, _val) \
     ( (_idx) < curMethod->registersSize-1 ? \
         (void)putLongToArray(fp, (_idx), (_val)) : assert(!"bad reg") )
-# define GET_REGISTER_FLOAT(_idx) \
-    ( (_idx) < curMethod->registersSize ? \
-        (*((float*) &fp[(_idx)])) : (assert(!"bad reg"),1969.0f) )
-# define SET_REGISTER_FLOAT(_idx, _val) \
-    ( (_idx) < curMethod->registersSize ? \
-        (*((float*) &fp[(_idx)]) = (_val)) : (assert(!"bad reg"),1969.0f) )
 # define GET_REGISTER_DOUBLE(_idx) \
     ( (_idx) < curMethod->registersSize-1 ? \
         getDoubleFromArray(fp, (_idx)) : (assert(!"bad reg"),1969.0) )
 # define SET_REGISTER_DOUBLE(_idx, _val) \
     ( (_idx) < curMethod->registersSize-1 ? \
         (void)putDoubleToArray(fp, (_idx), (_val)) : assert(!"bad reg") )
-#else
+#endif // _LP64
+
+#if defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+
+# define GET_REGISTER_FLOAT(_idx)           (*(((float*) &fp[(_idx)])+1))
+# define SET_REGISTER_FLOAT(_idx, _val)     (*(((float*) &fp[(_idx)])+1) = (_val))
+# define GET_REGISTER_FLOAT(_idx) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*(((float*) &fp[(_idx)])+1)) : (assert(!"bad reg"),1969.0f) )
+# define SET_REGISTER_FLOAT(_idx, _val) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*(((float*) &fp[(_idx)])+1) = (_val)) : (assert(!"bad reg"),1969.0f) )
+
+#else // defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+
+# define GET_REGISTER_FLOAT(_idx) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*((float*) &fp[(_idx)])) : (assert(!"bad reg"),1969.0f) )
+# define SET_REGISTER_FLOAT(_idx, _val) \
+    ( (_idx) < curMethod->registersSize ? \
+        (*((float*) &fp[(_idx)]) = (_val)) : (assert(!"bad reg"),1969.0f) )
+#endif // defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+
+#else // CHECK_REGISTER_INDICES
+
 # define GET_REGISTER(_idx)                 (fp[(_idx)])
 # define SET_REGISTER(_idx, _val)           (fp[(_idx)] = (_val))
 # define GET_REGISTER_AS_OBJECT(_idx)       ((Object*) fp[(_idx)])
-# define SET_REGISTER_AS_OBJECT(_idx, _val) (fp[(_idx)] = (u4)(_val))
+# define SET_REGISTER_AS_OBJECT(_idx, _val) (fp[(_idx)] = (StackSlot)(_val))
+
+#ifdef _LP64
+
 # define GET_REGISTER_INT(_idx)             ((s4)GET_REGISTER(_idx))
-# define SET_REGISTER_INT(_idx, _val)       SET_REGISTER(_idx, (s4)_val)
+# define SET_REGISTER_INT(_idx, _val)       SET_REGISTER(_idx, (u8)((u4)(_val)))
+# define GET_REGISTER_WIDE(_idx)            ((s8)GET_REGISTER(_idx))
+# define SET_REGISTER_WIDE(_idx, _val)      SET_REGISTER(_idx, _val)
+# define GET_REGISTER_DOUBLE(_idx)          (*((double*)&fp[(_idx)]))
+# define SET_REGISTER_DOUBLE(_idx, _val)    (*((double*)&fp[(_idx)]) = (_val))
+
+#else // _LP64
+
+# define GET_REGISTER_INT(_idx)             ((s4)GET_REGISTER(_idx))
+# define SET_REGISTER_INT(_idx, _val)       SET_REGISTER(_idx, ((s4)(_val)))
 # define GET_REGISTER_WIDE(_idx)            getLongFromArray(fp, (_idx))
 # define SET_REGISTER_WIDE(_idx, _val)      putLongToArray(fp, (_idx), (_val))
-# define GET_REGISTER_FLOAT(_idx)           (*((float*) &fp[(_idx)]))
-# define SET_REGISTER_FLOAT(_idx, _val)     (*((float*) &fp[(_idx)]) = (_val))
 # define GET_REGISTER_DOUBLE(_idx)          getDoubleFromArray(fp, (_idx))
 # define SET_REGISTER_DOUBLE(_idx, _val)    putDoubleToArray(fp, (_idx), (_val))
+
+#endif // _LP64
+
+#if defined(_LP64) && defined(HAVE_BIG_ENDIAN)
+# define GET_REGISTER_FLOAT(_idx)           (*(((float*) &fp[(_idx)])+1))
+# define SET_REGISTER_FLOAT(_idx, _val)     (*(((float*) &fp[(_idx)])+1) = (_val))
+#else
+# define GET_REGISTER_FLOAT(_idx)           (*((float*) &fp[(_idx)]))
+# define SET_REGISTER_FLOAT(_idx, _val)     (*((float*) &fp[(_idx)]) = (_val))
 #endif
+
+#endif // CHECK_REGISTER_INDICES
 
 /*
  * Get 16 bits from the specified offset of the program counter.  We always
@@ -300,7 +357,7 @@ static inline void putDoubleToArray(u4* ptr, int idx, double dval)
  *
  * This is also used to determine the address for precise GC.
  *
- * Assumes existence of "u4* fp" and "const u2* pc".
+ * Assumes existence of "StackSlot* fp" and "const u2* pc".
  */
 #define EXPORT_PC()         (SAVEAREA_FROM_FP(fp)->xtra.currentPc = pc)
 
@@ -316,7 +373,7 @@ static inline void putDoubleToArray(u4* ptr, int idx, double dval)
  */
 static inline bool checkForNull(Object* obj)
 {
-    if (obj == NULL) {
+    if (dvmRefIsNull(obj)) {
         dvmThrowNullPointerException(NULL);
         return false;
     }
@@ -327,9 +384,9 @@ static inline bool checkForNull(Object* obj)
     }
 #endif
 #ifndef NDEBUG
-    if (obj->clazz == NULL || ((u4) obj->clazz) <= 65536) {
+    if (obj->clazz == NULLREF || ((uintptr_t) obj->clazz) <= 65536) {
         /* probable heap corruption */
-        ALOGE("Invalid object class %p (in %p)", obj->clazz, obj);
+        ALOGE("Invalid object class %p (in %p)", dvmRefExpandClazzGlobal(obj->clazz), obj);
         dvmAbort();
     }
 #endif
@@ -345,9 +402,9 @@ static inline bool checkForNull(Object* obj)
  * Use this to check for NULL when the instruction handler doesn't do
  * anything else that can throw an exception.
  */
-static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
+static inline bool checkForNullExportPC(Object* obj, StackSlot* fp, const u2* pc)
 {
-    if (obj == NULL) {
+    if (dvmRefIsNull(obj)) {
         EXPORT_PC();
         dvmThrowNullPointerException(NULL);
         return false;
@@ -359,9 +416,9 @@ static inline bool checkForNullExportPC(Object* obj, u4* fp, const u2* pc)
     }
 #endif
 #ifndef NDEBUG
-    if (obj->clazz == NULL || ((u4) obj->clazz) <= 65536) {
+    if (obj->clazz == NULLREF || ((StackSlot) obj->clazz) <= 65536) {
         /* probable heap corruption */
-        ALOGE("Invalid object class %p (in %p)", obj->clazz, obj);
+        ALOGE("Invalid object class %p (in %p)", dvmRefExpandClazzGlobal(obj->clazz), obj);
         dvmAbort();
     }
 #endif

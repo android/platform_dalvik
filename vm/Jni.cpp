@@ -24,6 +24,7 @@
 #include "UniquePtr.h"
 
 #include <stdlib.h>
+#include <inttypes.h>
 #include <stdarg.h>
 #include <limits.h>
 
@@ -383,6 +384,7 @@ static void AddLocalReferenceFailure(IndirectRefTable* pRefTable) {
  * GC allocations here, and it's best if we don't grab a mutex.
  */
 static inline jobject addLocalReference(Thread* self, Object* obj) {
+    obj = dvmRefNormalize(obj);
     if (obj == NULL) {
         return NULL;
     }
@@ -442,6 +444,7 @@ static void deleteLocalReference(Thread* self, jobject jobj) {
  * so it needs to appear on the list multiple times.
  */
 static jobject addGlobalReference(Object* obj) {
+    obj = dvmRefNormalize(obj);
     if (obj == NULL) {
         return NULL;
     }
@@ -455,7 +458,7 @@ static jobject addGlobalReference(Object* obj) {
         ALOGI("Adding global ref on class %s", clazz->descriptor);
         dvmDumpThread(dvmThreadSelf(), false);
     }
-    if (false && ((Object*)obj)->clazz == gDvm.classJavaLangString) {
+    if (false && dvmRefExpandClazzGlobal(((Object*)obj)->clazz) == gDvm.classJavaLangString) {
         StringObject* strObj = (StringObject*) obj;
         char* str = dvmCreateCstrFromString(strObj);
         if (strcmp(str, "sync-response") == 0) {
@@ -466,7 +469,7 @@ static jobject addGlobalReference(Object* obj) {
         }
         free(str);
     }
-    if (false && ((Object*)obj)->clazz == gDvm.classArrayByte) {
+    if (false && dvmRefExpandClazzGlobal(((Object*)obj)->clazz) == gDvm.classArrayByte) {
         ArrayObject* arrayObj = (ArrayObject*) obj;
         if (arrayObj->length == 8192 /*&&
             dvmReferenceTableEntries(&gDvm.jniGlobalRefTable) > 400*/)
@@ -586,7 +589,7 @@ static void pinPrimitiveArray(ArrayObject* arrayObj) {
 
     if (count > kPinComplainThreshold) {
         ALOGW("JNI: pin count on array %p (%s) is now %d",
-              arrayObj, arrayObj->clazz->descriptor, count);
+              arrayObj, dvmRefExpandClazzGlobal(arrayObj->clazz)->descriptor, count);
         /* keep going */
     }
 }
@@ -630,17 +633,17 @@ void dvmDumpJniStats(DebugOutputTarget* target) {
     dvmPrintDebugMessage(target, "; workarounds are %s", gDvmJni.workAroundAppJniBugs ? "on" : "off");
 
     dvmLockMutex(&gDvm.jniPinRefLock);
-    dvmPrintDebugMessage(target, "; pins=%d", dvmReferenceTableEntries(&gDvm.jniPinRefTable));
+    dvmPrintDebugMessage(target, "; pins=%zu", dvmReferenceTableEntries(&gDvm.jniPinRefTable));
     dvmUnlockMutex(&gDvm.jniPinRefLock);
 
     dvmLockMutex(&gDvm.jniGlobalRefLock);
-    dvmPrintDebugMessage(target, "; globals=%d", gDvm.jniGlobalRefTable.capacity());
+    dvmPrintDebugMessage(target, "; globals=%zu", gDvm.jniGlobalRefTable.capacity());
     dvmUnlockMutex(&gDvm.jniGlobalRefLock);
 
     dvmLockMutex(&gDvm.jniWeakGlobalRefLock);
     size_t weaks = gDvm.jniWeakGlobalRefTable.capacity();
     if (weaks > 0) {
-        dvmPrintDebugMessage(target, " (plus %d weak)", weaks);
+        dvmPrintDebugMessage(target, " (plus %zd weak)", weaks);
     }
     dvmUnlockMutex(&gDvm.jniWeakGlobalRefLock);
 
@@ -856,10 +859,10 @@ static void appendValue(char type, const JValue value, char* buf, size_t n, bool
         sprintf(p, "%d", value.i);
         break;
     case 'L':
-        sprintf(p, "%#x", value.i);
+        sprintf(p, "%#" PRIxPTR, (intptr_t) value.l);
         break;
     case 'J':
-        sprintf(p, "%lld", value.j);
+        sprintf(p, "%" PRId64, value.j);
         break;
     case 'S':
         sprintf(p, "%d", value.s);
@@ -880,12 +883,16 @@ static void appendValue(char type, const JValue value, char* buf, size_t n, bool
     }
 }
 
-static void logNativeMethodEntry(const Method* method, const u4* args)
+static void logNativeMethodEntry(const Method* method, const StackSlot* args)
 {
     char thisString[32] = { 0 };
-    const u4* sp = args;
+    const StackSlot* sp = args;
     if (!dvmIsStaticMethod(method)) {
+#ifdef _LP64
+        sprintf(thisString, "this=0x%016lx ", *sp++);
+#else
         sprintf(thisString, "this=0x%08x ", *sp++);
+#endif
     }
 
     char argsString[128]= { 0 };
@@ -896,6 +903,8 @@ static void logNativeMethodEntry(const Method* method, const u4* args)
         if (argType == 'D' || argType == 'J') {
             value.j = dvmGetArgLong(sp, 0);
             sp += 2;
+        } else if (argType == 'L') {
+            value.l = (Object*) *sp++;
         } else {
             value.i = *sp++;
         }
@@ -915,7 +924,7 @@ static void logNativeMethodExit(const Method* method, Thread* self, const JValue
     char* signature = dexProtoCopyMethodDescriptor(&method->prototype);
     if (dvmCheckException(self)) {
         Object* exception = dvmGetException(self);
-        std::string exceptionClassName(dvmHumanReadableDescriptor(exception->clazz->descriptor));
+        std::string exceptionClassName(dvmHumanReadableDescriptor(dvmRefExpandClazzGlobal(exception->clazz)->descriptor));
         ALOGI("<- %s %s%s threw %s", className.c_str(),
                 method->name, signature, exceptionClassName.c_str());
     } else {
@@ -1091,8 +1100,8 @@ static inline void convertReferenceResult(JNIEnv* env, JValue* pResult,
 /*
  * General form, handles all cases.
  */
-void dvmCallJNIMethod(const u4* args, JValue* pResult, const Method* method, Thread* self) {
-    u4* modArgs = (u4*) args;
+void dvmCallJNIMethod(const StackSlot* args, JValue* pResult, const Method* method, Thread* self) {
+    StackSlot* modArgs = (StackSlot*)args;
     jclass staticMethodClass = NULL;
 
     u4 accessFlags = method->accessFlags;
@@ -1114,7 +1123,7 @@ void dvmCallJNIMethod(const u4* args, JValue* pResult, const Method* method, Thr
     } else {
         lockObj = (Object*) args[0];
         /* add "this" */
-        modArgs[idx++] = (u4) addLocalReference(self, (Object*) modArgs[0]);
+        modArgs[idx++] = (StackSlot) addLocalReference(self, (Object*) modArgs[0]);
     }
 
     if (!method->noRef) {
@@ -1124,7 +1133,7 @@ void dvmCallJNIMethod(const u4* args, JValue* pResult, const Method* method, Thr
             case 'L':
                 //ALOGI("  local %d: 0x%08x", idx, modArgs[idx]);
                 if (modArgs[idx] != 0) {
-                    modArgs[idx] = (u4) addLocalReference(self, (Object*) modArgs[idx]);
+                    modArgs[idx] = (StackSlot) addLocalReference(self, (Object*) modArgs[idx]);
                 }
                 break;
             case 'D':
@@ -1591,7 +1600,7 @@ static jclass GetObjectClass(JNIEnv* env, jobject jobj) {
     assert(jobj != NULL);
 
     Object* obj = dvmDecodeIndirectRef(ts.self(), jobj);
-    return (jclass) addLocalReference(ts.self(), (Object*) obj->clazz);
+    return (jclass) addLocalReference(ts.self(), (Object*) dvmRefExpandClazzGlobal(obj->clazz));
 }
 
 /*
@@ -1607,7 +1616,7 @@ static jboolean IsInstanceOf(JNIEnv* env, jobject jobj, jclass jclazz) {
 
     Object* obj = dvmDecodeIndirectRef(ts.self(), jobj);
     ClassObject* clazz = (ClassObject*) dvmDecodeIndirectRef(ts.self(), jclazz);
-    return dvmInstanceof(obj->clazz, clazz);
+    return dvmInstanceof(dvmRefExpandClazzGlobal(obj->clazz), clazz);
 }
 
 /*
@@ -1761,14 +1770,14 @@ static jfieldID GetStaticFieldID(JNIEnv* env, jclass jclazz, const char* name, c
         if (dvmIsVolatileField(sfield)) {                                   \
             if (_isref) {   /* only when _ctype==jobject */                 \
                 Object* obj = dvmGetStaticFieldObjectVolatile(sfield);      \
-                value = (_ctype)(u4)addLocalReference(ts.self(), obj);            \
+                value = (_ctype)(StackSlot)addLocalReference(ts.self(), obj);            \
             } else {                                                        \
                 value = (_ctype) dvmGetStaticField##_jname##Volatile(sfield);\
             }                                                               \
         } else {                                                            \
             if (_isref) {                                                   \
                 Object* obj = dvmGetStaticFieldObject(sfield);              \
-                value = (_ctype)(u4)addLocalReference(ts.self(), obj);            \
+                value = (_ctype)(StackSlot)addLocalReference(ts.self(), obj);            \
             } else {                                                        \
                 value = (_ctype) dvmGetStaticField##_jname(sfield);         \
             }                                                               \
@@ -1797,14 +1806,14 @@ GET_STATIC_TYPE_FIELD(jdouble, Double, false);
         StaticField* sfield = (StaticField*) fieldID;                       \
         if (dvmIsVolatileField(sfield)) {                                   \
             if (_isref) {   /* only when _ctype==jobject */                 \
-                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(u4)value); \
+                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(StackSlot)value); \
                 dvmSetStaticFieldObjectVolatile(sfield, valObj);            \
             } else {                                                        \
                 dvmSetStaticField##_jname##Volatile(sfield, (_ctype2)value);\
             }                                                               \
         } else {                                                            \
             if (_isref) {                                                   \
-                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(u4)value); \
+                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(StackSlot)value); \
                 dvmSetStaticFieldObject(sfield, valObj);                    \
             } else {                                                        \
                 dvmSetStaticField##_jname(sfield, (_ctype2)value);          \
@@ -1838,7 +1847,7 @@ SET_STATIC_TYPE_FIELD(jdouble, double, Double, false);
             if (_isref) {   /* only when _ctype==jobject */                 \
                 Object* valObj =                                            \
                     dvmGetFieldObjectVolatile(obj, field->byteOffset);      \
-                value = (_ctype)(u4)addLocalReference(ts.self(), valObj);         \
+                value = (_ctype)(StackSlot)addLocalReference(ts.self(), valObj);         \
             } else {                                                        \
                 value = (_ctype)                                            \
                     dvmGetField##_jname##Volatile(obj, field->byteOffset);  \
@@ -1846,7 +1855,7 @@ SET_STATIC_TYPE_FIELD(jdouble, double, Double, false);
         } else {                                                            \
             if (_isref) {                                                   \
                 Object* valObj = dvmGetFieldObject(obj, field->byteOffset); \
-                value = (_ctype)(u4)addLocalReference(ts.self(), valObj);         \
+                value = (_ctype)(StackSlot)addLocalReference(ts.self(), valObj);         \
             } else {                                                        \
                 value = (_ctype) dvmGetField##_jname(obj, field->byteOffset);\
             }                                                               \
@@ -1875,7 +1884,7 @@ GET_TYPE_FIELD(jdouble, Double, false);
         InstField* field = (InstField*) fieldID;                            \
         if (dvmIsVolatileField(field)) {                                    \
             if (_isref) {   /* only when _ctype==jobject */                 \
-                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(u4)value); \
+                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(StackSlot)value); \
                 dvmSetFieldObjectVolatile(obj, field->byteOffset, valObj);  \
             } else {                                                        \
                 dvmSetField##_jname##Volatile(obj,                          \
@@ -1883,7 +1892,7 @@ GET_TYPE_FIELD(jdouble, Double, false);
             }                                                               \
         } else {                                                            \
             if (_isref) {                                                   \
-                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(u4)value); \
+                Object* valObj = dvmDecodeIndirectRef(ts.self(), (jobject)(StackSlot)value); \
                 dvmSetFieldObject(obj, field->byteOffset, valObj);          \
             } else {                                                        \
                 dvmSetField##_jname(obj,                                    \
@@ -1916,7 +1925,7 @@ SET_TYPE_FIELD(jdouble, double, Double, false);
         const Method* meth;                                                 \
         va_list args;                                                       \
         JValue result;                                                      \
-        meth = dvmGetVirtualizedMethod(obj->clazz, (Method*)methodID);      \
+        meth = dvmGetVirtualizedMethod(dvmRefExpandClazzGlobal(obj->clazz), (Method*)methodID);      \
         if (meth == NULL) {                                                 \
             return _retfail;                                                \
         }                                                                   \
@@ -1934,7 +1943,7 @@ SET_TYPE_FIELD(jdouble, double, Double, false);
         Object* obj = dvmDecodeIndirectRef(ts.self(), jobj);                      \
         const Method* meth;                                                 \
         JValue result;                                                      \
-        meth = dvmGetVirtualizedMethod(obj->clazz, (Method*)methodID);      \
+        meth = dvmGetVirtualizedMethod(dvmRefExpandClazzGlobal(obj->clazz), (Method*)methodID);      \
         if (meth == NULL) {                                                 \
             return _retfail;                                                \
         }                                                                   \
@@ -1950,7 +1959,7 @@ SET_TYPE_FIELD(jdouble, double, Double, false);
         Object* obj = dvmDecodeIndirectRef(ts.self(), jobj);                      \
         const Method* meth;                                                 \
         JValue result;                                                      \
-        meth = dvmGetVirtualizedMethod(obj->clazz, (Method*)methodID);      \
+        meth = dvmGetVirtualizedMethod(dvmRefExpandClazzGlobal(obj->clazz), (Method*)methodID);      \
         if (meth == NULL) {                                                 \
             return _retfail;                                                \
         }                                                                   \
@@ -2259,9 +2268,9 @@ static jobjectArray NewObjectArray(JNIEnv* env, jsize length,
      */
     if (jinitialElement != NULL) {
         Object* initialElement = dvmDecodeIndirectRef(ts.self(), jinitialElement);
-        Object** arrayData = (Object**) (void*) newObj->contents;
+        ObjectRef* arrayData = (ObjectRef*) (void*) newObj->contents;
         for (jsize i = 0; i < length; ++i) {
-            arrayData[i] = initialElement;
+            arrayData[i] = dvmRefCompress(initialElement);
         }
     }
 
@@ -2290,7 +2299,7 @@ static jobject GetObjectArrayElement(JNIEnv* env, jobjectArray jarr, jsize index
         return NULL;
     }
 
-    Object* value = ((Object**) (void*) arrayObj->contents)[index];
+    Object* value = dvmRefExpandGlobal(((ObjectRef*) (void*) arrayObj->contents)[index]);
     return addLocalReference(ts.self(), value);
 }
 
@@ -2307,11 +2316,11 @@ static void SetObjectArrayElement(JNIEnv* env, jobjectArray jarr, jsize index, j
 
     Object* obj = dvmDecodeIndirectRef(ts.self(), jobj);
 
-    if (obj != NULL && !dvmCanPutArrayElement(obj->clazz, arrayObj->clazz)) {
+    if (obj != NULL && !dvmCanPutArrayElement(dvmRefExpandClazzGlobal(obj->clazz), dvmRefExpandClazzGlobal(arrayObj->clazz))) {
       ALOGV("Can't put a '%s'(%p) into array type='%s'(%p)",
-            obj->clazz->descriptor, obj,
-            arrayObj->clazz->descriptor, arrayObj);
-      dvmThrowArrayStoreExceptionIncompatibleElement(obj->clazz, arrayObj->clazz);
+            dvmRefExpandClazzGlobal(obj->clazz)->descriptor, obj,
+            dvmRefExpandClazzGlobal(arrayObj->clazz)->descriptor, arrayObj);
+      dvmThrowArrayStoreExceptionIncompatibleElement(dvmRefExpandClazzGlobal(obj->clazz), dvmRefExpandClazzGlobal(arrayObj->clazz));
       return;
     }
 
@@ -2390,7 +2399,7 @@ static void throwArrayRegionOutOfBounds(ArrayObject* arrayObj, jsize start,
 {
     dvmThrowExceptionFmt(gDvm.exArrayIndexOutOfBoundsException,
         "%s offset=%d length=%d %s.length=%d",
-        arrayObj->clazz->descriptor, start, len, arrayIdentifier,
+        dvmRefExpandClazzGlobal(arrayObj->clazz)->descriptor, start, len, arrayIdentifier,
         arrayObj->length);
 }
 
@@ -2692,11 +2701,11 @@ static jobject NewDirectByteBuffer(JNIEnv* env, void* address, jlong capacity) {
     ScopedJniThreadState ts(env);
 
     if (capacity < 0) {
-        ALOGE("JNI ERROR (app bug): negative buffer capacity: %lld", capacity);
+        ALOGE("JNI ERROR (app bug): negative buffer capacity: %" PRId64, capacity);
         ReportJniError();
     }
     if (address == NULL && capacity != 0) {
-        ALOGE("JNI ERROR (app bug): non-zero capacity for NULL pointer: %lld", capacity);
+        ALOGE("JNI ERROR (app bug): non-zero capacity for NULL pointer: %" PRId64, capacity);
         ReportJniError();
     }
 
@@ -3311,7 +3320,11 @@ JNIEnv* dvmCreateJNIEnv(Thread* self) {
     } else {
         /* make it obvious if we fail to initialize these later */
         newEnv->envThreadId = 0x77777775;
+#ifdef _LP64
+        newEnv->self = (Thread*) 0x7777777777777779L;
+#else
         newEnv->self = (Thread*) 0x77777779;
+#endif
     }
     if (gDvmJni.useCheckJni) {
         dvmUseCheckedJniEnv(newEnv);

@@ -23,7 +23,7 @@
 #include <limits.h>
 
 /* width of an object reference, for arrays of objects */
-static size_t kObjectArrayRefWidth = sizeof(Object*);
+static u4 kObjectArrayRefWidth = (u4) sizeof(ObjectRef);
 
 static ClassObject* createArrayClass(const char* descriptor, Object* loader);
 
@@ -35,8 +35,8 @@ static ClassObject* createArrayClass(const char* descriptor, Object* loader);
  *
  * On failure, returns NULL with an exception raised.
  */
-static ArrayObject* allocArray(ClassObject* arrayClass, size_t length,
-    size_t elemWidth, int allocFlags)
+static ArrayObject* allocArray(ClassObject* arrayClass, u4 length,
+    u4 elemWidth, int allocFlags)
 {
     assert(arrayClass != NULL);
     assert(arrayClass->descriptor != NULL);
@@ -45,14 +45,14 @@ static ArrayObject* allocArray(ClassObject* arrayClass, size_t length,
     assert(elemWidth > 0);
     assert(elemWidth <= 8);
     assert((elemWidth & (elemWidth - 1)) == 0);
-    size_t elementShift = sizeof(size_t) * CHAR_BIT - 1 - CLZ(elemWidth);
-    size_t elementSize = length << elementShift;
-    size_t headerSize = OFFSETOF_MEMBER(ArrayObject, contents);
-    size_t totalSize = elementSize + headerSize;
-    if (elementSize >> elementShift != length || totalSize < elementSize) {
+    u4 elementShift = sizeof(u4) * CHAR_BIT - 1 - CLZ_U4((u4)elemWidth);
+    u4 elementSize = length << elementShift;
+    u4 headerSize = OFFSETOF_MEMBER(ArrayObject, contents);
+    u4 totalSize = elementSize + headerSize;
+    if (elementSize >> elementShift != u4(length) || totalSize < elementSize) {
         std::string descriptor(dvmHumanReadableDescriptor(arrayClass->descriptor));
         dvmThrowExceptionFmt(gDvm.exOutOfMemoryError,
-                "%s of length %zd exceeds the VM limit", descriptor.c_str(), length);
+                "%s of length %d exceeds the VM limit", descriptor.c_str(), length);
         return NULL;
     }
     ArrayObject* newArray = (ArrayObject*)dvmMalloc(totalSize, allocFlags);
@@ -70,7 +70,7 @@ static ArrayObject* allocArray(ClassObject* arrayClass, size_t length,
  * array of references or primitives.
  */
 ArrayObject* dvmAllocArrayByClass(ClassObject* arrayClass,
-    size_t length, int allocFlags)
+    u4 length, int allocFlags)
 {
     const char* descriptor = arrayClass->descriptor;
 
@@ -111,7 +111,7 @@ ClassObject* dvmFindArrayClassForElement(ClassObject* elemClassObj)
  *
  * "type" is the primitive type letter, e.g. 'I' for int or 'J' for long.
  */
-ArrayObject* dvmAllocPrimitiveArray(char type, size_t length, int allocFlags)
+ArrayObject* dvmAllocPrimitiveArray(char type, u4 length, int allocFlags)
 {
     ArrayObject* newArray;
     ClassObject* arrayClass;
@@ -370,16 +370,16 @@ static ClassObject* createArrayClass(const char* descriptor, Object* loader)
     dvmSetClassSerialNumber(newClass);
     newClass->descriptorAlloc = strdup(descriptor);
     newClass->descriptor = newClass->descriptorAlloc;
-    dvmSetFieldObject((Object *)newClass,
+    dvmSetClassFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, super),
                       (Object *)gDvm.classJavaLangObject);
     newClass->vtableCount = gDvm.classJavaLangObject->vtableCount;
     newClass->vtable = gDvm.classJavaLangObject->vtable;
     newClass->primitiveType = PRIM_NOT;
-    dvmSetFieldObject((Object *)newClass,
+    dvmSetClassFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, elementClass),
                       (Object *)elementClass);
-    dvmSetFieldObject((Object *)newClass,
+    dvmSetClassFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, classLoader),
                       (Object *)elementClass->classLoader);
     newClass->arrayDim = arrayDim;
@@ -495,22 +495,22 @@ static ClassObject* createArrayClass(const char* descriptor, Object* loader)
 bool dvmCopyObjectArray(ArrayObject* dstArray, const ArrayObject* srcArray,
     ClassObject* dstElemClass)
 {
-    Object** src = (Object**)(void*)srcArray->contents;
+    ObjectRef* src = (ObjectRef*)(void*)srcArray->contents;
     u4 length, count;
 
     assert(srcArray->length == dstArray->length);
-    assert(dstArray->clazz->elementClass == dstElemClass ||
-        (dstArray->clazz->elementClass == dstElemClass->elementClass &&
-         dstArray->clazz->arrayDim == dstElemClass->arrayDim+1));
+    assert(dvmRefExpandClazzGlobal(dstArray->clazz)->elementClass == dstElemClass ||
+        (dvmRefExpandClazzGlobal(dstArray->clazz)->elementClass == dstElemClass->elementClass &&
+         dvmRefExpandClazzGlobal(dstArray->clazz)->arrayDim == dstElemClass->arrayDim+1));
 
     length = dstArray->length;
     for (count = 0; count < length; count++) {
-        if (!dvmInstanceof(src[count]->clazz, dstElemClass)) {
+        if (!dvmInstanceof(dvmRefExpandClazzGlobal(dvmRefExpandGlobal(src[count])->clazz), dstElemClass)) {
             ALOGW("dvmCopyObjectArray: can't store %s in %s",
-                src[count]->clazz->descriptor, dstElemClass->descriptor);
+                dvmRefExpandClazzGlobal(dvmRefExpandGlobal(src[count])->clazz)->descriptor, dstElemClass->descriptor);
             return false;
         }
-        dvmSetObjectArrayElement(dstArray, count, src[count]);
+        dvmSetObjectArrayElement(dstArray, count, dvmRefExpandGlobal(src[count]));
     }
 
     return true;
@@ -524,7 +524,7 @@ bool dvmCopyObjectArray(ArrayObject* dstArray, const ArrayObject* srcArray,
 bool dvmUnboxObjectArray(ArrayObject* dstArray, const ArrayObject* srcArray,
     ClassObject* dstElemClass)
 {
-    Object** src = (Object**)(void*)srcArray->contents;
+    ObjectRef* src = (ObjectRef*)(void*)srcArray->contents;
     void* dst = (void*)dstArray->contents;
     u4 count = dstArray->length;
     PrimitiveType typeIndex = dstElemClass->primitiveType;
@@ -541,9 +541,9 @@ bool dvmUnboxObjectArray(ArrayObject* dstArray, const ArrayObject* srcArray,
          * primitive type exactly matches the box class, but it's not
          * necessary for correctness.
          */
-        if (!dvmUnboxPrimitive(*src, dstElemClass, &result)) {
+        if (!dvmUnboxPrimitive(dvmRefExpandGlobal(*src), dstElemClass, &result)) {
             ALOGW("dvmCopyObjectArray: can't store %s in %s",
-                (*src)->clazz->descriptor, dstElemClass->descriptor);
+                dvmRefExpandClazzGlobal(dvmRefExpandGlobal(*src)->clazz)->descriptor, dstElemClass->descriptor);
             return false;
         }
 
@@ -603,7 +603,7 @@ size_t dvmArrayClassElementWidth(const ClassObject* arrayClass)
     assert(dvmIsArrayClass(arrayClass));
 
     if (dvmIsObjectArrayClass(arrayClass)) {
-        return sizeof(Object *);
+        return sizeof(ObjectRef);
     } else {
         descriptor = arrayClass->descriptor;
         switch (descriptor[1]) {
@@ -627,6 +627,6 @@ size_t dvmArrayObjectSize(const ArrayObject *array)
 {
     assert(array != NULL);
     size_t size = OFFSETOF_MEMBER(ArrayObject, contents);
-    size += array->length * dvmArrayClassElementWidth(array->clazz);
+    size += array->length * dvmArrayClassElementWidth(dvmRefExpandClazzGlobal(array->clazz));
     return size;
 }

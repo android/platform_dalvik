@@ -130,6 +130,7 @@ static void* stdioConverterThreadStart(void* arg)
 {
     int cc;
 
+    (void)cc;
     /* tell the main thread that we're ready */
     dvmLockMutex(&gDvm.stdioConverterLock);
     gDvm.stdioConverterReady = true;
@@ -213,7 +214,7 @@ static bool readAndLog(int fd, BufferedData* data, const char* tag)
     want = kMaxLine - data->count;
     actual = read(fd, data->buf + data->count, want);
     if (actual <= 0) {
-        ALOGW("read %s: (%d,%d) failed (%d): %s",
+        ALOGW("read %s: (%d,%zd) failed (%d): %s",
             tag, fd, want, (int)actual, strerror(errno));
         return false;
     } else {

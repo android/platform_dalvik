@@ -17,17 +17,17 @@
 #include "Dalvik.h"
 #include "native/InternalNativePriv.h"
 
-static void Double_doubleToLongBits(const u4* args, JValue* pResult)
+static void Double_doubleToLongBits(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangDouble_doubleToLongBits);
 }
 
-static void Double_doubleToRawLongBits(const u4* args, JValue* pResult)
+static void Double_doubleToRawLongBits(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangDouble_doubleToRawLongBits);
 }
 
-static void Double_longBitsToDouble(const u4* args, JValue* pResult)
+static void Double_longBitsToDouble(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangDouble_longBitsToDouble);
 }

@@ -74,7 +74,7 @@ int dvmInstanceofNonTrivial(const ClassObject* instance,   // OP_CHECK_CAST &&
 
 /* Originally declared in oo/Array.h */
 ArrayObject* dvmAllocArrayByClass(ClassObject* arrayClass, // OP_NEW_ARRAY
-                                  size_t length, int allocFlags);
+                                  u4 length, int allocFlags);
 
 /* Originally declared in interp/InterpDefs.h */
 bool dvmInterpHandleFillArrayData(ArrayObject* arrayObject,// OP_FILL_ARRAY_DATA

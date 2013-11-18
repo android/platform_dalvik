@@ -104,7 +104,7 @@ void dvmHeapBitmapWalk(const HeapBitmap *bitmap, BitmapCallback *callback,
     for (uintptr_t i = 0; i <= end; ++i) {
         unsigned long word = bitmap->bits[i];
         if (UNLIKELY(word != 0)) {
-            unsigned long highBit = 1 << (HB_BITS_PER_WORD - 1);
+            unsigned long highBit = 1L << (HB_BITS_PER_WORD - 1);
             uintptr_t ptrBase = HB_INDEX_TO_OFFSET(i) + bitmap->base;
             while (word != 0) {
                 const int shift = CLZ(word);
@@ -139,7 +139,7 @@ void dvmHeapBitmapScanWalk(HeapBitmap *bitmap,
     for (i = 0; i <= end; ++i) {
         unsigned long word = bitmap->bits[i];
         if (UNLIKELY(word != 0)) {
-            unsigned long highBit = 1 << (HB_BITS_PER_WORD - 1);
+            unsigned long highBit = 1L << (HB_BITS_PER_WORD - 1);
             uintptr_t ptrBase = HB_INDEX_TO_OFFSET(i) + bitmap->base;
             void *finger = (void *)(HB_INDEX_TO_OFFSET(i + 1) + bitmap->base);
             while (word != 0) {
@@ -188,7 +188,7 @@ void dvmHeapBitmapSweepWalk(const HeapBitmap *liveHb, const HeapBitmap *markHb,
     for (size_t i = start; i <= end; i++) {
         unsigned long garbage = live[i] & ~mark[i];
         if (UNLIKELY(garbage != 0)) {
-            unsigned long highBit = 1 << (HB_BITS_PER_WORD - 1);
+            unsigned long highBit = 1L << (HB_BITS_PER_WORD - 1);
             uintptr_t ptrBase = HB_INDEX_TO_OFFSET(i) + liveHb->base;
             while (garbage != 0) {
                 int shift = CLZ(garbage);

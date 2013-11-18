@@ -112,7 +112,7 @@ enum {
  * pointer to the ClassObject, and for uninitialized references it holds
  * an index into the UninitInstanceMap.
  */
-typedef u4 RegType;
+typedef uintptr_t RegType;
 
 /*
  * A bit vector indicating which entries in the monitor stack are

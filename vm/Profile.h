@@ -86,7 +86,7 @@ struct AllocProfState {
  * Start/stop method tracing.
  */
 void dvmMethodTraceStart(const char* traceFileName, int traceFd, int bufferSize,
-        int flags, bool directToDdms, bool samplingEnabled, int intervalUs);
+        int flags, bool directToDdms, bool samplingEnabled, long intervalUs);
 void dvmMethodTraceStop(void);
 
 /*

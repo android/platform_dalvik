@@ -29,13 +29,16 @@
  * One entry in the cache.  We store two keys (e.g. the classes that are
  * arguments to "instanceof") and one result (e.g. a boolean value).
  *
- * Must be exactly 16 bytes.
+ * Must be exactly 16 or 32 bytes.
  */
 struct AtomicCacheEntry {
-    u4          key1;
-    u4          key2;
-    u4          value;
+    uintptr_t          key1;
+    uintptr_t          key2;
+    uintptr_t         value;
     volatile u4 version;    /* version and lock flag */
+#ifdef _LP64
+    u4 pad;
+#endif
 };
 
 /*
@@ -92,6 +95,8 @@ struct AtomicCache {
 #else
 # define CACHE_XARG(_value)
 #endif
+
+#ifndef _LP64
 #define ATOMIC_CACHE_LOOKUP(_cache, _cacheSize, _key1, _key2) ({            \
     AtomicCacheEntry* pEntry;                                               \
     int hash;                                                               \
@@ -144,6 +149,61 @@ struct AtomicCache {
     value;                                                                  \
 })
 
+#else // _LP64
+#define ATOMIC_CACHE_LOOKUP(_cache, _cacheSize, _key1, _key2) ({            \
+    AtomicCacheEntry* pEntry;                                               \
+    int hash;                                                               \
+    u4 firstVersion, secondVersion;                                         \
+    u8 value;                                                               \
+                                                                            \
+    /* simple hash function */                                              \
+    hash = (((u8)(_key1) >> 2) ^ (u8)(_key2)) & ((_cacheSize)-1);           \
+    pEntry = (_cache)->entries + hash;                                      \
+                                                                            \
+    firstVersion = android_atomic_acquire_load((int32_t*)&pEntry->version); \
+                                                                            \
+    if (pEntry->key1 == (u8)(_key1) && pEntry->key2 == (u8)(_key2)) {       \
+        /*                                                                  \
+         * The fields match.  Get the value, then read the version a        \
+         * second time to verify that we didn't catch a partial update.     \
+         * We're also hosed if "firstVersion" was odd, indicating that      \
+         * an update was in progress before we got here (unlikely).         \
+         */                                                                 \
+        value = dvmQuasiAtomicAcquireLoad64((volatile const int64_t*)       \
+                                                           &pEntry->value); \
+        secondVersion = pEntry->version;                                    \
+                                                                            \
+        if ((firstVersion & 0x01) != 0 || firstVersion != secondVersion) {  \
+            /*                                                              \
+             * We clashed with another thread.  Instead of sitting and      \
+             * spinning, which might not complete if we're a high priority  \
+             * thread, just do the regular computation.                     \
+             */                                                             \
+            if (CALC_CACHE_STATS)                                           \
+                (_cache)->fail++;                                           \
+            value = (u8) ATOMIC_CACHE_CALC;                                 \
+        } else {                                                            \
+            /* all good */                                                  \
+            if (CALC_CACHE_STATS)                                           \
+                (_cache)->hits++;                                           \
+        }                                                                   \
+    } else {                                                                \
+        /*                                                                  \
+         * Compute the result and update the cache.  We really want this    \
+         * to happen in a different method -- it makes the ARM frame        \
+         * setup for this method simpler, which gives us a ~10% speed       \
+         * boost.                                                           \
+         */                                                                 \
+        value = (u8) ATOMIC_CACHE_CALC;                                     \
+        if (value == 0 && ATOMIC_CACHE_NULL_ALLOWED) { \
+            dvmUpdateAtomicCache((u8) (_key1), (u8) (_key2), value, pEntry, \
+                    firstVersion CACHE_XARG(_cache) );                      \
+        }                                                                   \
+    }                                                                       \
+    value;                                                                  \
+})
+#endif // _LP64
+
 /*
  * Allocate a cache.
  */
@@ -160,8 +220,8 @@ void dvmFreeAtomicCache(AtomicCache* cache);
  * Making the last argument optional, instead of merely unused, saves us
  * a few percent in the ATOMIC_CACHE_LOOKUP time.
  */
-void dvmUpdateAtomicCache(u4 key1, u4 key2, u4 value, AtomicCacheEntry* pEntry,
-    u4 firstVersion
+void dvmUpdateAtomicCache(uintptr_t key1, uintptr_t key2, uintptr_t value,
+    AtomicCacheEntry* pEntry, u4 firstVersion
 #if CALC_CACHE_STATS > 0
     , AtomicCache* pCache
 #endif

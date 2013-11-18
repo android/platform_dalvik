@@ -29,6 +29,8 @@
 #include "interp/Jit.h"
 #endif
 
+#include <inttypes.h>
+
 
 /*
  * ===========================================================================
@@ -375,7 +377,7 @@ static void dvmBreakpointSetFlush(BreakpointSet* pSet, ClassObject* clazz)
             ALOGV("Flushing breakpoint at %p for %s",
                 pBreak->addr, clazz->descriptor);
             if (instructionIsMagicNop(pBreak->addr)) {
-                ALOGV("Refusing to flush breakpoint on %04x at %s.%s + %#x",
+                ALOGV("Refusing to flush breakpoint on %04x at %s.%s + %#"PRIxPTR,
                     *pBreak->addr, pBreak->method->clazz->descriptor,
                     pBreak->method->name, pBreak->addr - pBreak->method->insns);
             } else {
@@ -537,8 +539,8 @@ bool dvmAddSingleStep(Thread* thread, int size, int depth)
      * on by PushLocalFrame, we want to use the topmost native method.
      */
     const StackSaveArea* saveArea;
-    u4* fp;
-    u4* prevFp = NULL;
+    StackSlot* fp;
+    StackSlot* prevFp = NULL;
 
     for (fp = thread->interpSave.curFrame; fp != NULL;
          fp = saveArea->prevFrame) {
@@ -547,7 +549,7 @@ bool dvmAddSingleStep(Thread* thread, int size, int depth)
         saveArea = SAVEAREA_FROM_FP(fp);
         method = saveArea->method;
 
-        if (!dvmIsBreakFrame((u4*)fp) && !dvmIsNativeMethod(method))
+        if (!dvmIsBreakFrame((StackSlot*)fp) && !dvmIsNativeMethod(method))
             break;
         prevFp = fp;
     }
@@ -564,7 +566,7 @@ bool dvmAddSingleStep(Thread* thread, int size, int depth)
          */
         ALOGV("##### init step while in native method");
         fp = prevFp;
-        assert(!dvmIsBreakFrame((u4*)fp));
+        assert(!dvmIsBreakFrame((StackSlot*)fp));
         assert(dvmIsNativeMethod(SAVEAREA_FROM_FP(fp)->method));
         saveArea = SAVEAREA_FROM_FP(fp);
     }
@@ -654,7 +656,7 @@ void dvmReportInvoke(Thread* self, const Method* methodToCall)
  * be called prior to the invoke.  fp is the Dalvik FP of the calling
  * method.
  */
-void dvmReportPreNativeInvoke(const Method* methodToCall, Thread* self, u4* fp)
+void dvmReportPreNativeInvoke(const Method* methodToCall, Thread* self, StackSlot* fp)
 {
 #if defined(WITH_JIT)
     /*
@@ -677,7 +679,7 @@ void dvmReportPreNativeInvoke(const Method* methodToCall, Thread* self, u4* fp)
  * special subMode requirements.  fp is the Dalvik FP of the calling
  * method.
  */
-void dvmReportPostNativeInvoke(const Method* methodToCall, Thread* self, u4* fp)
+void dvmReportPostNativeInvoke(const Method* methodToCall, Thread* self, StackSlot* fp)
 {
     if (self->interpBreak.ctl.subMode & kSubModeDebuggerActive) {
         Object* thisPtr = dvmGetThisPtr(self->interpSave.method, fp);
@@ -728,7 +730,7 @@ void dvmReportReturn(Thread* self)
  * breakpoints.  We may be able to speed things up a bit if we don't query
  * the event list unless we know there's at least one lurking within.
  */
-static void updateDebugger(const Method* method, const u2* pc, const u4* fp,
+static void updateDebugger(const Method* method, const u2* pc, const StackSlot* fp,
                            Thread* self)
 {
     int eventFlags = 0;
@@ -767,6 +769,7 @@ static void updateDebugger(const Method* method, const u2* pc, const u4* fp,
         int frameDepth;
         bool doStop = false;
         const char* msg = NULL;
+        (void)msg;
 
         assert(!dvmIsNativeMethod(method));
 
@@ -892,7 +895,7 @@ static void updateDebugger(const Method* method, const u2* pc, const u4* fp,
  * Because we need it when setting up debugger event filters, we want to
  * be able to do this quickly.
  */
-Object* dvmGetThisPtr(const Method* method, const u4* fp)
+Object* dvmGetThisPtr(const Method* method, const StackSlot* fp)
 {
     if (dvmIsStaticMethod(method))
         return NULL;
@@ -930,7 +933,8 @@ void dvmInterpCheckTrackedRefs(Thread* self, const Method* method,
         while (top < self->internalLocalRefTable.nextEntry) {
             ALOGE("  %p (%s)",
                  *top,
-                 ((*top)->clazz != NULL) ? (*top)->clazz->descriptor : "");
+                 ((*top)->clazz != NULLREF) ?
+                         dvmRefExpandClazzGlobal((*top)->clazz)->descriptor : "");
             top++;
         }
         dvmDumpThread(self, false);
@@ -946,7 +950,7 @@ void dvmInterpCheckTrackedRefs(Thread* self, const Method* method,
 /*
  * Dump the v-registers.  Sent to the ILOG log tag.
  */
-void dvmDumpRegs(const Method* method, const u4* framePtr, bool inOnly)
+void dvmDumpRegs(const Method* method, const StackSlot* framePtr, bool inOnly)
 {
     int i, localCount;
 
@@ -955,7 +959,7 @@ void dvmDumpRegs(const Method* method, const u4* framePtr, bool inOnly)
     ALOG(LOG_VERBOSE, LOG_TAG"i", "Registers (fp=%p):", framePtr);
     for (i = method->registersSize-1; i >= 0; i--) {
         if (i >= localCount) {
-            ALOG(LOG_VERBOSE, LOG_TAG"i", "  v%-2d in%-2d : 0x%08x",
+            ALOG(LOG_VERBOSE, LOG_TAG"i", "  v%-2d in%-2d : 0x%"PRIxPTR,
                 i, i-localCount, framePtr[i]);
         } else {
             if (inOnly) {
@@ -976,7 +980,7 @@ void dvmDumpRegs(const Method* method, const u4* framePtr, bool inOnly)
                 }
             }
 #endif
-            ALOG(LOG_VERBOSE, LOG_TAG"i", "  v%-2d      : 0x%08x %s",
+            ALOG(LOG_VERBOSE, LOG_TAG"i", "  v%-2d      : 0x%"PRIxPTR" %s",
                 i, framePtr[i], name);
         }
     }
@@ -1032,7 +1036,7 @@ s4 dvmInterpHandlePackedSwitch(const u2* switchData, s4 testVal)
      * we can treat them as a native int array.
      */
     const s4* entries = (const s4*) switchData;
-    assert(((u4)entries & 0x3) == 0);
+    assert(((uintptr_t)entries & 0x3) == 0);
 
     assert(index >= 0 && index < size);
     LOGVV("Value %d found in slot %d (goto 0x%02x)",
@@ -1077,13 +1081,13 @@ s4 dvmInterpHandleSparseSwitch(const u2* switchData, s4 testVal)
      * we can treat them as a native int array.
      */
     keys = (const s4*) switchData;
-    assert(((u4)keys & 0x3) == 0);
+    assert(((uintptr_t)keys & 0x3) == 0);
 
     /* The entries are guaranteed to be aligned on a 32-bit boundary;
      * we can treat them as a native int array.
      */
     entries = keys + size;
-    assert(((u4)entries & 0x3) == 0);
+    assert(((uintptr_t)entries & 0x3) == 0);
 
     /*
      * Binary-search through the array of keys, which are guaranteed to
@@ -1181,7 +1185,8 @@ bool dvmInterpHandleFillArrayData(ArrayObject* arrayObj, const u2* arrayData)
         dvmThrowNullPointerException(NULL);
         return false;
     }
-    assert (!IS_CLASS_FLAG_SET(((Object *)arrayObj)->clazz,
+    assert (!IS_CLASS_FLAG_SET(
+            dvmRefExpandClazzGlobal(((Object *)arrayObj)->clazz),
                                CLASS_ISOBJECTARRAY));
 
     /*
@@ -1467,8 +1472,13 @@ void updateInterpBreak(Thread* thread, ExecutionSubModes subMode, bool enable)
         newValue.ctl.curHandlerTable = (newValue.ctl.breakFlags) ?
             thread->altHandlerTable : thread->mainHandlerTable;
 #endif
+#if !defined(_LP64)
     } while (dvmQuasiAtomicCas64(oldValue.all, newValue.all,
              &thread->interpBreak.all) != 0);
+#else
+    } while (dvmQuasiAtomicCas128(oldValue.all, newValue.all,
+         &thread->interpBreak.all) != 0);
+#endif
 }
 
 /*
@@ -1559,15 +1569,15 @@ void dvmCheckInterpStateConsistency()
          }
 #ifndef DVM_NO_ASM_INTERP
         if (handlerTable != thread->interpBreak.ctl.curHandlerTable) {
-            ALOGD("Warning: curHandlerTable mismatch - %#x:%#x, tid[%d]",
-                (int)handlerTable,(int)thread->interpBreak.ctl.curHandlerTable,
+            ALOGD("Warning: curHandlerTable mismatch - %p:%p, tid[%d]",
+                handlerTable,thread->interpBreak.ctl.curHandlerTable,
                 thread->threadId);
          }
 #endif
 #if defined(WITH_JIT)
          if (thread->pJitProfTable != gDvmJit.pProfTable) {
-             ALOGD("Warning: pJitProfTable mismatch - %#x:%#x, tid[%d]",
-                  (int)thread->pJitProfTable,(int)gDvmJit.pProfTable,
+             ALOGD("Warning: pJitProfTable mismatch - %p:%p, tid[%d]",
+                  thread->pJitProfTable,gDvmJit.pProfTable,
                   thread->threadId);
          }
          if (thread->jitThreshold != gDvmJit.threshold) {
@@ -1647,6 +1657,11 @@ void dvmInitInterpreterState(Thread* self)
     // Jit state that can change
     dvmJitUpdateThreadStateSingle(self);
 #endif
+
+#if defined(WITH_COMPREFS)
+    self->heapBase = gDvm.heapBase;
+#endif
+
     dvmInitializeInterpBreak(self);
 }
 
@@ -1689,7 +1704,7 @@ void dvmInitializeInterpBreak(Thread* thread)
  * count profiling, JIT trace building, etc.  Dalvik PC has been exported
  * prior to call, but Thread copy of dPC & fp are not current.
  */
-void dvmCheckBefore(const u2 *pc, u4 *fp, Thread* self)
+void dvmCheckBefore(const u2 *pc, StackSlot *fp, Thread* self)
 {
     const Method* method = self->interpSave.method;
     assert(pc >= method->insns && pc <
@@ -1926,7 +1941,7 @@ void dvmInterpret(Thread* self, const Method* method, JValue* pResult)
      * No need to initialize "retval".
      */
     self->interpSave.method = method;
-    self->interpSave.curFrame = (u4*) self->interpSave.curFrame;
+    self->interpSave.curFrame = (StackSlot*) self->interpSave.curFrame;
     self->interpSave.pc = method->insns;
 
     assert(!dvmIsNativeMethod(method));

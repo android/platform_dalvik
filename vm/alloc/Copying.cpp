@@ -1255,9 +1255,9 @@ static void scavengeDataObject(Object *obj)
     scavengeReference((Object **) obj);
     /* Scavenge instance fields. */
     if (clazz->refOffsets != CLASS_WALK_SUPER) {
-        size_t refOffsets = clazz->refOffsets;
+        u4 refOffsets = clazz->refOffsets;
         while (refOffsets != 0) {
-            size_t rshift = CLZ(refOffsets);
+            size_t rshift = CLZ_U4(refOffsets);
             size_t offset = CLASS_OFFSET_FROM_CLZ(rshift);
             Object **ref = (Object **)((u1 *)obj + offset);
             scavengeReference(ref);
@@ -1512,12 +1512,12 @@ static void scavengeLargeHeapRefTable(LargeHeapRefTable *table)
 /* This code was copied from Thread.c */
 static void scavengeThreadStack(Thread *thread)
 {
-    const u4 *framePtr;
+    const StackSlot *framePtr;
 #if WITH_EXTRA_GC_CHECKS > 1
     bool first = true;
 #endif
 
-    framePtr = (const u4 *)thread->interpSave.curFrame;
+    framePtr = (const StackSlot *)thread->interpSave.curFrame;
     while (framePtr != NULL) {
         const StackSaveArea *saveArea;
         const Method *method;
@@ -1648,7 +1648,7 @@ static void scavengeThreadStack(Thread *thread)
                  */
                 u2 bits = 1 << 1;
                 for (int i = method->registersSize - 1; i >= 0; i--) {
-                    u4 rval = *framePtr;
+                    StackSlot rval = *framePtr;
 
                     bits >>= 1;
                     if (bits == 1) {
@@ -1736,14 +1736,14 @@ static void scavengeThreadList()
 
 static void pinThreadStack(const Thread *thread)
 {
-    const u4 *framePtr;
+    const StackSlot *framePtr;
     const StackSaveArea *saveArea;
     Method *method;
     const char *shorty;
     Object *obj;
 
     saveArea = NULL;
-    framePtr = (const u4 *)thread->interpSave.curFrame;
+    framePtr = (const StackSlot *)thread->interpSave.curFrame;
     for (; framePtr != NULL; framePtr = saveArea->prevFrame) {
         saveArea = SAVEAREA_FROM_FP(framePtr);
         method = (Method *)saveArea->method;
@@ -1820,7 +1820,7 @@ static void pinThreadStack(const Thread *thread)
                  * No register info for this frame, conservatively pin.
                  */
                 for (int i = 0; i < method->registersSize; ++i) {
-                    u4 regValue = framePtr[i];
+                    StackSlot regValue = framePtr[i];
                     if (regValue != 0 && (regValue & 0x3) == 0 && dvmIsValidObject((Object *)regValue)) {
                         pinObject((Object *)regValue);
                     }
@@ -1897,7 +1897,7 @@ static void scavengeBlock(HeapSource *heapSource, size_t block)
     /* Parse and scavenge the current block. */
     size = 0;
     while (cursor < end) {
-        u4 word = *(u4 *)cursor;
+        uintptr_t word = *(uintptr_t *)cursor;
         if (word != 0) {
             scavengeObject((Object *)cursor);
             size = objectSize((Object *)cursor);
@@ -1905,8 +1905,8 @@ static void scavengeBlock(HeapSource *heapSource, size_t block)
             cursor += size;
         } else {
             /* Check for padding. */
-            while (*(u4 *)cursor == 0) {
-                cursor += 4;
+            while (*(uintptr_t *)cursor == 0) {
+                cursor += sizeof(uintptr_t);
                 if (cursor == end) break;
             }
             /* Punt if something went wrong. */
@@ -1954,7 +1954,7 @@ static void verifyBlock(HeapSource *heapSource, size_t block)
     /* Parse and scavenge the current block. */
     size = 0;
     while (cursor < end) {
-        u4 word = *(u4 *)cursor;
+        uintptr_t word = *(uintptr_t *)cursor;
         if (word != 0) {
             dvmVerifyObject((Object *)cursor);
             size = objectSize((Object *)cursor);
@@ -1963,7 +1963,7 @@ static void verifyBlock(HeapSource *heapSource, size_t block)
         } else {
             /* Check for padding. */
             while (*(unsigned long *)cursor == 0) {
-                cursor += 4;
+                cursor += sizeof(uintptr_t);
                 if (cursor == end) break;
             }
             /* Punt if something went wrong. */

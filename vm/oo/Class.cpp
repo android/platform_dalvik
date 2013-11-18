@@ -1369,7 +1369,7 @@ static ClassObject* findClassFromLoaderNoInit(const char* descriptor,
     LOGVV("--- Invoking loadClass(%s, %p)", dotName, loader);
     {
         const Method* loadClass =
-            loader->clazz->vtable[gDvm.voffJavaLangClassLoader_loadClass];
+            dvmRefExpandClazzGlobal(loader->clazz)->vtable[gDvm.voffJavaLangClassLoader_loadClass];
         JValue result;
         dvmCallMethod(self, loadClass, loader, &result, nameObj);
         clazz = (ClassObject*) result.l;
@@ -1379,7 +1379,7 @@ static ClassObject* findClassFromLoaderNoInit(const char* descriptor,
         if (excep != NULL) {
 #if DVM_SHOW_EXCEPTION >= 2
             ALOGD("NOTE: loadClass '%s' %p threw exception %s",
-                 dotName, loader, excep->clazz->descriptor);
+                 dotName, loader, dvmRefExpandClazzGlobal(excep->clazz)->descriptor);
 #endif
             dvmAddTrackedAlloc(excep, self);
             dvmClearException(self);
@@ -1705,7 +1705,7 @@ got_class:
     /* check some invariants */
     assert(dvmIsClassLinked(clazz));
     assert(gDvm.classJavaLangClass != NULL);
-    assert(clazz->clazz == gDvm.classJavaLangClass);
+    assert(dvmRefExpandClazzGlobal(clazz->clazz) == gDvm.classJavaLangClass);
     assert(dvmIsClassObject(clazz));
     assert(clazz == gDvm.classJavaLangObject || clazz->super != NULL);
     if (!dvmIsInterfaceClass(clazz)) {
@@ -1777,7 +1777,7 @@ static ClassObject* loadClassFromDex0(DvmDex* pDvmDex,
     newClass->descriptor = descriptor;
     assert(newClass->descriptorAlloc == NULL);
     SET_CLASS_FLAG(newClass, pClassDef->accessFlags);
-    dvmSetFieldObject((Object *)newClass,
+    dvmSetClassFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, classLoader),
                       (Object *)classLoader);
     newClass->pDvmDex = pDvmDex;
@@ -1793,8 +1793,7 @@ static ClassObject* loadClassFromDex0(DvmDex* pDvmDex,
      * newClass->super is not traversed or freed by dvmFreeClassInnards, so
      * this is safe.
      */
-    assert(sizeof(u4) == sizeof(ClassObject*)); /* 32-bit check */
-    newClass->super = (ClassObject*) pClassDef->superclassIdx;
+    newClass->super = (ClassObject*)(uintptr_t) pClassDef->superclassIdx;
 
     /*
      * Stuff class reference indices into the pointer fields.
@@ -1811,7 +1810,7 @@ static ClassObject* loadClassFromDex0(DvmDex* pDvmDex,
 
         for (i = 0; i < newClass->interfaceCount; i++) {
             const DexTypeItem* pType = dexGetTypeItem(pInterfacesList, i);
-            newClass->interfaces[i] = (ClassObject*)(u4) pType->typeIdx;
+            newClass->interfaces[i] = (ClassObject*)(uintptr_t) pType->typeIdx;
         }
         dvmLinearReadOnly(classLoader, newClass->interfaces);
     }
@@ -2006,7 +2005,7 @@ void dvmFreeClassInnards(ClassObject* clazz)
     if (clazz == NULL)
         return;
 
-    assert(clazz->clazz == gDvm.classJavaLangClass);
+    assert(dvmRefExpandClazzGlobal(clazz->clazz) == gDvm.classJavaLangClass);
     assert(dvmIsClassObject(clazz));
 
     /* Guarantee that dvmFreeClassInnards can be called on a given
@@ -2312,6 +2311,11 @@ static int computeJniArgInfo(const DexProto* proto)
     case 'S':
         returnType = DALVIK_JNI_RETURN_S2;
         break;
+#if defined(_LP64)
+    case 'L':
+        returnType = DALVIK_JNI_RETURN_S8;
+        break;
+#endif
     default:
         returnType = DALVIK_JNI_RETURN_S4;
         break;
@@ -2509,7 +2513,7 @@ static void computeRefOffsets(ClassObject* clazz)
 bool dvmLinkClass(ClassObject* clazz)
 {
     u4 superclassIdx = 0;
-    u4 *interfaceIdxArray = NULL;
+    uintptr_t *interfaceIdxArray = NULL;
     bool okay = false;
     int i;
 
@@ -2520,7 +2524,7 @@ bool dvmLinkClass(ClassObject* clazz)
         ALOGV("CLASS: linking '%s'...", clazz->descriptor);
 
     assert(gDvm.classJavaLangClass != NULL);
-    assert(clazz->clazz == gDvm.classJavaLangClass);
+    assert(dvmRefExpandClazzGlobal(clazz->clazz) == gDvm.classJavaLangClass);
     assert(dvmIsClassObject(clazz));
     if (clazz->classLoader == NULL &&
         (strcmp(clazz->descriptor, "Ljava/lang/Class;") == 0))
@@ -2552,7 +2556,7 @@ bool dvmLinkClass(ClassObject* clazz)
              */
             assert(sizeof(*interfaceIdxArray) == sizeof(*clazz->interfaces));
             size_t len = clazz->interfaceCount * sizeof(*interfaceIdxArray);
-            interfaceIdxArray = (u4*)malloc(len);
+            interfaceIdxArray = (uintptr_t*)malloc(len);
             if (interfaceIdxArray == NULL) {
                 ALOGW("Unable to allocate memory to link %s", clazz->descriptor);
                 goto bail;
@@ -2564,8 +2568,7 @@ bool dvmLinkClass(ClassObject* clazz)
             dvmLinearReadOnly(clazz->classLoader, clazz->interfaces);
         }
 
-        assert(sizeof(superclassIdx) == sizeof(clazz->super));
-        superclassIdx = (u4) clazz->super;
+        superclassIdx = static_cast<u4>((uintptr_t) clazz->super);
         clazz->super = NULL;
         /* After this line, clazz will be fair game for the GC. The
          * superclass and interfaces are all NULL.
@@ -2586,7 +2589,7 @@ bool dvmLinkClass(ClassObject* clazz)
                 }
                 goto bail;
             }
-            dvmSetFieldObject((Object *)clazz,
+            dvmSetClassFieldObject((Object *)clazz,
                               OFFSETOF_MEMBER(ClassObject, super),
                               (Object *)super);
         }
@@ -2598,7 +2601,7 @@ bool dvmLinkClass(ClassObject* clazz)
             for (i = 0; i < clazz->interfaceCount; i++) {
                 assert(interfaceIdxArray[i] != kDexNoIndex);
                 clazz->interfaces[i] =
-                    dvmResolveClass(clazz, interfaceIdxArray[i], false);
+                    dvmResolveClass(clazz, (u4) interfaceIdxArray[i], false);
                 if (clazz->interfaces[i] == NULL) {
                     const DexFile* pDexFile = clazz->pDvmDex->pDexFile;
 
@@ -2607,15 +2610,15 @@ bool dvmLinkClass(ClassObject* clazz)
 
                     const char* classDescriptor;
                     classDescriptor =
-                        dexStringByTypeIdx(pDexFile, interfaceIdxArray[i]);
+                        dexStringByTypeIdx(pDexFile, (u4)interfaceIdxArray[i]);
                     if (gDvm.optimizing) {
                         /* happens with "external" libs */
                         ALOGV("Failed resolving %s interface %d '%s'",
-                             clazz->descriptor, interfaceIdxArray[i],
+                             clazz->descriptor, (u4) interfaceIdxArray[i],
                              classDescriptor);
                     } else {
                         ALOGI("Failed resolving %s interface %d '%s'",
-                             clazz->descriptor, interfaceIdxArray[i],
+                             clazz->descriptor, (u4) interfaceIdxArray[i],
                              classDescriptor);
                     }
                     goto bail;
@@ -3563,6 +3566,15 @@ static bool computeFieldOffsets(ClassObject* clazz)
     else
         fieldOffset = OFFSETOF_MEMBER(DataObject, instanceData);
 
+#if defined(_LP64) && !defined(WITH_COMPREFS)
+    /*
+     * Make sure first element is 64bit aligned, as they usually contain references.
+     */
+    if ((fieldOffset & 0x7) != 0) {
+        fieldOffset = (fieldOffset + 0x7) & ~7;
+    }
+#endif
+
     LOGVV("--- computeFieldOffsets '%s'", clazz->descriptor);
 
     //ALOGI("OFFSETS fieldCount=%d", clazz->ifieldCount);
@@ -3619,7 +3631,8 @@ static bool computeFieldOffsets(ClassObject* clazz)
             break;
 
         pField->byteOffset = fieldOffset;
-        fieldOffset += sizeof(u4);
+        // Advance field offset by one object reference in size.
+        fieldOffset += sizeof(ObjectRef);
         LOGVV("  --- offset1 '%s'=%d", pField->name,pField->byteOffset);
     }
 
@@ -4296,9 +4309,9 @@ bool dvmInitClass(ClassObject* clazz)
         if (!dvmVerifyClass(clazz)) {
 verify_failed:
             dvmThrowVerifyError(clazz->descriptor);
-            dvmSetFieldObject((Object*) clazz,
+            dvmSetClassFieldObject((Object*) clazz,
                 OFFSETOF_MEMBER(ClassObject, verifyErrorClass),
-                (Object*) dvmGetException(self)->clazz);
+                (Object*) dvmRefExpandClazzGlobal(dvmGetException(self)->clazz));
             clazz->status = CLASS_ERROR;
             goto bail_unlock;
         }
@@ -4491,7 +4504,7 @@ noverify:
          * tuck the original exception into the "cause" field.
          */
         ALOGW("Exception %s thrown while initializing %s",
-            (dvmGetException(self)->clazz)->descriptor, clazz->descriptor);
+            dvmRefExpandClazzGlobal(dvmGetException(self)->clazz)->descriptor, clazz->descriptor);
         dvmThrowExceptionInInitializerError();
         //ALOGW("+++ replaced");
 
@@ -4572,8 +4585,13 @@ void dvmSetNativeFunc(Method* method, DalvikBridgeFunc func,
     if (insns != NULL) {
         /* update both, ensuring that "insns" is observed first */
         method->insns = insns;
+#if defined(_LP64)
+        dvmQuasiAtomicReleaseStore64((int64_t) func,
+            (volatile int64_t*)(void*) &method->nativeFunc);
+#else
         android_atomic_release_store((int32_t) func,
             (volatile int32_t*)(void*) &method->nativeFunc);
+#endif
     } else {
         /* only update nativeFunc */
         method->nativeFunc = func;
@@ -4615,13 +4633,13 @@ void dvmSetRegisterMap(Method* method, const RegisterMap* pMap)
  * dvmHashForeach callback.  A nonzero return value causes foreach to
  * bail out.
  */
-static int findClassCallback(void* vclazz, void* arg)
+static intptr_t findClassCallback(void* vclazz, void* arg)
 {
     ClassObject* clazz = (ClassObject*)vclazz;
     const char* descriptor = (const char*) arg;
 
     if (strcmp(clazz->descriptor, descriptor) == 0)
-        return (int) clazz;
+        return (intptr_t) clazz;
     return 0;
 }
 
@@ -4637,7 +4655,7 @@ static int findClassCallback(void* vclazz, void* arg)
  */
 ClassObject* dvmFindLoadedClass(const char* descriptor)
 {
-    int result;
+    intptr_t result;
 
     dvmHashTableLock(gDvm.loadedClasses);
     result = dvmHashForeach(gDvm.loadedClasses, findClassCallback,
@@ -4672,11 +4690,11 @@ Object* dvmGetSystemClassLoader()
 /*
  * This is a dvmHashForeach callback.
  */
-static int dumpClass(void* vclazz, void* varg)
+static intptr_t dumpClass(void* vclazz, void* varg)
 {
     const ClassObject* clazz = (const ClassObject*) vclazz;
     const ClassObject* super;
-    int flags = (int) varg;
+    int flags = (int)((long)varg);
     char* desc;
     int i;
 
@@ -4705,7 +4723,8 @@ static int dumpClass(void* vclazz, void* varg)
     }
 
     /* clazz->super briefly holds the superclass index during class prep */
-    if ((u4)clazz->super > 0x10000 && (u4) clazz->super != (u4)-1)
+    if ((uintptr_t)clazz->super > 0x10000 && 
+            (uintptr_t) clazz->super != (uintptr_t)-1)
         super = clazz->super;
     else
         super = NULL;
@@ -4795,18 +4814,18 @@ static int dumpClass(void* vclazz, void* varg)
  *
  * Pass kDumpClassFullDetail into "flags" to get lots of detail.
  */
-void dvmDumpClass(const ClassObject* clazz, int flags)
+void dvmDumpClass(const ClassObject* clazz, intptr_t flags)
 {
-    dumpClass((void*) clazz, (void*) flags);
+    dumpClass((void*) clazz, (void*) (long) flags);
 }
 
 /*
  * Dump the contents of all classes.
  */
-void dvmDumpAllClasses(int flags)
+void dvmDumpAllClasses(intptr_t flags)
 {
     dvmHashTableLock(gDvm.loadedClasses);
-    dvmHashForeach(gDvm.loadedClasses, dumpClass, (void*) flags);
+    dvmHashForeach(gDvm.loadedClasses, dumpClass, (void*) (long) flags);
     dvmHashTableUnlock(gDvm.loadedClasses);
 }
 

@@ -19,6 +19,8 @@
  */
 #include "Dalvik.h"
 
+#include <inttypes.h>
+
 /*
  * Find a matching field, in the current class only.
  *
@@ -742,12 +744,12 @@ void dvmDumpObject(const Object* obj)
     ClassObject* clazz;
     int i;
 
-    if (obj == NULL || obj->clazz == NULL) {
+    if (dvmRefIsNull(obj) || dvmRefIsNull(dvmRefExpandClazzGlobal(obj->clazz))) {
         ALOGW("Null or malformed object not dumped");
         return;
     }
 
-    clazz = obj->clazz;
+    clazz = dvmRefExpandClazzGlobal(obj->clazz);
     ALOGD("----- Object dump: %p (%s, %d bytes) -----",
         obj, clazz->descriptor, (int) clazz->objectSize);
     //printHexDump(obj, clazz->objectSize);
@@ -779,7 +781,7 @@ void dvmDumpObject(const Object* obj)
                 else
                     lval = dvmGetFieldInt(obj, pField->byteOffset);
 
-                ALOGD("    %2d: '%s' '%s' af=%04x off=%d 0x%08llx", i,
+                ALOGD("    %2d: '%s' '%s' af=%04x off=%d 0x%016" PRIx64, i,
                     pField->name, pField->signature,
                     pField->accessFlags, pField->byteOffset, lval);
             }
@@ -816,7 +818,7 @@ void dvmDumpObject(const Object* obj)
                 else
                     lval = pField->value.i;
 
-                ALOGD("    %2d: '%s' '%s' af=%04x off=%zd 0x%08llx", i,
+                ALOGD("    %2d: '%s' '%s' af=%04x off=%zd 0x%016" PRIx64, i,
                      pField->name, pField->signature,
                      pField->accessFlags, byteOffset, lval);
             }

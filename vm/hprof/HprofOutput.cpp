@@ -103,7 +103,7 @@ void hprofContextInit(hprof_context_t *ctx, char *fileName, int fd,
         /* u4: size of identifiers.  We're using addresses
          *     as IDs, so make sure a pointer fits.
          */
-        U4_TO_BUF_BE(buf, 0, sizeof(void *));
+        U4_TO_BUF_BE(buf, 0, HPROF_ID_SIZE);
         fwrite(buf, 1, sizeof(u4), fp);
 
         /* The current time, in milliseconds since 0:00 GMT, 1/1/70.

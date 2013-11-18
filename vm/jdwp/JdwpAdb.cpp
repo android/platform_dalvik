@@ -434,6 +434,7 @@ static bool handlePacket(JdwpState* state)
     bool reply;
     int dataLen;
 
+    (void)error;
     cmd = cmdSet = 0;       // shut up gcc
 
     length = read4BE(&buf);

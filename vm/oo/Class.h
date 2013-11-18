@@ -174,7 +174,7 @@ void dvmSetBootPathExtraDex(DvmDex* pDvmDex);
  * Debugging.
  */
 void dvmDumpClass(const ClassObject* clazz, int flags);
-void dvmDumpAllClasses(int flags);
+void dvmDumpAllClasses(intptr_t flags);
 void dvmDumpLoaderStats(const char* msg);
 int  dvmGetNumLoadedClasses();
 

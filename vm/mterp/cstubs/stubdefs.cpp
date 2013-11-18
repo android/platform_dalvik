@@ -28,6 +28,7 @@
 #define curMethod               self->interpSave.method
 #define methodClassDex          self->interpSave.methodClassDex
 #define debugTrackedRefStart    self->interpSave.debugTrackedRefStart
+#define heapBase                self->heapBase
 
 /* ugh */
 #define STUB_HACK(x) x

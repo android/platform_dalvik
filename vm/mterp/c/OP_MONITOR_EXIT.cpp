@@ -5,9 +5,9 @@ HANDLE_OPCODE(OP_MONITOR_EXIT /*vAA*/)
         EXPORT_PC();
 
         vsrc1 = INST_AA(inst);
-        ILOGV("|monitor-exit v%d %s(0x%08x)",
-            vsrc1, kSpacing+5, GET_REGISTER(vsrc1));
-        obj = (Object*)GET_REGISTER(vsrc1);
+        ILOGV("|monitor-exit v%d %s(%"PRIxPTR")",
+            (u4)vsrc1, kSpacing+5, (uintptr_t)GET_REGISTER(vsrc1));
+        obj = GET_REGISTER_AS_OBJECT(vsrc1);
         if (!checkForNull(obj)) {
             /*
              * The exception needs to be processed at the *following*
@@ -19,7 +19,7 @@ HANDLE_OPCODE(OP_MONITOR_EXIT /*vAA*/)
             ADJUST_PC(1);           /* monitor-exit width is 1 */
             GOTO_exceptionThrown();
         }
-        ILOGV("+ unlocking %p %s", obj, obj->clazz->descriptor);
+        ILOGV("+ unlocking %p %s", obj, dvmRefExpandClazz(obj->clazz,heapBase)->descriptor);
         if (!dvmUnlockObject(self, obj)) {
             assert(dvmCheckException(self));
             ADJUST_PC(1);

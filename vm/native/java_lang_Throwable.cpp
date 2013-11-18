@@ -24,7 +24,7 @@
 /*
  * private static Object nativeFillInStackTrace()
  */
-static void Dalvik_java_lang_Throwable_nativeFillInStackTrace(const u4* args,
+static void Dalvik_java_lang_Throwable_nativeFillInStackTrace(const StackSlot* args,
     JValue* pResult)
 {
     Object* stackState = NULL;
@@ -41,7 +41,7 @@ static void Dalvik_java_lang_Throwable_nativeFillInStackTrace(const u4* args,
  * The "stackState" argument must be the value returned by an earlier call to
  * nativeFillInStackTrace().
  */
-static void Dalvik_java_lang_Throwable_nativeGetStackTrace(const u4* args,
+static void Dalvik_java_lang_Throwable_nativeGetStackTrace(const StackSlot* args,
     JValue* pResult)
 {
     Object* stackState = (Object*) args[0];

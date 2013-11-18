@@ -68,7 +68,12 @@ void dvmFreeDexOrJar(void* vptr)
  */
 static int hashcmpDexOrJar(const void* tableVal, const void* newVal)
 {
+#ifndef _LP64
     return (int) newVal - (int) tableVal;
+#else
+    intptr_t cmp = (intptr_t) newVal - (intptr_t) tableVal;
+    return  (cmp == 0) ? 0 : ((cmp > 0) ? 1 : -1);
+#endif
 }
 
 /*
@@ -78,16 +83,16 @@ static int hashcmpDexOrJar(const void* tableVal, const void* newVal)
  *
  * If the cookie is invalid, we throw an exception and return "false".
  */
-static bool validateCookie(int cookie)
+static bool validateCookie(jlong cookie)
 {
-    DexOrJar* pDexOrJar = (DexOrJar*) cookie;
+    DexOrJar* pDexOrJar = (DexOrJar*) (uintptr_t)cookie;
 
     LOGVV("+++ dex verifying cookie %p", pDexOrJar);
 
     if (pDexOrJar == NULL)
         return false;
 
-    u4 hash = cookie;
+    u4 hash = static_cast<u4>((uintptr_t) cookie);
     dvmHashTableLock(gDvm.userDexFiles);
     void* result = dvmHashTableLookup(gDvm.userDexFiles, hash, pDexOrJar,
                 hashcmpDexOrJar, false);
@@ -113,7 +118,7 @@ static void addToDexFileTable(DexOrJar* pDexOrJar) {
      * file is opened multiple times, so we can just use the low 32
      * bits of the pointer as the hash.
      */
-    u4 hash = (u4) pDexOrJar;
+    u4 hash = static_cast<u4>((uintptr_t) pDexOrJar);
     void* result;
 
     dvmHashTableLock(gDvm.userDexFiles);
@@ -148,7 +153,7 @@ static void addToDexFileTable(DexOrJar* pDexOrJar) {
  *
  * TODO: should be using "long" for a pointer.
  */
-static void Dalvik_dalvik_system_DexFile_openDexFileNative(const u4* args,
+static void Dalvik_dalvik_system_DexFile_openDexFileNative(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* sourceNameObj = (StringObject*) args[0];
@@ -246,7 +251,7 @@ static void Dalvik_dalvik_system_DexFile_openDexFileNative(const u4* args,
  *
  * TODO: should be using "long" for a pointer.
  */
-static void Dalvik_dalvik_system_DexFile_openDexFile_bytearray(const u4* args,
+static void Dalvik_dalvik_system_DexFile_openDexFile_bytearray(const StackSlot* args,
     JValue* pResult)
 {
     ArrayObject* fileContentsObj = (ArrayObject*) args[0];
@@ -290,15 +295,15 @@ static void Dalvik_dalvik_system_DexFile_openDexFile_bytearray(const u4* args,
 }
 
 /*
- * private static void closeDexFile(int cookie)
+ * private static void closeDexFile(long cookie)
  *
  * Release resources associated with a user-loaded DEX file.
  */
-static void Dalvik_dalvik_system_DexFile_closeDexFile(const u4* args,
+static void Dalvik_dalvik_system_DexFile_closeDexFile(const StackSlot* args,
     JValue* pResult)
 {
-    int cookie = args[0];
-    DexOrJar* pDexOrJar = (DexOrJar*) cookie;
+    jlong cookie = (jlong)args[0];
+    DexOrJar* pDexOrJar = (DexOrJar*) (uintptr_t) cookie;
 
     if (pDexOrJar == NULL)
         RETURN_VOID();
@@ -316,7 +321,7 @@ static void Dalvik_dalvik_system_DexFile_closeDexFile(const u4* args,
      * them when the VM shuts down.
      */
     if (pDexOrJar->okayToFree) {
-        u4 hash = (u4) pDexOrJar;
+        u4 hash = static_cast<u4>((uintptr_t) pDexOrJar);
         dvmHashTableLock(gDvm.userDexFiles);
         if (!dvmHashTableRemove(gDvm.userDexFiles, hash, pDexOrJar)) {
             ALOGW("WARNING: could not remove '%s' from DEX hash table",
@@ -334,7 +339,7 @@ static void Dalvik_dalvik_system_DexFile_closeDexFile(const u4* args,
 
 /*
  * private static Class defineClassNative(String name, ClassLoader loader,
- *      int cookie)
+ *      long cookie)
  *
  * Load a class from a DEX file.  This is roughly equivalent to defineClass()
  * in a regular VM -- it's invoked by the class loader to cause the
@@ -346,12 +351,12 @@ static void Dalvik_dalvik_system_DexFile_closeDexFile(const u4* args,
  * Returns a null pointer with no exception if the class was not found.
  * Throws an exception on other failures.
  */
-static void Dalvik_dalvik_system_DexFile_defineClassNative(const u4* args,
+static void Dalvik_dalvik_system_DexFile_defineClassNative(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* nameObj = (StringObject*) args[0];
     Object* loader = (Object*) args[1];
-    int cookie = args[2];
+    jlong cookie = (jlong) (uintptr_t) args[2];
     ClassObject* clazz = NULL;
     DexOrJar* pDexOrJar = (DexOrJar*) cookie;
     DvmDex* pDvmDex;
@@ -360,7 +365,7 @@ static void Dalvik_dalvik_system_DexFile_defineClassNative(const u4* args,
 
     name = dvmCreateCstrFromString(nameObj);
     descriptor = dvmDotToDescriptor(name);
-    ALOGV("--- Explicit class load '%s' l=%p c=0x%08x",
+    ALOGV("--- Explicit class load '%s' l=%p c=0x%08" PRIx64,
         descriptor, loader, cookie);
     free(name);
 
@@ -384,9 +389,9 @@ static void Dalvik_dalvik_system_DexFile_defineClassNative(const u4* args,
          * the class is not found.
          */
         Object* excep = dvmGetException(self);
-        if (strcmp(excep->clazz->descriptor,
+        if (strcmp(dvmRefExpandClazzGlobal(excep->clazz)->descriptor,
                    "Ljava/lang/ClassNotFoundException;") == 0 ||
-            strcmp(excep->clazz->descriptor,
+            strcmp(dvmRefExpandClazzGlobal(excep->clazz)->descriptor,
                    "Ljava/lang/NoClassDefFoundError;") == 0)
         {
             dvmClearException(self);
@@ -399,16 +404,16 @@ static void Dalvik_dalvik_system_DexFile_defineClassNative(const u4* args,
 }
 
 /*
- * private static String[] getClassNameList(int cookie)
+ * private static String[] getClassNameList(long cookie)
  *
  * Returns a String array that holds the names of all classes in the
  * specified DEX file.
  */
-static void Dalvik_dalvik_system_DexFile_getClassNameList(const u4* args,
+static void Dalvik_dalvik_system_DexFile_getClassNameList(const StackSlot* args,
     JValue* pResult)
 {
-    int cookie = args[0];
-    DexOrJar* pDexOrJar = (DexOrJar*) cookie;
+    jlong cookie = (jlong) args[0];
+    DexOrJar* pDexOrJar = (DexOrJar*) (uintptr_t) cookie;
     Thread* self = dvmThreadSelf();
 
     if (!validateCookie(cookie))
@@ -468,7 +473,7 @@ static void Dalvik_dalvik_system_DexFile_getClassNameList(const u4* args,
  * @throws dalvik.system.StaleDexCacheError if the optimized dex file
  *         is stale but exists on a read-only partition.
  */
-static void Dalvik_dalvik_system_DexFile_isDexOptNeeded(const u4* args,
+static void Dalvik_dalvik_system_DexFile_isDexOptNeeded(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* nameObj = (StringObject*) args[0];
@@ -517,15 +522,15 @@ static void Dalvik_dalvik_system_DexFile_isDexOptNeeded(const u4* args,
 }
 
 const DalvikNativeMethod dvm_dalvik_system_DexFile[] = {
-    { "openDexFileNative",  "(Ljava/lang/String;Ljava/lang/String;I)I",
+    { "openDexFileNative",  "(Ljava/lang/String;Ljava/lang/String;I)J",
         Dalvik_dalvik_system_DexFile_openDexFileNative },
-    { "openDexFile",        "([B)I",
+    { "openDexFile",        "([B)J",
         Dalvik_dalvik_system_DexFile_openDexFile_bytearray },
-    { "closeDexFile",       "(I)V",
+    { "closeDexFile",       "(J)V",
         Dalvik_dalvik_system_DexFile_closeDexFile },
-    { "defineClassNative",  "(Ljava/lang/String;Ljava/lang/ClassLoader;I)Ljava/lang/Class;",
+    { "defineClassNative",  "(Ljava/lang/String;Ljava/lang/ClassLoader;J)Ljava/lang/Class;",
         Dalvik_dalvik_system_DexFile_defineClassNative },
-    { "getClassNameList",   "(I)[Ljava/lang/String;",
+    { "getClassNameList",   "(J)[Ljava/lang/String;",
         Dalvik_dalvik_system_DexFile_getClassNameList },
     { "isDexOptNeeded",     "(Ljava/lang/String;)Z",
         Dalvik_dalvik_system_DexFile_isDexOptNeeded },

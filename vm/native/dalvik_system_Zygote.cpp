@@ -38,8 +38,11 @@
 #include <cutils/multiuser.h>
 #include <sched.h>
 #include <sys/utsname.h>
+#include <inttypes.h>
+#ifdef HAVE_ANDROID_OS
 #include <sys/capability.h>
 #include <sys/resource.h>
+#endif
 
 #if defined(HAVE_PRCTL)
 # include <sys/prctl.h>
@@ -220,10 +223,10 @@ static int setrlimitsFromArray(ArrayObject* rlimits)
 
     memset (&rlim, 0, sizeof(rlim));
 
-    ArrayObject** tuples = (ArrayObject **)(void *)rlimits->contents;
+    ObjectRef* tuples = (ObjectRef *)(void *)rlimits->contents;
 
     for (i = 0; i < rlimits->length; i++) {
-        ArrayObject * rlimit_tuple = tuples[i];
+        ArrayObject * rlimit_tuple = (ArrayObject*) dvmRefExpandGlobal(tuples[i]);
         s4* contents = (s4 *)(void *)rlimit_tuple->contents;
         int err;
 
@@ -321,7 +324,7 @@ static int mountEmulatedStorage(uid_t uid, u4 mountMode) {
 }
 
 /* native public static int fork(); */
-static void Dalvik_dalvik_system_Zygote_fork(const u4* args, JValue* pResult)
+static void Dalvik_dalvik_system_Zygote_fork(const StackSlot* args, JValue* pResult)
 {
     pid_t pid;
 
@@ -445,7 +448,7 @@ static int setCapabilities(int64_t permitted, int64_t effective)
     capdata[1].permitted = permitted >> 32;
 
     if (capset(&capheader, &capdata[0]) == -1) {
-        ALOGE("capset(perm=%llx, eff=%llx) failed: %s", permitted, effective, strerror(errno));
+        ALOGE("capset(perm=%"PRIx64", eff=%"PRIx64") failed: %s", permitted, effective, strerror(errno));
         return errno;
     }
 #endif /*HAVE_ANDROID_OS*/
@@ -491,15 +494,15 @@ static bool needsNoRandomizeWorkaround() {
 /*
  * Utility routine to fork zygote and specialize the child process.
  */
-static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
+static pid_t forkAndSpecializeCommon(const StackSlot* args, bool isSystemServer)
 {
     pid_t pid;
 
     uid_t uid = (uid_t) args[0];
     gid_t gid = (gid_t) args[1];
-    ArrayObject* gids = (ArrayObject *)args[2];
-    u4 debugFlags = args[3];
-    ArrayObject *rlimits = (ArrayObject *)args[4];
+    ArrayObject* gids = (ArrayObject *)dvmRefNormalize((Object*)args[2]);
+    u4 debugFlags = (u4)args[3];
+    ArrayObject *rlimits = (ArrayObject *)dvmRefNormalize((Object*)args[4]);
     u4 mountMode = MOUNT_EXTERNAL_NONE;
     int64_t permittedCapabilities, effectiveCapabilities;
     char *seInfo = NULL;
@@ -518,7 +521,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     } else {
         mountMode = args[5];
         permittedCapabilities = effectiveCapabilities = 0;
-        StringObject* seInfoObj = (StringObject*)args[6];
+        StringObject* seInfoObj = (StringObject*)dvmRefNormalize((Object*)args[6]);
         if (seInfoObj) {
             seInfo = dvmCreateCstrFromString(seInfoObj);
             if (!seInfo) {
@@ -526,7 +529,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
                 dvmAbort();
             }
         }
-        StringObject* niceNameObj = (StringObject*)args[7];
+        StringObject* niceNameObj = (StringObject*)dvmRefNormalize((Object*)args[7]);
         if (niceNameObj) {
             niceName = dvmCreateCstrFromString(niceNameObj);
             if (!niceName) {
@@ -639,7 +642,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 
         err = setCapabilities(permittedCapabilities, effectiveCapabilities);
         if (err != 0) {
-            ALOGE("cannot set capabilities (%llx,%llx): %s",
+            ALOGE("cannot set capabilities (%" PRIx64 ",%" PRIx64 "): %s",
                 permittedCapabilities, effectiveCapabilities, strerror(err));
             dvmAbort();
         }
@@ -697,7 +700,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
  *     int[] gids, int debugFlags, int[][] rlimits, int mountExternal,
  *     String seInfo, String niceName);
  */
-static void Dalvik_dalvik_system_Zygote_forkAndSpecialize(const u4* args,
+static void Dalvik_dalvik_system_Zygote_forkAndSpecialize(const StackSlot* args,
     JValue* pResult)
 {
     pid_t pid;
@@ -713,7 +716,7 @@ static void Dalvik_dalvik_system_Zygote_forkAndSpecialize(const u4* args,
  *     long permittedCapabilities, long effectiveCapabilities);
  */
 static void Dalvik_dalvik_system_Zygote_forkSystemServer(
-        const u4* args, JValue* pResult)
+        const StackSlot* args, JValue* pResult)
 {
     pid_t pid;
     pid = forkAndSpecializeCommon(args, true);

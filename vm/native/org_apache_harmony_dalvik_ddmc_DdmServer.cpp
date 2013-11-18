@@ -28,12 +28,12 @@
  * Send a DDM chunk to the server.
  */
 static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmServer_nativeSendChunk(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
-    int type = args[0];
+    int type = (int)args[0];
     ArrayObject* data = (ArrayObject*) args[1];
-    int offset = args[2];
-    int length = args[3];
+    int offset = (int)args[2];
+    int length = (int)args[3];
 
     assert(offset+length <= (int)data->length);
 

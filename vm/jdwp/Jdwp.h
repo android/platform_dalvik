@@ -37,8 +37,8 @@ struct JdwpState;       /* opaque */
  *
  * ObjectId and RefTypeId must be the same size.
  */
-typedef u4 FieldId;     /* static or instance field */
-typedef u4 MethodId;    /* any kind of method, including constructors */
+typedef u8 FieldId;     /* static or instance field */
+typedef u8 MethodId;    /* any kind of method, including constructors */
 typedef u8 ObjectId;    /* any object (threadID, stringID, arrayID, etc) */
 typedef u8 RefTypeId;   /* like ObjectID, but unique for Class objects */
 typedef u8 FrameId;     /* short-lived stack frame ID */
@@ -47,21 +47,21 @@ typedef u8 FrameId;     /* short-lived stack frame ID */
  * Match these with the type sizes.  This way we don't have to pass
  * a value and a length.
  */
-INLINE FieldId dvmReadFieldId(const u1** pBuf)      { return read4BE(pBuf); }
-INLINE MethodId dvmReadMethodId(const u1** pBuf)    { return read4BE(pBuf); }
+INLINE FieldId dvmReadFieldId(const u1** pBuf)      { return read8BE(pBuf); }
+INLINE MethodId dvmReadMethodId(const u1** pBuf)    { return read8BE(pBuf); }
 INLINE ObjectId dvmReadObjectId(const u1** pBuf)    { return read8BE(pBuf); }
 INLINE RefTypeId dvmReadRefTypeId(const u1** pBuf)  { return read8BE(pBuf); }
 INLINE FrameId dvmReadFrameId(const u1** pBuf)      { return read8BE(pBuf); }
-INLINE void dvmSetFieldId(u1* buf, FieldId val)     { return set4BE(buf, val); }
-INLINE void dvmSetMethodId(u1* buf, MethodId val)   { return set4BE(buf, val); }
+INLINE void dvmSetFieldId(u1* buf, FieldId val)     { return set8BE(buf, val); }
+INLINE void dvmSetMethodId(u1* buf, MethodId val)   { return set8BE(buf, val); }
 INLINE void dvmSetObjectId(u1* buf, ObjectId val)   { return set8BE(buf, val); }
 INLINE void dvmSetRefTypeId(u1* buf, RefTypeId val) { return set8BE(buf, val); }
 INLINE void dvmSetFrameId(u1* buf, FrameId val)     { return set8BE(buf, val); }
 INLINE void expandBufAddFieldId(ExpandBuf* pReply, FieldId id) {
-    expandBufAdd4BE(pReply, id);
+    expandBufAdd8BE(pReply, id);
 }
 INLINE void expandBufAddMethodId(ExpandBuf* pReply, MethodId id) {
-    expandBufAdd4BE(pReply, id);
+    expandBufAdd8BE(pReply, id);
 }
 INLINE void expandBufAddObjectId(ExpandBuf* pReply, ObjectId id) {
     expandBufAdd8BE(pReply, id);

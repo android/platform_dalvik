@@ -160,7 +160,7 @@ void dvmThrowChainedException(ClassObject* excepClass, const char* msg,
         ALOGV("Skipping init of exception %s '%s'",
             excepClass->descriptor, msg);
     } else {
-        assert(excepClass == exception->clazz);
+        assert(excepClass == dvmRefExpandClazzGlobal(exception->clazz));
         if (!initException(exception, msg, cause, self)) {
             /*
              * Whoops.  If we can't initialize the exception, we can't use
@@ -255,7 +255,7 @@ static bool initException(Object* exception, const char* msg, Object* cause,
         kInitThrow
     } initKind = kInitUnknown;
     Method* initMethod = NULL;
-    ClassObject* excepClass = exception->clazz;
+    ClassObject* excepClass = dvmRefExpandClazzGlobal(exception->clazz);
     StringObject* msgStr = NULL;
     bool result = false;
     bool needInitCause = false;
@@ -277,9 +277,9 @@ static bool initException(Object* exception, const char* msg, Object* cause,
     }
 
     if (cause != NULL) {
-        if (!dvmInstanceof(cause->clazz, gDvm.exThrowable)) {
+        if (!dvmInstanceof(dvmRefExpandClazzGlobal(cause->clazz), gDvm.exThrowable)) {
             ALOGE("Tried to init exception with cause '%s'",
-                cause->clazz->descriptor);
+                dvmRefExpandClazzGlobal(cause->clazz)->descriptor);
             dvmAbort();
         }
     }
@@ -410,7 +410,8 @@ static bool initException(Object* exception, const char* msg, Object* cause,
      */
     if (self->exception != NULL) {
         ALOGW("Exception thrown (%s) while throwing internal exception (%s)",
-            self->exception->clazz->descriptor, exception->clazz->descriptor);
+                dvmRefExpandClazzGlobal(self->exception->clazz)->descriptor,
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor);
         goto bail;
     }
 
@@ -431,8 +432,8 @@ static bool initException(Object* exception, const char* msg, Object* cause,
                  */
                 ALOGW("Exception thrown (%s) during initCause() "
                         "of internal exception (%s)",
-                        self->exception->clazz->descriptor,
-                        exception->clazz->descriptor);
+                        dvmRefExpandClazzGlobal(self->exception->clazz)->descriptor,
+                        dvmRefExpandClazzGlobal(exception->clazz)->descriptor);
                 goto bail;
             }
         } else {
@@ -468,8 +469,8 @@ void dvmClearOptException(Thread* self)
  */
 bool dvmIsCheckedException(const Object* exception)
 {
-    if (dvmInstanceof(exception->clazz, gDvm.exError) ||
-        dvmInstanceof(exception->clazz, gDvm.exRuntimeException))
+    if (dvmInstanceof(dvmRefExpandClazzGlobal(exception->clazz), gDvm.exError) ||
+        dvmInstanceof(dvmRefExpandClazzGlobal(exception->clazz), gDvm.exRuntimeException))
     {
         return false;
     } else {
@@ -538,9 +539,9 @@ void dvmWrapException(const char* newExcepStr)
  */
 Object* dvmGetExceptionCause(const Object* exception)
 {
-    if (!dvmInstanceof(exception->clazz, gDvm.exThrowable)) {
+    if (!dvmInstanceof(dvmRefExpandClazzGlobal(exception->clazz), gDvm.exThrowable)) {
         ALOGE("Tried to get cause from object of type '%s'",
-            exception->clazz->descriptor);
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor);
         dvmAbort();
     }
     Object* cause =
@@ -573,19 +574,19 @@ void dvmPrintExceptionStackTrace()
 
     dvmAddTrackedAlloc(exception, self);
     self->exception = NULL;
-    printMethod = dvmFindVirtualMethodHierByDescriptor(exception->clazz,
+    printMethod = dvmFindVirtualMethodHierByDescriptor(dvmRefExpandClazzGlobal(exception->clazz),
                     "printStackTrace", "()V");
     if (printMethod != NULL) {
         JValue unused;
         dvmCallMethod(self, printMethod, exception, &unused);
     } else {
         ALOGW("WARNING: could not find printStackTrace in %s",
-            exception->clazz->descriptor);
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor);
     }
 
     if (self->exception != NULL) {
         ALOGW("NOTE: exception thrown while printing stack trace: %s",
-            self->exception->clazz->descriptor);
+                dvmRefExpandClazzGlobal(self->exception->clazz)->descriptor);
     }
 
     self->exception = exception;
@@ -675,7 +676,7 @@ static int findCatchInMethod(Thread* self, const Method* method, int relPc,
                             "catch list (class index %d, exception %s)",
                             handler->typeIdx,
                             (self->exception != NULL) ?
-                            self->exception->clazz->descriptor : "(none)");
+                            dvmRefExpandClazzGlobal(self->exception->clazz)->descriptor : "(none)");
                     dvmClearException(self);
                     continue;
                 }
@@ -715,7 +716,7 @@ static int findCatchInMethod(Thread* self, const Method* method, int relPc,
 int dvmFindCatchBlock(Thread* self, int relPc, Object* exception,
     bool scanOnly, void** newFrame)
 {
-    u4* fp = self->interpSave.curFrame;
+    StackSlot* fp = self->interpSave.curFrame;
     int catchAddr = -1;
 
     assert(!dvmCheckException(self));
@@ -723,7 +724,7 @@ int dvmFindCatchBlock(Thread* self, int relPc, Object* exception,
     while (true) {
         StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
         catchAddr = findCatchInMethod(self, saveArea->method, relPc,
-                        exception->clazz);
+                        dvmRefExpandClazzGlobal(exception->clazz));
         if (catchAddr >= 0)
             break;
 
@@ -745,7 +746,7 @@ int dvmFindCatchBlock(Thread* self, int relPc, Object* exception,
          * if this was a native method.
          */
         assert(saveArea->prevFrame != NULL);
-        if (dvmIsBreakFrame((u4*)saveArea->prevFrame)) {
+        if (dvmIsBreakFrame((StackSlot*)saveArea->prevFrame)) {
             if (!scanOnly)
                 break;      // bail with catchAddr == -1
 
@@ -762,7 +763,7 @@ int dvmFindCatchBlock(Thread* self, int relPc, Object* exception,
             saveArea = SAVEAREA_FROM_FP(fp);
             fp = saveArea->prevFrame;           // this may be a good one
             while (fp != NULL) {
-                if (!dvmIsBreakFrame((u4*)fp)) {
+                if (!dvmIsBreakFrame((StackSlot*)fp)) {
                     saveArea = SAVEAREA_FROM_FP(fp);
                     if (!dvmIsNativeMethod(saveArea->method))
                         break;
@@ -814,8 +815,9 @@ int dvmFindCatchBlock(Thread* self, int relPc, Object* exception,
  * header file.)
  *
  * If "wantObject" is true, this returns a newly-allocated Object, which is
- * presently an array of integers, but could become something else in the
- * future.  If "wantObject" is false, return plain malloc data.
+ * presently an array of intptr_t's to match the machine pointer sizes.
+ * It could become something else in the future.  If "wantObject" is false,
+ * return plain malloc data.
  *
  * NOTE: if we support class unloading, we will need to scan the class
  * object references out of these arrays.
@@ -823,11 +825,11 @@ int dvmFindCatchBlock(Thread* self, int relPc, Object* exception,
 void* dvmFillInStackTraceInternal(Thread* thread, bool wantObject, size_t* pCount)
 {
     ArrayObject* stackData = NULL;
-    int* simpleData = NULL;
+    intptr_t* simpleData = NULL;
     void* fp;
     void* startFp;
     size_t stackDepth;
-    int* intPtr;
+    intptr_t* intPtr;
 
     if (pCount != NULL)
         *pCount = 0;
@@ -849,7 +851,7 @@ void* dvmFillInStackTraceInternal(Thread* thread, bool wantObject, size_t* pCoun
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
         const Method* method = saveArea->method;
 
-        if (dvmIsBreakFrame((u4*)fp))
+        if (dvmIsBreakFrame((StackSlot*)fp))
             break;
         if (!dvmInstanceof(method->clazz, gDvm.exThrowable))
             break;
@@ -866,7 +868,7 @@ void* dvmFillInStackTraceInternal(Thread* thread, bool wantObject, size_t* pCoun
     while (fp != NULL) {
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
 
-        if (!dvmIsBreakFrame((u4*)fp))
+        if (!dvmIsBreakFrame((StackSlot*)fp))
             stackDepth++;
 
         assert(fp != saveArea->prevFrame);
@@ -879,20 +881,26 @@ void* dvmFillInStackTraceInternal(Thread* thread, bool wantObject, size_t* pCoun
 
     /*
      * We need to store a pointer to the Method and the program counter.
-     * We have 4-byte pointers, so we use '[I'.
+     * For 4-byte pointers use '[I'.
+     * For 8-byte pointers use '[J'.
      */
     if (wantObject) {
+#ifdef _LP64
+        assert(sizeof(Method*) == 8);
+        stackData = dvmAllocPrimitiveArray('J', stackDepth*2, ALLOC_DEFAULT);
+#else
         assert(sizeof(Method*) == 4);
         stackData = dvmAllocPrimitiveArray('I', stackDepth*2, ALLOC_DEFAULT);
+#endif
         if (stackData == NULL) {
             assert(dvmCheckException(dvmThreadSelf()));
             goto bail;
         }
-        intPtr = (int*)(void*)stackData->contents;
+        intPtr = (intptr_t*)(void*)stackData->contents;
     } else {
-        /* array of ints; first entry is stack depth */
-        assert(sizeof(Method*) == sizeof(int));
-        simpleData = (int*) malloc(sizeof(int) * stackDepth*2);
+        /* array of ints/longs; first entry is stack depth */
+        assert(sizeof(Method*) == sizeof(intptr_t));
+        simpleData = (intptr_t*) malloc(sizeof(intptr_t) * stackDepth*2);
         if (simpleData == NULL)
             goto bail;
 
@@ -907,18 +915,18 @@ void* dvmFillInStackTraceInternal(Thread* thread, bool wantObject, size_t* pCoun
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
         const Method* method = saveArea->method;
 
-        if (!dvmIsBreakFrame((u4*)fp)) {
+        if (!dvmIsBreakFrame((StackSlot*)fp)) {
             //ALOGD("EXCEP keeping %s.%s", method->clazz->descriptor,
             //         method->name);
 
-            *intPtr++ = (int) method;
+            *intPtr++ = (intptr_t) method;
             if (dvmIsNativeMethod(method)) {
                 *intPtr++ = 0;      /* no saved PC for native methods */
             } else {
                 assert(saveArea->xtra.currentPc >= method->insns &&
                         saveArea->xtra.currentPc <
                         method->insns + dvmGetMethodInsnsSize(method));
-                *intPtr++ = (int) (saveArea->xtra.currentPc - method->insns);
+                *intPtr++ = (intptr_t) (saveArea->xtra.currentPc - method->insns);
             }
 
             stackDepth--;       // for verification
@@ -950,7 +958,7 @@ ArrayObject* dvmGetStackTrace(const Object* ostackData)
 {
     const ArrayObject* stackData = (const ArrayObject*) ostackData;
     size_t stackSize = stackData->length / 2;
-    const int* intVals = (const int*)(void*)stackData->contents;
+    const intptr_t* intVals = (const intptr_t*)(void*)stackData->contents;
     return dvmGetStackTraceRaw(intVals, stackSize);
 }
 
@@ -962,7 +970,7 @@ ArrayObject* dvmGetStackTrace(const Object* ostackData)
  *
  * The returned array is not added to the "local refs" list.
  */
-ArrayObject* dvmGetStackTraceRaw(const int* intVals, size_t stackDepth)
+ArrayObject* dvmGetStackTraceRaw(const intptr_t* intVals, size_t stackDepth)
 {
     /* allocate a StackTraceElement array */
     ClassObject* klass = gDvm.classJavaLangStackTraceElementArray;
@@ -980,7 +988,7 @@ ArrayObject* dvmGetStackTraceRaw(const int* intVals, size_t stackDepth)
  *
  * "intVals" points to the first {method,pc} pair.
  */
-void dvmFillStackTraceElements(const int* intVals, size_t stackDepth, ArrayObject* steArray)
+void dvmFillStackTraceElements(const intptr_t* intVals, size_t stackDepth, ArrayObject* steArray)
 {
     unsigned int i;
 
@@ -999,7 +1007,7 @@ void dvmFillStackTraceElements(const int* intVals, size_t stackDepth, ArrayObjec
         }
 
         Method* meth = (Method*) *intVals++;
-        int pc = *intVals++;
+        int pc = static_cast<int>(*intVals++);
 
         int lineNumber;
         if (pc == -1)      // broken top frame?
@@ -1041,13 +1049,13 @@ void dvmFillStackTraceElements(const int* intVals, size_t stackDepth, ArrayObjec
 /*
  * Dump the contents of a raw stack trace to the log.
  */
-void dvmLogRawStackTrace(const int* intVals, int stackDepth) {
+void dvmLogRawStackTrace(const intptr_t* intVals, int stackDepth) {
     /*
      * Run through the array of stack frame data.
      */
     for (int i = 0; i < stackDepth; i++) {
         Method* meth = (Method*) *intVals++;
-        int pc = *intVals++;
+        intptr_t pc = *intVals++;
 
         std::string dotName(dvmHumanReadableDescriptor(meth->clazz->descriptor));
         if (dvmIsNativeMethod(meth)) {
@@ -1086,7 +1094,7 @@ static StringObject* getExceptionMessage(Object* exception)
         dvmClearException(self);
     }
 
-    getMessageMethod = dvmFindVirtualMethodHierByDescriptor(exception->clazz,
+    getMessageMethod = dvmFindVirtualMethodHierByDescriptor(dvmRefExpandClazzGlobal(exception->clazz),
             "getMessage", "()Ljava/lang/String;");
     if (getMessageMethod != NULL) {
         /* could be in NATIVE mode from CheckJNI, so switch state */
@@ -1101,12 +1109,12 @@ static StringObject* getExceptionMessage(Object* exception)
         dvmChangeStatus(self, oldStatus);
     } else {
         ALOGW("WARNING: could not find getMessage in %s",
-            exception->clazz->descriptor);
+            dvmRefExpandClazzGlobal(exception->clazz)->descriptor);
     }
 
     if (dvmGetException(self) != NULL) {
         ALOGW("NOTE: exception thrown while retrieving exception message: %s",
-            dvmGetException(self)->clazz->descriptor);
+                dvmRefExpandClazzGlobal(dvmGetException(self)->clazz)->descriptor);
         /* will be overwritten below */
     }
 
@@ -1121,7 +1129,7 @@ static StringObject* getExceptionMessage(Object* exception)
  * Print the direct stack trace of the given exception to the log.
  */
 static void logStackTraceOf(Object* exception) {
-    std::string className(dvmHumanReadableDescriptor(exception->clazz->descriptor));
+    std::string className(dvmHumanReadableDescriptor(dvmRefExpandClazzGlobal(exception->clazz)->descriptor));
     StringObject* messageStr = getExceptionMessage(exception);
     if (messageStr != NULL) {
         char* cp = dvmCreateCstrFromString(messageStr);
@@ -1148,7 +1156,7 @@ static void logStackTraceOf(Object* exception) {
     }
 
     int stackSize = stackData->length / 2;
-    const int* intVals = (const int*)(void*)stackData->contents;
+    const intptr_t* intVals = (const intptr_t*)(void*)stackData->contents;
 
     dvmLogRawStackTrace(intVals, stackSize);
 }
@@ -1292,7 +1300,7 @@ void dvmThrowExceptionInInitializerError()
     Object* exception = dvmGetException(self);
 
     // We only wrap non-Error exceptions; an Error can just be used as-is.
-    if (dvmInstanceof(exception->clazz, gDvm.exError)) {
+    if (dvmInstanceof(dvmRefExpandClazzGlobal(exception->clazz), gDvm.exError)) {
         return;
     }
 

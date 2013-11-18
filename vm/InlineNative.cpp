@@ -108,7 +108,7 @@ extern "C" u4 __memcmp16(const u2* s0, const u2* s1, size_t count);
  * This exists only for benchmarks.
  */
 static bool org_apache_harmony_dalvik_NativeTestTarget_emptyInlineMethod(
-    u4 arg0, u4 arg1, u4 arg2, u4 arg3, JValue* pResult)
+    StackSlot arg0, StackSlot arg1, StackSlot arg2, StackSlot arg3, JValue* pResult)
 {
     // do nothing
     return true;
@@ -124,8 +124,8 @@ static bool org_apache_harmony_dalvik_NativeTestTarget_emptyInlineMethod(
 /*
  * public char charAt(int index)
  */
-bool javaLangString_charAt(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangString_charAt(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     int count, offset;
     ArrayObject* chars;
@@ -196,8 +196,8 @@ static void badMatch(StringObject* thisStrObj, StringObject* compStrObj,
 /*
  * public int compareTo(String s)
  */
-bool javaLangString_compareTo(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangString_compareTo(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     /*
      * Null reference check on "this".  Normally this is performed during
@@ -291,8 +291,8 @@ bool javaLangString_compareTo(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public boolean equals(Object anObject)
  */
-bool javaLangString_equals(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangString_equals(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     /*
      * Null reference check on "this".
@@ -400,8 +400,8 @@ bool javaLangString_equals(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public int length()
  */
-bool javaLangString_length(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangString_length(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     //ALOGI("String.length this=0x%08x pResult=%p", arg0, pResult);
 
@@ -418,8 +418,8 @@ bool javaLangString_length(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public boolean isEmpty()
  */
-bool javaLangString_isEmpty(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangString_isEmpty(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     //ALOGI("String.isEmpty this=0x%08x pResult=%p", arg0, pResult);
 
@@ -493,8 +493,8 @@ static inline int indexOfCommon(Object* strObj, int ch, int start)
  * The character must be <= 0xffff; this method does not handle supplementary
  * characters.
  */
-bool javaLangString_fastIndexOf_II(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangString_fastIndexOf_II(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg3, JValue* pResult)
 {
     /* null reference check on "this" */
     if ((Object*) arg0 == NULL) {
@@ -527,8 +527,8 @@ union Convert64 {
 /*
  * public static int abs(int)
  */
-bool javaLangMath_abs_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_abs_int(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     s4 val = (s4) arg0;
     pResult->i = (val >= 0) ? val : -val;
@@ -538,13 +538,18 @@ bool javaLangMath_abs_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static long abs(long)
  */
-bool javaLangMath_abs_long(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_abs_long(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
+#ifndef _LP64
     Convert64 convert;
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
     s8 val = convert.ll;
+#else
+    // On 64bit systems, the second half of the pair is wasted.
+    s8 val = (s8) arg0;
+#endif
     pResult->j = (val >= 0) ? val : -val;
     return true;
 }
@@ -552,12 +557,12 @@ bool javaLangMath_abs_long(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static float abs(float)
  */
-bool javaLangMath_abs_float(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_abs_float(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     Convert32 convert;
     /* clear the sign bit; assumes a fairly common fp representation */
-    convert.arg = arg0 & 0x7fffffff;
+    convert.arg = (u4)arg0 & 0x7fffffff;
     pResult->f = convert.ff;
     return true;
 }
@@ -565,12 +570,17 @@ bool javaLangMath_abs_float(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static double abs(double)
  */
-bool javaLangMath_abs_double(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_abs_double(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     Convert64 convert;
+#ifndef _LP64
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
+#else
+    // On 64bit systems, the second half of the pair is wasted.
+    convert.ll = arg0;
+#endif
     /* clear the sign bit in the (endian-dependent) high word */
     convert.ll &= 0x7fffffffffffffffULL;
     pResult->d = convert.dd;
@@ -580,8 +590,8 @@ bool javaLangMath_abs_double(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static int min(int)
  */
-bool javaLangMath_min_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_min_int(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     pResult->i = ((s4) arg0 < (s4) arg1) ? arg0 : arg1;
     return true;
@@ -590,8 +600,8 @@ bool javaLangMath_min_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static int max(int)
  */
-bool javaLangMath_max_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_max_int(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     pResult->i = ((s4) arg0 > (s4) arg1) ? arg0 : arg1;
     return true;
@@ -604,12 +614,16 @@ bool javaLangMath_max_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
  * by an fcmpd of the result against itself.  If it doesn't match (i.e.
  * it's NaN), the libm sqrt() is invoked.
  */
-bool javaLangMath_sqrt(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_sqrt(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     Convert64 convert;
+#ifndef _LP64
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
+#else
+    convert.ll = arg0;
+#endif
     pResult->d = sqrt(convert.dd);
     return true;
 }
@@ -617,12 +631,16 @@ bool javaLangMath_sqrt(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static double cos(double)
  */
-bool javaLangMath_cos(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_cos(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     Convert64 convert;
+#ifndef _LP64
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
+#else
+    convert.ll = arg0;
+#endif
     pResult->d = cos(convert.dd);
     return true;
 }
@@ -630,12 +648,16 @@ bool javaLangMath_cos(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * public static double sin(double)
  */
-bool javaLangMath_sin(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult)
+bool javaLangMath_sin(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult)
 {
     Convert64 convert;
+#ifndef _LP64
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
+#else
+    convert.ll = arg0;
+#endif
     pResult->d = sin(convert.dd);
     return true;
 }
@@ -646,27 +668,27 @@ bool javaLangMath_sin(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
  * ===========================================================================
  */
 
-bool javaLangFloat_floatToIntBits(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-    JValue* pResult)
+bool javaLangFloat_floatToIntBits(StackSlot arg0, StackSlot arg1, StackSlot arg2
+    , StackSlot arg, JValue* pResult)
 {
     Convert32 convert;
-    convert.arg = arg0;
-    pResult->i = isnanf(convert.ff) ? 0x7fc00000 : arg0;
+    convert.arg = (u4)arg0;
+    pResult->i = isnanf(convert.ff) ? 0x7fc00000 : (u4)arg0;
     return true;
 }
 
-bool javaLangFloat_floatToRawIntBits(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-    JValue* pResult)
+bool javaLangFloat_floatToRawIntBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult)
 {
-    pResult->i = arg0;
+    pResult->i = (u4)arg0;
     return true;
 }
 
-bool javaLangFloat_intBitsToFloat(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-    JValue* pResult)
+bool javaLangFloat_intBitsToFloat(StackSlot arg0, StackSlot arg1, StackSlot arg2
+    , StackSlot arg, JValue* pResult)
 {
     Convert32 convert;
-    convert.arg = arg0;
+    convert.arg = (u4) arg0;
     pResult->f = convert.ff;
     return true;
 }
@@ -677,32 +699,44 @@ bool javaLangFloat_intBitsToFloat(u4 arg0, u4 arg1, u4 arg2, u4 arg,
  * ===========================================================================
  */
 
-bool javaLangDouble_doubleToLongBits(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-    JValue* pResult)
+bool javaLangDouble_doubleToLongBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult)
 {
     Convert64 convert;
+#ifndef _LP64
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
+#else
+    convert.ll = arg0;
+#endif
     pResult->j = isnan(convert.dd) ? 0x7ff8000000000000LL : convert.ll;
     return true;
 }
 
-bool javaLangDouble_doubleToRawLongBits(u4 arg0, u4 arg1, u4 arg2,
-    u4 arg, JValue* pResult)
+bool javaLangDouble_doubleToRawLongBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult)
 {
+#ifndef _LP64
     Convert64 convert;
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
     pResult->j = convert.ll;
+#else
+    pResult->j = arg0;
+#endif
     return true;
 }
 
-bool javaLangDouble_longBitsToDouble(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-    JValue* pResult)
+bool javaLangDouble_longBitsToDouble(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult)
 {
     Convert64 convert;
+#ifndef _LP64
     convert.arg[0] = arg0;
     convert.arg[1] = arg1;
+#else
+    convert.ll = arg0;
+#endif
     pResult->d = convert.dd;
     return true;
 }
@@ -897,8 +931,8 @@ Method* dvmResolveInlineNative(int opIndex)
  * Make an inline call for the "debug" interpreter, used when the debugger
  * or profiler is active.
  */
-bool dvmPerformInlineOp4Dbg(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult, int opIndex)
+bool dvmPerformInlineOp4Dbg(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult, int opIndex)
 {
     Method* method = dvmResolveInlineNative(opIndex);
     if (method == NULL) {

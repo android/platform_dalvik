@@ -48,9 +48,9 @@ struct RegisterMap;
  * arguments passed in, but some functions only care about the first two.
  * Passing extra arguments to a C function is (mostly) harmless.
  */
-typedef void (*DalvikBridgeFunc)(const u4* args, JValue* pResult,
+typedef void (*DalvikBridgeFunc)(const StackSlot* args, JValue* pResult,
     const Method* method, struct Thread* self);
-typedef void (*DalvikNativeFunc)(const u4* args, JValue* pResult);
+typedef void (*DalvikNativeFunc)(const StackSlot* args, JValue* pResult);
 
 
 /* vm-internal access flags and related definitions */
@@ -145,7 +145,7 @@ enum ClassStatus {
  */
 #define CLASS_WALK_SUPER ((unsigned int)(3))
 #define CLASS_SMALLEST_OFFSET (sizeof(struct Object))
-#define CLASS_BITS_PER_WORD (sizeof(unsigned long int) * 8)
+#define CLASS_BITS_PER_WORD (sizeof(unsigned int) * 8)
 #define CLASS_OFFSET_ALIGNMENT 4
 #define CLASS_HIGH_BIT ((unsigned int)1 << (CLASS_BITS_PER_WORD - 1))
 /*
@@ -203,13 +203,13 @@ struct InterfaceEntry {
  */
 struct Object {
     /* ptr to class object */
-    ClassObject*    clazz;
+    ClassObjectRef  clazz;
 
     /*
      * A word containing either a "thin" lock or a "fat" monitor.  See
      * the comments in Sync.c for a description of its layout.
      */
-    u4              lock;
+    uintptr_t              lock;
 };
 
 /*
@@ -761,8 +761,8 @@ INLINE bool dvmIsClassVerified(const ClassObject* clazz) {
  */
 INLINE bool dvmIsClassObject(const Object* obj) {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    return IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISCLASS);
+    assert(dvmRefExpandClazzGlobal(obj->clazz) != NULL);
+    return IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISCLASS);
 }
 
 /*

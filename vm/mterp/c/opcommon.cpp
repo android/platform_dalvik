@@ -64,7 +64,7 @@ GOTO_TARGET_DECL(exceptionThrown);
         vdst = INST_A(inst);                                                \
         vsrc1 = INST_B(inst);                                               \
         ILOGV("|int-to-%s v%d,v%d", (_opname), vdst, vsrc1);                \
-        SET_REGISTER(vdst, (_type) GET_REGISTER(vsrc1));                    \
+        SET_REGISTER_INT(vdst, (_type) GET_REGISTER_INT(vsrc1));            \
         FINISH(1);
 
 /* NOTE: the comparison result is always a signed 4-byte integer */
@@ -90,15 +90,49 @@ GOTO_TARGET_DECL(exceptionThrown);
         else                                                                \
             result = (_nanVal);                                             \
         ILOGV("+ result=%d", result);                                       \
-        SET_REGISTER(vdst, result);                                         \
+        SET_REGISTER_INT(vdst, result);                                     \
     }                                                                       \
     FINISH(2);
+
+#define HANDLE_OP_IF_EQ(_opcode, _opname, _cmp)                             \
+    HANDLE_OPCODE(_opcode /*vA, vB, +CCCC*/)                                \
+        vsrc1 = INST_A(inst);                                               \
+        vsrc2 = INST_B(inst);                                               \
+        if (GET_REGISTER(vsrc1) _cmp GET_REGISTER(vsrc2)) {         \
+            int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
+            ILOGV("|if-%s v%d,v%d,+0x%04x", (_opname), vsrc1, vsrc2,        \
+                branchOffset);                                              \
+            ILOGV("> branch taken");                                        \
+            if (branchOffset < 0)                                           \
+                PERIODIC_CHECKS(branchOffset);                              \
+            FINISH(branchOffset);                                           \
+        } else {                                                            \
+            ILOGV("|if-%s v%d,v%d,-", (_opname), vsrc1, vsrc2);             \
+            FINISH(2);                                                      \
+        }
+
+#define HANDLE_OP_IF_EQZ(_opcode, _opname, _cmp)                             \
+    HANDLE_OPCODE(_opcode /*vA, vB, +CCCC*/)                                \
+        vsrc1 = INST_AA(inst);                                               \
+        if (GET_REGISTER(vsrc1) _cmp 0) {         \
+            int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
+            ILOGV("|if-%s v%d,+0x%04x", (_opname), vsrc1,        \
+                branchOffset);                                              \
+            ILOGV("> branch taken");                                        \
+            if (branchOffset < 0)                                           \
+                PERIODIC_CHECKS(branchOffset);                              \
+            FINISH(branchOffset);                                           \
+        } else {                                                            \
+            ILOGV("|if-%s v%d -", (_opname), vsrc1);             \
+            FINISH(2);                                                      \
+        }
+
 
 #define HANDLE_OP_IF_XX(_opcode, _opname, _cmp)                             \
     HANDLE_OPCODE(_opcode /*vA, vB, +CCCC*/)                                \
         vsrc1 = INST_A(inst);                                               \
         vsrc2 = INST_B(inst);                                               \
-        if ((s4) GET_REGISTER(vsrc1) _cmp (s4) GET_REGISTER(vsrc2)) {       \
+        if ((s4)GET_REGISTER(vsrc1) _cmp (s4)GET_REGISTER(vsrc2)) {         \
             int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
             ILOGV("|if-%s v%d,v%d,+0x%04x", (_opname), vsrc1, vsrc2,        \
                 branchOffset);                                              \
@@ -145,8 +179,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         ILOGV("|%s-int v%d,v%d", (_opname), vdst, vsrc1);                   \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, secondVal, result;                                 \
-            firstVal = GET_REGISTER(vsrc1);                                 \
-            secondVal = GET_REGISTER(vsrc2);                                \
+            firstVal = GET_REGISTER_INT(vsrc1);                             \
+            secondVal = GET_REGISTER_INT(vsrc2);                            \
             if (secondVal == 0) {                                           \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -160,11 +194,11 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op secondVal;                            \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
             /* non-div/rem case */                                          \
-            SET_REGISTER(vdst,                                              \
-                (s4) GET_REGISTER(vsrc1) _op (s4) GET_REGISTER(vsrc2));     \
+            SET_REGISTER_INT(vdst,                                          \
+                (u4) GET_REGISTER_INT(vsrc1) _op (s4) GET_REGISTER_INT(vsrc2));\
         }                                                                   \
     }                                                                       \
     FINISH(2);
@@ -178,8 +212,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         vsrc1 = srcRegs & 0xff;                                             \
         vsrc2 = srcRegs >> 8;                                               \
         ILOGV("|%s-int v%d,v%d", (_opname), vdst, vsrc1);                   \
-        SET_REGISTER(vdst,                                                  \
-            _cast GET_REGISTER(vsrc1) _op (GET_REGISTER(vsrc2) & 0x1f));    \
+        SET_REGISTER_INT(vdst,                                              \
+            _cast GET_REGISTER_INT(vsrc1) _op (GET_REGISTER_INT(vsrc2) & 0x1f));\
     }                                                                       \
     FINISH(2);
 
@@ -192,7 +226,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             (_opname), vdst, vsrc1, vsrc2);                                 \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, result;                                            \
-            firstVal = GET_REGISTER(vsrc1);                                 \
+            firstVal = GET_REGISTER_INT(vsrc1);                             \
             if ((s2) vsrc2 == 0) {                                          \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -207,10 +241,10 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op (s2) vsrc2;                           \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
             /* non-div/rem case */                                          \
-            SET_REGISTER(vdst, GET_REGISTER(vsrc1) _op (s2) vsrc2);         \
+            SET_REGISTER_INT(vdst, GET_REGISTER_INT(vsrc1) _op (s2) vsrc2); \
         }                                                                   \
         FINISH(2);
 
@@ -226,7 +260,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             (_opname), vdst, vsrc1, vsrc2);                                 \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, result;                                            \
-            firstVal = GET_REGISTER(vsrc1);                                 \
+            firstVal = GET_REGISTER_INT(vsrc1);                             \
             if ((s1) vsrc2 == 0) {                                          \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -240,10 +274,10 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op ((s1) vsrc2);                         \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
-            SET_REGISTER(vdst,                                              \
-                (s4) GET_REGISTER(vsrc1) _op (s1) vsrc2);                   \
+            SET_REGISTER_INT(vdst,                                          \
+                (s4) GET_REGISTER_INT(vsrc1) _op (s1) vsrc2);               \
         }                                                                   \
     }                                                                       \
     FINISH(2);
@@ -258,8 +292,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         vsrc2 = litInfo >> 8;       /* constant */                          \
         ILOGV("|%s-int/lit8 v%d,v%d,#+0x%02x",                              \
             (_opname), vdst, vsrc1, vsrc2);                                 \
-        SET_REGISTER(vdst,                                                  \
-            _cast GET_REGISTER(vsrc1) _op (vsrc2 & 0x1f));                  \
+        SET_REGISTER_INT(vdst,                                              \
+            _cast GET_REGISTER_INT(vsrc1) _op (vsrc2 & 0x1f));              \
     }                                                                       \
     FINISH(2);
 
@@ -270,8 +304,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         ILOGV("|%s-int-2addr v%d,v%d", (_opname), vdst, vsrc1);             \
         if (_chkdiv != 0) {                                                 \
             s4 firstVal, secondVal, result;                                 \
-            firstVal = GET_REGISTER(vdst);                                  \
-            secondVal = GET_REGISTER(vsrc1);                                \
+            firstVal = GET_REGISTER_INT(vdst);                              \
+            secondVal = GET_REGISTER_INT(vsrc1);                            \
             if (secondVal == 0) {                                           \
                 EXPORT_PC();                                                \
                 dvmThrowArithmeticException("divide by zero");              \
@@ -285,10 +319,10 @@ GOTO_TARGET_DECL(exceptionThrown);
             } else {                                                        \
                 result = firstVal _op secondVal;                            \
             }                                                               \
-            SET_REGISTER(vdst, result);                                     \
+            SET_REGISTER_INT(vdst, result);                                 \
         } else {                                                            \
-            SET_REGISTER(vdst,                                              \
-                (s4) GET_REGISTER(vdst) _op (s4) GET_REGISTER(vsrc1));      \
+            SET_REGISTER_INT(vdst,                                          \
+                (s4) GET_REGISTER_INT(vdst) _op (s4) GET_REGISTER_INT(vsrc1));\
         }                                                                   \
         FINISH(1);
 
@@ -297,8 +331,8 @@ GOTO_TARGET_DECL(exceptionThrown);
         vdst = INST_A(inst);                                                \
         vsrc1 = INST_B(inst);                                               \
         ILOGV("|%s-int-2addr v%d,v%d", (_opname), vdst, vsrc1);             \
-        SET_REGISTER(vdst,                                                  \
-            _cast GET_REGISTER(vdst) _op (GET_REGISTER(vsrc1) & 0x1f));     \
+        SET_REGISTER_INT(vdst,                                              \
+            _cast GET_REGISTER_INT(vdst) _op (GET_REGISTER_INT(vsrc1) & 0x1f));\
         FINISH(1);
 
 #define HANDLE_OP_X_LONG(_opcode, _opname, _op, _chkdiv)                    \
@@ -458,11 +492,72 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst,                                        \
             ((_type*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)]);      \
-        ILOGV("+ AGET[%d]=%#x", GET_REGISTER(vsrc2), GET_REGISTER(vdst));   \
+        ILOGV("+ AGET[%d]=%08"PRIx64, vdst, (u8)GET_REGISTER(vdst));   \
     }                                                                       \
     FINISH(2);
 
+#if defined(WITH_COMPREFS)
+
+#define HANDLE_OP_AGET_OBJECT(_opcode, _opname, _type, _regsize)            \
+    HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+    {                                                                       \
+        ArrayObject* arrayObj;                                              \
+        u2 arrayInfo;                                                       \
+        EXPORT_PC();                                                        \
+        vdst = INST_AA(inst);                                               \
+        arrayInfo = FETCH(1);                                               \
+        vsrc1 = arrayInfo & 0xff;    /* array ptr */                        \
+        vsrc2 = arrayInfo >> 8;      /* index */                            \
+        ILOGV("|aget%s v%d,v%d,v%d", (_opname), vdst, vsrc1, vsrc2);        \
+        arrayObj = (ArrayObject*) GET_REGISTER(vsrc1);                      \
+        if (!checkForNull((Object*) arrayObj))                              \
+            GOTO_exceptionThrown();                                         \
+        if (GET_REGISTER(vsrc2) >= arrayObj->length) {                      \
+            dvmThrowArrayIndexOutOfBoundsException(                         \
+                arrayObj->length, GET_REGISTER(vsrc2));                     \
+            GOTO_exceptionThrown();                                         \
+        }                                                                   \
+        SET_REGISTER##_regsize(vdst,                                        \
+            (StackSlot)dvmRefExpand(((u4*)((void*)arrayObj->contents))[GET_REGISTER(vsrc2)], heapBase));      \
+        ILOGV("+ AGET[%d]=%"PRIx64, (u4)GET_REGISTER(vsrc2), (u8)GET_REGISTER(vdst));   \
+    }                                                                       \
+    FINISH(2);
+
+#else
+
+#define HANDLE_OP_AGET_OBJECT(_opcode, _opname, _type, _regsize)            \
+                          HANDLE_OP_AGET(_opcode, _opname, _type, _regsize)
+#endif
+
 #define HANDLE_OP_APUT(_opcode, _opname, _type, _regsize)                   \
+    HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+    {                                                                       \
+        ArrayObject* arrayObj;                                              \
+        u2 arrayInfo;                                                       \
+        EXPORT_PC();                                                        \
+        vdst = INST_AA(inst);       /* AA: source value */                  \
+        arrayInfo = FETCH(1);                                               \
+        vsrc1 = arrayInfo & 0xff;   /* BB: array ptr */                     \
+        vsrc2 = arrayInfo >> 8;     /* CC: index */                         \
+        ILOGV("|aput%s v%d,v%d,v%d", (_opname), vdst, vsrc1, vsrc2);        \
+        arrayObj = (ArrayObject*) GET_REGISTER(vsrc1);                      \
+        ILOGV("+ ARRAY=%08"PRIx64, (uint64_t)arrayObj);                     \
+        if (!checkForNull((Object*) arrayObj))                              \
+            GOTO_exceptionThrown();                                         \
+        if (GET_REGISTER(vsrc2) >= arrayObj->length) {                      \
+            dvmThrowArrayIndexOutOfBoundsException(                         \
+                arrayObj->length, GET_REGISTER(vsrc2));                     \
+            GOTO_exceptionThrown();                                         \
+        }                                                                   \
+        ILOGV("+ APUT[%d]=%"PRIx64, (u4)GET_REGISTER(vsrc2), (u8)GET_REGISTER(vdst));\
+        ((_type*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)] =          \
+            GET_REGISTER##_regsize(vdst);                                   \
+    }                                                                       \
+    FINISH(2);
+
+#if defined(WITH_COMPREFS)
+
+#define HANDLE_OP_APUT_OBJECT(_opcode, _opname, _type, _regsize)            \
     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
     {                                                                       \
         ArrayObject* arrayObj;                                              \
@@ -481,11 +576,16 @@ GOTO_TARGET_DECL(exceptionThrown);
                 arrayObj->length, GET_REGISTER(vsrc2));                     \
             GOTO_exceptionThrown();                                         \
         }                                                                   \
-        ILOGV("+ APUT[%d]=0x%08x", GET_REGISTER(vsrc2), GET_REGISTER(vdst));\
-        ((_type*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)] =          \
-            GET_REGISTER##_regsize(vdst);                                   \
+        ILOGV("+ APUT[%d]=%"PRIx64, (u4)GET_REGISTER(vsrc2), (u8)GET_REGISTER(vdst));\
+        ((u4*)(void*)arrayObj->contents)[GET_REGISTER(vsrc2)] =          \
+            dvmRefCompress(GET_REGISTER##_regsize(vdst));                   \
     }                                                                       \
     FINISH(2);
+#else
+
+#define HANDLE_OP_APUT_OBJECT(_opcode, _opname, _type, _regsize)            \
+             HANDLE_OP_APUT(_opcode, _opname, _type, _regsize)
+#endif
 
 /*
  * It's possible to get a bad value out of a field with sub-32-bit stores
@@ -525,7 +625,33 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         SET_REGISTER##_regsize(vdst,                                        \
             dvmGetField##_ftype(obj, ifield->byteOffset));                  \
-        ILOGV("+ IGET '%s'=0x%08llx", ifield->name,                         \
+        ILOGV("+ IGET '%s'=0x%08"PRIx64, ifield->name,                         \
+            (u8) GET_REGISTER##_regsize(vdst));                             \
+    }                                                                       \
+    FINISH(2);
+
+#define HANDLE_IGET_OBJECT_X(_opcode, _opname, _ftype, _regsize)            \
+    HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
+    {                                                                       \
+        InstField* ifield;                                                  \
+        Object* obj;                                                        \
+        EXPORT_PC();                                                        \
+        vdst = INST_A(inst);                                                \
+        vsrc1 = INST_B(inst);   /* object ptr */                            \
+        ref = FETCH(1);         /* field ref */                             \
+        ILOGV("|iget%s v%d,v%d,field@0x%04x", (_opname), vdst, vsrc1, ref); \
+        obj = (Object*) GET_REGISTER(vsrc1);                                \
+        if (!checkForNull(obj))                                             \
+            GOTO_exceptionThrown();                                         \
+        ifield = (InstField*) dvmDexGetResolvedField(methodClassDex, ref);  \
+        if (ifield == NULL) {                                               \
+            ifield = dvmResolveInstField(curMethod->clazz, ref);            \
+            if (ifield == NULL)                                             \
+                GOTO_exceptionThrown();                                     \
+        }                                                                   \
+        SET_REGISTER##_regsize(vdst,                                        \
+            dvmGetField##_ftype##Base(obj, ifield->byteOffset, heapBase));  \
+        ILOGV("+ IGET '%s'=0x%08"PRIx64, ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -543,7 +669,26 @@ GOTO_TARGET_DECL(exceptionThrown);
         if (!checkForNullExportPC(obj, fp, pc))                             \
             GOTO_exceptionThrown();                                         \
         SET_REGISTER##_regsize(vdst, dvmGetField##_ftype(obj, ref));        \
-        ILOGV("+ IGETQ %d=0x%08llx", ref,                                   \
+        ILOGV("+ IGETQ %d=0x%08"PRIx64, ref,                                   \
+            (u8) GET_REGISTER##_regsize(vdst));                             \
+    }                                                                       \
+    FINISH(2);
+
+#define HANDLE_IGET_OBJECT_X_QUICK(_opcode, _opname, _ftype, _regsize)      \
+    HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
+    {                                                                       \
+        Object* obj;                                                        \
+        vdst = INST_A(inst);                                                \
+        vsrc1 = INST_B(inst);   /* object ptr */                            \
+        ref = FETCH(1);         /* field offset */                          \
+        ILOGV("|iget%s-quick v%d,v%d,field@+%u",                            \
+            (_opname), vdst, vsrc1, ref);                                   \
+        obj = (Object*) GET_REGISTER(vsrc1);                                \
+        if (!checkForNullExportPC(obj, fp, pc))                             \
+            GOTO_exceptionThrown();                                         \
+        SET_REGISTER##_regsize(vdst,                                        \
+                     dvmGetField##_ftype##Base(obj, ref, heapBase));        \
+        ILOGV("+ IGETQ %d=0x%08"PRIx64, ref,                                   \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -569,10 +714,42 @@ GOTO_TARGET_DECL(exceptionThrown);
         }                                                                   \
         dvmSetField##_ftype(obj, ifield->byteOffset,                        \
             GET_REGISTER##_regsize(vdst));                                  \
-        ILOGV("+ IPUT '%s'=0x%08llx", ifield->name,                         \
+        ILOGV("+ IPUT '%s'=0x%08"PRIx64, ifield->name,                         \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
+
+#if defined(WITH_COMPREFS)
+#define HANDLE_IPUT_OBJECT_X(_opcode, _opname, _ftype, _regsize)            \
+    HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
+    {                                                                       \
+        InstField* ifield;                                                  \
+        Object* obj;                                                        \
+        EXPORT_PC();                                                        \
+        vdst = INST_A(inst);                                                \
+        vsrc1 = INST_B(inst);   /* object ptr */                            \
+        ref = FETCH(1);         /* field ref */                             \
+        ILOGV("|iput%s v%d,v%d,field@0x%04x", (_opname), vdst, vsrc1, ref); \
+        obj = (Object*) GET_REGISTER(vsrc1);                                \
+        if (!checkForNull(obj))                                             \
+            GOTO_exceptionThrown();                                         \
+        ifield = (InstField*) dvmDexGetResolvedField(methodClassDex, ref);  \
+        if (ifield == NULL) {                                               \
+            ifield = dvmResolveInstField(curMethod->clazz, ref);            \
+            if (ifield == NULL)                                             \
+                GOTO_exceptionThrown();                                     \
+        }                                                                   \
+        dvmSetField##_ftype##Base(obj, ifield->byteOffset,                  \
+            GET_REGISTER##_regsize(vdst), heapBase);                        \
+        ILOGV("+ IPUT '%s'=0x%08"PRIxPTR, ifield->name,                         \
+            GET_REGISTER##_regsize(vdst));                             \
+    }                                                                       \
+    FINISH(2);
+#else
+
+#define HANDLE_IPUT_OBJECT_X(_opcode, _opname, _ftype, _regsize)            \
+               HANDLE_IPUT_X(_opcode, _opname, _ftype, _regsize)
+#endif
 
 #define HANDLE_IPUT_X_QUICK(_opcode, _opname, _ftype, _regsize)             \
     HANDLE_OPCODE(_opcode /*vA, vB, field@CCCC*/)                           \
@@ -586,8 +763,9 @@ GOTO_TARGET_DECL(exceptionThrown);
         obj = (Object*) GET_REGISTER(vsrc1);                                \
         if (!checkForNullExportPC(obj, fp, pc))                             \
             GOTO_exceptionThrown();                                         \
+        ILOGD("|v0=%p v1=%p",(void *)GET_REGISTER##_regsize(vdst), (void *)obj);                \
         dvmSetField##_ftype(obj, ref, GET_REGISTER##_regsize(vdst));        \
-        ILOGV("+ IPUTQ %d=0x%08llx", ref,                                   \
+        ILOGV("+ IPUTQ %d=0x%08"PRIx64, ref,                                   \
             (u8) GET_REGISTER##_regsize(vdst));                             \
     }                                                                       \
     FINISH(2);
@@ -618,7 +796,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             }                                                               \
         }                                                                   \
         SET_REGISTER##_regsize(vdst, dvmGetStaticField##_ftype(sfield));    \
-        ILOGV("+ SGET '%s'=0x%08llx",                                       \
+        ILOGV("+ SGET '%s'=0x%08"PRIx64,                                       \
             sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(2);
@@ -641,7 +819,7 @@ GOTO_TARGET_DECL(exceptionThrown);
             }                                                               \
         }                                                                   \
         dvmSetStaticField##_ftype(sfield, GET_REGISTER##_regsize(vdst));    \
-        ILOGV("+ SPUT '%s'=0x%08llx",                                       \
+        ILOGV("+ SPUT '%s'=0x%08"PRIx64,                                       \
             sfield->name, (u8)GET_REGISTER##_regsize(vdst));                \
     }                                                                       \
     FINISH(2);

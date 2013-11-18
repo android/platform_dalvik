@@ -30,8 +30,8 @@ Method* dvmFindInlinableMethod(const char* classDescriptor,
 /*
  * Basic 4-argument inline operation handler.
  */
-typedef bool (*InlineOp4Func)(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult);
+typedef bool (*InlineOp4Func)(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
 /*
  * Table of inline operations.
@@ -111,8 +111,8 @@ extern const InlineOperation gDvmInlineOpsTable[];
  * Returns "true" if everything went normally, "false" if an exception
  * was thrown.
  */
-INLINE bool dvmPerformInlineOp4Std(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult, int opIndex)
+INLINE bool dvmPerformInlineOp4Std(StackSlot arg0, StackSlot arg1, 
+    StackSlot arg2, StackSlot arg3, JValue* pResult, int opIndex)
 {
     return (*gDvmInlineOpsTable[opIndex].func)(arg0, arg1, arg2, arg3, pResult);
 }
@@ -120,8 +120,8 @@ INLINE bool dvmPerformInlineOp4Std(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
 /*
  * Like the "std" version, but will emit profiling info.
  */
-bool dvmPerformInlineOp4Dbg(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-    JValue* pResult, int opIndex);
+bool dvmPerformInlineOp4Dbg(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult, int opIndex);
 
 /*
  * Return method & populate the table on first use.
@@ -131,70 +131,70 @@ extern "C" Method* dvmResolveInlineNative(int opIndex);
 /*
  * The actual inline native definitions.
  */
-bool javaLangString_charAt(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                           JValue* pResult);
+bool javaLangString_charAt(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangString_compareTo(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                              JValue* pResult);
+bool javaLangString_compareTo(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangString_equals(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                           JValue* pResult);
+bool javaLangString_equals(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangString_length(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                           JValue* pResult);
+bool javaLangString_length(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangString_isEmpty(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                            JValue* pResult);
+bool javaLangString_isEmpty(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangString_fastIndexOf_II(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                                   JValue* pResult);
+bool javaLangString_fastIndexOf_II(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_abs_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                          JValue* pResult);
+bool javaLangMath_abs_int(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_abs_long(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                           JValue* pResult);
+bool javaLangMath_abs_long(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_abs_float(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                            JValue* pResult);
+bool javaLangMath_abs_float(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_abs_double(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                             JValue* pResult);
+bool javaLangMath_abs_double(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_min_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                          JValue* pResult);
+bool javaLangMath_min_int(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_max_int(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                          JValue* pResult);
+bool javaLangMath_max_int(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_sqrt(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                       JValue* pResult);
+bool javaLangMath_sqrt(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_cos(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                      JValue* pResult);
+bool javaLangMath_cos(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangMath_sin(u4 arg0, u4 arg1, u4 arg2, u4 arg3,
-                      JValue* pResult);
+bool javaLangMath_sin(StackSlot arg0, StackSlot arg1, StackSlot arg2,
+    StackSlot arg3, JValue* pResult);
 
-bool javaLangFloat_floatToIntBits(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-                                  JValue* pResult);
+bool javaLangFloat_floatToIntBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
-bool javaLangFloat_floatToRawIntBits(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-                                     JValue* pResult);
+bool javaLangFloat_floatToRawIntBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
-bool javaLangFloat_intBitsToFloat(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-                                  JValue* pResult);
+bool javaLangFloat_intBitsToFloat(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
-bool javaLangDouble_doubleToLongBits(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-                                     JValue* pResult);
+bool javaLangDouble_doubleToLongBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
-bool javaLangDouble_longBitsToDouble(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-                                     JValue* pResult);
+bool javaLangDouble_longBitsToDouble(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
-bool javaLangDouble_doubleToRawLongBits(u4 arg0, u4 arg1, u4 arg2,
-                                        u4 arg, JValue* pResult);
+bool javaLangDouble_doubleToRawLongBits(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
-bool javaLangDouble_longBitsToDouble(u4 arg0, u4 arg1, u4 arg2, u4 arg,
-                                     JValue* pResult);
+bool javaLangDouble_longBitsToDouble(StackSlot arg0, StackSlot arg1,
+    StackSlot arg2, StackSlot arg, JValue* pResult);
 
 #endif  // DALVIK_INLINENATIVE_H_

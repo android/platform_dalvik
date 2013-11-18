@@ -22,6 +22,9 @@
  * Collecting all debugger-related pieces here will also allow us to #ifdef
  * the JDWP code out of release builds.
  */
+
+#include <inttypes.h>
+
 #include "Dalvik.h"
 
 /*
@@ -151,20 +154,14 @@ void dvmDbgCondBroadcast(pthread_cond_t* pCond)
     assert(cc == 0);
 }
 
-
-/* keep track of type, in case we need to distinguish them someday */
-enum RegistryType {
-    kObjectId = 0xc1, kRefTypeId
-};
-
 /*
  * Hash function for object IDs.  Since objects are at least 8 bytes, and
  * could someday be allocated on 16-byte boundaries, we don't want to use
  * the low 4 bits in our hash.
  */
-static inline u4 registryHash(u4 val)
+static inline u4 registryHash(uintptr_t val)
 {
-    return val >> 4;
+    return (u4) val >> 4;
 }
 
 /*
@@ -172,7 +169,17 @@ static inline u4 registryHash(u4 val)
  */
 static int registryCompare(const void* obj1, const void* obj2)
 {
+#ifndef _LP64
     return (int) obj1 - (int) obj2;
+#else
+    /*
+     * With 64bit pointers and large heaps the comparison could overflow
+     * an int and produce wrong results.
+     */
+    intptr_t cmp = (intptr_t) obj1 - (intptr_t) obj2;
+
+    return (cmp == 0) ? 0 : ((cmp > 0) ? 1 : -1);
+#endif
 }
 
 
@@ -188,11 +195,11 @@ static bool lookupId(ObjectId id)
 {
     void* found;
 
-    found = dvmHashTableLookup(gDvm.dbgRegistry, registryHash((u4) id),
-                (void*)(u4) id, registryCompare, false);
+    found = dvmHashTableLookup(gDvm.dbgRegistry, registryHash((uintptr_t) id),
+                (void*)(uintptr_t) id, registryCompare, false);
     if (found == NULL)
         return false;
-    assert(found == (void*)(u4) id);
+    assert(found == (void*)(uintptr_t) id);
     return true;
 }
 #endif
@@ -206,17 +213,16 @@ static bool lookupId(ObjectId id)
  * Null references must be represented as zero, or the debugger will get
  * very confused.
  */
-static ObjectId registerObject(const Object* obj, RegistryType type, bool reg)
+static ObjectId registerObject(const Object* obj, bool reg)
 {
-    ObjectId id;
-
     if (obj == NULL)
         return 0;
 
-    assert((u4) obj != 0xcccccccc);
-    assert((u4) obj > 0x100);
+    assert((uintptr_t) obj != 0xcccccccc);
+    assert((uintptr_t) obj > 0x100);
 
-    id = (ObjectId)(u4)obj | ((u8) type) << 32;
+    ObjectId id = (ObjectId) obj;
+
     if (!reg)
         return id;
 
@@ -230,7 +236,7 @@ static ObjectId registerObject(const Object* obj, RegistryType type, bool reg)
     }
 
     dvmHashTableLookup(gDvm.dbgRegistry, registryHash((u4) id),
-                (void*)(u4) id, registryCompare, true);
+                (void*)(uintptr_t) id, registryCompare, true);
 
 bail:
     dvmHashTableUnlock(gDvm.dbgRegistry);
@@ -244,14 +250,10 @@ bail:
  *
  * If speed is an issue we can encode the registry index in the high
  * four bytes.  We could also just hard-wire this to "true".
- *
- * Note this actually takes both ObjectId and RefTypeId.
  */
 #ifndef NDEBUG
-static bool objectIsRegistered(ObjectId id, RegistryType type)
+static bool objectIsRegistered(ObjectId id)
 {
-    UNUSED_PARAMETER(type);
-
     if (id == 0)        // null reference?
         return true;
 
@@ -269,18 +271,18 @@ static bool objectIsRegistered(ObjectId id, RegistryType type)
  */
 static RefTypeId classObjectToRefTypeId(ClassObject* clazz)
 {
-    return (RefTypeId) registerObject((Object*) clazz, kRefTypeId, true);
+    return (RefTypeId) registerObject((Object*) clazz, true);
 }
 #if 0
 static RefTypeId classObjectToRefTypeIdNoReg(ClassObject* clazz)
 {
-    return (RefTypeId) registerObject((Object*) clazz, kRefTypeId, false);
+    return (RefTypeId) registerObject((Object*) clazz, false);
 }
 #endif
 static ClassObject* refTypeIdToClassObject(RefTypeId id)
 {
-    assert(objectIsRegistered(id, kRefTypeId) || !gDvm.debuggerConnected);
-    return (ClassObject*)(u4) id;
+    assert(objectIsRegistered(id) || !gDvm.debuggerConnected);
+    return (ClassObject*)(uintptr_t) id;
 }
 
 /*
@@ -288,16 +290,16 @@ static ClassObject* refTypeIdToClassObject(RefTypeId id)
  */
 static ObjectId objectToObjectId(const Object* obj)
 {
-    return registerObject(obj, kObjectId, true);
+    return registerObject(obj, true);
 }
 static ObjectId objectToObjectIdNoReg(const Object* obj)
 {
-    return registerObject(obj, kObjectId, false);
+    return registerObject(obj, false);
 }
 static Object* objectIdToObject(ObjectId id)
 {
-    assert(objectIsRegistered(id, kObjectId) || !gDvm.debuggerConnected);
-    return (Object*)(u4) id;
+    assert(objectIsRegistered(id) || !gDvm.debuggerConnected);
+    return (Object*)(uintptr_t) id;
 }
 
 /*
@@ -309,9 +311,9 @@ static Object* objectIdToObject(ObjectId id)
  */
 void dvmDbgRegisterObjectId(ObjectId id)
 {
-    Object* obj = (Object*)(u4) id;
-    ALOGV("+++ registering %p (%s)", obj, obj->clazz->descriptor);
-    registerObject(obj, kObjectId, true);
+    Object* obj = (Object*)(uintptr_t) id;
+    ALOGV("+++ registering %p (%s)", obj, dvmRefExpandClazzGlobal(obj->clazz)->descriptor);
+    registerObject(obj, true);
 }
 
 /*
@@ -322,12 +324,12 @@ void dvmDbgRegisterObjectId(ObjectId id)
  */
 static MethodId methodToMethodId(const Method* meth)
 {
-    return (MethodId)(u4) meth;
+    return (MethodId)(uintptr_t) meth;
 }
 static Method* methodIdToMethod(RefTypeId refTypeId, MethodId id)
 {
     // TODO? verify "id" is actually a method in "refTypeId"
-    return (Method*)(u4) id;
+    return (Method*)(uintptr_t) id;
 }
 
 /*
@@ -338,12 +340,12 @@ static Method* methodIdToMethod(RefTypeId refTypeId, MethodId id)
  */
 static FieldId fieldToFieldId(const Field* field)
 {
-    return (FieldId)(u4) field;
+    return (FieldId)(uintptr_t) field;
 }
 static Field* fieldIdToField(RefTypeId refTypeId, FieldId id)
 {
     // TODO? verify "id" is actually a field in "refTypeId"
-    return (Field*)(u4) id;
+    return (Field*)(uintptr_t) id;
 }
 
 /*
@@ -353,11 +355,11 @@ static Field* fieldIdToField(RefTypeId refTypeId, FieldId id)
  */
 static FrameId frameToFrameId(const void* frame)
 {
-    return (FrameId)(u4) frame;
+    return (FrameId)(uintptr_t) frame;
 }
-static u4* frameIdToFrame(FrameId id)
+static StackSlot* frameIdToFrame(FrameId id)
 {
-    return (u4*)(u4) id;
+    return (StackSlot*)(uintptr_t) id;
 }
 
 
@@ -563,7 +565,7 @@ bool dvmDbgIsInterface(RefTypeId id)
 /*
  * dvmHashForeach callback
  */
-static int copyRefType(void* vclazz, void* varg)
+static intptr_t copyRefType(void* vclazz, void* varg)
 {
     RefTypeId** pRefType = (RefTypeId**)varg;
     **pRefType = classObjectToRefTypeId((ClassObject*) vclazz);
@@ -686,9 +688,7 @@ void dvmDbgGetClassInfo(RefTypeId classId, u1* pTypeTag, u4* pStatus,
 bool dvmDbgFindLoadedClassBySignature(const char* classDescriptor,
         RefTypeId* pRefTypeId)
 {
-    ClassObject* clazz;
-
-    clazz = dvmFindLoadedClass(classDescriptor);
+    ClassObject* clazz = dvmFindLoadedClass(classDescriptor);
     if (clazz != NULL) {
         *pRefTypeId = classObjectToRefTypeId(clazz);
         return true;
@@ -703,15 +703,15 @@ bool dvmDbgFindLoadedClassBySignature(const char* classDescriptor,
 void dvmDbgGetObjectType(ObjectId objectId, u1* pRefTypeTag,
     RefTypeId* pRefTypeId)
 {
-    Object* obj = objectIdToObject(objectId);
+    ClassObject* clazz = dvmRefExpandClazzGlobal(objectIdToObject(objectId)->clazz);
 
-    if (dvmIsArrayClass(obj->clazz))
+    if (dvmIsArrayClass(clazz))
         *pRefTypeTag = TT_ARRAY;
-    else if (dvmIsInterfaceClass(obj->clazz))
+    else if (dvmIsInterfaceClass(clazz))
         *pRefTypeTag = TT_INTERFACE;
     else
         *pRefTypeTag = TT_CLASS;
-    *pRefTypeId = classObjectToRefTypeId(obj->clazz);
+    *pRefTypeId = classObjectToRefTypeId(clazz);
 }
 
 /*
@@ -734,9 +734,7 @@ u1 dvmDbgGetClassObjectType(RefTypeId refTypeId)
  */
 const char* dvmDbgGetSignature(RefTypeId refTypeId)
 {
-    ClassObject* clazz;
-
-    clazz = refTypeIdToClassObject(refTypeId);
+    ClassObject* clazz = refTypeIdToClassObject(refTypeId);
     assert(clazz != NULL);
 
     return jniSignature(clazz);
@@ -766,7 +764,7 @@ const char* dvmDbgGetObjectTypeName(ObjectId objectId)
         return "(null)";
 
     Object* obj = objectIdToObject(objectId);
-    return jniSignature(obj->clazz);
+    return jniSignature(dvmRefExpandClazzGlobal(obj->clazz));
 }
 
 /*
@@ -847,7 +845,7 @@ static u1 tagFromObject(const Object* obj)
 {
     if (obj == NULL)
         return JT_OBJECT;
-    return tagFromClass(obj->clazz);
+    return tagFromClass(dvmRefExpandClazzGlobal(obj->clazz));
 }
 
 /*
@@ -913,7 +911,7 @@ u1 dvmDbgGetArrayElementTag(ObjectId arrayId)
 {
     ArrayObject* arrayObj = (ArrayObject*) objectIdToObject(arrayId);
 
-    ClassObject* arrayClass = arrayObj->clazz;
+    ClassObject* arrayClass = dvmRefExpandClazzGlobal(arrayObj->clazz);
     u1 tag = basicTagFromDescriptor(arrayClass->descriptor + 1);
     if (!isTagPrimitive(tag)) {
         /* try to refine it */
@@ -1001,7 +999,7 @@ bool dvmDbgOutputArray(ObjectId arrayId, int firstIndex, int count,
         return false;
     }
 
-    tag = basicTagFromDescriptor(arrayObj->clazz->descriptor + 1);
+    tag = basicTagFromDescriptor(dvmRefExpandClazzGlobal(arrayObj->clazz)->descriptor + 1);
 
     if (isTagPrimitive(tag)) {
         int width = dvmDbgGetTagWidth(tag);
@@ -1011,23 +1009,22 @@ bool dvmDbgOutputArray(ObjectId arrayId, int firstIndex, int count,
 
         copyValuesToBE(outBuf, data + firstIndex*width, count, width);
     } else {
-        Object** pObjects;
-        int i;
-
-        pObjects = (Object**) data;
+        ObjectRef* pObjects = (ObjectRef*) data;
         pObjects += firstIndex;
 
         ALOGV("    --> copying %d object IDs", count);
-        //assert(tag == JT_OBJECT);     // could be object or "refined" type
 
+        int i;
         for (i = 0; i < count; i++, pObjects++) {
             u1 thisTag;
-            if (*pObjects != NULL)
-                thisTag = tagFromObject(*pObjects);
+            Object *expandedRef = dvmRefExpandGlobal(*pObjects);
+            if (!dvmRefIsNull(expandedRef))
+                thisTag = tagFromObject(expandedRef);
             else
                 thisTag = tag;
+
             expandBufAdd1(pReply, thisTag);
-            expandBufAddObjectId(pReply, objectToObjectId(*pObjects));
+            expandBufAddObjectId(pReply, objectToObjectId(expandedRef));
         }
     }
 
@@ -1052,7 +1049,7 @@ bool dvmDbgSetArrayElements(ObjectId arrayId, int firstIndex, int count,
         return false;
     }
 
-    tag = basicTagFromDescriptor(arrayObj->clazz->descriptor + 1);
+    tag = basicTagFromDescriptor(dvmRefExpandClazzGlobal(arrayObj->clazz)->descriptor + 1);
 
     if (isTagPrimitive(tag)) {
         int width = dvmDbgGetTagWidth(tag);
@@ -1061,10 +1058,10 @@ bool dvmDbgSetArrayElements(ObjectId arrayId, int firstIndex, int count,
 
         copyValuesFromBE(data + firstIndex*width, buf, count, width);
     } else {
-        Object** pObjects;
+        ObjectRef *pObjects;
         int i;
 
-        pObjects = (Object**) data;
+        pObjects = (ObjectRef*) data;
         pObjects += firstIndex;
 
         ALOGV("    --> setting %d objects", count);
@@ -1072,7 +1069,7 @@ bool dvmDbgSetArrayElements(ObjectId arrayId, int firstIndex, int count,
         /* should do array type check here */
         for (i = 0; i < count; i++) {
             ObjectId id = dvmReadObjectId(&buf);
-            *pObjects++ = objectIdToObject(id);
+            *pObjects++ = dvmRefCompress(objectIdToObject(id));
         }
     }
 
@@ -1440,7 +1437,7 @@ void dvmDbgOutputVariableTable(RefTypeId refTypeId, MethodId methodId,
 u1 dvmDbgGetFieldBasicTag(ObjectId objId, FieldId fieldId)
 {
     Object* obj = objectIdToObject(objId);
-    RefTypeId classId = classObjectToRefTypeId(obj->clazz);
+    RefTypeId classId = classObjectToRefTypeId(dvmRefExpandClazzGlobal(obj->clazz));
     const Field* field = fieldIdToField(classId, fieldId);
     return basicTagFromDescriptor(field->signature);
 }
@@ -1463,7 +1460,7 @@ u1 dvmDbgGetStaticFieldBasicTag(RefTypeId refTypeId, FieldId fieldId)
 void dvmDbgGetFieldValue(ObjectId objectId, FieldId fieldId, ExpandBuf* pReply)
 {
     Object* obj = objectIdToObject(objectId);
-    RefTypeId classId = classObjectToRefTypeId(obj->clazz);
+    RefTypeId classId = classObjectToRefTypeId(dvmRefExpandClazzGlobal(obj->clazz));
     InstField* ifield = (InstField*) fieldIdToField(classId, fieldId);
     u1 tag = basicTagFromDescriptor(ifield->signature);
 
@@ -1472,9 +1469,9 @@ void dvmDbgGetFieldValue(ObjectId objectId, FieldId fieldId, ExpandBuf* pReply)
         tag = tagFromObject(objVal);
         expandBufAdd1(pReply, tag);
         expandBufAddObjectId(pReply, objectToObjectId(objVal));
-        ALOGV("    --> ifieldId %x --> tag '%c' %p", fieldId, tag, objVal);
+        ALOGV("    --> ifieldId %zx --> tag '%c' %p", fieldId, tag, objVal);
     } else {
-        ALOGV("    --> ifieldId %x --> tag '%c'", fieldId, tag);
+        ALOGV("    --> ifieldId %zx --> tag '%c'", fieldId, tag);
         expandBufAdd1(pReply, tag);
 
         switch (tag) {
@@ -1513,7 +1510,7 @@ void dvmDbgSetFieldValue(ObjectId objectId, FieldId fieldId, u8 value,
     int width)
 {
     Object* obj = objectIdToObject(objectId);
-    RefTypeId classId = classObjectToRefTypeId(obj->clazz);
+    RefTypeId classId = classObjectToRefTypeId(dvmRefExpandClazzGlobal(obj->clazz));
     InstField* field = (InstField*) fieldIdToField(classId, fieldId);
 
     switch (field->signature[0]) {
@@ -1568,11 +1565,11 @@ void dvmDbgGetStaticFieldValue(RefTypeId refTypeId, FieldId fieldId,
         tag = tagFromObject(objVal);
         expandBufAdd1(pReply, tag);
         expandBufAddObjectId(pReply, objectToObjectId(objVal));
-        ALOGV("    --> sfieldId %x --> tag '%c' %p", fieldId, tag, objVal);
+        ALOGV("    --> sfieldId %zx --> tag '%c' %p", fieldId, tag, objVal);
     } else {
         JValue value;
 
-        ALOGV("    --> sfieldId %x --> tag '%c'", fieldId, tag);
+        ALOGV("    --> sfieldId %zx --> tag '%c'", fieldId, tag);
         expandBufAdd1(pReply, tag);
 
         switch (tag) {
@@ -2088,7 +2085,7 @@ bool dvmDbgGetThreadFrame(ObjectId threadId, int num, FrameId* pFrameId,
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(framePtr);
         const Method* method = saveArea->method;
 
-        if (!dvmIsBreakFrame((u4*)framePtr)) {
+        if (!dvmIsBreakFrame((StackSlot*)framePtr)) {
             if (count == num) {
                 *pFrameId = frameToFrameId(framePtr);
                 if (dvmIsInterfaceClass(method->clazz))
@@ -2154,7 +2151,7 @@ void dvmDbgSuspendThread(ObjectId threadId)
     thread = threadObjToThread(threadObj);
     if (thread == NULL) {
         /* can happen if our ThreadDeath notify crosses in the mail */
-        ALOGW("WARNING: threadid=%llx obj=%p no match", threadId, threadObj);
+        ALOGW("WARNING: threadid=%" PRIx64 " obj=%p no match", threadId, threadObj);
     } else {
         dvmSuspendThread(thread);
     }
@@ -2174,7 +2171,7 @@ void dvmDbgResumeThread(ObjectId threadId)
 
     thread = threadObjToThread(threadObj);
     if (thread == NULL) {
-        ALOGW("WARNING: threadid=%llx obj=%p no match", threadId, threadObj);
+        ALOGW("WARNING: threadid=%" PRIx64 " obj=%p no match", threadId, threadObj);
     } else {
         dvmResumeThread(thread);
     }
@@ -2193,7 +2190,7 @@ void dvmDbgSuspendSelf()
 /*
  * Get the "this" object for the specified frame.
  */
-static Object* getThisObject(const u4* framePtr)
+static Object* getThisObject(const StackSlot* framePtr)
 {
     const StackSaveArea* saveArea = SAVEAREA_FROM_FP(framePtr);
     const Method* method = saveArea->method;
@@ -2235,7 +2232,7 @@ static Object* getThisObject(const u4* framePtr)
  */
 bool dvmDbgGetThisObject(ObjectId threadId, FrameId frameId, ObjectId* pThisId)
 {
-    const u4* framePtr = frameIdToFrame(frameId);
+    const StackSlot* framePtr = frameIdToFrame(frameId);
     Object* thisObj;
 
     UNUSED_PARAMETER(threadId);
@@ -2256,7 +2253,7 @@ bool dvmDbgGetThisObject(ObjectId threadId, FrameId frameId, ObjectId* pThisId)
 void dvmDbgGetLocalValue(ObjectId threadId, FrameId frameId, int slot,
     u1 tag, u1* buf, int expectedLen)
 {
-    const u4* framePtr = frameIdToFrame(frameId);
+    const StackSlot* framePtr = frameIdToFrame(frameId);
     Object* objVal;
     u4 intVal;
     u8 longVal;
@@ -2322,7 +2319,11 @@ void dvmDbgGetLocalValue(ObjectId threadId, FrameId frameId, int slot,
     case JT_DOUBLE:
     case JT_LONG:
         assert(expectedLen == 8);
+#ifndef _LP64
         memcpy(&longVal, &framePtr[slot], 8);
+#else
+        longVal = framePtr[slot];
+#endif
         set8BE(buf+1, longVal);
         break;
     default:
@@ -2341,7 +2342,7 @@ void dvmDbgGetLocalValue(ObjectId threadId, FrameId frameId, int slot,
 void dvmDbgSetLocalValue(ObjectId threadId, FrameId frameId, int slot, u1 tag,
     u8 value, int width)
 {
-    u4* framePtr = frameIdToFrame(frameId);
+    StackSlot* framePtr = frameIdToFrame(frameId);
 
     UNUSED_PARAMETER(threadId);
 
@@ -2350,21 +2351,21 @@ void dvmDbgSetLocalValue(ObjectId threadId, FrameId frameId, int slot, u1 tag,
     switch (tag) {
     case JT_BOOLEAN:
         assert(width == 1);
-        framePtr[slot] = (u4)value;
+        framePtr[slot] = (StackSlot)value;
         break;
     case JT_BYTE:
         assert(width == 1);
-        framePtr[slot] = (u4)value;
+        framePtr[slot] = (StackSlot)value;
         break;
     case JT_SHORT:
     case JT_CHAR:
         assert(width == 2);
-        framePtr[slot] = (u4)value;
+        framePtr[slot] = (StackSlot)value;
         break;
     case JT_INT:
     case JT_FLOAT:
         assert(width == 4);
-        framePtr[slot] = (u4)value;
+        framePtr[slot] = (StackSlot)value;
         break;
     case JT_STRING:
         /* The debugger calls VirtualMachine.CreateString to create a new
@@ -2373,12 +2374,16 @@ void dvmDbgSetLocalValue(ObjectId threadId, FrameId frameId, int slot, u1 tag,
     case JT_ARRAY:
     case JT_OBJECT:
         assert(width == sizeof(ObjectId));
-        framePtr[slot] = (u4) objectIdToObject(value);
+        framePtr[slot] = (StackSlot) objectIdToObject(value);
         break;
     case JT_DOUBLE:
     case JT_LONG:
         assert(width == 8);
+#ifndef _LP64
         memcpy(&framePtr[slot], &value, 8);
+#else
+        framePtr[slot] = value;
+#endif
         break;
     case JT_VOID:
     case JT_CLASS_OBJECT:
@@ -2466,7 +2471,7 @@ void dvmDbgPostException(void* throwFp, int throwRelPc, void* catchFp,
     }
 
     /* need this for InstanceOnly filters */
-    Object* thisObj = getThisObject((u4*)throwFp);
+    Object* thisObj = getThisObject((StackSlot*)throwFp);
 
     /*
      * Hand the event to the JDWP exception handler.  Note we're using the
@@ -2479,7 +2484,7 @@ void dvmDbgPostException(void* throwFp, int throwRelPc, void* catchFp,
      */
     dvmJdwpPostException(gDvm.jdwpState, &throwLoc,
         objectToObjectIdNoReg(exception),
-        classObjectToRefTypeId(exception->clazz), &catchLoc,
+        classObjectToRefTypeId(dvmRefExpandClazzGlobal(exception->clazz)), &catchLoc,
         objectToObjectId(thisObj));
 }
 
@@ -2804,7 +2809,7 @@ void dvmDbgExecuteMethod(DebugInvokeReq* pReq)
     if (pReq->exceptObj != 0) {
         Object* exc = dvmGetException(self);
         ALOGD("  JDWP invocation returning with exceptObj=%p (%s)",
-            exc, exc->clazz->descriptor);
+            exc, dvmRefExpandClazzGlobal(exc->clazz)->descriptor);
         //dvmLogExceptionStackTrace();
         dvmClearException(self);
         /*
