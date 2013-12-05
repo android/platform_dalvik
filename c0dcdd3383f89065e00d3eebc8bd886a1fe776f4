@@ -16,6 +16,24 @@
       "revId": "c0dcdd3383f89065e00d3eebc8bd886a1fe776f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "430dc2ba_67bc12f0",
+        "filename": "vm/native/java_lang_Class.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2013-12-05T17:10:12Z",
+      "side": 1,
+      "message": "Ah right, sorry I\u0027m a dinosaur.",
+      "parentUuid": "03d66a3f_30152657",
+      "revId": "c0dcdd3383f89065e00d3eebc8bd886a1fe776f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
