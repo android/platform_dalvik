@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3ca9290_b3325826",
+        "filename": "vm/native/java_lang_Class.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2013-12-05T10:34:26Z",
+      "side": 1,
+      "message": "bool* isPublic, not char* since you\u0027re using it as a boolean.\n\nYou\u0027ll also need to initialize the memory you\u0027re allocating.",
+      "revId": "a3e9522c00c929cef8436f35d0fc6edf4e757cdb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83ea5aed_5418a28e",
+        "filename": "vm/native/java_lang_Class.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2013-12-05T10:34:26Z",
+      "side": 1,
+      "message": "You\u0027ll need to explicitly add else branches to set isPublic[count] \u003d false or add a memset(0, sizeof()) to initialize the memory you are allocating.",
+      "revId": "a3e9522c00c929cef8436f35d0fc6edf4e757cdb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3ca9290_13246cda",
+        "filename": "vm/native/java_lang_Class.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2013-12-05T10:34:26Z",
+      "side": 1,
+      "message": "Code style: Surrounding code prefers if(foo) instead of if (foo \u003d\u003d true)",
+      "revId": "a3e9522c00c929cef8436f35d0fc6edf4e757cdb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
