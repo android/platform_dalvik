@@ -34,6 +34,23 @@
       "revId": "c0dcdd3383f89065e00d3eebc8bd886a1fe776f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23260e9d_e60bfee9",
+        "filename": "vm/native/java_lang_Class.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1014554
+      },
+      "writtenOn": "2013-12-11T06:53:25Z",
+      "side": 1,
+      "message": "clazz is wrong \npSource[count] is correct",
+      "revId": "c0dcdd3383f89065e00d3eebc8bd886a1fe776f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
