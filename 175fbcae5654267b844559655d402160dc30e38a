@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8ce934a_4ccbdf91",
+        "filename": "vm/Dvm.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-12-12T01:48:24Z",
+      "side": 1,
+      "message": "this part of the change doesn\u0027t seem worth it.",
+      "revId": "175fbcae5654267b844559655d402160dc30e38a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
