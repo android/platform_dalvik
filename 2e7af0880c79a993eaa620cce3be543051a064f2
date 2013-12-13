@@ -16,6 +16,24 @@
       "revId": "2e7af0880c79a993eaa620cce3be543051a064f2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68d543ff_80c0f639",
+        "filename": "vm/compiler/codegen/arm/Thumb2/Gen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1018108
+      },
+      "writtenOn": "2013-12-13T11:49:01Z",
+      "side": 1,
+      "message": "Can we just strip the comment? I don\u0027t find it very useful.",
+      "parentUuid": "a8101b3f_9a9c8d81",
+      "revId": "2e7af0880c79a993eaa620cce3be543051a064f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
