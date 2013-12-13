@@ -19,12 +19,14 @@
 #ifndef DALVIK_JARFILE_H_
 #define DALVIK_JARFILE_H_
 
+#include "libdex/ZipArchive.h"
+
 /*
  * This represents an open, scanned Jar file.  (It's actually for any Zip
  * archive that happens to hold a Dex file.)
  */
 struct JarFile {
-    ZipArchive  archive;
+    ZipArchiveHandle archive;
     //MemMapping  map;
     char*       cacheFileName;
     DvmDex*     pDvmDex;

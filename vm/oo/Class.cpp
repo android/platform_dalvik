@@ -23,6 +23,7 @@
 
 #include "Dalvik.h"
 #include "libdex/DexClass.h"
+#include "libdex/ZipArchive.h"
 #include "analysis/Optimize.h"
 
 #include <stdlib.h>
@@ -886,6 +887,7 @@ StringObject* dvmGetBootPathResource(const char* name, int idx)
     const int kUrlOverhead = 13;        // worst case for Jar URL
     const ClassPathEntry* cpe = gDvm.bootClassPath;
     StringObject* urlObj = NULL;
+    ZipEntry entry;
 
     ALOGV("+++ searching for resource '%s' in %d(%s)",
         name, idx, cpe[idx].fileName);
@@ -904,7 +906,7 @@ StringObject* dvmGetBootPathResource(const char* name, int idx)
     case kCpeJar:
         {
             JarFile* pJarFile = (JarFile*) cpe->ptr;
-            if (dexZipFindEntry(&pJarFile->archive, name) == NULL)
+            if (dexZipFindEntry(pJarFile->archive, name, &entry) != 0)
                 goto bail;
             sprintf(urlBuf, "jar:file://%s!/%s", cpe->fileName, name);
         }

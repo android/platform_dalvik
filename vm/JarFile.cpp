@@ -24,6 +24,7 @@
 
 #include "Dalvik.h"
 #include "libdex/OptInvocation.h"
+#include "JarFile.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -85,7 +86,7 @@ bail:
  */
 DexCacheStatus dvmDexCacheStatus(const char *fileName)
 {
-    ZipArchive archive;
+    ZipArchiveHandle archive;
     char* cachedName = NULL;
     int fd;
     DexCacheStatus result = DEX_CACHE_ERROR;
@@ -108,8 +109,7 @@ DexCacheStatus dvmDexCacheStatus(const char *fileName)
     if (dexZipOpenArchive(fileName, &archive) != 0) {
         return DEX_CACHE_BAD_ARCHIVE;
     }
-    entry = dexZipFindEntry(&archive, kDexInJarName);
-    if (entry != NULL) {
+    if (dexZipFindEntry(archive, kDexInJarName, &entry) == 0) {
         bool newFile = false;
 
         /*
@@ -122,8 +122,7 @@ DexCacheStatus dvmDexCacheStatus(const char *fileName)
             return DEX_CACHE_BAD_ARCHIVE;
 
         fd = dvmOpenCachedDexFile(fileName, cachedName,
-                dexGetZipEntryModTime(&archive, entry),
-                dexGetZipEntryCrc32(&archive, entry),
+                entry.mod_time, entry.crc32,
                 /*isBootstrap=*/false, &newFile, /*createIfMissing=*/false);
         ALOGV("dvmOpenCachedDexFile returned fd %d", fd);
         if (fd < 0) {
@@ -169,7 +168,7 @@ DexCacheStatus dvmDexCacheStatus(const char *fileName)
     result = DEX_CACHE_OK;
 
 bail:
-    dexZipCloseArchive(&archive);
+    dexZipCloseArchive(archive);
     free(cachedName);
     if (fd >= 0) {
         close(fd);
@@ -193,7 +192,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
      * dvmRawDexFileOpen() in RawDexFile.c. This should be refactored.
      */
 
-    ZipArchive archive;
+    ZipArchiveHandle archive;
     DvmDex* pDvmDex = NULL;
     char* cachedName = NULL;
     bool archiveOpen = false;
@@ -210,7 +209,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
 
     /* If we fork/exec into dexopt, don't let it inherit the archive's fd.
      */
-    dvmSetCloseOnExec(dexZipGetArchiveFd(&archive));
+    dvmSetCloseOnExec(dexZipGetArchiveFd(archive));
 
     /* First, look for a ".odex" alongside the jar file.  It will
      * have the same name/path except for the extension.
@@ -239,8 +238,7 @@ tryArchive:
          * Pre-created .odex absent or stale.  Look inside the jar for a
          * "classes.dex".
          */
-        entry = dexZipFindEntry(&archive, kDexInJarName);
-        if (entry != NULL) {
+        if (dexZipFindEntry(archive, kDexInJarName, &entry) == 0) {
             bool newFile = false;
 
             /*
@@ -265,8 +263,8 @@ tryArchive:
             ALOGV("dvmJarFileOpen: Checking cache for %s (%s)",
                 fileName, cachedName);
             fd = dvmOpenCachedDexFile(fileName, cachedName,
-                    dexGetZipEntryModTime(&archive, entry),
-                    dexGetZipEntryCrc32(&archive, entry),
+                    entry.mod_time,
+                    entry.crc32,
                     isBootstrap, &newFile, /*createIfMissing=*/true);
             if (fd < 0) {
                 ALOGI("Unable to open or create cache for %s (%s)",
@@ -291,15 +289,15 @@ tryArchive:
 
                 if (result) {
                     startWhen = dvmGetRelativeTimeUsec();
-                    result = dexZipExtractEntryToFile(&archive, entry, fd) == 0;
+                    result = dexZipExtractEntryToFile(archive, &entry, fd) == 0;
                     extractWhen = dvmGetRelativeTimeUsec();
                 }
                 if (result) {
                     result = dvmOptimizeDexFile(fd, dexOffset,
-                                dexGetZipEntryUncompLen(&archive, entry),
+                                entry.uncompressed_length,
                                 fileName,
-                                dexGetZipEntryModTime(&archive, entry),
-                                dexGetZipEntryCrc32(&archive, entry),
+                                entry.mod_time,
+                                entry.crc32,
                                 isBootstrap);
                 }
 
@@ -353,7 +351,7 @@ tryArchive:
 bail:
     /* clean up, closing the open file */
     if (archiveOpen && result != 0)
-        dexZipCloseArchive(&archive);
+        dexZipCloseArchive(archive);
     free(cachedName);
     if (fd >= 0) {
         if (locked)

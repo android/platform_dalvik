@@ -20,67 +20,10 @@
 #ifndef LIBDEX_ZIPARCHIVE_H_
 #define LIBDEX_ZIPARCHIVE_H_
 
+#include <ziparchive/zip_archive.h>
+
 #include "SysUtil.h"
 #include "DexFile.h"            // need DEX_INLINE
-
-/*
- * Trivial typedef to ensure that ZipEntry is not treated as a simple
- * integer.  We use NULL to indicate an invalid value.
- */
-typedef void* ZipEntry;
-
-/*
- * One entry in the hash table.
- */
-struct ZipHashEntry {
-    const char*     name;
-    unsigned short  nameLen;
-};
-
-/*
- * Read-only Zip archive.
- *
- * We want "open" and "find entry by name" to be fast operations, and
- * we want to use as little memory as possible.  We memory-map the zip
- * central directory, and load a hash table with pointers to the filenames
- * (which aren't null-terminated).  The other fields are at a fixed offset
- * from the filename, so we don't need to extract those (but we do need
- * to byte-read and endian-swap them every time we want them).
- *
- * It's possible that somebody has handed us a massive (~1GB) zip archive,
- * so we can't expect to mmap the entire file.
- *
- * To speed comparisons when doing a lookup by name, we could make the mapping
- * "private" (copy-on-write) and null-terminate the filenames after verifying
- * the record structure.  However, this requires a private mapping of
- * every page that the Central Directory touches.  Easier to tuck a copy
- * of the string length into the hash table entry.
- */
-struct ZipArchive {
-    /* open Zip archive */
-    int         mFd;
-
-    /* mapped central directory area */
-    off_t       mDirectoryOffset;
-    MemMapping  mDirectoryMap;
-
-    /* number of entries in the Zip archive */
-    int         mNumEntries;
-
-    /*
-     * We know how many entries are in the Zip archive, so we can have a
-     * fixed-size hash table.  We probe on collisions.
-     */
-    int         mHashTableSize;
-    ZipHashEntry* mHashTable;
-};
-
-/* Zip compression methods we support */
-enum {
-    kCompressStored     = 0,        // no compression
-    kCompressDeflated   = 8,        // standard deflate
-};
-
 
 /*
  * Open a Zip archive.
@@ -88,7 +31,9 @@ enum {
  * On success, returns 0 and populates "pArchive".  Returns nonzero errno
  * value on failure.
  */
-int dexZipOpenArchive(const char* fileName, ZipArchive* pArchive);
+DEX_INLINE int dexZipOpenArchive(const char* fileName, ZipArchiveHandle* pArchive) {
+    return OpenArchive(fileName, pArchive);
+}
 
 /*
  * Like dexZipOpenArchive, but takes a file descriptor open for reading
@@ -97,7 +42,10 @@ int dexZipOpenArchive(const char* fileName, ZipArchive* pArchive);
  *
  * "debugFileName" will appear in error messages, but is not otherwise used.
  */
-int dexZipPrepArchive(int fd, const char* debugFileName, ZipArchive* pArchive);
+DEX_INLINE int dexZipOpenArchiveFd(int fd, const char* debugFileName,
+                                   ZipArchiveHandle* pArchive) {
+    return OpenArchiveFd(fd, debugFileName, pArchive);
+}
 
 /*
  * Close archive, releasing resources associated with it.
@@ -105,62 +53,24 @@ int dexZipPrepArchive(int fd, const char* debugFileName, ZipArchive* pArchive);
  * Depending on the implementation this could unmap pages used by classes
  * stored in a Jar.  This should only be done after unloading classes.
  */
-void dexZipCloseArchive(ZipArchive* pArchive);
+DEX_INLINE void dexZipCloseArchive(ZipArchiveHandle archive) {
+    CloseArchive(archive);
+}
 
 /*
  * Return the archive's file descriptor.
  */
-DEX_INLINE int dexZipGetArchiveFd(const ZipArchive* pArchive) {
-    return pArchive->mFd;
+DEX_INLINE int dexZipGetArchiveFd(const ZipArchiveHandle pArchive) {
+    return GetFileDescriptor(pArchive);
 }
 
 /*
  * Find an entry in the Zip archive, by name.  Returns NULL if the entry
  * was not found.
  */
-ZipEntry dexZipFindEntry(const ZipArchive* pArchive,
-    const char* entryName);
-
-/*
- * Retrieve one or more of the "interesting" fields.  Non-NULL pointers
- * are filled in.
- *
- * Returns 0 on success.
- */
-int dexZipGetEntryInfo(const ZipArchive* pArchive, ZipEntry entry,
-    int* pMethod, size_t* pUncompLen, size_t* pCompLen, off_t* pOffset,
-    long* pModWhen, long* pCrc32);
-
-/*
- * Simple accessors.
- */
-DEX_INLINE long dexGetZipEntryOffset(const ZipArchive* pArchive,
-    const ZipEntry entry)
-{
-    off_t val = 0;
-    dexZipGetEntryInfo(pArchive, entry, NULL, NULL, NULL, &val, NULL, NULL);
-    return (long) val;
-}
-DEX_INLINE size_t dexGetZipEntryUncompLen(const ZipArchive* pArchive,
-    const ZipEntry entry)
-{
-    size_t val = 0;
-    dexZipGetEntryInfo(pArchive, entry, NULL, &val, NULL, NULL, NULL, NULL);
-    return val;
-}
-DEX_INLINE long dexGetZipEntryModTime(const ZipArchive* pArchive,
-    const ZipEntry entry)
-{
-    long val = 0;
-    dexZipGetEntryInfo(pArchive, entry, NULL, NULL, NULL, NULL, &val, NULL);
-    return val;
-}
-DEX_INLINE long dexGetZipEntryCrc32(const ZipArchive* pArchive,
-    const ZipEntry entry)
-{
-    long val = 0;
-    dexZipGetEntryInfo(pArchive, entry, NULL, NULL, NULL, NULL, NULL, &val);
-    return val;
+DEX_INLINE int  dexZipFindEntry(const ZipArchiveHandle pArchive,
+    const char* entryName, ZipEntry* data) {
+    return FindEntry(pArchive, entryName, data);
 }
 
 /*
@@ -168,13 +78,9 @@ DEX_INLINE long dexGetZipEntryCrc32(const ZipArchive* pArchive,
  *
  * Returns 0 on success.
  */
-int dexZipExtractEntryToFile(const ZipArchive* pArchive,
-    const ZipEntry entry, int fd);
-
-/*
- * Utility function to compute a CRC-32.
- */
-u4 dexInitCrc32(void);
-u4 dexComputeCrc32(u4 crc, const void* buf, size_t len);
+DEX_INLINE int dexZipExtractEntryToFile(ZipArchiveHandle handle,
+    ZipEntry* entry, int fd) {
+    return ExtractEntryToFile(handle, entry, fd);
+}
 
 #endif  // LIBDEX_ZIPARCHIVE_H_

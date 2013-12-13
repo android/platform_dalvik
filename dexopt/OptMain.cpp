@@ -58,18 +58,14 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
     const char* debugFileName, bool isBootstrap, const char* bootClassPath,
     const char* dexoptFlagStr)
 {
-    ZipArchive zippy;
+    ZipArchiveHandle zippy;
     ZipEntry zipEntry;
-    size_t uncompLen;
-    long modWhen, crc32;
     off_t dexOffset;
     int err;
     int result = -1;
     int dexoptFlags = 0;        /* bit flags, from enum DexoptFlags */
     DexClassVerifyMode verifyMode = VERIFY_MODE_ALL;
     DexOptimizerMode dexOptMode = OPTIMIZE_MODE_VERIFIED;
-
-    memset(&zippy, 0, sizeof(zippy));
 
     /* make sure we're still at the start of an empty file */
     if (lseek(cacheFd, 0, SEEK_END) != 0) {
@@ -93,36 +89,21 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
     /*
      * Open the zip archive, find the DEX entry.
      */
-    if (dexZipPrepArchive(zipFd, debugFileName, &zippy) != 0) {
+    if (dexZipOpenArchiveFd(zipFd, debugFileName, &zippy) != 0) {
         ALOGW("DexOptZ: unable to open zip archive '%s'", debugFileName);
         goto bail;
     }
 
-    zipEntry = dexZipFindEntry(&zippy, kClassesDex);
-    if (zipEntry == NULL) {
+    if (dexZipFindEntry(zippy, kClassesDex, &zipEntry) != 0) {
         ALOGW("DexOptZ: zip archive '%s' does not include %s",
             debugFileName, kClassesDex);
         goto bail;
     }
 
     /*
-     * Extract some info about the zip entry.
-     */
-    if (dexZipGetEntryInfo(&zippy, zipEntry, NULL, &uncompLen, NULL, NULL,
-            &modWhen, &crc32) != 0)
-    {
-        ALOGW("DexOptZ: zip archive GetEntryInfo failed on %s", debugFileName);
-        goto bail;
-    }
-
-    uncompLen = uncompLen;
-    modWhen = modWhen;
-    crc32 = crc32;
-
-    /*
      * Extract the DEX data into the cache file at the current offset.
      */
-    if (dexZipExtractEntryToFile(&zippy, zipEntry, cacheFd) != 0) {
+    if (dexZipExtractEntryToFile(zippy, &zipEntry, cacheFd) != 0) {
         ALOGW("DexOptZ: extraction of %s from %s failed",
             kClassesDex, debugFileName);
         goto bail;
@@ -183,8 +164,9 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
     //vmStarted = 1;
 
     /* do the optimization */
-    if (!dvmContinueOptimization(cacheFd, dexOffset, uncompLen, debugFileName,
-            modWhen, crc32, isBootstrap))
+    if (!dvmContinueOptimization(cacheFd, dexOffset,
+            zipEntry.uncompressed_length, debugFileName,
+            zipEntry.mod_time, zipEntry.crc32, isBootstrap))
     {
         ALOGE("Optimization failed");
         goto bail;
@@ -195,7 +177,7 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
     result = 0;
 
 bail:
-    dexZipCloseArchive(&zippy);
+    dexZipCloseArchive(zippy);
     return result;
 }
 
