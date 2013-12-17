@@ -54,7 +54,7 @@ UnzipToFileResult dexUnzipToFile(const char* zipFileName,
         goto bail;
     }
 
-    fd = open(outFileName, O_WRONLY | O_CREAT | O_EXCL, 0600);
+    fd = open(outFileName, O_RDWR | O_CREAT | O_EXCL, 0600);
     if (fd < 0) {
         fprintf(stderr, "Unable to create output file '%s': %s\n",
             outFileName, strerror(errno));
@@ -85,7 +85,7 @@ bail:
         close(fd);
     if (unlinkOnFailure && result != kUTFRSuccess)
         unlink(outFileName);
-    dexZipCloseArchive(&archive);
+    dexZipCloseArchive(archive);
     return result;
 }
 

@@ -370,7 +370,7 @@ void dvmJarFileFree(JarFile* pJarFile)
         return;
 
     dvmDexFileFree(pJarFile->pDvmDex);
-    dexZipCloseArchive(&pJarFile->archive);
+    dexZipCloseArchive(pJarFile->archive);
     free(pJarFile->cacheFileName);
     free(pJarFile);
 }
