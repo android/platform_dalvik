@@ -34,6 +34,24 @@
       "revId": "175fbcae5654267b844559655d402160dc30e38a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e85053a6_3f9623e8",
+        "filename": "vm/Dvm.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2013-12-18T00:18:46Z",
+      "side": 1,
+      "message": "dalvik is basically dead at this point. since the correct fix isn\u0027t easy, i\u0027d just abandon this change and go worry about art instead.",
+      "parentUuid": "c84d4f11_7b44bf8a",
+      "revId": "175fbcae5654267b844559655d402160dc30e38a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
