@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2dd43d2d_c7197e93",
+        "filename": "vm/arch/x86/Call386ABI.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-01-10T22:37:48Z",
+      "side": 1,
+      "message": "This looks wrong, 2 subtracts from ESP one after the other?",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 21
+      },
+      "revId": "f1f39d726f1753f022eefc9f8ec63851eb9d501f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
