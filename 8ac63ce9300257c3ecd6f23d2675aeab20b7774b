@@ -46,6 +46,30 @@
       "revId": "8ac63ce9300257c3ecd6f23d2675aeab20b7774b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad810d4e_5bad4f82",
+        "filename": "vm/arch/x86/Call386ABI.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-01-14T18:52:45Z",
+      "side": 1,
+      "message": "Dalvik is deprecated, so I\u0027m not too bothered by extra instructions that would be a performance regression. I just wanted to raise that this didn\u0027t feel right and its also a pattern we try to avoid elsewhere, where we try to always ensure 16byte stack alignment.",
+      "parentUuid": "4d1b3107_865cd4d9",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "8ac63ce9300257c3ecd6f23d2675aeab20b7774b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
