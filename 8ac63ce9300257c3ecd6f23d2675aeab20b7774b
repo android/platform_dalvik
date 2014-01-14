@@ -22,6 +22,30 @@
       "revId": "8ac63ce9300257c3ecd6f23d2675aeab20b7774b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d1b3107_865cd4d9",
+        "filename": "vm/arch/x86/Call386ABI.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1013855
+      },
+      "writtenOn": "2014-01-14T17:37:25Z",
+      "side": 1,
+      "message": "According to Vladimir (the author of this patch), it is possible to hit this path with unaligned stack. Thus the fix looks the way it does. I can do some more investigation if you\u0027d like a more thorough answer. :)",
+      "parentUuid": "6d1635de_4c56dfb9",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "8ac63ce9300257c3ecd6f23d2675aeab20b7774b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
