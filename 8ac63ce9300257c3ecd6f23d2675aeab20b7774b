@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d1635de_4c56dfb9",
+        "filename": "vm/arch/x86/Call386ABI.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-01-14T02:31:15Z",
+      "side": 1,
+      "message": "Is there a reason we can\u0027t just do \"subl $12, $esp\" (ie lose the andl)? My reason for thinking that\u0027s ok is that we get here from C code (so 16byte alignment is a given) and we\u0027ve got 5 things on the stack (4 pushes + return address).",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "8ac63ce9300257c3ecd6f23d2675aeab20b7774b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
