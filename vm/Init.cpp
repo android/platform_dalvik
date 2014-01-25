@@ -17,7 +17,6 @@
 /*
  * Dalvik initialization, shutdown, and command-line argument processing.
  */
-#define __STDC_LIMIT_MACROS
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
