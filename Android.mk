@@ -24,6 +24,7 @@ subdirs := $(addprefix $(LOCAL_PATH)/,$(addsuffix /Android.mk, \
 		dx \
 		tools \
 		unit-tests \
+		vm/compiler/codegen/x86/libenc \
 	))
 
 include $(subdirs)
