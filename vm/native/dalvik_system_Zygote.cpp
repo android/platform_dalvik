@@ -29,6 +29,8 @@
 #include <grp.h>
 #include <errno.h>
 #include <paths.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <sys/personality.h>
 #include <sys/stat.h>
 #include <sys/mount.h>
@@ -488,10 +490,49 @@ static bool needsNoRandomizeWorkaround() {
 #endif
 }
 
+#ifdef HAVE_ANDROID_OS
+
+// Utility to close down the Zygote socket file descriptors while
+// the child is still running as root with Zygote's privileges.  Each
+// descriptor (if any) is closed via dup2(), replacing it with a valid
+// (open) descriptor to /dev/null.
+
+static void detachDescriptors(ArrayObject* fdsToClose) {
+    if (!fdsToClose) {
+        return;
+    }
+    size_t count = fdsToClose->length;
+    int *ar = (int *) (void *) fdsToClose->contents;
+    if (!ar) {
+        ALOG(LOG_ERROR, ZYGOTE_LOG_TAG, "Bad fd array");
+        dvmAbort();
+    }
+    size_t i;
+    int devnull;
+    for (i = 0; i < count; i++) {
+        if (ar[1] < 0) {
+            continue;
+        }
+        devnull = open ("/dev/null", O_RDWR);
+        if (devnull < 0) {
+            ALOG(LOG_ERROR, ZYGOTE_LOG_TAG, "Failed to open /dev/null");
+            dvmAbort();
+        }
+        ALOG(LOG_VERBOSE, ZYGOTE_LOG_TAG, "Switching descriptor %d to /dev/null", ar[i]);
+        if (dup2(devnull, ar[i]) < 0) {
+            ALOG(LOG_ERROR, ZYGOTE_LOG_TAG, "Failed dup2() on descriptor %d", ar[i]);
+            dvmAbort();
+        }
+        close(devnull);
+    }
+}
+
+#endif
+
 /*
  * Utility routine to fork zygote and specialize the child process.
  */
-static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
+static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer, bool legacyFork)
 {
     pid_t pid;
 
@@ -500,6 +541,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     ArrayObject* gids = (ArrayObject *)args[2];
     u4 debugFlags = args[3];
     ArrayObject *rlimits = (ArrayObject *)args[4];
+    ArrayObject *fdsToClose = NULL;
     u4 mountMode = MOUNT_EXTERNAL_NONE;
     int64_t permittedCapabilities, effectiveCapabilities;
     char *seInfo = NULL;
@@ -534,6 +576,9 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
                 dvmAbort();
             }
         }
+        if (!legacyFork) {
+          fdsToClose = (ArrayObject *)args[8];
+        }
     }
 
     if (!gDvm.zygote) {
@@ -560,6 +605,10 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 #ifdef HAVE_ANDROID_OS
         extern int gMallocLeakZygoteChild;
         gMallocLeakZygoteChild = 1;
+
+        // Unhook from the Zygote sockets immediately
+
+        detachDescriptors(fdsToClose);
 
         /* keep caps across UID change, unless we're staying root */
         if (uid != 0) {
@@ -693,6 +742,28 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 }
 
 /*
+ * We must expose both flavors of the native forking code for a while,
+ * as this Dalvik change must be reviewed and checked in before the
+ * libcore and frameworks changes.  The legacy fork API function and
+ * registration can be removed later.
+ */
+
+/*
+ * native public static int nativeForkAndSpecialize(int uid, int gid,
+ *     int[] gids, int debugFlags, int[][] rlimits, int mountExternal,
+ *     String seInfo, String niceName, int[] fdsToClose);
+ */
+static void Dalvik_dalvik_system_Zygote_forkAndSpecialize_new(const u4* args,
+    JValue* pResult)
+{
+    pid_t pid;
+
+    pid = forkAndSpecializeCommon(args, false, false);
+
+    RETURN_INT(pid);
+}
+
+/*
  * native public static int nativeForkAndSpecialize(int uid, int gid,
  *     int[] gids, int debugFlags, int[][] rlimits, int mountExternal,
  *     String seInfo, String niceName);
@@ -702,7 +773,7 @@ static void Dalvik_dalvik_system_Zygote_forkAndSpecialize(const u4* args,
 {
     pid_t pid;
 
-    pid = forkAndSpecializeCommon(args, false);
+    pid = forkAndSpecializeCommon(args, false, true);
 
     RETURN_INT(pid);
 }
@@ -716,7 +787,7 @@ static void Dalvik_dalvik_system_Zygote_forkSystemServer(
         const u4* args, JValue* pResult)
 {
     pid_t pid;
-    pid = forkAndSpecializeCommon(args, true);
+    pid = forkAndSpecializeCommon(args, true, true);
 
     /* The zygote process checks whether the child process has died or not. */
     if (pid > 0) {
@@ -739,6 +810,8 @@ static void Dalvik_dalvik_system_Zygote_forkSystemServer(
 const DalvikNativeMethod dvm_dalvik_system_Zygote[] = {
     { "nativeFork", "()I",
       Dalvik_dalvik_system_Zygote_fork },
+    { "nativeForkAndSpecialize", "(II[II[[IILjava/lang/String;Ljava/lang/String;[I)I",
+      Dalvik_dalvik_system_Zygote_forkAndSpecialize_new },
     { "nativeForkAndSpecialize", "(II[II[[IILjava/lang/String;Ljava/lang/String;)I",
       Dalvik_dalvik_system_Zygote_forkAndSpecialize },
     { "nativeForkSystemServer", "(II[II[[IJJ)I",
