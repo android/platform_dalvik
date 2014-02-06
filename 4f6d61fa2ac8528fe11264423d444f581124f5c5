@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2496e4f_72f358ba",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1003966
+      },
+      "writtenOn": "2014-02-06T20:54:20Z",
+      "side": 1,
+      "message": "nit: whitespace between \"open\" and \"(\"",
+      "revId": "4f6d61fa2ac8528fe11264423d444f581124f5c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
