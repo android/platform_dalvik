@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "323d7e9f_3711badf",
+        "filename": "vm/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2014-02-07T20:36:37Z",
+      "side": 1,
+      "message": "not sure the build system people will be thrilled we are adding dependencies to our convenience phony target.",
+      "range": {
+        "startLine": 165,
+        "startChar": 44,
+        "endLine": 165,
+        "endChar": 55
+      },
+      "revId": "d332ede9ac423296af54f2f04d2c434ed2906af1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
