@@ -14,6 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+function follow_links() {
+  file="$1"
+  while [ -h "$file" ]; do
+    # On Mac OS, readlink -f doesn't work.
+    file="$(readlink "$file")"
+  done
+  echo "$file"
+}
+
+PROG_NAME="$(follow_links "$BASH_SOURCE")"
+PROG_DIR="$(cd "${PROG_NAME%/*}" ; pwd -P)"
+ANDROID_BUILD_TOP="$(cd "${PROG_DIR}/../../../../" ; pwd -P)/"
+
 mkdir -p /tmp/android-data/dalvik-cache
 ANDROID_PRINTF_LOG=tag \
 ANDROID_LOG_TAGS="" \

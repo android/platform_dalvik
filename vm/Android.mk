@@ -162,7 +162,7 @@ ifeq ($(WITH_HOST_DALVIK),true)
     LOCAL_MODULE_CLASS := EXECUTABLES
     LOCAL_MODULE := dalvik
     include $(BUILD_SYSTEM)/base_rules.mk
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/dalvik | $(ACP)
+$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/dalvik dalvik-host | $(ACP)
 	@echo "Copy: $(PRIVATE_MODULE) ($@)"
 	$(copy-file-to-new-target)
 	$(hide) chmod 755 $@
