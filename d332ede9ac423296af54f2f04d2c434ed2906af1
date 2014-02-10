@@ -22,6 +22,30 @@
       "revId": "d332ede9ac423296af54f2f04d2c434ed2906af1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf7639c5_93a25cbc",
+        "filename": "vm/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2014-02-10T09:19:52Z",
+      "side": 1,
+      "message": "Oh, yeah, I overlooked dalvik-host and did not see it already contains the dalvik script. Nevermind, I won\u0027t change this makefile.",
+      "parentUuid": "323d7e9f_3711badf",
+      "range": {
+        "startLine": 165,
+        "startChar": 44,
+        "endLine": 165,
+        "endChar": 55
+      },
+      "revId": "d332ede9ac423296af54f2f04d2c434ed2906af1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
