@@ -449,23 +449,6 @@ static void Dalvik_dalvik_system_DexFile_getClassNameList(const u4* args,
     RETURN_PTR(stringArray);
 }
 
-/*
- * public static boolean isDexOptNeeded(String fileName)
- *         throws FileNotFoundException, IOException
- *
- * Returns true if the VM believes that the apk/jar file is out of date
- * and should be passed through "dexopt" again.
- *
- * @param fileName the absolute path to the apk/jar file to examine.
- * @return true if dexopt should be called on the file, false otherwise.
- * @throws java.io.FileNotFoundException if fileName is not readable,
- *         not a file, or not present.
- * @throws java.io.IOException if fileName is not a valid apk/jar file or
- *         if problems occur while parsing it.
- * @throws java.lang.NullPointerException if fileName is null.
- * @throws dalvik.system.StaleDexCacheError if the optimized dex file
- *         is stale but exists on a read-only partition.
- */
 static void Dalvik_dalvik_system_DexFile_isDexOptNeeded(const u4* args,
     JValue* pResult)
 {
@@ -514,6 +497,29 @@ static void Dalvik_dalvik_system_DexFile_isDexOptNeeded(const u4* args,
     }
 }
 
+/*
+ * public static boolean isDexOptNeeded(String fileName, String pkgname)
+ *         throws FileNotFoundException, IOException
+ *
+ * Returns true if the VM believes that the apk/jar file is out of date
+ * and should be passed through "dexopt" again.
+ *
+ * @param fileName the absolute path to the apk/jar file to examine.
+ * @return true if dexopt should be called on the file, false otherwise.
+ * @throws java.io.FileNotFoundException if fileName is not readable,
+ *         not a file, or not present.
+ * @throws java.io.IOException if fileName is not a valid apk/jar file or
+ *         if problems occur while parsing it.
+ * @throws java.lang.NullPointerException if fileName is null.
+ * @throws dalvik.system.StaleDexCacheError if the optimized dex file
+ *         is stale but exists on a read-only partition.
+ */
+static void Dalvik_dalvik_system_DexFile_isDexOptNeededInternal(const u4* args,
+    JValue* pResult)
+{
+   Dalvik_dalvik_system_DexFile_isDexOptNeeded(args, pResult);
+}
+
 const DalvikNativeMethod dvm_dalvik_system_DexFile[] = {
     { "openDexFileNative",  "(Ljava/lang/String;Ljava/lang/String;I)J",
         Dalvik_dalvik_system_DexFile_openDexFileNative },
@@ -527,5 +533,7 @@ const DalvikNativeMethod dvm_dalvik_system_DexFile[] = {
         Dalvik_dalvik_system_DexFile_getClassNameList },
     { "isDexOptNeeded",     "(Ljava/lang/String;)Z",
         Dalvik_dalvik_system_DexFile_isDexOptNeeded },
+    { "isDexOpNeededInternal",     "(Ljava/lang/String;Ljava/lang/String;Z)Z",
+        Dalvik_dalvik_system_DexFile_isDexOptNeededInternal },
     { NULL, NULL, NULL },
 };
