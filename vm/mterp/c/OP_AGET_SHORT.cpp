@@ -1,2 +1,2 @@
-HANDLE_OP_AGET(OP_AGET_SHORT, "-short", s2, )
+HANDLE_OP_AGET(OP_AGET_SHORT, "-short", s2, _INT)
 OP_END

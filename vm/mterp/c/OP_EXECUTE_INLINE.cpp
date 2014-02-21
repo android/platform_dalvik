@@ -16,7 +16,7 @@ HANDLE_OPCODE(OP_EXECUTE_INLINE /*vB, {vD, vE, vF, vG}, inline@CCCC*/)
          * either way as the uninitialiezd values are never actually
          * used.
          */
-        u4 arg0, arg1, arg2, arg3;
+        StackSlot arg0, arg1, arg2, arg3;
         arg0 = arg1 = arg2 = arg3 = 0;
 
         EXPORT_PC();

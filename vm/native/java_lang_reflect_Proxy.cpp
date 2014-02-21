@@ -28,7 +28,7 @@
  * Generate a proxy class with the specified characteristics.  Throws an
  * exception on error.
  */
-static void Dalvik_java_lang_reflect_Proxy_generateProxy(const u4* args,
+static void Dalvik_java_lang_reflect_Proxy_generateProxy(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* str = (StringObject*) args[0];

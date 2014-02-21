@@ -1,2 +1,2 @@
-HANDLE_IGET_X_QUICK(OP_IGET_QUICK,          "", Int, )
+HANDLE_IGET_X_QUICK(OP_IGET_QUICK,          "", Int, _INT)
 OP_END

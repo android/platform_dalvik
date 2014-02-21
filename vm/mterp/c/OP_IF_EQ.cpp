@@ -1,2 +1,2 @@
-HANDLE_OP_IF_XX(OP_IF_EQ, "eq", ==)
+HANDLE_OP_IF_EQ(OP_IF_EQ, "eq", ==)
 OP_END

@@ -23,7 +23,7 @@
 /*
  * Stash the dalvik PC in the frame.  Called  during interpretation.
  */
-INLINE void dvmExportPC(const u2* pc, const u4* fp)
+INLINE void dvmExportPC(const u2* pc, const StackSlot* fp)
 {
     SAVEAREA_FROM_FP(fp)->xtra.currentPc = pc;
 }
@@ -77,10 +77,10 @@ void dvmFlushBreakpoints(ClassObject* clazz);
 /*
  * Debugger support
  */
-extern "C" void dvmCheckBefore(const u2 *dPC, u4 *fp, Thread* self);
+extern "C" void dvmCheckBefore(const u2 *dPC, StackSlot *fp, Thread* self);
 extern "C" void dvmReportExceptionThrow(Thread* self, Object* exception);
-extern "C" void dvmReportPreNativeInvoke(const Method* methodToCall, Thread* self, u4* fp);
-extern "C" void dvmReportPostNativeInvoke(const Method* methodToCall, Thread* self, u4* fp);
+extern "C" void dvmReportPreNativeInvoke(const Method* methodToCall, Thread* self, StackSlot* fp);
+extern "C" void dvmReportPostNativeInvoke(const Method* methodToCall, Thread* self, StackSlot* fp);
 extern "C" void dvmReportInvoke(Thread* self, const Method* methodToCall);
 extern "C" void dvmReportReturn(Thread* self);
 

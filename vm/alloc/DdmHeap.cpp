@@ -328,7 +328,7 @@ static void heap_chunk_callback(void* start, void* end, size_t used_bytes,
 //TODO: if ctx.merge, see if this chunk is different from the last chunk.
 //      If it's the same, we should combine them.
     if (!native && dvmIsValidObject(obj)) {
-        ClassObject *clazz = obj->clazz;
+        ClassObject *clazz = dvmRefExpandClazzGlobal(obj->clazz);
         if (clazz == NULL) {
             /* The object was probably just created
              * but hasn't been initialized yet.

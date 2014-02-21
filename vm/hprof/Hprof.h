@@ -18,7 +18,7 @@
 
 #include "Dalvik.h"
 
-#define HPROF_ID_SIZE (sizeof (u4))
+#define HPROF_ID_SIZE (sizeof (uintptr_t))
 
 #define UNIQUE_ERROR() \
     -((((uintptr_t)__func__) << 16 | __LINE__) & (0x7fffffff))
@@ -27,7 +27,7 @@
 #define HPROF_NULL_STACK_TRACE   0
 #define HPROF_NULL_THREAD        0
 
-typedef u4 hprof_id;
+typedef uintptr_t hprof_id;
 typedef hprof_id hprof_string_id;
 typedef hprof_id hprof_object_id;
 typedef hprof_id hprof_class_object_id;
@@ -210,9 +210,16 @@ int hprofAddU8ToRecord(hprof_record_t *rec, u8 value);
 int hprofAddU8ListToRecord(hprof_record_t *rec,
                            const u8 *values, size_t numValues);
 
-#define hprofAddIdToRecord(rec, id) hprofAddU4ToRecord((rec), (u4)(id))
+
+#ifndef _LP64
+#define hprofAddIdToRecord(rec, id) hprofAddU4ToRecord((rec), (hprof_id)(id))
 #define hprofAddIdListToRecord(rec, values, numValues) \
             hprofAddU4ListToRecord((rec), (const u4 *)(values), (numValues))
+#else
+#define hprofAddIdToRecord(rec, id) hprofAddU8ToRecord((rec), (hprof_id)(id))
+#define hprofAddIdListToRecord(rec, values, numValues) \
+            hprofAddU8ListToRecord((rec), (const u8 *)(values), (numValues))
+#endif
 
 /*
  * Hprof.cpp functions

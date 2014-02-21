@@ -48,7 +48,7 @@ extern void dvmMterpStd(Thread* self);
 /*
  * Get the "this" pointer from the current frame.
  */
-Object* dvmGetThisPtr(const Method* method, const u4* fp);
+Object* dvmGetThisPtr(const Method* method, const StackSlot* fp);
 
 /*
  * Verify that our tracked local references are valid.

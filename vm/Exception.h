@@ -191,11 +191,11 @@ INLINE Object* dvmFillInStackTrace(Thread* thread) {
 }
 ArrayObject* dvmGetStackTrace(const Object* stackState);
 /* return an int* and array count; caller must free() the return value */
-INLINE int* dvmFillInStackTraceRaw(Thread* thread, size_t* pCount) {
-    return (int*) dvmFillInStackTraceInternal(thread, false, pCount);
+INLINE intptr_t* dvmFillInStackTraceRaw(Thread* thread, size_t* pCount) {
+    return (intptr_t*) dvmFillInStackTraceInternal(thread, false, pCount);
 }
-ArrayObject* dvmGetStackTraceRaw(const int* intVals, size_t stackDepth);
-void dvmFillStackTraceElements(const int* intVals, size_t stackDepth, ArrayObject* steArray);
+ArrayObject* dvmGetStackTraceRaw(const intptr_t* intVals, size_t stackDepth);
+void dvmFillStackTraceElements(const intptr_t* intVals, size_t stackDepth, ArrayObject* steArray);
 
 /*
  * Print a formatted version of a raw stack trace to the log file.

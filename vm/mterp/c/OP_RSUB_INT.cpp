@@ -4,7 +4,7 @@ HANDLE_OPCODE(OP_RSUB_INT /*vA, vB, #+CCCC*/)
         vsrc1 = INST_B(inst);
         vsrc2 = FETCH(1);
         ILOGV("|rsub-int v%d,v%d,#+0x%04x", vdst, vsrc1, vsrc2);
-        SET_REGISTER(vdst, (s2) vsrc2 - (s4) GET_REGISTER(vsrc1));
+        SET_REGISTER_INT(vdst, (s2) vsrc2 - (s4) GET_REGISTER_INT(vsrc1));
     }
     FINISH(2);
 OP_END

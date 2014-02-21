@@ -27,7 +27,7 @@
  * Enable DDM thread notifications.
  */
 static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_threadNotify(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     bool enable = (args[0] != 0);
 
@@ -42,7 +42,7 @@ static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_threadNotify(
  * Get a buffer full of thread info.
  */
 static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_getThreadStats(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
 
@@ -57,9 +57,9 @@ static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_getThreadStats(
  * Enable DDM heap notifications.
  */
 static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_heapInfoNotify(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
-    int when = args[0];
+    int when = (int) args[0];
     bool ret;
 
     ret = dvmDdmHandleHpifChunk(when);
@@ -73,10 +73,10 @@ static void Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_heapInfoNotify(
  */
 static void
     Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_heapSegmentNotify(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
-    int  when   = args[0];        // 0=never (off), 1=during GC
-    int  what   = args[1];        // 0=merged objects, 1=distinct objects
+    int  when   = (int)args[0];        // 0=never (off), 1=during GC
+    int  what   = (int)args[1];        // 0=merged objects, 1=distinct objects
     bool native = (args[2] != 0); // false=virtual heap, true=native heap
     bool ret;
 
@@ -92,9 +92,9 @@ static void
  */
 static void
     Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_getStackTraceById(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
-    u4 threadId = args[0];
+    StackSlot threadId = (int)args[0];
     ArrayObject* trace;
 
     trace = dvmDdmGetStackTraceById(threadId);
@@ -108,7 +108,7 @@ static void
  */
 static void
     Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_enableRecentAllocations(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     bool enable = (args[0] != 0);
 
@@ -126,7 +126,7 @@ static void
  */
 static void
     Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_getRecentAllocationStatus(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
     RETURN_BOOLEAN(gDvm.allocRecords != NULL);
@@ -139,7 +139,7 @@ static void
  */
 static void
     Dalvik_org_apache_harmony_dalvik_ddmc_DdmVmInternal_getRecentAllocations(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     ArrayObject* data;
 

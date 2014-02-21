@@ -9,7 +9,7 @@ HANDLE_OPCODE(OP_INSTANCE_OF /*vA, vB, class@CCCC*/)
         ILOGV("|instance-of v%d,v%d,class@0x%04x", vdst, vsrc1, ref);
 
         obj = (Object*)GET_REGISTER(vsrc1);
-        if (obj == NULL) {
+        if (dvmRefIsNull(obj)) {
             SET_REGISTER(vdst, 0);
         } else {
 #if defined(WITH_EXTRA_OBJECT_VALIDATION)
@@ -23,7 +23,7 @@ HANDLE_OPCODE(OP_INSTANCE_OF /*vA, vB, class@CCCC*/)
                 if (clazz == NULL)
                     GOTO_exceptionThrown();
             }
-            SET_REGISTER(vdst, dvmInstanceof(obj->clazz, clazz));
+            SET_REGISTER(vdst, dvmInstanceof(dvmRefExpandClazz(obj->clazz, heapBase), clazz));
         }
     }
     FINISH(2);

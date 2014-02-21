@@ -71,12 +71,61 @@
  *
  * All values are stored in little-endian order.
  */
+
+// On 64 bit systems:
+
+/*
+ * File format:
+ *  header
+ *  record 0
+ *  record 1
+ *  ...
+ *
+ * Header format:
+ *  u4  magic ('SW64')
+ *  u2  version
+ *  u2  offset to data
+ *  u8  start date/time in usec
+ *  u2  record size in bytes (version >= 2 only)
+ *  ... padding to 32 bytes
+ *
+ * Record format v1:
+ *  u1  thread ID
+ *  u8  method ID | method action
+ *  u4  time delta since start, in usec
+ *
+ * Record format v2:
+ *  u2  thread ID
+ *  u8  method ID | method action
+ *  u4  time delta since start, in usec
+ *
+ * Record format v3:
+ *  u2  thread ID
+ *  u8  method ID | method action
+ *  u4  time delta since start, in usec
+ *  u4  wall time since start, in usec (when clock == "dual" only)
+ *
+ * 32 bits of microseconds is 70 minutes.
+ *
+ * All values are stored in little-endian order.
+ */
+#ifndef _LP64
+
 #define TRACE_REC_SIZE_SINGLE_CLOCK  10 // using v2
 #define TRACE_REC_SIZE_DUAL_CLOCK    14 // using v3 with two timestamps
 #define TRACE_MAGIC         0x574f4c53
+#define FILL_PATTERN        0xeeeeeeee
+
+#else
+
+#define TRACE_REC_SIZE_SINGLE_CLOCK  14 // using v2
+#define TRACE_REC_SIZE_DUAL_CLOCK    18 // using v3 with two timestamps
+#define TRACE_MAGIC         0x57533634
+#define FILL_PATTERN        0xeeeeeeeeeeeeeeeeL
+#endif
+
 #define TRACE_HEADER_LEN    32
 
-#define FILL_PATTERN        0xeeeeeeee
 
 
 /*
@@ -185,7 +234,7 @@ static const Method** getStackTrace(Thread* thread, size_t* pCount)
     while (fp != NULL) {
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
 
-        if (!dvmIsBreakFrame((u4*) fp))
+        if (!dvmIsBreakFrame((StackSlot*) fp))
             stackDepth++;
 
         assert(fp != saveArea->prevFrame);
@@ -209,7 +258,7 @@ static const Method** getStackTrace(Thread* thread, size_t* pCount)
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
         const Method* method = saveArea->method;
 
-        if (!dvmIsBreakFrame((u4*) fp)) {
+        if (!dvmIsBreakFrame((StackSlot*) fp)) {
             *ptr++ = method;
             stackDepth--;
         }
@@ -281,7 +330,7 @@ static void getSample(Thread* thread)
  */
 static void* runSamplingThread(void* arg)
 {
-    int intervalUs = (int) arg;
+    uintptr_t intervalUs = (uintptr_t) arg;
     while (gDvm.methodTrace.traceEnabled) {
         dvmSuspendAllThreads(SUSPEND_FOR_SAMPLING);
 
@@ -439,7 +488,7 @@ static void dumpThreadList(FILE* fp) {
 /*
  * This is a dvmHashForeach callback.
  */
-static int dumpMarkedMethods(void* vclazz, void* vfp)
+static intptr_t dumpMarkedMethods(void* vclazz, void* vfp)
 {
     DexStringCache stringCache;
     ClassObject* clazz = (ClassObject*) vclazz;
@@ -454,8 +503,12 @@ static int dumpMarkedMethods(void* vclazz, void* vfp)
         meth = &clazz->virtualMethods[i];
         if (meth->inProfile) {
             name = dvmDescriptorToName(meth->clazz->descriptor);
-            fprintf(fp, "0x%08x\t%s\t%s\t%s\t%s\t%d\n", (int) meth,
-                name, meth->name,
+#ifndef _LP64
+            fprintf(fp, "0x%08x\t%s\t%s\t%s\t%s\t%d\n",
+#else
+            fprintf(fp, "0x%016lx\t%s\t%s\t%s\t%s\t%d\n",
+#endif
+                (intptr_t) meth, name, meth->name,
                 dexProtoGetMethodDescriptor(&meth->prototype, &stringCache),
                 dvmGetMethodSourceFile(meth), dvmLineNumFromPC(meth, 0));
             meth->inProfile = false;
@@ -467,8 +520,12 @@ static int dumpMarkedMethods(void* vclazz, void* vfp)
         meth = &clazz->directMethods[i];
         if (meth->inProfile) {
             name = dvmDescriptorToName(meth->clazz->descriptor);
-            fprintf(fp, "0x%08x\t%s\t%s\t%s\t%s\t%d\n", (int) meth,
-                name, meth->name,
+#ifndef _LP64
+            fprintf(fp, "0x%08x\t%s\t%s\t%s\t%s\t%d\n",
+#else
+            fprintf(fp, "0x%016lx\t%s\t%s\t%s\t%s\t%d\n",
+#endif
+                (intptr_t) meth, name, meth->name,
                 dexProtoGetMethodDescriptor(&meth->prototype, &stringCache),
                 dvmGetMethodSourceFile(meth), dvmLineNumFromPC(meth, 0));
             meth->inProfile = false;
@@ -502,7 +559,7 @@ static void dumpMethodList(FILE* fp)
  * On failure, we throw an exception and return.
  */
 void dvmMethodTraceStart(const char* traceFileName, int traceFd, int bufferSize,
-    int flags, bool directToDdms, bool samplingEnabled, int intervalUs)
+    int flags, bool directToDdms, bool samplingEnabled, long intervalUs)
 {
     MethodTraceState* state = &gDvm.methodTrace;
 
@@ -601,7 +658,7 @@ void dvmMethodTraceStart(const char* traceFileName, int traceFd, int bufferSize,
         updateActiveProfilers(kSubModeSampleTrace, true);
         /* Start the sampling thread. */
         if (!dvmCreateInternalThread(&state->samplingThreadHandle,
-                "Sampling Thread", &runSamplingThread, (void*) intervalUs)) {
+                "Sampling Thread", &runSamplingThread, (void*) (uintptr_t)intervalUs)) {
             dvmThrowInternalError("failed to create sampling thread");
             goto fail;
         }
@@ -635,12 +692,25 @@ static void markTouchedMethods(int endOffset)
     u1* ptr = gDvm.methodTrace.buf + TRACE_HEADER_LEN;
     u1* end = gDvm.methodTrace.buf + endOffset;
     size_t recordSize = gDvm.methodTrace.recordSize;
-    unsigned int methodVal;
+    uintptr_t methodVal;
     Method* method;
 
     while (ptr < end) {
-        methodVal = ptr[2] | (ptr[3] << 8) | (ptr[4] << 16)
-                    | (ptr[5] << 24);
+#ifndef _LP64
+        methodVal = ptr[2]
+                    | (ptr[3] << 8*1)
+                    | (ptr[4] << 8*2)
+                    | (ptr[5] << 8*3);
+#else
+        methodVal = ptr[2]
+                    | (ptr[3] << 8*1)
+                    | (ptr[4] << 8*2)
+                    | (ptr[5] << 8*3)
+                    | (((uintptr_t)ptr[6]) << 8*4)
+                    | (((uintptr_t)ptr[7]) << 8*5)
+                    | (((uintptr_t)ptr[8]) << 8*6)
+                    | (((uintptr_t)ptr[9]) << 8*7);
+#endif
         method = (Method*) METHOD_ID(methodVal);
 
         method->inProfile = true;
@@ -776,15 +846,28 @@ void dvmMethodTraceStop()
 
     size_t recordSize = state->recordSize;
     if (finalCurOffset > TRACE_HEADER_LEN) {
-        u4 fillVal = METHOD_ID(FILL_PATTERN);
+        uintptr_t fillVal = METHOD_ID(FILL_PATTERN);
         u1* scanPtr = state->buf + TRACE_HEADER_LEN;
 
         while (scanPtr < state->buf + finalCurOffset) {
-            u4 methodVal = scanPtr[2] | (scanPtr[3] << 8) | (scanPtr[4] << 16)
-                        | (scanPtr[5] << 24);
+#ifndef _LP64
+            uintptr_t methodVal = scanPtr[2]
+                    | (scanPtr[3] << 8*1)
+                    | (scanPtr[4] << 8*2)
+                    | (scanPtr[5] << 8*3);
+#else
+            uintptr_t methodVal = scanPtr[2]
+                    | (scanPtr[3] << 8*1)
+                    | (scanPtr[4] << 8*2)
+                    | (scanPtr[5] << 8*3)
+                    | (((uintptr_t)scanPtr[6]) << 8*4)
+                    | (((uintptr_t)scanPtr[7]) << 8*5)
+                    | (((uintptr_t)scanPtr[8]) << 8*6)
+                    | (((uintptr_t)scanPtr[9]) << 8*7);
+#endif
             if (METHOD_ID(methodVal) == fillVal) {
                 u1* scanBase = state->buf + TRACE_HEADER_LEN;
-                ALOGW("Found unfilled record at %d (of %d)",
+                ALOGW("Found unfilled record at %zd (of %zu)",
                     (scanPtr - scanBase) / recordSize,
                     (finalCurOffset - TRACE_HEADER_LEN) / recordSize);
                 finalCurOffset = scanPtr - state->buf;
@@ -795,7 +878,7 @@ void dvmMethodTraceStop()
         }
     }
 
-    ALOGI("TRACE STOPPED%s: writing %d records",
+    ALOGI("TRACE STOPPED%s: writing %zu records",
         state->overflow ? " (NOTE: overflowed buffer)" : "",
         (finalCurOffset - TRACE_HEADER_LEN) / recordSize);
     if (gDvm.debuggerActive) {
@@ -836,8 +919,8 @@ void dvmMethodTraceStop()
     } else {
         fprintf(state->traceFile, "clock=wall\n");
     }
-    fprintf(state->traceFile, "elapsed-time-usec=%llu\n", elapsed);
-    fprintf(state->traceFile, "num-method-calls=%d\n",
+    fprintf(state->traceFile, "elapsed-time-usec=%" PRIu64 "\n", elapsed);
+    fprintf(state->traceFile, "num-method-calls=%zd\n",
         (finalCurOffset - TRACE_HEADER_LEN) / state->recordSize);
     fprintf(state->traceFile, "clock-call-overhead-nsec=%d\n", clockNsec);
     fprintf(state->traceFile, "vm=dalvik\n");
@@ -933,7 +1016,7 @@ void dvmMethodTraceAdd(Thread* self, const Method* method, int action,
                        u4 cpuClockDiff, u4 wallClockDiff)
 {
     MethodTraceState* state = &gDvm.methodTrace;
-    u4 methodVal;
+    uintptr_t methodVal;
     int oldOffset, newOffset;
     u1* ptr;
 
@@ -954,7 +1037,7 @@ void dvmMethodTraceAdd(Thread* self, const Method* method, int action,
 
     //assert(METHOD_ACTION((u4) method) == 0);
 
-    methodVal = METHOD_COMBINE((u4) method, action);
+    methodVal = METHOD_COMBINE((uintptr_t) method, action);
 
     /*
      * Write data into "oldOffset".
@@ -966,6 +1049,12 @@ void dvmMethodTraceAdd(Thread* self, const Method* method, int action,
     *ptr++ = (u1) (methodVal >> 8);
     *ptr++ = (u1) (methodVal >> 16);
     *ptr++ = (u1) (methodVal >> 24);
+#ifdef _LP64
+    *ptr++ = (u1) (methodVal >> 32);
+    *ptr++ = (u1) (methodVal >> 40);
+    *ptr++ = (u1) (methodVal >> 48);
+    *ptr++ = (u1) (methodVal >> 56);
+#endif
 
 #if defined(HAVE_POSIX_CLOCKS)
     if (useThreadCpuClock()) {
@@ -1052,8 +1141,8 @@ void dvmEmitEmulatorTrace(const Method* method, int action)
     if (dvmIsAbstractMethod(method))
         return;
 
-    u4* pMagic = (u4*) gDvm.emulatorTracePage;
-    u4 addr;
+    uintptr_t* pMagic = (uintptr_t*) gDvm.emulatorTracePage;
+    uintptr_t addr;
 
     if (dvmIsNativeMethod(method)) {
         /*
@@ -1073,7 +1162,7 @@ void dvmEmitEmulatorTrace(const Method* method, int action)
          * Fortunately, the trace tools can get by without the address, but
          * it would be nice to fix this.
          */
-         addr = (u4) method->nativeFunc;
+         addr = (uintptr_t) method->nativeFunc;
     } else {
         /*
          * The dexlist output shows the &DexCode.insns offset value, which
@@ -1089,11 +1178,11 @@ void dvmEmitEmulatorTrace(const Method* method, int action)
          */
         assert(method->insns != NULL);
         const DexOptHeader* pOptHdr = method->clazz->pDvmDex->pDexFile->pOptHeader;
-        addr = (u4) method->insns - pOptHdr->dexOffset;
+        addr = (uintptr_t) method->insns - pOptHdr->dexOffset;
     }
 
     *(pMagic+action) = addr;
-    LOGVV("Set %p = 0x%08x (%s.%s)",
+    LOGVV("Set %p = %p (%s.%s)",
         pMagic+action, addr, method->clazz->descriptor, method->name);
 #endif
 }

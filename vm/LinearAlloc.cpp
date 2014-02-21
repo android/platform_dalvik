@@ -164,7 +164,7 @@ LinearAllocHdr* dvmLinearAllocCreate(Object* classLoader)
 #endif /*USE_ASHMEM*/
 
     /* region expected to begin on a page boundary */
-    assert(((int) pHdr->mapAddr & (SYSTEM_PAGE_SIZE-1)) == 0);
+    assert(((uintptr_t) pHdr->mapAddr & (SYSTEM_PAGE_SIZE-1)) == 0);
 
     /* the system should initialize newly-mapped memory to zero */
     assert(*(u4*) (pHdr->mapAddr + pHdr->curOffset) == 0);
@@ -426,7 +426,7 @@ void* dvmLinearRealloc(Object* classLoader, void* mem, size_t newSize)
                           getHeader(classLoader)->curOffset));
 
     const u4* pLen = getBlockHeader(mem);
-    ALOGV("--- LinearRealloc(%d) old=%d", newSize, *pLen);
+    ALOGV("--- LinearRealloc(%zu) old=%x", newSize, *pLen);
 
     /* handle size reduction case */
     if (*pLen >= newSize) {
@@ -467,6 +467,7 @@ static void updatePages(Object* classLoader, void* mem, int direction)
     LOGVV("--- updating pages %d-%d (%d)", firstPage, lastPage, direction);
 
     int i, cc;
+    (void)cc;
 
     /*
      * Update individual pages.  We could do some sort of "lazy update" to

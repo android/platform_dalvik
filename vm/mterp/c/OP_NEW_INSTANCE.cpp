@@ -42,7 +42,7 @@ HANDLE_OPCODE(OP_NEW_INSTANCE /*vAA, class@BBBB*/)
         newObj = dvmAllocObject(clazz, ALLOC_DONT_TRACK);
         if (newObj == NULL)
             GOTO_exceptionThrown();
-        SET_REGISTER(vdst, (u4) newObj);
+        SET_REGISTER(vdst, (StackSlot) newObj);
     }
     FINISH(2);
 OP_END

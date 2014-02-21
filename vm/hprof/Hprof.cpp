@@ -145,7 +145,7 @@ bool hprofShutdown(hprof_context_t *tailCtx)
     }
 
     /* throw out a log message for the benefit of "runhat" */
-    ALOGI("hprof: heap dump completed (%dKB)",
+    ALOGI("hprof: heap dump completed (%zdKB)",
         (headCtx->fileDataSize + tailCtx->fileDataSize + 1023) / 1024);
 
     hprofFreeContext(headCtx);

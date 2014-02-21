@@ -22,7 +22,6 @@
 #include "analysis/CodeVerify.h"
 #include "libdex/DexCatch.h"
 
-
 /* fwd */
 static bool verifyMethod(Method* meth);
 static bool verifyInstructions(VerifierData* vdata);
@@ -98,7 +97,7 @@ static bool computeWidthsAndCountOps(VerifierData* vdata)
             goto bail;
         } else if (width > 65535) {
             LOG_VFY_METH(meth,
-                "VFY: warning: unusually large instr width (%d)", width);
+                "VFY: warning: unusually large instr width (%zd)", width);
         }
 
         Opcode opcode = dexOpcodeFromCodeUnit(*insns);
@@ -368,7 +367,7 @@ static bool checkArrayData(const Method* meth, u4 curOffset)
     arrayData = insns + offsetToArrayData;
 
     /* make sure the table is 32-bit aligned */
-    if ((((u4) arrayData) & 0x03) != 0) {
+    if ((((uintptr_t) arrayData) & 0x03) != 0) {
         LOG_VFY("VFY: unaligned array data table: at %d, data offset %d",
             curOffset, offsetToArrayData);
         return false;
@@ -628,7 +627,7 @@ static bool checkSwitchTargets(const Method* meth, InsnFlags* insnFlags,
     switchInsns = insns + offsetToSwitch;
 
     /* make sure the table is 32-bit aligned */
-    if ((((u4) switchInsns) & 0x03) != 0) {
+    if ((((uintptr_t) switchInsns) & 0x03) != 0) {
         LOG_VFY("VFY: unaligned switch table: at %d, switch offset %d",
             curOffset, offsetToSwitch);
         return false;

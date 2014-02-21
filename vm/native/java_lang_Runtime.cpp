@@ -29,7 +29,7 @@
  *
  * Initiate a gc.
  */
-static void Dalvik_java_lang_Runtime_gc(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_Runtime_gc(const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
 
@@ -43,7 +43,7 @@ static void Dalvik_java_lang_Runtime_gc(const u4* args, JValue* pResult)
  * Runtime.exit() calls this after doing shutdown processing.  Runtime.halt()
  * uses this as well.
  */
-static void Dalvik_java_lang_Runtime_nativeExit(const u4* args,
+static void Dalvik_java_lang_Runtime_nativeExit(const StackSlot* args,
     JValue* pResult)
 {
     int status = args[0];
@@ -67,7 +67,7 @@ static void Dalvik_java_lang_Runtime_nativeExit(const u4* args,
  * JNI-compatible methods. Returns null on success, or a failure
  * message on failure.
  */
-static void Dalvik_java_lang_Runtime_nativeLoad(const u4* args,
+static void Dalvik_java_lang_Runtime_nativeLoad(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* fileNameObj = (StringObject*) args[0];
@@ -109,7 +109,7 @@ static void Dalvik_java_lang_Runtime_nativeLoad(const u4* args,
  *
  * Returns GC heap max memory in bytes.
  */
-static void Dalvik_java_lang_Runtime_maxMemory(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_Runtime_maxMemory(const StackSlot* args, JValue* pResult)
 {
     RETURN_LONG(dvmGetHeapDebugInfo(kVirtualHeapMaximumSize));
 }
@@ -119,7 +119,7 @@ static void Dalvik_java_lang_Runtime_maxMemory(const u4* args, JValue* pResult)
  *
  * Returns GC heap total memory in bytes.
  */
-static void Dalvik_java_lang_Runtime_totalMemory(const u4* args,
+static void Dalvik_java_lang_Runtime_totalMemory(const StackSlot* args,
     JValue* pResult)
 {
     RETURN_LONG(dvmGetHeapDebugInfo(kVirtualHeapSize));
@@ -130,7 +130,7 @@ static void Dalvik_java_lang_Runtime_totalMemory(const u4* args,
  *
  * Returns GC heap free memory in bytes.
  */
-static void Dalvik_java_lang_Runtime_freeMemory(const u4* args,
+static void Dalvik_java_lang_Runtime_freeMemory(const StackSlot* args,
     JValue* pResult)
 {
     size_t size = dvmGetHeapDebugInfo(kVirtualHeapSize);

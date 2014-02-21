@@ -43,5 +43,9 @@ static void heap_error(const char* msg, const char* function, void* p) {
     ALOG(LOG_FATAL, LOG_TAG, "@@@ ABORTING: DALVIK: %s IN %s addr=%p", msg,
          function, p);
     /* So that we can get a memory dump around p */
+#if !defined(_LP64)
     *((int **) 0xdeadbaad) = (int *) p;
+#else
+    *((int **) 0xffffffffdeadbaadL) = (int *) p;
+#endif
 }

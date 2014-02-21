@@ -28,7 +28,7 @@
 /*
  * Test foreach.
  */
-static int printFunc(void* data, void* arg)
+static intptr_t printFunc(void* data, void* arg)
 {
     //printf("  '%s'\n", (const char*) data);
     // (should verify strings)

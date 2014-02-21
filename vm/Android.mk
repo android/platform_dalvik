@@ -40,7 +40,12 @@ endif
 host_smp_flag := -DANDROID_SMP=1
 
 # Build the installed version (libdvm.so) first
-WITH_JIT := true
+ifeq ($(TARGET_ARCH),arm64)
+    $(info TODOArm64: JIT not yet implemented for arm64)
+    WITH_JIT := false
+else
+    WITH_JIT := true
+endif
 include $(LOCAL_PATH)/ReconfigureDvm.mk
 
 # Overwrite default settings
@@ -121,6 +126,21 @@ ifeq ($(WITH_HOST_DALVIK),true)
     # Note: HOST_ARCH_VARIANT isn't defined.
     dvm_arch_variant := $(HOST_ARCH)
     WITH_JIT := true
+
+    ifneq ($(strip $(BUILD_HOST_64bit)),)
+        WITH_JIT := false
+        dvm_arch := unknown
+
+        # libffi is currently needed in order to build Dalvik on the host. For
+        # now, we pick the library from the host and we hard-code paths below.
+        # The way to solve this is add for x86_64 custom code so that libffi is
+        # not needed at all. Once this is done the code below can be removed.
+        $(info TODOArm64: do not hard-code paths to host system libraries/includes)
+        LOCAL_LDFLAGS += -L/usr/lib/x86_64-linux-gnu
+        LOCAL_CPPFLAGS := -I/usr/include/x86_64-linux-gnu \
+          -I/usr/include $(LOCAL_CPPFLAGS)
+    endif
+
     include $(LOCAL_PATH)/Dvm.mk
 
     LOCAL_SHARED_LIBRARIES += libnativehelper libcrypto-host libssl-host libicuuc-host libicui18n-host
@@ -145,6 +165,10 @@ ifeq ($(WITH_HOST_DALVIK),true)
     ifneq (,$(findstring libffi,$(LOCAL_SHARED_LIBRARIES)))
         LOCAL_SHARED_LIBRARIES := \
             $(patsubst libffi, ,$(LOCAL_SHARED_LIBRARIES))
+    endif
+
+    ifneq ($(strip $(BUILD_HOST_64bit)),)
+        LOCAL_LDLIBS += -lffi
     endif
 
     LOCAL_CFLAGS += $(host_smp_flag)

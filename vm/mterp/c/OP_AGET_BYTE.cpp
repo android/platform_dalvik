@@ -1,2 +1,2 @@
-HANDLE_OP_AGET(OP_AGET_BYTE, "-byte", s1, )
+HANDLE_OP_AGET(OP_AGET_BYTE, "-byte", s1, _INT)
 OP_END

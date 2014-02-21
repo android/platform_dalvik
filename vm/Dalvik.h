@@ -76,6 +76,7 @@
 #include "compiler/Compiler.h"
 #endif
 #include "Globals.h"
+#include "CompressRefs.h"
 #include "reflect/Reflect.h"
 #include "oo/TypeCheck.h"
 #include "Atomic.h"

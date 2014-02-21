@@ -27,7 +27,7 @@
  * For benchmarks, a do-nothing internal method with no arguments.
  */
 static void Dalvik_org_apache_harmony_dalvik_NativeTestTarget_emptyInternalMethod(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
 

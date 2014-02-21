@@ -178,6 +178,36 @@ static void memmove_words(void* dest, const void* src, size_t n) {
 #define move16 memmove_words
 #define move32 memmove_words
 
+#ifdef _LP64
+/*
+ * Copies from src to dest n bytes. Copies 64 bit values.
+ * Needed to copy object reference arrays atomically.
+ * Supports overlapping memory.
+ */
+static void move64(void* dest, const void* src, size_t n)
+{
+    assert((((uintptr_t) dest | (uintptr_t) src | n) & 0x07) == 0);
+    uint64_t* d = (uint64_t*) dest;
+    const uint64_t* s = (uint64_t*) src;
+
+    n /= sizeof(uint64_t);
+
+    if (d < s) {
+        /* copy forward */
+        while (n--) {
+            *d++ = *s++;
+        }
+    } else {
+        /* copy backward */
+        d += n;
+        s += n;
+        while (n--) {
+            *--d = *--s;
+        }
+    }
+}
+#endif /* _LP64 */
+
 /*
  * public static void arraycopy(Object src, int srcPos, Object dest,
  *      int destPos, int length)
@@ -185,13 +215,13 @@ static void memmove_words(void* dest, const void* src, size_t n) {
  * The description of this function is long, and describes a multitude
  * of checks and exceptions.
  */
-static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_System_arraycopy(const StackSlot* args, JValue* pResult)
 {
     ArrayObject* srcArray = (ArrayObject*) args[0];
-    int srcPos = args[1];
+    int srcPos = (int)args[1];
     ArrayObject* dstArray = (ArrayObject*) args[2];
-    int dstPos = args[3];
-    int length = args[4];
+    int dstPos = (int)args[3];
+    int length = (int)args[4];
 
     /* Check for null pointers. */
     if (srcArray == NULL) {
@@ -205,11 +235,11 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
 
     /* Make sure source and destination are arrays. */
     if (!dvmIsArray(srcArray)) {
-        dvmThrowArrayStoreExceptionNotArray(((Object*)srcArray)->clazz, "source");
+        dvmThrowArrayStoreExceptionNotArray(dvmRefExpandClazzGlobal(((Object*)srcArray)->clazz), "source");
         RETURN_VOID();
     }
     if (!dvmIsArray(dstArray)) {
-        dvmThrowArrayStoreExceptionNotArray(((Object*)dstArray)->clazz, "destination");
+        dvmThrowArrayStoreExceptionNotArray(dvmRefExpandClazzGlobal(((Object*)dstArray)->clazz), "destination");
         RETURN_VOID();
     }
 
@@ -224,8 +254,8 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
         RETURN_VOID();
     }
 
-    ClassObject* srcClass = srcArray->clazz;
-    ClassObject* dstClass = dstArray->clazz;
+    ClassObject* srcClass = dvmRefExpandClazzGlobal(srcArray->clazz);
+    ClassObject* dstClass = dvmRefExpandClazzGlobal(dstArray->clazz);
     char srcType = srcClass->descriptor[1];
     char dstType = dstClass->descriptor[1];
 
@@ -269,6 +299,7 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
             break;
         case 'D':
         case 'J':
+#ifndef _LP64
             /*
              * 8 bytes per element.  We don't need to guarantee atomicity
              * of the entire 64-bit word, so we can use the 32-bit copier.
@@ -276,6 +307,16 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
             move32((u1*) dstArray->contents + dstPos * 8,
                 (const u1*) srcArray->contents + srcPos * 8,
                 length * 8);
+#else
+            /*
+             * 8 bytes per element, we don't need to guarantee atomicity
+             * , but as this is on a 64bit machine we might as well
+             * do the copy more efficiently.
+             */
+            move64((u1*) dstArray->contents + dstPos * 8,
+                (const u1*) srcArray->contents + srcPos * 8,
+                length * 8);
+#endif
             break;
         default:        /* illegal array type */
             ALOGE("Weird array type '%s'", srcClass->descriptor);
@@ -287,7 +328,7 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
          * of elements in "dst" (e.g. copy String to String or String to
          * Object).
          */
-        const int width = sizeof(Object*);
+        const int width = sizeof(ObjectRef);
 
         if (srcClass->arrayDim == dstClass->arrayDim &&
             dvmInstanceof(srcClass, dstClass))
@@ -299,10 +340,17 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
                 dstArray->contents, dstPos * width,
                 srcArray->contents, srcPos * width,
                 length * width);
+#if !defined(_LP64) || defined(WITH_COMPREFS)
             move32((u1*)dstArray->contents + dstPos * width,
                 (const u1*)srcArray->contents + srcPos * width,
                 length * width);
+#else
+            // We should preserve atomicity of object references.
+            move64((u1*)dstArray->contents + dstPos * width,
+                (const u1*)srcArray->contents + srcPos * width,
+                length * width);
             dvmWriteBarrierArray(dstArray, dstPos, dstPos+length);
+#endif //_LP64
         } else {
             /*
              * The arrays are not fundamentally compatible.  However, we
@@ -316,24 +364,24 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
              * then call move32() to shift the actual data.  If we just
              * start from the front we could do a smear rather than a move.
              */
-            Object** srcObj;
+            ObjectRef* srcObj;
             int copyCount;
             ClassObject*   clazz = NULL;
 
-            srcObj = ((Object**)(void*)srcArray->contents) + srcPos;
+            srcObj = ((ObjectRef*)(void*)srcArray->contents) + srcPos;
 
-            if (length > 0 && srcObj[0] != NULL)
+            if (length > 0 && srcObj[0] != NULLREF)
             {
-                clazz = srcObj[0]->clazz;
+                clazz = dvmRefExpandClazzGlobal(dvmRefExpandGlobal(srcObj[0])->clazz);
                 if (!dvmCanPutArrayElement(clazz, dstClass))
                     clazz = NULL;
             }
 
             for (copyCount = 0; copyCount < length; copyCount++)
             {
-                if (srcObj[copyCount] != NULL &&
-                    srcObj[copyCount]->clazz != clazz &&
-                    !dvmCanPutArrayElement(srcObj[copyCount]->clazz, dstClass))
+                if (srcObj[copyCount] != NULLREF &&
+                    dvmRefExpandClazzGlobal(dvmRefExpandGlobal(srcObj[copyCount])->clazz) != clazz &&
+                    !dvmCanPutArrayElement(dvmRefExpandClazzGlobal(dvmRefExpandGlobal(srcObj[copyCount])->clazz), dstClass))
                 {
                     /* can't put this element into the array */
                     break;
@@ -344,13 +392,19 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
                 dstArray->contents, dstPos * width,
                 srcArray->contents, srcPos * width,
                 copyCount, length);
+#if !defined(_LP64) || defined(WITH_COMPREFS)
             move32((u1*)dstArray->contents + dstPos * width,
                 (const u1*)srcArray->contents + srcPos * width,
                 copyCount * width);
+#else
+            move64((u1*)dstArray->contents + dstPos * width,
+                (const u1*)srcArray->contents + srcPos * width,
+                copyCount * width);
+#endif
             dvmWriteBarrierArray(dstArray, 0, copyCount);
             if (copyCount != length) {
                 dvmThrowArrayStoreExceptionIncompatibleArrayElement(srcPos + copyCount,
-                        srcObj[copyCount]->clazz, dstClass);
+                        dvmRefExpandClazzGlobal(dvmRefExpandGlobal(srcObj[copyCount])->clazz), dstClass);
                 RETURN_VOID();
             }
         }
@@ -366,7 +420,7 @@ static void Dalvik_java_lang_System_arraycopy(const u4* args, JValue* pResult)
  * This is a char[] specialized, native, unchecked version of
  * arraycopy(). This assumes error checking has been done.
  */
-static void Dalvik_java_lang_System_arraycopyCharUnchecked(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_System_arraycopyCharUnchecked(const StackSlot* args, JValue* pResult)
 {
     ArrayObject* srcArray = (ArrayObject*) args[0];
     int srcPos = args[1];
@@ -381,8 +435,8 @@ static void Dalvik_java_lang_System_arraycopyCharUnchecked(const u4* args, JValu
            srcPos + length <= (int) srcArray->length &&
            dstPos + length <= (int) dstArray->length);
 #ifndef NDEBUG
-    ClassObject* srcClass = srcArray->clazz;
-    ClassObject* dstClass = dstArray->clazz;
+    ClassObject* srcClass = dvmRefExpandClazzGlobal(srcArray->clazz);
+    ClassObject* dstClass = dvmRefExpandClazzGlobal(dstArray->clazz);
     char srcType = srcClass->descriptor[1];
     char dstType = dstClass->descriptor[1];
     assert(srcType == 'C' && dstType == 'C');
@@ -401,7 +455,7 @@ static void Dalvik_java_lang_System_arraycopyCharUnchecked(const u4* args, JValu
  * method would return for "x", even if "x"s class
  * overrides hashCode().
  */
-static void Dalvik_java_lang_System_identityHashCode(const u4* args,
+static void Dalvik_java_lang_System_identityHashCode(const StackSlot* args,
     JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];

@@ -21,8 +21,8 @@ HANDLE_OPCODE(OP_CHECK_CAST /*vAA, class@BBBB*/)
                 if (clazz == NULL)
                     GOTO_exceptionThrown();
             }
-            if (!dvmInstanceof(obj->clazz, clazz)) {
-                dvmThrowClassCastException(obj->clazz, clazz);
+            if (!dvmInstanceof(dvmRefExpandClazz(obj->clazz, heapBase), clazz)) {
+                dvmThrowClassCastException(dvmRefExpandClazzGlobal(obj->clazz), clazz);
                 GOTO_exceptionThrown();
             }
         }

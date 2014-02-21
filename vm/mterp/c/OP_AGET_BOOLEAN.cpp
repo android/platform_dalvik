@@ -1,2 +1,2 @@
-HANDLE_OP_AGET(OP_AGET_BOOLEAN, "-boolean", u1, )
+HANDLE_OP_AGET(OP_AGET_BOOLEAN, "-boolean", u1, _INT)
 OP_END

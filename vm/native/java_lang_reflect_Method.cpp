@@ -27,11 +27,11 @@
  * (Not sure why the access flags weren't stored in the class along with
  * everything else.  Not sure why this isn't static.)
  */
-static void Dalvik_java_lang_reflect_Method_getMethodModifiers(const u4* args,
+static void Dalvik_java_lang_reflect_Method_getMethodModifiers(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* declaringClass = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     Method* meth;
 
     meth = dvmSlotToMethod(declaringClass, slot);
@@ -44,7 +44,7 @@ static void Dalvik_java_lang_reflect_Method_getMethodModifiers(const u4* args,
  *
  * Invoke a static or virtual method via reflection.
  */
-static void Dalvik_java_lang_reflect_Method_invokeNative(const u4* args,
+static void Dalvik_java_lang_reflect_Method_invokeNative(const StackSlot* args,
     JValue* pResult)
 {
     // ignore thisPtr in args[0]
@@ -53,7 +53,7 @@ static void Dalvik_java_lang_reflect_Method_invokeNative(const u4* args,
     ClassObject* declaringClass = (ClassObject*) args[3];
     ArrayObject* params = (ArrayObject*) args[4];
     ClassObject* returnType = (ClassObject*) args[5];
-    int slot = args[6];
+    int slot = (int)args[6];
     bool noAccessCheck = (args[7] != 0);
     const Method* meth;
     Object* result;
@@ -86,7 +86,7 @@ static void Dalvik_java_lang_reflect_Method_invokeNative(const u4* args,
         }
 
         /* do the virtual table lookup for the method */
-        meth = dvmGetVirtualizedMethod(methObj->clazz, meth);
+        meth = dvmGetVirtualizedMethod(dvmRefExpandClazzGlobal(methObj->clazz), meth);
         if (meth == NULL) {
             assert(dvmCheckException(dvmThreadSelf()));
             RETURN_VOID();
@@ -118,10 +118,10 @@ init_failed:
  * Return the annotations declared for this method.
  */
 static void Dalvik_java_lang_reflect_Method_getDeclaredAnnotations(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     ClassObject* declaringClass = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     Method* meth;
 
     meth = dvmSlotToMethod(declaringClass, slot);
@@ -136,11 +136,11 @@ static void Dalvik_java_lang_reflect_Method_getDeclaredAnnotations(
  * static Annotation getAnnotation(
  *         Class declaringClass, int slot, Class annotationType);
  */
-static void Dalvik_java_lang_reflect_Method_getAnnotation(const u4* args,
+static void Dalvik_java_lang_reflect_Method_getAnnotation(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     ClassObject* annotationClazz = (ClassObject*) args[2];
 
     Method* meth = dvmSlotToMethod(clazz, slot);
@@ -151,11 +151,11 @@ static void Dalvik_java_lang_reflect_Method_getAnnotation(const u4* args,
  * static boolean isAnnotationPresent(
  *         Class declaringClass, int slot, Class annotationType);
  */
-static void Dalvik_java_lang_reflect_Method_isAnnotationPresent(const u4* args,
+static void Dalvik_java_lang_reflect_Method_isAnnotationPresent(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     ClassObject* annotationClazz = (ClassObject*) args[2];
 
     Method* meth = dvmSlotToMethod(clazz, slot);
@@ -168,10 +168,10 @@ static void Dalvik_java_lang_reflect_Method_isAnnotationPresent(const u4* args,
  * Return the annotations declared for this method's parameters.
  */
 static void Dalvik_java_lang_reflect_Method_getParameterAnnotations(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     ClassObject* declaringClass = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     Method* meth;
 
     meth = dvmSlotToMethod(declaringClass, slot);
@@ -188,12 +188,12 @@ static void Dalvik_java_lang_reflect_Method_getParameterAnnotations(
  * Return the default value for the annotation member represented by
  * this Method instance.  Returns NULL if none is defined.
  */
-static void Dalvik_java_lang_reflect_Method_getDefaultValue(const u4* args,
+static void Dalvik_java_lang_reflect_Method_getDefaultValue(const StackSlot* args,
     JValue* pResult)
 {
     // ignore thisPtr in args[0]
     ClassObject* declaringClass = (ClassObject*) args[1];
-    int slot = args[2];
+    int slot = (int)args[2];
     Method* meth;
 
     /* make sure this is an annotation class member */
@@ -214,10 +214,10 @@ static void Dalvik_java_lang_reflect_Method_getDefaultValue(const u4* args,
  * Returns the signature annotation.
  */
 static void Dalvik_java_lang_reflect_Method_getSignatureAnnotation(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     ClassObject* declaringClass = (ClassObject*) args[0];
-    int slot = args[1];
+    int slot = (int)args[1];
     Method* meth;
 
     meth = dvmSlotToMethod(declaringClass, slot);

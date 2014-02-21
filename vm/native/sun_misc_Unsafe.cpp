@@ -24,7 +24,7 @@
 /*
  * private static native long objectFieldOffset0(Field field);
  */
-static void Dalvik_sun_misc_Unsafe_objectFieldOffset0(const u4* args,
+static void Dalvik_sun_misc_Unsafe_objectFieldOffset0(const StackSlot* args,
     JValue* pResult)
 {
     Object* fieldObject = (Object*) args[0];
@@ -37,7 +37,7 @@ static void Dalvik_sun_misc_Unsafe_objectFieldOffset0(const u4* args,
 /*
  * private static native int arrayBaseOffset0(Class clazz);
  */
-static void Dalvik_sun_misc_Unsafe_arrayBaseOffset0(const u4* args,
+static void Dalvik_sun_misc_Unsafe_arrayBaseOffset0(const StackSlot* args,
     JValue* pResult)
 {
     // The base offset is not type-dependent in this vm.
@@ -48,7 +48,7 @@ static void Dalvik_sun_misc_Unsafe_arrayBaseOffset0(const u4* args,
 /*
  * private static native int arrayIndexScale0(Class clazz);
  */
-static void Dalvik_sun_misc_Unsafe_arrayIndexScale0(const u4* args,
+static void Dalvik_sun_misc_Unsafe_arrayIndexScale0(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz = (ClassObject*) args[0];
@@ -59,7 +59,7 @@ static void Dalvik_sun_misc_Unsafe_arrayIndexScale0(const u4* args,
  * public native boolean compareAndSwapInt(Object obj, long offset,
  *         int expectedValue, int newValue);
  */
-static void Dalvik_sun_misc_Unsafe_compareAndSwapInt(const u4* args,
+static void Dalvik_sun_misc_Unsafe_compareAndSwapInt(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -79,7 +79,7 @@ static void Dalvik_sun_misc_Unsafe_compareAndSwapInt(const u4* args,
  * public native boolean compareAndSwapLong(Object obj, long offset,
  *         long expectedValue, long newValue);
  */
-static void Dalvik_sun_misc_Unsafe_compareAndSwapLong(const u4* args,
+static void Dalvik_sun_misc_Unsafe_compareAndSwapLong(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -100,27 +100,37 @@ static void Dalvik_sun_misc_Unsafe_compareAndSwapLong(const u4* args,
  * public native boolean compareAndSwapObject(Object obj, long offset,
  *         Object expectedValue, Object newValue);
  */
-static void Dalvik_sun_misc_Unsafe_compareAndSwapObject(const u4* args,
+static void Dalvik_sun_misc_Unsafe_compareAndSwapObject(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
     s8 offset = GET_ARG_LONG(args, 2);
-    Object* expectedValue = (Object*) args[4];
-    Object* newValue = (Object*) args[5];
-    int32_t* address = (int32_t*) (((u1*) obj) + offset);
+    ObjectRef expectedValue = dvmRefCompress((Object*) args[4]);
+    ObjectRef newValue = dvmRefCompress((Object*) args[5]);
+
+#if !defined(_LP64) || defined(WITH_COMPREFS)
+    ObjectRef* address = (ObjectRef*) (((u1*) obj) + offset);
 
     // Note: android_atomic_cmpxchg() returns 0 on success, not failure.
     int result = android_atomic_release_cas((int32_t) expectedValue,
-            (int32_t) newValue, address);
+            (int32_t) newValue, (volatile int*) address);
     dvmWriteBarrierField(obj, address);
+#else
+    // 64bit object references are handled differently.
+    volatile int64_t* address = (volatile int64_t*) (((u1*) obj) + offset);
+
+    // Note: android_atomic_cmpxchg() returns 0 on success, not failure.
+    int result =
+    dvmQuasiAtomicCas64((int64_t)expectedValue, (int64_t)newValue, address);
+#endif
     RETURN_BOOLEAN(result == 0);
 }
 
 /*
  * public native int getIntVolatile(Object obj, long offset);
  */
-static void Dalvik_sun_misc_Unsafe_getIntVolatile(const u4* args,
+static void Dalvik_sun_misc_Unsafe_getIntVolatile(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -135,7 +145,7 @@ static void Dalvik_sun_misc_Unsafe_getIntVolatile(const u4* args,
 /*
  * public native void putIntVolatile(Object obj, long offset, int newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putIntVolatile(const u4* args,
+static void Dalvik_sun_misc_Unsafe_putIntVolatile(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -151,7 +161,7 @@ static void Dalvik_sun_misc_Unsafe_putIntVolatile(const u4* args,
 /*
  * public native long getLongVolatile(Object obj, long offset);
  */
-static void Dalvik_sun_misc_Unsafe_getLongVolatile(const u4* args,
+static void Dalvik_sun_misc_Unsafe_getLongVolatile(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -166,7 +176,7 @@ static void Dalvik_sun_misc_Unsafe_getLongVolatile(const u4* args,
 /*
  * public native void putLongVolatile(Object obj, long offset, long newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putLongVolatile(const u4* args,
+static void Dalvik_sun_misc_Unsafe_putLongVolatile(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -183,39 +193,52 @@ static void Dalvik_sun_misc_Unsafe_putLongVolatile(const u4* args,
 /*
  * public native Object getObjectVolatile(Object obj, long offset);
  */
-static void Dalvik_sun_misc_Unsafe_getObjectVolatile(const u4* args,
+static void Dalvik_sun_misc_Unsafe_getObjectVolatile(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
     s8 offset = GET_ARG_LONG(args, 2);
-    volatile int32_t* address = (volatile int32_t*) (((u1*) obj) + offset);
 
-    RETURN_PTR((Object*) android_atomic_acquire_load(address));
+#if !defined(_LP64) || defined(WITH_COMPREFS)
+    volatile ObjectRef* address = (volatile ObjectRef*) (((u1*) obj) + offset);
+    RETURN_PTR( dvmRefExpandGlobal(
+        (ObjectRef) android_atomic_acquire_load((volatile int32_t* )address)) );
+#else
+    // 64bit object references are handled differently.
+    volatile int64_t* address = (volatile int64_t*) (((u1*) obj) + offset);
+    RETURN_PTR((Object*) dvmQuasiAtomicAcquireLoad64(address));
+#endif
 }
 
 /*
  * public native void putObjectVolatile(Object obj, long offset,
  *         Object newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putObjectVolatile(const u4* args,
+static void Dalvik_sun_misc_Unsafe_putObjectVolatile(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
     s8 offset = GET_ARG_LONG(args, 2);
-    Object* value = (Object*) args[4];
-    volatile int32_t* address = (volatile int32_t*) (((u1*) obj) + offset);
+    ObjectRef value = dvmRefCompress((Object*) args[4]);
+#if !defined(_LP64) || defined(WITH_COMPREFS)
+    volatile ObjectRef* address = (volatile ObjectRef*) (((u1*) obj) + offset);
 
-    android_atomic_release_store((int32_t)value, address);
-    dvmWriteBarrierField(obj, (void *)address);
+    android_atomic_release_store((int32_t) value, (volatile int*) address);
+#else
+    // 64bit object references are handled differently.
+    volatile int64_t* address = (volatile int64_t*) (((u1*) obj) + offset);
+    dvmQuasiAtomicReleaseStore64((int64_t)value, address);
+#endif
+    dvmWriteBarrierField(obj, (void *) address);
     RETURN_VOID();
 }
 
 /*
  * public native int getInt(Object obj, long offset);
  */
-static void Dalvik_sun_misc_Unsafe_getInt(const u4* args, JValue* pResult)
+static void Dalvik_sun_misc_Unsafe_getInt(const StackSlot* args, JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
@@ -228,7 +251,7 @@ static void Dalvik_sun_misc_Unsafe_getInt(const u4* args, JValue* pResult)
 /*
  * public native void putInt(Object obj, long offset, int newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putInt(const u4* args, JValue* pResult)
+static void Dalvik_sun_misc_Unsafe_putInt(const StackSlot* args, JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
@@ -243,7 +266,7 @@ static void Dalvik_sun_misc_Unsafe_putInt(const u4* args, JValue* pResult)
 /*
  * public native void putOrderedInt(Object obj, long offset, int newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putOrderedInt(const u4* args,
+static void Dalvik_sun_misc_Unsafe_putOrderedInt(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -260,7 +283,7 @@ static void Dalvik_sun_misc_Unsafe_putOrderedInt(const u4* args,
 /*
  * public native long getLong(Object obj, long offset);
  */
-static void Dalvik_sun_misc_Unsafe_getLong(const u4* args, JValue* pResult)
+static void Dalvik_sun_misc_Unsafe_getLong(const StackSlot* args, JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
@@ -273,7 +296,7 @@ static void Dalvik_sun_misc_Unsafe_getLong(const u4* args, JValue* pResult)
 /*
  * public native void putLong(Object obj, long offset, long newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putLong(const u4* args, JValue* pResult)
+static void Dalvik_sun_misc_Unsafe_putLong(const StackSlot* args, JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
@@ -288,7 +311,7 @@ static void Dalvik_sun_misc_Unsafe_putLong(const u4* args, JValue* pResult)
 /*
  * public native void putOrderedLong(Object obj, long offset, long newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putOrderedLong(const u4* args,
+static void Dalvik_sun_misc_Unsafe_putOrderedLong(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
@@ -305,26 +328,26 @@ static void Dalvik_sun_misc_Unsafe_putOrderedLong(const u4* args,
 /*
  * public native Object getObject(Object obj, long offset);
  */
-static void Dalvik_sun_misc_Unsafe_getObject(const u4* args, JValue* pResult)
+static void Dalvik_sun_misc_Unsafe_getObject(const StackSlot* args, JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
     s8 offset = GET_ARG_LONG(args, 2);
-    Object** address = (Object**) (((u1*) obj) + offset);
+    ObjectRef* address = (ObjectRef*) (((u1*) obj) + offset);
 
-    RETURN_PTR(*address);
+    RETURN_PTR(dvmRefExpandGlobal(*address));
 }
 
 /*
  * public native void putObject(Object obj, long offset, Object newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putObject(const u4* args, JValue* pResult)
+static void Dalvik_sun_misc_Unsafe_putObject(const StackSlot* args, JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
     s8 offset = GET_ARG_LONG(args, 2);
-    Object* value = (Object*) args[4];
-    Object** address = (Object**) (((u1*) obj) + offset);
+    ObjectRef value = dvmRefCompress((Object*) args[4]);
+    ObjectRef* address = (ObjectRef*) (((u1*) obj) + offset);
 
     *address = value;
     dvmWriteBarrierField(obj, address);
@@ -335,14 +358,14 @@ static void Dalvik_sun_misc_Unsafe_putObject(const u4* args, JValue* pResult)
  * public native void putOrderedObject(Object obj, long offset,
  *      Object newValue);
  */
-static void Dalvik_sun_misc_Unsafe_putOrderedObject(const u4* args,
+static void Dalvik_sun_misc_Unsafe_putOrderedObject(const StackSlot* args,
     JValue* pResult)
 {
     // We ignore the this pointer in args[0].
     Object* obj = (Object*) args[1];
     s8 offset = GET_ARG_LONG(args, 2);
-    Object* value = (Object*) args[4];
-    Object** address = (Object**) (((u1*) obj) + offset);
+    ObjectRef value = dvmRefCompress((Object*) args[4]);
+    ObjectRef* address = (ObjectRef*) (((u1*) obj) + offset);
 
     ANDROID_MEMBAR_STORE();
     *address = value;

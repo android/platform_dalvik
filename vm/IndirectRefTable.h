@@ -110,7 +110,7 @@ const char* indirectRefKindToString(IndirectRefKind kind);
  */
 INLINE IndirectRefKind indirectRefKind(IndirectRef iref)
 {
-    return (IndirectRefKind)((u4) iref & 0x03);
+    return (IndirectRefKind) ((uintptr_t)iref & 0x03);
 }
 
 /*
@@ -345,12 +345,12 @@ public:
 
 private:
     static inline u4 extractIndex(IndirectRef iref) {
-        u4 uref = (u4) iref;
+        u4 uref = (u4) (uintptr_t) iref;
         return (uref >> 2) & 0xffff;
     }
 
     static inline u4 extractSerial(IndirectRef iref) {
-        u4 uref = (u4) iref;
+        u4 uref = (u4) (uintptr_t) iref;
         return uref >> 20;
     }
 

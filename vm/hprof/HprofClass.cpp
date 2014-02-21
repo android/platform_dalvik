@@ -44,7 +44,7 @@ static u4 computeClassHash(const ClassObject *clazz)
     char c;
 
     cp = clazz->descriptor;
-    hash = (u4)clazz->classLoader;
+    hash = static_cast<u4>((uintptr_t) clazz->classLoader);
     while ((c = *cp++) != '\0') {
         hash = hash * 31 + c;
     }
@@ -59,6 +59,10 @@ static int classCmp(const void *v1, const void *v2)
     intptr_t diff;
 
     diff = (uintptr_t)c1->classLoader - (uintptr_t)c2->classLoader;
+#ifdef _LP64
+    // Normalise comparison to fit in int
+    diff =  (diff == 0) ? 0 : ((diff > 0) ? 1 : -1);
+#endif
     if (diff == 0) {
         return strcmp(c1->descriptor, c2->descriptor);
     }
@@ -74,6 +78,7 @@ hprof_class_object_id hprofLookupClassId(const ClassObject *clazz)
 {
     void *val;
 
+    (void)val;
     if (clazz == NULL) {
         /* Someone's probably looking up the superclass
          * of java.lang.Object or of a primitive class.

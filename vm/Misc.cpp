@@ -30,6 +30,10 @@
 #include <cutils/ashmem.h>
 #include <sys/mman.h>
 
+static const int address_len = sizeof(void*)*2;
+static const int hex_address_shift = address_len+1+16*3+2;
+static const int out_len = hex_address_shift+16+2;
+
 /*
  * Print a hex dump in this format:
  *
@@ -49,8 +53,8 @@ void dvmPrintHexDumpEx(int priority, const char* tag, const void* vaddr,
 {
     static const char gHexDigit[] = "0123456789abcdef";
     const unsigned char* addr = (const unsigned char*)vaddr;
-    char out[77];           /* exact fit */
-    unsigned int offset;    /* offset to show while printing */
+    char out[out_len];           /* exact fit */
+    uintptr_t offset;    /* offset to show while printing */
     char* hex;
     char* asc;
     int gap;
@@ -59,10 +63,10 @@ void dvmPrintHexDumpEx(int priority, const char* tag, const void* vaddr,
     if (mode == kHexDumpLocal)
         offset = 0;
     else
-        offset = (int) addr;
+        offset = (uintptr_t) addr;
 
     memset(out, ' ', sizeof(out)-1);
-    out[8] = ':';
+    out[address_len] = ':';
     out[sizeof(out)-2] = '\n';
     out[sizeof(out)-1] = '\0';
 
@@ -73,8 +77,7 @@ void dvmPrintHexDumpEx(int priority, const char* tag, const void* vaddr,
 
         hex = out;
         asc = out + 59;
-
-        for (i = 0; i < 8; i++) {
+        for (i = 0; i < address_len; i++) {
             *hex++ = gHexDigit[lineOffset >> 28];
             lineOffset <<= 4;
         }
@@ -271,11 +274,11 @@ std::string dvmHumanReadableType(const Object* obj)
     if (obj == NULL) {
         return "null";
     }
-    if (obj->clazz == NULL) {
+    if (obj->clazz == NULLREF) {
         /* should only be possible right after a plain dvmMalloc() */
         return "(raw)";
     }
-    std::string result(dvmHumanReadableDescriptor(obj->clazz->descriptor));
+    std::string result(dvmHumanReadableDescriptor(dvmRefExpandClazzGlobal(obj->clazz)->descriptor));
     if (dvmIsClassObject(obj)) {
         const ClassObject* clazz = reinterpret_cast<const ClassObject*>(obj);
         result += "<" + dvmHumanReadableDescriptor(clazz->descriptor) + ">";
@@ -625,6 +628,47 @@ void *dvmAllocRegion(size_t byteCount, int prot, const char *name) {
     }
     if (ret == -1) {
         munmap(base, byteCount);
+        return NULL;
+    }
+    return base;
+}
+
+/*
+ *  Allocates a memory region using ashmem and mmap, initialized to
+ *  zero.  Actual allocation allocated to alignment variable in bits.
+ *  Returns NULL on failure.
+ */
+void *dvmAllocAlignedRegion(size_t byteCount, int prot, const char *name, unsigned int alignment) {
+    void *base;
+    int fd, ret;
+    uintptr_t desiredLoc;
+    uintptr_t alignsize = 1L << alignment;
+
+    byteCount = ALIGN_UP_TO_PAGE_SIZE(byteCount);
+    fd = ashmem_create_region(name, byteCount);
+    if (fd == -1) {
+        return NULL;
+    }
+
+    /*
+     * Sweep through memory until mmap returns an address we've requested.
+     */
+    for (desiredLoc = alignsize ;  desiredLoc < alignsize * REFS_ALIGN_RANGE ; desiredLoc += alignsize) {
+        base = (void*) mmap( (void*)desiredLoc, byteCount, prot, MAP_PRIVATE, fd, 0);
+
+        if ( ((uintptr_t) base) != desiredLoc) {
+            munmap (base, byteCount);
+            base = MAP_FAILED;
+        } else if (((uintptr_t) base) == desiredLoc) {
+            break;
+        }
+    }
+
+    ret = close(fd);
+    if (base == MAP_FAILED) {
+        return NULL;
+    }
+    if (ret == -1) {
         return NULL;
     }
     return base;

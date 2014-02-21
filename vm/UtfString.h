@@ -42,10 +42,26 @@
 # define STRING_FIELDOFF_COUNT      gDvm.offJavaLangString_count
 # define STRING_FIELDOFF_HASHCODE   gDvm.offJavaLangString_hashCode
 #else
-# define STRING_FIELDOFF_VALUE      8
-# define STRING_FIELDOFF_HASHCODE   12
-# define STRING_FIELDOFF_OFFSET     16
-# define STRING_FIELDOFF_COUNT      20
+# ifndef _LP64
+#  define STRING_FIELDOFF_VALUE      8
+#  define STRING_FIELDOFF_HASHCODE   12
+#  define STRING_FIELDOFF_OFFSET     16
+#  define STRING_FIELDOFF_COUNT      20
+# else
+// Value field is placed after 8 byte clazz and lock fields on 64bit.
+#  if defined(WITH_COMPREFS)
+#   define STRING_FIELDOFF_VALUE      16
+#   define STRING_FIELDOFF_HASHCODE   20
+#   define STRING_FIELDOFF_OFFSET     24
+#   define STRING_FIELDOFF_COUNT      28
+#  else
+// Value object reference is 4 bytes on 64bit with compressed references.
+#   define STRING_FIELDOFF_VALUE      16
+#   define STRING_FIELDOFF_HASHCODE   24
+#   define STRING_FIELDOFF_OFFSET     28
+#   define STRING_FIELDOFF_COUNT      32
+#  endif
+# endif
 #endif
 
 /*
@@ -96,7 +112,7 @@ StringObject* dvmCreateStringFromCstr(const std::string& utf8Str);
  * Returns NULL and throws an exception on failure.
  */
 StringObject* dvmCreateStringFromCstrAndLength(const char* utf8Str,
-    u4 utf16Length);
+    size_t utf16Length);
 
 /*
  * Compute the number of characters in a "modified UTF-8" string.  This will

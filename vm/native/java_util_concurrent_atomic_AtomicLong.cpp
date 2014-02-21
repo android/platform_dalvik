@@ -25,7 +25,7 @@
  * private static native boolean VMSupportsCS8();
  */
 static void Dalvik_java_util_concurrent_atomic_AtomicLong_VMSupportsCS8(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
     RETURN_BOOLEAN(1);

@@ -105,9 +105,9 @@ INLINE void dvmSetJniEnvThreadId(JNIEnv* pEnv, Thread* self)
     ((JNIEnvExt*)pEnv)->self = self;
 }
 
-void dvmCallJNIMethod(const u4* args, JValue* pResult,
+void dvmCallJNIMethod(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self);
-void dvmCheckCallJNIMethod(const u4* args, JValue* pResult,
+void dvmCheckCallJNIMethod(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self);
 
 /*

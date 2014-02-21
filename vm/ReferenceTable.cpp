@@ -78,7 +78,7 @@ bool dvmAddToReferenceTable(ReferenceTable* pRef, Object* obj)
 
         newTable = (Object**) realloc(pRef->table, newSize * sizeof(Object*));
         if (newTable == NULL) {
-            ALOGE("Unable to expand ref table (from %d to %d %d-byte entries)",
+            ALOGE("Unable to expand ref table (from %d to %d %zu-byte entries)",
                 pRef->allocEntries, newSize, sizeof(Object*));
             return false;
         }
@@ -158,7 +158,7 @@ static size_t getElementCount(const Object* obj)
 {
     const ArrayObject* arrayObj = (ArrayObject*) obj;
     if (arrayObj == NULL || arrayObj == kClearedJniWeakGlobal ||
-            arrayObj->clazz == NULL || !dvmIsArray(arrayObj)) {
+            dvmRefExpandClazzGlobal(arrayObj->clazz) == NULL || !dvmIsArray(arrayObj)) {
         return 0;
     }
     return arrayObj->length;
@@ -194,7 +194,7 @@ static int compareObject(const void* vobj1, const void* vobj2)
     }
 
     if (obj1->clazz != obj2->clazz) {
-        return (u1*)obj1->clazz - (u1*)obj2->clazz;
+        return reinterpret_cast<u1*>(obj1->clazz) - reinterpret_cast<u1*>(obj2->clazz);
     } else {
         size_t count1 = getElementCount(obj1);
         size_t count2 = getElementCount(obj2);
@@ -225,7 +225,7 @@ static void logSummaryLine(const Object* obj, size_t elems, int identical, int e
     }
 
     std::string className(dvmHumanReadableType(obj));
-    if (obj->clazz == gDvm.classJavaLangClass) {
+    if (dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangClass) {
         // We're summarizing multiple instances, so using the exemplar
         // Class' type parameter here would be misleading.
         className = "java.lang.Class";
@@ -235,7 +235,7 @@ static void logSummaryLine(const Object* obj, size_t elems, int identical, int e
     }
 
     size_t total = identical + equiv + 1;
-    std::string msg(StringPrintf("%5d of %s", total, className.c_str()));
+    std::string msg(StringPrintf("%5zu of %s", total, className.c_str()));
     if (identical + equiv != 0) {
         StringAppendF(&msg, " (%d unique instances)", equiv + 1);
     }
@@ -264,7 +264,7 @@ void dvmDumpReferenceTableContents(Object* const* refs, size_t count,
     if (first < 0) {
         first = 0;
     }
-    ALOGW("  Last %d entries (of %d):", (count - first), count);
+    ALOGW("  Last %zd entries (of %zd):", (count - first), count);
     for (int idx = count - 1; idx >= first; --idx) {
         const Object* ref = refs[idx];
         if (ref == NULL) {
@@ -274,7 +274,7 @@ void dvmDumpReferenceTableContents(Object* const* refs, size_t count,
             ALOGW("    %5d: cleared jweak", idx);
             continue;
         }
-        if (ref->clazz == NULL) {
+        if (ref->clazz == (ClassObjectRef) NULL) {
             // should only be possible right after a plain dvmMalloc().
             size_t size = dvmObjectSizeInHeap(ref);
             ALOGW("    %5d: %p (raw) (%zd bytes)", idx, ref, size);
@@ -287,7 +287,7 @@ void dvmDumpReferenceTableContents(Object* const* refs, size_t count,
         size_t elems = getElementCount(ref);
         if (elems != 0) {
             StringAppendF(&extras, " (%zd elements)", elems);
-        } else if (ref->clazz == gDvm.classJavaLangString) {
+        } else if (dvmRefExpandClazzGlobal(ref->clazz) == gDvm.classJavaLangString) {
             const StringObject* str =
                     reinterpret_cast<const StringObject*>(ref);
             extras += " \"";
@@ -310,7 +310,7 @@ void dvmDumpReferenceTableContents(Object* const* refs, size_t count,
     // Make a copy of the table, and sort it.
     Object** tableCopy = (Object**)malloc(sizeof(Object*) * count);
     if (tableCopy == NULL) {
-        ALOGE("Unable to copy table with %d elements", count);
+        ALOGE("Unable to copy table with %zu elements", count);
         return;
     }
     memcpy(tableCopy, refs, sizeof(Object*) * count);

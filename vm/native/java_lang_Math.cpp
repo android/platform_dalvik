@@ -17,47 +17,47 @@
 #include "Dalvik.h"
 #include "native/InternalNativePriv.h"
 
-static void Math_absD(const u4* args, JValue* pResult)
+static void Math_absD(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_abs_double);
 }
 
-static void Math_absF(const u4* args, JValue* pResult)
+static void Math_absF(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_abs_float);
 }
 
-static void Math_absI(const u4* args, JValue* pResult)
+static void Math_absI(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_abs_int);
 }
 
-static void Math_absJ(const u4* args, JValue* pResult)
+static void Math_absJ(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_abs_long);
 }
 
-static void Math_cos(const u4* args, JValue* pResult)
+static void Math_cos(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_cos);
 }
 
-static void Math_maxI(const u4* args, JValue* pResult)
+static void Math_maxI(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_max_int);
 }
 
-static void Math_minI(const u4* args, JValue* pResult)
+static void Math_minI(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_min_int);
 }
 
-static void Math_sin(const u4* args, JValue* pResult)
+static void Math_sin(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_sin);
 }
 
-static void Math_sqrt(const u4* args, JValue* pResult)
+static void Math_sqrt(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangMath_sqrt);
 }

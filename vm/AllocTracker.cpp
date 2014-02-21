@@ -133,7 +133,7 @@ bool dvmEnableAllocTracker()
     if (gDvm.allocRecords == NULL) {
         gDvm.allocRecordMax = getAllocRecordMax();
 
-        ALOGI("Enabling alloc tracker (%d entries, %d frames --> %d bytes)",
+        ALOGI("Enabling alloc tracker (%d entries, %d frames --> %zu bytes)",
               gDvm.allocRecordMax, kMaxAllocRecordStackDepth,
               sizeof(AllocRecord) * gDvm.allocRecordMax);
         gDvm.allocRecordHead = gDvm.allocRecordCount = 0;
@@ -176,7 +176,7 @@ static void getStackFrames(Thread* self, AllocRecord* pRec)
         const StackSaveArea* saveArea = SAVEAREA_FROM_FP(fp);
         const Method* method = saveArea->method;
 
-        if (!dvmIsBreakFrame((u4*) fp)) {
+        if (!dvmIsBreakFrame((StackSlot*) fp)) {
             pRec->stackElem[stackDepth].method = method;
             if (dvmIsNativeMethod(method)) {
                 pRec->stackElem[stackDepth].pc = 0;
@@ -576,7 +576,7 @@ bool dvmGenerateTrackedAllocationReport(u1** pData, size_t* pDataLen)
     totalSize += computeStringTableSize(classNames);
     totalSize += computeStringTableSize(methodNames);
     totalSize += computeStringTableSize(fileNames);
-    ALOGI("Generated AT, size is %zd/%zd", baseSize, totalSize);
+    ALOGI("Generated AT, size is %zu/%zu", baseSize, totalSize);
 
     /*
      * Part 3: allocate a buffer and generate the output.
@@ -590,7 +590,7 @@ bool dvmGenerateTrackedAllocationReport(u1** pData, size_t* pDataLen)
     strPtr += outputStringTable(methodNames, strPtr);
     strPtr += outputStringTable(fileNames, strPtr);
     if (strPtr - buffer != (int)totalSize) {
-        ALOGE("size mismatch (%d vs %zd)", strPtr - buffer, totalSize);
+        ALOGE("size mismatch (%zu vs %zu)", (size_t) (strPtr - buffer), totalSize);
         dvmAbort();
     }
     //dvmPrintHexDump(buffer, totalSize);

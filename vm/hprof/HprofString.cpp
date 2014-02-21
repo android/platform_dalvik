@@ -100,7 +100,7 @@ int hprofDumpStrings(hprof_context_t *ctx)
              *
              * We use the address of the string data as its ID.
              */
-            err = hprofAddU4ToRecord(rec, (u4)str);
+            err = hprofAddIdToRecord(rec, (hprof_id)str);
             if (err == 0) {
                 err = hprofAddUtf8StringToRecord(rec, str);
             }

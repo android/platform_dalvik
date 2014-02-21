@@ -21,15 +21,17 @@ HANDLE_OPCODE(OP_APUT_OBJECT /*vAA, vBB, vCC*/)
         if (obj != NULL) {
             if (!checkForNull(obj))
                 GOTO_exceptionThrown();
-            if (!dvmCanPutArrayElement(obj->clazz, arrayObj->clazz)) {
+            if (!dvmCanPutArrayElement(dvmRefExpandClazz(obj->clazz, heapBase),
+                    dvmRefExpandClazz(arrayObj->clazz, heapBase))) {
                 ALOGV("Can't put a '%s'(%p) into array type='%s'(%p)",
-                    obj->clazz->descriptor, obj,
-                    arrayObj->clazz->descriptor, arrayObj);
-                dvmThrowArrayStoreExceptionIncompatibleElement(obj->clazz, arrayObj->clazz);
+                        dvmRefExpandClazz(obj->clazz, heapBase)->descriptor, obj,
+                        dvmRefExpandClazz(arrayObj->clazz, heapBase)->descriptor, arrayObj);
+                dvmThrowArrayStoreExceptionIncompatibleElement(dvmRefExpandClazz(obj->clazz, heapBase),
+                        dvmRefExpandClazz(arrayObj->clazz,heapBase));
                 GOTO_exceptionThrown();
             }
         }
-        ILOGV("+ APUT[%d]=0x%08x", GET_REGISTER(vsrc2), GET_REGISTER(vdst));
+        ILOGV("+ APUT[%d]="PRIxPTR, (u4)GET_REGISTER(vsrc2), GET_REGISTER_AS_OBJECT(vdst));
         dvmSetObjectArrayElement(arrayObj,
                                  GET_REGISTER(vsrc2),
                                  (Object *)GET_REGISTER(vdst));

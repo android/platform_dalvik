@@ -529,7 +529,7 @@ StringObject* dvmResolveString(const ClassObject* referrer, u4 stringIdx)
      * already interned.
      */
     utf8 = dexStringAndSizeById(pDvmDex->pDexFile, stringIdx, &utf16Size);
-    strObj = dvmCreateStringFromCstrAndLength(utf8, utf16Size);
+    strObj = dvmCreateStringFromCstrAndLength(utf8, size_t(utf16Size));
     if (strObj == NULL) {
         /* ran out of space in GC heap? */
         assert(dvmCheckException(dvmThreadSelf()));

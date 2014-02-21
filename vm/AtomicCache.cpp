@@ -55,13 +55,13 @@ AtomicCache* dvmAllocAtomicCache(int numEntries)
     }
 
     /*
-     * Adjust storage to align on a 32-byte boundary.  Each entry is 16 bytes
-     * wide.  This ensures that each cache entry sits on a single CPU cache
-     * line.
+     * Adjust storage to align on a 32-byte boundary.  Each entry is 16 or 32
+     * bytes wide.  This ensures that each cache entry sits on a single CPU
+     * cache line.
      */
-    assert(sizeof(AtomicCacheEntry) == 16);
+    assert(sizeof(AtomicCacheEntry) == 4 * sizeof(uintptr_t));
     newCache->entries = (AtomicCacheEntry*)
-        (((int) newCache->entryAlloc + CPU_CACHE_WIDTH_1) & ~CPU_CACHE_WIDTH_1);
+        (((uintptr_t) newCache->entryAlloc + CPU_CACHE_WIDTH_1) & ~CPU_CACHE_WIDTH_1);
 
     return newCache;
 }
@@ -85,8 +85,8 @@ void dvmFreeAtomicCache(AtomicCache* cache)
  *
  * We only need "pCache" for stats.
  */
-void dvmUpdateAtomicCache(u4 key1, u4 key2, u4 value, AtomicCacheEntry* pEntry,
-    u4 firstVersion
+void dvmUpdateAtomicCache(uintptr_t key1, uintptr_t key2, uintptr_t  value,
+    AtomicCacheEntry* pEntry, u4 firstVersion
 #if CALC_CACHE_STATS > 0
     , AtomicCache* pCache
 #endif
@@ -141,8 +141,11 @@ void dvmUpdateAtomicCache(u4 key1, u4 key2, u4 value, AtomicCacheEntry* pEntry,
     assert((newVersion & 0x01) == 1);
 
     pEntry->version = newVersion;
-
+#ifndef _LP64
     android_atomic_release_store(key1, (int32_t*) &pEntry->key1);
+#else
+    dvmQuasiAtomicReleaseStore64((int64_t) key1, (int64_t*) &pEntry->key1);
+#endif
     pEntry->key2 = key2;
     pEntry->value = value;
 

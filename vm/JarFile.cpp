@@ -155,7 +155,7 @@ DexCacheStatus dvmDexCacheStatus(const char *fileName)
             goto bail;
         }
 
-        ALOGV("Using alternate file (odex) for %s ...", fileName);
+        ALOGI("Using alternate file (odex) for %s ...", fileName);
         if (!dvmCheckOptHeaderAndDependencies(fd, false, 0, 0, true, true)) {
             ALOGE("%s odex has stale dependencies", fileName);
             ALOGE("odex source not available -- failing");
@@ -216,7 +216,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
      */
     fd = openAlternateSuffix(fileName, "odex", O_RDONLY, &cachedName);
     if (fd >= 0) {
-        ALOGV("Using alternate file (odex) for %s ...", fileName);
+        ALOGI("Using alternate file (odex) for %s ...", fileName);
         if (!dvmCheckOptHeaderAndDependencies(fd, false, 0, 0, true, true)) {
             ALOGE("%s odex has stale dependencies", fileName);
             free(cachedName);

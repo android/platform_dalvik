@@ -55,7 +55,6 @@ static int getModTimeAndSize(int fd, u4* modTime, size_t* size)
 
     *modTime = (u4) buf.st_mtime;
     *size = (size_t) buf.st_size;
-    assert((size_t) buf.st_size == buf.st_size);
 
     return 0;
 }

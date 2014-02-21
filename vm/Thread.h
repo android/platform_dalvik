@@ -75,16 +75,24 @@ void dvmSlayDaemons(void);
 #define kInternalRefDefault     32      /* equally arbitrary */
 #define kInternalRefMax         4096    /* mainly a sanity check */
 
-#define kMinStackSize       (512 + STACK_OVERFLOW_RESERVE)
-#define kDefaultStackSize   (16*1024)   /* four 4K pages */
-#define kMaxStackSize       (256*1024 + STACK_OVERFLOW_RESERVE)
+/* Calculate sizes for stack. Calculated such that 2x space is used for 64bit
+ * processes + overflow.
+ */
+# define kMinStackSize       ((int)(128*sizeof(StackSlot) + STACK_OVERFLOW_RESERVE))
+# define kDefaultStackSize   ((int)sizeof(StackSlot)*4096)   /* four/eight 4K pages */
+# define kMaxStackSize       ((int)(64 * sizeof(StackSlot)*1024 + STACK_OVERFLOW_RESERVE))
 
 /*
- * Interpreter control struction.  Packed into a long long to enable
- * atomic updates.
+ * Interpreter control struction.  Packed into a long long or __int128 to enable
+ * atomic updates. __int128 is used on 64bit platforms as the ctl structure is
+ * larger than 64bits.
  */
 union InterpBreak {
+#if !defined(_LP64)
     volatile int64_t   all;
+#else
+    volatile __int128 all;
+#endif
     struct {
         uint16_t   subMode;
         uint8_t    breakFlags;
@@ -311,6 +319,9 @@ struct Thread {
 #if defined(ARCH_IA32) && defined(WITH_JIT)
     u4 spillRegion[MAX_SPILL_JIT_IA];
 #endif
+
+    // For calculating expanded object references.
+    void*             heapBase;
 };
 
 /* start point for an internal thread; mimics pthread args */

@@ -50,7 +50,7 @@ void dvmNativeShutdown(void);
  * Convert argc/argv into a function call.  This is platform-specific.
  */
 extern "C" void dvmPlatformInvoke(void* pEnv, ClassObject* clazz, int argInfo,
-    int argc, const u4* argv, const char* signature, void* func, JValue* pResult);
+    int argc, const StackSlot* argv, const char* signature, void* func, JValue* pResult);
 
 /*
  * Generate hints to speed native calls.  This is platform specific.
@@ -75,7 +75,7 @@ bool dvmLoadNativeCode(const char* fileName, Object* classLoader,
  *
  * Throws an exception and returns NULL on failure.
  */
-void dvmResolveNativeMethod(const u4* args, JValue* pResult,
+void dvmResolveNativeMethod(const StackSlot* args, JValue* pResult,
     const Method* method, struct Thread* self);
 
 /*
@@ -94,11 +94,19 @@ void dvmUnregisterJNINativeMethods(ClassObject* clazz);
  * Big/little endian shouldn't matter here -- ordering of words within a
  * long seems consistent across our supported platforms.
  */
+#ifdef _LP64
+// First slot contains whole 64bit value.
+INLINE s8 dvmGetArgLong(const StackSlot* args, int elem)
+{
+    return args[elem];
+}
+#else
 INLINE s8 dvmGetArgLong(const u4* args, int elem)
 {
     s8 val;
     memcpy(&val, &args[elem], sizeof(val));
     return val;
 }
+#endif
 
 #endif  // DALVIK_NATIVE_H_

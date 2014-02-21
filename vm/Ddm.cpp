@@ -427,7 +427,7 @@ ArrayObject* dvmDdmGetStackTraceById(u4 threadId)
 {
     Thread* self = dvmThreadSelf();
     Thread* thread;
-    int* traceBuf;
+    intptr_t* traceBuf;
 
     dvmLockThreadList(self);
 

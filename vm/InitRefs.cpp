@@ -214,7 +214,7 @@ static bool initFieldOffsets() {
 
     static struct FieldInfo infoVMThread[] = {
         { &gDvm.offJavaLangVMThread_thread, "thread", "Ljava/lang/Thread;" },
-        { &gDvm.offJavaLangVMThread_vmData, "vmData", "I" },
+        { &gDvm.offJavaLangVMThread_vmData, "vmData", "J" },
         { NULL, NULL, NULL }
     };
 

@@ -2590,7 +2590,7 @@ int call_dvmAllocObject() {
 
 //!
 int call_dvmAllocArrayByClass() {
-    typedef ArrayObject* (*vmHelper)(ClassObject*, size_t, int);
+    typedef ArrayObject* (*vmHelper)(ClassObject*, u4, int);
     vmHelper funcPtr = dvmAllocArrayByClass;
     if(gDvm.executionMode == kExecutionModeNcgO1) {
         beforeCall("dvmAllocArrayByClass");
@@ -2605,7 +2605,7 @@ int call_dvmAllocArrayByClass() {
 
 //!
 int call_dvmAllocPrimitiveArray() {
-    typedef ArrayObject* (*vmHelper)(char, size_t, int);
+    typedef ArrayObject* (*vmHelper)(char, u4, int);
     vmHelper funcPtr = dvmAllocPrimitiveArray;
     if(gDvm.executionMode == kExecutionModeNcgO1) {
         beforeCall("dvmAllocPrimitiveArray");
