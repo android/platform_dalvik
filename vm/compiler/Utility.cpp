@@ -17,6 +17,11 @@
 #include "Dalvik.h"
 #include "CompilerInternals.h"
 
+#ifdef __clang__
+// clang doesn't have __builtin___clear_cache, but libgcc has __clear_cache...
+#define __builtin___clear_cache(x, y) __clear_cache(x, y)
+#endif
+
 static ArenaMemBlock *arenaHead, *currentArena;
 static int numArenaBlocks;
 
