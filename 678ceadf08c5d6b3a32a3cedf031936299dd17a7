@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c0a6d15_1ef2adbf",
+        "filename": "vm/compiler/Utility.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-02-26T10:11:56Z",
+      "side": 1,
+      "message": "From what I could tell from objdump, ligcc\u0027s __clear_cache looked empty (at least on arm 32)",
+      "revId": "678ceadf08c5d6b3a32a3cedf031936299dd17a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
