@@ -22,6 +22,30 @@
       "revId": "c3424aac9200316c1102565015514b36fc563c80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c29d585_5a05e2a4",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1040593
+      },
+      "writtenOn": "2014-02-28T01:28:45Z",
+      "side": 1,
+      "message": "Oooh, that\u0027s a good catch.  Sharp eyes, Jason - it got by me and everyone else.\n\nShould be ar[i] not ar[1].\n\nIt\u0027s having no ill effect on Zygote (so far) because in every case where the system is operating in a not-horribly-broken fashion, the ar[] array will always be 2 entries long, and both entries will be non-negative.  -1 means \"there is no valid descriptor in this entry of the array\" and that\u0027s a should-never-happen.\n\nI\u0027ll fix it, though (and will check art to see if I made a corresponding booboo there.)",
+      "parentUuid": "dc2fd98a_f4bcae9c",
+      "range": {
+        "startLine": 513,
+        "startChar": 15,
+        "endLine": 513,
+        "endChar": 16
+      },
+      "revId": "c3424aac9200316c1102565015514b36fc563c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
