@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc2fd98a_f4bcae9c",
+        "filename": "vm/native/dalvik_system_Zygote.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1042158
+      },
+      "writtenOn": "2014-02-28T01:20:49Z",
+      "side": 1,
+      "message": "Is 1 correct here, or should it be i?  If 1 is special, why is it checked on every loop?",
+      "range": {
+        "startLine": 513,
+        "startChar": 15,
+        "endLine": 513,
+        "endChar": 16
+      },
+      "revId": "c3424aac9200316c1102565015514b36fc563c80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
