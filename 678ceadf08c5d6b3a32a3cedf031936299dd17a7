@@ -16,6 +16,24 @@
       "revId": "678ceadf08c5d6b3a32a3cedf031936299dd17a7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c971504_de1ea577",
+        "filename": "vm/compiler/Utility.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-03T10:38:09Z",
+      "side": 1,
+      "message": "You\u0027re right. I just checked with libgcc.a 4.8 (which we\u0027re using on master) and it does have __clear_cache defined). I\u0027ll compare the generated code for __builtin_clear_cache vs __clear_cache and if it\u0027s the same we should just switch everyone (even gcc compiles) over to __clear_cache.\n\nIf we do go ahead with this change :\n\n\u003cpedantry\u003e Also, In the name of neutral comments, perhaps we should end the comment with a single period. (I\u0027d also suggest a rephrase along the lines of \"Unlike gcc, clang only has __clear_cache and not __builtin__clear_cache\".)",
+      "parentUuid": "7c0a6d15_1ef2adbf",
+      "revId": "678ceadf08c5d6b3a32a3cedf031936299dd17a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
