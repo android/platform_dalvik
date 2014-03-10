@@ -285,7 +285,7 @@ public class BlockDumper
         TranslationAdvice advice = DexTranslationAdvice.THE_ONE;
         BytecodeArray code = meth.getCode();
         ByteArray bytes = code.getBytes();
-        RopMethod rmeth = Ropper.convert(meth, advice);
+        RopMethod rmeth = Ropper.convert(meth, advice, classFile.getMethods());
         StringBuffer sb = new StringBuffer(2000);
 
         if (optimize) {

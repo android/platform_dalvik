@@ -16,6 +16,9 @@
 
 package com.android.dx.cf.code;
 
+import com.android.dx.cf.iface.Method;
+import com.android.dx.cf.iface.MethodList;
+import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.FillArrayDataInsn;
 import com.android.dx.rop.code.Insn;
 import com.android.dx.rop.code.PlainCstInsn;
@@ -66,6 +69,9 @@ import java.util.ArrayList;
 
     /** {@code non-null;} method being converted */
     private final ConcreteMethod method;
+
+    /** {@code non-null:} list of methods from the class whose method is being converted */
+    private final MethodList methods;
 
     /** {@code non-null;} translation advice */
     private final TranslationAdvice advice;
@@ -124,8 +130,12 @@ import java.util.ArrayList;
      * @param advice {@code non-null;} translation advice to use
      */
     public RopperMachine(Ropper ropper, ConcreteMethod method,
-            TranslationAdvice advice) {
+            TranslationAdvice advice, MethodList methods) {
         super(method.getEffectiveDescriptor());
+
+        if (methods == null) {
+            throw new NullPointerException("methods == null");
+        }
 
         if (ropper == null) {
             throw new NullPointerException("ropper == null");
@@ -137,6 +147,7 @@ import java.util.ArrayList;
 
         this.ropper = ropper;
         this.method = method;
+        this.methods = methods;
         this.advice = advice;
         this.maxLocals = method.getMaxLocals();
         this.insns = new ArrayList<Insn>(25);
@@ -907,6 +918,29 @@ import java.util.ArrayList;
                 return RegOps.PUT_FIELD;
             }
             case ByteOps.INVOKEVIRTUAL: {
+                CstMethodRef ref = (CstMethodRef) cst;
+                // Some compilers and bytecode tools (incorrectly) emit
+                // invokevirtual instructions for calls to private functions.
+                //
+                // The runtime (correctly) rejects classes with such calls. We
+                // therefore check for an invoke-virtual to a private method and
+                // replace with an invoke-direct operation.
+                //
+                // Note that it assumes that all methods for a given class are
+                // defined in the same dex file.
+                //
+                // NOTE: This is a slow O(n) loop, and can be replaced with a
+                // faster implementation (at the cost of higher memory usage)
+                // if it proves to be a hot area of code.
+                if (ref.getDefiningClass() == method.getDefiningClass()) {
+                    for (int i = 0; i < methods.size(); ++i) {
+                        final Method m = methods.get(i);
+                        if (AccessFlags.isPrivate(m.getAccessFlags()) &&
+                                ref.getNat().equals(m.getNat())) {
+                            return RegOps.INVOKE_DIRECT;
+                        }
+                    }
+                }
                 return RegOps.INVOKE_VIRTUAL;
             }
             case ByteOps.INVOKESPECIAL: {
