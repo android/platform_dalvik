@@ -771,15 +771,13 @@ static int processXjitconfig(const char* opt) {
  * Process an argument vector full of options.  Unlike standard C programs,
  * argv[0] does not contain the name of the program.
  *
- * If "ignoreUnrecognized" is set, we ignore options starting with "-X" or "_"
- * that we don't recognize.  Otherwise, we return with an error as soon as
- * we see anything we can't identify.
+ * We always ignore options starting with "-X" or "_" that we don't recognize.
  *
  * Returns 0 on success, -1 on failure, and 1 for the special case of
  * "-version" where we want to stop without showing an error message.
  */
 static int processOptions(int argc, const char* const argv[],
-    bool ignoreUnrecognized)
+    bool /*ignoreUnrecognized*/)
 {
     int i;
 
@@ -1204,10 +1202,7 @@ static int processOptions(int argc, const char* const argv[],
             gDvm.profilerClockSource = kProfilerClockSourceDual;
 
         } else {
-            if (!ignoreUnrecognized) {
-                dvmFprintf(stderr, "Unrecognized option '%s'\n", argv[i]);
-                return -1;
-            }
+            dvmFprintf(stderr, "Unrecognized option '%s'\n", argv[i]);
         }
     }
 
