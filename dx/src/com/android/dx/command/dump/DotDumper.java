@@ -115,7 +115,7 @@ public class DotDumper implements ParseObserver {
 
         TranslationAdvice advice = DexTranslationAdvice.THE_ONE;
         RopMethod rmeth =
-            Ropper.convert(meth, advice);
+            Ropper.convert(meth, advice, classFile.getMethods());
 
         if (optimize) {
             boolean isStatic = AccessFlags.isStatic(meth.getAccessFlags());

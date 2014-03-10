@@ -90,7 +90,7 @@ public class SsaDumper extends BlockDumper {
         ConcreteMethod meth =
             new ConcreteMethod((Method) member, classFile, true, true);
         TranslationAdvice advice = DexTranslationAdvice.THE_ONE;
-        RopMethod rmeth = Ropper.convert(meth, advice);
+        RopMethod rmeth = Ropper.convert(meth, advice, classFile.getMethods());
         SsaMethod ssaMeth = null;
         boolean isStatic = AccessFlags.isStatic(meth.getAccessFlags());
         int paramWidth = computeParamWidth(meth, isStatic);

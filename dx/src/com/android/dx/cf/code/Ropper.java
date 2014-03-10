@@ -16,6 +16,7 @@
 
 package com.android.dx.cf.code;
 
+import com.android.dx.cf.iface.MethodList;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.BasicBlock;
 import com.android.dx.rop.code.BasicBlockList;
@@ -257,12 +258,14 @@ public final class Ropper {
      *
      * @param method {@code non-null;} method to convert
      * @param advice {@code non-null;} translation advice to use
+     * @param methods {@code non-null;} list of methods defined by the class
+     *     that defines {@code method}.
      * @return {@code non-null;} the converted instance
      */
     public static RopMethod convert(ConcreteMethod method,
-            TranslationAdvice advice) {
+            TranslationAdvice advice, MethodList methods) {
         try {
-            Ropper r = new Ropper(method, advice);
+            Ropper r = new Ropper(method, advice, methods);
             r.doit();
             return r.getRopMethod();
         } catch (SimException ex) {
@@ -278,8 +281,10 @@ public final class Ropper {
      *
      * @param method {@code non-null;} method to convert
      * @param advice {@code non-null;} translation advice to use
+     * @param methods {@code non-null;} list of methods defined by the class
+     *     that defines {@code method}.
      */
-    private Ropper(ConcreteMethod method, TranslationAdvice advice) {
+    private Ropper(ConcreteMethod method, TranslationAdvice advice, MethodList methods) {
         if (method == null) {
             throw new NullPointerException("method == null");
         }
@@ -292,7 +297,7 @@ public final class Ropper {
         this.blocks = BasicBlocker.identifyBlocks(method);
         this.maxLabel = blocks.getMaxLabel();
         this.maxLocals = method.getMaxLocals();
-        this.machine = new RopperMachine(this, method, advice);
+        this.machine = new RopperMachine(this, method, advice, methods);
         this.sim = new Simulator(machine, method);
         this.startFrames = new Frame[maxLabel];
         this.subroutines = new Subroutine[maxLabel];

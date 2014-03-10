@@ -279,7 +279,7 @@ public class CfTranslator {
 
                     advice = DexTranslationAdvice.THE_ONE;
 
-                    RopMethod rmeth = Ropper.convert(concrete, advice);
+                    RopMethod rmeth = Ropper.convert(concrete, advice, methods);
                     RopMethod nonOptRmeth = null;
                     int paramSize;
 
