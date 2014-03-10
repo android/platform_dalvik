@@ -15,8 +15,6 @@
 #
 
 # Only include the x86 encoder/decoder for x86 architecture
-ifeq ($(TARGET_ARCH),x86)
-
 LOCAL_PATH:= $(call my-dir)
 
 ifneq ($(LIBENC_INCLUDED),true)
@@ -36,17 +34,14 @@ enc_include_files :=
 ## Build the device version of libenc
 ##
 ##
-ifneq ($(SDK_ONLY),true)  # SDK_only doesn't need device version
 
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(enc_src_files)
+LOCAL_SRC_FILES :=
+LOCAL_SRC_FILES_x86 := $(enc_src_files)
 LOCAL_C_INCLUDES += $(enc_include_files)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libenc
-LOCAL_32_BIT_ONLY := true
 include $(BUILD_STATIC_LIBRARY)
-
-endif # !SDK_ONLY
 
 
 ##
@@ -62,5 +57,3 @@ LOCAL_MODULE := libenc
 include $(BUILD_HOST_STATIC_LIBRARY)
 
 endif   # ifneq ($(LIBENC_INCLUDED),true)
-
-endif   # ifeq ($(TARGET_ARCH),x86)

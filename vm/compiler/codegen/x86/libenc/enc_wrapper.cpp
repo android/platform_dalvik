@@ -174,9 +174,9 @@ extern "C" ENCODER_DECLARE_EXPORT unsigned encoder_get_inst_size(char * stream) 
     return numBytes;
 }
 
-extern "C" ENCODER_DECLARE_EXPORT unsigned encoder_get_cur_operand_offset(int opnd_id)
+extern "C" ENCODER_DECLARE_EXPORT unsigned long encoder_get_cur_operand_offset(int opnd_id)
 {
-    return (unsigned)EncoderBase::getOpndLocation(opnd_id);
+    return (unsigned long)EncoderBase::getOpndLocation(opnd_id);
 }
 
 extern "C" ENCODER_DECLARE_EXPORT char * encoder_update_imm(int imm, char * stream) {
