@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5c25a9ed_ea152799",
+        "filename": "dx/src/com/android/dx/cf/code/Ropper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-11T11:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c1ab5b4_c967957c",
+      "range": {
+        "startLine": 264,
+        "startChar": 38,
+        "endLine": 264,
+        "endChar": 56
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c25a9ed_ca99431d",
         "filename": "dx/src/com/android/dx/cf/code/Ropper.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5c25a9ed_ca12e3ae",
+        "filename": "dx/src/com/android/dx/cf/code/Ropper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-11T11:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c25a9ed_ca99431d",
+      "range": {
+        "startLine": 283,
+        "startChar": 68,
+        "endLine": 283,
+        "endChar": 86
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dce519f4_3bbbd7ef",
         "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2014-03-11T11:08:47Z",
       "side": 1,
       "message": "nit: add Javadoc for new \"methods\" parameter?",
+      "range": {
+        "startLine": 133,
+        "startChar": 38,
+        "endLine": 133,
+        "endChar": 56
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dce519f4_bbfa878c",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-11T11:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dce519f4_3bbbd7ef",
       "range": {
         "startLine": 133,
         "startChar": 38,
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "dce519f4_dbf753a3",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-11T11:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dce519f4_bb48c74c",
+      "range": {
+        "startLine": 922,
+        "startChar": 54,
+        "endLine": 922,
+        "endChar": 65
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dce519f4_3b3d97a2",
         "filename": "dx/tests/123-dex-transform-invalid-virtual-to-direct/run",
         "patchSetId": 1
@@ -129,6 +225,24 @@
       "writtenOn": "2014-03-11T11:25:50Z",
       "side": 1,
       "message": "nit: 2014",
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c1ab5b4_89f11d4b",
+        "filename": "dx/tests/123-dex-transform-invalid-virtual-to-direct/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-11T11:45:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dce519f4_3b3d97a2",
       "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
