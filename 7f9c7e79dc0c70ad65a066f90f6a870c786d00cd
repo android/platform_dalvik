@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c1ab5b4_c967957c",
+        "filename": "dx/src/com/android/dx/cf/code/Ropper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-03-11T11:08:47Z",
+      "side": 1,
+      "message": "nit: add Javadoc for new \"methods\" parameter?",
+      "range": {
+        "startLine": 264,
+        "startChar": 38,
+        "endLine": 264,
+        "endChar": 56
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c25a9ed_ca99431d",
+        "filename": "dx/src/com/android/dx/cf/code/Ropper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-03-11T11:08:47Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 283,
+        "startChar": 68,
+        "endLine": 283,
+        "endChar": 86
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dce519f4_3bbbd7ef",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-03-11T11:08:47Z",
+      "side": 1,
+      "message": "nit: add Javadoc for new \"methods\" parameter?",
+      "range": {
+        "startLine": 133,
+        "startChar": 38,
+        "endLine": 133,
+        "endChar": 56
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
