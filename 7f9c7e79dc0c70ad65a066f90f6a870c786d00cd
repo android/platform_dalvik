@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "dce519f4_bb48c74c",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-03-11T11:29:59Z",
+      "side": 1,
+      "message": "Which section of the bytecode specification are you looking at ? (I think I might have misunderstood). I\u0027ll reword this accordingly.",
+      "parentUuid": "dce519f4_db2e7373",
+      "range": {
+        "startLine": 922,
+        "startChar": 54,
+        "endLine": 922,
+        "endChar": 65
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dce519f4_3b3d97a2",
         "filename": "dx/tests/123-dex-transform-invalid-virtual-to-direct/run",
         "patchSetId": 1
