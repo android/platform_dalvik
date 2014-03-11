@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "5c25a9ed_ea54073e",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-03-11T12:33:03Z",
+      "side": 1,
+      "message": "I\u0027ve consluted 2 editions http://docs.oracle.com/javase/specs/jvms/se5.0/html/Instructions2.doc6.html and http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.10.1.9.invokevirtual",
+      "parentUuid": "dce519f4_bb48c74c",
+      "range": {
+        "startLine": 922,
+        "startChar": 54,
+        "endLine": 922,
+        "endChar": 65
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dce519f4_3b3d97a2",
         "filename": "dx/tests/123-dex-transform-invalid-virtual-to-direct/run",
         "patchSetId": 1
