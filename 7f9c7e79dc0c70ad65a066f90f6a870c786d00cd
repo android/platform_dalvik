@@ -68,6 +68,29 @@
       "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dce519f4_db2e7373",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-03-11T11:19:36Z",
+      "side": 1,
+      "message": "My understanding of the java bytecode specification is that it\u0027s correct (but probably sub-optimal). Only the specification of the dex opcode invoke-virtual is stating that it\u0027s incorrect to try calling a private.",
+      "range": {
+        "startLine": 922,
+        "startChar": 54,
+        "endLine": 922,
+        "endChar": 65
+      },
+      "revId": "7f9c7e79dc0c70ad65a066f90f6a870c786d00cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
