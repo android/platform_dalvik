@@ -409,5 +409,9 @@ void dvmGetBlockName(BasicBlock *bb, char *name)
 }
 
 void dvmCompilerCacheFlush(uintptr_t start, uintptr_t end) {
+#ifdef __clang__
+    __clear_cache(reinterpret_cast<void*>(start), reinterpret_cast<void*>(end));
+#else
     __builtin___clear_cache(reinterpret_cast<void*>(start), reinterpret_cast<void*>(end));
+#endif
 }
