@@ -207,7 +207,7 @@ Object* dvmAllocObject(ClassObject* clazz, int flags)
 Object* dvmCloneObject(Object* obj, int flags)
 {
     assert(dvmIsValidObject(obj));
-    ClassObject* clazz = obj->clazz;
+    ClassObject* clazz =dvmRefExpandClazzGlobal(obj->clazz);
 
     /* Class.java shouldn't let us get here (java.lang.Class is final
      * and does not implement Clonable), but make extra sure.
@@ -328,7 +328,7 @@ static void countInstancesOfClassCallback(Object *obj, void *arg)
 {
     CountContext *ctx = (CountContext *)arg;
     assert(ctx != NULL);
-    if (obj->clazz == ctx->clazz) {
+    if (dvmRefExpandClazzGlobal(obj->clazz) == ctx->clazz) {
         ctx->count += 1;
     }
 }
@@ -347,7 +347,7 @@ static void countAssignableInstancesOfClassCallback(Object *obj, void *arg)
 {
     CountContext *ctx = (CountContext *)arg;
     assert(ctx != NULL);
-    if (obj->clazz != NULL && dvmInstanceof(obj->clazz, ctx->clazz)) {
+    if (obj->clazz != NULLREF && dvmInstanceof(dvmRefExpandClazzGlobal(obj->clazz), ctx->clazz)) {
         ctx->count += 1;
     }
 }

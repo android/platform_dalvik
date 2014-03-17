@@ -14,7 +14,7 @@ HANDLE_OPCODE(OP_CONST_STRING_JUMBO /*vAA, string@BBBBBBBB*/)
             if (strObj == NULL)
                 GOTO_exceptionThrown();
         }
-        SET_REGISTER(vdst, (u4) strObj);
+        SET_REGISTER(vdst, (StackSlot) strObj);
     }
     FINISH(3);
 OP_END

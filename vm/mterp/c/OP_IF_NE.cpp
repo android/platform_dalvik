@@ -1,2 +1,2 @@
-HANDLE_OP_IF_XX(OP_IF_NE, "ne", !=)
+HANDLE_OP_IF_EQ(OP_IF_NE, "ne", !=)
 OP_END

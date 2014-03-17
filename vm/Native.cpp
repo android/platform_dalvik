@@ -67,7 +67,7 @@ void dvmNativeShutdown()
  * structure, but the declaration needs to match the DalvikBridgeFunc
  * type definition.)
  */
-void dvmResolveNativeMethod(const u4* args, JValue* pResult,
+void dvmResolveNativeMethod(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     ClassObject* clazz = method->clazz;
@@ -687,7 +687,7 @@ static char* createMangledSignature(const DexProto* proto)
  *
  * TODO: we may want to skip libraries for which JNI_OnLoad failed.
  */
-static int findMethodInLib(void* vlib, void* vmethod)
+static intptr_t findMethodInLib(void* vlib, void* vmethod)
 {
     const SharedLib* pLib = (const SharedLib*) vlib;
     const Method* meth = (const Method*) vmethod;
@@ -745,7 +745,7 @@ bail:
     free(mangleCM);
     free(mangleSig);
     free(mangleCMSig);
-    return (int) func;
+    return (intptr_t) func;
 }
 
 /*

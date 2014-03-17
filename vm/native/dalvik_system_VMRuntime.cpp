@@ -36,7 +36,7 @@
  * between zero and one.
  */
 static void Dalvik_dalvik_system_VMRuntime_getTargetHeapUtilization(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
 
@@ -52,9 +52,9 @@ static void Dalvik_dalvik_system_VMRuntime_getTargetHeapUtilization(
  * Note that this is NOT static.
  */
 static void Dalvik_dalvik_system_VMRuntime_nativeSetTargetHeapUtilization(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
-    dvmSetTargetHeapUtilization(dvmU4ToFloat(args[1]));
+    dvmSetTargetHeapUtilization(dvmU4ToFloat((u4)args[1]));
 
     RETURN_VOID();
 }
@@ -65,7 +65,7 @@ static void Dalvik_dalvik_system_VMRuntime_nativeSetTargetHeapUtilization(
  * Callback function from the framework to indicate that an app has gone
  * through the startup phase and it is time to enable the JIT compiler.
  */
-static void Dalvik_dalvik_system_VMRuntime_startJitCompilation(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_startJitCompilation(const StackSlot* args,
     JValue* pResult)
 {
 #if defined(WITH_JIT)
@@ -85,7 +85,7 @@ static void Dalvik_dalvik_system_VMRuntime_startJitCompilation(const u4* args,
  * permanently disable the JIT compiler. Currently only the system server uses
  * this interface when it detects system-wide safe mode is enabled.
  */
-static void Dalvik_dalvik_system_VMRuntime_disableJitCompilation(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_disableJitCompilation(const StackSlot* args,
     JValue* pResult)
 {
 #if defined(WITH_JIT)
@@ -96,11 +96,11 @@ static void Dalvik_dalvik_system_VMRuntime_disableJitCompilation(const u4* args,
     RETURN_VOID();
 }
 
-static void Dalvik_dalvik_system_VMRuntime_newNonMovableArray(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_newNonMovableArray(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* elementClass = (ClassObject*) args[1];
-    int length = args[2];
+    int length = (int) args[2];
 
     if (elementClass == NULL) {
         dvmThrowNullPointerException("elementClass == null");
@@ -127,7 +127,7 @@ static void Dalvik_dalvik_system_VMRuntime_newNonMovableArray(const u4* args,
     RETURN_PTR(newArray);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_addressOf(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_addressOf(const StackSlot* args,
     JValue* pResult)
 {
     ArrayObject* array = (ArrayObject*) args[1];
@@ -140,7 +140,7 @@ static void Dalvik_dalvik_system_VMRuntime_addressOf(const u4* args,
     RETURN_LONG(result);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_clearGrowthLimit(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_clearGrowthLimit(const StackSlot* args,
     JValue* pResult)
 {
     dvmClearGrowthLimit();
@@ -148,12 +148,12 @@ static void Dalvik_dalvik_system_VMRuntime_clearGrowthLimit(const u4* args,
 }
 
 static void Dalvik_dalvik_system_VMRuntime_isDebuggerActive(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     RETURN_BOOLEAN(gDvm.debuggerActive || gDvm.nativeDebuggerActive);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_properties(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_properties(const StackSlot* args,
     JValue* pResult)
 {
     ArrayObject* result = dvmCreateStringArray(*gDvm.properties);
@@ -168,19 +168,19 @@ static void returnCString(JValue* pResult, const char* s)
     RETURN_PTR(result);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_bootClassPath(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_bootClassPath(const StackSlot* args,
     JValue* pResult)
 {
     returnCString(pResult, gDvm.bootClassPathStr);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_classPath(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_classPath(const StackSlot* args,
     JValue* pResult)
 {
     returnCString(pResult, gDvm.classPathStr);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_vmVersion(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_vmVersion(const StackSlot* args,
     JValue* pResult)
 {
     char buf[64];
@@ -189,20 +189,20 @@ static void Dalvik_dalvik_system_VMRuntime_vmVersion(const u4* args,
     returnCString(pResult, buf);
 }
 
-static void Dalvik_dalvik_system_VMRuntime_vmLibrary(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_vmLibrary(const StackSlot* args,
     JValue* pResult)
 {
     returnCString(pResult, "libdvm.so");
 }
 
 static void Dalvik_dalvik_system_VMRuntime_setTargetSdkVersionNative(
-    const u4* args,
+    const StackSlot* args,
     JValue* pResult)
 {
     // This is the target SDK version of the app we're about to run.
     // Note that this value may be CUR_DEVELOPMENT (10000).
     // Note that this value may be 0, meaning "current".
-    int targetSdkVersion = args[1];
+    int targetSdkVersion = (int) args[1];
     if (targetSdkVersion > 0 && targetSdkVersion <= 13 /* honeycomb-mr2 */) {
         if (gDvmJni.useCheckJni) {
             ALOGI("CheckJNI enabled: not enabling JNI app bug workarounds.");
@@ -215,7 +215,7 @@ static void Dalvik_dalvik_system_VMRuntime_setTargetSdkVersionNative(
     RETURN_VOID();
 }
 
-static void Dalvik_dalvik_system_VMRuntime_registerNativeAllocation(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_registerNativeAllocation(const StackSlot* args,
                                                                     JValue* pResult)
 {
   int bytes = args[1];
@@ -227,7 +227,7 @@ static void Dalvik_dalvik_system_VMRuntime_registerNativeAllocation(const u4* ar
   RETURN_VOID();
 }
 
-static void Dalvik_dalvik_system_VMRuntime_registerNativeFree(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_registerNativeFree(const StackSlot* args,
                                                               JValue* pResult)
 {
   int bytes = args[1];
@@ -239,7 +239,7 @@ static void Dalvik_dalvik_system_VMRuntime_registerNativeFree(const u4* args,
   RETURN_VOID();
 }
 
-static void Dalvik_dalvik_system_VMRuntime_updateProcessState(const u4* args,
+static void Dalvik_dalvik_system_VMRuntime_updateProcessState(const StackSlot* args,
                                                               JValue* pResult)
 {
   RETURN_VOID();
@@ -451,7 +451,7 @@ static void preloadDexCachesStatsFilled(DexCacheStats* filled) {
     }
 }
 
-static void Dalvik_dalvik_system_VMRuntime_preloadDexCaches(const u4* args, JValue* pResult)
+static void Dalvik_dalvik_system_VMRuntime_preloadDexCaches(const StackSlot* args, JValue* pResult)
 {
     if (!kPreloadDexCachesEnabled) {
         return;

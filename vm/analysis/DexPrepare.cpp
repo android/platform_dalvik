@@ -1046,6 +1046,8 @@ static void verifyAndOptimizeClass(DexFile* pDexFile, ClassObject* clazz,
     const char* classDescriptor;
     bool verified = false;
 
+    (void)classDescriptor;
+
     if (clazz->pDvmDex->pDexFile != pDexFile) {
         /*
          * The current DEX file defined a class that is also present in the
@@ -1444,7 +1446,7 @@ static bool writeChunk(int fd, u4 type, const void* data, size_t size)
 
     assert(sizeof(header) == 8);
 
-    ALOGV("Writing chunk, type=%.4s size=%d", (char*) &type, size);
+    ALOGV("Writing chunk, type=%.4s size=%zu", (char*) &type, size);
 
     header.ts.type = type;
     header.ts.size = (u4) size;
@@ -1462,7 +1464,7 @@ static bool writeChunk(int fd, u4 type, const void* data, size_t size)
     /* if necessary, pad to 64-bit alignment */
     if ((size & 7) != 0) {
         int padSize = 8 - (size & 7);
-        ALOGV("size was %d, inserting %d pad bytes", size, padSize);
+        ALOGV("size was %zu, inserting %d pad bytes", size, padSize);
         lseek(fd, padSize, SEEK_CUR);
     }
 

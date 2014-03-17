@@ -467,7 +467,7 @@ ClassObject* dvmOptResolveClass(ClassObject* referrer, u4 classIdx,
                         break;
                     excep = cause;
                 }
-                if (strcmp(excep->clazz->descriptor,
+                if (strcmp(dvmRefExpandClazzGlobal(excep->clazz)->descriptor,
                     "Ljava/lang/IncompatibleClassChangeError;") == 0)
                 {
                     *pFailure = VERIFY_ERROR_CLASS_CHANGE;

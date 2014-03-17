@@ -34,7 +34,7 @@
 /* The ID for the synthetic object generated to account for class
  * Static overhead.
  */
-#define CLASS_STATICS_ID(clazz) ((hprof_object_id)(((u4)(clazz)) | 1))
+#define CLASS_STATICS_ID(clazz) ((hprof_object_id)(((uintptr_t)(clazz)) | 1))
 
 int hprofStartHeapDump(hprof_context_t *ctx)
 {
@@ -70,7 +70,7 @@ static hprof_basic_type signatureToBasicTypeAndSize(const char *sig,
 
     switch (c) {
     case '[':
-    case 'L': ret = hprof_basic_object;  size = 4; break;
+    case 'L': ret = hprof_basic_object;  size = sizeof(void*); break;
     case 'Z': ret = hprof_basic_boolean; size = 1; break;
     case 'C': ret = hprof_basic_char;    size = 2; break;
     case 'F': ret = hprof_basic_float;   size = 4; break;
@@ -254,9 +254,9 @@ int hprofDumpHeapObject(hprof_context_t *ctx, const Object *obj)
         ctx->currentHeap = desiredHeap;
     }
 
-    clazz = obj->clazz;
+    clazz = dvmRefExpandClazzGlobal(obj->clazz);
 
-    if (clazz == NULL) {
+    if (dvmRefIsNull(clazz)) {
         /* This object will bother HprofReader, because it has a NULL
          * class, so just don't dump it. It could be
          * gDvm.unlinkedJavaLangClass or it could be an object just

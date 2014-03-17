@@ -7,6 +7,7 @@ void dvmInterpretPortable(Thread* self)
 {
 #if defined(EASY_GDB)
     StackSaveArea* debugSaveArea = SAVEAREA_FROM_FP(self->interpSave.curFrame);
+    (void)debugSaveArea;
 #endif
     DvmDex* methodClassDex;     // curMethod->clazz->pDvmDex
     JValue retval;
@@ -14,7 +15,7 @@ void dvmInterpretPortable(Thread* self)
     /* core state */
     const Method* curMethod;    // method we're interpreting
     const u2* pc;               // program counter
-    u4* fp;                     // frame pointer
+    StackSlot* fp;              // frame pointer
     u2 inst;                    // current instruction
     /* instruction decoding */
     u4 ref;                     // 16 or 32-bit quantity fetched directly
@@ -22,6 +23,7 @@ void dvmInterpretPortable(Thread* self)
     /* method call setup */
     const Method* methodToCall;
     bool methodCallRange;
+    void *heapBase = gDvm.heapBase;
 
     /* static computed goto table */
     DEFINE_GOTO_TABLE(handlerTable);

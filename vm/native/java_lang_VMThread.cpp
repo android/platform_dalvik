@@ -28,7 +28,7 @@
  *
  * Throws an exception on failure.
  */
-static void Dalvik_java_lang_VMThread_create(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_VMThread_create(const StackSlot* args, JValue* pResult)
 {
     Object* threadObj = (Object*) args[0];
     s8 stackSize = GET_ARG_LONG(args, 1);
@@ -41,7 +41,7 @@ static void Dalvik_java_lang_VMThread_create(const u4* args, JValue* pResult)
 /*
  * static Thread currentThread()
  */
-static void Dalvik_java_lang_VMThread_currentThread(const u4* args,
+static void Dalvik_java_lang_VMThread_currentThread(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -55,7 +55,7 @@ static void Dalvik_java_lang_VMThread_currentThread(const u4* args,
  * Gets the Thread status. Result is in VM terms, has to be mapped to
  * Thread.State by interpreted code.
  */
-static void Dalvik_java_lang_VMThread_getStatus(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_VMThread_getStatus(const StackSlot* args, JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
     Thread* thread;
@@ -78,7 +78,7 @@ static void Dalvik_java_lang_VMThread_getStatus(const u4* args, JValue* pResult)
  * Returns whether the current thread has a monitor lock on the specific
  * object.
  */
-static void Dalvik_java_lang_VMThread_holdsLock(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_VMThread_holdsLock(const StackSlot* args, JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
     Object* object = (Object*) args[1];
@@ -102,7 +102,7 @@ static void Dalvik_java_lang_VMThread_holdsLock(const u4* args, JValue* pResult)
  *
  * Interrupt a thread that is waiting (or is about to wait) on a monitor.
  */
-static void Dalvik_java_lang_VMThread_interrupt(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_VMThread_interrupt(const StackSlot* args, JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
     Thread* thread;
@@ -120,7 +120,7 @@ static void Dalvik_java_lang_VMThread_interrupt(const u4* args, JValue* pResult)
  *
  * Determine if the current thread has been interrupted.  Clears the flag.
  */
-static void Dalvik_java_lang_VMThread_interrupted(const u4* args,
+static void Dalvik_java_lang_VMThread_interrupted(const StackSlot* args,
     JValue* pResult)
 {
     Thread* self = dvmThreadSelf();
@@ -139,7 +139,7 @@ static void Dalvik_java_lang_VMThread_interrupted(const u4* args,
  * Determine if the specified thread has been interrupted.  Does not clear
  * the flag.
  */
-static void Dalvik_java_lang_VMThread_isInterrupted(const u4* args,
+static void Dalvik_java_lang_VMThread_isInterrupted(const StackSlot* args,
     JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
@@ -162,7 +162,7 @@ static void Dalvik_java_lang_VMThread_isInterrupted(const u4* args,
  *
  * The name of the target thread has changed.  We may need to alert DDMS.
  */
-static void Dalvik_java_lang_VMThread_nameChanged(const u4* args,
+static void Dalvik_java_lang_VMThread_nameChanged(const StackSlot* args,
     JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
@@ -192,11 +192,11 @@ static void Dalvik_java_lang_VMThread_nameChanged(const u4* args,
  * from Thread.MIN_PRIORITY to Thread.MAX_PRIORITY (1-10), with "normal"
  * threads at Thread.NORM_PRIORITY (5).
  */
-static void Dalvik_java_lang_VMThread_setPriority(const u4* args,
+static void Dalvik_java_lang_VMThread_setPriority(const StackSlot* args,
     JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
-    int newPriority = args[1];
+    int newPriority = (int)args[1];
     Thread* thread;
 
     dvmLockThreadList(NULL);
@@ -212,9 +212,9 @@ static void Dalvik_java_lang_VMThread_setPriority(const u4* args,
 /*
  * static void sleep(long msec, int nsec)
  */
-static void Dalvik_java_lang_VMThread_sleep(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_VMThread_sleep(const StackSlot* args, JValue* pResult)
 {
-    dvmThreadSleep(GET_ARG_LONG(args,0), args[2]);
+    dvmThreadSleep(GET_ARG_LONG(args,0), (u4)args[2]);
     RETURN_VOID();
 }
 
@@ -226,7 +226,7 @@ static void Dalvik_java_lang_VMThread_sleep(const u4* args, JValue* pResult)
  * The exact behavior is poorly defined.  Some discussion here:
  *   http://www.cs.umd.edu/~pugh/java/memoryModel/archive/0944.html
  */
-static void Dalvik_java_lang_VMThread_yield(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_VMThread_yield(const StackSlot* args, JValue* pResult)
 {
     UNUSED_PARAMETER(args);
 

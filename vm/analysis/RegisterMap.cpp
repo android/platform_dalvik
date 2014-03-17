@@ -27,7 +27,6 @@
 #include "libdex/DexCatch.h"
 #include "libdex/InstrUtils.h"
 #include "libdex/Leb128.h"
-
 #include <stddef.h>
 
 /* double-check the compression */
@@ -536,7 +535,7 @@ static bool verifyMap(VerifierData* vdata, const RegisterMap* pMap)
             regIsRef = isReferenceType(type);
 
             if (bitIsRef != regIsRef) {
-                ALOGE("GLITCH: addr %d reg %d: bit=%d reg=%d(%d)",
+                ALOGE("GLITCH: addr %d reg %d: bit=%d reg=%d(%" PRIdPTR ")",
                     addr, i, bitIsRef, regIsRef, type);
                 return false;
             }
@@ -563,7 +562,7 @@ static bool verifyMap(VerifierData* vdata, const RegisterMap* pMap)
  */
 static inline u1* align32(u1* ptr)
 {
-    return (u1*) (((int) ptr + 3) & ~0x03);
+    return (u1*) (((intptr_t) ptr + 3) & ~0x03);
 }
 
 /*
@@ -815,7 +814,7 @@ RegisterMapBuilder* dvmGenerateRegisterMaps(DvmDex* pDvmDex)
         return NULL;
     }
 
-    ALOGV("TOTAL size of register maps: %d", actual);
+    ALOGV("TOTAL size of register maps: %zu", actual);
 
     pBuilder->data = pBuilder->memMap.addr;
     pBuilder->size = actual;
@@ -1630,7 +1629,7 @@ static RegisterMap* compressMapDifferential(const RegisterMap* pMap,
          */
         if (tmpPtr - tmpBuf.get() >= origSize) {
             if (debug) {
-                ALOGD("Compressed size >= original (%d vs %d): %s.%s",
+                ALOGD("Compressed size >= original (%" PRIdPTR" vs %d): %s.%s",
                     tmpPtr - tmpBuf.get(), origSize,
                     meth->clazz->descriptor, meth->name);
             }
@@ -1670,7 +1669,7 @@ static RegisterMap* compressMapDifferential(const RegisterMap* pMap,
     memcpy(tmpPtr, tmpBuf.get(), newDataSize);
 
     if (REGISTER_MAP_VERBOSE) {
-        ALOGD("Compression successful (%d -> %d) from aw=%d rw=%d ne=%d",
+        ALOGD("Compression successful (%zu -> %zu) from aw=%d rw=%d ne=%d",
             computeRegisterMapSize(pMap), computeRegisterMapSize(pNewMap),
             addrWidth, regWidth, numEntries);
     }
@@ -1813,21 +1812,21 @@ static RegisterMap* uncompressMapDifferential(const RegisterMap* pMap)
     }
 
     if (dstPtr - (u1*) pNewMap != newMapSize) {
-        ALOGE("ERROR: output %d bytes, expected %d",
+        ALOGE("ERROR: output %" PRIdPTR " bytes, expected %d",
             dstPtr - (u1*) pNewMap, newMapSize);
         free(pNewMap);
         return NULL;
     }
 
     if (srcPtr - srcStart != expectedSrcLen) {
-        ALOGE("ERROR: consumed %d bytes, expected %d",
+        ALOGE("ERROR: consumed %" PRIdPTR " bytes, expected %d",
             srcPtr - srcStart, expectedSrcLen);
         free(pNewMap);
         return NULL;
     }
 
     if (REGISTER_MAP_VERBOSE) {
-        ALOGD("Expansion successful (%d -> %d)",
+        ALOGD("Expansion successful (%zu -> %zu)",
             computeRegisterMapSize(pMap), computeRegisterMapSize(pNewMap));
     }
 

@@ -42,7 +42,7 @@ ClassObject* dvmFindArrayClassForElement(ClassObject* elemClassObj);
  * Returns NULL with an exception raised if allocation fails.
  */
 extern "C" ArrayObject* dvmAllocArrayByClass(ClassObject* arrayClass,
-    size_t length, int allocFlags);
+    u4 length, int allocFlags);
 
 /*
  * Allocate an array whose members are primitives (bools, ints, etc.).
@@ -53,7 +53,7 @@ extern "C" ArrayObject* dvmAllocArrayByClass(ClassObject* arrayClass,
  *
  * Returns NULL with an exception raised if allocation fails.
  */
-ArrayObject* dvmAllocPrimitiveArray(char type, size_t length, int allocFlags);
+ArrayObject* dvmAllocPrimitiveArray(char type, u4 length, int allocFlags);
 
 /*
  * Allocate an array with multiple dimensions.  Elements may be Objects or
@@ -73,7 +73,7 @@ ArrayObject* dvmAllocMultiArray(ClassObject* arrayClass, int curDim,
  */
 INLINE bool dvmIsArray(const ArrayObject* arrayObj)
 {
-    return ( ((Object*)arrayObj)->clazz->descriptor[0] == '[' );
+    return ( dvmRefExpandClazzGlobal(((Object*)arrayObj)->clazz)->descriptor[0] == '[' );
 }
 
 /*
@@ -95,7 +95,7 @@ INLINE bool dvmIsObjectArrayClass(const ClassObject* clazz)
  */
 INLINE bool dvmIsObjectArray(const ArrayObject* arrayObj)
 {
-    return dvmIsObjectArrayClass(arrayObj->clazz);
+    return dvmIsObjectArrayClass(dvmRefExpandClazzGlobal(arrayObj->clazz));
 }
 
 /*

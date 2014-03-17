@@ -310,11 +310,11 @@ static bool isReferentUnmarked(const Object *obj,
                                const WhiteReferenceCounter* ctx)
 {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     assert(ctx != NULL);
     if (ctx->whiteRefs != 1) {
         return false;
-    } else if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISREFERENCE)) {
+    } else if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISREFERENCE)) {
         size_t offset = gDvm.offJavaLangRefReference_referent;
         const Object *referent = dvmGetFieldObject(obj, offset);
         return !dvmHeapBitmapIsObjectBitSet(ctx->markBits, referent);
@@ -330,7 +330,7 @@ static bool isReferentUnmarked(const Object *obj,
 static bool isWeakInternedString(const Object *obj)
 {
     assert(obj != NULL);
-    if (obj->clazz == gDvm.classJavaLangString) {
+    if (dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangString) {
         return dvmIsWeakInternedString((StringObject *)obj);
     } else {
         return false;

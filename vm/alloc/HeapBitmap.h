@@ -38,8 +38,9 @@
  * when using CLZ.
  */
 #define HB_OFFSET_TO_MASK(offset_) \
-    (1 << \
-        (31-(((uintptr_t)(offset_) / HB_OBJECT_ALIGNMENT) % HB_BITS_PER_WORD)))
+    (1L << \
+        ((sizeof(void*)*8-1)-(((uintptr_t)(offset_) / HB_OBJECT_ALIGNMENT) \
+        % HB_BITS_PER_WORD)))
 
 struct HeapBitmap {
     /* The bitmap data, which points to an mmap()ed area of zeroed

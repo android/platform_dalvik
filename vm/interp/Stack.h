@@ -119,7 +119,7 @@ struct StackSaveArea;
  */
 struct StackSaveArea {
 #ifdef PAD_SAVE_AREA
-    u4          pad0, pad1, pad2;
+    StackSlot          pad0, pad1, pad2;
 #endif
 
 #ifdef EASY_GDB
@@ -128,7 +128,7 @@ struct StackSaveArea {
 #endif
 
     /* saved frame pointer for previous frame, or NULL if this is at bottom */
-    u4*         prevFrame;
+    StackSlot*         prevFrame;
 
     /* saved program counter (from method in caller's frame) */
     const u2*   savedPc;
@@ -148,25 +148,25 @@ struct StackSaveArea {
     /* Native return pointer for JIT, or 0 if interpreted */
     const u2* returnAddr;
 #ifdef PAD_SAVE_AREA
-    u4          pad3, pad4, pad5;
+    StackSlot          pad3, pad4, pad5;
 #endif
 };
 
 /* move between the stack save area and the frame pointer */
 #define SAVEAREA_FROM_FP(_fp)   ((StackSaveArea*)(_fp) -1)
-#define FP_FROM_SAVEAREA(_save) ((u4*) ((StackSaveArea*)(_save) +1))
+#define FP_FROM_SAVEAREA(_save) ((StackSlot*) ((StackSaveArea*)(_save) +1))
 
 /* when calling a function, get a pointer to outs[0] */
 #define OUTS_FROM_FP(_fp, _argCount) \
-    ((u4*) ((u1*)SAVEAREA_FROM_FP(_fp) - sizeof(u4) * (_argCount)))
+    ((StackSlot*) ((u1*)SAVEAREA_FROM_FP(_fp) - sizeof(StackSlot) * (_argCount)))
 
-/* reserve this many bytes for handling StackOverflowError */
-#define STACK_OVERFLOW_RESERVE  768
+/* reserve 192 StackSlots for handling StackOverflowError */
+# define STACK_OVERFLOW_RESERVE  (192*sizeof(StackSlot))
 
 /*
  * Determine if the frame pointer points to a "break frame".
  */
-INLINE bool dvmIsBreakFrame(const u4* fp)
+INLINE bool dvmIsBreakFrame(const StackSlot* fp)
 {
     return SAVEAREA_FROM_FP(fp)->method == NULL;
 }

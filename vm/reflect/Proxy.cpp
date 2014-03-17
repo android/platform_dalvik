@@ -39,9 +39,9 @@ static void updateExceptionClassList(const Method* method, PointerSet* throws);
 static void createConstructor(ClassObject* clazz, Method* meth);
 static void createHandlerMethod(ClassObject* clazz, Method* dstMeth,
     const Method* srcMeth);
-static void proxyConstructor(const u4* args, JValue* pResult,
+static void proxyConstructor(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self);
-static void proxyInvoker(const u4* args, JValue* pResult,
+static void proxyInvoker(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self);
 static bool mustWrapException(const Method* method, const Object* throwable);
 
@@ -113,11 +113,11 @@ ClassObject* dvmGenerateProxyClass(StringObject* str, ArrayObject* interfaces,
     newClass->descriptorAlloc = dvmNameToDescriptor(nameStr);
     newClass->descriptor = newClass->descriptorAlloc;
     SET_CLASS_FLAG(newClass, ACC_PUBLIC | ACC_FINAL);
-    dvmSetFieldObject((Object *)newClass,
+    dvmSetClassFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, super),
                       (Object *)gDvm.classJavaLangReflectProxy);
     newClass->primitiveType = PRIM_NOT;
-    dvmSetFieldObject((Object *)newClass,
+    dvmSetClassFieldObject((Object *)newClass,
                       OFFSETOF_MEMBER(ClassObject, classLoader),
                       (Object *)loader);
 
@@ -158,13 +158,13 @@ ClassObject* dvmGenerateProxyClass(StringObject* str, ArrayObject* interfaces,
      */
     {
         size_t interfaceCount = interfaces->length;
-        ClassObject** ifArray = (ClassObject**)(void*)interfaces->contents;
+        ClassObjectRef* ifArray = (ClassObjectRef*)(void*)interfaces->contents;
         newClass->interfaceCount = interfaceCount;
         size_t interfacesSize = sizeof(ClassObject*) * interfaceCount;
         newClass->interfaces =
             (ClassObject**)dvmLinearAlloc(newClass->classLoader, interfacesSize);
         for (size_t i = 0; i < interfaceCount; i++)
-          newClass->interfaces[i] = ifArray[i];
+          newClass->interfaces[i] = dvmRefExpandClazzGlobal(ifArray[i]);
         dvmLinearReadOnly(newClass->classLoader, newClass->interfaces);
     }
 
@@ -238,7 +238,7 @@ bail:
 static bool gatherMethods(ArrayObject* interfaces, Method*** pMethods,
     ArrayObject** pThrows, int* pMethodCount)
 {
-    ClassObject** classes;
+    ClassObjectRef* classes;
     ArrayObject* throws = NULL;
     Method** methods = NULL;
     Method** allMethods = NULL;
@@ -252,10 +252,10 @@ static bool gatherMethods(ArrayObject* interfaces, Method*** pMethods,
      */
     maxCount = 3;       // 3 methods in java.lang.Object
     numInterfaces = interfaces->length;
-    classes = (ClassObject**)(void*)interfaces->contents;
+    classes = (ClassObjectRef*)(void*)interfaces->contents;
 
     for (i = 0; i < numInterfaces; i++, classes++) {
-        ClassObject* clazz = *classes;
+        ClassObject* clazz = dvmRefExpandClazzGlobal(*classes);
 
         LOGVV("---  %s virtualMethodCount=%d",
             clazz->descriptor, clazz->virtualMethodCount);
@@ -290,9 +290,9 @@ static bool gatherMethods(ArrayObject* interfaces, Method*** pMethods,
     /*
      * Add the methods from each interface, in order.
      */
-    classes = (ClassObject**)(void*)interfaces->contents;
+    classes = (ClassObjectRef*)(void*)interfaces->contents;
     for (i = 0; i < numInterfaces; i++, classes++) {
-        ClassObject* clazz = *classes;
+        ClassObject* clazz = dvmRefExpandClazzGlobal(*classes);
         int j;
 
         for (j = 0; j < clazz->virtualMethodCount; j++) {
@@ -484,7 +484,7 @@ static int copyWithoutDuplicates(Method** allMethods, int allCount,
                 {
                     int commonCount = dvmPointerSetGetCount(commonThrows);
                     ArrayObject* throwArray;
-                    Object** contents;
+                    ObjectRef* contents;
                     int ent;
 
                     throwArray = dvmAllocArrayByClass(
@@ -495,15 +495,15 @@ static int copyWithoutDuplicates(Method** allMethods, int allCount,
                         return -1;
                     }
 
-                    contents = (Object**)(void*)throwArray->contents;
+                    contents = (ObjectRef*)(void*)throwArray->contents;
                     for (ent = 0; ent < commonCount; ent++) {
-                        contents[ent] = (Object*)
-                            dvmPointerSetGetEntry(commonThrows, ent);
+                        contents[ent] = (ObjectRef) dvmRefCompress(
+                            (Object*)dvmPointerSetGetEntry(commonThrows, ent));
                     }
 
                     /* add it to the array of arrays */
-                    contents = (Object**)(void*)throwLists->contents;
-                    contents[outCount] = (Object*) throwArray;
+                    contents = (ObjectRef*)(void*)throwLists->contents;
+                    contents[outCount] = dvmRefCompress((Object*) throwArray);
                     dvmReleaseTrackedAlloc((Object*) throwArray, NULL);
                 }
 
@@ -526,10 +526,10 @@ static int copyWithoutDuplicates(Method** allMethods, int allCount,
             /* keep track of our throwables */
             ArrayObject* exceptionArray = dvmGetMethodThrows(allMethods[i]);
             if (exceptionArray != NULL) {
-                Object** contents;
+                ObjectRef* contents;
 
-                contents = (Object**)(void*)throwLists->contents;
-                contents[outCount] = (Object*) exceptionArray;
+                contents = (ObjectRef*)(void*)throwLists->contents;
+                contents[outCount] = dvmRefCompress((Object*) exceptionArray);
                 dvmReleaseTrackedAlloc((Object*) exceptionArray, NULL);
             }
 
@@ -566,8 +566,8 @@ static int copyWithoutDuplicates(Method** allMethods, int allCount,
  */
 static void reduceExceptionClassList(ArrayObject* exceptionArray)
 {
-    const ClassObject** classes =
-        (const ClassObject**)(void*)exceptionArray->contents;
+    ClassObjectRef * classes =
+        (ClassObjectRef *)(void*)exceptionArray->contents;
 
     /*
      * Consider all pairs of classes.  If one is the subclass of the other,
@@ -575,17 +575,17 @@ static void reduceExceptionClassList(ArrayObject* exceptionArray)
      */
     size_t len = exceptionArray->length;
     for (size_t i = 0; i < len - 1; i++) {
-        if (classes[i] == NULL)
+        if (classes[i] == NULLREF)
             continue;
         for (size_t j = i + 1; j < len; j++) {
-            if (classes[j] == NULL)
+            if (classes[j] == NULLREF)
                 continue;
 
-            if (dvmInstanceof(classes[i], classes[j])) {
-                classes[i] = NULL;
+            if (dvmInstanceof(dvmRefExpandClazzGlobal(classes[i]), dvmRefExpandClazzGlobal(classes[j]))) {
+                classes[i] = NULLREF;
                 break;      /* no more comparisons against classes[i] */
-            } else if (dvmInstanceof(classes[j], classes[i])) {
-                classes[j] = NULL;
+            } else if (dvmInstanceof(dvmRefExpandClazzGlobal(classes[j]), dvmRefExpandClazzGlobal(classes[i]))) {
+                classes[j] = NULLREF;
             }
         }
     }
@@ -611,12 +611,12 @@ static bool createExceptionClassList(const Method* method, PointerSet** pThrows)
         if (*pThrows == NULL)
             goto bail;
 
-        const ClassObject** contents;
+        const ClassObjectRef* contents;
 
-        contents = (const ClassObject**)(void*)exceptionArray->contents;
+        contents = (const ClassObjectRef*)(void*)exceptionArray->contents;
         for (size_t i = 0; i < exceptionArray->length; i++) {
-            if (contents[i] != NULL)
-                dvmPointerSetAddEntry(*pThrows, contents[i]);
+            if (contents[i] != NULLREF)
+                dvmPointerSetAddEntry(*pThrows, dvmRefExpandClazzGlobal(contents[i]));
         }
     } else {
         *pThrows = NULL;
@@ -658,7 +658,7 @@ static void updateExceptionClassList(const Method* method, PointerSet* throws)
     const ClassObject* mixSet[mixLen];
 
     size_t declLen = exceptionArray->length;
-    const ClassObject** declSet = (const ClassObject**)(void*)exceptionArray->contents;
+    const ClassObjectRef* declSet = (const ClassObjectRef*)(void*)exceptionArray->contents;
 
     /* grab a local copy to work on */
     for (size_t i = 0; i < mixLen; i++) {
@@ -668,18 +668,20 @@ static void updateExceptionClassList(const Method* method, PointerSet* throws)
     for (size_t i = 0; i < mixLen; i++) {
         size_t j;
         for (j = 0; j < declLen; j++) {
-            if (declSet[j] == NULL)
+            ClassObject* declSet_j = dvmRefExpandClazzGlobal(declSet[j]);
+
+            if (declSet[j] == NULLREF)
                 continue;
 
-            if (mixSet[i] == declSet[j]) {
+            if (mixSet[i] == declSet_j) {
                 /* match, keep this one */
                 break;
-            } else if (dvmInstanceof(mixSet[i], declSet[j])) {
+            } else if (dvmInstanceof(mixSet[i], declSet_j)) {
                 /* mix is a subclass of a declared throwable, keep it */
                 break;
-            } else if (dvmInstanceof(declSet[j], mixSet[i])) {
+            } else if (dvmInstanceof(declSet_j, mixSet[i])) {
                 /* mix is a superclass, replace it */
-                mixSet[i] = declSet[j];
+                mixSet[i] = declSet_j;
                 break;
             }
         }
@@ -787,7 +789,7 @@ static void createHandlerMethod(ClassObject* clazz, Method* dstMeth,
  *
  * On failure, returns with an appropriate exception raised.
  */
-static ArrayObject* boxMethodArgs(const Method* method, const u4* args)
+static ArrayObject* boxMethodArgs(const Method* method, const StackSlot* args)
 {
     const char* desc = &method->shorty[1]; // [0] is the return type.
 
@@ -799,7 +801,7 @@ static ArrayObject* boxMethodArgs(const Method* method, const u4* args)
         argCount, ALLOC_DEFAULT);
     if (argArray == NULL)
         return NULL;
-    Object** argObjects = (Object**)(void*)argArray->contents;
+    ObjectRef* argObjects = (ObjectRef*)(void*)argArray->contents;
 
     /*
      * Fill in the array.
@@ -818,25 +820,25 @@ static ArrayObject* boxMethodArgs(const Method* method, const u4* args)
         case 'B':
         case 'S':
         case 'I':
-            value.i = args[srcIndex++];
-            argObjects[dstIndex] = (Object*) dvmBoxPrimitive(value,
-                dvmFindPrimitiveClass(descChar));
+            value.i = (s4)args[srcIndex++];
+            argObjects[dstIndex] = (ObjectRef) dvmRefCompress(dvmBoxPrimitive(value,
+                dvmFindPrimitiveClass(descChar)));
             /* argObjects is tracked, don't need to hold this too */
-            dvmReleaseTrackedAlloc(argObjects[dstIndex], NULL);
+            dvmReleaseTrackedAlloc(dvmRefExpandGlobal(argObjects[dstIndex]), NULL);
             dstIndex++;
             break;
         case 'D':
         case 'J':
             value.j = dvmGetArgLong(args, srcIndex);
             srcIndex += 2;
-            argObjects[dstIndex] = (Object*) dvmBoxPrimitive(value,
-                dvmFindPrimitiveClass(descChar));
-            dvmReleaseTrackedAlloc(argObjects[dstIndex], NULL);
+            argObjects[dstIndex] = (ObjectRef) dvmRefCompress(dvmBoxPrimitive(value,
+                dvmFindPrimitiveClass(descChar)));
+            dvmReleaseTrackedAlloc(dvmRefExpandGlobal(argObjects[dstIndex]), NULL);
             dstIndex++;
             break;
         case '[':
         case 'L':
-            argObjects[dstIndex++] = (Object*) args[srcIndex++];
+            argObjects[dstIndex++] = (ObjectRef) dvmRefCompress((Object*)args[srcIndex++]);
             break;
         }
     }
@@ -848,7 +850,7 @@ static ArrayObject* boxMethodArgs(const Method* method, const u4* args)
  * This is the constructor for a generated proxy object.  All we need to
  * do is stuff "handler" into "h".
  */
-static void proxyConstructor(const u4* args, JValue* pResult,
+static void proxyConstructor(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     Object* obj = (Object*) args[0];
@@ -867,7 +869,7 @@ static void proxyConstructor(const u4* args, JValue* pResult,
  * a new Object[] array, make the call, and unbox the return value if
  * necessary.
  */
-static void proxyInvoker(const u4* args, JValue* pResult,
+static void proxyInvoker(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     Object* thisObj = (Object*) args[0];
@@ -889,7 +891,7 @@ static void proxyInvoker(const u4* args, JValue* pResult,
      * start here we don't have to convert it to a vtable index and then
      * index into this' vtable.)
      */
-    invoke = dvmFindVirtualMethodHierByDescriptor(handler->clazz, "invoke",
+    invoke = dvmFindVirtualMethodHierByDescriptor(dvmRefExpandClazzGlobal(handler->clazz), "invoke",
             "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object;");
     if (invoke == NULL) {
         ALOGE("Unable to find invoke()");
@@ -898,7 +900,7 @@ static void proxyInvoker(const u4* args, JValue* pResult,
 
     ALOGV("invoke: %s.%s, this=%p, handler=%s",
         method->clazz->descriptor, method->name,
-        thisObj, handler->clazz->descriptor);
+        thisObj, dvmRefExpandClazzGlobal(handler->clazz)->descriptor);
 
     /*
      * Create a java.lang.reflect.Method object for this method.
@@ -977,7 +979,7 @@ static void proxyInvoker(const u4* args, JValue* pResult,
         pResult->l = NULL;
     } else {
         if (!dvmUnboxPrimitive((Object*)invokeResult.l, returnType, pResult)) {
-            dvmThrowClassCastException(((Object*)invokeResult.l)->clazz,
+            dvmThrowClassCastException(dvmRefExpandClazzGlobal(((Object*)invokeResult.l)->clazz),
                     returnType);
             goto bail;
         }
@@ -1005,8 +1007,8 @@ static bool mustWrapException(const Method* method, const Object* throwable)
     int methodIndex = method - method->clazz->virtualMethods;
     assert(methodIndex >= 0 && methodIndex < method->clazz->virtualMethodCount);
 
-    const Object** contents = (const Object**)(void*)throws->contents;
-    const ArrayObject* methodThrows = (ArrayObject*) contents[methodIndex];
+    const ObjectRef* contents = (const ObjectRef*)(void*)throws->contents;
+    const ArrayObject* methodThrows = (ArrayObject*) dvmRefExpandGlobal(contents[methodIndex]);
 
     if (methodThrows == NULL) {
         /* no throws declared, must wrap all checked exceptions */
@@ -1014,11 +1016,11 @@ static bool mustWrapException(const Method* method, const Object* throwable)
     }
 
     size_t throwCount = methodThrows->length;
-    const ClassObject** classes =
-        (const ClassObject**)(void*)methodThrows->contents;
+    const ClassObjectRef* classes =
+        (const ClassObjectRef*)(void*)methodThrows->contents;
 
     for (size_t i = 0; i < throwCount; i++) {
-        if (dvmInstanceof(throwable->clazz, classes[i])) {
+        if (dvmInstanceof(dvmRefExpandClazzGlobal(throwable->clazz), dvmRefExpandClazzGlobal(classes[i]))) {
             /* this was declared, okay to throw */
             return false;
         }

@@ -26,7 +26,7 @@ void dvmVisitObject(Visitor *visitor, Object *obj, void *arg)
 {
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     visitObject(visitor, obj, arg);
 }
 
@@ -86,9 +86,9 @@ static void visitThreadStack(RootVisitor *visitor, Thread *thread, void *arg)
     assert(thread != NULL);
     u4 threadId = thread->threadId;
     const StackSaveArea *saveArea;
-    for (u4 *fp = (u4 *)thread->interpSave.curFrame;
+    for (StackSlot *fp = (StackSlot *)thread->interpSave.curFrame;
          fp != NULL;
-         fp = (u4 *)saveArea->prevFrame) {
+         fp = (StackSlot *)saveArea->prevFrame) {
         Method *method;
         saveArea = SAVEAREA_FROM_FP(fp);
         method = (Method *)saveArea->method;
@@ -134,7 +134,7 @@ static void visitThreadStack(RootVisitor *visitor, Thread *thread, void *arg)
 #if WITH_EXTRA_GC_CHECKS
                         if (fp[i] != 0 && !dvmIsValidObject((Object *)fp[i])) {
                             /* this is very bad */
-                            ALOGE("PGC: invalid ref in reg %d: %#x",
+                            ALOGE("PGC: invalid ref in reg %zd: %#" PRIxPTR,
                                  method->registersSize - 1 - i, fp[i]);
                             ALOGE("PGC: %s.%s addr %#x",
                                  method->clazz->descriptor, method->name,

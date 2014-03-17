@@ -8,11 +8,10 @@
  * next instruction.  Here, these are subroutines that return to the caller.
  */
 
-GOTO_TARGET(filledNewArray, bool methodCallRange, bool)
+GOTO_TARGET(filledNewArray, bool methodCallRange)
     {
         ClassObject* arrayClass;
         ArrayObject* newArray;
-        u4* contents;
         char typeCh;
         int i;
         u4 arg5;
@@ -78,24 +77,49 @@ GOTO_TARGET(filledNewArray, bool methodCallRange, bool)
         /*
          * Fill in the elements.  It's legal for vsrc1 to be zero.
          */
-        contents = (u4*)(void*)newArray->contents;
-        if (methodCallRange) {
-            for (i = 0; i < vsrc1; i++)
-                contents[i] = GET_REGISTER(vdst+i);
-        } else {
-            assert(vsrc1 <= 5);
-            if (vsrc1 == 5) {
-                contents[4] = GET_REGISTER(arg5);
-                vsrc1--;
+#if defined(_LP64) || defined(WITH_COMPREFS)
+        if (typeCh == 'L' || typeCh == '[') {
+            ObjectRef* contents = (ObjectRef*)(void*)newArray->contents;
+            if (methodCallRange) {
+                for (i = 0; i < vsrc1; i++)
+                    contents[i] = dvmRefCompress((const Object*) GET_REGISTER(vdst+i));
+            } else {
+                assert(vsrc1 <= 5);
+                if (vsrc1 == 5) {
+                    contents[4] = dvmRefCompress((const Object*)GET_REGISTER(arg5));
+                    vsrc1--;
+                }
+                for (i = 0; i < vsrc1; i++) {
+                    contents[i] = dvmRefCompress((const Object*)GET_REGISTER(vdst & 0x0f));
+                    vdst >>= 4;
+                }
             }
-            for (i = 0; i < vsrc1; i++) {
-                contents[i] = GET_REGISTER(vdst & 0x0f);
-                vdst >>= 4;
+            dvmWriteBarrierArray(newArray, 0, newArray->length);
+        }
+        else
+#endif
+        {
+            u4* contents = (u4*)(void*)newArray->contents;
+            if (methodCallRange) {
+                for (i = 0; i < vsrc1; i++)
+                    contents[i] = GET_REGISTER(vdst+i);
+            } else {
+                assert(vsrc1 <= 5);
+                if (vsrc1 == 5) {
+                    contents[4] = GET_REGISTER(arg5);
+                    vsrc1--;
+                }
+                for (i = 0; i < vsrc1; i++) {
+                    contents[i] = GET_REGISTER(vdst & 0x0f);
+                    vdst >>= 4;
+                }
             }
         }
+#if !defined(_LP64) && !defined(WITH_COMPREFS)
         if (typeCh == 'L' || typeCh == '[') {
             dvmWriteBarrierArray(newArray, 0, newArray->length);
         }
+#endif
 
         retval.l = (Object*)newArray;
     }
@@ -103,10 +127,11 @@ GOTO_TARGET(filledNewArray, bool methodCallRange, bool)
 GOTO_TARGET_END
 
 
-GOTO_TARGET(invokeVirtual, bool methodCallRange, bool)
+GOTO_TARGET(invokeVirtual, bool methodCallRange)
     {
         Method* baseMethod;
         Object* thisPtr;
+        ClassObject* thisClass;
 
         EXPORT_PC();
 
@@ -133,6 +158,8 @@ GOTO_TARGET(invokeVirtual, bool methodCallRange, bool)
         if (!checkForNull(thisPtr))
             GOTO_exceptionThrown();
 
+        thisClass = dvmRefExpandClazzGlobal(thisPtr->clazz);
+
         /*
          * Resolve the method.  This is the correct method for the static
          * type of the object.  We also verify access permissions here.
@@ -150,12 +177,12 @@ GOTO_TARGET(invokeVirtual, bool methodCallRange, bool)
          * Combine the object we found with the vtable offset in the
          * method.
          */
-        assert(baseMethod->methodIndex < thisPtr->clazz->vtableCount);
-        methodToCall = thisPtr->clazz->vtable[baseMethod->methodIndex];
+        assert(baseMethod->methodIndex < thisClass->vtableCount);
+        methodToCall = thisClass->vtable[baseMethod->methodIndex];
 
 #if defined(WITH_JIT) && defined(MTERP_STUB)
         self->methodToCall = methodToCall;
-        self->callsiteClass = thisPtr->clazz;
+        self->callsiteClass = thisClass;
 #endif
 
 #if 0
@@ -307,7 +334,7 @@ GOTO_TARGET(invokeInterface, bool methodCallRange)
         if (!checkForNull(thisPtr))
             GOTO_exceptionThrown();
 
-        thisClass = thisPtr->clazz;
+        thisClass = dvmRefExpandClazzGlobal(thisPtr->clazz);
 
         /*
          * Given a class and a method index, find the Method* with the
@@ -405,7 +432,7 @@ GOTO_TARGET_END
 GOTO_TARGET(invokeVirtualQuick, bool methodCallRange)
     {
         Object* thisPtr;
-
+        ClassObject* thisClass;
         EXPORT_PC();
 
         vsrc1 = INST_AA(inst);      /* AA (count) or BA (count + arg 5) */
@@ -431,15 +458,16 @@ GOTO_TARGET(invokeVirtualQuick, bool methodCallRange)
         if (!checkForNull(thisPtr))
             GOTO_exceptionThrown();
 
+        thisClass = dvmRefExpandClazzGlobal(thisPtr->clazz);
 
         /*
          * Combine the object we found with the vtable offset in the
          * method.
          */
-        assert(ref < (unsigned int) thisPtr->clazz->vtableCount);
-        methodToCall = thisPtr->clazz->vtable[ref];
+        assert(ref < (unsigned int) thisClass->vtableCount);
+        methodToCall = thisClass->vtable[ref];
 #if defined(WITH_JIT) && defined(MTERP_STUB)
-        self->callsiteClass = thisPtr->clazz;
+        self->callsiteClass = thisClass;
         self->methodToCall = methodToCall;
 #endif
 
@@ -538,7 +566,7 @@ GOTO_TARGET(returnFromMethod)
          */
         PERIODIC_CHECKS(0);
 
-        ILOGV("> retval=0x%llx (leaving %s.%s %s)",
+        ILOGV("> retval=0x%"PRIx64" (leaving %s.%s %s)",
             retval.j, curMethod->clazz->descriptor, curMethod->name,
             curMethod->shorty);
         //DUMP_REGS(curMethod, fp);
@@ -550,7 +578,7 @@ GOTO_TARGET(returnFromMethod)
 #endif
 
         /* back up to previous frame and see if we hit a break */
-        fp = (u4*)saveArea->prevFrame;
+        fp = (StackSlot*)saveArea->prevFrame;
         assert(fp != NULL);
 
         /* Handle any special subMode requirements */
@@ -615,7 +643,7 @@ GOTO_TARGET(exceptionThrown)
         dvmClearException(self);
 
         ALOGV("Handling exception %s at %s:%d",
-            exception->clazz->descriptor, curMethod->name,
+            dvmRefExpandClazzGlobal(exception->clazz)->descriptor, curMethod->name,
             dvmLineNumFromPC(curMethod, pc - curMethod->insns));
 
         /*
@@ -683,7 +711,7 @@ GOTO_TARGET(exceptionThrown)
             /* falling through to JNI code or off the bottom of the stack */
 #if DVM_SHOW_EXCEPTION >= 2
             ALOGD("Exception %s from %s:%d not caught locally",
-                exception->clazz->descriptor, dvmGetMethodSourceFile(curMethod),
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor, dvmGetMethodSourceFile(curMethod),
                 dvmLineNumFromPC(curMethod, pc - curMethod->insns));
 #endif
             dvmSetException(self, exception);
@@ -695,7 +723,7 @@ GOTO_TARGET(exceptionThrown)
         {
             const Method* catchMethod = SAVEAREA_FROM_FP(fp)->method;
             ALOGD("Exception %s thrown from %s:%d to %s:%d",
-                exception->clazz->descriptor, dvmGetMethodSourceFile(curMethod),
+                dvmRefExpandClazzGlobal(exception->clazz)->descriptor, dvmGetMethodSourceFile(curMethod),
                 dvmLineNumFromPC(curMethod, pc - curMethod->insns),
                 dvmGetMethodSourceFile(catchMethod),
                 dvmLineNumFromPC(catchMethod, catchRelPc));
@@ -765,7 +793,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
         //printf(" --> %s.%s %s\n", methodToCall->clazz->descriptor,
         //    methodToCall->name, methodToCall->shorty);
 
-        u4* outs;
+        StackSlot* outs;
         int i;
 
         /*
@@ -828,23 +856,23 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
      */
     {
         StackSaveArea* newSaveArea;
-        u4* newFp;
+        StackSlot* newFp;
 
         ILOGV("> %s%s.%s %s",
             dvmIsNativeMethod(methodToCall) ? "(NATIVE) " : "",
             methodToCall->clazz->descriptor, methodToCall->name,
             methodToCall->shorty);
 
-        newFp = (u4*) SAVEAREA_FROM_FP(fp) - methodToCall->registersSize;
+        newFp = (StackSlot*) SAVEAREA_FROM_FP(fp) - methodToCall->registersSize;
         newSaveArea = SAVEAREA_FROM_FP(newFp);
 
         /* verify that we have enough space */
         if (true) {
             u1* bottom;
-            bottom = (u1*) newSaveArea - methodToCall->outsSize * sizeof(u4);
+            bottom = (u1*) newSaveArea - methodToCall->outsSize * sizeof(StackSlot);
             if (bottom < self->interpStackEnd) {
                 /* stack overflow */
-                ALOGV("Stack overflow on method call (start=%p end=%p newBot=%p(%d) size=%d '%s')",
+                ALOGV("Stack overflow on method call (start=%p end=%p newBot=%p(%zd) size=%d '%s')",
                     self->interpStackStart, self->interpStackEnd, bottom,
                     (u1*) fp - bottom, self->interpStackSize,
                     methodToCall->name);
@@ -865,7 +893,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
              * used-before-initialized issues.
              */
             memset(newFp, 0xcc,
-                (methodToCall->registersSize - methodToCall->insSize) * 4);
+                (methodToCall->registersSize - methodToCall->insSize) * sizeof(StackSlot));
         }
 #endif
 
@@ -949,7 +977,7 @@ GOTO_TARGET(invokeMethod, bool methodCallRange, const Method* _methodToCall,
                 GOTO_exceptionThrown();
             }
 
-            ILOGD("> retval=0x%llx (leaving native)", retval.j);
+            ILOGD("> retval=0x%"PRIx64" (leaving native)", retval.j);
             ILOGD("> (return from native %s.%s to %s.%s %s)",
                 methodToCall->clazz->descriptor, methodToCall->name,
                 curMethod->clazz->descriptor, curMethod->name,

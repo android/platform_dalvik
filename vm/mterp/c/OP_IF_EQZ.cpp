@@ -1,2 +1,2 @@
-HANDLE_OP_IF_XXZ(OP_IF_EQZ, "eqz", ==)
+HANDLE_OP_IF_EQZ(OP_IF_EQZ, "eqz", ==)
 OP_END

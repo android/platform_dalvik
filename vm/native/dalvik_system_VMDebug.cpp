@@ -35,7 +35,8 @@
 static int getFileDescriptor(Object* obj)
 {
     assert(obj != NULL);
-    assert(strcmp(obj->clazz->descriptor, "Ljava/io/FileDescriptor;") == 0);
+    assert(strcmp(dvmRefExpandClazzGlobal(obj->clazz)->descriptor,
+            "Ljava/io/FileDescriptor;") == 0);
 
     int fd = dvmGetFieldInt(obj, gDvm.offJavaIoFileDescriptor_descriptor);
     if (fd < 0) {
@@ -52,7 +53,7 @@ static int getFileDescriptor(Object* obj)
  * Return a set of strings describing available VM features (this is chiefly
  * of interest to DDMS).
  */
-static void Dalvik_dalvik_system_VMDebug_getVmFeatureList(const u4* args, JValue* pResult) {
+static void Dalvik_dalvik_system_VMDebug_getVmFeatureList(const StackSlot* args, JValue* pResult) {
     std::vector<std::string> features;
     features.push_back("method-trace-profiling");
     features.push_back("method-trace-profiling-streaming");
@@ -140,7 +141,7 @@ static void clearAllocProfStateFields(AllocProfState *allocProf,
  * thread.  If we actually start using the per-thread counters we'll
  * probably want to fix this.
  */
-static void Dalvik_dalvik_system_VMDebug_startAllocCounting(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_startAllocCounting(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -154,7 +155,7 @@ static void Dalvik_dalvik_system_VMDebug_startAllocCounting(const u4* args,
 /*
  * public static void stopAllocCounting()
  */
-static void Dalvik_dalvik_system_VMDebug_stopAllocCounting(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_stopAllocCounting(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -166,11 +167,11 @@ static void Dalvik_dalvik_system_VMDebug_stopAllocCounting(const u4* args,
 /*
  * private static int getAllocCount(int kind)
  */
-static void Dalvik_dalvik_system_VMDebug_getAllocCount(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_getAllocCount(const StackSlot* args,
     JValue* pResult)
 {
     AllocProfState *allocProf;
-    unsigned int kind = args[0];
+    unsigned int kind = (unsigned int) args[0];
     if (kind < (1<<16)) {
         allocProf = &gDvm.allocProf;
     } else {
@@ -215,7 +216,7 @@ static void Dalvik_dalvik_system_VMDebug_getAllocCount(const u4* args,
 /*
  * public static void resetAllocCount(int kinds)
  */
-static void Dalvik_dalvik_system_VMDebug_resetAllocCount(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_resetAllocCount(const StackSlot* args,
     JValue* pResult)
 {
     unsigned int kinds = args[0];
@@ -230,7 +231,7 @@ static void Dalvik_dalvik_system_VMDebug_resetAllocCount(const u4* args,
  *
  * Start method trace profiling, sending results directly to DDMS.
  */
-static void Dalvik_dalvik_system_VMDebug_startMethodTracingDdmsImpl(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_startMethodTracingDdmsImpl(const StackSlot* args,
     JValue* pResult)
 {
     int bufferSize = args[0];
@@ -248,7 +249,7 @@ static void Dalvik_dalvik_system_VMDebug_startMethodTracingDdmsImpl(const u4* ar
  *
  * Start method trace profiling, sending results to a file descriptor.
  */
-static void Dalvik_dalvik_system_VMDebug_startMethodTracingFd(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_startMethodTracingFd(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* traceFileStr = (StringObject*) args[0];
@@ -286,7 +287,7 @@ static void Dalvik_dalvik_system_VMDebug_startMethodTracingFd(const u4* args,
  *
  * Start method trace profiling, sending results to a file.
  */
-static void Dalvik_dalvik_system_VMDebug_startMethodTracingFilename(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_startMethodTracingFilename(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* traceFileStr = (StringObject*) args[0];
@@ -311,7 +312,7 @@ static void Dalvik_dalvik_system_VMDebug_startMethodTracingFilename(const u4* ar
  *
  * Determine whether method tracing is currently active and what type is active.
  */
-static void Dalvik_dalvik_system_VMDebug_getMethodTracingMode(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_getMethodTracingMode(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -324,7 +325,7 @@ static void Dalvik_dalvik_system_VMDebug_getMethodTracingMode(const u4* args,
  *
  * Stop method tracing.
  */
-static void Dalvik_dalvik_system_VMDebug_stopMethodTracing(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_stopMethodTracing(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -338,7 +339,7 @@ static void Dalvik_dalvik_system_VMDebug_stopMethodTracing(const u4* args,
  *
  * Start sending method trace info to the emulator.
  */
-static void Dalvik_dalvik_system_VMDebug_startEmulatorTracing(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_startEmulatorTracing(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -352,7 +353,7 @@ static void Dalvik_dalvik_system_VMDebug_startEmulatorTracing(const u4* args,
  *
  * Start sending method trace info to the emulator.
  */
-static void Dalvik_dalvik_system_VMDebug_stopEmulatorTracing(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_stopEmulatorTracing(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -366,7 +367,7 @@ static void Dalvik_dalvik_system_VMDebug_stopEmulatorTracing(const u4* args,
  *
  * Returns "true" if a debugger is attached.
  */
-static void Dalvik_dalvik_system_VMDebug_isDebuggerConnected(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_isDebuggerConnected(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -379,7 +380,7 @@ static void Dalvik_dalvik_system_VMDebug_isDebuggerConnected(const u4* args,
  *
  * Returns "true" if debugging is enabled.
  */
-static void Dalvik_dalvik_system_VMDebug_isDebuggingEnabled(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_isDebuggingEnabled(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -393,7 +394,7 @@ static void Dalvik_dalvik_system_VMDebug_isDebuggingEnabled(const u4* args,
  * Returns the time, in msec, since we last had an interaction with the
  * debugger (send or receive).
  */
-static void Dalvik_dalvik_system_VMDebug_lastDebuggerActivity(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_lastDebuggerActivity(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -404,7 +405,7 @@ static void Dalvik_dalvik_system_VMDebug_lastDebuggerActivity(const u4* args,
 /*
  * static void startInstructionCounting()
  */
-static void Dalvik_dalvik_system_VMDebug_startInstructionCounting(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_startInstructionCounting(const StackSlot* args,
     JValue* pResult)
 {
     dvmStartInstructionCounting();
@@ -414,7 +415,7 @@ static void Dalvik_dalvik_system_VMDebug_startInstructionCounting(const u4* args
 /*
  * static void stopInstructionCounting()
  */
-static void Dalvik_dalvik_system_VMDebug_stopInstructionCounting(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_stopInstructionCounting(const StackSlot* args,
     JValue* pResult)
 {
     dvmStopInstructionCounting();
@@ -430,7 +431,7 @@ static void Dalvik_dalvik_system_VMDebug_stopInstructionCounting(const u4* args,
  * to improve our chances of finishing without contention.  (Only makes
  * sense on a uniprocessor.)
  */
-static void Dalvik_dalvik_system_VMDebug_getInstructionCount(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_getInstructionCount(const StackSlot* args,
     JValue* pResult)
 {
     ArrayObject* countArray = (ArrayObject*) args[0];
@@ -459,7 +460,7 @@ static void Dalvik_dalvik_system_VMDebug_getInstructionCount(const u4* args,
  *
  * Reset the instruction count array.
  */
-static void Dalvik_dalvik_system_VMDebug_resetInstructionCount(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_resetInstructionCount(const StackSlot* args,
     JValue* pResult)
 {
     sched_yield();
@@ -472,10 +473,10 @@ static void Dalvik_dalvik_system_VMDebug_resetInstructionCount(const u4* args,
  *
  * Dump the list of loaded classes.
  */
-static void Dalvik_dalvik_system_VMDebug_printLoadedClasses(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_printLoadedClasses(const StackSlot* args,
     JValue* pResult)
 {
-    int flags = args[0];
+    intptr_t flags = args[0];
 
     dvmDumpAllClasses(flags);
 
@@ -487,7 +488,7 @@ static void Dalvik_dalvik_system_VMDebug_printLoadedClasses(const u4* args,
  *
  * Return the number of loaded classes
  */
-static void Dalvik_dalvik_system_VMDebug_getLoadedClassCount(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_getLoadedClassCount(const StackSlot* args,
     JValue* pResult)
 {
     int count;
@@ -503,7 +504,7 @@ static void Dalvik_dalvik_system_VMDebug_getLoadedClassCount(const u4* args,
  * Returns the thread-specific CPU-time clock value for the current thread,
  * or -1 if the feature isn't supported.
  */
-static void Dalvik_dalvik_system_VMDebug_threadCpuTimeNanos(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_threadCpuTimeNanos(const StackSlot* args,
     JValue* pResult)
 {
     jlong result;
@@ -525,7 +526,7 @@ static void Dalvik_dalvik_system_VMDebug_threadCpuTimeNanos(const u4* args,
  * Cause "hprof" data to be dumped.  We can throw an IOException if an
  * error occurs during file handling.
  */
-static void Dalvik_dalvik_system_VMDebug_dumpHprofData(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_dumpHprofData(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* fileNameStr = (StringObject*) args[0];
@@ -579,7 +580,7 @@ static void Dalvik_dalvik_system_VMDebug_dumpHprofData(const u4* args,
  *
  * Cause "hprof" data to be computed and sent directly to DDMS.
  */
-static void Dalvik_dalvik_system_VMDebug_dumpHprofDataDdms(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_dumpHprofDataDdms(const StackSlot* args,
     JValue* pResult)
 {
     int result;
@@ -612,7 +613,7 @@ static void Dalvik_dalvik_system_VMDebug_dumpHprofDataDdms(const u4* args,
  *
  * (Uncomment logs in dvmGetExpandedRegisterMap0() to gather stats.)
  */
-static void Dalvik_dalvik_system_VMDebug_cacheRegisterMap(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_cacheRegisterMap(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* classAndMethodDescStr = (StringObject*) args[0];
@@ -709,7 +710,7 @@ bail:
 /*
  * static void dumpReferenceTables()
  */
-static void Dalvik_dalvik_system_VMDebug_dumpReferenceTables(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_dumpReferenceTables(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -732,7 +733,7 @@ static void Dalvik_dalvik_system_VMDebug_dumpReferenceTables(const u4* args,
  * (Might want to restrict this to debuggable processes as a security
  * measure, or check SecurityManager.checkExit().)
  */
-static void Dalvik_dalvik_system_VMDebug_crash(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_crash(const StackSlot* args,
     JValue* pResult)
 {
     UNUSED_PARAMETER(args);
@@ -749,18 +750,18 @@ static void Dalvik_dalvik_system_VMDebug_crash(const u4* args,
  * Provide a hook for gdb to hang to so that the VM can be stopped when
  * user-tagged source locations are being executed.
  */
-static void Dalvik_dalvik_system_VMDebug_infopoint(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_infopoint(const StackSlot* args,
     JValue* pResult)
 {
     gDvm.nativeDebuggerActive = true;
 
-    ALOGD("VMDebug infopoint %d hit", args[0]);
+    ALOGD("VMDebug infopoint %d hit", (int)args[0]);
 
     gDvm.nativeDebuggerActive = false;
     RETURN_VOID();
 }
 
-static void Dalvik_dalvik_system_VMDebug_countInstancesOfClass(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_countInstancesOfClass(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz = (ClassObject*)args[0];
@@ -780,7 +781,7 @@ static void Dalvik_dalvik_system_VMDebug_countInstancesOfClass(const u4* args,
 /*
  * public static native void getHeapSpaceStats(long[] data)
  */
-static void Dalvik_dalvik_system_VMDebug_getHeapSpaceStats(const u4* args,
+static void Dalvik_dalvik_system_VMDebug_getHeapSpaceStats(const StackSlot* args,
     JValue* pResult)
 {
     ArrayObject* dataArray = (ArrayObject*) args[0];

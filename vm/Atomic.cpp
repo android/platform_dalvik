@@ -33,6 +33,60 @@
 #elif defined(__mips__)
 #define NEED_PTHREADS_QUASI_ATOMICS 1
 
+#elif defined(__aarch64__)
+
+int64_t dvmQuasiAtomicSwap64(int64_t value, volatile int64_t* addr) {
+    return __atomic_exchange_n(addr, value, __ATOMIC_RELAXED);
+}
+
+int64_t dvmQuasiAtomicSwap64Sync(int64_t value, volatile int64_t* addr) {
+    return __atomic_exchange_n(addr, value, __ATOMIC_SEQ_CST);
+}
+
+int dvmQuasiAtomicAcquireCas64(int64_t oldvalue, int64_t newvalue,
+        volatile int64_t* addr) {
+    return __atomic_compare_exchange_n(addr, &oldvalue, newvalue, false,
+            __ATOMIC_ACQUIRE, __ATOMIC_ACQUIRE) == 0;
+}
+
+int dvmQuasiAtomicReleaseCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr) {
+    return __atomic_compare_exchange_n(addr, &oldvalue, newvalue, false,
+            __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST) == 0;
+}
+
+int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr) {
+    return __atomic_load_n(addr, __ATOMIC_RELAXED);
+}
+
+int dvmQuasiAtomicCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr) {
+    return __atomic_compare_exchange_n(addr, &oldvalue, newvalue, false,
+            __ATOMIC_RELAXED, __ATOMIC_RELAXED) == 0;
+}
+
+int dvmQuasiAtomicCas128(__int128 oldvalue, __int128 newvalue,
+    volatile __int128* addr) {
+    int status;
+    __int128 origvalue;
+
+    __asm__ __volatile__ (
+            "    mov %w1,#1\n"
+            "    ldxp %0,%H0, [%3]\n"
+            "    cmp %0,%4\n"
+            "    b.ne .LdvmQuasiAtomicCas128asmExit\n"
+            "    cmp %H0,%H4\n"
+            "    b.ne .LdvmQuasiAtomicCas128asmExit\n"
+            "    stxp %w1, %5, %H5, [%3]\n"
+            "   .LdvmQuasiAtomicCas128asmExit:\n"
+            : "=&r" (origvalue), "=&r" ( status), "+m" (*addr)
+            : "r" (addr), "r" (oldvalue), "r" (newvalue)
+            : "cc", "memory");
+
+    return status;
+}
+
+
 #elif defined(__arm__)
 
 // TODO: Clang can not process our inline assembly at the moment.
@@ -94,15 +148,22 @@ int dvmQuasiAtomicCas64(int64_t oldvalue, int64_t newvalue,
             "strexdeq   %1, %5, %H5, [%3]"
             : "=&r" (prev), "=&r" (status), "+m"(*addr)
             : "r" (addr), "Ir" (oldvalue), "r" (newvalue)
-            : "cc");
+            : "cc", "memory");
     } while (__builtin_expect(status != 0, 0));
     return prev != oldvalue;
+}
+
+int dvmQuasiAtomicReleaseCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr) {
+
+    ANDROID_MEMBAR_STORE();
+    return dvmQuasiAtomicCas64(oldvalue, newvalue, addr);
 }
 
 int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr)
 {
     int64_t value;
-    __asm__ __volatile__ ("@ dvmQuasiAtomicRead64\n"
+    __asm__ __volatile__ (
         "ldrexd     %0, %H0, [%1]"
         : "=&r" (value)
         : "r" (addr));
@@ -190,7 +251,7 @@ void dvmQuasiAtomicsShutdown() {
 }
 
 static inline pthread_mutex_t* GetSwapLock(const volatile int64_t* addr) {
-    return gSwapLocks[((unsigned)(void*)(addr) >> 3U) % kSwapLockCount];
+    return gSwapLocks[(static_cast<unsigned>((uintptr_t)(addr)) >> 3U) % kSwapLockCount];
 }
 
 int64_t dvmQuasiAtomicSwap64(int64_t value, volatile int64_t* addr)
@@ -231,6 +292,22 @@ int dvmQuasiAtomicCas64(int64_t oldvalue, int64_t newvalue,
     return result;
 }
 
+
+/* Same as dvmQuasiAtomicCas64 - mutex handles barrier */
+int dvmQuasiAtomicAcquireCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr)
+{
+    return dvmQuasiAtomicCas64(oldvalue, newvalue, addr);
+}
+
+/* Same as dvmQuasiAtomicCas64 - mutex handles barrier */
+int dvmQuasiAtomicReleaseCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr)
+{
+    return dvmQuasiAtomicCas64(oldvalue, newvalue, addr);
+}
+
+
 int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr)
 {
     int64_t result;
@@ -241,6 +318,25 @@ int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr)
     pthread_mutex_unlock(lock);
     return result;
 }
+
+#if defined(_LP64)
+int dvmQuasiAtomicCas128(__int128 oldvalue, __int128 newvalue,
+    volatile __int128* addr) {
+    int result;
+    pthread_mutex_t* lock = GetSwapLock((const volatile int64_t*)addr);
+
+    pthread_mutex_lock(lock);
+
+    if (*addr == oldvalue) {
+        *addr  = newvalue;
+        result = 0;
+    } else {
+        result = 1;
+    }
+    pthread_mutex_unlock(lock);
+    return result;
+}
+#endif
 
 #else
 

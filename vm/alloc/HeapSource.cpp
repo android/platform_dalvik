@@ -424,7 +424,7 @@ static bool addNewHeap(HeapSource *hs)
 
     assert(hs != NULL);
     if (hs->numHeaps >= HEAP_SOURCE_MAX_HEAP_COUNT) {
-        ALOGE("Attempt to create too many heaps (%zd >= %zd)",
+        ALOGE("Attempt to create too many heaps (%zd >= %d)",
                 hs->numHeaps, HEAP_SOURCE_MAX_HEAP_COUNT);
         dvmAbort();
         return false;
@@ -616,7 +616,17 @@ GcHeap* dvmHeapSourceStartup(size_t startSize, size_t maximumSize,
      * among the heaps managed by the garbage collector.
      */
     length = ALIGN_UP_TO_PAGE_SIZE(maximumSize);
+
+#if defined(WITH_COMPREFS)
+    base = dvmAllocAlignedRegion(length, PROT_NONE, gDvm.zygote ? "dalvik-zygote" : "dalvik-heap", REF_ALIGNBITS);
+    // Hack to avoid allocations at 0.
+    gDvm.heapBase = base;
+    base = (void*) ((uintptr_t) base + (uintptr_t) 0x10000);
+    length -= 0x10000;
+    growthLimit -= 0x10000;
+#else
     base = dvmAllocRegion(length, PROT_NONE, gDvm.zygote ? "dalvik-zygote" : "dalvik-heap");
+#endif
     if (base == NULL) {
         dvmAbort();
     }
@@ -1281,7 +1291,7 @@ static void setIdealFootprint(size_t max)
     HeapSource *hs = gHs;
     size_t maximumSize = getMaximumSize(hs);
     if (max > maximumSize) {
-        LOGI_HEAP("Clamp target GC heap from %zd.%03zdMB to %u.%03uMB",
+        LOGI_HEAP("Clamp target GC heap from %zd.%04zdMB to %zu.%04zuMB",
                 FRACTIONAL_MB(max),
                 FRACTIONAL_MB(maximumSize));
         max = maximumSize;

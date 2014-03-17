@@ -28,7 +28,7 @@
 /*
  * public static native boolean isInvoke(int opcode);
  */
-static void Dalvik_dalvik_bytecode_OpcodeInfo_isInvoke(const u4* args,
+static void Dalvik_dalvik_bytecode_OpcodeInfo_isInvoke(const StackSlot* args,
     JValue* pResult)
 {
     Opcode opcode = static_cast<Opcode>(args[0]);

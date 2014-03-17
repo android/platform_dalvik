@@ -12,7 +12,7 @@ HANDLE_OPCODE(OP_CONST_STRING /*vAA, string@BBBB*/)
             if (strObj == NULL)
                 GOTO_exceptionThrown();
         }
-        SET_REGISTER(vdst, (u4) strObj);
+        SET_REGISTER(vdst, (StackSlot) strObj);
     }
     FINISH(2);
 OP_END

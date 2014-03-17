@@ -24,25 +24,28 @@ static void visitFields(Visitor *visitor, Object *obj, void *arg)
 {
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    if (obj->clazz->refOffsets != CLASS_WALK_SUPER) {
-        size_t refOffsets = obj->clazz->refOffsets;
+    assert(obj->clazz != NULLREF);
+    ClassObject *expandedClazz = dvmRefExpandClazzGlobal(obj->clazz);
+    if (expandedClazz->refOffsets != CLASS_WALK_SUPER) {
+        u4 refOffsets = expandedClazz->refOffsets;
         while (refOffsets != 0) {
-            size_t rshift = CLZ(refOffsets);
+            size_t rshift = CLZ_U4(refOffsets);
             size_t offset = CLASS_OFFSET_FROM_CLZ(rshift);
-            Object **ref = (Object **)BYTE_OFFSET(obj, offset);
-            (*visitor)(ref, arg);
+            ObjectRef*ref = (ObjectRef*)BYTE_OFFSET(obj, offset);
+            Object *object = dvmRefExpandGlobal(*ref);
+            (*visitor)(&object, arg);
             refOffsets &= ~(CLASS_HIGH_BIT >> rshift);
         }
     } else {
-        for (ClassObject *clazz = obj->clazz;
+        for (ClassObject *clazz = expandedClazz;
              clazz != NULL;
              clazz = clazz->super) {
             InstField *field = clazz->ifields;
             for (int i = 0; i < clazz->ifieldRefCount; ++i, ++field) {
                 size_t offset = field->byteOffset;
-                Object **ref = (Object **)BYTE_OFFSET(obj, offset);
-                (*visitor)(ref, arg);
+                ObjectRef *ref = (ObjectRef*)BYTE_OFFSET(obj, offset);
+                Object *object = dvmRefExpandGlobal(*ref);
+                (*visitor)(&object, arg);
             }
         }
     }
@@ -59,7 +62,8 @@ static void visitStaticFields(Visitor *visitor, ClassObject *clazz,
     for (int i = 0; i < clazz->sfieldCount; ++i) {
         char ch = clazz->sfields[i].signature[0];
         if (ch == '[' || ch == 'L') {
-            (*visitor)(&clazz->sfields[i].value.l, arg);
+            Object *ref = dvmRefExpandGlobal(clazz->sfields[i].value.hl);
+            (*visitor)(&ref, arg);
         }
     }
 }
@@ -86,9 +90,10 @@ static void visitClassObject(Visitor *visitor, Object *obj, void *arg)
 
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    assert(!strcmp(obj->clazz->descriptor, "Ljava/lang/Class;"));
-    (*visitor)(&obj->clazz, arg);
+    assert(obj->clazz != NULLREF);
+    assert(!strcmp(dvmRefExpandClazzGlobal(obj->clazz)->descriptor, "Ljava/lang/Class;"));
+    Object *ref = dvmRefExpandGlobal(obj->clazz);
+    (*visitor)(&ref, arg);
     asClass = (ClassObject *)obj;
     if (IS_CLASS_FLAG_SET(asClass, CLASS_ISARRAY)) {
         (*visitor)(&asClass->elementClass, arg);
@@ -112,13 +117,15 @@ static void visitArrayObject(Visitor *visitor, Object *obj, void *arg)
 {
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    (*visitor)(&obj->clazz, arg);
-    if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISOBJECTARRAY)) {
+    assert(obj->clazz != NULLREF);
+    Object *ref = dvmRefExpandGlobal(obj->clazz);
+    (*visitor)(&ref, arg);
+    if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISOBJECTARRAY)) {
         ArrayObject *array = (ArrayObject *)obj;
-        Object **contents = (Object **)(void *)array->contents;
+        ObjectRef*contents = (ObjectRef*)(void *)array->contents;
         for (size_t i = 0; i < array->length; ++i) {
-            (*visitor)(&contents[i], arg);
+            Object *ref = dvmRefExpandGlobal(contents[i]);
+            (*visitor)(&ref, arg);
         }
     }
 }
@@ -131,8 +138,9 @@ static void visitDataObject(Visitor *visitor, Object *obj, void *arg)
 {
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    (*visitor)(&obj->clazz, arg);
+    assert(obj->clazz != NULLREF);
+    Object *ref = dvmRefExpandGlobal(obj->clazz);
+    (*visitor)(&ref, arg);
     visitFields(visitor, obj, arg);
 }
 
@@ -144,11 +152,12 @@ static void visitReferenceObject(Visitor *visitor, Object *obj, void *arg)
 {
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     visitDataObject(visitor, obj, arg);
     size_t offset = gDvm.offJavaLangRefReference_referent;
-    Object **ref = (Object **)BYTE_OFFSET(obj, offset);
-    (*visitor)(ref, arg);
+    Object *ref = dvmRefExpandGlobal(*((ObjectRef*)BYTE_OFFSET(obj, offset)));
+
+    (*visitor)(&ref, arg);
 }
 
 /*
@@ -158,12 +167,12 @@ static void visitObject(Visitor *visitor, Object *obj, void *arg)
 {
     assert(visitor != NULL);
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     if (dvmIsClassObject(obj)) {
         visitClassObject(visitor, obj, arg);
-    } else if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISARRAY)) {
+    } else if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISARRAY)) {
         visitArrayObject(visitor, obj, arg);
-    } else if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISREFERENCE)) {
+    } else if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISREFERENCE)) {
         visitReferenceObject(visitor, obj, arg);
     } else {
         visitDataObject(visitor, obj, arg);

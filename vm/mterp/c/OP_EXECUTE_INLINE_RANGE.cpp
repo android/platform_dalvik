@@ -1,6 +1,6 @@
 HANDLE_OPCODE(OP_EXECUTE_INLINE_RANGE /*{vCCCC..v(CCCC+AA-1)}, inline@BBBB*/)
     {
-        u4 arg0, arg1, arg2, arg3;
+        StackSlot arg0, arg1, arg2, arg3;
         arg0 = arg1 = arg2 = arg3 = 0;      /* placate gcc */
 
         EXPORT_PC();

@@ -41,7 +41,7 @@ typedef void (*HashFreeFunc)(void* ptr);
 /*
  * Used by dvmHashForeach().
  */
-typedef int (*HashForeachFunc)(void* data, void* arg);
+typedef intptr_t (*HashForeachFunc)(void* data, void* arg);
 
 /*
  * Used by dvmHashForeachRemove().
@@ -156,7 +156,7 @@ bool dvmHashTableRemove(HashTable* pHashTable, u4 hash, void* item);
  *
  * If "func" returns a nonzero value, terminate early and return the value.
  */
-int dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg);
+intptr_t dvmHashForeach(HashTable* pHashTable, HashForeachFunc func, void* arg);
 
 /*
  * Execute "func" on every entry in the hash table.

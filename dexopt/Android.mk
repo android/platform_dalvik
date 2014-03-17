@@ -54,5 +54,18 @@ ifeq ($(WITH_HOST_DALVIK),true)
     LOCAL_CFLAGS += -DANDROID_SMP=1
     LOCAL_MODULE_TAGS := optional
     LOCAL_MODULE := dexopt
+
+    ifneq ($(strip $(BUILD_HOST_64bit)),)
+        # libffi is currently needed in order to build Dalvik on the host. For
+        # now, we pick the library from the host and we hard-code paths below.
+        # The way to solve this is add for x86_64 custom code so that libffi is
+        # not needed at all. Once this is done the code below can be removed.
+        $(info TODOArm64: do not hard-code paths to host system libraries/includes)
+        LOCAL_LDLIBS += -lffi
+        LOCAL_LDFLAGS += -L/usr/lib/x86_64-linux-gnu
+        LOCAL_C_INCLUDES += /usr/include/x86_64-linux-gnu
+        LOCAL_CPPFLAGS += -I/usr/include/x86_64-linux-gnu -I/usr/include
+    endif
+
     include $(BUILD_HOST_EXECUTABLE)
 endif

@@ -107,8 +107,13 @@ Monitor* dvmCreateMonitor(Object* obj)
     /* replace the head of the list with the new monitor */
     do {
         mon->next = gDvm.monitorList;
+#if !defined(_LP64)
     } while (android_atomic_release_cas((int32_t)mon->next, (int32_t)mon,
             (int32_t*)(void*)&gDvm.monitorList) != 0);
+#else
+    } while(dvmQuasiAtomicReleaseCas64((int64_t) mon->next, (int64_t) mon,
+            (volatile int64_t*)(void*)&gDvm.monitorList) !=0);
+#endif
 
     return mon;
 }
@@ -146,7 +151,7 @@ Object* dvmGetMonitorObject(Monitor* mon)
 static u4 lockOwner(Object* obj)
 {
     Thread *owner;
-    u4 lock;
+    uintptr_t lock;
 
     assert(obj != NULL);
     /*
@@ -616,6 +621,7 @@ static void waitMonitor(Thread* self, Monitor* mon, s8 msec, s4 nsec,
     bool timed;
     int ret;
 
+    (void)ret;
     assert(self != NULL);
     assert(mon != NULL);
 
@@ -820,7 +826,7 @@ static void notifyAllMonitor(Thread* self, Monitor* mon)
 static void inflateMonitor(Thread *self, Object *obj)
 {
     Monitor *mon;
-    u4 thin;
+    uintptr_t thin;
 
     assert(self != NULL);
     assert(obj != NULL);
@@ -833,9 +839,13 @@ static void inflateMonitor(Thread *self, Object *obj)
     thin = obj->lock;
     mon->lockCount = LW_LOCK_COUNT(thin);
     thin &= LW_HASH_STATE_MASK << LW_HASH_STATE_SHIFT;
-    thin |= (u4)mon | LW_SHAPE_FAT;
+    thin |= (uintptr_t)mon | LW_SHAPE_FAT;
     /* Publish the updated lock word. */
+#ifndef _LP64
     android_atomic_release_store(thin, (int32_t *)&obj->lock);
+#else
+    dvmQuasiAtomicReleaseStore64(thin, (int64_t *)&obj->lock);
+#endif
 }
 
 /*
@@ -846,13 +856,13 @@ static void inflateMonitor(Thread *self, Object *obj)
  */
 void dvmLockObject(Thread* self, Object *obj)
 {
-    volatile u4 *thinp;
+    volatile uintptr_t *thinp;
     ThreadStatus oldStatus;
     struct timespec tm;
     long sleepDelayNs;
     long minSleepDelayNs = 1000000;  /* 1 millisecond */
     long maxSleepDelayNs = 1000000000;  /* 1 second */
-    u4 thin, newThin, threadId;
+    uintptr_t thin, newThin, threadId;
 
     assert(self != NULL);
     assert(obj != NULL);
@@ -870,7 +880,7 @@ retry:
              * The calling thread owns the lock.  Increment the
              * value of the recursion count field.
              */
-            obj->lock += 1 << LW_LOCK_COUNT_SHIFT;
+            obj->lock += 1L << LW_LOCK_COUNT_SHIFT;
             if (LW_LOCK_COUNT(obj->lock) == LW_LOCK_COUNT_MASK) {
                 /*
                  * The reacquisition limit has been reached.  Inflate
@@ -886,16 +896,21 @@ retry:
              * common case.  In performance critical code the JIT
              * will have tried this before calling out to the VM.
              */
-            newThin = thin | (threadId << LW_LOCK_OWNER_SHIFT);
+            newThin = thin | ((uintptr_t)threadId << LW_LOCK_OWNER_SHIFT);
+#ifndef _LP64
             if (android_atomic_acquire_cas(thin, newThin,
                     (int32_t*)thinp) != 0) {
+#else
+            if (dvmQuasiAtomicAcquireCas64(thin, newThin,
+                    (int64_t*)thinp) != 0) {
+#endif
                 /*
                  * The acquire failed.  Try again.
                  */
                 goto retry;
             }
         } else {
-            ALOGV("(%d) spin on lock %p: %#x (%#x) %#x",
+            ALOGV("(%zd) spin on lock %p: %#x (%"PRIxPTR") %#"PRIxPTR,
                  threadId, &obj->lock, 0, *thinp, thin);
             /*
              * The lock is owned by another thread.  Notify the VM
@@ -920,8 +935,13 @@ retry:
                          * owner field.
                          */
                         newThin = thin | (threadId << LW_LOCK_OWNER_SHIFT);
+#ifndef _LP64
                         if (android_atomic_acquire_cas(thin, newThin,
                                 (int32_t *)thinp) == 0) {
+#else
+                        if (dvmQuasiAtomicAcquireCas64(thin, newThin,
+                                (int64_t *)thinp) == 0) {
+#endif
                             /*
                              * The acquire succeed.  Break out of the
                              * loop and proceed to inflate the lock.
@@ -957,13 +977,13 @@ retry:
                      * Let the VM know we are no longer waiting and
                      * try again.
                      */
-                    ALOGV("(%d) lock %p surprise-fattened",
+                    ALOGV("(%zd) lock %p surprise-fattened",
                              threadId, &obj->lock);
                     dvmChangeStatus(self, oldStatus);
                     goto retry;
                 }
             }
-            ALOGV("(%d) spin on lock done %p: %#x (%#x) %#x",
+            ALOGV("(%zd) spin on lock done %p: %#x (%"PRIxPTR") %#"PRIxPTR,
                  threadId, &obj->lock, 0, *thinp, thin);
             /*
              * We have acquired the thin lock.  Let the VM know that
@@ -974,7 +994,7 @@ retry:
              * Fatten the lock.
              */
             inflateMonitor(self, obj);
-            ALOGV("(%d) lock %p fattened", threadId, &obj->lock);
+            ALOGV("(%zd) lock %p fattened", threadId, &obj->lock);
         }
     } else {
         /*
@@ -992,7 +1012,7 @@ retry:
  */
 bool dvmUnlockObject(Thread* self, Object *obj)
 {
-    u4 thin;
+    uintptr_t thin;
 
     assert(self != NULL);
     assert(self->status == THREAD_RUNNING);
@@ -1001,7 +1021,7 @@ bool dvmUnlockObject(Thread* self, Object *obj)
      * Cache the lock word as its value can change while we are
      * examining its state.
      */
-    thin = *(volatile u4 *)&obj->lock;
+    thin = *(volatile uintptr_t *)&obj->lock;
     if (LW_SHAPE(thin) == LW_SHAPE_THIN) {
         /*
          * The lock is thin.  We must ensure that the lock is owned
@@ -1019,13 +1039,17 @@ bool dvmUnlockObject(Thread* self, Object *obj)
                  * hash state.
                  */
                 thin &= (LW_HASH_STATE_MASK << LW_HASH_STATE_SHIFT);
+#ifndef _LP64
                 android_atomic_release_store(thin, (int32_t*)&obj->lock);
+#else
+                dvmQuasiAtomicReleaseStore64(thin, (intptr_t volatile*)&obj->lock);
+#endif
             } else {
                 /*
                  * The object was recursively acquired.  Decrement the
                  * lock recursion count field.
                  */
-                obj->lock -= 1 << LW_LOCK_COUNT_SHIFT;
+                obj->lock -= 1L << LW_LOCK_COUNT_SHIFT;
             }
         } else {
             /*
@@ -1058,7 +1082,7 @@ void dvmObjectWait(Thread* self, Object *obj, s8 msec, s4 nsec,
     bool interruptShouldThrow)
 {
     Monitor* mon;
-    u4 thin = *(volatile u4 *)&obj->lock;
+    uintptr_t thin = *(volatile uintptr_t *)&obj->lock;
 
     /* If the lock is still thin, we need to fatten it.
      */
@@ -1088,7 +1112,7 @@ void dvmObjectWait(Thread* self, Object *obj, s8 msec, s4 nsec,
  */
 void dvmObjectNotify(Thread* self, Object *obj)
 {
-    u4 thin = *(volatile u4 *)&obj->lock;
+    uintptr_t thin = *(volatile uintptr_t *)&obj->lock;
 
     /* If the lock is still thin, there aren't any waiters;
      * waiting on an object forces lock fattening.
@@ -1116,7 +1140,7 @@ void dvmObjectNotify(Thread* self, Object *obj)
  */
 void dvmObjectNotifyAll(Thread* self, Object *obj)
 {
-    u4 thin = *(volatile u4 *)&obj->lock;
+    uintptr_t thin = *(volatile uintptr_t *)&obj->lock;
 
     /* If the lock is still thin, there aren't any waiters;
      * waiting on an object forces lock fattening.
@@ -1209,7 +1233,7 @@ void dvmThreadInterrupt(Thread* thread)
 #ifndef WITH_COPYING_GC
 u4 dvmIdentityHashCode(Object *obj)
 {
-    return (u4)obj;
+    return static_cast<u4>((uintptr_t)obj);
 }
 #else
 /*
@@ -1218,9 +1242,9 @@ u4 dvmIdentityHashCode(Object *obj)
 u4 dvmIdentityHashCode(Object *obj)
 {
     Thread *self, *thread;
-    volatile u4 *lw;
+    volatile uintptr_t *lw;
     size_t size;
-    u4 lock, owner, hashState;
+    uintptr_t lock, owner, hashState;
 
     if (obj == NULL) {
         /*
@@ -1237,7 +1261,7 @@ retry:
          * relocated by the garbage collector.  Use the raw object
          * address.
          */
-        return (u4)obj >> 3;
+        return static_cast<u4>(obj) >> 3;
     } else if (hashState == LW_HASH_STATE_HASHED_AND_MOVED) {
         /*
          * The object has been hashed and its hash code has been
@@ -1251,7 +1275,7 @@ retry:
         } else {
             size = obj->clazz->objectSize;
         }
-        return *(u4 *)(((char *)obj) + size);
+        return *static_cast<u4 *>((((char *)obj) + size));
     } else if (hashState == LW_HASH_STATE_UNHASHED) {
         /*
          * The object has never been hashed.  Change the hash state to
@@ -1264,7 +1288,7 @@ retry:
              * directly.
              */
             *lw |= (LW_HASH_STATE_HASHED << LW_HASH_STATE_SHIFT);
-            return (u4)obj >> 3;
+            return static_cast<u4>(obj >> 3);
         }
         /*
          * We do not own the lock.  Try acquiring the lock.  Should
@@ -1276,15 +1300,22 @@ retry:
              * an acquire, update, and release with a single CAS.
              */
             lock = (LW_HASH_STATE_HASHED << LW_HASH_STATE_SHIFT);
+#ifndef _LP64
             if (android_atomic_acquire_cas(
                                 0,
                                 (int32_t)lock,
                                 (int32_t *)lw) == 0) {
+#else
+            if (dvmQuasiAtomicAcquireCas64(
+                                0L,
+                                (int64_t)lock,
+                                (int64_t *)lw) == 0) {
+#endif
                 /*
                  * A new lockword has been installed with a hash state
                  * of hashed.  Use the raw object address.
                  */
-                return (u4)obj >> 3;
+                return static_cast<u4>(obj >> 3);
             }
         } else {
             if (tryLockMonitor(self, LW_MONITOR(*lw))) {
@@ -1295,7 +1326,7 @@ retry:
                  */
                 *lw |= (LW_HASH_STATE_HASHED << LW_HASH_STATE_SHIFT);
                 unlockMonitor(self, LW_MONITOR(*lw));
-                return (u4)obj >> 3;
+                return static_cast<u4>(obj >> 3);
             }
         }
         /*
@@ -1348,7 +1379,7 @@ retry:
             *lw |= (LW_HASH_STATE_HASHED << LW_HASH_STATE_SHIFT);
             dvmResumeThread(thread);
             dvmUnlockThreadList();
-            return (u4)obj >> 3;
+            return static_cast<u4>(obj) >> 3;
         }
         /*
          * The wrong thread has been suspended.  Try again.

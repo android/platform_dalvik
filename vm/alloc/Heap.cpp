@@ -669,7 +669,7 @@ void dvmCollectGarbageInternal(const GcSpec* spec)
         u4 markSweepTime = dirtyEnd - rootStart;
         u4 gcTime = gcEnd - rootStart;
         bool isSmall = numBytesFreed > 0 && numBytesFreed < 1024;
-        ALOGD("%s freed %s%zdK, %d%% free %zdK/%zdK, paused %ums, total %ums",
+        ALOGD("%s freed %s%zdK, %zd%% free %zdK/%zdK, paused %ums, total %ums",
              spec->reason,
              isSmall ? "<" : "",
              numBytesFreed ? MAX(numBytesFreed / 1024, 1) : 0,
@@ -681,7 +681,7 @@ void dvmCollectGarbageInternal(const GcSpec* spec)
         u4 dirtyTime = dirtyEnd - dirtyStart;
         u4 gcTime = gcEnd - rootStart;
         bool isSmall = numBytesFreed > 0 && numBytesFreed < 1024;
-        ALOGD("%s freed %s%zdK, %d%% free %zdK/%zdK, paused %ums+%ums, total %ums",
+        ALOGD("%s freed %s%zdK, %zd%% free %zdK/%zdK, paused %ums+%ums, total %ums",
              spec->reason,
              isSmall ? "<" : "",
              numBytesFreed ? MAX(numBytesFreed / 1024, 1) : 0,

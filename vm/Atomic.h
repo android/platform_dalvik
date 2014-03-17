@@ -59,7 +59,53 @@ extern "C" int64_t dvmQuasiAtomicRead64(volatile const int64_t* addr);
  * If the value at "addr" is equal to "oldvalue", replace it with "newvalue"
  * and return 0.  Otherwise, don't swap, and return nonzero.
  */
-int dvmQuasiAtomicCas64(int64_t oldvalue, int64_t newvalue,
-        volatile int64_t* addr);
+extern "C" int dvmQuasiAtomicCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr);
+
+/*
+ * If the value at "addr" is equal to "oldvalue", replace it with "newvalue"
+ * and return 0.  Otherwise, don't swap, and return nonzero.
+ * Provides memory barrier for acquire semantics.
+ */
+extern "C" int dvmQuasiAtomicAcquireCas64(int64_t oldvalue, int64_t newvalue,
+    volatile int64_t* addr);
+
+/*
+ * If the value at "addr" is equal to "oldvalue", replace it with "newvalue"
+ * and return 0.  Otherwise, don't swap, and return nonzero.
+ * Provides memory barrier for release semantics.
+ */
+extern "C" int dvmQuasiAtomicReleaseCas64(int64_t oldvalue, int64_t newvalue,
+     volatile int64_t* addr);
+
+/*
+ * Load a 64bit value at ptr, and return, with acquire semantics.
+ * 64bit replacement for android_atomic_acquire_load.
+ */
+extern "C" inline int64_t dvmQuasiAtomicAcquireLoad64(volatile const int64_t *ptr) {
+    int64_t value = *ptr;
+    android_memory_barrier();
+    return value;
+}
+
+/*
+ * Store a 64bit value at ptr, with release semantics.
+ * 64bit replacement for android_atomic_acquire_store.
+ */
+extern "C" inline void dvmQuasiAtomicReleaseStore64(int64_t value, volatile int64_t *ptr) {
+    android_memory_barrier();
+    *ptr = value;
+}
+
+#if defined(_LP64)
+// Routines using 128 bit values.
+// Only valid on 64bit platforms.
+
+/*
+ * Compare and swap a 128 bit value.
+ */
+int dvmQuasiAtomicCas128(__int128 oldvalue, __int128 newvalue,
+    volatile __int128* addr);
+#endif
 
 #endif  // DALVIK_ATOMIC_H_

@@ -29,7 +29,7 @@ HANDLE_OPCODE(OP_NEW_ARRAY /*vA, vB, class@CCCC*/)
         newArray = dvmAllocArrayByClass(arrayClass, length, ALLOC_DONT_TRACK);
         if (newArray == NULL)
             GOTO_exceptionThrown();
-        SET_REGISTER(vdst, (u4) newArray);
+        SET_REGISTER(vdst, (StackSlot) newArray);
     }
     FINISH(2);
 OP_END

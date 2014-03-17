@@ -735,6 +735,10 @@ struct DvmGlobals {
 
     /* String pointed here will be deposited on the stack frame of dvmAbort */
     const char *lastMessage;
+
+
+    /* The base for the object references */
+    void*       heapBase;
 };
 
 extern struct DvmGlobals gDvm;

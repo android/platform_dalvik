@@ -49,6 +49,7 @@
 #include <getopt.h>
 #include <errno.h>
 #include <assert.h>
+#include <inttypes.h>
 
 static const char* gProgName = "dexdump";
 
@@ -854,7 +855,7 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
     const u2* insns = pCode->insns;
     int i;
 
-    printf("%06x:", ((u1*)insns - pDexFile->baseAddr) + insnIdx*2);
+    printf("%06" PRIxPTR ":", (intptr_t) ((u1*)insns - pDexFile->baseAddr) + insnIdx*2);
     for (i = 0; i < 8; i++) {
         if (i < insnWidth) {
             if (i == 7) {
@@ -939,7 +940,7 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
                 pDecInsn->vA, value, (u2)pDecInsn->vB);
         } else {
             s8 value = ((s8) pDecInsn->vB) << 48;
-            printf(" v%d, #long %lld // #%x",
+            printf(" v%d, #long %" PRId64 " // #%x",
                 pDecInsn->vA, value, (u2)pDecInsn->vB);
         }
         break;
@@ -1033,7 +1034,7 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
                 u8 j;
             } conv;
             conv.j = pDecInsn->vB_wide;
-            printf(" v%d, #double %f // #%016llx",
+            printf(" v%d, #double %f // #%016" PRIx64,
                 pDecInsn->vA, conv.d, pDecInsn->vB_wide);
         }
         break;

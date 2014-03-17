@@ -17,17 +17,17 @@
 #include "Dalvik.h"
 #include "native/InternalNativePriv.h"
 
-static void Float_floatToIntBits(const u4* args, JValue* pResult)
+static void Float_floatToIntBits(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangFloat_floatToIntBits);
 }
 
-static void Float_floatToRawIntBits(const u4* args, JValue* pResult)
+static void Float_floatToRawIntBits(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangFloat_floatToRawIntBits);
 }
 
-static void Float_intBitsToFloat(const u4* args, JValue* pResult)
+static void Float_intBitsToFloat(const StackSlot* args, JValue* pResult)
 {
     MAKE_INTRINSIC_TRAMPOLINE(javaLangFloat_intBitsToFloat);
 }

@@ -45,9 +45,10 @@
  * This macro is used to implement the native methods that bridge this gap.
  */
 #define MAKE_INTRINSIC_TRAMPOLINE(INTRINSIC_FN) \
-    extern bool INTRINSIC_FN(u4 arg0, u4 arg1, u4 arg2, u4 arg3, \
+    extern bool INTRINSIC_FN(StackSlot arg0, StackSlot arg1, StackSlot arg2, StackSlot arg3, \
             JValue* pResult); \
     INTRINSIC_FN(args[0], args[1], args[2], args[3], pResult);
+
 
 /*
  * Verify that "obj" is non-null and is an instance of "clazz".

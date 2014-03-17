@@ -32,13 +32,13 @@
  * with an interface, array, or primitive class.
  */
 static void Dalvik_java_lang_reflect_Constructor_constructNative(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     // ignore thisPtr in args[0]
     ArrayObject* argList = (ArrayObject*) args[1];
     ClassObject* declaringClass = (ClassObject*) args[2];
     ArrayObject* params = (ArrayObject*) args[3];
-    int slot = args[4];
+    int slot = (int)args[4];
     bool noAccessCheck = (args[5] != 0);
     Object* newObj;
     Method* meth;

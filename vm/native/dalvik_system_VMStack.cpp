@@ -26,7 +26,7 @@
  *
  * Return the defining class loader of the caller's caller.
  */
-static void Dalvik_dalvik_system_VMStack_getCallingClassLoader(const u4* args,
+static void Dalvik_dalvik_system_VMStack_getCallingClassLoader(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz =
@@ -44,7 +44,7 @@ static void Dalvik_dalvik_system_VMStack_getCallingClassLoader(const u4* args,
  *
  * Returns the class of the caller's caller's caller.
  */
-static void Dalvik_dalvik_system_VMStack_getStackClass2(const u4* args,
+static void Dalvik_dalvik_system_VMStack_getStackClass2(const StackSlot* args,
     JValue* pResult)
 {
     ClassObject* clazz =
@@ -62,7 +62,7 @@ static void Dalvik_dalvik_system_VMStack_getStackClass2(const u4* args,
  * first two and all reflection methods.  If "stopAtPrivileged" is set,
  * stop shortly after we encounter a privileged class.
  */
-static void Dalvik_dalvik_system_VMStack_getClasses(const u4* args,
+static void Dalvik_dalvik_system_VMStack_getClasses(const StackSlot* args,
     JValue* pResult)
 {
     /* note "maxSize" is unsigned, so -1 turns into a very large value */
@@ -132,11 +132,11 @@ static void Dalvik_dalvik_system_VMStack_getClasses(const u4* args,
  * non-NULL trace buffer. Caller is responsible for freeing the trace
  * buffer.
  */
-static int* getTraceBuf(Object* targetThreadObj, size_t* pStackDepth)
+static intptr_t* getTraceBuf(Object* targetThreadObj, size_t* pStackDepth)
 {
     Thread* self = dvmThreadSelf();
     Thread* thread;
-    int* traceBuf;
+    intptr_t* traceBuf;
 
     assert(targetThreadObj != NULL);
 
@@ -177,12 +177,12 @@ static int* getTraceBuf(Object* targetThreadObj, size_t* pStackDepth)
  * Retrieve the stack trace of the specified thread and return it as an
  * array of StackTraceElement.  Returns NULL on failure.
  */
-static void Dalvik_dalvik_system_VMStack_getThreadStackTrace(const u4* args,
+static void Dalvik_dalvik_system_VMStack_getThreadStackTrace(const StackSlot* args,
     JValue* pResult)
 {
     Object* targetThreadObj = (Object*) args[0];
     size_t stackDepth;
-    int* traceBuf = getTraceBuf(targetThreadObj, &stackDepth);
+    intptr_t* traceBuf = getTraceBuf(targetThreadObj, &stackDepth);
 
     if (traceBuf == NULL)
         RETURN_PTR(NULL);
@@ -201,13 +201,13 @@ static void Dalvik_dalvik_system_VMStack_getThreadStackTrace(const u4* args,
  * Retrieve a partial stack trace of the specified thread and return
  * the number of frames filled.  Returns 0 on failure.
  */
-static void Dalvik_dalvik_system_VMStack_fillStackTraceElements(const u4* args,
+static void Dalvik_dalvik_system_VMStack_fillStackTraceElements(const StackSlot* args,
     JValue* pResult)
 {
     Object* targetThreadObj = (Object*) args[0];
     ArrayObject* steArray = (ArrayObject*) args[1];
     size_t stackDepth;
-    int* traceBuf = getTraceBuf(targetThreadObj, &stackDepth);
+    intptr_t* traceBuf = getTraceBuf(targetThreadObj, &stackDepth);
 
     if (traceBuf == NULL)
         RETURN_PTR(NULL);

@@ -173,6 +173,8 @@ static bool setPredecessors(VerifierData* vdata, VfyBasicBlock* curBlock,
     }
     if ((opFlags & kInstrCanBranch) != 0) {
         bool unused, gotBranch;
+
+        (void)gotBranch;
         s4 branchOffset, absOffset;
 
         gotBranch = dvmGetBranchOffset(meth, insnFlags, curIdx,
@@ -382,7 +384,7 @@ bool dvmComputeVfyBasicBlocks(VerifierData* vdata)
                 if (numHandlers <= kHandlerStackAllocSize) {
                     handlerList = handlerAddrs;
                 } else {
-                    ALOGD("overflow, numHandlers=%d", numHandlers);
+                    ALOGD("overflow, numHandlers=%zu", numHandlers);
                     handlerListAlloc = (u4*) malloc(sizeof(u4) * numHandlers);
                     if (handlerListAlloc == NULL)
                         return false;
@@ -391,7 +393,7 @@ bool dvmComputeVfyBasicBlocks(VerifierData* vdata)
                     handlerList = handlerListAlloc;
                 }
 
-                ALOGV("+++ start=%x end=%x numHan=%d",
+                ALOGV("+++ start=%x end=%x numHan=%zu",
                     tryStart, tryEnd, numHandlers);
 
                 tryIndex++;
@@ -477,7 +479,7 @@ bool dvmComputeVfyBasicBlocks(VerifierData* vdata)
 
             if (pTries != NULL && idx == tryStart) {
                 assert(numHandlers > 0);
-                ALOGI("  EXC block: [%04x, %04x) %d:(%04x...)",
+                ALOGI("  EXC block: [%04x, %04x) %zu:(%04x...)",
                     tryStart, tryEnd, numHandlers, handlerList[0]);
             }
         }

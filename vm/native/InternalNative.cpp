@@ -139,7 +139,7 @@ DalvikNativeFunc dvmLookupInternalNativeMethod(const Method* method)
  * definitions when a class is first loaded.  This throws the expected
  * exception so we don't have to explicitly check for it in the interpreter.
  */
-void dvmAbstractMethodStub(const u4* args, JValue* pResult)
+void dvmAbstractMethodStub(const StackSlot* args, JValue* pResult)
 {
     ALOGD("--- called into dvmAbstractMethodStub");
     dvmThrowAbstractMethodError("abstract method not implemented");
@@ -156,7 +156,7 @@ bool dvmVerifyObjectInClass(Object* obj, ClassObject* clazz) {
     ClassObject* exceptionClass = NULL;
     if (obj == NULL) {
         exceptionClass = gDvm.exNullPointerException;
-    } else if (!dvmInstanceof(obj->clazz, clazz)) {
+    } else if (!dvmInstanceof(dvmRefExpandClazzGlobal(obj->clazz), clazz)) {
         exceptionClass = gDvm.exIllegalArgumentException;
     }
 

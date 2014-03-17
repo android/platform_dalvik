@@ -30,7 +30,7 @@
 #include "libdex/InstrUtils.h"
 
 #include <stddef.h>
-
+#include <stdint.h>
 
 /*
  * We don't need to store the register data for many instructions, because
@@ -574,12 +574,12 @@ static ClassObject* regTypeReferenceToClass(RegType type,
 
 /* convert the ClassObject pointer to an (initialized) register type */
 static inline RegType regTypeFromClass(ClassObject* clazz) {
-    return (u4) clazz;
+    return (RegType) clazz;
 }
 
 /* return the RegType for the uninitialized reference in slot "uidx" */
 static RegType regTypeFromUninitIndex(int uidx) {
-    return (u4) (kRegTypeUninit | (uidx << kRegTypeUninitShift));
+    return (RegType) (kRegTypeUninit | (uidx << kRegTypeUninitShift));
 }
 
 
@@ -1437,7 +1437,7 @@ static ClassObject* getClassFromRegister(const RegisterLine* registerLine,
         goto bail;
 
     if (!regTypeIsReference(type)) {
-        LOG_VFY("VFY: tried to get class from non-ref register v%d (type=%d)",
+        LOG_VFY("VFY: tried to get class from non-ref register v%d (type=%" PRIdPTR ")",
             vsrc, type);
         *pFailure = VERIFY_ERROR_GENERIC;
         goto bail;
@@ -1478,7 +1478,7 @@ static RegType getInvocationThis(const RegisterLine* registerLine,
     /* get the element type of the array held in vsrc */
     thisType = getRegisterType(registerLine, pDecInsn->vC);
     if (!regTypeIsReference(thisType)) {
-        LOG_VFY("VFY: tried to get class from non-ref register v%d (type=%d)",
+        LOG_VFY("VFY: tried to get class from non-ref register v%d (type=%" PRIdPTR ")",
             pDecInsn->vC, thisType);
         *pFailure = VERIFY_ERROR_GENERIC;
         goto bail;
@@ -1559,7 +1559,7 @@ static void setRegisterType(RegisterLine* registerLine, u4 vdst,
         /* bad type - fall through */
 
     case kRegTypeConflict:      // should only be set during a merge
-        ALOGE("BUG: set register to unknown type %d", newType);
+        ALOGE("BUG: set register to unknown type %" PRIdPTR , newType);
         dvmAbort();
         break;
     }
@@ -1600,7 +1600,7 @@ static void verifyRegisterType(RegisterLine* registerLine, u4 vsrc,
     case kRegTypeChar:
     case kRegTypeInteger:
         if (!canConvertTo1nr(srcType, checkType)) {
-            LOG_VFY("VFY: register1 v%u type %d, wanted %d",
+            LOG_VFY("VFY: register1 v%u type %" PRIdPTR ", wanted %" PRIdPTR,
                 vsrc, srcType, checkType);
             *pFailure = VERIFY_ERROR_GENERIC;
             break;
@@ -1616,12 +1616,12 @@ static void verifyRegisterType(RegisterLine* registerLine, u4 vsrc,
     case kRegTypeLongLo:
     case kRegTypeDoubleLo:
         if (insnRegs[vsrc+1] != srcType+1) {
-            LOG_VFY("VFY: register2 v%u-%u values %d,%d",
+            LOG_VFY("VFY: register2 v%u-%u values %" PRIdPTR ",%" PRIdPTR,
                 vsrc, vsrc+1, insnRegs[vsrc], insnRegs[vsrc+1]);
             *pFailure = VERIFY_ERROR_GENERIC;
             break;
         } else if (!canConvertTo2(srcType, checkType)) {
-            LOG_VFY("VFY: register2 v%u type %d, wanted %d",
+            LOG_VFY("VFY: register2 v%u type %" PRIdPTR ", wanted %" PRIdPTR,
                 vsrc, srcType, checkType);
             *pFailure = VERIFY_ERROR_GENERIC;
             break;
@@ -1647,7 +1647,7 @@ static void verifyRegisterType(RegisterLine* registerLine, u4 vsrc,
     default:
         /* make sure checkType is initialized reference */
         if (!regTypeIsReference(checkType)) {
-            LOG_VFY("VFY: unexpected check type %d", checkType);
+            LOG_VFY("VFY: unexpected check type %" PRIdPTR, checkType);
             assert(false);
             *pFailure = VERIFY_ERROR_GENERIC;
             break;
@@ -1659,7 +1659,7 @@ static void verifyRegisterType(RegisterLine* registerLine, u4 vsrc,
         }
         /* make sure srcType is initialized reference or always-NULL */
         if (!regTypeIsReference(srcType)) {
-            LOG_VFY("VFY: register1 v%u type %d, wanted ref", vsrc, srcType);
+            LOG_VFY("VFY: register1 v%u type %" PRIdPTR ", wanted ref", vsrc, srcType);
             *pFailure = VERIFY_ERROR_GENERIC;
             break;
         }
@@ -1728,7 +1728,7 @@ static void markRefsAsInitialized(RegisterLine* registerLine, int insnRegCount,
 
     clazz = getUninitInstance(uninitMap, regTypeToUninitIndex(uninitType));
     if (clazz == NULL) {
-        ALOGE("VFY: unable to find type=%#x (idx=%d)",
+        ALOGE("VFY: unable to find type=%#" PRIxPTR " (idx=%d)",
             uninitType, regTypeToUninitIndex(uninitType));
         *pFailure = VERIFY_ERROR_GENERIC;
         return;
@@ -1971,7 +1971,7 @@ static void copyRegister1(RegisterLine* registerLine, u4 vdst, u4 vsrc,
     RegType type = getRegisterType(registerLine, vsrc);
     checkTypeCategory(type, cat, pFailure);
     if (!VERIFY_OK(*pFailure)) {
-        LOG_VFY("VFY: copy1 v%u<-v%u type=%d cat=%d", vdst, vsrc, type, cat);
+        LOG_VFY("VFY: copy1 v%u<-v%u type=%" PRIdPTR " cat=%d", vdst, vsrc, type, cat);
     } else {
         setRegisterType(registerLine, vdst, type);
         if (cat == kTypeCategoryRef && registerLine->monitorEntries != NULL) {
@@ -1994,7 +1994,7 @@ static void copyRegister2(RegisterLine* registerLine, u4 vdst, u4 vsrc,
     checkTypeCategory(typel, kTypeCategory2, pFailure);
     checkWidePair(typel, typeh, pFailure);
     if (!VERIFY_OK(*pFailure)) {
-        LOG_VFY("VFY: copy2 v%u<-v%u type=%d/%d", vdst, vsrc, typel, typeh);
+        LOG_VFY("VFY: copy2 v%u<-v%u type=%" PRIdPTR "/%" PRIdPTR, vdst, vsrc, typel, typeh);
     } else {
         setRegisterType(registerLine, vdst, typel);
         /* target monitor stack bits will be cleared */
@@ -2017,7 +2017,7 @@ static void copyResultRegister1(RegisterLine* registerLine,
     type = getRegisterType(registerLine, vsrc);
     checkTypeCategory(type, cat, pFailure);
     if (!VERIFY_OK(*pFailure)) {
-        LOG_VFY("VFY: copyRes1 v%u<-v%u cat=%d type=%d",
+        LOG_VFY("VFY: copyRes1 v%u<-v%u cat=%d type=%" PRIdPTR,
             vdst, vsrc, cat, type);
     } else {
         setRegisterType(registerLine, vdst, type);
@@ -2044,7 +2044,7 @@ static void copyResultRegister2(RegisterLine* registerLine,
     checkTypeCategory(typel, kTypeCategory2, pFailure);
     checkWidePair(typel, typeh, pFailure);
     if (!VERIFY_OK(*pFailure)) {
-        LOG_VFY("VFY: copyRes2 v%u<-v%u type=%d/%d",
+        LOG_VFY("VFY: copyRes2 v%u<-v%u type=%" PRIdPTR "/%" PRIdPTR,
             vdst, vsrc, typel, typeh);
     } else {
         setRegisterType(registerLine, vdst, typel);
@@ -2694,7 +2694,7 @@ static InstField* getInstField(const Method* meth,
     bool mustBeLocal = false;
 
     if (!regTypeIsReference(objType)) {
-        LOG_VFY("VFY: attempt to access field in non-reference type %d",
+        LOG_VFY("VFY: attempt to access field in non-reference type %" PRIdPTR,
             objType);
         *pFailure = VERIFY_ERROR_GENERIC;
         goto bail;
@@ -2841,7 +2841,7 @@ static void checkArrayIndexType(const Method* meth, RegType regType,
           *pFailure = VERIFY_ERROR_GENERIC;
         }
         if (!VERIFY_OK(*pFailure)) {
-            LOG_VFY_METH(meth, "Invalid reg type for array index (%d)",
+            LOG_VFY_METH(meth, "Invalid reg type for array index (%" PRIdPTR ")",
                 regType);
         }
     }
@@ -3360,7 +3360,7 @@ void handleMonitorEnter(RegisterLine* workLine, u4 regIdx, u4 insnIdx,
     }
 
     if (workLine->monitorStackTop == kMaxMonitorStackDepth) {
-        LOG_VFY("VFY: monitor-enter stack overflow (%d)",
+        LOG_VFY("VFY: monitor-enter stack overflow (%zu)",
             kMaxMonitorStackDepth);
         *pFailure = VERIFY_ERROR_GENERIC;
         return;
@@ -4140,7 +4140,7 @@ static bool verifyInstruction(const Method* meth, InsnFlags* insnFlags,
         /* make sure we're checking a reference type */
         tmpType = getRegisterType(workLine, decInsn.vB);
         if (!regTypeIsReference(tmpType)) {
-            LOG_VFY("VFY: vB not a reference (%d)", tmpType);
+            LOG_VFY("VFY: vB not a reference (%" PRIdPTR ")", tmpType);
             failure = VERIFY_ERROR_GENERIC;
             break;
         }
@@ -4296,6 +4296,7 @@ static bool verifyInstruction(const Method* meth, InsnFlags* insnFlags,
             const u2 *arrayData;
             u2 elemWidth;
 
+            (void)valueType;
             /* Similar to the verification done for APUT */
             resClass = getClassFromRegister(workLine, decInsn.vA, &failure);
             if (!VERIFY_OK(failure))
@@ -4484,8 +4485,8 @@ aget_1nr_common:
                     tmpType = kRegTypeFloat;
 
                 if (!checkFieldArrayStore1nr(tmpType, srcType)) {
-                    LOG_VFY("VFY: invalid aget-1nr, array type=%d with"
-                            " inst type=%d (on %s)",
+                    LOG_VFY("VFY: invalid aget-1nr, array type=%" PRIdPTR" with"
+                            " inst type=%" PRIdPTR " (on %s)",
                         srcType, tmpType, resClass->descriptor);
                     failure = VERIFY_ERROR_GENERIC;
                     break;
@@ -4639,7 +4640,7 @@ aput_1nr_common:
 
             /* make sure the source register has the correct type */
             if (!canConvertTo1nr(srcType, tmpType)) {
-                LOG_VFY("VFY: invalid reg type %d on aput instr (need %d)",
+                LOG_VFY("VFY: invalid reg type %" PRIdPTR " on aput instr (need %" PRIdPTR ")",
                     srcType, tmpType);
                 failure = VERIFY_ERROR_GENERIC;
                 break;
@@ -4673,7 +4674,7 @@ aput_1nr_common:
 
             if (dstType == kRegTypeUnknown ||
                 !checkFieldArrayStore1nr(tmpType, dstType)) {
-                LOG_VFY("VFY: invalid aput-1nr on %s (inst=%d dst=%d)",
+                LOG_VFY("VFY: invalid aput-1nr on %s (inst=%" PRIdPTR " dst=%" PRIdPTR ")",
                         resClass->descriptor, tmpType, dstType);
                 failure = VERIFY_ERROR_GENERIC;
                 break;
@@ -4809,7 +4810,7 @@ iget_1nr_common:
             if (fieldType == kRegTypeUnknown ||
                 !checkFieldArrayStore1nr(tmpType, fieldType))
             {
-                LOG_VFY("VFY: invalid iget-1nr of %s.%s (inst=%d field=%d)",
+                LOG_VFY("VFY: invalid iget-1nr of %s.%s (inst=%" PRIdPTR " field=%" PRIdPTR ")",
                         instField->clazz->descriptor,
                         instField->name, tmpType, fieldType);
                 failure = VERIFY_ERROR_GENERIC;
@@ -4912,7 +4913,7 @@ iput_1nr_common:
 
             /* make sure the source register has the correct type */
             if (!canConvertTo1nr(srcType, tmpType)) {
-                LOG_VFY("VFY: invalid reg type %d on iput instr (need %d)",
+                LOG_VFY("VFY: invalid reg type %" PRIdPTR " on iput instr (need %" PRIdPTR ")",
                     srcType, tmpType);
                 failure = VERIFY_ERROR_GENERIC;
                 break;
@@ -4942,7 +4943,7 @@ iput_1nr_common:
             if (fieldType == kRegTypeUnknown ||
                 !checkFieldArrayStore1nr(tmpType, fieldType))
             {
-                LOG_VFY("VFY: invalid iput-1nr of %s.%s (inst=%d field=%d)",
+                LOG_VFY("VFY: invalid iput-1nr of %s.%s (inst=%" PRIdPTR " field=%" PRIdPTR ")",
                         instField->clazz->descriptor,
                         instField->name, tmpType, fieldType);
                 failure = VERIFY_ERROR_GENERIC;
@@ -5081,7 +5082,7 @@ sget_1nr_common:
                 tmpType = kRegTypeFloat;
 
             if (!checkFieldArrayStore1nr(tmpType, fieldType)) {
-                LOG_VFY("VFY: invalid sget-1nr of %s.%s (inst=%d actual=%d)",
+                LOG_VFY("VFY: invalid sget-1nr of %s.%s (inst=%" PRIdPTR " actual=%" PRIdPTR ")",
                     staticField->clazz->descriptor,
                     staticField->name, tmpType, fieldType);
                 failure = VERIFY_ERROR_GENERIC;
@@ -5178,7 +5179,7 @@ sput_1nr_common:
 
             /* make sure the source register has the correct type */
             if (!canConvertTo1nr(srcType, tmpType)) {
-                LOG_VFY("VFY: invalid reg type %d on sput instr (need %d)",
+                LOG_VFY("VFY: invalid reg type %" PRIdPTR " on sput instr (need %" PRIdPTR ")",
                     srcType, tmpType);
                 failure = VERIFY_ERROR_GENERIC;
                 break;
@@ -5211,7 +5212,7 @@ sput_1nr_common:
 
             if (fieldType == kRegTypeUnknown ||
                 !checkFieldArrayStore1nr(tmpType, fieldType)) {
-                LOG_VFY("VFY: invalid sput-1nr of %s.%s (inst=%d actual=%d)",
+                LOG_VFY("VFY: invalid sput-1nr of %s.%s (inst=%" PRIdPTR " actual=%" PRIdPTR ")",
                     staticField->clazz->descriptor,
                     staticField->name, tmpType, fieldType);
                 failure = VERIFY_ERROR_GENERIC;
@@ -6182,12 +6183,23 @@ static void dumpRegTypes(const VerifierData* vdata,
                 ClassObject* clazz = regTypeReferenceToClass(addrRegs[i], uninitMap);
                 assert(dvmIsHeapAddress((Object*)clazz));
                 if (i < regCount) {
+#ifndef _LP64
                     ALOGI("        %2d: 0x%08x %s%s",
+#else
+                    ALOGI("        %2d: 0x%016lx %s%s",
+#endif
                         i, addrRegs[i],
                         regTypeIsUninitReference(addrRegs[i]) ? "[U]" : "",
                         clazz->descriptor);
+
+
                 } else {
+#ifndef _LP64
                     ALOGI("        RS: 0x%08x %s%s",
+#else
+                    ALOGI("        RS: 0x%016lx %s%s",
+#endif
+
                         addrRegs[i],
                         regTypeIsUninitReference(addrRegs[i]) ? "[U]" : "",
                         clazz->descriptor);

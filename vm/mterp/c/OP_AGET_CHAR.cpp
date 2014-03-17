@@ -1,2 +1,2 @@
-HANDLE_OP_AGET(OP_AGET_CHAR, "-char", u2, )
+HANDLE_OP_AGET(OP_AGET_CHAR, "-char", u2, _INT)
 OP_END

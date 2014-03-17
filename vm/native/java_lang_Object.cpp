@@ -26,7 +26,7 @@
  *
  * Implements most of Object.clone().
  */
-static void Dalvik_java_lang_Object_internalClone(const u4* args,
+static void Dalvik_java_lang_Object_internalClone(const StackSlot* args,
     JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
@@ -38,7 +38,7 @@ static void Dalvik_java_lang_Object_internalClone(const u4* args,
 /*
  * public int hashCode()
  */
-static void Dalvik_java_lang_Object_hashCode(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_Object_hashCode(const StackSlot* args, JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
     RETURN_INT(dvmIdentityHashCode(thisPtr));
@@ -47,11 +47,11 @@ static void Dalvik_java_lang_Object_hashCode(const u4* args, JValue* pResult)
 /*
  * public Class getClass()
  */
-static void Dalvik_java_lang_Object_getClass(const u4* args, JValue* pResult)
+static void Dalvik_java_lang_Object_getClass(const StackSlot* args, JValue* pResult)
 {
     Object* thisPtr = (Object*) args[0];
 
-    RETURN_PTR(thisPtr->clazz);
+    RETURN_PTR(dvmRefExpandClazzGlobal(thisPtr->clazz));
 }
 
 /*
@@ -60,7 +60,7 @@ static void Dalvik_java_lang_Object_getClass(const u4* args, JValue* pResult)
  * NOTE: we declare this as a full DalvikBridgeFunc, rather than a
  * DalvikNativeFunc, because we really want to avoid the "self" lookup.
  */
-static void Dalvik_java_lang_Object_notify(const u4* args, JValue* pResult,
+static void Dalvik_java_lang_Object_notify(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     Object* thisPtr = (Object*) args[0];
@@ -72,7 +72,7 @@ static void Dalvik_java_lang_Object_notify(const u4* args, JValue* pResult,
 /*
  * public void notifyAll()
  */
-static void Dalvik_java_lang_Object_notifyAll(const u4* args, JValue* pResult,
+static void Dalvik_java_lang_Object_notifyAll(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     Object* thisPtr = (Object*) args[0];
@@ -84,7 +84,7 @@ static void Dalvik_java_lang_Object_notifyAll(const u4* args, JValue* pResult,
 /*
  * public void wait(long ms, int ns) throws InterruptedException
  */
-static void Dalvik_java_lang_Object_wait(const u4* args, JValue* pResult,
+static void Dalvik_java_lang_Object_wait(const StackSlot* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     Object* thisPtr = (Object*) args[0];

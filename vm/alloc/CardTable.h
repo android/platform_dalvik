@@ -24,7 +24,7 @@
 #define DALVIK_ALLOC_CARDTABLE_H_
 
 #define GC_CARD_SHIFT 7
-#define GC_CARD_SIZE (1 << GC_CARD_SHIFT)
+#define GC_CARD_SIZE (1L << GC_CARD_SHIFT)
 #define GC_CARD_CLEAN 0
 #define GC_CARD_DIRTY 0x70
 

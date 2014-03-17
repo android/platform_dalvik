@@ -126,10 +126,11 @@ static ArrayObject* emptyAnnoArrayArray(int numElements)
     arr = dvmAllocArrayByClass(gDvm.classJavaLangAnnotationAnnotationArrayArray,
             numElements, ALLOC_DEFAULT);
     if (arr != NULL) {
-        ArrayObject** elems = (ArrayObject**)(void*)arr->contents;
+        ObjectRef* elems = (ObjectRef*)(void*)arr->contents;
         for (i = 0; i < numElements; i++) {
-            elems[i] = emptyAnnoArray();
-            dvmReleaseTrackedAlloc((Object*)elems[i], self);
+            ArrayObject* annoArray = emptyAnnoArray();
+            elems[i] = dvmRefCompress(annoArray);
+            dvmReleaseTrackedAlloc((Object*)annoArray, self);
         }
     }
 
@@ -330,7 +331,7 @@ static bool processAnnotationValue(const ClassObject* clazz,
     valueArg = valueType >> kDexAnnotationValueArgShift;
     width = valueArg + 1;       /* assume, correct later */
 
-    ALOGV("----- type is 0x%02x %d, ptr=%p [0x%06x]",
+    ALOGV("----- type is 0x%02x %d, ptr=%p [0x%06"PRIxPTR"]",
         valueType & kDexAnnotationValueTypeMask, valueArg, ptr-1,
         (ptr-1) - (u1*)clazz->pDvmDex->pDexFile->baseAddr);
 
@@ -574,13 +575,14 @@ static Object* convertReturnType(Object* valueObj, ClassObject* methodReturn)
     ClassObject* srcElemClass;
     ClassObject* dstElemClass;
 
+    (void)srcElemClass;
     /*
      * We always extract kDexAnnotationArray into Object[], so we expect to
      * find that here.  This means we can skip the FindClass on
      * (valueObj->clazz->descriptor+1, valueObj->clazz->classLoader).
      */
-    if (strcmp(valueObj->clazz->descriptor, "[Ljava/lang/Object;") != 0) {
-        ALOGE("Unexpected src type class (%s)", valueObj->clazz->descriptor);
+    if (strcmp(dvmRefExpandClazzGlobal(valueObj->clazz)->descriptor, "[Ljava/lang/Object;") != 0) {
+        ALOGE("Unexpected src type class (%s)", dvmRefExpandClazzGlobal(valueObj->clazz)->descriptor);
         return NULL;
     }
     srcElemClass = gDvm.classJavaLangObject;
@@ -761,7 +763,7 @@ static Object* processEncodedAnnotation(const ClassObject* clazz,
         }
     }
 
-    ALOGV("----- processEnc ptr=%p [0x%06x]  typeIdx=%d size=%d class=%s",
+    ALOGV("----- processEnc ptr=%p [0x%06"PRIxPTR"]  typeIdx=%d size=%d class=%s",
         *pPtr, *pPtr - (u1*) clazz->pDvmDex->pDexFile->baseAddr,
         typeIdx, size, annoClass->descriptor);
 
@@ -881,8 +883,8 @@ static ArrayObject* processAnnotationSet(const ClassObject* clazz,
         return NULL;
     }
     for (size_t i = 0; i < dstIndex; ++i) {
-        Object** src = (Object**)(void*) annoArray->contents;
-        dvmSetObjectArrayElement(trimmedArray, i, src[i]);
+        ObjectRef* src = (ObjectRef*)(void*) annoArray->contents;
+        dvmSetObjectArrayElement(trimmedArray, i, dvmRefExpandGlobal(src[i]));
     }
     dvmReleaseTrackedAlloc((Object*) annoArray, NULL);
     return trimmedArray;
@@ -978,7 +980,7 @@ static bool skipAnnotationValue(const ClassObject* clazz, const u1** pPtr)
     valueArg = valueType >> kDexAnnotationValueArgShift;
     width = valueArg + 1;       /* assume */
 
-    ALOGV("----- type is 0x%02x %d, ptr=%p [0x%06x]",
+    ALOGV("----- type is 0x%02x %d, ptr=%p [0x%06"PRIxPTR"]",
         valueType & kDexAnnotationValueTypeMask, valueArg, ptr-1,
         (ptr-1) - (u1*)clazz->pDvmDex->pDexFile->baseAddr);
 
@@ -1121,6 +1123,7 @@ static const u1* searchEncodedAnnotation(const ClassObject* clazz,
     DexFile* pDexFile = clazz->pDvmDex->pDexFile;
     u4 typeIdx, size;
 
+    (void)typeIdx;
     typeIdx = readUleb128(&ptr);
     size = readUleb128(&ptr);
     //printf("#####   searching ptr=%p type=%u size=%u\n", ptr, typeIdx, size);
@@ -1209,7 +1212,7 @@ static ArrayObject* getSignatureValue(const ClassObject* clazz,
             "Signature");
     if (obj == GAV_FAILED)
         return NULL;
-    assert(obj->clazz == gDvm.classJavaLangObjectArray);
+    assert(dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangObjectArray);
 
     return (ArrayObject*)obj;
 }
@@ -1341,8 +1344,8 @@ Object* dvmGetEnclosingMethod(const ClassObject* clazz)
             "EnclosingMethod");
     if (obj == GAV_FAILED)
         return NULL;
-    assert(obj->clazz == gDvm.classJavaLangReflectConstructor ||
-           obj->clazz == gDvm.classJavaLangReflectMethod);
+    assert(dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangReflectConstructor ||
+           dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangReflectMethod);
 
     return obj;
 }
@@ -1508,7 +1511,7 @@ bool dvmGetInnerClass(const ClassObject* clazz, StringObject** pName,
     }
 
     *pName = (StringObject*) avalue.value.l;
-    assert(*pName == NULL || (*pName)->clazz == gDvm.classJavaLangString);
+    assert(*pName == NULL || dvmRefExpandClazzGlobal((*pName)->clazz) == gDvm.classJavaLangString);
 
     ptr = searchEncodedAnnotation(clazz, pAnnoItem->annotation, "accessFlags");
     if (ptr == NULL) {

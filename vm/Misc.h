@@ -297,6 +297,18 @@ extern "C" size_t strlcpy(char *dst, const char *src, size_t size);
 void *dvmAllocRegion(size_t size, int prot, const char *name);
 
 /*
+ * Number of attempts to allocate an aligned heap.
+ */
+#define REFS_ALIGN_RANGE 1024
+
+/*
+ *  Allocates a memory region using ashmem and mmap, initialized to
+ *  zero.  Actual allocation allocated to alignment variable in bits.
+ *  Returns NULL on failure.
+ */
+void *dvmAllocAlignedRegion(size_t byteCount, int prot, const char *name, unsigned int alignment);
+
+/*
  * Get some per-thread stats from /proc/self/task/N/stat.
  */
 struct ProcStatData {

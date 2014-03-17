@@ -188,7 +188,9 @@ LOCAL_SRC_FILES := \
 	reflect/Reflect.cpp \
 	test/AtomicTest.cpp.arm \
 	test/TestHash.cpp \
-	test/TestIndirectRefTable.cpp
+	test/TestIndirectRefTable.cpp \
+	test/TestPlatformInvoke.cpp
+
 
 # TODO: this is the wrong test, but what's the right one?
 ifneq ($(filter arm mips,$(dvm_arch)),)
@@ -260,6 +262,20 @@ ifeq ($(dvm_arch),arm)
 		compiler/codegen/arm/ArmRallocUtil.cpp \
 		compiler/template/out/CompilerTemplateAsm-$(dvm_arch_variant).S
   endif
+endif
+
+ifeq ($(dvm_arch),arm64)
+  $(info TODOArm64: compile Arm64 Dalvik with -Werror)
+  #LOCAL_CFLAGS += -Werror
+  MTERP_ARCH_KNOWN := true
+  LOCAL_SRC_FILES += \
+		arch/aarch64/CallAAPCS64.S \
+		arch/aarch64/HintsAAPCS64.cpp \
+		mterp/out/InterpC-allstubs.cpp
+  WITH_JIT=false
+
+  # No assembler interpreter yet
+  LOCAL_CFLAGS +=-DDVM_NO_ASM_INTERP=1 -ggdb -O2
 endif
 
 ifeq ($(dvm_arch),mips)

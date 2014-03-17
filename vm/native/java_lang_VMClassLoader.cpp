@@ -28,14 +28,14 @@
  *
  * Convert an array of bytes to a Class object.
  */
-static void Dalvik_java_lang_VMClassLoader_defineClass(const u4* args,
+static void Dalvik_java_lang_VMClassLoader_defineClass(const StackSlot* args,
     JValue* pResult)
 {
     Object* loader = (Object*) args[0];
     StringObject* nameObj = (StringObject*) args[1];
     const u1* data = (const u1*) args[2];
-    int offset = args[3];
-    int len = args[4];
+    int offset = (int)args[3];
+    int len = (int)args[4];
     char* name = NULL;
 
     name = dvmCreateCstrFromString(nameObj);
@@ -56,13 +56,13 @@ static void Dalvik_java_lang_VMClassLoader_defineClass(const u4* args,
  * Convert an array of bytes to a Class object. Deprecated version of
  * previous method, lacks name parameter.
  */
-static void Dalvik_java_lang_VMClassLoader_defineClass2(const u4* args,
+static void Dalvik_java_lang_VMClassLoader_defineClass2(const StackSlot* args,
     JValue* pResult)
 {
     Object* loader = (Object*) args[0];
     const u1* data = (const u1*) args[1];
-    int offset = args[2];
-    int len = args[3];
+    int offset = (int)args[2];
+    int len = (int)args[3];
 
     ALOGE("ERROR: defineClass(%p, %p, %d, %d)",
         loader, data, offset, len);
@@ -75,7 +75,7 @@ static void Dalvik_java_lang_VMClassLoader_defineClass2(const u4* args,
 /*
  * static Class findLoadedClass(ClassLoader cl, String name)
  */
-static void Dalvik_java_lang_VMClassLoader_findLoadedClass(const u4* args,
+static void Dalvik_java_lang_VMClassLoader_findLoadedClass(const StackSlot* args,
     JValue* pResult)
 {
     Object* loader = (Object*) args[0];
@@ -114,7 +114,7 @@ bail:
  *
  * Get the number of entries in the boot class path.
  */
-static void Dalvik_java_lang_VMClassLoader_getBootClassPathSize(const u4* args,
+static void Dalvik_java_lang_VMClassLoader_getBootClassPathSize(const StackSlot* args,
     JValue* pResult)
 {
     int count = dvmGetBootPathSize();
@@ -129,11 +129,11 @@ static void Dalvik_java_lang_VMClassLoader_getBootClassPathSize(const u4* args,
  * This mimics the previous VM interface, since we're sharing class libraries.
  */
 static void Dalvik_java_lang_VMClassLoader_getBootClassPathResource(
-    const u4* args, JValue* pResult)
+    const StackSlot* args, JValue* pResult)
 {
     StringObject* nameObj = (StringObject*) args[0];
     StringObject* result;
-    int idx = args[1];
+    int idx = (int)args[1];
     char* name;
 
     name = dvmCreateCstrFromString(nameObj);
@@ -149,10 +149,10 @@ static void Dalvik_java_lang_VMClassLoader_getBootClassPathResource(
 /*
  * static final Class getPrimitiveClass(char prim_type)
  */
-static void Dalvik_java_lang_VMClassLoader_getPrimitiveClass(const u4* args,
+static void Dalvik_java_lang_VMClassLoader_getPrimitiveClass(const StackSlot* args,
     JValue* pResult)
 {
-    int primType = args[0];
+    int primType = (int) args[0];
 
     pResult->l = (Object*)dvmFindPrimitiveClass(primType);
 }
@@ -168,7 +168,7 @@ static void Dalvik_java_lang_VMClassLoader_getPrimitiveClass(const u4* args,
  *
  * "name" is in "binary name" format, e.g. "dalvik.system.Debug$1".
  */
-static void Dalvik_java_lang_VMClassLoader_loadClass(const u4* args,
+static void Dalvik_java_lang_VMClassLoader_loadClass(const StackSlot* args,
     JValue* pResult)
 {
     StringObject* nameObj = (StringObject*) args[0];

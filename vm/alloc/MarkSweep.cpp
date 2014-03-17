@@ -129,7 +129,7 @@ static void markObjectNonNull(const Object *obj, GcMarkContext *ctx,
  */
 static void markObject(const Object *obj, GcMarkContext *ctx)
 {
-    if (obj != NULL) {
+    if (!dvmRefIsNull(obj)) {
         markObjectNonNull(obj, ctx, true);
     }
 }
@@ -146,7 +146,7 @@ static void rootMarkObjectVisitor(void *addr, u4 thread, RootType type,
     assert(arg != NULL);
     Object *obj = *(Object **)addr;
     GcMarkContext *ctx = (GcMarkContext *)arg;
-    if (obj != NULL) {
+    if (!dvmRefIsNull(obj)) {
         markObjectNonNull(obj, ctx, false);
     }
 }
@@ -193,7 +193,7 @@ static void rootReMarkObjectVisitor(void *addr, u4 thread, RootType type,
     assert(arg != NULL);
     Object *obj = *(Object **)addr;
     GcMarkContext *ctx = (GcMarkContext *)arg;
-    if (obj != NULL) {
+    if (!dvmRefIsNull(obj)) {
         markObjectNonNull(obj, ctx, true);
     }
 }
@@ -214,25 +214,26 @@ void dvmHeapReMarkRootSet()
 static void scanFields(const Object *obj, GcMarkContext *ctx)
 {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     assert(ctx != NULL);
-    if (obj->clazz->refOffsets != CLASS_WALK_SUPER) {
-        unsigned int refOffsets = obj->clazz->refOffsets;
+    unsigned int refOffsets = dvmRefExpandClazzGlobal(obj->clazz)->refOffsets;
+    if (refOffsets != CLASS_WALK_SUPER) {
+        //unsigned int refOffsets = obj->clazz->refOffsets;
         while (refOffsets != 0) {
-            size_t rshift = CLZ(refOffsets);
+            size_t rshift = CLZ_U4(refOffsets);
             size_t offset = CLASS_OFFSET_FROM_CLZ(rshift);
             Object *ref = dvmGetFieldObject(obj, offset);
             markObject(ref, ctx);
             refOffsets &= ~(CLASS_HIGH_BIT >> rshift);
         }
     } else {
-        for (ClassObject *clazz = obj->clazz;
-             clazz != NULL;
+        for (ClassObject *clazz = dvmRefExpandClazzGlobal(obj->clazz);
+             !dvmRefIsNull(clazz);
              clazz = clazz->super) {
             InstField *field = clazz->ifields;
             for (int i = 0; i < clazz->ifieldRefCount; ++i, ++field) {
                 void *addr = BYTE_OFFSET(obj, field->byteOffset);
-                Object *ref = ((JValue *)addr)->l;
+                Object *ref = dvmRefExpandGlobal(((JValue *)addr)->hl);
                 markObject(ref, ctx);
             }
         }
@@ -276,7 +277,7 @@ static void scanClassObject(const Object *obj, GcMarkContext *ctx)
     assert(obj != NULL);
     assert(dvmIsClassObject(obj));
     assert(ctx != NULL);
-    markObject((const Object *)obj->clazz, ctx);
+    markObject((const Object *)dvmRefExpandClazzGlobal(obj->clazz), ctx);
     const ClassObject *asClass = (const ClassObject *)obj;
     if (IS_CLASS_FLAG_SET(asClass, CLASS_ISARRAY)) {
         markObject((const Object *)asClass->elementClass, ctx);
@@ -300,14 +301,19 @@ static void scanClassObject(const Object *obj, GcMarkContext *ctx)
 static void scanArrayObject(const Object *obj, GcMarkContext *ctx)
 {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     assert(ctx != NULL);
-    markObject((const Object *)obj->clazz, ctx);
-    if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISOBJECTARRAY)) {
+
+    const ClassObject *expandedClazz = dvmRefExpandClazzGlobal(obj->clazz);
+    markObject((const Object*) expandedClazz, ctx);
+
+    if (IS_CLASS_FLAG_SET(expandedClazz, CLASS_ISOBJECTARRAY)) {
         const ArrayObject *array = (const ArrayObject *)obj;
-        const Object **contents = (const Object **)(void *)array->contents;
+
+        const ObjectRef *contents = (const ObjectRef*)(void *)array->contents;
+
         for (size_t i = 0; i < array->length; ++i) {
-            markObject(contents[i], ctx);
+            markObject(dvmRefExpandGlobal(contents[i]), ctx);
         }
     }
 }
@@ -321,7 +327,7 @@ static int referenceClassFlags(const Object *obj)
                 CLASS_ISWEAKREFERENCE |
                 CLASS_ISFINALIZERREFERENCE |
                 CLASS_ISPHANTOMREFERENCE;
-    return GET_CLASS_FLAG_GROUP(obj->clazz, flags);
+    return GET_CLASS_FLAG_GROUP(dvmRefExpandClazzGlobal(obj->clazz), flags);
 }
 
 /*
@@ -405,15 +411,16 @@ static Object *dequeuePendingReference(Object **list)
 static void delayReferenceReferent(Object *obj, GcMarkContext *ctx)
 {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    assert(IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISREFERENCE));
+    assert(obj->clazz != NULLREF);
+    assert(IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISREFERENCE));
     assert(ctx != NULL);
     GcHeap *gcHeap = gDvm.gcHeap;
     size_t pendingNextOffset = gDvm.offJavaLangRefReference_pendingNext;
     size_t referentOffset = gDvm.offJavaLangRefReference_referent;
     Object *pending = dvmGetFieldObject(obj, pendingNextOffset);
     Object *referent = dvmGetFieldObject(obj, referentOffset);
-    if (pending == NULL && referent != NULL && !isMarked(referent, ctx)) {
+
+    if (dvmRefIsNull(pending) && !dvmRefIsNull(referent) && !isMarked(referent, ctx)) {
         Object **list = NULL;
         if (isSoftReference(obj)) {
             list = &gcHeap->softReferences;
@@ -435,11 +442,11 @@ static void delayReferenceReferent(Object *obj, GcMarkContext *ctx)
 static void scanDataObject(const Object *obj, GcMarkContext *ctx)
 {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
+    assert(obj->clazz != NULLREF);
     assert(ctx != NULL);
-    markObject((const Object *)obj->clazz, ctx);
+    markObject((const Object *)dvmRefExpandClazzGlobal(obj->clazz), ctx);
     scanFields(obj, ctx);
-    if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISREFERENCE)) {
+    if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISREFERENCE)) {
         delayReferenceReferent((Object *)obj, ctx);
     }
 }
@@ -451,10 +458,10 @@ static void scanDataObject(const Object *obj, GcMarkContext *ctx)
 static void scanObject(const Object *obj, GcMarkContext *ctx)
 {
     assert(obj != NULL);
-    assert(obj->clazz != NULL);
-    if (obj->clazz == gDvm.classJavaLangClass) {
+    assert(obj->clazz != NULLREF);
+    if (dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangClass) {
         scanClassObject(obj, ctx);
-    } else if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISARRAY)) {
+    } else if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISARRAY)) {
         scanArrayObject(obj, ctx);
     } else {
         scanDataObject(obj, ctx);
@@ -480,13 +487,13 @@ static void processMarkStack(GcMarkContext *ctx)
 static size_t objectSize(const Object *obj)
 {
     assert(dvmIsValidObject(obj));
-    assert(dvmIsValidObject((Object *)obj->clazz));
-    if (IS_CLASS_FLAG_SET(obj->clazz, CLASS_ISARRAY)) {
+    assert(dvmIsValidObject( (Object *) dvmRefExpandClazzGlobal(obj->clazz)) );
+    if (IS_CLASS_FLAG_SET(dvmRefExpandClazzGlobal(obj->clazz), CLASS_ISARRAY)) {
         return dvmArrayObjectSize((ArrayObject *)obj);
-    } else if (obj->clazz == gDvm.classJavaLangClass) {
+    } else if (dvmRefExpandClazzGlobal(obj->clazz) == gDvm.classJavaLangClass) {
         return dvmClassObjectSize((ClassObject *)obj);
     } else {
-        return obj->clazz->objectSize;
+        return dvmRefExpandClazzGlobal(obj->clazz)->objectSize;
     }
 }
 
