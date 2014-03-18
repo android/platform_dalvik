@@ -69,7 +69,7 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
     private final int paramRangeEnd;
 
     /** set of rop registers reserved for parameters or local variables */
-    private final BitSet reservedRopRegs;
+    private BitSet reservedRopRegs;
 
     /** set of rop registers that have been used by anything */
     private final BitSet usedRopRegs;
@@ -448,7 +448,9 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
      */
     private void handleInvokeRangeInsns() {
         for (NormalSsaInsn insn : invokeRangeInsns) {
+            BitSet old_reserved_rop_regs = (BitSet)reservedRopRegs.clone();
             adjustAndMapSourceRangeRange(insn);
+            reservedRopRegs = old_reserved_rop_regs;
         }
     }
 
