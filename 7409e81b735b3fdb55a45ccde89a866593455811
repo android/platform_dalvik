@@ -22,6 +22,30 @@
       "revId": "7409e81b735b3fdb55a45ccde89a866593455811",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cefcdff_b9ea235a",
+        "filename": "dx/src/com/android/dx/ssa/back/FirstFitLocalCombiningAllocator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-03-19T17:23:09Z",
+      "side": 1,
+      "message": "It wasn\u0027t clear to me that that wouldn\u0027t lead to all the moves in an invoke-range all using the same target register. I\u0027m happy to pass ownership of this patch off, I just uploaded as a proof-of-concept.",
+      "parentUuid": "3cd4752d_e5dda086",
+      "range": {
+        "startLine": 451,
+        "startChar": 12,
+        "endLine": 453,
+        "endChar": 52
+      },
+      "revId": "7409e81b735b3fdb55a45ccde89a866593455811",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
