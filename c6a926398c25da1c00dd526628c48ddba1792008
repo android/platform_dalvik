@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cf3951c_8474ea10",
+        "filename": "vm/dalvik",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2014-03-24T17:21:39Z",
+      "side": 0,
+      "message": "the exec was to make sure that the script returned the exit code of dalvikvm. now you need to preserve $? and exit $? at the end.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 4
+      },
+      "revId": "c6a926398c25da1c00dd526628c48ddba1792008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
