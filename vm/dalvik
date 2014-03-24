@@ -26,19 +26,20 @@ function follow_links() {
 PROG_NAME="$(follow_links "$BASH_SOURCE")"
 PROG_DIR="$(cd "${PROG_NAME%/*}" ; pwd -P)"
 ANDROID_BUILD_TOP="$(cd "${PROG_DIR}/../../../../" ; pwd -P)/"
+ANDROID_DATA=$PWD/android-data$$
 
-mkdir -p /tmp/android-data/dalvik-cache
+mkdir -p $ANDROID_DATA/dalvik-cache
 ANDROID_PRINTF_LOG=tag \
 ANDROID_LOG_TAGS="" \
-ANDROID_DATA=/tmp/android-data \
+ANDROID_DATA=$ANDROID_DATA \
 ANDROID_ROOT=$ANDROID_BUILD_TOP/out/host/linux-x86 \
 LD_LIBRARY_PATH=$ANDROID_BUILD_TOP/out/host/linux-x86/lib \
-exec $ANDROID_BUILD_TOP/out/host/linux-x86/bin/dalvikvm \
+$ANDROID_BUILD_TOP/out/host/linux-x86/bin/dalvikvm \
 -Xbootclasspath\
 :$ANDROID_BUILD_TOP/out/host/linux-x86/framework/core-hostdex.jar\
 :$ANDROID_BUILD_TOP/out/host/linux-x86/framework/conscrypt-hostdex.jar\
 :$ANDROID_BUILD_TOP/out/host/linux-x86/framework/okhttp-hostdex.jar\
 :$ANDROID_BUILD_TOP/out/host/linux-x86/framework/bouncycastle-hostdex.jar\
 :$ANDROID_BUILD_TOP/out/host/linux-x86/framework/apache-xml-hostdex.jar \
-$*
+$*; rm -rf $ANDROID_DATA
 
