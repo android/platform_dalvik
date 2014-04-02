@@ -22,6 +22,30 @@
       "revId": "c6a926398c25da1c00dd526628c48ddba1792008",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "99bf338c_8cfd471e",
+        "filename": "vm/dalvik",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2014-04-02T08:56:01Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3cf3951c_8474ea10",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 4
+      },
+      "revId": "c6a926398c25da1c00dd526628c48ddba1792008",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
