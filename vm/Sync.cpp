@@ -550,9 +550,10 @@ static void absoluteTime(s8 msec, s4 nsec, struct timespec *ts)
 {
     s8 endSec;
 
+    // Clock used here must be consistent with clock specified in dvmInitCondForTimedWaiting
 #ifdef HAVE_POSIX_CLOCKS
     clock_gettime(CLOCK_MONOTONIC, ts);
-#else
+#else // MacOS doesn't support CLOCK_MONOTONIC or pthread_condattr_setclock
     {
         struct timeval tv;
         gettimeofday(&tv, NULL);
@@ -573,6 +574,19 @@ static void absoluteTime(s8 msec, s4 nsec, struct timespec *ts)
         ts->tv_sec++;
         ts->tv_nsec -= 1000000000L;
     }
+}
+
+void dvmInitCondForTimedWaiting(pthread_cond_t* cond)
+{
+    // Must be consistent with clock specified in absoluteTime
+#ifdef HAVE_POSIX_CLOCKS
+    pthread_condattr_t condAttr;
+    pthread_condattr_init(&condAttr);
+    pthread_condattr_setclock(&condAttr, CLOCK_MONOTONIC);
+    pthread_cond_init(cond, &condAttr);
+#else // MacOS doesn't support CLOCK_MONOTONIC or pthread_condattr_setclock
+    pthread_cond_init(cond, NULL);
+#endif
 }
 
 int dvmRelativeCondWait(pthread_cond_t* cond, pthread_mutex_t* mutex,
@@ -640,6 +654,7 @@ static void waitMonitor(Thread* self, Monitor* mon, s8 msec, s4 nsec,
     if (msec == 0 && nsec == 0) {
         timed = false;
     } else {
+        // Calculate absolute time before doing any other work so it is as accurate as possible.
         absoluteTime(msec, nsec, &ts);
         timed = true;
     }
