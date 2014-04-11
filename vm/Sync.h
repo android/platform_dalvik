@@ -142,6 +142,13 @@ Thread* dvmGetObjectLockHolder(Object* obj);
 bool dvmHoldsLock(Thread* thread, Object* obj);
 
 /*
+ * Initialize a pthread_cond_t for timed waiting.
+ *
+ * This must be used for initializing conditional variables that are used by dvmRelativeCondWait.
+ */
+void dvmInitCondForTimedWaiting(pthread_cond_t* cond);
+
+/*
  * Relative timed wait on condition
  */
 int dvmRelativeCondWait(pthread_cond_t* cond, pthread_mutex_t* mutex,
