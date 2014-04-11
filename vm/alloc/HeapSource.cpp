@@ -532,14 +532,7 @@ static void *gcDaemonThread(void* arg)
 static bool gcDaemonStartup()
 {
     dvmInitMutex(&gHs->gcThreadMutex);
-#if defined(__APPLE__)
-    pthread_cond_init(&gHs->gcThreadCond, NULL);
-#else
-    pthread_condattr_t condAttr;
-    pthread_condattr_init(&condAttr);
-    pthread_condattr_setclock(&condAttr, CLOCK_MONOTONIC);
-    pthread_cond_init(&gHs->gcThreadCond, &condAttr);
-#endif  // defined(__APPLE__)
+    dvmInitCondForTimedWait(&gHs->gcThreadCond);
     gHs->gcThreadShutdown = false;
     gHs->hasGcThread = dvmCreateInternalThread(&gHs->gcThread, "GC",
                                                gcDaemonThread, NULL);
