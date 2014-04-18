@@ -64,9 +64,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -149,7 +154,7 @@ public class Main {
     };
 
     /** number of errors during processing */
-    private static int errors = 0;
+    private static AtomicInteger errors = new AtomicInteger(0);
 
     /** {@code non-null;} parsed command-line arguments */
     private static Arguments args;
@@ -169,8 +174,11 @@ public class Main {
     /** thread pool object used for multi-threaded file processing */
     private static ExecutorService threadPool;
 
+    /** used to handle Errors for multi-threaded file processing */
+    private static List<Future<Void>> parallelProcessorFutures;
+
     /** true if any files are successfully processed */
-    private static boolean anyFilesProcessed;
+    private static volatile boolean anyFilesProcessed;
 
     /** class files older than this must be defined in the target dex file. */
     private static long minimumFileAge = 0;
@@ -209,7 +217,7 @@ public class Main {
      */
     public static int run(Arguments arguments) throws IOException {
         // Reset the error count to start fresh.
-        errors = 0;
+        errors.set(0);
         // empty the list, so that  tools that load dx and keep it around
         // for multiple runs don't reuse older buffers.
         libraryDexBuffers.clear();
@@ -461,6 +469,7 @@ public class Main {
 
         if (args.numThreads > 1) {
             threadPool = Executors.newFixedThreadPool(args.numThreads);
+            parallelProcessorFutures = new ArrayList<Future<Void>>();
         }
 
         try {
@@ -471,9 +480,7 @@ public class Main {
 
                 // forced in main dex
                 for (int i = 0; i < fileNames.length; i++) {
-                    if (processOne(fileNames[i], mainPassFilter)) {
-                        anyFilesProcessed = true;
-                    }
+                    processOne(fileNames[i], mainPassFilter);
                 }
 
                 if (dexOutputArrays.size() > 1) {
@@ -488,16 +495,12 @@ public class Main {
 
                 // remaining files
                 for (int i = 0; i < fileNames.length; i++) {
-                    if (processOne(fileNames[i], new NotFilter(mainPassFilter))) {
-                        anyFilesProcessed = true;
-                    }
+                    processOne(fileNames[i], new NotFilter(mainPassFilter));
                 }
             } else {
                 // without --main-dex-list
                 for (int i = 0; i < fileNames.length; i++) {
-                    if (processOne(fileNames[i], ClassPathOpener.acceptAll)) {
-                        anyFilesProcessed = true;
-                    }
+                    processOne(fileNames[i], ClassPathOpener.acceptAll);
                 }
             }
         } catch (StopProcessing ex) {
@@ -510,15 +513,31 @@ public class Main {
         if (args.numThreads > 1) {
             try {
                 threadPool.shutdown();
-                threadPool.awaitTermination(600L, TimeUnit.SECONDS);
+                if (!threadPool.awaitTermination(600L, TimeUnit.SECONDS)) {
+                    throw new RuntimeException("Timed out waiting for threads.");
+                }
+                for (Future<?> future : parallelProcessorFutures) {
+                    future.get();
+                }
             } catch (InterruptedException ex) {
-                throw new RuntimeException("Timed out waiting for threads.");
+                threadPool.shutdownNow();
+                throw new RuntimeException("A thread has been interrupted.");
+            } catch (ExecutionException e) {
+                Throwable cause = e.getCause();
+                // All Exceptions should have been handled in the ParallelProcessor, only Errors
+                // should remain
+                if (cause instanceof Error) {
+                    throw (Error) e.getCause();
+                } else {
+                    throw new AssertionError(e.getCause());
+                }
             }
         }
 
-        if (errors != 0) {
-            DxConsole.err.println(errors + " error" +
-                    ((errors == 1) ? "" : "s") + "; aborting");
+        int errorNum = errors.get();
+        if (errorNum != 0) {
+            DxConsole.err.println(errorNum + " error" +
+                    ((errorNum == 1) ? "" : "s") + "; aborting");
             return false;
         }
 
@@ -557,21 +576,19 @@ public class Main {
      * be the path of a class file, a jar file, or a directory
      * containing class files.
      * @param filter {@code non-null;} A filter for excluding files.
-     * @return whether any processing actually happened
      */
-    private static boolean processOne(String pathname, FileNameFilter filter) {
+    private static void processOne(String pathname, FileNameFilter filter) {
         ClassPathOpener opener;
 
         opener = new ClassPathOpener(pathname, false, filter,
                 new ClassPathOpener.Consumer() {
+
+            @Override
             public boolean processFileBytes(String name, long lastModified, byte[] bytes) {
-                if (args.numThreads > 1) {
-                    threadPool.execute(new ParallelProcessor(name, lastModified, bytes));
-                    return false;
-                } else {
-                    return Main.processFileBytes(name, lastModified, bytes);
-                }
+                return Main.processFileBytes(name, lastModified, bytes);
             }
+
+            @Override
             public void onException(Exception ex) {
                 if (ex instanceof StopProcessing) {
                     throw (StopProcessing) ex;
@@ -583,8 +600,10 @@ public class Main {
                     DxConsole.err.println("\nUNEXPECTED TOP-LEVEL EXCEPTION:");
                     ex.printStackTrace(DxConsole.err);
                 }
-                errors++;
+                errors.incrementAndGet();
             }
+
+            @Override
             public void onProcessArchiveStart(File file) {
                 if (args.verbose) {
                     DxConsole.out.println("processing archive " + file +
@@ -593,7 +612,13 @@ public class Main {
             }
         });
 
-        return opener.process();
+        if (args.numThreads > 1) {
+            parallelProcessorFutures.add(threadPool.submit(new ParallelProcessor(opener)));
+        } else {
+            if (opener.process()) {
+                anyFilesProcessed = true;
+            }
+        }
     }
 
     /**
@@ -694,7 +719,7 @@ public class Main {
                 ex.printContext(DxConsole.err);
             }
         }
-        errors++;
+        errors.incrementAndGet();
         return false;
     }
 
@@ -734,7 +759,7 @@ public class Main {
 
         DxConsole.err.println("\ntrouble processing \"" + name + "\":\n\n" +
                 IN_RE_CORE_CLASSES);
-        errors++;
+        errors.incrementAndGet();
         throw new StopProcessing();
     }
 
@@ -1518,34 +1543,21 @@ public class Main {
         }
     }
 
-    /** Runnable helper class to process files in multiple threads */
-    private static class ParallelProcessor implements Runnable {
+    /** Callable helper class to process files in multiple threads */
+    private static class ParallelProcessor implements Callable<Void> {
 
-        String path;
-        long lastModified;
-        byte[] bytes;
+        ClassPathOpener classPathOpener;
 
-        /**
-         * Constructs an instance.
-         *
-         * @param path {@code non-null;} filename of element. May not be a valid
-         * filesystem path.
-         * @param bytes {@code non-null;} file data
-         */
-        private ParallelProcessor(String path, long lastModified, byte bytes[]) {
-            this.path = path;
-            this.lastModified = lastModified;
-            this.bytes = bytes;
+        private ParallelProcessor(ClassPathOpener classPathOpener) {
+            this.classPathOpener = classPathOpener;
         }
 
-        /**
-         * Task run by each thread in the thread pool. Runs processFileBytes
-         * with the given path and bytes.
-         */
-        public void run() {
-            if (Main.processFileBytes(path, lastModified, bytes)) {
+        @Override
+        public Void call() throws Exception {
+            if (classPathOpener.process()) {
                 anyFilesProcessed = true;
             }
+            return null;
         }
     }
 }
