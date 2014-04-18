@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a51a0b65_5675b24d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-04-18T17:07:51Z",
+      "side": 1,
+      "message": "as",
+      "range": {
+        "startLine": 13,
+        "startChar": 63,
+        "endLine": 13,
+        "endChar": 67
+      },
+      "revId": "004dff534b400a507a6a3bbb597ca0295656f7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "250ffb25_da0441e3",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-04-18T17:07:51Z",
+      "side": 1,
+      "message": "volatile ?",
+      "range": {
+        "startLine": 174,
+        "startChar": 18,
+        "endLine": 174,
+        "endChar": 19
+      },
+      "revId": "004dff534b400a507a6a3bbb597ca0295656f7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "250ffb25_fa0705e5",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-04-18T17:07:51Z",
+      "side": 1,
+      "message": "I\u0027m sorry I didn\u0027t thought about it before, but you can not do that here, this would kill any other tools that would try to execute dx in the same VM. The SDK coul be one of those tools.",
+      "range": {
+        "startLine": 478,
+        "startChar": 35,
+        "endLine": 478,
+        "endChar": 39
+      },
+      "revId": "004dff534b400a507a6a3bbb597ca0295656f7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
