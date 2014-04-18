@@ -66,6 +66,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -460,7 +461,28 @@ public class Main {
         String[] fileNames = args.fileNames;
 
         if (args.numThreads > 1) {
-            threadPool = Executors.newFixedThreadPool(args.numThreads);
+            ThreadFactory threadFactory = new ThreadFactory() {
+
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread t = new Thread(r);
+                    t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+
+                        @Override
+                        public void uncaughtException(Thread t, Throwable e) {
+                            // Exceptions have already been caught, only the other Throwables remain
+                            System.err.println("\nUNEXPECTED TOP-LEVEL ERROR:");
+                            e.printStackTrace();
+                            // return the same error code as for Throwables in
+                            // com.android.dx.command.Main
+                            System.exit(3);
+                        }
+                    });
+                    return t;
+                }
+            };
+
+            threadPool = Executors.newFixedThreadPool(args.numThreads, threadFactory);
         }
 
         try {
@@ -471,9 +493,7 @@ public class Main {
 
                 // forced in main dex
                 for (int i = 0; i < fileNames.length; i++) {
-                    if (processOne(fileNames[i], mainPassFilter)) {
-                        anyFilesProcessed = true;
-                    }
+                    processOne(fileNames[i], mainPassFilter);
                 }
 
                 if (dexOutputArrays.size() > 1) {
@@ -488,16 +508,12 @@ public class Main {
 
                 // remaining files
                 for (int i = 0; i < fileNames.length; i++) {
-                    if (processOne(fileNames[i], new NotFilter(mainPassFilter))) {
-                        anyFilesProcessed = true;
-                    }
+                    processOne(fileNames[i], new NotFilter(mainPassFilter));
                 }
             } else {
                 // without --main-dex-list
                 for (int i = 0; i < fileNames.length; i++) {
-                    if (processOne(fileNames[i], ClassPathOpener.acceptAll)) {
-                        anyFilesProcessed = true;
-                    }
+                    processOne(fileNames[i], ClassPathOpener.acceptAll);
                 }
             }
         } catch (StopProcessing ex) {
@@ -557,21 +573,19 @@ public class Main {
      * be the path of a class file, a jar file, or a directory
      * containing class files.
      * @param filter {@code non-null;} A filter for excluding files.
-     * @return whether any processing actually happened
      */
-    private static boolean processOne(String pathname, FileNameFilter filter) {
+    private static void processOne(String pathname, FileNameFilter filter) {
         ClassPathOpener opener;
 
         opener = new ClassPathOpener(pathname, false, filter,
                 new ClassPathOpener.Consumer() {
+
+            @Override
             public boolean processFileBytes(String name, long lastModified, byte[] bytes) {
-                if (args.numThreads > 1) {
-                    threadPool.execute(new ParallelProcessor(name, lastModified, bytes));
-                    return false;
-                } else {
-                    return Main.processFileBytes(name, lastModified, bytes);
-                }
+                return Main.processFileBytes(name, lastModified, bytes);
             }
+
+            @Override
             public void onException(Exception ex) {
                 if (ex instanceof StopProcessing) {
                     throw (StopProcessing) ex;
@@ -585,6 +599,8 @@ public class Main {
                 }
                 errors++;
             }
+
+            @Override
             public void onProcessArchiveStart(File file) {
                 if (args.verbose) {
                     DxConsole.out.println("processing archive " + file +
@@ -593,7 +609,13 @@ public class Main {
             }
         });
 
-        return opener.process();
+        if (args.numThreads > 1) {
+            threadPool.execute(new ParallelProcessor(opener));
+        } else {
+            if (opener.process()) {
+                anyFilesProcessed = true;
+            }
+        }
     }
 
     /**
@@ -1521,31 +1543,17 @@ public class Main {
     /** Runnable helper class to process files in multiple threads */
     private static class ParallelProcessor implements Runnable {
 
-        String path;
-        long lastModified;
-        byte[] bytes;
+        ClassPathOpener classPathOpener;
 
-        /**
-         * Constructs an instance.
-         *
-         * @param path {@code non-null;} filename of element. May not be a valid
-         * filesystem path.
-         * @param bytes {@code non-null;} file data
-         */
-        private ParallelProcessor(String path, long lastModified, byte bytes[]) {
-            this.path = path;
-            this.lastModified = lastModified;
-            this.bytes = bytes;
+        private ParallelProcessor(ClassPathOpener classPathOpener) {
+            this.classPathOpener = classPathOpener;
         }
 
-        /**
-         * Task run by each thread in the thread pool. Runs processFileBytes
-         * with the given path and bytes.
-         */
+        @Override
         public void run() {
-            if (Main.processFileBytes(path, lastModified, bytes)) {
-                anyFilesProcessed = true;
-            }
+          if (classPathOpener.process()) {
+            anyFilesProcessed = true;
+          }
         }
     }
 }
