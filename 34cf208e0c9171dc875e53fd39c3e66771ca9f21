@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25b37bfb_fa088545",
+        "filename": "vm/Sync.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-04-24T14:11:35Z",
+      "side": 1,
+      "message": "Style nit :  Please move this comment to the next line. The only comments allowed in \"#else\" or \"#endif\" lines are the condition of the attached if. For eg,\n\n  #ifdef HAVE_POSIX_CLOCKS\n  ...\n  ... \n  #endif  // HAVE_POSIX_CLOCKS",
+      "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45aeaf94_1859c570",
+        "filename": "vm/Sync.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-04-24T14:11:35Z",
+      "side": 1,
+      "message": "Same as the above.",
+      "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05c83774_f6cee0e7",
+        "filename": "vm/Sync.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-04-24T14:11:35Z",
+      "side": 1,
+      "message": "This should probably be named dvmInitCondForTimedWait( ); It\u0027s closer to the usuall C style naming.",
+      "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
