@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "45aeaf94_9bea2f12",
+        "filename": "vm/Sync.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1039338
+      },
+      "writtenOn": "2014-04-24T14:41:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25b37bfb_fa088545",
+      "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45aeaf94_1859c570",
         "filename": "vm/Sync.cpp",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "05c83774_b682a873",
+        "filename": "vm/Sync.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1039338
+      },
+      "writtenOn": "2014-04-24T14:41:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45aeaf94_1859c570",
+      "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05c83774_f6cee0e7",
         "filename": "vm/Sync.h",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2014-04-24T14:11:35Z",
       "side": 1,
       "message": "This should probably be named dvmInitCondForTimedWait( ); It\u0027s closer to the usuall C style naming.",
+      "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45aeaf94_bbe7f348",
+        "filename": "vm/Sync.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1039338
+      },
+      "writtenOn": "2014-04-24T14:41:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05c83774_f6cee0e7",
       "revId": "34cf208e0c9171dc875e53fd39c3e66771ca9f21",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
