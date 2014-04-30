@@ -32,6 +32,8 @@
 
 #include <cutils/open_memstream.h>
 
+#include "ReportBacktrace.h"
+
 static void* signalCatcherThreadStart(void* arg);
 
 /*
@@ -271,6 +273,7 @@ static void* signalCatcherThreadStart(void* arg)
 
     while (true) {
         int rcvd;
+        siginfo_t rsi;
 
         dvmChangeStatus(self, THREAD_VMWAIT);
 
@@ -284,8 +287,8 @@ static void* signalCatcherThreadStart(void* arg)
          * with EINTR (e.g. when other threads exit).
          */
 loop:
-        cc = sigwait(&mask, &rcvd);
-        if (cc != 0) {
+        if ((rcvd = sys_sigwaitinfo(&mask, &rsi)) < 0) {
+            cc = errno;
             if (cc == EINTR) {
                 //ALOGV("sigwait: EINTR");
                 goto loop;
@@ -309,6 +312,9 @@ loop:
             handleSigQuit();
             break;
         case SIGUSR1:
+            if (reportBacktrace(&rsi)) {
+                break;
+            }
             handleSigUsr1();
             break;
 #if defined(WITH_JIT) && defined(WITH_JIT_TUNING)

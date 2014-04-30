@@ -112,6 +112,7 @@ LOCAL_SRC_FILES := \
 	RawDexFile.cpp \
 	ReferenceTable.cpp \
 	SignalCatcher.cpp \
+	ReportBacktrace.cpp \
 	StdioConverter.cpp \
 	Sync.cpp \
 	Thread.cpp \
