@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa1ad864_764d4e81",
+        "filename": "libdex/OptInvocation.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-05-01T16:00:44Z",
+      "side": 1,
+      "message": "isn\u0027t static const char k...[] google3 style ? I assumed we were following that.",
+      "revId": "e4e5d8caab4869eaec8995e8e64e4fa7af914845",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
