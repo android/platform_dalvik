@@ -16,6 +16,24 @@
       "revId": "e4e5d8caab4869eaec8995e8e64e4fa7af914845",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a3f9cb5_c4857ef6",
+        "filename": "libdex/OptInvocation.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-05-01T16:04:44Z",
+      "side": 1,
+      "message": "we don\u0027t do that for kClassesDex or kDacheDirectoryName, there was a lack of consistency. I wasn\u0027t aware of char k..[] being a style thing in dalvik.",
+      "parentUuid": "aa1ad864_764d4e81",
+      "revId": "e4e5d8caab4869eaec8995e8e64e4fa7af914845",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
