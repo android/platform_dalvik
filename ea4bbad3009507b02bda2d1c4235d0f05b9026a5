@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2ae0a8ae_52ee126c",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-05-06T17:06:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4adb1c06_564da480",
+      "range": {
+        "startLine": 176,
+        "startChar": 31,
+        "endLine": 176,
+        "endChar": 32
+      },
+      "revId": "ea4bbad3009507b02bda2d1c4235d0f05b9026a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4adb1c06_d612f478",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "aaa49887_661cb0cf",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-05-06T17:06:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4adb1c06_d612f478",
+      "range": {
+        "startLine": 519,
+        "startChar": 44,
+        "endLine": 519,
+        "endChar": 74
+      },
+      "revId": "ea4bbad3009507b02bda2d1c4235d0f05b9026a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aaa49887_c61004e3",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2014-05-06T16:20:29Z",
       "side": 1,
       "message": "IIUC, this must be thread safe here. Think about using AtomicInteger.",
+      "range": {
+        "startLine": 597,
+        "startChar": 16,
+        "endLine": 597,
+        "endChar": 24
+      },
+      "revId": "ea4bbad3009507b02bda2d1c4235d0f05b9026a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aaa49887_06113cb6",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-05-06T17:06:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaa49887_c61004e3",
       "range": {
         "startLine": 597,
         "startChar": 16,
