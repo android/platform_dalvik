@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4adb1c06_564da480",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-05-06T16:20:29Z",
+      "side": 1,
+      "message": "It is not a Future to get something, but a Future which does not return anything, right? If yes, try using Future\u003cVoid\u003e.",
+      "range": {
+        "startLine": 176,
+        "startChar": 31,
+        "endLine": 176,
+        "endChar": 32
+      },
+      "revId": "ea4bbad3009507b02bda2d1c4235d0f05b9026a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4adb1c06_d612f478",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-05-06T16:20:29Z",
+      "side": 1,
+      "message": "Timeout during termination is returned as a boolean by awaitTermination.",
+      "range": {
+        "startLine": 519,
+        "startChar": 44,
+        "endLine": 519,
+        "endChar": 74
+      },
+      "revId": "ea4bbad3009507b02bda2d1c4235d0f05b9026a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aaa49887_c61004e3",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-05-06T16:20:29Z",
+      "side": 1,
+      "message": "IIUC, this must be thread safe here. Think about using AtomicInteger.",
+      "range": {
+        "startLine": 597,
+        "startChar": 16,
+        "endLine": 597,
+        "endChar": 24
+      },
+      "revId": "ea4bbad3009507b02bda2d1c4235d0f05b9026a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
