@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8a81944e_b54b2a6b",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-05-12T15:46:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a862067_34f17e06",
+      "range": {
+        "startLine": 519,
+        "startChar": 1,
+        "endLine": 521,
+        "endChar": 17
+      },
+      "revId": "469c39a3e18a988c2a59237ff63fec000946b1df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a81944e_f25c6860",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 5
@@ -36,6 +60,24 @@
       "writtenOn": "2014-05-12T14:32:59Z",
       "side": 1,
       "message": "I know it\u0027s not the CL for that but shouldn\u0027t we just awaitTermination again untill time runs out?",
+      "revId": "469c39a3e18a988c2a59237ff63fec000946b1df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a81944e_55419e49",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-05-12T15:46:12Z",
+      "side": 1,
+      "message": "We\u0027ll discuss this.",
+      "parentUuid": "8a81944e_f25c6860",
       "revId": "469c39a3e18a988c2a59237ff63fec000946b1df",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
