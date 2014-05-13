@@ -34,6 +34,10 @@ ifneq ($(strip $(LOCAL_CLANG)),true)
 LOCAL_CFLAGS += -fno-align-jumps
 endif
 
+ifeq ($(MALLOC_IMPL),jemalloc)
+LOCAL_CFLAGS += -DUSE_JEMALLOC
+endif
+
 #
 # Optional features.  These may impact the size or performance of the VM.
 #
