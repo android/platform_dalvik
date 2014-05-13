@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a862067_577c443f",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-05-13T13:36:02Z",
+      "side": 1,
+      "message": "Why is it different from the above statement throw new RuntimeException(\"A thread has been interrupted.\")?",
+      "revId": "d7938d20de5f2a395e472c5c5f1c72c9ff98b828",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
