@@ -416,7 +416,9 @@ static void walkHeap(bool merge, bool native)
     ctx.p = ctx.buf;
     ctx.needHeader = true;
     if (native) {
+#ifdef USE_DLMALLOC
         dlmalloc_inspect_all(heap_chunk_callback, (void*)&ctx);
+#endif
     } else {
         dvmHeapSourceWalk(heap_chunk_callback, (void *)&ctx);
     }

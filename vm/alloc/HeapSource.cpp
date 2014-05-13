@@ -1454,9 +1454,11 @@ static void trimHeaps()
     }
 
     /* Same for the native heap. */
-    dlmalloc_trim(0);
     size_t nativeBytes = 0;
+#ifdef USE_DLMALLOC
+    dlmalloc_trim(0);
     dlmalloc_inspect_all(releasePagesInRange, &nativeBytes);
+#endif
 
     LOGD_HEAP("madvised %zd (GC) + %zd (native) = %zd total bytes",
             heapBytes, nativeBytes, heapBytes + nativeBytes);
