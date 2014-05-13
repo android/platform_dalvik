@@ -34,6 +34,24 @@
       "revId": "d7938d20de5f2a395e472c5c5f1c72c9ff98b828",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a81944e_d878650a",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-05-13T15:21:40Z",
+      "side": 1,
+      "message": "Ok. Agree.",
+      "parentUuid": "aa26584d_f9452f7a",
+      "revId": "d7938d20de5f2a395e472c5c5f1c72c9ff98b828",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
