@@ -16,6 +16,24 @@
       "revId": "d7938d20de5f2a395e472c5c5f1c72c9ff98b828",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa26584d_f9452f7a",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-05-13T15:20:13Z",
+      "side": 1,
+      "message": "I\u0027ve added a comment as discussed.",
+      "parentUuid": "6a862067_577c443f",
+      "revId": "d7938d20de5f2a395e472c5c5f1c72c9ff98b828",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
