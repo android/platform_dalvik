@@ -195,6 +195,11 @@ static void Dalvik_dalvik_system_VMRuntime_vmLibrary(const u4* args,
     returnCString(pResult, "libdvm.so");
 }
 
+static void Dalvik_dalvik_system_VMRuntime_isCheckJniEnabled(const u4* args, JValue* pResult)
+{
+    RETURN_BOOLEAN(gDvmJni.useCheckJni);
+}
+
 static void Dalvik_dalvik_system_VMRuntime_setTargetSdkVersionNative(
     const u4* args,
     JValue* pResult)
@@ -584,6 +589,8 @@ const DalvikNativeMethod dvm_dalvik_system_VMRuntime[] = {
         Dalvik_dalvik_system_VMRuntime_vmVersion },
     { "vmLibrary", "()Ljava/lang/String;",
         Dalvik_dalvik_system_VMRuntime_vmLibrary },
+    { "isCheckJniEnabled", "()Z",
+        Dalvik_dalvik_system_VMRuntime_isCheckJniEnabled },
     { "registerNativeAllocation", "(I)V",
         Dalvik_dalvik_system_VMRuntime_registerNativeAllocation },
     { "registerNativeFree", "(I)V",
