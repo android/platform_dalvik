@@ -1,1 +1,0 @@
-    jmp     common_abort

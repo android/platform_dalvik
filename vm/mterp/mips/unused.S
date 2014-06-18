@@ -1,2 +1,0 @@
-    BAL(common_abort)
-

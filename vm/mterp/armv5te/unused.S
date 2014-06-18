@@ -1,1 +1,0 @@
-    bl      common_abort
