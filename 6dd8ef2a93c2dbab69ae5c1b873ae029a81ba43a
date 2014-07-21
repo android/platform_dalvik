@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f95af4db_4ee7c746",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-07-21T10:04:12Z",
+      "side": 1,
+      "message": "nit: renumber?",
+      "revId": "6dd8ef2a93c2dbab69ae5c1b873ae029a81ba43a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
