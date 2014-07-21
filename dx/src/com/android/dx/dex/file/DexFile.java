@@ -323,7 +323,7 @@ public final class DexFile {
      *
      * @return {@code non-null;} the class definitions section
      */
-    /*package*/ ClassDefsSection getClassDefs() {
+    public ClassDefsSection getClassDefs() {
         return classDefs;
     }
 
