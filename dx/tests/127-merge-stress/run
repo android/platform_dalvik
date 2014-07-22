@@ -24,6 +24,16 @@ dexes=`find $ANDROID_BUILD_TOP/out -name '*.dex' -printf '%p '`
 dexesinjars=`find $ANDROID_BUILD_TOP/libcore $ANDROID_BUILD_TOP/out -name '*.jar' -exec sh -c 'unzip -l "{}" 2>/dev/null | grep -q classes.dex ' \; -printf '%p '`
 dexesinapks=`find $ANDROID_BUILD_TOP/libcore $ANDROID_BUILD_TOP/out -name '*.apk' -exec sh -c 'unzip -l "{}" 2>/dev/null | grep -q classes.dex ' \; -printf '%p '`
 
+# Select only the valid dex files
+validdexes=""
+for dex in $dexes $dexesinjars $dexesinapks; do
+  dexdump -c $dex &> /dev/null
+  if [ $? -eq 0 ]; then
+    validdexes="$validdexes $dex"
+  fi
+done 
+
+# Compile and run java merging test
 $JAVAC -cp $dxjar -d . com/android/dx/merge/MergeTest.java
-java -cp .:$dxjar com.android.dx.merge.MergeTest $dexes $dexesinjars $dexesinapks >/dev/null
+java -cp .:$dxjar com.android.dx.merge.MergeTest $validdexes >/dev/null
 
