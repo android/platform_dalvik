@@ -22,6 +22,24 @@
       "revId": "54943b31e1ee39878bbfa69356ba369508f8c271",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d998d0f7_bfed93db",
+        "filename": "dx/tests/127-merge-stress/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-07-23T14:58:49Z",
+      "side": 1,
+      "message": "No, removed.",
+      "parentUuid": "d957f0b2_1ef1fd01",
+      "revId": "54943b31e1ee39878bbfa69356ba369508f8c271",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
