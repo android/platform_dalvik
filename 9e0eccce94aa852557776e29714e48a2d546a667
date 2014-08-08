@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6c4c362_debf3995",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1001414
+      },
+      "writtenOn": "2014-08-08T20:56:33Z",
+      "side": 1,
+      "message": "whitespace here and below.",
+      "range": {
+        "startLine": 1196,
+        "startChar": 0,
+        "endLine": 1196,
+        "endChar": 8
+      },
+      "revId": "9e0eccce94aa852557776e29714e48a2d546a667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
