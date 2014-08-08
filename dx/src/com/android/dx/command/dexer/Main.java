@@ -326,7 +326,7 @@ public class Main {
         assert args.numThreads == 1;
 
         if (args.mainDexListFile != null) {
-            classesInMainDex = loadMainDexListFile(args.mainDexListFile);
+            classesInMainDex = readPathsFromFile(new File(args.mainDexListFile));
         }
 
         if (!processAllFiles()) {
@@ -380,25 +380,22 @@ public class Main {
         }
     }
 
-    private static Set<String> loadMainDexListFile(String mainDexListFile) throws IOException {
-        Set<String> mainDexList = new HashSet<String>();
-        BufferedReader bfr = null;
+    private static Set<String> readPathsFromFile(File file) throws IOException{
+        BufferedReader reader = null;
+        Set<String> lines = new HashSet<String>();
         try {
-            FileReader fr = new FileReader(mainDexListFile);
-            bfr = new BufferedReader(fr);
+            reader = new BufferedReader(new FileReader(file));
+            String line = null;
 
-            String line;
-
-            while (null != (line = bfr.readLine())) {
-                mainDexList.add(fixPath(line));
+            while((line = reader.readLine()) != null){
+                lines.add(fixPath(line));
             }
-
         } finally {
-            if (bfr != null) {
-                bfr.close();
+            if(reader != null){
+                reader.close();
             }
         }
-        return mainDexList;
+        return lines;
     }
 
     /**
@@ -1194,6 +1191,8 @@ public class Main {
 
         private static final String INCREMENTAL_OPTION = "--incremental";
 
+        private static final String INPUT_LIST_OPTION = "--input-list";
+
         /** whether to run in debug mode */
         public boolean debug = false;
 
@@ -1286,6 +1285,9 @@ public class Main {
         /** Produce the smallest possible main dex. Ignored unless multiDex is true and
          * mainDexListFile is specified and non empty. */
         public boolean minimalMainDex = false;
+
+        /** Optional list containing inputs read in from a file. */
+        private Set<String> inputList = null;
 
         private int maxNumberOfIdxPerDex = DexFormat.MAX_MEMBER_IDX + 1;
 
@@ -1488,13 +1490,34 @@ public class Main {
                     minimalMainDex = true;
                 } else if (parser.isArg("--set-max-idx-number=")) { // undocumented test option
                     maxNumberOfIdxPerDex = Integer.parseInt(parser.getLastValue());
-              } else {
+                } else if(parser.isArg(INPUT_LIST_OPTION + "=")){
+                    File inputListFile = new File(parser.getLastValue());
+                    if(!inputListFile.isFile()){
+                        System.err.println(inputListFile.getName() + " does not exist or is a directory");
+                        throw new UsageException();
+                    }
+                    try{
+                        inputList = readPathsFromFile(inputListFile);
+                    } catch(IOException e) {
+                        System.err.println("IO Exception while reading " + inputListFile.getName());
+                        // problem reading the file so we should halt execution
+                        throw new StopProcessing();
+                    }
+                } else {
                     System.err.println("unknown option: " + parser.getCurrent());
                     throw new UsageException();
                 }
             }
 
             fileNames = parser.getRemaining();
+            if(inputList != null && !inputList.isEmpty()){
+                // append the input list to the already existing file names
+                String[] newFileNames = new String[fileNames.length + inputList.size()];
+                System.arraycopy(fileNames, 0, newFileNames, 0, fileNames.length);
+                System.arraycopy(inputList.toArray(new String[inputList.size()]), 0, newFileNames, fileNames.length, inputList.size());
+                fileNames = newFileNames;
+            }
+
             if (fileNames.length == 0) {
                 if (!emptyOk) {
                     System.err.println("no input files specified");
@@ -1544,6 +1567,8 @@ public class Main {
 
             makeOptionsObjects();
         }
+
+        
 
         /**
          * Copies relevent arguments over into CfOptions and

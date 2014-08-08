@@ -35,6 +35,7 @@ public class Main {
         "[--core-library]\n" +
         "  [--num-threads=<n>] [--incremental] [--force-jumbo]\n" +
         "  [--multi-dex [--main-dex-list=<file> [--minimal-main-dex]]\n" +
+        "  [--input-list=<file>]\n" +
         "  [<file>.class | <file>.{zip,jar,apk} | <directory>] ...\n" +
         "    Convert a set of classfiles into a dex file, optionally " +
         "embedded in a\n" +
@@ -52,6 +53,8 @@ public class Main {
         "    --minimal-main-dex: only classes selected by --main-dex-list are " +
         "to be put in\n" +
         "    the main dex.\n" +
+        "    --input-list: <file> is a list of inputs.\n" +
+        "    Each line in <file> must end with one of: .class .jar .zip .apk or be a directory.\n" +
         "  dx --annotool --annotation=<class> [--element=<element types>]\n" +
         "  [--print=<print types>]\n" +
         "  dx --dump [--debug] [--strict] [--bytes] [--optimize]\n" +
