@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "769e136e_f497b668",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2014-08-08T21:46:20Z",
+      "side": 1,
+      "message": "no trailing whitespace here",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "9e0eccce94aa852557776e29714e48a2d546a667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "769e136e_141a7a60",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2014-08-08T21:46:20Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 60
+      },
+      "revId": "9e0eccce94aa852557776e29714e48a2d546a667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6c4c362_debf3995",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
