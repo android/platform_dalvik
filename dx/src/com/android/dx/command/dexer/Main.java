@@ -326,7 +326,7 @@ public class Main {
         assert args.numThreads == 1;
 
         if (args.mainDexListFile != null) {
-            classesInMainDex = loadMainDexListFile(args.mainDexListFile);
+            classesInMainDex = readPathsFromFile(args.mainDexListFile);
         }
 
         if (!processAllFiles()) {
@@ -380,17 +380,17 @@ public class Main {
         }
     }
 
-    private static Set<String> loadMainDexListFile(String mainDexListFile) throws IOException {
-        Set<String> mainDexList = new HashSet<String>();
+    private static Set<String> readPathsFromFile(String fileName) throws IOException {
+        Set<String> paths = new HashSet<String>();
         BufferedReader bfr = null;
         try {
-            FileReader fr = new FileReader(mainDexListFile);
+            FileReader fr = new FileReader(fileName);
             bfr = new BufferedReader(fr);
 
             String line;
 
             while (null != (line = bfr.readLine())) {
-                mainDexList.add(fixPath(line));
+                paths.add(fixPath(line));
             }
 
         } finally {
@@ -398,7 +398,7 @@ public class Main {
                 bfr.close();
             }
         }
-        return mainDexList;
+        return paths;
     }
 
     /**
@@ -1194,6 +1194,8 @@ public class Main {
 
         private static final String INCREMENTAL_OPTION = "--incremental";
 
+        private static final String INPUT_LIST_OPTION = "--input-list";
+
         /** whether to run in debug mode */
         public boolean debug = false;
 
@@ -1286,6 +1288,9 @@ public class Main {
         /** Produce the smallest possible main dex. Ignored unless multiDex is true and
          * mainDexListFile is specified and non empty. */
         public boolean minimalMainDex = false;
+
+        /** Optional list containing inputs read in from a file. */
+        private Set<String> inputList = null;
 
         private int maxNumberOfIdxPerDex = DexFormat.MAX_MEMBER_IDX + 1;
 
@@ -1488,13 +1493,28 @@ public class Main {
                     minimalMainDex = true;
                 } else if (parser.isArg("--set-max-idx-number=")) { // undocumented test option
                     maxNumberOfIdxPerDex = Integer.parseInt(parser.getLastValue());
-              } else {
+                } else if(parser.isArg(INPUT_LIST_OPTION + "=")) {
+                    File inputListFile = new File(parser.getLastValue());
+                    try{
+                        inputList = readPathsFromFile(inputListFile.getAbsolutePath());
+                    } catch(IOException e) {
+                        System.err.println("Unable to read input list file: " + inputListFile.getName());
+                        // problem reading the file so we should halt execution
+                        throw new UsageException();
+                    }
+                } else {
                     System.err.println("unknown option: " + parser.getCurrent());
                     throw new UsageException();
                 }
             }
 
             fileNames = parser.getRemaining();
+            if(inputList != null && !inputList.isEmpty()) {
+                // append the file names to the end of the input list
+                inputList.addAll(Arrays.asList(fileNames));
+                fileNames = inputList.toArray(new String[inputList.size()]);
+            }
+
             if (fileNames.length == 0) {
                 if (!emptyOk) {
                     System.err.println("no input files specified");
