@@ -1193,6 +1193,8 @@ public class Main {
         private static final String NUM_THREADS_OPTION = "--num-threads";
 
         private static final String INCREMENTAL_OPTION = "--incremental";
+        
+        private static final String INPUT_LIST_OPTION = "--input-list";
 
         /** whether to run in debug mode */
         public boolean debug = false;
@@ -1286,6 +1288,8 @@ public class Main {
         /** Produce the smallest possible main dex. Ignored unless multiDex is true and
          * mainDexListFile is specified and non empty. */
         public boolean minimalMainDex = false;
+        
+        private List<String> inputList = null;
 
         private int maxNumberOfIdxPerDex = DexFormat.MAX_MEMBER_IDX + 1;
 
@@ -1488,13 +1492,34 @@ public class Main {
                     minimalMainDex = true;
                 } else if (parser.isArg("--set-max-idx-number=")) { // undocumented test option
                     maxNumberOfIdxPerDex = Integer.parseInt(parser.getLastValue());
-              } else {
+                } else if(parser.isArg(INPUT_LIST_OPTION + "=")){
+                    File inputListFile = new File(parser.getLastValue());
+                    if(!inputListFile.isFile()){
+                        System.err.println(inputListFile.getName() + " does not exist or is a directory");
+                        throw new UsageException();
+                    }
+                    try{
+                        inputList = readLines(inputListFile);
+                    } catch(IOException e) {
+                        System.err.println("IO Exception while reading " + inputListFile.getName());
+                        // problem reading the file so we should halt execution
+                        throw new StopProcessing();
+                    }
+                } else {
                     System.err.println("unknown option: " + parser.getCurrent());
                     throw new UsageException();
                 }
             }
 
             fileNames = parser.getRemaining();
+            if(inputList != null && !inputList.isEmpty()){
+                // append the library list to the already existing file names
+                String[] newFileNames = new String[fileNames.length + inputList.size()];
+                System.arraycopy(fileNames, 0, newFileNames, 0, fileNames.length);
+                System.arraycopy(inputList.toArray(new String[inputList.size()]), 0, newFileNames, fileNames.length, inputList.size());
+                fileNames = newFileNames;
+            }
+            
             if (fileNames.length == 0) {
                 if (!emptyOk) {
                     System.err.println("no input files specified");
@@ -1543,6 +1568,23 @@ public class Main {
             }
 
             makeOptionsObjects();
+        }
+        
+        private List<String> readLines(File file) throws IOException{
+            BufferedReader reader = null;
+            List<String> lines = new ArrayList<String>();
+            try {
+                reader = new BufferedReader(new FileReader(file));
+                String line = null;
+                while((line = reader.readLine()) != null){
+                    lines.add(line);
+                }
+            } finally {
+                if(reader != null){
+                    reader.close();
+                }
+            }
+            return lines;
         }
 
         /**
