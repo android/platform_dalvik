@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6e5ebf4_9518340e",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2014-08-09T07:24:49Z",
+      "side": 1,
+      "message": "Why did you change the implementation of this function (and not just its name) ?. I don\u0027t see any functional changes but I do see a bunch of style guide violations :(\n\nhttps://source.android.com/source/code-style.html",
+      "revId": "af4c6c1207f2985e5020c3eeb35ab30841361df7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
