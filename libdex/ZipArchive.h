@@ -20,6 +20,7 @@
 #ifndef LIBDEX_ZIPARCHIVE_H_
 #define LIBDEX_ZIPARCHIVE_H_
 
+#include <string.h>
 #include <ziparchive/zip_archive.h>
 
 #include "SysUtil.h"
@@ -70,7 +71,13 @@ DEX_INLINE int dexZipGetArchiveFd(const ZipArchiveHandle pArchive) {
  */
 DEX_INLINE int  dexZipFindEntry(const ZipArchiveHandle pArchive,
     const char* entryName, ZipEntry* data) {
-    return FindEntry(pArchive, entryName, data);
+    if (entryName == NULL) {
+      return NULL;
+    }
+    ZipEntryName entry_name;
+    entry_name.name = reinterpret_cast<const uint8_t*>(entryName);
+    entry_name.name_length = strlen(entryName);
+    return FindEntry(pArchive, entry_name, data);
 }
 
 /*
