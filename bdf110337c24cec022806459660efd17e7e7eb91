@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5602efbb_5bb2b7e7",
+        "filename": "libdex/ZipArchive.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2014-08-15T16:10:29Z",
+      "side": 1,
+      "message": "is that actually allowed? or should that crash? afaics, this is only ever supplied the constant \"classes.dex\".",
+      "revId": "bdf110337c24cec022806459660efd17e7e7eb91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
