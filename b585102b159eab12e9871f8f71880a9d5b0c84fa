@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3043104_d0330c27",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-08-20T17:07:56Z",
+      "side": 1,
+      "message": "nit: this line is too long.",
+      "revId": "b585102b159eab12e9871f8f71880a9d5b0c84fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
