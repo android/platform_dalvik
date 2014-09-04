@@ -940,7 +940,7 @@ import java.util.ArrayList;
                 // NOTE: This is a slow O(n) loop, and can be replaced with a
                 // faster implementation (at the cost of higher memory usage)
                 // if it proves to be a hot area of code.
-                if (ref.getDefiningClass() == method.getDefiningClass()) {
+                if (ref.getDefiningClass().equals(method.getDefiningClass())) {
                     for (int i = 0; i < methods.size(); ++i) {
                         final Method m = methods.get(i);
                         if (AccessFlags.isPrivate(m.getAccessFlags()) &&
@@ -960,7 +960,7 @@ import java.util.ArrayList;
                  */
                 CstMethodRef ref = (CstMethodRef) cst;
                 if (ref.isInstanceInit() ||
-                    (ref.getDefiningClass() == method.getDefiningClass()) ||
+                    (ref.getDefiningClass().equals(method.getDefiningClass())) ||
                     !method.getAccSuper()) {
                     return RegOps.INVOKE_DIRECT;
                 }
