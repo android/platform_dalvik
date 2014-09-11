@@ -16,7 +16,7 @@
 
 # We compile for a 1.4 target to suppress the use of EnclosingMethod
 # attributes.
-${JAVAC} -source 1.4 -target 1.4 -d . Blort.java
+${JAVAC} -source 1.4 -target 1.4 -d . Blort.java &> /dev/null
 
 # We expect there to be two warning lines, one for each of the inner classes.
 dx --debug --dex *.class 2>&1 | awk '/^warning:/ { print $1 }'
