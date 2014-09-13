@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "709e1b6e_7d27223c",
+        "filename": "dexdump/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-09-13T08:05:24Z",
+      "side": 1,
+      "message": "\\n ?",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 57
+      },
+      "revId": "205a1848975c3f68cdbd45bab6ea98661b6cdb68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0933369_3a503d1d",
+        "filename": "dexdump/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-09-13T08:05:24Z",
+      "side": 1,
+      "message": "\\n ?",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 57
+      },
+      "revId": "205a1848975c3f68cdbd45bab6ea98661b6cdb68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "709e1b6e_dd3d6e46",
+        "filename": "dexdump/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-09-13T08:05:24Z",
+      "side": 1,
+      "message": "TODO: fix/delete/.. - bug.. ?",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "205a1848975c3f68cdbd45bab6ea98661b6cdb68",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
