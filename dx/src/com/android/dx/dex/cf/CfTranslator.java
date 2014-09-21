@@ -84,13 +84,14 @@ public class CfTranslator {
      * @param bytes {@code non-null;} contents of the file
      * @param cfOptions options for class translation
      * @param dexOptions options for dex output
+     * @param optimizerOptions options for the optimizer
      * @param dexFile {@code non-null;} dex output
      * @return {@code non-null;} the translated class
      */
     public static ClassDefItem translate(DirectClassFile cf, byte[] bytes,
-            CfOptions cfOptions, DexOptions dexOptions, DexFile dexFile) {
+            CfOptions cfOptions, DexOptions dexOptions, OptimizerOptions optimizerOptions, DexFile dexFile) {
         try {
-            return translate0(cf, bytes, cfOptions, dexOptions, dexFile);
+            return translate0(cf, bytes, cfOptions, dexOptions, optimizerOptions, dexFile);
         } catch (RuntimeException ex) {
             String msg = "...while processing " + cf.getFilePath();
             throw ExceptionWithContext.withContext(ex, msg);
@@ -106,13 +107,14 @@ public class CfTranslator {
      * @param bytes {@code non-null;} contents of the file
      * @param cfOptions options for class translation
      * @param dexOptions options for dex output
+     * @param optimizerOptions options for the optimizer
      * @param dexFile {@code non-null;} dex output
      * @return {@code non-null;} the translated class
      */
-    private static ClassDefItem translate0(DirectClassFile cf, byte[] bytes,
-            CfOptions cfOptions, DexOptions dexOptions, DexFile dexFile) {
+    private static ClassDefItem translate0(DirectClassFile cf, byte[] bytes, CfOptions cfOptions,
+        DexOptions dexOptions, OptimizerOptions optimizerOptions, DexFile dexFile) {
 
-        OptimizerOptions.loadOptimizeLists(cfOptions.optimizeListFile,
+        optimizerOptions.loadOptimizeLists(cfOptions.optimizeListFile,
                 cfOptions.dontOptimizeListFile);
 
         // Build up a class to output.
@@ -134,7 +136,7 @@ public class CfTranslator {
         FieldIdsSection fieldIdsSection = dexFile.getFieldIds();
         MethodIdsSection methodIdsSection = dexFile.getMethodIds();
         processFields(cf, out, dexFile);
-        processMethods(cf, cfOptions, dexOptions, out, dexFile);
+        processMethods(cf, cfOptions, dexOptions, out, optimizerOptions, dexFile);
 
         // intern constant pool method, field and type references
         ConstantPool constantPool = cf.getConstantPool();
@@ -238,15 +240,15 @@ public class CfTranslator {
 
     /**
      * Processes the methods of the given class.
-     *
-     * @param cf {@code non-null;} class being translated
+     *  @param cf {@code non-null;} class being translated
      * @param cfOptions {@code non-null;} options for class translation
      * @param dexOptions {@code non-null;} options for dex output
      * @param out {@code non-null;} output class
      * @param dexFile {@code non-null;} dex output
      */
     private static void processMethods(DirectClassFile cf, CfOptions cfOptions,
-            DexOptions dexOptions, ClassDefItem out, DexFile dexFile) {
+        DexOptions dexOptions, ClassDefItem out, OptimizerOptions optimizerOptions,
+        DexFile dexFile) {
         CstType thisClass = cf.getThisClass();
         MethodList methods = cf.getMethods();
         int sz = methods.size();
@@ -288,13 +290,13 @@ public class CfTranslator {
                                 + "." + one.getName().getString();
 
                     if (cfOptions.optimize &&
-                            OptimizerOptions.shouldOptimize(canonicalName)) {
+                            optimizerOptions.shouldOptimize(canonicalName)) {
                         if (DEBUG) {
                             System.err.println("Optimizing " + canonicalName);
                         }
 
                         nonOptRmeth = rmeth;
-                        rmeth = Optimizer.optimize(rmeth,
+                        rmeth = new Optimizer().optimize(rmeth,
                                 paramSize, isStatic, cfOptions.localInfo, advice);
 
                         if (DEBUG) {
@@ -303,7 +305,7 @@ public class CfTranslator {
                         }
 
                         if (cfOptions.statistics) {
-                            CodeStatistics.updateRopStatistics(
+                            cfOptions.codeStatistics.updateRopStatistics(
                                     nonOptRmeth, rmeth);
                         }
                     }
@@ -406,7 +408,7 @@ public class CfTranslator {
         optCode.assignIndices(callback);
         nonOptCode.assignIndices(callback);
 
-        CodeStatistics.updateDexStatistics(nonOptCode, optCode);
-        CodeStatistics.updateOriginalByteCount(originalByteCount);
+        cfOptions.codeStatistics.updateDexStatistics(nonOptCode, optCode);
+        cfOptions.codeStatistics.updateOriginalByteCount(originalByteCount);
     }
 }
