@@ -29,11 +29,6 @@ import com.android.dex.ProtoId;
 import com.android.dex.SizeOf;
 import com.android.dex.TableOfContents;
 import com.android.dex.TypeList;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.PeekingIterator;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,7 +95,7 @@ public final class DexMerger {
 
     private DexMerger(List<Dex> dexs, CollisionPolicy collisionPolicy,
             WriterSizes writerSizes) throws IOException {
-        this.dexs = ImmutableList.copyOf(dexs);
+        this.dexs = new ArrayList<Dex>(dexs);
 
         this.collisionPolicy = collisionPolicy;
         this.writerSizes = writerSizes;
@@ -203,7 +198,7 @@ public final class DexMerger {
         int wastedByteCount = writerSizes.size() - compactedSizes.size();
         if (wastedByteCount >  + compactWasteThreshold) {
             DexMerger compacter = new DexMerger(
-                    ImmutableList.of(dexOut, new Dex(0)),
+                    Arrays.asList(dexOut, new Dex(0)),
                     CollisionPolicy.FAIL,
                     compactedSizes);
             result = compacter.mergeDexes();
@@ -290,8 +285,8 @@ public final class DexMerger {
 
             int outCount = 0;
 
-            PeekingIterator<UnsortedValue> sorted = Iterators.peekingIterator(
-                Iterators.mergeSorted(iters, Ordering.natural()));
+            PeekingIterator<UnsortedValue> sorted = new PeekingIterator<UnsortedValue>(
+                new MergingIterator<UnsortedValue>(iters));
             while (sorted.hasNext()) {
                 UnsortedValue uValue = sorted.peek();
                 // Consume all equivalent values, but only write one.
@@ -1123,11 +1118,11 @@ public final class DexMerger {
             return;
         }
 
-        ImmutableList.Builder<Dex> toMerge = ImmutableList.builder();
+        List<Dex> toMerge = new ArrayList<Dex>();
         for (int i = 2; i < args.length; i++) {
             toMerge.add(new Dex(new File(args[i])));
         }
-        Dex merged = new DexMerger(toMerge.build(), CollisionPolicy.KEEP_FIRST).merge();
+        Dex merged = new DexMerger(toMerge, CollisionPolicy.KEEP_FIRST).merge();
         merged.writeTo(new File(args[0]));
     }
 
