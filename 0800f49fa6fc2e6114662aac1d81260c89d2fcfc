@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b05413b2_468a54ce",
+        "filename": "dx/tests/113-old-style-inner-class/expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-09-25T09:48:55Z",
+      "side": 1,
+      "message": "Already fixed differently by ignoring javac output, since we\u0027re testing dx\u0027s output.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 9
+      },
+      "revId": "0800f49fa6fc2e6114662aac1d81260c89d2fcfc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
