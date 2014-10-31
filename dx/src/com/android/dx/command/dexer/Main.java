@@ -1199,6 +1199,9 @@ public class Main {
         /** whether to run in debug mode */
         public boolean debug = false;
 
+        /** whether to emit warning messages */
+        public boolean warnings = true;
+
         /** whether to emit high-level verbose human-oriented output */
         public boolean verbose = false;
 
@@ -1409,6 +1412,8 @@ public class Main {
             while(parser.getNext()) {
                 if (parser.isArg("--debug")) {
                     debug = true;
+                } else if (parser.isArg("--no-warning")) {
+                    warnings = false;
                 } else if (parser.isArg("--verbose")) {
                     verbose = true;
                 } else if (parser.isArg("--verbose-dump")) {
@@ -1579,7 +1584,12 @@ public class Main {
             cfOptions.optimizeListFile = optimizeListFile;
             cfOptions.dontOptimizeListFile = dontOptimizeListFile;
             cfOptions.statistics = statistics;
-            cfOptions.warn = DxConsole.err;
+
+            if (warnings) {
+                cfOptions.warn = DxConsole.err;
+            } else {
+                cfOptions.warn = DxConsole.noop;
+            }
 
             dexOptions = new DexOptions();
             dexOptions.forceJumbo = forceJumbo;
