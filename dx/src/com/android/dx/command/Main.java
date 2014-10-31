@@ -25,7 +25,7 @@ import com.android.dx.Version;
 public class Main {
     private static String USAGE_MESSAGE =
         "usage:\n" +
-        "  dx --dex [--debug] [--verbose] [--positions=<style>] " +
+        "  dx --dex [--no-warnings] [--debug] [--verbose] [--positions=<style>] " +
         "[--no-locals]\n" +
         "  [--no-optimize] [--statistics] [--[no-]optimize-list=<file>] " +
         "[--no-strict]\n" +
