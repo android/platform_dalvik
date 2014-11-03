@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5a166bc_c684f6ee",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-03T09:45:03Z",
+      "side": 1,
+      "message": "--no-warning?\n\nI know there is --no-files but does that force us to add new badly spelled options?",
+      "range": {
+        "startLine": 1415,
+        "startChar": 41,
+        "endLine": 1415,
+        "endChar": 54
+      },
+      "revId": "8a7b74fcca117322abe58fcfd27d0ef778eeb96b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
