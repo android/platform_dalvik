@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5572ea58_13781431",
+        "filename": "dx/src/com/android/dx/command/DxConsole.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1010118
+      },
+      "writtenOn": "2014-11-05T21:51:22Z",
+      "side": 1,
+      "message": "final?",
+      "range": {
+        "startLine": 43,
+        "startChar": 17,
+        "endLine": 43,
+        "endChar": 18
+      },
+      "revId": "112f27227510ae1a01e925ea394928934a36ddc7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
