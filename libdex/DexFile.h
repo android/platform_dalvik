@@ -33,7 +33,49 @@
 #ifndef LIBDEX_DEXFILE_H_
 #define LIBDEX_DEXFILE_H_
 
-#include "vm/Common.h"      // basic type defs, e.g. u1/u2/u4/u8, and LOG
+#ifndef LOG_TAG
+# define LOG_TAG "libdex"
+#endif
+
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <assert.h>
+#include "cutils/log.h"
+
+#ifndef __BYTE_ORDER
+#define __LITTLE_ENDIAN 1234
+#define __BYTE_ORDER __LITTLE_ENDIAN
+#endif
+
+/*
+ * If "very verbose" logging is enabled, make it equivalent to ALOGV.
+ * Otherwise, make it disappear.
+ *
+ * Define this above the #include "Dalvik.h" to enable for only a
+ * single file.
+ */
+/* #define VERY_VERBOSE_LOG */
+#if defined(VERY_VERBOSE_LOG)
+# define LOGVV      ALOGV
+# define IF_LOGVV() IF_ALOGV()
+#else
+# define LOGVV(...) ((void)0)
+# define IF_LOGVV() if (false)
+#endif
+
+/*
+ * These match the definitions in the VM specification.
+ */
+typedef uint8_t             u1;
+typedef uint16_t            u2;
+typedef uint32_t            u4;
+typedef uint64_t            u8;
+typedef int8_t              s1;
+typedef int16_t             s2;
+typedef int32_t             s4;
+typedef int64_t             s8;
+
 #include "libdex/SysUtil.h"
 
 /*
