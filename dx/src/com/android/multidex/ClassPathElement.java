@@ -36,4 +36,6 @@ interface ClassPathElement {
 
     void close() throws IOException;
 
+    Iterable<String> list();
+
 }

@@ -23,7 +23,7 @@ import com.android.dx.rop.cst.CstType;
 /**
  * Interface representing members of class files (that is, fields and methods).
  */
-public interface Member {
+public interface Member extends HasAttribute {
     /**
      * Get the defining class.
      *
