@@ -17,114 +17,41 @@
 package com.android.multidex;
 
 import com.android.dx.cf.direct.DirectClassFile;
-import com.android.dx.cf.direct.StdAttributeFactory;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.ConstantPool;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Type;
 import com.android.dx.rop.type.TypeList;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 /**
- * This is a command line tool used by mainDexClasses script to find direct class references to
- * other classes. First argument of the command line is an archive, each class file contained in
- * this archive is used to identify a class whose references are to be searched, those class files
- * are not opened by this tool only their names matter. Other arguments must be zip files or
- * directories, they constitute in a classpath in with the classes named by the first argument
- * will be searched. Each searched class must be found. On each of this classes are searched for
- * their dependencies to other classes. Finally the tools prints on standard output a list of class
- * files names suitable as content of the file argument --main-dex-list of dx.
+ * Tool to find direct class references to other classes.
  */
 public class ClassReferenceListBuilder {
-
     private static final String CLASS_EXTENSION = ".class";
 
-    private static final int STATUS_ERROR = 1;
-
-    private static final String EOL = System.getProperty("line.separator");
-
-    private static String USAGE_MESSAGE =
-            "Usage:" + EOL + EOL +
-            "Short version: Don't use this." + EOL + EOL +
-            "Slightly longer version: This tool is used by mainDexClasses script to find direct"
-            + EOL +
-            "references of some classes." + EOL;
-
     private Path path;
-    private Set<String> toKeep = new HashSet<String>();
+    private Set<String> classNames = new HashSet<String>();
 
-    /**
-     *
-     * @param inputPath list of path to input jars or folders. Path elements must be separated by
-     * the system path separator: ':' on Unix, ';' on Windows.
-     */
-    public ClassReferenceListBuilder(String inputPath) throws IOException {
-        this(new Path(inputPath));
-    }
-
-    private ClassReferenceListBuilder(Path path) {
+    public ClassReferenceListBuilder(Path path) {
         this.path = path;
     }
 
+    /**
+     * Kept for compatibility with the gradle integration, this method just forwards to
+     * {@link MainDexListBuilder#main(String[])}.
+     * @deprecated use {@link MainDexListBuilder#main(String[])} instead.
+     */
+    @Deprecated
     public static void main(String[] args) {
-
-        if (args.length != 2) {
-            printUsage();
-            System.exit(STATUS_ERROR);
-        }
-
-        ZipFile jarOfRoots;
-        try {
-            jarOfRoots = new ZipFile(args[0]);
-        } catch (IOException e) {
-            System.err.println("\"" + args[0] + "\" can not be read as a zip archive. ("
-                    + e.getMessage() + ")");
-            System.exit(STATUS_ERROR);
-            return;
-        }
-
-        Path path = null;
-        try {
-            path = new Path(args[1]);
-
-            ClassReferenceListBuilder builder = new ClassReferenceListBuilder(path);
-            builder.addRoots(jarOfRoots);
-
-            printList(builder.toKeep);
-        } catch (IOException e) {
-            System.err.println("A fatal error occured: " + e.getMessage());
-            System.exit(STATUS_ERROR);
-            return;
-        } finally {
-            try {
-                jarOfRoots.close();
-            } catch (IOException e) {
-                // ignore
-            }
-            if (path != null) {
-                for (ClassPathElement element : path.elements) {
-                    try {
-                        element.close();
-                    } catch (IOException e) {
-                        // keep going, lets do our best.
-                    }
-                }
-            }
-        }
+        MainDexListBuilder.main(args);
     }
 
     /**
@@ -139,7 +66,7 @@ public class ClassReferenceListBuilder {
             ZipEntry entry = entries.nextElement();
             String name = entry.getName();
             if (name.endsWith(CLASS_EXTENSION)) {
-                toKeep.add(name.substring(0, name.length() - CLASS_EXTENSION.length()));
+                classNames.add(name.substring(0, name.length() - CLASS_EXTENSION.length()));
             }
         }
 
@@ -162,41 +89,8 @@ public class ClassReferenceListBuilder {
         }
     }
 
-    /**
-     * Returns a list of classes to keep. This can be passed to dx as a file with --main-dex-list.
-     */
-    public Set<String> getMainDexList() {
-        Set<String> resultSet = new HashSet<String>(toKeep.size());
-        for (String classDescriptor : toKeep) {
-            resultSet.add(classDescriptor + CLASS_EXTENSION);
-        }
-
-        return resultSet;
-    }
-
-    private static void printUsage() {
-        System.err.print(USAGE_MESSAGE);
-    }
-
-    private static ClassPathElement getClassPathElement(File file)
-            throws ZipException, IOException {
-        if (file.isDirectory()) {
-            return new FolderPathElement(file);
-        } else if (file.isFile()) {
-            return new ArchivePathElement(new ZipFile(file));
-        } else if (file.exists()) {
-            throw new IOException(file.getAbsolutePath() +
-                    " is not a directory neither a zip file");
-        } else {
-            throw new FileNotFoundException(file.getAbsolutePath());
-        }
-    }
-
-    private static void printList(Set<String> toKeep) {
-        for (String classDescriptor : toKeep) {
-            System.out.print(classDescriptor);
-            System.out.println(CLASS_EXTENSION);
-        }
+    Set<String> getClassNames() {
+        return classNames;
     }
 
     private void addDependencies(ConstantPool pool) {
@@ -220,14 +114,13 @@ public class ClassReferenceListBuilder {
     }
 
     private void addClassWithHierachy(String classBinaryName) {
-        if (toKeep.contains(classBinaryName)) {
+        if (classNames.contains(classBinaryName)) {
             return;
         }
 
-        String fileName = classBinaryName + CLASS_EXTENSION;
         try {
-            DirectClassFile classFile = path.getClass(fileName);
-            toKeep.add(classBinaryName);
+            DirectClassFile classFile = path.getClass(classBinaryName + CLASS_EXTENSION);
+            classNames.add(classBinaryName);
             CstType superClass = classFile.getSuperclass();
             if (superClass != null) {
                 addClassWithHierachy(superClass.getClassType().getClassName());
@@ -242,77 +135,5 @@ public class ClassReferenceListBuilder {
             // Ignore: The referenced type is not in the path it must be part of the libraries.
         }
     }
-
-    private static class Path {
-        private List<ClassPathElement> elements = new ArrayList<ClassPathElement>();
-        private String definition;
-        private ByteArrayOutputStream baos = new ByteArrayOutputStream(40 * 1024);
-        private byte[] readBuffer = new byte[20 * 1024];
-
-        private Path(String definition) throws IOException {
-            this.definition = definition;
-            for (String filePath : definition.split(Pattern.quote(File.pathSeparator))) {
-                try {
-                    addElement(getClassPathElement(new File(filePath)));
-                } catch (IOException e) {
-                    throw new IOException("\"" + filePath + "\" can not be used as a classpath"
-                            + " element. ("
-                            + e.getMessage() + ")", e);
-                }
-            }
-        }
-
-        private static byte[] readStream(InputStream in, ByteArrayOutputStream baos, byte[] readBuffer)
-                throws IOException {
-            try {
-                for (;;) {
-                    int amt = in.read(readBuffer);
-                    if (amt < 0) {
-                        break;
-                    }
-
-                    baos.write(readBuffer, 0, amt);
-                }
-            } finally {
-                in.close();
-            }
-            return baos.toByteArray();
-        }
-
-        @Override
-        public String toString() {
-            return definition;
-        }
-
-        private void addElement(ClassPathElement element) {
-            assert element != null;
-            elements.add(element);
-        }
-
-        private DirectClassFile getClass(String path) throws FileNotFoundException {
-            DirectClassFile classFile = null;
-            for (ClassPathElement element : elements) {
-                try {
-                    InputStream in = element.open(path);
-                    try {
-                        byte[] bytes = readStream(in, baos, readBuffer);
-                        baos.reset();
-                        classFile = new DirectClassFile(bytes, path, false);
-                        classFile.setAttributeFactory(StdAttributeFactory.THE_ONE);
-                        break;
-                    } finally {
-                        in.close();
-                    }
-                } catch (IOException e) {
-                    // search next element
-                }
-            }
-            if (classFile == null) {
-                throw new FileNotFoundException(path);
-            }
-            return classFile;
-        }
-    }
-
 
 }

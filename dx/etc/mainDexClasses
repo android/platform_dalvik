@@ -155,4 +155,4 @@ ${proguard} -injars ${@} -dontwarn -forceprocessing  -outjars ${tmpOut} \
   -libraryjars "${shrinkedAndroidJar}" -dontoptimize -dontobfuscate -dontpreverify \
   -include "${baserules}" 1>/dev/null || exit 10
 
-java -cp "$jarpath" com.android.multidex.ClassReferenceListBuilder "${tmpOut}" ${@} ||  exit 11
+java -cp "$jarpath" com.android.multidex.MainDexListBuilder "${tmpOut}" ${@} ||  exit 11

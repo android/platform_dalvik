@@ -28,7 +28,7 @@ import com.android.dx.rop.type.TypeList;
  * <p><b>Note:</b> The fields referred to in this documentation are of the
  * {@code ClassFile} structure defined in vmspec-2 sec4.1.
  */
-public interface ClassFile {
+public interface ClassFile extends HasAttribute {
     /**
      * Gets the field {@code magic}.
      *
