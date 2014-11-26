@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a3d1b9e_2e3b2710",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "nit space",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa5f182_86868c72",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Be coherent with other message in dx. Use \" everywhere or nowhere.",
+      "range": {
+        "startLine": 42,
+        "startChar": 34,
+        "endLine": 42,
+        "endChar": 56
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f448158_c40b3cc1",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Absolute or just path?",
+      "range": {
+        "startLine": 42,
+        "startChar": 42,
+        "endLine": 42,
+        "endChar": 50
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f448158_643c9069",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Strange message. A bit short?",
+      "range": {
+        "startLine": 45,
+        "startChar": 44,
+        "endLine": 45,
+        "endChar": 66
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f448158_84377487",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Idem",
+      "range": {
+        "startLine": 45,
+        "startChar": 52,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f448158_44318c8f",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Redundant with the e.getMessage? May be something like \"Wrong class path: e.getMessage\"?",
+      "range": {
+        "startLine": 60,
+        "startChar": 38,
+        "endLine": 60,
+        "endChar": 60
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa5f182_86ad2cfc",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Add synchronized here, because of baos and readBuffer. Or make baos and readBuffer local to readStream.",
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa5f182_a6aaa8df",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Why add baos and readBuffer here?",
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa5f182_667ef0db",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-11-26T10:01:00Z",
+      "side": 1,
+      "message": "Idem",
+      "range": {
+        "startLine": 117,
+        "startChar": 44,
+        "endLine": 117,
+        "endChar": 48
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
