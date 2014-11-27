@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f633129_73d00089",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a3d1b9e_2e3b2710",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fa5f182_86868c72",
         "filename": "dx/src/com/android/multidex/Path.java",
         "patchSetId": 2
@@ -64,6 +88,54 @@
         "startChar": 42,
         "endLine": 42,
         "endChar": 50
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f633129_73d64057",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f448158_c40b3cc1",
+      "range": {
+        "startLine": 42,
+        "startChar": 42,
+        "endLine": 42,
+        "endChar": 50
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f633129_53db447b",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fa5f182_86868c72",
+      "range": {
+        "startLine": 42,
+        "startChar": 34,
+        "endLine": 42,
+        "endChar": 56
       },
       "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
@@ -117,6 +189,54 @@
     },
     {
       "key": {
+        "uuid": "5f404975_3d5beff7",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f448158_84377487",
+      "range": {
+        "startLine": 45,
+        "startChar": 52,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f448158_24ee884a",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f448158_643c9069",
+      "range": {
+        "startLine": 45,
+        "startChar": 44,
+        "endLine": 45,
+        "endChar": 66
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f448158_44318c8f",
         "filename": "dx/src/com/android/multidex/Path.java",
         "patchSetId": 2
@@ -128,6 +248,30 @@
       "writtenOn": "2014-11-26T10:01:00Z",
       "side": 1,
       "message": "Redundant with the e.getMessage? May be something like \"Wrong class path: e.getMessage\"?",
+      "range": {
+        "startLine": 60,
+        "startChar": 38,
+        "endLine": 60,
+        "endChar": 60
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f404975_1dc1d30f",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "OK Done.",
+      "parentUuid": "9f448158_44318c8f",
       "range": {
         "startLine": 60,
         "startChar": 38,
@@ -157,6 +301,24 @@
     },
     {
       "key": {
+        "uuid": "5f404975_dd93eb2e",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "For now all multidex package is strictly mono thread. But I agree the usage of shared buffers justifies taking some precautions for the future. Done.",
+      "parentUuid": "1fa5f182_86ad2cfc",
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fa5f182_a6aaa8df",
         "filename": "dx/src/com/android/multidex/Path.java",
         "patchSetId": 2
@@ -174,6 +336,24 @@
     },
     {
       "key": {
+        "uuid": "3f663537_b7172237",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "baos, readBuffer as fields are just an optimization (less allocations), I just wanted to keep readStream free from this considerations.",
+      "parentUuid": "1fa5f182_a6aaa8df",
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fa5f182_667ef0db",
         "filename": "dx/src/com/android/multidex/Path.java",
         "patchSetId": 2
@@ -185,6 +365,30 @@
       "writtenOn": "2014-11-26T10:01:00Z",
       "side": 1,
       "message": "Idem",
+      "range": {
+        "startLine": 117,
+        "startChar": 44,
+        "endLine": 117,
+        "endChar": 48
+      },
+      "revId": "0a21d02b0eb08d90017e23caed936c022e438c50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f404975_ddd64bd0",
+        "filename": "dx/src/com/android/multidex/Path.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2014-11-27T21:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fa5f182_667ef0db",
       "range": {
         "startLine": 117,
         "startChar": 44,
