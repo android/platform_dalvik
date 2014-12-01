@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f971556_6f504d20",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2014-12-01T20:40:05Z",
+      "side": 1,
+      "message": "Can there be a cap on the number of \"opened, bytes extracted, but waiting to be parsed/consumed\" tasks? Otherwise, memory usage could start ballooning unnecessarily if the consuming threads start to \"fall behind\" for whatever reason (holding big byte[] arrays for files we are nowhere near ready for).",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87d927_acb08bd2",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2014-12-01T20:40:05Z",
+      "side": 1,
+      "message": "Trivial nit: Trailing white space.",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf7ce5f1_0e68afe6",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2014-12-01T20:40:05Z",
+      "side": 1,
+      "message": "It feels like this can be made cleaner and rely less on static state by use of AtomicIntegers and a \"reserve, release\" type pattern. This could also reduce the amount of time spent in locks.",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f971556_0f47c97e",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2014-12-01T20:40:05Z",
+      "side": 1,
+      "message": "wait() can sometimes spuriously \"resume\" (return even though no notify or notifyAll call has been issued). You need to recheck the condition you were waiting for (usually done in a loop around the wait call).\n\nThis is allowed by and documented by the spec of Object.wait().",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df87d927_ac624bb2",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1906,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2014-12-01T20:40:05Z",
+      "side": 1,
+      "message": "Trivial nit: Should be 1 space after equals.",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
