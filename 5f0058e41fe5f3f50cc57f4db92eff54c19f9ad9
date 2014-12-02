@@ -377,6 +377,24 @@
     },
     {
       "key": {
+        "uuid": "df87d927_98c94166",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2014-12-02T21:53:03Z",
+      "side": 1,
+      "message": "As long as you\u0027re sure the conditions will be rechecked and cause a wait again upon spurious wakeup, you should be fine.",
+      "parentUuid": "ff99fd83_078ec439",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82dd17_6d13f14c",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
