@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1fcb3196_f367b017",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "agreed",
+      "parentUuid": "df3a79c4_114aaca1",
+      "range": {
+        "startLine": 196,
+        "startChar": 49,
+        "endLine": 196,
+        "endChar": 66
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df3a79c4_f1c96864",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2014-12-02T17:11:08Z",
       "side": 1,
       "message": "nit: indentation (or it this a gerrit problem?)",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 30
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fd1293e_d8f971e2",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "I think it make sense to remove both the --parallel-parse and --profile-concurrency options. The first doesn\u0027t provide any benefit, and the second is only for dx development.",
+      "parentUuid": "df3a79c4_f1c96864",
       "range": {
         "startLine": 263,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5fd1293e_78093d53",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "yep",
+      "parentUuid": "9f448158_ef550148",
+      "range": {
+        "startLine": 408,
+        "startChar": 66,
+        "endLine": 408,
+        "endChar": 69
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df3a79c4_51671449",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2014-12-02T17:11:08Z",
       "side": 1,
       "message": "dex",
+      "range": {
+        "startLine": 417,
+        "startChar": 42,
+        "endLine": 417,
+        "endChar": 45
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcb3196_138eac39",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "yep",
+      "parentUuid": "df3a79c4_51671449",
       "range": {
         "startLine": 417,
         "startChar": 42,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "3fce35a4_b7c36267",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "Yes, but would go away with --profile-concurrency",
+      "parentUuid": "7f526d24_c6c6a254",
+      "range": {
+        "startLine": 452,
+        "startChar": 43,
+        "endLine": 452,
+        "endChar": 44
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f971556_6f504d20",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -128,6 +248,24 @@
       "writtenOn": "2014-12-01T20:40:05Z",
       "side": 1,
       "message": "Can there be a cap on the number of \"opened, bytes extracted, but waiting to be parsed/consumed\" tasks? Otherwise, memory usage could start ballooning unnecessarily if the consuming threads start to \"fall behind\" for whatever reason (holding big byte[] arrays for files we are nowhere near ready for).",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fab4d9e_befd7915",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "The parallelParse feature should probably be removed, as it doesn\u0027t provide any speed-up. Then this becomes a matter of throttling the main thread\u0027s scheduling of translation tasks.\nTranslation does fall behind, so using a limited the number of waiting tasks sounds like a good idea.",
+      "parentUuid": "3f971556_6f504d20",
       "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -151,6 +289,24 @@
     },
     {
       "key": {
+        "uuid": "3fce35a4_b79c8274",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "yep",
+      "parentUuid": "df87d927_acb08bd2",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf7ce5f1_0e68afe6",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -168,6 +324,24 @@
     },
     {
       "key": {
+        "uuid": "7fab4d9e_816c9c78",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "Has to hold a lock when over \"test of condition\" and \"entering wait\", otherwise wait condition may be resolved before we enter wait, and we may never get a notification.\nAlso, need to hold lock across dex rotation.\nNote: waiting only occur when a dex file is almost full. This doesn\u0027t have an huge impact on overall degree of concurrency.\n\nOpen to suggestions if there is a better way to do this.",
+      "parentUuid": "bf7ce5f1_0e68afe6",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f971556_0f47c97e",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -179,6 +353,24 @@
       "writtenOn": "2014-12-01T20:40:05Z",
       "side": 1,
       "message": "wait() can sometimes spuriously \"resume\" (return even though no notify or notifyAll call has been issued). You need to recheck the condition you were waiting for (usually done in a loop around the wait call).\n\nThis is allowed by and documented by the spec of Object.wait().",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff99fd83_078ec439",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "In case of a spurious resume, the while-loop and if construct will recheck the condition. Am I missing something here?",
+      "parentUuid": "3f971556_0f47c97e",
       "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -208,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "1fcb3196_f6d55efb",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "They trivially return true, and represent the last step in the per-class flow. I made if Boolean rather than Void, in case more sophisticated exception handling will be needed in the future. Since they do not trigger any further per-class actions, we do not need to handle them. The shutdown() and awaitTermination() protocol will allow all submitted tasks to complete, whether we check the futures or not.",
+      "parentUuid": "ff82dd17_6d13f14c",
+      "range": {
+        "startLine": 1882,
+        "startChar": 12,
+        "endLine": 1883,
+        "endChar": 62
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87d927_ac624bb2",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -219,6 +435,24 @@
       "writtenOn": "2014-12-01T20:40:05Z",
       "side": 1,
       "message": "Trivial nit: Should be 1 space after equals.",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcb3196_76ca6e5a",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1906,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-02T20:16:13Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "df87d927_ac624bb2",
       "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
