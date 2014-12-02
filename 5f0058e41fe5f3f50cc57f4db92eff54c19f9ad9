@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "df3a79c4_114aaca1",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-02T17:11:08Z",
+      "side": 1,
+      "message": "dex conversion (to byte array)? Or something like that...",
+      "range": {
+        "startLine": 196,
+        "startChar": 49,
+        "endLine": 196,
+        "endChar": 66
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df3a79c4_f1c96864",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-02T17:11:08Z",
+      "side": 1,
+      "message": "nit: indentation (or it this a gerrit problem?)",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 30
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f448158_ef550148",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-02T17:11:08Z",
+      "side": 1,
+      "message": "dex",
+      "range": {
+        "startLine": 408,
+        "startChar": 66,
+        "endLine": 408,
+        "endChar": 69
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df3a79c4_51671449",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-02T17:11:08Z",
+      "side": 1,
+      "message": "dex",
+      "range": {
+        "startLine": 417,
+        "startChar": 42,
+        "endLine": 417,
+        "endChar": 45
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f526d24_c6c6a254",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-02T17:11:08Z",
+      "side": 1,
+      "message": "nit: 2 spaces",
+      "range": {
+        "startLine": 452,
+        "startChar": 43,
+        "endLine": 452,
+        "endChar": 44
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f971556_6f504d20",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -64,6 +179,29 @@
       "writtenOn": "2014-12-01T20:40:05Z",
       "side": 1,
       "message": "wait() can sometimes spuriously \"resume\" (return even though no notify or notifyAll call has been issued). You need to recheck the condition you were waiting for (usually done in a loop around the wait call).\n\nThis is allowed by and documented by the spec of Object.wait().",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff82dd17_6d13f14c",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-02T17:11:08Z",
+      "side": 1,
+      "message": "I think the Futures of the ClassDefItemConsumers need to be handled.",
+      "range": {
+        "startLine": 1882,
+        "startChar": 12,
+        "endLine": 1883,
+        "endChar": 62
+      },
       "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
