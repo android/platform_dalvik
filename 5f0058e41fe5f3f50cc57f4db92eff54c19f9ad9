@@ -395,6 +395,24 @@
     },
     {
       "key": {
+        "uuid": "bfef85fe_198ecf39",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-03T01:45:51Z",
+      "side": 1,
+      "message": "Spurious or not, we always recheck, since we don\u0027t know if a class added to the dex file will leave enough space to safely schedule another one.",
+      "parentUuid": "df87d927_98c94166",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82dd17_6d13f14c",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
