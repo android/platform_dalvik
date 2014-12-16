@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "41215094_95d3448e",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:15Z",
+      "side": 1,
+      "message": "I agree.",
+      "parentUuid": "5fd1293e_d8f971e2",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 30
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f448158_ef550148",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -413,6 +437,29 @@
     },
     {
       "key": {
+        "uuid": "c13aa0c4_b1d6407e",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:15Z",
+      "side": 1,
+      "message": "Unused?",
+      "range": {
+        "startLine": 1859,
+        "startChar": 28,
+        "endLine": 1859,
+        "endChar": 60
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff82dd17_6d13f14c",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -460,6 +507,30 @@
     },
     {
       "key": {
+        "uuid": "211e1c5a_b7008229",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:15Z",
+      "side": 1,
+      "message": "Maybe I\u0027m missing something, but what if an Exception is thrown during the ClassTranslationTask? The Exception will be rethrown by the \"futureClazz.get()\" in the \"ClassDefItemConsumer.call()\", but then it won\u0027t be reported anywhere because there will be no \"get()\" on the Future of the ClassDefItemConsumer. See what was done with the previous \"parallelProcessorFutures\".",
+      "parentUuid": "1fcb3196_f6d55efb",
+      "range": {
+        "startLine": 1882,
+        "startChar": 12,
+        "endLine": 1883,
+        "endChar": 62
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df87d927_ac624bb2",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 1
@@ -489,6 +560,75 @@
       "side": 1,
       "message": "yes",
       "parentUuid": "df87d927_ac624bb2",
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c13aa0c4_519b94db",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:15Z",
+      "side": 1,
+      "message": "Unused",
+      "range": {
+        "startLine": 1967,
+        "startChar": 8,
+        "endLine": 1967,
+        "endChar": 46
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c13aa0c4_f1a968ea",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:15Z",
+      "side": 1,
+      "message": "Maybe pick a different name to avoid a collision with the field of the same name in Main?",
+      "range": {
+        "startLine": 1968,
+        "startChar": 24,
+        "endLine": 1968,
+        "endChar": 33
+      },
+      "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41215094_f5dcb8a1",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1974,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:15Z",
+      "side": 1,
+      "message": "Missing @Override",
+      "range": {
+        "startLine": 1974,
+        "startChar": 8,
+        "endLine": 1974,
+        "endChar": 14
+      },
       "revId": "5f0058e41fe5f3f50cc57f4db92eff54c19f9ad9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
