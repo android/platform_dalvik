@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41215094_7564283f",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2014-12-16T15:22:20Z",
+      "side": 0,
+      "message": "I think that for a good error reporting, something similar as this should be done.",
+      "range": {
+        "startLine": 531,
+        "startChar": 12,
+        "endLine": 548,
+        "endChar": 13
+      },
+      "revId": "9013f53c778d11e7ba7a8bf745882a3e29fe938d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
