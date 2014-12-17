@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c102a041_547d02a0",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-12-17T16:29:28Z",
+      "side": 1,
+      "message": "(1) outputDex \u003d rotateDexFile(null)\n\nor\n\n(2) createDexFile();",
+      "revId": "35435b88b4e30fefc7ae34a09c7edf8de2f47480",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c102a041_f42eb6a7",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-12-17T16:29:28Z",
+      "side": 1,
+      "message": "(1) outputDex \u003d rotateDexFile(outputDex);\n\nor\n\n(2) closeDexFile(); createDexFile();",
+      "range": {
+        "startLine": 501,
+        "startChar": 20,
+        "endLine": 501,
+        "endChar": 36
+      },
+      "revId": "35435b88b4e30fefc7ae34a09c7edf8de2f47480",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1cb2464_05e5d433",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-12-17T16:29:28Z",
+      "side": 1,
+      "message": "@Nonnull DexFile rotateDexFile(@CheckForNull DexFile old);",
+      "range": {
+        "startLine": 575,
+        "startChar": 19,
+        "endLine": 575,
+        "endChar": 39
+      },
+      "revId": "35435b88b4e30fefc7ae34a09c7edf8de2f47480",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1204cdf_abafb59d",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1015381
+      },
+      "writtenOn": "2014-12-17T16:29:28Z",
+      "side": 1,
+      "message": "Here also.",
+      "revId": "35435b88b4e30fefc7ae34a09c7edf8de2f47480",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
