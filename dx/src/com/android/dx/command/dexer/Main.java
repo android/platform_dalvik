@@ -224,6 +224,7 @@ public class Main {
      * @return 0 if success > 0 otherwise.
      */
     public static int run(Arguments arguments) throws IOException {
+
         // Reset the error count to start fresh.
         errors.set(0);
         // empty the list, so that  tools that load dx and keep it around
@@ -465,7 +466,7 @@ public class Main {
      * @return whether processing was successful
      */
     private static boolean processAllFiles() {
-        createDexFile();
+        outputDex = new DexFile(args.dexOptions);
 
         if (args.jarOutput) {
             outputResources = new TreeMap<String, byte[]>();
@@ -497,7 +498,7 @@ public class Main {
 
                 if (args.minimalMainDex) {
                     // start second pass directly in a secondary dex file.
-                    createDexFile();
+                    rotateDexFile();
                 }
 
                 // remaining files
@@ -571,7 +572,7 @@ public class Main {
         return true;
     }
 
-    private static void createDexFile() {
+    private static void rotateDexFile() {
         if (outputDex != null) {
             dexOutputArrays.add(writeDex());
         }
@@ -718,7 +719,7 @@ public class Main {
             && ((maxMethodIdsInDex > args.maxNumberOfIdxPerDex) ||
                 (maxFieldIdsInDex > args.maxNumberOfIdxPerDex))) {
             DexFile completeDex = outputDex;
-            createDexFile();
+            rotateDexFile();
             assert  (completeDex.getMethodIds().items().size() <= numMethodIds +
                     MAX_METHOD_ADDED_DURING_DEX_CREATION) &&
                     (completeDex.getFieldIds().items().size() <= numFieldIds +
