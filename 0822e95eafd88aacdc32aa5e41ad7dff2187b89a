@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6175743d_82b7cac7",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-20T01:50:06Z",
+      "side": 1,
+      "message": "removing",
+      "parentUuid": "c13aa0c4_717fb8d5",
+      "range": {
+        "startLine": 737,
+        "startChar": 54,
+        "endLine": 737,
+        "endChar": 58
+      },
+      "revId": "0822e95eafd88aacdc32aa5e41ad7dff2187b89a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "211e1c5a_37d47252",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "41723059_931164fd",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-20T01:50:06Z",
+      "side": 1,
+      "message": "removing",
+      "parentUuid": "211e1c5a_37d47252",
+      "range": {
+        "startLine": 754,
+        "startChar": 48,
+        "endLine": 754,
+        "endChar": 52
+      },
+      "revId": "0822e95eafd88aacdc32aa5e41ad7dff2187b89a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41215094_d5d9bcaf",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2014-12-16T15:22:20Z",
       "side": 1,
       "message": "Remove?",
+      "range": {
+        "startLine": 1606,
+        "startChar": 25,
+        "endLine": 1606,
+        "endChar": 42
+      },
+      "revId": "0822e95eafd88aacdc32aa5e41ad7dff2187b89a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6175743d_229db641",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-20T01:50:06Z",
+      "side": 1,
+      "message": "Removing.",
+      "parentUuid": "41215094_d5d9bcaf",
       "range": {
         "startLine": 1606,
         "startChar": 25,

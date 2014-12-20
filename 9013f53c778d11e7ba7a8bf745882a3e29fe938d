@@ -22,6 +22,30 @@
       "revId": "9013f53c778d11e7ba7a8bf745882a3e29fe938d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "217ffc22_b2ced8ed",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2014-12-20T01:50:06Z",
+      "side": 0,
+      "message": "Yes. Except, I\u0027m not sure the assumption about all runtime\nerrors being handled was actually correct. Anyway, I need to\ncatch and report and previously uncaught exceptions from translation or from adding to dex.",
+      "parentUuid": "41215094_7564283f",
+      "range": {
+        "startLine": 531,
+        "startChar": 12,
+        "endLine": 548,
+        "endChar": 13
+      },
+      "revId": "9013f53c778d11e7ba7a8bf745882a3e29fe938d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
