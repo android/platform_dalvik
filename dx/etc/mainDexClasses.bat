@@ -67,6 +67,7 @@ REM followed by "value". Dx has been changed to know how to deal with that.
 set params=
 
 set output=
+set disableKeepAnnotated=
 
 :firstArg
 if [%1]==[] goto endArgs
@@ -78,6 +79,13 @@ if [%1]==[] goto endArgs
         goto firstArg
 
 :notOut
+
+    if %1 NEQ --disable-annotation-resolution-workaround goto notDisable
+        set "disableKeepAnnotated=%1"
+        shift
+        goto firstArg
+
+:notDisable
     if defined params goto usage
     set params=%1
     shift
@@ -96,10 +104,10 @@ set "exitStatus=0"
 call "%proguard%" -injars %params% -dontwarn -forceprocessing  -outjars "%tmpJar%" -libraryjars "%shrinkedAndroidJar%" -dontoptimize -dontobfuscate -dontpreverify -include "%baserules%" 1>nul
 
 if DEFINED output goto redirect
-call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder "%tmpJar%" "%params%"
+call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder "%disableKeepAnnotated%" "%tmpJar%" "%params%"
 goto afterClassReferenceListBuilder
 :redirect
-call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder "%tmpJar%" "%params%" 1>"%output%"
+call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder "%disableKeepAnnotated%" "%tmpJar%" "%params%" 1>"%output%"
 :afterClassReferenceListBuilder
 
 del %tmpJar%
