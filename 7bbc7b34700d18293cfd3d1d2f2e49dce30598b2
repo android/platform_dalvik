@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eeb4f1df_fa96c922",
+        "filename": "dx/etc/mainDexClasses.bat",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-01-08T11:10:06Z",
+      "side": 1,
+      "message": "This one is untested.",
+      "revId": "7bbc7b34700d18293cfd3d1d2f2e49dce30598b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
