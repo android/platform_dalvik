@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "eeb4f1df_5a8175d8",
+        "filename": "dx/etc/mainDexClasses.bat",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2015-01-08T13:06:09Z",
+      "side": 1,
+      "message": "notDisabled?",
+      "range": {
+        "startLine": 88,
+        "startChar": 1,
+        "endLine": 88,
+        "endChar": 11
+      },
+      "revId": "7bbc7b34700d18293cfd3d1d2f2e49dce30598b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ea8d591_cf993d56",
         "filename": "dx/src/com/android/multidex/MainDexListBuilder.java",
         "patchSetId": 1
@@ -59,6 +82,52 @@
         "startChar": 77,
         "endLine": 63,
         "endChar": 78
+      },
+      "revId": "7bbc7b34700d18293cfd3d1d2f2e49dce30598b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eeb4f1df_da74a56a",
+        "filename": "dx/src/com/android/multidex/MainDexListBuilder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2015-01-08T13:06:09Z",
+      "side": 1,
+      "message": "nit: weird white space",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 23
+      },
+      "revId": "7bbc7b34700d18293cfd3d1d2f2e49dce30598b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e8d6144_ae4eb736",
+        "filename": "dx/src/com/android/multidex/MainDexListBuilder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2015-01-08T13:06:09Z",
+      "side": 1,
+      "message": "nit: line is too long",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 108
       },
       "revId": "7bbc7b34700d18293cfd3d1d2f2e49dce30598b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
