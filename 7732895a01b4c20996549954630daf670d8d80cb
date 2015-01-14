@@ -34,6 +34,24 @@
       "revId": "7732895a01b4c20996549954630daf670d8d80cb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee3231d2_10f4cc60",
+        "filename": "dx/src/com/android/dx/dex/file/TypeIdsSection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2015-01-14T18:15:49Z",
+      "side": 1,
+      "message": "Fair enough. It seemed low risk enough to not really worry about too much, which is why I still gave +1.",
+      "parentUuid": "6e26419e_891a5d96",
+      "revId": "7732895a01b4c20996549954630daf670d8d80cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
