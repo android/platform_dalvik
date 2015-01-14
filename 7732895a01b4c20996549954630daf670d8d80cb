@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ecac1df_4db96aba",
+        "filename": "dx/src/com/android/dx/dex/file/TypeIdsSection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2015-01-14T16:55:42Z",
+      "side": 1,
+      "message": "Get\u0027s from typeIds might not strictly be thread safe with put\u0027s. Not sure how much of a risk that is in practice though. (Similar concerns with the other XIdsSection classes)",
+      "revId": "7732895a01b4c20996549954630daf670d8d80cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
