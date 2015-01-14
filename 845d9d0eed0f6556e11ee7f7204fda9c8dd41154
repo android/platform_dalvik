@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ecac1df_8dc36236",
+        "filename": "dx/src/com/android/dx/dex/file/ProtoIdsSection.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1035053
+      },
+      "writtenOn": "2015-01-14T16:56:40Z",
+      "side": 1,
+      "message": "Get\u0027s from protoIds might not strictly be thread safe with put\u0027s. Not sure how much of a risk that is in practice though. (Similar concerns with the other XIdsSection classes)",
+      "revId": "845d9d0eed0f6556e11ee7f7204fda9c8dd41154",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
