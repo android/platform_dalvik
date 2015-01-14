@@ -16,6 +16,24 @@
       "revId": "7732895a01b4c20996549954630daf670d8d80cb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6e26419e_891a5d96",
+        "filename": "dx/src/com/android/dx/dex/file/TypeIdsSection.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1057223
+      },
+      "writtenOn": "2015-01-14T17:40:56Z",
+      "side": 1,
+      "message": "Well, the typieIds map should really be declared of type Map (not TreeMap), and the implementing TreeMap should be wrapped with a Collctions.synchornizedMap call. However, synchronizing the primitive get/put operations is not enough to allow concurrent adding to dex. It wouldn\u0027t even replace synchronizing intern, since this requires both put and get. And you still would need to worry about concurrent updates to different parts of the overall dex structure. For now, the global add-to-dex lock is still needed! As long as the dex structures are not updated concurrently anyway, adding synchronization is really just overhead.",
+      "parentUuid": "6ecac1df_4db96aba",
+      "revId": "7732895a01b4c20996549954630daf670d8d80cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
