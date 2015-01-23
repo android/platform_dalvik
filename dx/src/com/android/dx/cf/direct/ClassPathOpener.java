@@ -260,27 +260,30 @@ public class ClassPathOpener {
         consumer.onProcessArchiveStart(file);
 
         for (ZipEntry one : entriesList) {
-            if (one.isDirectory()) {
-                continue;
-            }
+            final boolean isDirectory = one.isDirectory();
 
             String path = one.getName();
             if (filter.accept(path)) {
-                InputStream in = zip.getInputStream(one);
+                final byte[] bytes;
+                if (!isDirectory) {
+                    InputStream in = zip.getInputStream(one);
 
-                baos.reset();
-                for (;;) {
-                    int amt = in.read(buf);
-                    if (amt < 0) {
-                        break;
+                    baos.reset();
+                    for (; ; ) {
+                        int amt = in.read(buf);
+                        if (amt < 0) {
+                            break;
+                        }
+
+                        baos.write(buf, 0, amt);
                     }
 
-                    baos.write(buf, 0, amt);
+                    in.close();
+                    bytes = baos.toByteArray();
+                } else {
+                    bytes = new byte[0];
                 }
 
-                in.close();
-
-                byte[] bytes = baos.toByteArray();
                 any |= consumer.processFileBytes(path, one.getTime(), bytes);
             }
         }
