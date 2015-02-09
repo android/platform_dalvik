@@ -2550,14 +2550,8 @@ int findMatch(MethodEntry** methods, int size, MethodEntry* matchThis)
         MethodEntry* method = methods[i];
 
         if (method != NULL && !compareMethodNamesForDiff(&method, &matchThis)) {
-//            printf("%s.%s == %s.%s<br>\n", matchThis->className, matchThis->methodName,
-  //              method->className, method->methodName);
-
             return i;
-/*            if (!compareMethodNames(&method, &matchThis)) {
-                return i;
             }
-*/        }
     }
 
     return -1;
@@ -2643,8 +2637,6 @@ void createDiff(DataKeys* d1, uint64_t sum1, DataKeys* d2, uint64_t sum2)
     DiffEntry* diffs = (DiffEntry*)malloc(max * sizeof(DiffEntry));
     memset(diffs, 0, max * sizeof(DiffEntry));
     DiffEntry* ptr = diffs;
-
-//    printf("<br>d1->numMethods: %d d1->numMethods: %d<br>\n", d1->numMethods, d2->numMethods);
 
     int matches = 0;
 

@@ -92,10 +92,7 @@ A million repetitions of "a"
 #else
 # include <unistd.h>
 # include <stdlib.h>
-//# include <endian.h>
-//# if __BYTE_ORDER == __LITTLE_ENDIAN
 #  define X_LITTLE_ENDIAN
-//# endif
 #endif
 #include <ctype.h>
 

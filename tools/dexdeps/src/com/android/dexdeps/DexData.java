@@ -150,7 +150,6 @@ public class DexData {
         for (int i = 0; i < count; i++) {
             seek(stringOffsets[i]);         // should be a no-op
             mStrings[i] = readString();
-            //System.out.println("STR: " + i + ": " + mStrings[i]);
         }
     }
 
@@ -161,14 +160,10 @@ public class DexData {
         int count = mHeaderItem.typeIdsSize;
         mTypeIds = new TypeIdItem[count];
 
-        //System.out.println("reading " + count + " typeIds");
         seek(mHeaderItem.typeIdsOff);
         for (int i = 0; i < count; i++) {
             mTypeIds[i] = new TypeIdItem();
             mTypeIds[i].descriptorIdx = readInt();
-
-            //System.out.println(i + ": " + mTypeIds[i].descriptorIdx +
-            //    " " + mStrings[mTypeIds[i].descriptorIdx]);
         }
     }
 
@@ -179,7 +174,6 @@ public class DexData {
         int count = mHeaderItem.protoIdsSize;
         mProtoIds = new ProtoIdItem[count];
 
-        //System.out.println("reading " + count + " protoIds");
         seek(mHeaderItem.protoIdsOff);
 
         /*
@@ -302,10 +296,6 @@ public class DexData {
             } else if (className.charAt(0) == '[') {
                 mTypeIds[i].internal = true;
             }
-
-            //System.out.println(i + " " +
-            //    (mTypeIds[i].internal ? "INTERNAL" : "external") + " - " +
-            //    mStrings[mTypeIds[i].descriptorIdx]);
         }
     }
 

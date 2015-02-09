@@ -1636,8 +1636,6 @@ void dumpMethodMap(DexFile* pDexFile, const DexMethod* pDexMethod, int idx,
     }
 
 bail:
-    //if (addrWidth >= 0)
-    //    *pData = align32(data);
     *pData = data;
 }
 

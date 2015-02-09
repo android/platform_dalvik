@@ -194,8 +194,6 @@ static void classLookupAdd(DexFile* pDexFile, DexClassLookup* pLookup,
         idx = (idx + 1) & mask;
         probes++;
     }
-    //if (probes > 1)
-    //    ALOGW("classLookupAdd: probes=%d", probes);
 
     pLookup->table[idx].classDescriptorHash = hash;
     pLookup->table[idx].classDescriptorOffset = stringOff;
