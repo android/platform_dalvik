@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1493ba5_bbc267b6",
+        "filename": "libdex/sha1.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2015-02-09T18:37:42Z",
+      "side": 1,
+      "message": "reindent",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 25
+      },
+      "revId": "480b841155157d099baae86b96af0a0861308ae9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
