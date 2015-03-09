@@ -19,7 +19,11 @@ package com.android.multidex;
 import com.android.dx.cf.direct.DirectClassFile;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.ConstantPool;
+import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstType;
+import com.android.dx.rop.type.Prototype;
+import com.android.dx.rop.type.StdTypeList;
 import com.android.dx.rop.type.Type;
 import com.android.dx.rop.type.TypeList;
 
@@ -37,8 +41,8 @@ import java.util.zip.ZipFile;
 public class ClassReferenceListBuilder {
     private static final String CLASS_EXTENSION = ".class";
 
-    private Path path;
-    private Set<String> classNames = new HashSet<String>();
+    private final Path path;
+    private final Set<String> classNames = new HashSet<String>();
 
     public ClassReferenceListBuilder(Path path) {
         this.path = path;
@@ -96,19 +100,31 @@ public class ClassReferenceListBuilder {
     private void addDependencies(ConstantPool pool) {
         for (Constant constant : pool.getEntries()) {
             if (constant instanceof CstType) {
-                Type type = ((CstType) constant).getClassType();
-                String descriptor = type.getDescriptor();
-                if (descriptor.endsWith(";")) {
-                    int lastBrace = descriptor.lastIndexOf('[');
-                    if (lastBrace < 0) {
-                        addClassWithHierachy(descriptor.substring(1, descriptor.length()-1));
-                    } else {
-                        assert descriptor.length() > lastBrace + 3
-                        && descriptor.charAt(lastBrace + 1) == 'L';
-                        addClassWithHierachy(descriptor.substring(lastBrace + 2,
-                                descriptor.length() - 1));
-                    }
+                checkDescriptor(((CstType) constant).getClassType());
+            } else if (constant instanceof CstFieldRef) {
+                checkDescriptor(((CstFieldRef) constant).getType());
+            } else if (constant instanceof CstMethodRef) {
+                Prototype proto = ((CstMethodRef) constant).getPrototype();
+                checkDescriptor(proto.getReturnType());
+                StdTypeList args = proto.getParameterTypes();
+                for (int i = 0; i < args.size(); i++) {
+                    checkDescriptor(args.get(i));
                 }
+            }
+        }
+    }
+
+    private void checkDescriptor(Type type) {
+        String descriptor = type.getDescriptor();
+        if (descriptor.endsWith(";")) {
+            int lastBrace = descriptor.lastIndexOf('[');
+            if (lastBrace < 0) {
+                addClassWithHierachy(descriptor.substring(1, descriptor.length()-1));
+            } else {
+                assert descriptor.length() > lastBrace + 3
+                && descriptor.charAt(lastBrace + 1) == 'L';
+                addClassWithHierachy(descriptor.substring(lastBrace + 2,
+                        descriptor.length() - 1));
             }
         }
     }
