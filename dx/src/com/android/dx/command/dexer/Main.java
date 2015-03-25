@@ -1731,15 +1731,15 @@ public class Main {
 
                 // Calculate max number of indices this class will add to the
                 // dex file.
-                // The constant pool contains at least one entry per method
-                // (name and signature), at least one entry per field (name
-                // and type), and at least per method/field reference (typed
-                // method ref).
+                // The possibility of overloading means that we can't easily
+                // know how many constant are needed for declared methods and
+                // fields. We therefore make the simplifying assumption that
+                // all constants are external method or field references.
 
                 int constantPoolSize = cf.getConstantPool().size();
-                maxMethodIdsInClass = constantPoolSize - cf.getFields().size()
+                maxMethodIdsInClass = constantPoolSize + cf.getMethods().size()
                         + MAX_METHOD_ADDED_DURING_DEX_CREATION;
-                maxFieldIdsInClass = constantPoolSize - cf.getMethods().size()
+                maxFieldIdsInClass = constantPoolSize + cf.getFields().size()
                         + MAX_FIELD_ADDED_DURING_DEX_CREATION;
                 synchronized(dexRotationLock) {
 
