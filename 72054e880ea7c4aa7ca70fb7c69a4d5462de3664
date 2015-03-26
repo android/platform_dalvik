@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e30dfa2c_5a9a7170",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2015-03-26T04:39:39Z",
+      "side": 1,
+      "message": "better to reference the git sha, not CL, since they are usable in any context, not just gerrit",
+      "range": {
+        "startLine": 9,
+        "startChar": 44,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "72054e880ea7c4aa7ca70fb7c69a4d5462de3664",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
