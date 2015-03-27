@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63caea3a_8b7bedb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-03-27T08:38:54Z",
+      "side": 1,
+      "message": "I think the recommendation for the commit message is a 60 max title followed by a blank line.",
+      "revId": "acc2d7ae0d88b9049544f4b5b3060c821d18bb61",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
