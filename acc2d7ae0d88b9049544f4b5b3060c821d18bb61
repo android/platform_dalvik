@@ -16,6 +16,24 @@
       "revId": "acc2d7ae0d88b9049544f4b5b3060c821d18bb61",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3c55625_2e7e8766",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2015-03-27T10:33:31Z",
+      "side": 1,
+      "message": "+1. please follow the git commit message style.",
+      "parentUuid": "63caea3a_8b7bedb9",
+      "revId": "acc2d7ae0d88b9049544f4b5b3060c821d18bb61",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
