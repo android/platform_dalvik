@@ -1,0 +1,25 @@
+//
+// Copyright 2006 The Android Open Source Project
+//
+// Java method trace dump tool
+//
+
+cc_binary_host {
+    srcs: ["TraceDump.c"],
+    cflags: [
+        "-O0",
+        "-g",
+    ],
+    tags: ["optional"],
+    name: "dmtracedump",
+}
+
+cc_binary_host {
+    srcs: ["CreateTestTrace.c"],
+    cflags: [
+        "-O0",
+        "-g",
+    ],
+    tags: ["optional"],
+    name: "create_test_dmtrace",
+}

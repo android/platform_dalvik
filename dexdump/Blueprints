@@ -1,0 +1,73 @@
+// Copyright (C) 2008 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+//
+// dexdump, similar in purpose to objdump.
+//
+
+// ANDROIDMK TRANSLATION ERROR: unsupported conditional
+// ifneq ($(SDK_ONLY),true)
+// SDK_only doesn't need device version
+
+cc_library_static {
+    name: "libdexdump_static",
+    host_supported: true,
+    srcs: ["DexDump.cpp"],
+    local_include_dirs: [".."],
+    static_libs: ["libdex"],
+    shared_libs: ["libutils"],
+    compile_multilib: "32"
+}
+
+cc_binary {
+    name: "dexdump",
+    host_supported: true,
+    static_libs: [
+        "libdex",
+    ],
+    whole_static_libs: [
+        "libdexdump_static",
+    ],
+    // ANDROIDMK TRANSLATION ERROR: unsupported assignment to LOCAL_MODULE_PATH
+    // LOCAL_MODULE_PATH:=$(TARGET_OUT_OPTIONAL_EXECUTABLES)
+    target: {
+        android: {
+            shared_libs: [
+                "libz",
+                "liblog",
+                "libutils",
+            ],
+        },
+        host: {
+            static_libs: [
+                "liblog",
+                "libutils",
+            ],
+            host_ldlibs: [
+                "-lpthread",
+                "-lz",
+            ],
+        },
+        windows: {
+            static_libs: [
+                "libz",
+            ],
+        },
+    },
+    compile_multilib: "32"
+}
+
+// ANDROIDMK TRANSLATION ERROR: endif from unsupported contitional
+// endif
+// !SDK_ONLY

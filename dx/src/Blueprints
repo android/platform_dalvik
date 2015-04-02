@@ -1,0 +1,40 @@
+// Copyright 2006 The Android Open Source Project
+//
+
+// This tool is prebuilt if we're doing an app-only build.
+// ANDROIDMK TRANSLATION ERROR: unsupported conditional
+// ifeq ($(TARGET_BUILD_APPS)$(filter true,$(TARGET_BUILD_PDK)),)
+// dx java library
+// ============================================================
+java_binary_host {
+    srcs: [
+        "**/*.java",
+        "../../../libcore/dex/src/main/java/**/*.java",
+    ],
+
+    manifest: "../etc/manifest.txt",
+    tags: ["optional"],
+    name: "dx",
+
+    // Force java 6 target because we want java 6 runtimes to run dx, at least as long as the android SDK
+    // requirement JDK 6.
+    javacopts: [
+        "-source 6",
+        "-target 6",
+    ],
+
+    wrapper: "../etc/dx",
+}
+
+// ANDROIDMK TRANSLATION ERROR: endif from unsupported contitional
+// endif
+// No TARGET_BUILD_APPS or TARGET_BUILD_PDK
+
+// the documentation
+// ============================================================
+
+// ANDROIDMK TRANSLATION ERROR: unsupported assignment to LOCAL_DROIDDOC_OPTIONS
+// LOCAL_DROIDDOC_OPTIONS:=-hidden
+
+// ANDROIDMK TRANSLATION ERROR: unsupported include
+// include $(BUILD_DROIDDOC)

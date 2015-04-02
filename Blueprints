@@ -1,0 +1,79 @@
+// Copyright (C) 2006 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+subdirs = [
+    "libdex",
+    "dexgen",
+    "dexdump",
+    "dx",
+    "tools",
+]
+
+// ANDROIDMK TRANSLATION ERROR: unsupported line
+// rule:       .PHONY: dex dex-debug
+//
+//
+// ANDROIDMK TRANSLATION ERROR: unsupported conditional
+// ifeq ($(DONT_INSTALL_DEX_FILES),true)
+// ANDROIDMK TRANSLATION ERROR: unsupported line
+// rule:       dex:
+// @echo "Forcing a remake with DONT_INSTALL_DEX_FILES=false"
+// $(hide) $(MAKE) DONT_INSTALL_DEX_FILES=false
+//
+//
+// ANDROIDMK TRANSLATION ERROR: else from unsupported contitional
+// else
+// DONT_INSTALL_DEX_FILES is already false, so a normal make takes care of it.
+// ANDROIDMK TRANSLATION ERROR: unsupported line
+// rule:       dex: $(DEFAULT_GOAL)
+//
+//
+// ANDROIDMK TRANSLATION ERROR: endif from unsupported contitional
+// endif
+//d = []
+// ANDROIDMK TRANSLATION ERROR: unsupported conditional
+// ifneq ($(GENERATE_DEX_DEBUG),)
+//d = ["debug"]
+// ANDROIDMK TRANSLATION ERROR: endif from unsupported contitional
+// endif
+// ANDROIDMK TRANSLATION ERROR: unsupported conditional
+// ifneq ($(DONT_INSTALL_DEX_FILES),true)
+//d = [d + "-install"]
+// ANDROIDMK TRANSLATION ERROR: endif from unsupported contitional
+// endif
+// ANDROIDMK TRANSLATION ERROR: unsupported conditional
+// ifneq ($(d),debug-install)
+// generate the debug .dex files, with a copy in ./dalvik/DEBUG-FILES.
+// We need to rebuild the .dex files for the debug output to be generated.
+// The "touch -c $(DX)" is a hack that we know will force
+// a rebuild of the .dex files.  If $(DX) doesn't exist yet,
+// we won't touch it (-c) and the normal build will create
+// the .dex files naturally.
+// ANDROIDMK TRANSLATION ERROR: unsupported line
+// rule:       dex-debug:
+// @echo "Forcing an app rebuild with GENERATE_DEX_DEBUG=true"
+// @touch -c $(DX)
+// $(hide) $(MAKE) DONT_INSTALL_DEX_FILES=false GENERATE_DEX_DEBUG=true
+//
+//
+// ANDROIDMK TRANSLATION ERROR: else from unsupported contitional
+// else
+// GENERATE_DEX_DEBUG and DONT_INSTALL_DEX_FILES are already set properly,
+// so a normal make takes care of it.
+// ANDROIDMK TRANSLATION ERROR: unsupported line
+// rule:       dex-debug: $(DEFAULT_GOAL)
+//
+//
+// ANDROIDMK TRANSLATION ERROR: endif from unsupported contitional
+// endif
