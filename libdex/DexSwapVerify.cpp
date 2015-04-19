@@ -2020,7 +2020,7 @@ static void* intraVerifyDebugInfoItem(const CheckState* state, void* ptr) {
                 if (!okay) break;
                 if (idx != 0) {
                     idx--;
-                    CHECK_INDEX(idx, state->pHeader->stringIdsSize);
+                    CHECK_INDEX(idx, state->pHeader->typeIdsSize);
                 }
                 break;
             }
@@ -2052,7 +2052,7 @@ static void* intraVerifyDebugInfoItem(const CheckState* state, void* ptr) {
                 if (!okay) break;
                 if (idx != 0) {
                     idx--;
-                    CHECK_INDEX(idx, state->pHeader->stringIdsSize);
+                    CHECK_INDEX(idx, state->pHeader->typeIdsSize);
                 }
                 idx = readAndVerifyUnsignedLeb128(&data, fileEnd, &okay);
                 if (!okay) break;
