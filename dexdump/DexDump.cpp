@@ -605,7 +605,7 @@ void dumpCatches(DexFile* pDexFile, const DexCode* pCode)
     }
 }
 
-static int dumpPositionsCb(void *cnxt, u4 address, u4 lineNum)
+static int dumpPositionsCb(void * /* cnxt */, u4 address, u4 lineNum)
 {
     printf("        0x%04x line=%d\n", address, lineNum);
     return 0;
@@ -627,7 +627,7 @@ void dumpPositions(DexFile* pDexFile, const DexCode* pCode,
             pDexMethod->accessFlags, dumpPositionsCb, NULL, NULL);
 }
 
-static void dumpLocalsCb(void *cnxt, u2 reg, u4 startAddress,
+static void dumpLocalsCb(void * /* cnxt */, u2 reg, u4 startAddress,
         u4 endAddress, const char *name, const char *descriptor,
         const char *signature)
 {

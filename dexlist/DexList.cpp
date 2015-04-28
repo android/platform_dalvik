@@ -79,7 +79,7 @@ static char* descriptorToDot(const char* str)
  * first line in the method, which *should* correspond to the first
  * entry from the table.  (Could also use "min" here.)
  */
-static int positionsCallback(void* cnxt, u4 address, u4 lineNum)
+static int positionsCallback(void* cnxt, u4 /*address */, u4 lineNum)
 {
     int* pFirstLine = (int*) cnxt;
     if (*pFirstLine == -1)
@@ -92,7 +92,7 @@ static int positionsCallback(void* cnxt, u4 address, u4 lineNum)
  * Dump a method.
  */
 void dumpMethod(DexFile* pDexFile, const char* fileName,
-    const DexMethod* pDexMethod, int i)
+    const DexMethod* pDexMethod, int /* i */)
 {
     const DexMethodId* pMethodId;
     const DexCode* pCode;
