@@ -689,7 +689,7 @@ public class Main {
     private static boolean processFileBytes(String name, long lastModified, byte[] bytes) {
 
         boolean isClass = name.endsWith(".class");
-        boolean isClassesDex = name.equals(DexFormat.DEX_IN_JAR_NAME);
+        boolean isClassesDex = DexFormat.MULTIDEX_IN_JAR_RX.matcher(name).matches();
         boolean keepResources = (outputResources != null);
 
         if (!isClass && !isClassesDex && !keepResources) {
