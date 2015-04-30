@@ -423,11 +423,16 @@ public class Main {
     }
 
     private static String getDexFileName(int i) {
+        String dexFileName;
         if (i == 0) {
-            return DexFormat.DEX_IN_JAR_NAME;
+            dexFileName = DexFormat.DEX_IN_JAR_NAME;
         } else {
-            return DEX_PREFIX + (i + 1) + DEX_EXTENSION;
+            dexFileName = DEX_PREFIX + (i + 1) + DEX_EXTENSION;
         }
+        if (!DexFormat.MULTIDEX_IN_JAR_RX.matcher(dexFileName).matches()) {
+            throw new AssertionError("Invalid dex name");
+        }
+        return dexFileName;
     }
 
     private static void readPathsFromFile(String fileName, Collection<String> paths) throws IOException {
@@ -689,7 +694,7 @@ public class Main {
     private static boolean processFileBytes(String name, long lastModified, byte[] bytes) {
 
         boolean isClass = name.endsWith(".class");
-        boolean isClassesDex = name.equals(DexFormat.DEX_IN_JAR_NAME);
+        boolean isClassesDex = DexFormat.MULTIDEX_IN_JAR_RX.matcher(name).matches();
         boolean keepResources = (outputResources != null);
 
         if (!isClass && !isClassesDex && !keepResources) {
