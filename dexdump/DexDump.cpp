@@ -65,6 +65,7 @@ struct Options {
     bool showSectionHeaders;
     bool ignoreBadChecksum;
     bool dumpRegisterMaps;
+    bool dumpStrings;
     OutputFormat outputFormat;
     const char* tempFileName;
     bool exportsOnly;
@@ -1729,6 +1730,18 @@ void dumpRegisterMaps(DexFile* pDexFile)
 }
 
 /*
+ * Dump all the strings in the file.
+ */
+void dumpStrings(DexFile* pDexFile) {
+  u4 count = pDexFile->pHeader->stringIdsSize;
+  printf("Dump of %d Strings:\n", count);
+
+  for (u4 i = 0; i < count; ++i) {
+    printf("  %d '%s'\n", i, dexStringById(pDexFile, i));
+  }
+}
+
+/*
  * Dump the requested sections of the file.
  */
 void processDexFile(const char* fileName, DexFile* pDexFile)
@@ -1744,6 +1757,11 @@ void processDexFile(const char* fileName, DexFile* pDexFile)
     if (gOptions.dumpRegisterMaps) {
         dumpRegisterMaps(pDexFile);
         return;
+    }
+
+    if (gOptions.dumpStrings) {
+      dumpStrings(pDexFile);
+      return;
     }
 
     if (gOptions.showFileHeaders) {
@@ -1834,6 +1852,7 @@ void usage(void)
     fprintf(stderr, " -i : ignore checksum failures\n");
     fprintf(stderr, " -l : output layout, either 'plain' or 'xml'\n");
     fprintf(stderr, " -m : dump register maps (and nothing else)\n");
+    fprintf(stderr, " -s : dump strings (and nothing else)\n");
     fprintf(stderr, " -t : temp file name (defaults to /sdcard/dex-temp-*)\n");
 }
 
@@ -1851,7 +1870,7 @@ int main(int argc, char* const argv[])
     gOptions.verbose = true;
 
     while (1) {
-        ic = getopt(argc, argv, "cdfhil:mt:");
+        ic = getopt(argc, argv, "cdfhil:mst:");
         if (ic < 0)
             break;
 
@@ -1884,6 +1903,9 @@ int main(int argc, char* const argv[])
             break;
         case 'm':       // dump register maps only
             gOptions.dumpRegisterMaps = true;
+            break;
+        case 's':       // dump strings only
+            gOptions.dumpStrings = true;
             break;
         case 't':       // temp file, used when opening compressed Jar
             gOptions.tempFileName = optarg;
