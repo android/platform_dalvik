@@ -36,7 +36,8 @@ DexDataMap* dexDataMapAlloc(u4 maxCount) {
     /*
      * Avoiding pulling in safe_iop for safe_iopf.
      */
-    if (!safe_mul(&size, maxCount, sizeof(u4) + sizeof(u2)) ||
+    const u4 sizeOfItems = (u4) (sizeof(u4) + sizeof(u2));
+    if (!safe_mul(&size, maxCount, sizeOfItems) ||
         !safe_add(&size, size, sizeof(DexDataMap))) {
       return NULL;
     }
