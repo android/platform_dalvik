@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9cfb89d_5b79dba6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2015-06-08T21:16:23Z",
+      "side": 1,
+      "message": "minor nit : prefer commit SHAs to links. It\u0027s easier to do something with it from the command line. we haven\u0027t been consistent about this ourselves, from what i can tell.",
+      "revId": "abc0ae4c207169fd5f724c0a85f1763b67f0f5f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
