@@ -45,6 +45,23 @@
       "revId": "206f5b5c9c9876099e6210fd01adb14cd555fe70",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "99ce74a2_37d5122e",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2015-06-08T12:16:54Z",
+      "side": 1,
+      "message": "missing const",
+      "revId": "206f5b5c9c9876099e6210fd01adb14cd555fe70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
