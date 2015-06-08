@@ -16,6 +16,24 @@
       "revId": "abc0ae4c207169fd5f724c0a85f1763b67f0f5f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9d9cc70_83c12c24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2015-06-08T21:20:48Z",
+      "side": 1,
+      "message": "No problem. Replaced link with SHA.",
+      "parentUuid": "b9cfb89d_5b79dba6",
+      "revId": "abc0ae4c207169fd5f724c0a85f1763b67f0f5f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
