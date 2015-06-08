@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d9ab8c9c_2c3ff1e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2015-06-08T18:10:26Z",
+      "side": 1,
+      "message": "Just to make sure I understand correctly, you just want me to say a bit more then the one line I had in the commit message? If so, done :-)",
+      "parentUuid": "f9a690c2_64eeb0b3",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 14
+      },
+      "revId": "206f5b5c9c9876099e6210fd01adb14cd555fe70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9a690c2_84dc740f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "796b8031_fd4a27a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2015-06-08T18:10:26Z",
+      "side": 1,
+      "message": "Ah great. Done",
+      "parentUuid": "f9a690c2_84dc740f",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "206f5b5c9c9876099e6210fd01adb14cd555fe70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99ce74a2_37d5122e",
         "filename": "libdex/DexSwapVerify.cpp",
         "patchSetId": 1
@@ -59,6 +107,24 @@
       "writtenOn": "2015-06-08T12:16:54Z",
       "side": 1,
       "message": "missing const",
+      "revId": "206f5b5c9c9876099e6210fd01adb14cd555fe70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9d9cc70_d467f49b",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2015-06-08T18:10:26Z",
+      "side": 1,
+      "message": "Love that eye for detail! Thanks.\nFixed.",
+      "parentUuid": "99ce74a2_37d5122e",
       "revId": "206f5b5c9c9876099e6210fd01adb14cd555fe70",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
