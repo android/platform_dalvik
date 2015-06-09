@@ -1,0 +1,254 @@
+Processing 'bytecodes.dex'...
+Opened 'bytecodes.dex', DEX version '035'
+DEX file header:
+magic               : 'dex\n035\0'
+checksum            : 19b5777e
+signature           : ec44...05ea
+file_size           : 1168
+header_size         : 112
+link_size           : 0
+link_off            : 0 (0x000000)
+string_ids_size     : 19
+string_ids_off      : 112 (0x000070)
+type_ids_size       : 8
+type_ids_off        : 188 (0x0000bc)
+proto_ids_size       : 6
+proto_ids_off        : 220 (0x0000dc)
+field_ids_size      : 1
+field_ids_off       : 292 (0x000124)
+method_ids_size     : 11
+method_ids_off      : 300 (0x00012c)
+class_defs_size     : 1
+class_defs_off      : 388 (0x000184)
+data_size           : 748
+data_off            : 420 (0x0001a4)
+
+Class #0 header:
+class_idx           : 5
+access_flags        : 1 (0x0001)
+superclass_idx      : 4
+interfaces_off      : 0 (0x000000)
+source_file_idx     : -1
+annotations_off     : 0 (0x000000)
+class_data_off      : 972 (0x0003cc)
+static_fields_size  : 0
+instance_fields_size: 1
+direct_methods_size : 9
+virtual_methods_size: 1
+
+Class #0            -
+  Class descriptor  : 'Lcom/google/android/test/Test;'
+  Access flags      : 0x0001 (PUBLIC)
+  Superclass        : 'Landroid/app/Activity;'
+  Interfaces        -
+  Static fields     -
+  Instance fields   -
+    #0              : (in Lcom/google/android/test/Test;)
+      name          : 'a'
+      type          : '[I'
+      access        : 0x0012 (PRIVATE FINAL)
+  Direct methods    -
+    #0              : (in Lcom/google/android/test/Test;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10001 (PUBLIC CONSTRUCTOR)
+      code          -
+      registers     : 5
+      ins           : 1
+      outs          : 2
+      insns size    : 36 16-bit code units
+0001a4:                                        |[0001a4] com.google.android.test.Test.<init>:()V
+0001b4: 1602 0100                              |0000: const-wide/16 v2, #int 1 // #1
+0001b8: 7010 0000 0400                         |0002: invoke-direct {v4}, Landroid/app/Activity;.<init>:()V // method@0000
+0001be: 1300 6400                              |0005: const/16 v0, #int 100 // #64
+0001c2: 2300 0700                              |0007: new-array v0, v0, [I // type@0007
+0001c6: 5b40 0000                              |0009: iput-object v0, v4, Lcom/google/android/test/Test;.a:[I // field@0000
+0001ca: 1230                                   |000b: const/4 v0, #int 3 // #3
+0001cc: 6e20 0500 0400                         |000c: invoke-virtual {v4, v0}, Lcom/google/android/test/Test;.a:(I)V // method@0005
+0001d2: 1210                                   |000f: const/4 v0, #int 1 // #1
+0001d4: 7110 0600 0000                         |0010: invoke-static {v0}, Lcom/google/android/test/Test;.b:(I)I // method@0006
+0001da: 7120 0400 3200                         |0013: invoke-static {v2, v3}, Lcom/google/android/test/Test;.a:(J)J // method@0004
+0001e0: 7120 0700 3200                         |0016: invoke-static {v2, v3}, Lcom/google/android/test/Test;.b:(J)J // method@0007
+0001e6: 1500 803f                              |0019: const/high16 v0, #int 1065353216 // #3f80
+0001ea: 7110 0300 0000                         |001b: invoke-static {v0}, Lcom/google/android/test/Test;.a:(F)F // method@0003
+0001f0: 1900 f03f                              |001e: const-wide/high16 v0, #long 4607182418800017408 // #3ff0
+0001f4: 7120 0200 1000                         |0020: invoke-static {v0, v1}, Lcom/google/android/test/Test;.a:(D)D // method@0002
+0001fa: 0e00                                   |0023: return-void
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #1              : (in Lcom/google/android/test/Test;)
+      name          : 'a'
+      type          : '(D)D'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 0
+      insns size    : 7 16-bit code units
+0001fc:                                        |[0001fc] com.google.android.test.Test.a:(D)D
+00020c: 1800 0000 0000 801c c840               |0000: const-wide v0, #double 12345.000000 // #40c81c8000000000
+000216: cb20                                   |0005: add-double/2addr v0, v2
+000218: 1000                                   |0006: return-wide v0
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #2              : (in Lcom/google/android/test/Test;)
+      name          : 'a'
+      type          : '(F)F'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 0
+      insns size    : 5 16-bit code units
+00021c:                                        |[00021c] com.google.android.test.Test.a:(F)F
+00022c: 1400 00e4 4046                         |0000: const v0, #float 12345.000000 // #4640e400
+000232: c610                                   |0003: add-float/2addr v0, v1
+000234: 0f00                                   |0004: return v0
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #3              : (in Lcom/google/android/test/Test;)
+      name          : 'a'
+      type          : '(J)J'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 0
+      insns size    : 4 16-bit code units
+000238:                                        |[000238] com.google.android.test.Test.a:(J)J
+000248: 1900 ff7f                              |0000: const-wide/high16 v0, #long 9223090561878065152 // #7fff
+00024c: bb20                                   |0002: add-long/2addr v0, v2
+00024e: 1000                                   |0003: return-wide v0
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #4              : (in Lcom/google/android/test/Test;)
+      name          : 'b'
+      type          : '(I)I'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 0
+      insns size    : 4 16-bit code units
+000250:                                        |[000250] com.google.android.test.Test.b:(I)I
+000260: 1500 ff7f                              |0000: const/high16 v0, #int 2147418112 // #7fff
+000264: b010                                   |0002: add-int/2addr v0, v1
+000266: 0f00                                   |0003: return v0
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #5              : (in Lcom/google/android/test/Test;)
+      name          : 'b'
+      type          : '(J)J'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 0
+      insns size    : 7 16-bit code units
+000268:                                        |[000268] com.google.android.test.Test.b:(J)J
+000278: 1800 2143 9999 3412 ff7f               |0000: const-wide v0, #double nan // #7fff123499994321
+000282: bb20                                   |0005: add-long/2addr v0, v2
+000284: 1000                                   |0006: return-wide v0
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #6              : (in Lcom/google/android/test/Test;)
+      name          : 'c'
+      type          : '(I)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 0
+      insns size    : 13 16-bit code units
+000288:                                        |[000288] com.google.android.test.Test.c:(I)V
+000298: 1200                                   |0000: const/4 v0, #int 0 // #0
+00029a: 1301 6400                              |0001: const/16 v1, #int 100 // #64
+00029e: 3410 0300                              |0003: if-lt v0, v1, 0006 // +0003
+0002a2: 0e00                                   |0005: return-void
+0002a4: 5421 0000                              |0006: iget-object v1, v2, Lcom/google/android/test/Test;.a:[I // field@0000
+0002a8: 4b03 0100                              |0008: aput v3, v1, v0
+0002ac: d800 0001                              |000a: add-int/lit8 v0, v0, #int 1 // #01
+0002b0: 28f5                                   |000c: goto 0001 // -000b
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #7              : (in Lcom/google/android/test/Test;)
+      name          : 'd'
+      type          : '(I)V'
+      access        : 0x0002 (PRIVATE)
+      code          -
+      registers     : 5
+      ins           : 2
+      outs          : 1
+      insns size    : 24 16-bit code units
+0002b4:                                        |[0002b4] com.google.android.test.Test.d:(I)V
+0002c4: 1300 0a00                              |0000: const/16 v0, #int 10 // #a
+0002c8: 3304 0c00                              |0002: if-ne v4, v0, 000e // +000c
+0002cc: 5430 0000                              |0004: iget-object v0, v3, Lcom/google/android/test/Test;.a:[I // field@0000
+0002d0: 1221                                   |0006: const/4 v1, #int 2 // #2
+0002d2: 7110 0a00 0400                         |0007: invoke-static {v4}, Lcom/google/android/test/Test;.e:(I)I // method@000a
+0002d8: 0a02                                   |000a: move-result v2
+0002da: 4b02 0001                              |000b: aput v2, v0, v1
+0002de: 0e00                                   |000d: return-void
+0002e0: 5430 0000                              |000e: iget-object v0, v3, Lcom/google/android/test/Test;.a:[I // field@0000
+0002e4: 1231                                   |0010: const/4 v1, #int 3 // #3
+0002e6: 7110 0a00 0400                         |0011: invoke-static {v4}, Lcom/google/android/test/Test;.e:(I)I // method@000a
+0002ec: 0a02                                   |0014: move-result v2
+0002ee: 4b02 0001                              |0015: aput v2, v0, v1
+0002f2: 28f6                                   |0017: goto 000d // -000a
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+    #8              : (in Lcom/google/android/test/Test;)
+      name          : 'e'
+      type          : '(I)I'
+      access        : 0x000a (PRIVATE STATIC)
+      code          -
+      registers     : 2
+      ins           : 1
+      outs          : 0
+      insns size    : 3 16-bit code units
+0002f4:                                        |[0002f4] com.google.android.test.Test.e:(I)I
+000304: db00 0102                              |0000: div-int/lit8 v0, v1, #int 2 // #02
+000308: 0f00                                   |0002: return v0
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+  Virtual methods   -
+    #0              : (in Lcom/google/android/test/Test;)
+      name          : 'a'
+      type          : '(I)V'
+      access        : 0x0001 (PUBLIC)
+      code          -
+      registers     : 3
+      ins           : 2
+      outs          : 2
+      insns size    : 14 16-bit code units
+00030c:                                        |[00030c] com.google.android.test.Test.a:(I)V
+00031c: 3d02 0700                              |0000: if-lez v2, 0007 // +0007
+000320: d800 02fd                              |0002: add-int/lit8 v0, v2, #int -3 // #fd
+000324: 6e20 0500 0100                         |0004: invoke-virtual {v1, v0}, Lcom/google/android/test/Test;.a:(I)V // method@0005
+00032a: 7020 0800 2100                         |0007: invoke-direct {v1, v2}, Lcom/google/android/test/Test;.c:(I)V // method@0008
+000330: 7020 0900 2100                         |000a: invoke-direct {v1, v2}, Lcom/google/android/test/Test;.d:(I)V // method@0009
+000336: 0e00                                   |000d: return-void
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+  source_file_idx   : -1 (unknown)
+
