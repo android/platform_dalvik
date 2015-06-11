@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79254042_f0dc5957",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1041833
+      },
+      "writtenOn": "2015-06-11T23:43:05Z",
+      "side": 1,
+      "message": "We\u0027re C++11, nullptr preferred nowadays. :-)",
+      "range": {
+        "startLine": 1074,
+        "startChar": 25,
+        "endLine": 1074,
+        "endChar": 29
+      },
+      "revId": "defd605929f3d8506cd5ef3c9a591afe1684c8a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
