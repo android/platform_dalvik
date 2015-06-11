@@ -35,7 +35,6 @@ LOCAL_SHARED_LIBRARIES := libcutils libz libutils
 LOCAL_STATIC_LIBRARIES := $(dexdump_static_libraries) libbase
 LOCAL_LDLIBS +=
 LOCAL_32_BIT_ONLY := true
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 #include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
@@ -45,7 +44,4 @@ LOCAL_SRC_FILES := $(dexdump_src_files)
 LOCAL_C_INCLUDES := $(dexdump_c_includes)
 LOCAL_STATIC_LIBRARIES := $(dexdump_static_libraries) libcutils liblog libutils libbase
 LOCAL_LDLIBS += -lpthread -lz
-# TODO: Move dexlist from libdex to libart and lose the 32-bit limitation.
-LOCAL_32_BIT_ONLY := true
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include $(BUILD_HOST_EXECUTABLE)
