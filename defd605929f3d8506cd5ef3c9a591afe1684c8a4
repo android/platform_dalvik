@@ -22,6 +22,30 @@
       "revId": "defd605929f3d8506cd5ef3c9a591afe1684c8a4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "992af412_f13bff8b",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2015-06-11T23:48:24Z",
+      "side": 1,
+      "message": "I am okay doing that (especially in new code), but since this file exclusively uses NULL, I took the consistency argument for readability.",
+      "parentUuid": "79254042_f0dc5957",
+      "range": {
+        "startLine": 1074,
+        "startChar": 25,
+        "endLine": 1074,
+        "endChar": 29
+      },
+      "revId": "defd605929f3d8506cd5ef3c9a591afe1684c8a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
