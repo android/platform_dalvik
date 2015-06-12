@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "396e687b_98d661ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2015-06-12T16:59:07Z",
+      "side": 1,
+      "message": "fwiw, this is actually better than our usual best practice; we tend to be lazy and not include a reason, but IMHO (even though i don\u0027t practice what i preach) a reason should be mandatory. thanks!",
+      "revId": "3478ee346df30730401eb8e3e9e540e6c744a26f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
