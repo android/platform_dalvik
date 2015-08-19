@@ -16,6 +16,6 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := HprofConv.c
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_HOST_OS := darwin linux windows
 LOCAL_MODULE := hprof-conv
 include $(BUILD_HOST_EXECUTABLE)

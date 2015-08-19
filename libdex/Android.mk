@@ -72,6 +72,6 @@ LOCAL_C_INCLUDES += $(dex_include_files)
 LOCAL_CPPFLAGS := -std=gnu++11
 LOCAL_STATIC_LIBRARIES := liblog libutils
 LOCAL_WHOLE_STATIC_LIBRARIES := libziparchive-host
-LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_HOST_OS := darwin linux windows
 LOCAL_MODULE := libdex
 include $(BUILD_HOST_STATIC_LIBRARY)
