@@ -31,7 +31,7 @@ public final class MergeConflictTest extends TestCase {
         Dex ab = new DexMerger(a, b, CollisionPolicy.FAIL).merge();
 
         // a and ab overlap; this should fail
-        DexMerger dexMerger = new DexMerger(a, ab, CollisionPolicy.FAIL);
+        DexMerger dexMerger = new DexMerger(new Dex[]{a, ab}, CollisionPolicy.FAIL);
         try {
             dexMerger.merge();
             fail();
