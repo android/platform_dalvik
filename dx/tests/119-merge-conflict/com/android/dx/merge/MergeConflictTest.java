@@ -28,10 +28,10 @@ public final class MergeConflictTest extends TestCase {
         Dex b = resourceToDexBuffer("/testdata/B.dex");
 
         // a and b don't overlap; this should succeed
-        Dex ab = new DexMerger(a, b, CollisionPolicy.FAIL).merge();
+        Dex ab = new DexMerger(new Dex[]{a, b}, CollisionPolicy.FAIL).merge();
 
         // a and ab overlap; this should fail
-        DexMerger dexMerger = new DexMerger(a, ab, CollisionPolicy.FAIL);
+        DexMerger dexMerger = new DexMerger(new Dex[]{a, ab}, CollisionPolicy.FAIL);
         try {
             dexMerger.merge();
             fail();

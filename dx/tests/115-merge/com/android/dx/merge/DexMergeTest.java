@@ -50,10 +50,10 @@ public final class DexMergeTest extends TestCase {
                 new byte[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, -112, -23, 121 },
                 (byte[]) fillArrayData.getMethod("newByteArray").invoke(null)));
         assertTrue(Arrays.equals(
-                new char[] { 0xFFFF, 0x4321, 0xABCD, 0, 'a', 'b', 'c' },
+                new char[]{0xFFFF, 0x4321, 0xABCD, 0, 'a', 'b', 'c'},
                 (char[]) fillArrayData.getMethod("newCharArray").invoke(null)));
         assertTrue(Arrays.equals(
-                new long[] { 4660046610375530309L, 7540113804746346429L, -6246583658587674878L },
+                new long[]{4660046610375530309L, 7540113804746346429L, -6246583658587674878L},
                 (long[]) fillArrayData.getMethod("newLongArray").invoke(null)));
     }
 
@@ -120,7 +120,7 @@ public final class DexMergeTest extends TestCase {
                 + "c=@testdata.Annotated$Nested(e=, f=0, g=0), d=[])",
                 field.getAnnotation(marker).toString());
         assertEquals("@testdata.Annotated$Marker(a=on parameter, b=[], "
-                + "c=@testdata.Annotated$Nested(e=, f=0, g=0), d=[])",
+                        + "c=@testdata.Annotated$Nested(e=, f=0, g=0), d=[])",
                 method.getParameterAnnotations()[1][0].toString());
     }
 
@@ -141,11 +141,11 @@ public final class DexMergeTest extends TestCase {
 
         Dex dexA = resourceToDexBuffer("/testdata/Basic.dex");
         Dex dexB = resourceToDexBuffer("/testdata/TryCatchFinally.dex");
-        Dex merged = new DexMerger(dexA, dexB, CollisionPolicy.KEEP_FIRST).merge();
+        Dex merged = new DexMerger(new Dex[]{dexA, dexB}, CollisionPolicy.KEEP_FIRST).merge();
 
         int maxLength = 0;
         for (int i = 0; i < steps; i++) {
-            DexMerger dexMerger = new DexMerger(dexA, merged, CollisionPolicy.KEEP_FIRST);
+            DexMerger dexMerger = new DexMerger(new Dex[]{dexA, merged}, CollisionPolicy.KEEP_FIRST);
             dexMerger.setCompactWasteThreshold(compactWasteThreshold);
             merged = dexMerger.merge();
             maxLength = Math.max(maxLength, merged.getLength());
@@ -158,7 +158,7 @@ public final class DexMergeTest extends TestCase {
     public ClassLoader mergeAndLoad(String dexAResource, String dexBResource) throws Exception {
         Dex dexA = resourceToDexBuffer(dexAResource);
         Dex dexB = resourceToDexBuffer(dexBResource);
-        Dex merged = new DexMerger(dexA, dexB, CollisionPolicy.KEEP_FIRST).merge();
+        Dex merged = new DexMerger(new Dex[]{dexA, dexB}, CollisionPolicy.KEEP_FIRST).merge();
         File mergedDex = File.createTempFile("DexMergeTest", ".classes.dex");
         merged.writeTo(mergedDex);
         File mergedJar = dexToJar(mergedDex);
