@@ -20,7 +20,7 @@ public class MergeTest {
       try {
         Dex toMerge = new Dex(new File(fileName1));
         Dex toMerge2 = new Dex(new File(fileName2));
-        new DexMerger(toMerge, toMerge2, CollisionPolicy.KEEP_FIRST).merge();
+        new DexMerger(new Dex[]{toMerge, toMerge2}, CollisionPolicy.KEEP_FIRST).merge();
       } catch (DexIndexOverflowException e) {
         // ignore index overflow
       } catch (Throwable t) {
@@ -29,5 +29,12 @@ public class MergeTest {
         throw t;
       }
     }
+
+    // Now try all of them
+    Dex[] dexes = new Dex[args.length];
+    for (int i = 0; i < args.length; i++) {
+      dexes[i] = new Dex(new File(args[i]));
+    }
+    new DexMerger(dexes, CollisionPolicy.KEEP_FIRST).merge();
   }
 }
