@@ -4,6 +4,8 @@ import com.android.dex.Dex;
 import com.android.dex.DexIndexOverflowException;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * This test tries to merge given dex files at random, 2 by 2.
@@ -14,19 +16,29 @@ public class MergeTest {
 
   public static void main(String[] args) throws Throwable {
 
-    for (int i = 0; i < NUMBER_OF_TRIES; i++) {
-      String fileName1 = args[(int) (Math.random() * args.length)];
-      String fileName2 = args[(int) (Math.random() * args.length)];
-      try {
-        Dex toMerge = new Dex(new File(fileName1));
-        Dex toMerge2 = new Dex(new File(fileName2));
-        new DexMerger(toMerge, toMerge2, CollisionPolicy.KEEP_FIRST).merge();
-      } catch (DexIndexOverflowException e) {
-        // ignore index overflow
-      } catch (Throwable t) {
-        System.err.println(
-            "Problem merging those 2 dexes: \"" + fileName1 + "\" and \"" + fileName2 + "\"");
-        throw t;
+    Random random = new Random();
+    for (int pass = 0; pass < 2; pass++) {
+      for (int i = 0; i < NUMBER_OF_TRIES; i++) {
+        // On the first pass only do 2-way merges, then do from 3 to 10 way merges
+        // but not more to avoid dex index overflow.
+        int numDex = pass == 0 ? 2 : random.nextInt(8) + 3;
+
+        String[] fileNames = new String[numDex]; // only for the error message
+        try {
+          Dex[] dexesToMerge = new Dex[numDex];
+          for (int j = 0; j < numDex; j++) {
+            String fileName = args[random.nextInt(args.length)];
+            fileNames[j] = fileName;
+            dexesToMerge[j] = new Dex(new File(fileName));
+          }
+          new DexMerger(dexesToMerge, CollisionPolicy.KEEP_FIRST).merge();
+        } catch (DexIndexOverflowException e) {
+          // ignore index overflow
+        } catch (Throwable t) {
+          System.err.println(
+                  "Problem merging those dexes: " + Arrays.toString(fileNames));
+          throw t;
+        }
       }
     }
   }
