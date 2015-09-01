@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6424bead_d089c21a",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0468616f_aa7c2f5b",
+      "range": {
+        "startLine": 501,
+        "startChar": 12,
+        "endLine": 501,
+        "endChar": 14
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64e03d3d_0b990500",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2015-08-31T15:43:42Z",
       "side": 1,
       "message": "i+1 would be more user-friendly?",
+      "range": {
+        "startLine": 208,
+        "startChar": 16,
+        "endLine": 208,
+        "endChar": 17
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8429b287_cec36390",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e03d3d_0b990500",
       "range": {
         "startLine": 208,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "84529221_29d669df",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e03d3d_cb30bd75",
+      "range": {
+        "startLine": 232,
+        "startChar": 43,
+        "endLine": 233,
+        "endChar": 21
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e478ad71_d9d27745",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2015-08-31T15:43:42Z",
       "side": 1,
       "message": "I think those could be fields of IdMerger, which whould avoid passing them to readToBuffer as parameters and would simplify a little.",
+      "range": {
+        "startLine": 236,
+        "startChar": 12,
+        "endLine": 239,
+        "endChar": 50
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "644d9e85_e52ab612",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "These values only make sense when there is a merge sorted. Making them fields of IdMerger might be more confusing for the non sorted case and also adds the non-obvious dependency between these methods by relying on side-effects. They are the k-way equivalent of aOffset,bOffset and aIndex,bIndex",
+      "parentUuid": "e478ad71_d9d27745",
       "range": {
         "startLine": 236,
         "startChar": 12,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "0484e2ca_85dbe457",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4ea6e5e_a1f71ec1",
+      "range": {
+        "startLine": 241,
+        "startChar": 38,
+        "endLine": 241,
+        "endChar": 45
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "845371c9_2cc7f7ab",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 3
@@ -128,6 +248,30 @@
       "writtenOn": "2015-08-31T15:43:42Z",
       "side": 1,
       "message": "This code with its TreeMap has become quite complicated and will be hard to maintain. Is there no way to simplify it? If not, a few comments and variable renames could help.",
+      "range": {
+        "startLine": 241,
+        "startChar": 12,
+        "endLine": 264,
+        "endChar": 13
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6492fe15_fdefe778",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done. I\u0027ve rename the variables and added the key comment. Perhaps because I wrote it, but I find the new way easier to understand. It\u0027s inherently a bit more complex because is a k-way merge instead of a 2-way merge, but in essence we just read one value from each dex at a time, take the smallest one, write it and re-read from the associated dexes again.",
+      "parentUuid": "845371c9_2cc7f7ab",
       "range": {
         "startLine": 241,
         "startChar": 12,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "e486eed4_04c03863",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "845371c9_cc94239d",
+      "range": {
+        "startLine": 269,
+        "startChar": 118,
+        "endLine": 269,
+        "endChar": 124
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "845371c9_26d5d85f",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 3
@@ -174,6 +342,30 @@
       "writtenOn": "2015-08-31T15:43:42Z",
       "side": 1,
       "message": "nit: avoid implicit boxing.",
+      "range": {
+        "startLine": 277,
+        "startChar": 18,
+        "endLine": 277,
+        "endChar": 24
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8497f201_7e1c3100",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "845371c9_26d5d85f",
       "range": {
         "startLine": 277,
         "startChar": 18,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "045f8228_6d991170",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e48fcdab_81debcf9",
+      "range": {
+        "startLine": 1018,
+        "startChar": 12,
+        "endLine": 1022,
+        "endChar": 93
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e478ad71_b607888f",
         "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
         "patchSetId": 3
@@ -220,6 +436,30 @@
       "writtenOn": "2015-08-31T15:43:42Z",
       "side": 1,
       "message": "An interesting stress test would now be to merge more that 2 dex files at once. But maybe not too many to avoid an index overflow?",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 5
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "644d9e85_7499d66f",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-01T22:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e478ad71_b607888f",
       "range": {
         "startLine": 17,
         "startChar": 4,
