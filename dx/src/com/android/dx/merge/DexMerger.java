@@ -192,11 +192,17 @@ public final class DexMerger {
          */
         WriterSizes compactedSizes = new WriterSizes(this);
         int wastedByteCount = writerSizes.size() - compactedSizes.size();
-        if (wastedByteCount >  + compactWasteThreshold) {
-            DexMerger compacter = new DexMerger(
-                    new Dex[] {dexOut, new Dex(0)}, CollisionPolicy.FAIL, compactedSizes);
-            result = compacter.mergeDexes();
-            System.out.printf("Result compacted from %.1fKiB to %.1fKiB to save %.1fKiB%n",
+        if (wastedByteCount > compactWasteThreshold) {
+            int compactions = wastedByteCount > 2 * compactWasteThreshold ? 2 : 1;
+
+            for (int i = 0; i < compactions; i++) {
+                DexMerger compacter = new DexMerger(
+                        new Dex[]{result, new Dex(0)}, CollisionPolicy.FAIL, compactedSizes);
+                result = compacter.mergeDexes();
+                compactedSizes = new WriterSizes(compacter);
+            }
+            System.out.printf("Result %d compactions from %.1fKiB to %.1fKiB to save %.1fKiB%n",
+                    compactions,
                     dexOut.getLength() / 1024f,
                     result.getLength() / 1024f,
                     wastedByteCount / 1024f);
@@ -238,8 +244,8 @@ public final class DexMerger {
             int[] offsets = new int[dexes.length];
             int[] indexes = new int[dexes.length];
 
-            TreeMap<T, List<Integer>> values = new TreeMap<T, List<Integer>>();
-
+            // values contains one value from each dex, sorted for fast retrieval of the smallest
+            // value. The list associated with a value has the indexes of the dexes that had that value.            TreeMap<T, List<Integer>> values = new TreeMap<T, List<Integer>>();
             for (int i = 0; i < dexes.length; i++) {
                 sections[i] = getSection(dexes[i].getTableOfContents());
                 dexSections[i] = sections[i].exists() ? dexes[i].open(sections[i].off) : null;
