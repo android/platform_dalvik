@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "24f726e3_435c6663",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:41:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure I get this one correctly, but if I do, I wonder if it would not be simpler to put 2 comments in the code. See propositions below.",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8447f2eb_3ee14903",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 4
