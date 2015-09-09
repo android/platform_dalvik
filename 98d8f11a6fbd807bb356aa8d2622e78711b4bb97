@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44517aa7_9cf0a59f",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "sections ?",
+      "range": {
+        "startLine": 237,
+        "startChar": 26,
+        "endLine": 237,
+        "endChar": 28
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8447f2eb_3ee14903",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "What about moving all that into readToBuffer?",
+      "range": {
+        "startLine": 250,
+        "startChar": 16,
+        "endLine": 250,
+        "endChar": 43
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6442fedf_3df86fb1",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "// Fill in values with the first value of each dex",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e436ee6e_e1fca6ae",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "// Fetch the next value of the dexes we just polled out",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0434e264_02298ac9",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "What about renaming to help understand the purpose of the method instead of naming it to how it will do it?\n\nMaybe something like fetchValueIntoMap, IDK hopefully you\u0027ll have a better idea.",
+      "range": {
+        "startLine": 272,
+        "startChar": 20,
+        "endLine": 272,
+        "endChar": 32
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44517aa7_7cf83984",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "Did you look if it was worth trying to remove or make faster?",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44517aa7_dce62dea",
+        "filename": "dx/src/com/android/dx/merge/InstructionTransformer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "What about setting indexMap back to null before leaving?",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e436ee6e_61f176cf",
+        "filename": "dx/tests/115-merge/com/android/dx/merge/DexMergeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-09T09:40:25Z",
+      "side": 1,
+      "message": "?",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
