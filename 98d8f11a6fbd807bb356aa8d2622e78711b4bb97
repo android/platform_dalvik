@@ -170,6 +170,29 @@
       "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6442fedf_fd4f67a8",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2015-09-09T10:15:10Z",
+      "side": 1,
+      "message": "You can\u0027t do it like that. With a built tree, you will always get a DexIndexOverflowException.\nSo you shouldn\u0027t merge too many dexes at once, and ignore DexIndexOverflowExceptions.\nHere\u0027s what I think you should do:\n\n// Now try to merge several dexes at a time\n    for (int i \u003d 0; i \u003c NUMBER_OF_TRIES; i++) {\n      \n      // we want a random number of dexes between 3 and 10, but not more to avoid dex index overflow\n      int numDex \u003d (int) (Math.random() * 8) + 3;\n      \n      String[] fileNames \u003d new String[numDex]; // only for the error message\n      try {\n        Dex[] dexesToMerge \u003d new Dex[numDex];\n        for (int j \u003d 0; j \u003c numDex; j++) {\n          String fileName \u003d args[(int) (Math.random() * args.length)];\n          fileNames[j] \u003d fileName;\n          dexesToMerge[j] \u003d new Dex(new File(fileName));\n        }\n        new DexMerger(dexesToMerge, CollisionPolicy.KEEP_FIRST).merge();\n      } catch (DexIndexOverflowException e) {\n        // ignore index overflow\n      } catch (Throwable t) {\n        System.err.println(\n            \"Problem merging those dexes: \" + Arrays.toString(fileNames));\n        throw t;\n      }\n    }",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 61
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
