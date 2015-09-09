@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "6442fedf_9d54233f",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2015-09-09T10:20:57Z",
+      "side": 1,
+      "message": "You\u0027re right, we can\u0027t put the fields in IdMerger because of the mergeUnsorted(), I missed that.\nI still think it would be better to have a more object-oriented design. Maybe a better way to do it would be to introduce SortedIdMerger and UnsortedIdMerger abstract classes that would extend IdMerger and have different implementations of their \"sort\" method. But it is a big change, and maybe I could do it later in another CL.",
+      "parentUuid": "644d9e85_e52ab612",
+      "range": {
+        "startLine": 236,
+        "startChar": 12,
+        "endLine": 239,
+        "endChar": 50
+      },
+      "revId": "d0f394cf12826b53e143f67126c7a4acced80f11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4ea6e5e_a1f71ec1",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 3
