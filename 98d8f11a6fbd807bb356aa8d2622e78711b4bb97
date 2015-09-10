@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "c4ef2afe_4a379ec5",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T17:32:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0434e264_22992efb",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8447f2eb_3ee14903",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 4
