@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e4c34e74_62fd0732",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T18:03:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6442fedf_fd10c7cc",
+      "range": {
+        "startLine": 247,
+        "startChar": 16,
+        "endLine": 247,
+        "endChar": 107
+      },
+      "revId": "ccaf1d2cde54e34137bb4c3d556064d2e00f056a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a44076d4_7fd6ef64",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2015-09-10T17:35:54Z",
       "side": 1,
       "message": "nit: line is too long",
+      "range": {
+        "startLine": 257,
+        "startChar": 20,
+        "endLine": 257,
+        "endChar": 123
+      },
+      "revId": "ccaf1d2cde54e34137bb4c3d556064d2e00f056a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44fdfae7_df5fdf08",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T18:03:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a44076d4_7fd6ef64",
       "range": {
         "startLine": 257,
         "startChar": 20,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "04c1426c_04dbf759",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T18:03:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8447f2eb_fe10c1cc",
+      "range": {
+        "startLine": 266,
+        "startChar": 8,
+        "endLine": 266,
+        "endChar": 155
+      },
+      "revId": "ccaf1d2cde54e34137bb4c3d556064d2e00f056a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6442fedf_bd0a3f97",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 5
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "64cf5e9f_9242ad2c",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T18:03:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6442fedf_bd0a3f97",
+      "range": {
+        "startLine": 565,
+        "startChar": 12,
+        "endLine": 565,
+        "endChar": 102
+      },
+      "revId": "ccaf1d2cde54e34137bb4c3d556064d2e00f056a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a44076d4_ff10bfcc",
         "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
         "patchSetId": 5
@@ -105,6 +201,30 @@
       "writtenOn": "2015-09-10T17:35:54Z",
       "side": 1,
       "message": "nit: update",
+      "range": {
+        "startLine": 11,
+        "startChar": 55,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "ccaf1d2cde54e34137bb4c3d556064d2e00f056a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4bdd6e7_23995571",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T18:03:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a44076d4_ff10bfcc",
       "range": {
         "startLine": 11,
         "startChar": 55,
