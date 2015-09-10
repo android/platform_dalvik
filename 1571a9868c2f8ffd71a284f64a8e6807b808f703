@@ -22,6 +22,30 @@
       "revId": "1571a9868c2f8ffd71a284f64a8e6807b808f703",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44cedaa4_8e216f68",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T18:03:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e41fceee_5cf1b1ce",
+      "range": {
+        "startLine": 242,
+        "startChar": 12,
+        "endLine": 242,
+        "endChar": 104
+      },
+      "revId": "1571a9868c2f8ffd71a284f64a8e6807b808f703",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
