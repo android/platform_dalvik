@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "0434e264_22992efb",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2015-09-10T08:46:37Z",
+      "side": 1,
+      "message": "Sorry my comment was only about \n\"// One a value is extracted, all the dexes associated with it are re-read.\"\nI think the description of the TreeMap was helpful.",
+      "parentUuid": "244c8613_be0475db",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8447f2eb_3ee14903",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 4
