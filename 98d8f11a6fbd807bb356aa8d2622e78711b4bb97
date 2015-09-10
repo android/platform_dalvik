@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "84d4522f_2ab007c0",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Well, sections is used for TableOfContents.Section. And in replaces inA and inB. Changed it to dexSections.",
+      "parentUuid": "44517aa7_9cf0a59f",
+      "range": {
+        "startLine": 237,
+        "startChar": 26,
+        "endLine": 237,
+        "endChar": 28
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24f726e3_435c6663",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2015-09-09T09:41:53Z",
       "side": 1,
       "message": "I\u0027m not sure I get this one correctly, but if I do, I wonder if it would not be simpler to put 2 comments in the code. See propositions below.",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "244c8613_be0475db",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24f726e3_435c6663",
       "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -82,6 +124,48 @@
     },
     {
       "key": {
+        "uuid": "64cf5e9f_9e187cb2",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8447f2eb_3ee14903",
+      "range": {
+        "startLine": 250,
+        "startChar": 16,
+        "endLine": 250,
+        "endChar": 43
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4c34e74_8da97161",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6442fedf_3df86fb1",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e436ee6e_e1fca6ae",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 4
@@ -93,6 +177,24 @@
       "writtenOn": "2015-09-09T09:40:25Z",
       "side": 1,
       "message": "// Fetch the next value of the dexes we just polled out",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4ef2afe_32374cc7",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e436ee6e_e1fca6ae",
       "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "a4bdd6e7_918d0c29",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "I renamed to readIntoMap, I called it \"read\" for consistency with the existing \"read\" that reads from (dex, indexmap, index) and returns a T. This one reads into the given values map. readIntoMap :)",
+      "parentUuid": "0434e264_02298ac9",
+      "range": {
+        "startLine": 272,
+        "startChar": 20,
+        "endLine": 272,
+        "endChar": 32
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44517aa7_7cf83984",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 4
@@ -133,6 +259,24 @@
       "writtenOn": "2015-09-09T09:40:25Z",
       "side": 1,
       "message": "Did you look if it was worth trying to remove or make faster?",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4bdd6e7_cb8cf5fe",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Yeah I did. It did not improve anything (on my 29 way merge), but I went ahead and did it anyway as it\u0027s cleaner and less code and might improve larger merges",
+      "parentUuid": "44517aa7_7cf83984",
       "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "e4c34e74_f336901a",
+        "filename": "dx/src/com/android/dx/merge/InstructionTransformer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44517aa7_dce62dea",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e436ee6e_61f176cf",
         "filename": "dx/tests/115-merge/com/android/dx/merge/DexMergeTest.java",
         "patchSetId": 4
@@ -173,6 +335,24 @@
     },
     {
       "key": {
+        "uuid": "04c1426c_14832cd0",
+        "filename": "dx/tests/115-merge/com/android/dx/merge/DexMergeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Oops :)",
+      "parentUuid": "e436ee6e_61f176cf",
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6442fedf_fd4f67a8",
         "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
         "patchSetId": 4
@@ -184,6 +364,30 @@
       "writtenOn": "2015-09-09T10:15:10Z",
       "side": 1,
       "message": "You can\u0027t do it like that. With a built tree, you will always get a DexIndexOverflowException.\nSo you shouldn\u0027t merge too many dexes at once, and ignore DexIndexOverflowExceptions.\nHere\u0027s what I think you should do:\n\n// Now try to merge several dexes at a time\n    for (int i \u003d 0; i \u003c NUMBER_OF_TRIES; i++) {\n      \n      // we want a random number of dexes between 3 and 10, but not more to avoid dex index overflow\n      int numDex \u003d (int) (Math.random() * 8) + 3;\n      \n      String[] fileNames \u003d new String[numDex]; // only for the error message\n      try {\n        Dex[] dexesToMerge \u003d new Dex[numDex];\n        for (int j \u003d 0; j \u003c numDex; j++) {\n          String fileName \u003d args[(int) (Math.random() * args.length)];\n          fileNames[j] \u003d fileName;\n          dexesToMerge[j] \u003d new Dex(new File(fileName));\n        }\n        new DexMerger(dexesToMerge, CollisionPolicy.KEEP_FIRST).merge();\n      } catch (DexIndexOverflowException e) {\n        // ignore index overflow\n      } catch (Throwable t) {\n        System.err.println(\n            \"Problem merging those dexes: \" + Arrays.toString(fileNames));\n        throw t;\n      }\n    }",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 61
+      },
+      "revId": "98d8f11a6fbd807bb356aa8d2622e78711b4bb97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4c34e74_f387b0d7",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1047453
+      },
+      "writtenOn": "2015-09-10T00:27:33Z",
+      "side": 1,
+      "message": "Done. I\u0027ve done as two passes of the original loop.",
+      "parentUuid": "6442fedf_fd4f67a8",
       "range": {
         "startLine": 33,
         "startChar": 4,
