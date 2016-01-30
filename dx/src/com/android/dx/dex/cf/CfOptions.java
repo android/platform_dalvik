@@ -17,6 +17,7 @@
 package com.android.dx.dex.cf;
 
 import com.android.dx.dex.code.PositionList;
+
 import java.io.PrintStream;
 
 /**
@@ -43,6 +44,9 @@ public class CfOptions {
 
     /** whether to print statistics to stdout at end of compile cycle */
     public boolean statistics;
+
+    /** The agregated statistics
+    public CodeStatistics codeStatistics;
 
     /** where to issue warnings to */
     public PrintStream warn = System.err;

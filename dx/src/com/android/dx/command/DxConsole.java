@@ -30,12 +30,12 @@ public class DxConsole {
     /**
      * Standard output stream. Links to {@code System.out} by default.
      */
-    public static PrintStream out = System.out;
+    public static final PrintStream out = System.out;
 
     /**
      * Error output stream. Links to {@code System.err} by default.
      */
-    public static PrintStream err = System.err;
+    public static final PrintStream err = System.err;
 
     /**
      * Output stream which prints to nowhere.
