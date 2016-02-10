@@ -748,6 +748,12 @@ public class Main {
         try {
             new DirectClassFileConsumer(name, bytes, null).call(
                     new ClassParserTask(name, bytes).call());
+        } catch (ParseException ex) {
+            if (args.debug) {
+                ex.printStackTrace(DxConsole.err);
+            } else {
+                ex.printContext(DxConsole.err);
+            }
         } catch(Exception ex) {
             throw new RuntimeException("Exception parsing classes", ex);
         }
