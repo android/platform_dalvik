@@ -748,6 +748,9 @@ public class Main {
         try {
             new DirectClassFileConsumer(name, bytes, null).call(
                     new ClassParserTask(name, bytes).call());
+        } catch (ParseException ex) {
+            // handled in FileBytesConsumer
+            throw ex;
         } catch(Exception ex) {
             throw new RuntimeException("Exception parsing classes", ex);
         }
@@ -1653,6 +1656,14 @@ public class Main {
                 DxConsole.err.println("\nEXCEPTION FROM SIMULATION:");
                 DxConsole.err.println(ex.getMessage() + "\n");
                 DxConsole.err.println(((SimException) ex).getContext());
+            } else if (ex instanceof ParseException) {
+                DxConsole.err.println("\nPARSE ERROR:");
+                ParseException parseException = (ParseException) ex;
+                if (args.debug) {
+                    parseException.printStackTrace(DxConsole.err);
+                } else {
+                    parseException.printContext(DxConsole.err);
+                }
             } else {
                 DxConsole.err.println("\nUNEXPECTED TOP-LEVEL EXCEPTION:");
                 ex.printStackTrace(DxConsole.err);
