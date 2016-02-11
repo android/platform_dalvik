@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dde478f9_3e4e6567",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1021408
+      },
+      "writtenOn": "2016-02-11T10:40:13Z",
+      "side": 1,
+      "message": "Could you add \"Bug: 25075831\"?",
+      "revId": "432ca6f84f78f89940288098b69260b64aa22735",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
