@@ -239,6 +239,8 @@ public class Main {
      * @param argArray the command line arguments
      */
     public static void main(String[] argArray) throws IOException {
+        System.err.println("DX is now deprecated and will be removed soon, please use Jack instead."
+            + " DX command was '" + Arrays.toString(argArray) + "'");
         Arguments arguments = new Arguments();
         arguments.parse(argArray);
 
