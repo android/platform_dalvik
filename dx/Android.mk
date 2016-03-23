@@ -2,10 +2,6 @@
 #
 LOCAL_PATH := $(call my-dir)
 
-# We use copy-file-to-new-target so that the installed
-# script files' timestamps are at least as new as the
-# .jar files they wrap.
-
 # This tool is prebuilt if we're doing an app-only build.
 ifeq ($(TARGET_BUILD_APPS)$(filter true,$(TARGET_BUILD_PDK)),)
 
@@ -14,16 +10,10 @@ ifeq ($(TARGET_BUILD_APPS)$(filter true,$(TARGET_BUILD_PDK)),)
 include $(CLEAR_VARS)
 LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := dx
-
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/dx | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-new-target)
-	$(hide) chmod 755 $@
+LOCAL_SRC_FILES := etc/dx
+LOCAL_ADDITIONAL_DEPENDENCIES := $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
+include $(BUILD_PREBUILT)
 
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
@@ -32,15 +22,10 @@ INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 include $(CLEAR_VARS)
 LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := mainDexClasses.rules
-
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/mainDexClasses.rules | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-new-target)
+LOCAL_SRC_FILES := etc/mainDexClasses.rules
+LOCAL_REQUIRED_MODULES := dx
+include $(BUILD_PREBUILT)
 
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
@@ -74,18 +59,11 @@ installed_shrinkedAndroid := $(LOCAL_INSTALLED_MODULE)
 include $(CLEAR_VARS)
 LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := mainDexClasses
+LOCAL_SRC_FILES := etc/mainDexClasses
+LOCAL_REQUIRED_MODULES := dx shrinkedAndroid mainDexClasses.rules
+include $(BUILD_PREBUILT)
 
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/mainDexClasses | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-new-target)
-	$(hide) chmod 755 $@
-
-$(LOCAL_INSTALLED_MODULE): | $(installed_shrinkedAndroid) $(installed_mainDexClasses.rules)
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
 endif # No TARGET_BUILD_APPS or TARGET_BUILD_PDK
@@ -95,16 +73,10 @@ endif # No TARGET_BUILD_APPS or TARGET_BUILD_PDK
 include $(CLEAR_VARS)
 LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := dexmerger
-
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/dexmerger | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-new-target)
-	$(hide) chmod 755 $@
+LOCAL_SRC_FILES := etc/dexmerger
+LOCAL_REQUIRED_MODULES := dx
+include $(BUILD_PREBUILT)
 
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
@@ -113,16 +85,10 @@ INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 include $(CLEAR_VARS)
 LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := jasmin
-
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/jasmin.jar
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/jasmin | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-new-target)
-	$(hide) chmod 755 $@
+LOCAL_SRC_FILES := etc/jasmin
+LOCAL_REQUIRED_MODULES := jasmin.jar
+include $(BUILD_PREBUILT)
 
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
@@ -131,15 +97,9 @@ INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 include $(CLEAR_VARS)
 LOCAL_IS_HOST_MODULE := true
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := jasmin.jar
-
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/jasmin.jar | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-target)
-	$(hide) chmod 644 $@
+LOCAL_SRC_FILES := etc/jasmin.jar
+include $(BUILD_PREBUILT)
 
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
