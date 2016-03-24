@@ -2792,7 +2792,8 @@ bool dexHasValidMagic(const DexHeader* pHeader)
     }
 
     if ((memcmp(version, DEX_MAGIC_VERS, 4) != 0) &&
-            (memcmp(version, DEX_MAGIC_VERS_API_13, 4) != 0)) {
+            (memcmp(version, DEX_MAGIC_VERS_API_13, 4) != 0) &&
+            (memcmp(version, DEX_MAGIC_VERS_37, 4) != 0)) {
         /*
          * Magic was correct, but this is an unsupported older or
          * newer format variant.

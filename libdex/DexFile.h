@@ -87,6 +87,9 @@ typedef int64_t             s8;
 /* DEX file magic number */
 #define DEX_MAGIC       "dex\n"
 
+/* Next version, put for tooling compatibility, encoded in 4 bytes of ASCII */
+#define DEX_MAGIC_VERS_37  "037\0"
+
 /* current version, encoded in 4 bytes of ASCII */
 #define DEX_MAGIC_VERS  "036\0"
 
