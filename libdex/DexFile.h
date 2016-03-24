@@ -88,6 +88,9 @@ typedef int64_t             s8;
 #define DEX_MAGIC       "dex\n"
 
 /* current version, encoded in 4 bytes of ASCII */
+#define DEX_MAGIC_VERS_37  "037\0"
+
+/* current version, encoded in 4 bytes of ASCII */
 #define DEX_MAGIC_VERS  "036\0"
 
 /*
