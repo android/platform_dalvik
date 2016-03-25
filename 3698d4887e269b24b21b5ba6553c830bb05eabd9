@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc4a6a40_d5feae4f",
+        "filename": "libdex/DexFile.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2016-03-25T17:33:33Z",
+      "side": 1,
+      "message": "perhaps slightly different comment to make difference clear?",
+      "range": {
+        "startLine": 90,
+        "startChar": 11,
+        "endLine": 90,
+        "endChar": 18
+      },
+      "revId": "3698d4887e269b24b21b5ba6553c830bb05eabd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
