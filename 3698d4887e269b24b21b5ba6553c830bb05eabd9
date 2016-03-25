@@ -22,6 +22,30 @@
       "revId": "3698d4887e269b24b21b5ba6553c830bb05eabd9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bc4a6a40_d55a2e28",
+        "filename": "libdex/DexFile.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1047769
+      },
+      "writtenOn": "2016-03-25T17:54:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc4a6a40_d5feae4f",
+      "range": {
+        "startLine": 90,
+        "startChar": 11,
+        "endLine": 90,
+        "endChar": 18
+      },
+      "revId": "3698d4887e269b24b21b5ba6553c830bb05eabd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
