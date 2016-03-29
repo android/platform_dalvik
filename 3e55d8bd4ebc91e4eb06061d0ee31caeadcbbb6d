@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1c4557e_7916e771",
+        "filename": "libdex/DexFile.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2016-03-29T09:03:09Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of this comment. \"next\" is meaningless without context. Please include details about when this was added (\"for Android N\" or the API level) and what language or dex features made this necessary.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 78
+      },
+      "revId": "3e55d8bd4ebc91e4eb06061d0ee31caeadcbbb6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
