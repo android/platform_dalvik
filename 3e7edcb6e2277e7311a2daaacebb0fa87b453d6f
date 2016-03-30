@@ -16,6 +16,24 @@
       "revId": "3e7edcb6e2277e7311a2daaacebb0fa87b453d6f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "915f51f9_db7d07f4",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1047769
+      },
+      "writtenOn": "2016-03-30T21:13:48Z",
+      "side": 1,
+      "message": "AFAIK Yes. It doesn\u0027t really distinguish interfaces from classes.",
+      "parentUuid": "915f51f9_3be0c30c",
+      "revId": "3e7edcb6e2277e7311a2daaacebb0fa87b453d6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
