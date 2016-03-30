@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "915f51f9_3be0c30c",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2016-03-30T21:09:36Z",
+      "side": 1,
+      "message": "Does it actually merge default methods properly?",
+      "revId": "3e7edcb6e2277e7311a2daaacebb0fa87b453d6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
