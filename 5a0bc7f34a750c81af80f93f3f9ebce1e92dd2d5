@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1b1b559_d1b864ec",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2016-03-30T09:41:12Z",
+      "side": 1,
+      "message": "Just call this apiLevel (minApi is confusing because it can mean two things in this context).\n\nAlso, why are you doing this before all the other merges ? Would contentsOut.writeHeader(headerOut, mergeApis()) work ?",
+      "range": {
+        "startLine": 156,
+        "startChar": 12,
+        "endLine": 156,
+        "endChar": 18
+      },
+      "revId": "5a0bc7f34a750c81af80f93f3f9ebce1e92dd2d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71bbbd3b_2fa7c9cf",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2016-03-30T09:41:12Z",
+      "side": 1,
+      "message": "mergeApiLevels",
+      "range": {
+        "startLine": 361,
+        "startChar": 16,
+        "endLine": 361,
+        "endChar": 25
+      },
+      "revId": "5a0bc7f34a750c81af80f93f3f9ebce1e92dd2d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
