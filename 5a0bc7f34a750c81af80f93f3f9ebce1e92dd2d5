@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "915f51f9_187945cd",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1047769
+      },
+      "writtenOn": "2016-03-30T21:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1b1b559_d1b864ec",
+      "range": {
+        "startLine": 156,
+        "startChar": 12,
+        "endLine": 156,
+        "endChar": 18
+      },
+      "revId": "5a0bc7f34a750c81af80f93f3f9ebce1e92dd2d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71bbbd3b_2fa7c9cf",
         "filename": "dx/src/com/android/dx/merge/DexMerger.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-30T09:41:12Z",
       "side": 1,
       "message": "mergeApiLevels",
+      "range": {
+        "startLine": 361,
+        "startChar": 16,
+        "endLine": 361,
+        "endChar": 25
+      },
+      "revId": "5a0bc7f34a750c81af80f93f3f9ebce1e92dd2d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "915f51f9_387609dc",
+        "filename": "dx/src/com/android/dx/merge/DexMerger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1047769
+      },
+      "writtenOn": "2016-03-30T21:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71bbbd3b_2fa7c9cf",
       "range": {
         "startLine": 361,
         "startChar": 16,
