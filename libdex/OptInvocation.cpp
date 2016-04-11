@@ -87,9 +87,9 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
             ALOGE("Can't get CWD while opening jar file");
             return NULL;
         }
-        strncat(absoluteFile, "/", kBufLen);
+        strncat(absoluteFile, "/", kBufLen - strlen(absoluteFile));
     }
-    strncat(absoluteFile, fileName, kBufLen);
+    strncat(absoluteFile, fileName, kBufLen - strlen(absoluteFile));
 
     /*
      * Append the name of the Jar file entry, if any.  This is not currently
@@ -97,8 +97,8 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
      * in a Jar.
      */
     if (subFileName != NULL) {
-        strncat(absoluteFile, "/", kBufLen);
-        strncat(absoluteFile, subFileName, kBufLen);
+        strncat(absoluteFile, "/", kBufLen - strlen(absoluteFile));
+        strncat(absoluteFile, subFileName, kBufLen - strlen(absoluteFile));
     }
 
     /* Turn the path into a flat filename by replacing
@@ -136,7 +136,7 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
 
     /* Tack on the file name for the actual cache file path.
      */
-    strncat(nameBuf, absoluteFile, kBufLen);
+    strncat(nameBuf, absoluteFile, kBufLen - strlen(absoluteFile));
 
     ALOGV("Cache file for '%s' '%s' is '%s'", fileName, subFileName, nameBuf);
     return strdup(nameBuf);
