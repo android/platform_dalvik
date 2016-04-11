@@ -2813,7 +2813,7 @@ bool dexHasValidMagic(const DexHeader* pHeader)
  *
  * Returns 0 on success, nonzero on failure.
  */
-int dexSwapAndVerify(u1* addr, int len)
+int dexSwapAndVerify(u1* addr, size_t len)
 {
     DexHeader* pHeader;
     CheckState state;
@@ -2833,13 +2833,13 @@ int dexSwapAndVerify(u1* addr, int len)
     }
 
     if (okay) {
-        int expectedLen = (int) SWAP4(pHeader->fileSize);
+        u4 expectedLen = SWAP4(pHeader->fileSize);
         if (len < expectedLen) {
-            ALOGE("ERROR: Bad length: expected %d, got %d", expectedLen, len);
+            ALOGE("ERROR: Bad length: expected %u, got %zu", expectedLen, len);
             okay = false;
         } else if (len != expectedLen) {
-            ALOGW("WARNING: Odd length: expected %d, got %d", expectedLen,
-                    len);
+            ALOGW("WARNING: Odd length: expected %u, got %zu", expectedLen,
+                  len);
             // keep going
         }
     }
@@ -2939,7 +2939,7 @@ int dexSwapAndVerify(u1* addr, int len)
  *
  * Returns 0 on success, nonzero on failure.
  */
-int dexSwapAndVerifyIfNecessary(u1* addr, int len)
+int dexSwapAndVerifyIfNecessary(u1* addr, size_t len)
 {
     if (memcmp(addr, DEX_OPT_MAGIC, 4) == 0) {
         // It is an optimized dex file.

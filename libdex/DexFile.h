@@ -606,7 +606,7 @@ int dexSwapAndVerify(u1* addr, int len);
  *
  * Return 0 on success.
  */
-int dexSwapAndVerifyIfNecessary(u1* addr, int len);
+int dexSwapAndVerifyIfNecessary(u1* addr, size_t len);
 
 /*
  * Check to see if the file magic and format version in the given
