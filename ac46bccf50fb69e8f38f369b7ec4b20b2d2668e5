@@ -22,6 +22,30 @@
       "revId": "ac46bccf50fb69e8f38f369b7ec4b20b2d2668e5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88b1e559_71e538b7",
+        "filename": "dx/src/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1047769
+      },
+      "writtenOn": "2016-05-02T16:49:40Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "6803d1bf_987d75da",
+      "range": {
+        "startLine": 21,
+        "startChar": 63,
+        "endLine": 22,
+        "endChar": 20
+      },
+      "revId": "ac46bccf50fb69e8f38f369b7ec4b20b2d2668e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
