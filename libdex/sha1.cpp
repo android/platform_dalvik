@@ -388,6 +388,7 @@ int verifyfile(char *fname)
             }
         }
     } while (s);
+    fclose(checkfile);
     return found;
 }
 
