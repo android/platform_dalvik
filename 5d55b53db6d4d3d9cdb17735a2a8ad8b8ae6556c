@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb243f49_1326cc2f",
+        "filename": "dx/tests/132-debug-info-with-jacoco/Ttml.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-09T15:45:24Z",
+      "side": 1,
+      "message": "Missing copyright\n\nRemove trailing spaces",
+      "revId": "5d55b53db6d4d3d9cdb17735a2a8ad8b8ae6556c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b4fd308_9ceae585",
+        "filename": "dx/tests/132-debug-info-with-jacoco/build.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-09T15:45:24Z",
+      "side": 1,
+      "message": "Should be the one in the tree",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 83
+      },
+      "revId": "5d55b53db6d4d3d9cdb17735a2a8ad8b8ae6556c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb243f49_731940e8",
+        "filename": "dx/tests/132-debug-info-with-jacoco/build.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-09T15:45:24Z",
+      "side": 1,
+      "message": "Why not introducing the dependency to javac? Like\n\n  \u003ctarget name\u003d\"jacoco\" depends\u003d\"javac\"\u003e",
+      "range": {
+        "startLine": 34,
+        "startChar": 1,
+        "endLine": 34,
+        "endChar": 23
+      },
+      "revId": "5d55b53db6d4d3d9cdb17735a2a8ad8b8ae6556c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b4fd308_5c053d77",
+        "filename": "dx/tests/132-debug-info-with-jacoco/build.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-09T15:45:24Z",
+      "side": 1,
+      "message": "Could be \"jacoco\" if you introduce the dependency to javac in the jacoco task",
+      "range": {
+        "startLine": 40,
+        "startChar": 77,
+        "endLine": 40,
+        "endChar": 90
+      },
+      "revId": "5d55b53db6d4d3d9cdb17735a2a8ad8b8ae6556c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

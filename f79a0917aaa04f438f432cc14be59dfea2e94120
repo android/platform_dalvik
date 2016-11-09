@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b32ab88_9663ac5b",
+        "filename": "dx/tests/132-debug-info-with-jacoco/Ttml.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-09T15:45:24Z",
+      "side": 0,
+      "message": "Remove trailing spaces",
+      "revId": "f79a0917aaa04f438f432cc14be59dfea2e94120",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b28b31a_74028872",
+        "filename": "dx/tests/132-debug-info-with-jacoco/build.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-09T15:45:24Z",
+      "side": 0,
+      "message": "Replace tabs with spaces?",
+      "revId": "f79a0917aaa04f438f432cc14be59dfea2e94120",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
