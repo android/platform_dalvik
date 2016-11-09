@@ -1,0 +1,7 @@
+This is a non-regression test that checks that a class file with full debug
+info instrumented by Jacoco >= 0.7.5 does not produce an infinite loop in
+LocalVariableExtractor anymore.
+
+The class file instrumented by Jacoco can be regenerated from the source file
+using "ant". You also need the "jacoco-ant" jar which can be built from
+"external/jacoco/org.jacoco.ant" with maven.
