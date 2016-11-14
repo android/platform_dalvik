@@ -581,8 +581,9 @@ public class Simulator {
                 localType = local.getType();
                 if (localType.getBasicFrameType() !=
                         type.getBasicFrameType()) {
-                    BaseMachine.throwLocalMismatch(type, localType);
-                    return;
+                    // wrong type, ignore local variable info
+                    local = null;
+                    localType = null;
                 }
             } else {
                 localType = type;
