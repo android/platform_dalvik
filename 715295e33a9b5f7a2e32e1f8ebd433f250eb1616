@@ -22,6 +22,30 @@
       "revId": "715295e33a9b5f7a2e32e1f8ebd433f250eb1616",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b0cd587b_221bae8e",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2016-11-15T15:58:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b028f8c6_aa504f7c",
+      "range": {
+        "startLine": 586,
+        "startChar": 32,
+        "endLine": 586,
+        "endChar": 36
+      },
+      "revId": "715295e33a9b5f7a2e32e1f8ebd433f250eb1616",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
