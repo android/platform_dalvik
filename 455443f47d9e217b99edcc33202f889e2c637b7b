@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b028f8c6_ea5a479a",
+        "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2016-11-15T15:25:59Z",
+      "side": 1,
+      "message": "With that you may return the wrong item even if the class file has correct debug info no? Unless those Items are sorted by pc?",
+      "revId": "455443f47d9e217b99edcc33202f889e2c637b7b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
