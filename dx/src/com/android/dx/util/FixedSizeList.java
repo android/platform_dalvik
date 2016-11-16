@@ -17,6 +17,7 @@
 package com.android.dx.util;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Simple (mostly) fixed-size list of objects, which may be made immutable.
@@ -25,6 +26,8 @@ public class FixedSizeList
         extends MutabilityControl implements ToHuman {
     /** {@code non-null;} array of elements */
     private Object[] arr;
+
+    private boolean sorted;
 
     /**
      * Constructs an instance. All indices initially contain {@code null}.
@@ -273,4 +276,16 @@ public class FixedSizeList
         return sb.toString();
     }
 
+    @SuppressWarnings("unchecked")
+    protected <T> void sort(Comparator<T> comparator) {
+        throwIfImmutable();
+
+        Arrays.<T>sort((T[]) arr, comparator);
+        setImmutable();
+        sorted = true;
+    }
+
+    public boolean isSorted() {
+        return sorted;
+    }
 }
