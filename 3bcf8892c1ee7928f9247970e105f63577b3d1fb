@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "70d3e01d_a350a47c",
+        "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2016-11-16T15:50:36Z",
+      "side": 1,
+      "message": "Remove?",
+      "revId": "3bcf8892c1ee7928f9247970e105f63577b3d1fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50233cec_c7077ef6",
+        "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2016-11-16T15:50:36Z",
+      "side": 1,
+      "message": "Remove?",
+      "revId": "3bcf8892c1ee7928f9247970e105f63577b3d1fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b028f8c6_cad94387",
         "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
         "patchSetId": 1
@@ -13,6 +47,23 @@
       "writtenOn": "2016-11-16T15:48:05Z",
       "side": 1,
       "message": "Missing space",
+      "revId": "3bcf8892c1ee7928f9247970e105f63577b3d1fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0f56c92_4b47251c",
+        "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2016-11-16T15:50:36Z",
+      "side": 1,
+      "message": "Remove?",
       "revId": "3bcf8892c1ee7928f9247970e105f63577b3d1fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
