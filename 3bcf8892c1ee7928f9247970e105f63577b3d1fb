@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b028f8c6_cad94387",
+        "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2016-11-16T15:48:05Z",
+      "side": 1,
+      "message": "Missing space",
+      "revId": "3bcf8892c1ee7928f9247970e105f63577b3d1fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
