@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b028f8c6_8afd8bc2",
+        "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2016-11-16T16:56:20Z",
+      "side": 1,
+      "message": "I hesitated to remove it but I think it\u0027s better to call it explicitly, even if it\u0027s currently useless.\nWe may want to change the behavior of \"sort\" so that it doesn\u0027t make the list immutable anymore but that any modification sets it back to an \"unsorted\" state.\nAnd here we want the list to be immutable, even if \"sort\" doesn\u0027t guarantee it.",
+      "parentUuid": "70d3e01d_a350a47c",
+      "revId": "3bcf8892c1ee7928f9247970e105f63577b3d1fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50233cec_c7077ef6",
         "filename": "dx/src/com/android/dx/cf/code/LocalVariableList.java",
         "patchSetId": 1
