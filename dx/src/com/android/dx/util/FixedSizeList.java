@@ -36,6 +36,7 @@ public class FixedSizeList
      */
     public FixedSizeList(int size) {
         super(size != 0);
+        sorted = size == 0;
 
         try {
             arr = new Object[size];
@@ -278,11 +279,13 @@ public class FixedSizeList
 
     @SuppressWarnings("unchecked")
     protected <T> void sort(Comparator<T> comparator) {
-        throwIfImmutable();
+        if (!sorted) {
+            throwIfImmutable();
 
-        Arrays.<T>sort((T[]) arr, comparator);
-        setImmutable();
-        sorted = true;
+            Arrays.<T>sort((T[]) arr, comparator);
+            setImmutable();
+            sorted = true;
+        }
     }
 
     public boolean isSorted() {
