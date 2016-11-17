@@ -36,6 +36,7 @@ public class FixedSizeList
      */
     public FixedSizeList(int size) {
         super(size != 0);
+        sorted = size == 0;
 
         try {
             arr = new Object[size];
