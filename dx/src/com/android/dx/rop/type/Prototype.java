@@ -108,6 +108,10 @@ public final class Prototype implements Comparable<Prototype> {
         return putIntern(result);
     }
 
+    public static void clearInternTable() {
+        internTable.clear();
+    }
+
     /**
      * Helper for {@link #intern} which returns an empty array to
      * populate with parsed parameter types, and which also ensures
@@ -257,6 +261,7 @@ public final class Prototype implements Comparable<Prototype> {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(Prototype other) {
         if (this == other) {
             return 0;
