@@ -16,6 +16,7 @@
 
 package com.android.dx.rop.code;
 
+import com.android.dx.command.dexer.Main;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.type.Type;
@@ -237,6 +238,7 @@ public final class RegisterSpec
      * @param other {@code non-null;} spec to compare to
      * @return {@code -1..1;} standard result of comparison
      */
+    @Override
     public int compareTo(RegisterSpec other) {
         if (this.reg < other.reg) {
             return -1;
@@ -288,31 +290,37 @@ public final class RegisterSpec
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return toString0(true);
     }
 
     /** {@inheritDoc} */
+    @Override
     public Type getType() {
         return type.getType();
     }
 
     /** {@inheritDoc} */
+    @Override
     public TypeBearer getFrameType() {
         return type.getFrameType();
     }
 
     /** {@inheritDoc} */
+    @Override
     public final int getBasicType() {
         return type.getBasicType();
     }
 
     /** {@inheritDoc} */
+    @Override
     public final int getBasicFrameType() {
         return type.getBasicFrameType();
     }
 
     /** {@inheritDoc} */
+    @Override
     public final boolean isConstant() {
         return false;
     }
@@ -596,6 +604,10 @@ public final class RegisterSpec
         }
 
         return sb.toString();
+    }
+
+    public static void clearInternTable() {
+        theInterns.clear();
     }
 
     /**
