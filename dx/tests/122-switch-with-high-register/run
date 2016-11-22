@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -d . *.java
+$JAVAC -source 1.7 -target 1.7 -d . *.java
 dx --debug --dex --dump-method=Blort.switchWithHighRegister Blort.class
-$JAVAC -g -d . *.java
+$JAVAC -source 1.7 -target 1.7 -g -d . *.java
 dx --debug --dex --dump-method=Blort.switchWithHighRegister Blort.class

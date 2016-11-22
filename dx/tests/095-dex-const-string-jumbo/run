@@ -36,6 +36,6 @@ function writeFile(name, start, end) {
     printf("}\n") > fileName;
 }'
 
-$JAVAC -d . *.java
+$JAVAC -source 1.7 -target 1.7 -d . *.java
 dx --debug --dex --no-optimize --positions=none --no-locals \
     --dump-method=Blort.test *.class
