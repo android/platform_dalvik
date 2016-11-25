@@ -404,6 +404,8 @@ public abstract class BaseMachine implements Machine {
         TypeBearer result = results[0];
         Type resultType = result.getType();
         Type localType = localTarget.getType();
+        
+        System.out.println("getLocalTarget: "+ result + " - " + resultType + " - " + localType); 
 
         if (resultType == localType) {
             /*
@@ -421,7 +423,7 @@ public abstract class BaseMachine implements Machine {
         if (! Merger.isPossiblyAssignableFrom(localType, resultType)) {
             // The result and local types are inconsistent. Complain!
             throwLocalMismatch(resultType, localType);
-            return null;
+            return localTarget.withType(resultType);
         }
 
         if (localType == Type.OBJECT) {
@@ -541,13 +543,23 @@ public abstract class BaseMachine implements Machine {
             // Nothing to do.
             return;
         }
-
+        
+        RegisterSpec localTarget2 = null;
+        
         if (localTarget != null) {
-            /*
-             * Note: getLocalTarget() doesn't necessarily return
-             * localTarget directly.
-             */
-            frame.getLocals().set(getLocalTarget(false));
+          /*
+           * Note: getLocalTarget() doesn't necessarily return
+           * localTarget directly.
+           */
+          System.out.println("localTarget: " + localTarget);
+        
+          localTarget2 = getLocalTarget(false);
+          System.out.println("localTarget2: " + localTarget2);
+        }
+
+        if (localTarget2 != null) {
+          System.out.println("localTarget3: " + localTarget2.toHuman());
+          frame.getLocals().set(localTarget2);
         } else {
             ExecutionStack stack = frame.getStack();
             for (int i = 0; i < resultCount; i++) {
@@ -568,12 +580,19 @@ public abstract class BaseMachine implements Machine {
      */
     public static void throwLocalMismatch(TypeBearer found,
             TypeBearer local) {
-        throw new SimException("local variable type mismatch: " +
-                "attempt to set or access a value of type " +
-                found.toHuman() +
-                " using a local variable of type " +
-                local.toHuman() +
-                ". This is symptomatic of .class transformation tools " +
-                "that ignore local variable information.");
+      System.err.println("local variable type mismatch: " +
+          "attempt to set or access a value of type " +
+          found.toHuman() +
+          " using a local variable of type " +
+          local.toHuman() +
+          ". This is symptomatic of .class transformation tools " +
+          "that ignore local variable information."); 
+//        throw new SimException("local variable type mismatch: " +
+//                "attempt to set or access a value of type " +
+//                found.toHuman() +
+//                " using a local variable of type " +
+//                local.toHuman() +
+//                ". This is symptomatic of .class transformation tools " +
+//                "that ignore local variable information.");
     }
 }

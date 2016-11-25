@@ -412,4 +412,9 @@ public final class Frame {
         locals.annotate(ex);
         stack.annotate(ex);
     }
+    
+    @Override
+    public String toString() {
+    return locals.toString();
+    }
 }

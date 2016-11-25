@@ -75,6 +75,11 @@ public class OneLocalsArray extends LocalsArray {
 
         return sb.toString();
     }
+    
+    @Override
+    public String toString() {
+    return toHuman();
+    }
 
     /** @inheritDoc */
     public void makeInitialized(Type type) {

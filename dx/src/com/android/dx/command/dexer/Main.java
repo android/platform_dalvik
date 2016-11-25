@@ -226,6 +226,8 @@ public class Main {
     private static List<byte[]> dexOutputArrays = new ArrayList<byte[]>();
 
     private static OutputStreamWriter humanOutWriter = null;
+    
+    public static boolean strictLocalInfo = false;
 
     /**
      * This class is uninstantiable.
@@ -1245,6 +1247,8 @@ public class Main {
         private static final String INCREMENTAL_OPTION = "--incremental";
 
         private static final String INPUT_LIST_OPTION = "--input-list";
+        
+        private static final String STRICT = "--strict";
 
         /** whether to run in debug mode */
         public boolean debug = false;
@@ -1346,6 +1350,8 @@ public class Main {
         private List<String> inputList = null;
 
         private int maxNumberOfIdxPerDex = DexFormat.MAX_MEMBER_IDX + 1;
+
+        private boolean strict = false;
 
         private static class ArgumentsParser {
 
@@ -1478,6 +1484,9 @@ public class Main {
                     coreLibrary = true;
                 } else if (parser.isArg("--statistics")) {
                     statistics = true;
+                } else if (parser.isArg("--strict")) {
+                    strict  = true;
+                    strictLocalInfo = true;
                 } else if (parser.isArg("--optimize-list=")) {
                     if (dontOptimizeListFile != null) {
                         System.err.println("--optimize-list and "
@@ -1629,6 +1638,7 @@ public class Main {
             cfOptions.optimizeListFile = optimizeListFile;
             cfOptions.dontOptimizeListFile = dontOptimizeListFile;
             cfOptions.statistics = statistics;
+            cfOptions.strictLocalInfo = strict;
 
             if (warnings) {
                 cfOptions.warn = DxConsole.err;

@@ -1115,7 +1115,7 @@ public final class Ropper {
         for (int i = 0; i < sz; i++) {
             Type one = params.get(i);
             LocalVariableList.Item local =
-                localVariables.pcAndIndexToLocal(0, at);
+                localVariables.pcAndIndexToLocal(0, at, null);
             RegisterSpec result = (local == null) ?
                 RegisterSpec.make(at, one) :
                 RegisterSpec.makeLocalOptional(at, one, local.getLocalItem());

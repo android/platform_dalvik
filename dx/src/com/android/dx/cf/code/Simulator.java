@@ -91,6 +91,9 @@ public class Simulator {
 
         try {
             for (int off = bb.getStart(); off < end; /*off*/) {
+                if (off == 2) {
+                System.out.println("SIMULATE off 2: "); 
+                }
                 int length = code.parseInstruction(off, visitor);
                 visitor.setPreviousOffset(off);
                 off += length;
@@ -571,10 +574,33 @@ public class Simulator {
              * type associated with a load is valid at the start of
              * the instruction.
              */
+          if (offset == 4) {
+            System.out.println("VISIT 4"); 
+          }
+          
+          if (offset == 11 && length == 1 && idx == 0) {
+            System.out.println("VISIT 11"); 
+          }
+          
+          if (offset == 16 && length == 1 && idx == 0) {
+            System.out.println("VISIT 16"); 
+          }
+          
+          if (offset == 25 && length == 1 && idx == 0) {
+            System.out.println("VISIT 25-0"); 
+          }
+                  
+          if (opcode == 21 && offset == 25 && length == 1 && idx == 1) {
+            System.out.println("VISIT ILOAD 25"); 
+          }
+          
             int localOffset =
                 (opcode == ByteOps.ISTORE) ? (offset + length) : offset;
             LocalVariableList.Item local =
-                localVariables.pcAndIndexToLocal(localOffset, idx);
+                localVariables.pcAndIndexToLocal(localOffset, idx, type); //XXX should check that type is Ldalvik/system/profiler/SamplingProfiler$Sampler;
+            if (localOffset == 3 && idx == 1) {
+              System.out.println("3/1 - " + opcode + " - " + ((local != null) ? local.getType() : "null"));
+            }
             Type localType;
 
             if (local != null) {
@@ -591,12 +617,20 @@ public class Simulator {
 
             switch (opcode) {
                 case ByteOps.ILOAD:
-                case ByteOps.RET: {
-                    machine.localArg(frame, idx);
-                    machine.localInfo(local != null);
-                    machine.auxType(type);
-                    break;
-                }
+        case ByteOps.RET:
+          {
+            System.out.println(
+                "RET: " + offset + " - " + length + " - " + idx + " - " + type + " - " + value + " - " + ((local != null) ? local.getType() : "null"));
+            try {
+              machine.localArg(frame, idx);
+              machine.localInfo(local != null);
+            } catch (SimException e) {
+              machine.localInfo(false);
+            }
+
+            machine.auxType(type);
+            break;
+          }
                 case ByteOps.ISTORE: {
                     LocalItem item
                             = (local == null) ? null : local.getLocalItem();

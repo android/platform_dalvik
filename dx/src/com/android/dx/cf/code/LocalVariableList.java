@@ -16,6 +16,7 @@
 
 package com.android.dx.cf.code;
 
+import com.android.dx.command.dexer.Main;
 import com.android.dx.rop.code.LocalItem;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.type.Type;
@@ -182,10 +183,11 @@ public final class LocalVariableList extends FixedSizeList {
      *
      * @param pc {@code >= 0;} the address to look up
      * @param index {@code >= 0;} the local variable index
+     * @param type 
      * @return {@code null-ok;} the associated local variable information, or
      * {@code null} if none is known
      */
-    public Item pcAndIndexToLocal(int pc, int index) {
+    public Item pcAndIndexToLocal(int pc, int index, Type type) {
         if (!isSorted()) {
           throw new AssertionError("local variable list should be sorted");
         }
@@ -196,7 +198,16 @@ public final class LocalVariableList extends FixedSizeList {
             Item one = (Item) get0(i);
 
             if ((one != null) && one.matchesPcAndIndex(pc, index)) {
+                if (type == null || type.getBasicFrameType() == one.getType().getBasicFrameType()) {
+                  
+                System.out.println("pc: " + pc + " - index: " + index);
+                if (type != null) {
+                  System.out.println(type + " - " + type.getBasicFrameType());
+                  System.out.println(one.getType() + " - " + one.getType().getBasicFrameType());
+
+                }
                 return one;
+                }
             }
         }
 
@@ -372,6 +383,7 @@ public final class LocalVariableList extends FixedSizeList {
          */
         public boolean matchesPcAndIndex(int pc, int index) {
             return (index == this.index) &&
+                (!Main.strictLocalInfo || (pc >= startPc)) &&
                 // do not check that "pc >= startPc" because startPc may be later than the expected
                 // pc, if the bytecode has been modified, by Jacoco instrumentation for instance
                 (pc < (startPc + length));

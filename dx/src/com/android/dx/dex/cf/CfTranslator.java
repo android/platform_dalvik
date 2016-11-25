@@ -268,6 +268,7 @@ public class CfTranslator {
                     // There's no code for native or abstract methods.
                     code = null;
                 } else {
+                    System.out.println("METHOD: " + meth.toHuman()); 
                     ConcreteMethod concrete =
                         new ConcreteMethod(one, cf,
                                 (cfOptions.positionInfo != PositionList.NONE),

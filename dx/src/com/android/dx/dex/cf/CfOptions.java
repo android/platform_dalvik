@@ -46,4 +46,6 @@ public class CfOptions {
 
     /** where to issue warnings to */
     public PrintStream warn = System.err;
+
+    public boolean strictLocalInfo = false;
 }
