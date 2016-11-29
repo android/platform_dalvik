@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "103c64a3_334e30df",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2016-11-29T17:55:00Z",
+      "side": 1,
+      "message": "Actual fix...",
+      "range": {
+        "startLine": 624,
+        "startChar": 12,
+        "endLine": 629,
+        "endChar": 13
+      },
+      "revId": "7dc55e246671c4f1727021a36808947cd0ef3c3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
