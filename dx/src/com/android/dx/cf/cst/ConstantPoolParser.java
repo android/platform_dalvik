@@ -217,10 +217,16 @@ public final class ConstantPoolParser {
                         break;
                     }
                     case CONSTANT_MethodHandle: {
-                        throw new ParseException("MethodHandle not supported");
+                        //throw new ParseException("MethodHandle not supported");
+                        lastCategory = 1;
+                        at += 4;
+                        break;
                     }
                     case CONSTANT_MethodType: {
-                        throw new ParseException("MethodType not supported");
+                        //throw new ParseException("MethodType not supported");
+                        lastCategory = 1;
+                        at += 3;
+                        break;
                     }
                     case CONSTANT_InvokeDynamic: {
                         throw new ParseException("InvokeDynamic not supported");
