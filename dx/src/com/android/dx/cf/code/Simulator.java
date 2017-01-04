@@ -662,6 +662,9 @@ public class Simulator {
                      * Get the instance prototype, and use it to direct
                      * the machine.
                      */
+                    if (cst instanceof CstInterfaceMethodRef) {
+                      cst = ((CstInterfaceMethodRef) cst).toMethodRef();
+                    }
                     Prototype prototype =
                         ((CstMethodRef) cst).getPrototype(false);
                     machine.popArgs(frame, prototype);
@@ -672,6 +675,9 @@ public class Simulator {
                      * Get the static prototype, and use it to direct
                      * the machine.
                      */
+                    if (cst instanceof CstInterfaceMethodRef) {
+                      cst = ((CstInterfaceMethodRef) cst).toMethodRef();
+                    }
                     Prototype prototype =
                         ((CstMethodRef) cst).getPrototype(true);
                     machine.popArgs(frame, prototype);
