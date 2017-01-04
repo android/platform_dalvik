@@ -958,6 +958,10 @@ import java.util.ArrayList;
                  * on "invokespecial" as well as section 4.8.2 (7th
                  * bullet point) for the gory details.
                  */
+                /* TODO: Consider checking that invoke-special target
+                 * method is private, or constructor since otherwise ART
+                 * verifier will reject it.
+                 */
                 CstMethodRef ref = (CstMethodRef) cst;
                 if (ref.isInstanceInit() ||
                     (ref.getDefiningClass().equals(method.getDefiningClass()))) {

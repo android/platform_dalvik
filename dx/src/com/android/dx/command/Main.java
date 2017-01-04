@@ -31,7 +31,7 @@ public class Main {
         "  [--dump-method=<name>[*]] [--verbose-dump] [--no-files] [--core-library]\n" +
         "  [--num-threads=<n>] [--incremental] [--force-jumbo] [--no-warning]\n" +
         "  [--multi-dex [--main-dex-list=<file> [--minimal-main-dex]]\n" +
-        "  [--input-list=<file>]\n" +
+        "  [--input-list=<file>] [--min-sdk-version=<n>]\n" +
         "  [<file>.class | <file>.{zip,jar,apk} | <directory>] ...\n" +
         "    Convert a set of classfiles into a dex file, optionally embedded in a\n" +
         "    jar/zip. Output name must end with one of: .dex .jar .zip .apk or be a\n" +
@@ -47,6 +47,8 @@ public class Main {
         "    --input-list: <file> is a list of inputs.\n" +
         "    Each line in <file> must end with one of: .class .jar .zip .apk or be a\n" +
         "    directory.\n" +
+        "    --min-sdk-version=<n>: Enable dex file features that require at least sdk\n" +
+        "    version <n>.\n" +
         "  dx --annotool --annotation=<class> [--element=<element types>]\n" +
         "  [--print=<print types>]\n" +
         "  dx --dump [--debug] [--strict] [--bytes] [--optimize]\n" +
