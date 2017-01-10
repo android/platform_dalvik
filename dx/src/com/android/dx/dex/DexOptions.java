@@ -39,7 +39,7 @@ public class DexOptions {
     public boolean ALIGN_64BIT_REGS_IN_OUTPUT_FINISHER = ALIGN_64BIT_REGS_SUPPORT;
 
     /** target API level */
-    public int targetApiLevel = DexFormat.API_NO_EXTENDED_OPCODES;
+    public int targetApiLevel = DexFormat.API_CURRENT;
 
     /** force generation of jumbo opcodes */
     public boolean forceJumbo = false;
