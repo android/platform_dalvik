@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6354fd0e_e6707ef5",
+        "filename": "dx/src/com/android/dx/dex/file/MemberIdsSection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-01-11T13:18:38Z",
+      "side": 1,
+      "message": "That\u0027s incorrect. The problem is not with classes but with methodIDs or fieldIDs.",
+      "range": {
+        "startLine": 74,
+        "startChar": 38,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "c734f3ef07156d381d0fe187ea2c7dfc86127df1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
