@@ -22,6 +22,24 @@
       "revId": "c734f3ef07156d381d0fe187ea2c7dfc86127df1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6354fd0e_2c555732",
+        "filename": "dx/src/com/android/dx/dex/file/MemberIdsSection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-16T10:49:13Z",
+      "side": 1,
+      "message": "Good point, I updated the text.",
+      "parentUuid": "6354fd0e_e6707ef5",
+      "revId": "c734f3ef07156d381d0fe187ea2c7dfc86127df1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
