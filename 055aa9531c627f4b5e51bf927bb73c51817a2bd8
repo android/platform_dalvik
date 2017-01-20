@@ -34,6 +34,24 @@
       "revId": "055aa9531c627f4b5e51bf927bb73c51817a2bd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48963609_20d764d5",
+        "filename": "dx/src/com/android/dx/dex/file/TypeIdsSection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-20T15:38:29Z",
+      "side": 1,
+      "message": "I\u0027ve unified the text.",
+      "parentUuid": "48963609_fd6e07a5",
+      "revId": "055aa9531c627f4b5e51bf927bb73c51817a2bd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
