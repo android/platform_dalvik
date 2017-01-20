@@ -185,6 +185,7 @@ public final class CstType extends TypedConstant {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Type getType() {
         return Type.CLASS;
     }
@@ -202,6 +203,7 @@ public final class CstType extends TypedConstant {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return type.toHuman();
     }
