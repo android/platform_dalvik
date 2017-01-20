@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48963609_dddc6b56",
+        "filename": "dx/src/com/android/dx/dex/file/TypeIdsSection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2017-01-20T09:19:00Z",
+      "side": 1,
+      "message": "What about adding isMultidex in DexOptions and keep the error existing error message?\nIf you don\u0027t think it\u0027s worth it I think I prefer the message in MemberIdsSection, not by much. I more care that the 2 messages are more alike.",
+      "revId": "055aa9531c627f4b5e51bf927bb73c51817a2bd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
