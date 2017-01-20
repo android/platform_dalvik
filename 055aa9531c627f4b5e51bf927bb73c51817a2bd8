@@ -16,6 +16,24 @@
       "revId": "055aa9531c627f4b5e51bf927bb73c51817a2bd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48963609_fd6e07a5",
+        "filename": "dx/src/com/android/dx/dex/file/TypeIdsSection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-01-20T09:51:30Z",
+      "side": 1,
+      "message": "I agree with Yohann that it would better if the member and types messages were more alike. The \"isMultidex\" in DexOptions is up to you.",
+      "parentUuid": "48963609_dddc6b56",
+      "revId": "055aa9531c627f4b5e51bf927bb73c51817a2bd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
