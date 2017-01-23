@@ -64,6 +64,24 @@
       "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48963609_8092f8aa",
+        "filename": "dx/src/com/android/dx/cf/code/LocalsArraySet.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-01-23T15:06:13Z",
+      "side": 1,
+      "message": "I think doclava is stupider and won\u0027t process inherited documentation unless there\u0027s an @inheritDoc .",
+      "parentUuid": "e86e0ae9_e0d096da",
+      "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
