@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88902e0b_8538c60f",
+        "filename": "dx/src/com/android/dx/cf/code/LocalsArraySet.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-23T09:55:33Z",
+      "side": 1,
+      "message": "These are unnecessary with the javadoc tool, are they needed for doclava? If not I\u0027ll just remove them.",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 24
+      },
+      "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
