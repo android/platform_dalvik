@@ -16,17 +16,24 @@
 
 package com.android.dx.rop.cst;
 
+import com.android.dx.command.dexer.Main;
 import com.android.dx.rop.type.Type;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Constants that represent an arbitrary type (reference or primitive).
  */
 public final class CstType extends TypedConstant {
-    /** {@code non-null;} map of interned types */
-    private static final HashMap<Type, CstType> interns =
-        new HashMap<Type, CstType>(100);
+
+    /**
+     * Intern table for instances.
+     *
+     * <p>The initial capacity is based on a medium-size project.
+     */
+    private static final ConcurrentMap<Type, CstType> interns =
+            new ConcurrentHashMap<>(1_000, 0.75f, Main.CONCURRENCY_LEVEL);
 
     /** {@code non-null;} instance corresponding to the class {@code Object} */
     public static final CstType OBJECT = intern(Type.OBJECT);
@@ -123,16 +130,9 @@ public final class CstType extends TypedConstant {
      * @return {@code non-null;} an appropriately-constructed instance
      */
     public static CstType intern(Type type) {
-        synchronized (interns) {
-            CstType cst = interns.get(type);
-
-            if (cst == null) {
-                cst = new CstType(type);
-                interns.put(type, cst);
-            }
-
-            return cst;
-        }
+        CstType cst = new CstType(type);
+        CstType result = interns.putIfAbsent(type, cst);
+        return result != null ? result : cst;
     }
 
     /**
@@ -248,5 +248,9 @@ public final class CstType extends TypedConstant {
             // +2 to skip the '[' and the 'L' prefix
             return descriptor.substring(lastLeftSquare + 2, lastSlash).replace('/', '.');
         }
+    }
+
+    public static void clearInternTable() {
+        interns.clear();
     }
 }

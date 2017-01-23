@@ -16,7 +16,9 @@
 
 package com.android.dx.rop.type;
 
-import java.util.HashMap;
+import com.android.dx.command.dexer.Main;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Representation of a method descriptor. Instances of this class are
@@ -24,9 +26,13 @@ import java.util.HashMap;
  * using {@code ==}.
  */
 public final class Prototype implements Comparable<Prototype> {
-    /** {@code non-null;} intern table mapping string descriptors to instances */
-    private static final HashMap<String, Prototype> internTable =
-        new HashMap<String, Prototype>(500);
+    /**
+     * Intern table for instances.
+     *
+     * <p>The initial capacity is based on a medium-size project.
+     */
+    private static final ConcurrentMap<String, Prototype> internTable =
+            new ConcurrentHashMap<>(10_000, 0.75f, Main.CONCURRENCY_LEVEL);
 
     /** {@code non-null;} method descriptor */
     private final String descriptor;
@@ -56,9 +62,7 @@ public final class Prototype implements Comparable<Prototype> {
         }
 
         Prototype result;
-        synchronized (internTable) {
-            result = internTable.get(descriptor);
-        }
+        result = internTable.get(descriptor);
         if (result != null) {
             return result;
         }
@@ -392,14 +396,7 @@ public final class Prototype implements Comparable<Prototype> {
      * @return {@code non-null;} the actual interned object
      */
     private static Prototype putIntern(Prototype desc) {
-        synchronized (internTable) {
-            String descriptor = desc.getDescriptor();
-            Prototype already = internTable.get(descriptor);
-            if (already != null) {
-                return already;
-            }
-            internTable.put(descriptor, desc);
-            return desc;
-        }
+        Prototype result = internTable.putIfAbsent(desc.getDescriptor(), desc);
+        return result != null ? result : desc;
     }
 }

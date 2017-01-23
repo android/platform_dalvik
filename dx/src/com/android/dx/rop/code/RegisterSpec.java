@@ -22,7 +22,8 @@ import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.type.Type;
 import com.android.dx.rop.type.TypeBearer;
 import com.android.dx.util.ToHuman;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Combination of a register number and a type, used as the sources and
@@ -33,12 +34,13 @@ public final class RegisterSpec
     /** {@code non-null;} string to prefix register numbers with */
     public static final String PREFIX = "v";
 
-    /** {@code non-null;} intern table for instances */
-    private static final HashMap<Object, RegisterSpec> theInterns =
-        new HashMap<Object, RegisterSpec>(1000);
-
-    /** {@code non-null;} common comparison instance used while interning */
-    private static final ForComparison theInterningItem = new ForComparison();
+    /**
+     * Intern table for instances.
+     *
+     * <p>The initial capacity is based on a medium-size project.
+     */
+    private static final ConcurrentMap<RegisterSpec, RegisterSpec> theInterns =
+            new ConcurrentHashMap<>(100_000, 0.75f, Main.CONCURRENCY_LEVEL);
 
     /** {@code >= 0;} register number */
     private final int reg;
@@ -63,18 +65,9 @@ public final class RegisterSpec
      */
     private static RegisterSpec intern(int reg, TypeBearer type,
             LocalItem local) {
-        synchronized (theInterns) {
-            theInterningItem.set(reg, type, local);
-            RegisterSpec found = theInterns.get(theInterningItem);
-
-            if (found != null) {
-                return found;
-            }
-
-            found = theInterningItem.toRegisterSpec();
-            theInterns.put(found, found);
-            return found;
-        }
+        RegisterSpec tmp = new RegisterSpec(reg, type, local);
+        RegisterSpec result = theInterns.putIfAbsent(tmp, tmp);
+        return result != null ? result : tmp;
     }
 
     /**

@@ -43,7 +43,9 @@ import com.android.dx.rop.annotation.AnnotationsList;
 import com.android.dx.rop.code.RegisterSpec;
 import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
+import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
+import com.android.dx.rop.type.Type;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -252,6 +254,8 @@ public class Main {
     public static void clearInternTables() {
         Prototype.clearInternTable();
         RegisterSpec.clearInternTable();
+        CstType.clearInternTable();
+        Type.clearInternTable();
     }
 
     /**
