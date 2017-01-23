@@ -22,6 +22,30 @@
       "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48963609_e052dc20",
+        "filename": "dx/src/com/android/dx/cf/code/LocalsArraySet.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-01-23T14:09:47Z",
+      "side": 1,
+      "message": "I have no idea, but if they don\u0027t hurt, I\u0027d say to leave them.",
+      "parentUuid": "88902e0b_8538c60f",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 24
+      },
+      "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
