@@ -46,6 +46,24 @@
       "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e86e0ae9_e0d096da",
+        "filename": "dx/src/com/android/dx/cf/code/LocalsArraySet.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-23T14:53:03Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "48963609_e052dc20",
+      "revId": "e8bf740e4843a2e7a41bfa6c2f96f8ae4a7147fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
