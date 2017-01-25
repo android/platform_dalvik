@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "226239d7_89e808ed",
+        "filename": "dx/src/com/android/dx/rop/code/RegisterSpec.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-25T10:55:39Z",
+      "side": 1,
+      "message": "I\u0027ll back this change from this CL, so we can discuss it separately.\n\nFor the tools dex in process use case, we are running multiple dx invocations in the same process in parallel, and this helped for that. Perhaps just making it invocation global would be sufficient and maintains the current behaviour of standalone dx.",
+      "revId": "efad9fb71774dee995e67f58979a611d236d692b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8323429_5e9dfa86",
         "filename": "dx/src/com/android/dx/rop/code/RegisterSpec.java",
         "patchSetId": 2
@@ -45,6 +62,23 @@
       "revId": "efad9fb71774dee995e67f58979a611d236d692b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26ab5e96_23def759",
+        "filename": "dx/src/com/android/dx/rop/code/RegisterSpec.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-25T10:55:39Z",
+      "side": 1,
+      "message": "When we looked at this in the tools/base fork, i.e. the dex in process case the reduced locking significantly outweighed the impact of these allocations, but I don\u0027t have concrete measurements to hand.",
+      "revId": "efad9fb71774dee995e67f58979a611d236d692b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
