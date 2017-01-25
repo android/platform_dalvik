@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ffee995_4afc0067",
+        "filename": "dx/src/com/android/dx/rop/code/RegisterSpec.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-01-25T08:57:57Z",
+      "side": 1,
+      "message": "Have you consider to share register spec not in a global way, but for instance by class or method to reduce the contention ? Perhaps it is out of scope, I am not really aware of what kind of parallelism is done by dx (per jar files, per types or so on)",
+      "range": {
+        "startLine": 42,
+        "startChar": 67,
+        "endLine": 42,
+        "endChar": 77
+      },
+      "revId": "efad9fb71774dee995e67f58979a611d236d692b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c8323429_5e9dfa86",
+        "filename": "dx/src/com/android/dx/rop/code/RegisterSpec.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-01-25T08:57:57Z",
+      "side": 1,
+      "message": "Now registers are always created even when they will not used because another register that is equals already exists. Did you see some impacts on GC or compilation time since in this case a lot of object with short livetime will be created ?",
+      "range": {
+        "startLine": 68,
+        "startChar": 27,
+        "endLine": 68,
+        "endChar": 61
+      },
+      "revId": "efad9fb71774dee995e67f58979a611d236d692b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
