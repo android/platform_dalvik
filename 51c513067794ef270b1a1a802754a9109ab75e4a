@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08f73d86_b8e8d4ce",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1057413
+      },
+      "writtenOn": "2017-01-26T16:26:35Z",
+      "side": 1,
+      "message": "Can we inline this?",
+      "range": {
+        "startLine": 1361,
+        "startChar": 8,
+        "endLine": 1361,
+        "endChar": 28
+      },
+      "revId": "51c513067794ef270b1a1a802754a9109ab75e4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd375988_d991c9d4",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1057413
+      },
+      "writtenOn": "2017-01-26T16:26:35Z",
+      "side": 1,
+      "message": "nit: \"...and updates the state of this {@code Arguments} object accordingly\"?\n\nIt\u0027s not clear where to look for the result ;)",
+      "range": {
+        "startLine": 1577,
+        "startChar": 35,
+        "endLine": 1577,
+        "endChar": 45
+      },
+      "revId": "51c513067794ef270b1a1a802754a9109ab75e4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
