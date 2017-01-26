@@ -241,8 +241,8 @@ public class Main {
      */
     public static void main(String[] argArray) throws IOException {
         DxContext context = new DxContext();
-        Arguments arguments = new Arguments();
-        arguments.parse(argArray, context);
+        Arguments arguments = new Arguments(context);
+        arguments.parse(argArray);
 
         int result = new Main(context).runDx(arguments);
 
@@ -267,7 +267,7 @@ public class Main {
         return new Main(new DxContext()).runDx(arguments);
     }
 
-    private int runDx(Arguments arguments) throws IOException {
+    public int runDx(Arguments arguments) throws IOException {
 
         // Reset the error count to start fresh.
         errors.set(0);
@@ -276,7 +276,7 @@ public class Main {
         libraryDexBuffers.clear();
 
         args = arguments;
-        args.makeOptionsObjects(context);
+        args.makeOptionsObjects();
 
         OutputStream humanOutRaw = null;
         if (args.humanOutName != null) {
@@ -1248,6 +1248,8 @@ public class Main {
 
         private static final String INPUT_LIST_OPTION = "--input-list";
 
+        public final DxContext context;
+
         /** whether to run in debug mode */
         public boolean debug = false;
 
@@ -1344,10 +1346,21 @@ public class Main {
          * mainDexListFile is specified and non empty. */
         public boolean minimalMainDex = false;
 
+        public int maxNumberOfIdxPerDex = DexFormat.MAX_MEMBER_IDX + 1;
+
         /** Optional list containing inputs read in from a file. */
         private List<String> inputList = null;
 
-        private int maxNumberOfIdxPerDex = DexFormat.MAX_MEMBER_IDX + 1;
+        private boolean outputIsDirectory = false;
+        private boolean outputIsDirectDex = false;
+
+        public Arguments(DxContext context) {
+            this.context = context;
+        }
+
+        public Arguments() {
+            this(new DxContext());
+        }
 
         private static class ArgumentsParser {
 
@@ -1450,17 +1463,7 @@ public class Main {
             }
         }
 
-        /**
-         * Parses the given command-line arguments.
-         *
-         * @param args {@code non-null;} the arguments
-         * @param context
-         */
-        public void parse(String[] args, DxContext context) {
-            ArgumentsParser parser = new ArgumentsParser(args);
-
-            boolean outputIsDirectory = false;
-            boolean outputIsDirectDex = false;
+        private void parseFlags(ArgumentsParser parser) {
 
             while(parser.getNext()) {
                 if (parser.isArg("--debug")) {
@@ -1567,6 +1570,18 @@ public class Main {
                     throw new UsageException();
                 }
             }
+        }
+
+
+        /**
+         * Parses all command-line arguments and updates the state of the {@code Arguments} object accordingly.
+         *
+         * @param args {@code non-null;} the arguments
+         */
+        private void parse(String[] args) {
+            ArgumentsParser parser = new ArgumentsParser(args);
+
+            parseFlags(parser);
 
             fileNames = parser.getRemaining();
             if(inputList != null && !inputList.isEmpty()) {
@@ -1616,14 +1631,22 @@ public class Main {
                 outName = new File(outName, DexFormat.DEX_IN_JAR_NAME).getPath();
             }
 
-            makeOptionsObjects(context);
+            makeOptionsObjects();
         }
 
         /**
-         * Copies relevent arguments over into CfOptions and
-         * DexOptions instances.
+         * Parses only command-line flags and updates the state of the {@code Arguments} object accordingly.
+         *
+         * @param flags {@code non-null;} the flags
          */
-        private void makeOptionsObjects(DxContext context) {
+        public void parseFlags(String[] flags) {
+            parseFlags(new ArgumentsParser(flags));
+        }
+
+        /**
+         * Copies relevant arguments over into CfOptions and DexOptions instances.
+         */
+        public void makeOptionsObjects() {
             cfOptions = new CfOptions();
             cfOptions.positionInfo = positionInfo;
             cfOptions.localInfo = localInfo;
