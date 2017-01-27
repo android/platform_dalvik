@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "d2118c70_88663524",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-27T10:47:17Z",
+      "side": 1,
+      "message": "I think this is used by other tests in the android tree, so I don\u0027t want to remove the default constructor.",
+      "revId": "51c513067794ef270b1a1a802754a9109ab75e4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd375988_d991c9d4",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 2
@@ -42,6 +59,23 @@
         "endLine": 1577,
         "endChar": 45
       },
+      "revId": "51c513067794ef270b1a1a802754a9109ab75e4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3329b95c_79a1ba4b",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-01-27T10:47:17Z",
+      "side": 1,
+      "message": "Done",
       "revId": "51c513067794ef270b1a1a802754a9109ab75e4a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
