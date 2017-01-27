@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a949e7f5_577803f9",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-01-27T15:04:02Z",
+      "side": 1,
+      "message": "nit: line is too long",
+      "range": {
+        "startLine": 1577,
+        "startChar": 11,
+        "endLine": 1577,
+        "endChar": 111
+      },
+      "revId": "b974a6014016a23375350f2db57fcf8f626efa69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc70aa23_b2ce94b9",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-01-27T15:04:02Z",
+      "side": 1,
+      "message": "nit: line is too long",
+      "range": {
+        "startLine": 1638,
+        "startChar": 10,
+        "endLine": 1638,
+        "endChar": 108
+      },
+      "revId": "b974a6014016a23375350f2db57fcf8f626efa69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
