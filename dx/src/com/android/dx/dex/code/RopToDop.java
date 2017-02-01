@@ -213,6 +213,7 @@ public final class RopToDop {
     //     Opcodes.SHL_INT_LIT8
     //     Opcodes.SHR_INT_LIT8
     //     Opcodes.USHR_INT_LIT8
+    //     Opcodes.INVOKE_POLYMORPHIC
     // END(first-opcodes)
 
     static {
