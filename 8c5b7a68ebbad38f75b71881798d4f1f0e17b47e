@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "a3ad0e6a_30995b68",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1103743
+      },
+      "writtenOn": "2017-02-01T22:27:13Z",
+      "side": 1,
+      "message": "free(NULL) is a nop, so there\u0027s no need for the if.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 37
+      },
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5df78293_fb94172f",
+        "filename": "dx/src/com/android/dx/dex/code/RopToDop.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1103743
+      },
+      "writtenOn": "2017-02-01T22:27:13Z",
+      "side": 1,
+      "message": "should there be:\n// Opcodes.INVOKE_POLYMORPHIC_RANGE\nhere?",
+      "range": {
+        "startLine": 216,
+        "startChar": 19,
+        "endLine": 216,
+        "endChar": 37
+      },
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f6e71ae_84e338c2",
         "filename": "libdex/DexOpcodes.cpp",
         "patchSetId": 5
@@ -30,6 +76,29 @@
       "writtenOn": "2017-02-01T20:59:46Z",
       "side": 1,
       "message": "This raises another question: the old dexdump could be used to dump true \"odex\" files from the past (quickened). This change will display new Art functionality in those cases? Do we care (answer is probably, no, or even better, why is dexdump2 not the standard yet, Aart! :-)",
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fdb8c067_f4c297e9",
+        "filename": "libdex/InstrUtils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1103743
+      },
+      "writtenOn": "2017-02-01T22:27:13Z",
+      "side": 1,
+      "message": "Ultra-nit: yours is the only comment here ending with .",
+      "range": {
+        "startLine": 83,
+        "startChar": 71,
+        "endLine": 83,
+        "endChar": 72
+      },
       "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
