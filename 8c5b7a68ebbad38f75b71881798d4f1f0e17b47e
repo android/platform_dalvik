@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53f4fd5e_3b0856bc",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2017-02-01T18:41:13Z",
+      "side": 1,
+      "message": "this is extremely nit picking and perhaps moot since dalvik dexdump should really go away, but using this kind of destructors, although nowadays good programming practice, is a bit out of place in the rest of this file, where we allocate/free everything explicitly.\n\nsince you only have one stack use at L911, you might as well move the freeing there",
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
