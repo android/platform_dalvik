@@ -40,6 +40,8 @@ import com.android.dx.dex.code.form.Form31t;
 import com.android.dx.dex.code.form.Form32x;
 import com.android.dx.dex.code.form.Form35c;
 import com.android.dx.dex.code.form.Form3rc;
+import com.android.dx.dex.code.form.Form45cc;
+import com.android.dx.dex.code.form.Form4rcc;
 import com.android.dx.dex.code.form.Form51l;
 import com.android.dx.dex.code.form.SpecialFormat;
 import com.android.dx.io.Opcodes;
@@ -499,6 +501,10 @@ public final class Dops {
         new Dop(Opcodes.INVOKE_INTERFACE, Opcodes.INVOKE_INTERFACE,
             Opcodes.INVOKE_INTERFACE_RANGE, Form35c.THE_ONE, false);
 
+    public static final Dop INVOKE_POLYMORPHIC =
+        new Dop(Opcodes.INVOKE_POLYMORPHIC, Opcodes.INVOKE_POLYMORPHIC,
+            Opcodes.INVOKE_POLYMORPHIC_RANGE, Form45cc.THE_ONE, false);
+
     public static final Dop INVOKE_VIRTUAL_RANGE =
         new Dop(Opcodes.INVOKE_VIRTUAL_RANGE, Opcodes.INVOKE_VIRTUAL,
             Opcodes.NO_NEXT, Form3rc.THE_ONE, false);
@@ -518,6 +524,10 @@ public final class Dops {
     public static final Dop INVOKE_INTERFACE_RANGE =
         new Dop(Opcodes.INVOKE_INTERFACE_RANGE, Opcodes.INVOKE_INTERFACE,
             Opcodes.NO_NEXT, Form3rc.THE_ONE, false);
+
+    public static final Dop INVOKE_POLYMORPHIC_RANGE =
+        new Dop(Opcodes.INVOKE_POLYMORPHIC_RANGE, Opcodes.INVOKE_POLYMORPHIC,
+            Opcodes.NO_NEXT, Form4rcc.THE_ONE, false);
 
     public static final Dop NEG_INT =
         new Dop(Opcodes.NEG_INT, Opcodes.NEG_INT,
@@ -1162,6 +1172,8 @@ public final class Dops {
         set(SHL_INT_LIT8);
         set(SHR_INT_LIT8);
         set(USHR_INT_LIT8);
+        set(INVOKE_POLYMORPHIC);
+        set(INVOKE_POLYMORPHIC_RANGE);
         // END(dops-init)
     }
 
