@@ -931,6 +931,14 @@ public final class OpcodeInfo {
         new Info(Opcodes.USHR_INT_LIT8, "ushr-int/lit8",
             InstructionCodec.FORMAT_22B, IndexType.NONE);
 
+    public static final Info INVOKE_POLYMORPHIC =
+        new Info(Opcodes.INVOKE_POLYMORPHIC, "invoke-polymorphic",
+            InstructionCodec.FORMAT_45CC, IndexType.METHOD_AND_PROTO_REF);
+
+    public static final Info INVOKE_POLYMORPHIC_RANGE =
+        new Info(Opcodes.INVOKE_POLYMORPHIC_RANGE, "invoke-polymorphic/range",
+            InstructionCodec.FORMAT_4RCC, IndexType.METHOD_AND_PROTO_REF);
+
     // END(opcode-info-defs)
 
     // Static initialization.
@@ -1164,6 +1172,8 @@ public final class OpcodeInfo {
         set(SHL_INT_LIT8);
         set(SHR_INT_LIT8);
         set(USHR_INT_LIT8);
+        set(INVOKE_POLYMORPHIC);
+        set(INVOKE_POLYMORPHIC_RANGE);
         // END(opcode-info-init)
     }
 

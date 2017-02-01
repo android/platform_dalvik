@@ -81,6 +81,21 @@ struct FieldMethodInfo {
     const char* signature;
 };
 
+
+/* basic info about a prototype */
+struct ProtoInfo {
+    char* parameterTypes;  // dynamically allocated with malloc
+    const char* returnType;
+
+    ProtoInfo() : parameterTypes(NULL), returnType(NULL) {}
+    ~ProtoInfo()
+    {
+        if (parameterTypes != NULL) {
+            free(parameterTypes);
+        }
+    }
+};
+
 /*
  * Get 2 little-endian bytes.
  */
@@ -691,6 +706,63 @@ bool getFieldInfo(DexFile* pDexFile, u4 fieldIdx, FieldMethodInfo* pFieldInfo)
     return true;
 }
 
+/*
+ * Get information about a ProtoId.
+ */
+bool getProtoInfo(DexFile* pDexFile, u4 protoIdx, ProtoInfo* pProtoInfo)
+{
+    if (protoIdx >= pDexFile->pHeader->protoIdsSize) {
+        return false;
+    }
+
+    const DexProtoId* protoId = dexGetProtoId(pDexFile, protoIdx);
+
+    // Get string for return type.
+    if (protoId->returnTypeIdx >= pDexFile->pHeader->typeIdsSize) {
+        return false;
+    }
+    pProtoInfo->returnType = dexStringByTypeIdx(pDexFile, protoId->returnTypeIdx);
+
+    // Build string for parameter types.
+    size_t bufSize = 1;
+    char* buf = (char*)malloc(bufSize);
+    if (buf == NULL) {
+        return false;
+    }
+
+    buf[0] = '\0';
+    size_t bufUsed = 1;
+
+    const DexTypeList* paramTypes = dexGetProtoParameters(pDexFile, protoId);
+    if (paramTypes == NULL) {
+        // No parameters.
+        pProtoInfo->parameterTypes = buf;
+        return true;
+    }
+
+    for (u4 i = 0; i < paramTypes->size; ++i) {
+        if (paramTypes->list[i].typeIdx >= pDexFile->pHeader->typeIdsSize) {
+            free(buf);
+            return false;
+        }
+        const char* param = dexStringByTypeIdx(pDexFile, paramTypes->list[i].typeIdx);
+        size_t newUsed = bufUsed + strlen(param);
+        if (newUsed > bufSize) {
+            char* newBuf = (char*)realloc(buf, newUsed);
+            if (newBuf == NULL) {
+                free(buf);
+                return false;
+            }
+            buf = newBuf;
+            bufSize = newUsed;
+        }
+        strncat(buf + bufUsed - 1, param, bufSize - (bufUsed - 1));
+        bufUsed = newUsed;
+    }
+
+    pProtoInfo->parameterTypes = buf;
+    return true;
+}
 
 /*
  * Look up a class' descriptor.
@@ -718,6 +790,7 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
 
     int outSize;
     u4 index;
+    u4 secondaryIndex = 0;
     u4 width;
 
     /* TODO: Make the index *always* be in field B, to simplify this code. */
@@ -740,6 +813,12 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
     case kFmt22c:
     case kFmt22cs:
         index = pDecInsn->vC;
+        width = 4;
+        break;
+    case kFmt45cc:
+    case kFmt4rcc:
+        index = pDecInsn->vB;  // method index
+        secondaryIndex = pDecInsn->arg[4];  // proto index
         width = 4;
         break;
     default:
@@ -825,6 +904,22 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
         break;
     case kIndexFieldOffset:
         outSize = snprintf(buf, bufSize, "[obj+%0*x]", width, index);
+        break;
+    case kIndexMethodAndProtoRef:
+        {
+            FieldMethodInfo methInfo;
+            ProtoInfo protoInfo;
+            if (getMethodInfo(pDexFile, index, &methInfo) &&
+                getProtoInfo(pDexFile, secondaryIndex, &protoInfo)) {
+                outSize = snprintf(buf, bufSize, "%s.%s:%s, (%s)%s // method@%0*x, proto@%0*x",
+                                   methInfo.classDescriptor, methInfo.name, methInfo.signature,
+                                   protoInfo.parameterTypes, protoInfo.returnType,
+                                   width, index, width, secondaryIndex);
+            } else {
+                outSize = snprintf(buf, bufSize, "<method?>, <proto?> // method@%0*x, proto@%0*x",
+                                   width, index, width, secondaryIndex);
+            }
+        }
         break;
     default:
         outSize = snprintf(buf, bufSize, "<?>");
@@ -1041,6 +1136,26 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
         }
         break;
     case kFmt00x:        // unknown op or breakpoint
+        break;
+    case kFmt45cc:
+        {
+            fputs("  {", stdout);
+            printf("v%d", pDecInsn->vC);
+            for (int i = 0; i < (int) pDecInsn->vA - 1; ++i) {
+                printf(", v%d", pDecInsn->arg[i]);
+            }
+            printf("}, %s", indexBuf);
+        }
+        break;
+    case kFmt4rcc:
+        {
+            fputs("  {", stdout);
+            printf("v%d", pDecInsn->vC);
+            for (int i = 1; i < (int) pDecInsn->vA; ++i) {
+                printf(", v%d", pDecInsn->vC + i);
+            }
+            printf("}, %s", indexBuf);
+        }
         break;
     default:
         printf(" ???");
