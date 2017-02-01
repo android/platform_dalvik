@@ -47,7 +47,7 @@ static InstructionWidth gInstructionWidthTable[kNumPackedOpcodes] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 3, 3,
-    3, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 0,
+    3, 1, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 2, 2, 2, 0,
     // END(libdex-widths)
 };
 
@@ -357,7 +357,7 @@ static u1 gInstructionFormatTable[kNumPackedOpcodes] = {
     kFmt22b,  kFmt22b,  kFmt22b,  kFmt22c,  kFmt22c,  kFmt21c,  kFmt21c,
     kFmt22c,  kFmt22c,  kFmt22c,  kFmt21c,  kFmt21c,  kFmt00x,  kFmt20bc,
     kFmt35mi, kFmt3rmi, kFmt35c,  kFmt10x,  kFmt22cs, kFmt22cs, kFmt22cs,
-    kFmt22cs, kFmt22cs, kFmt22cs, kFmt35ms, kFmt3rms, kFmt35ms, kFmt3rms,
+    kFmt22cs, kFmt22cs, kFmt22cs, kFmt35ms, kFmt3rms, kFmt45cc, kFmt4rcc,
     kFmt22c,  kFmt21c,  kFmt21c,  kFmt00x,
     // END(libdex-formats)
 };
@@ -451,7 +451,7 @@ static u1 gInstructionIndexTypeTable[kNumPackedOpcodes] = {
     kIndexMethodRef,    kIndexNone,         kIndexFieldOffset,
     kIndexFieldOffset,  kIndexFieldOffset,  kIndexFieldOffset,
     kIndexFieldOffset,  kIndexFieldOffset,  kIndexVtableOffset,
-    kIndexVtableOffset, kIndexVtableOffset, kIndexVtableOffset,
+    kIndexVtableOffset, kIndexMethodAndProtoRef, kIndexMethodAndProtoRef,
     kIndexFieldRef,     kIndexFieldRef,     kIndexFieldRef,
     kIndexUnknown,
     // END(libdex-index-types)
@@ -641,6 +641,29 @@ void dexDecodeInstruction(const u2* insns, DecodedInstruction* pDec)
     case kFmt51l:       // op vAA, #+BBBBBBBBBBBBBBBB
         pDec->vA = INST_AA(inst);
         pDec->vB_wide = FETCH_u4(1) | ((u8) FETCH_u4(3) << 32);
+        break;
+    case kFmt45cc:
+        {
+            // AG op BBBB FEDC HHHH
+            pDec->vA = INST_B(inst);  // This is labelled A in the spec.
+            pDec->vB = FETCH(1);  // vB meth@BBBB
+            u2 fedc  = FETCH(2);
+            pDec->vC = fedc & 0xf;
+            pDec->arg[0] = (fedc >> 4) & 0xf;  // vD
+            pDec->arg[1] = (fedc >> 8) & 0xf;  // vE
+            pDec->arg[2] = (fedc >> 12);       // vF
+            pDec->arg[3] = INST_A(inst);       // vG
+            pDec->arg[4] = FETCH(3);           // vH proto@HHHH
+        }
+        break;
+    case kFmt4rcc:
+        {
+            // AA op BBBB CCCC HHHH
+            pDec->vA = INST_AA(inst);
+            pDec->vB = FETCH(1);
+            pDec->vC = FETCH(2);
+            pDec->arg[4] = FETCH(3);  // vH proto@HHHH
+        }
         break;
     default:
         ALOGW("Can't decode unexpected format %d (op=%d)", format, opcode);

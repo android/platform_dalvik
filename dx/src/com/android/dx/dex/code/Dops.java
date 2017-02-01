@@ -935,6 +935,14 @@ public final class Dops {
         new Dop(Opcodes.USHR_INT_LIT8, Opcodes.USHR_INT,
             Opcodes.NO_NEXT, Form22b.THE_ONE, true);
 
+    public static final Dop INVOKE_POLYMORPHIC =
+        new Dop(Opcodes.INVOKE_POLYMORPHIC, Opcodes.INVOKE_POLYMORPHIC,
+            Opcodes.INVOKE_POLYMORPHIC_RANGE, Form45cc.THE_ONE, true);
+
+    public static final Dop INVOKE_POLYMORPHIC_RANGE =
+        new Dop(Opcodes.INVOKE_POLYMORPHIC_RANGE, Opcodes.INVOKE_POLYMORPHIC,
+            Opcodes.NO_NEXT, Form4rcc.THE_ONE, true);
+
     // END(dops)
 
     // Static initialization.
@@ -1162,6 +1170,8 @@ public final class Dops {
         set(SHL_INT_LIT8);
         set(SHR_INT_LIT8);
         set(USHR_INT_LIT8);
+        set(INVOKE_POLYMORPHIC);
+        set(INVOKE_POLYMORPHIC_RANGE);
         // END(dops-init)
     }
 
