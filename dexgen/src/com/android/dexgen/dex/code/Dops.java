@@ -39,6 +39,8 @@ import com.android.dexgen.dex.code.form.Form31t;
 import com.android.dexgen.dex.code.form.Form32x;
 import com.android.dexgen.dex.code.form.Form35c;
 import com.android.dexgen.dex.code.form.Form3rc;
+import com.android.dexgen.dex.code.form.Form45cc;
+import com.android.dexgen.dex.code.form.Form4rcc;
 import com.android.dexgen.dex.code.form.Form51l;
 import com.android.dexgen.dex.code.form.SpecialFormat;
 
@@ -496,6 +498,10 @@ public final class Dops {
         new Dop(DalvOps.INVOKE_INTERFACE, DalvOps.INVOKE_INTERFACE,
             Form35c.THE_ONE, false, "invoke-interface");
 
+    public static final Dop INVOKE_POLYMORPHIC =
+        new Dop(DalvOps.INVOKE_POLYMORPHIC, DalvOps.INVOKE_POLYMORPHIC,
+            Form45cc.THE_ONE, false, "invoke-polymorphic");
+
     public static final Dop INVOKE_VIRTUAL_RANGE =
         new Dop(DalvOps.INVOKE_VIRTUAL_RANGE, DalvOps.INVOKE_VIRTUAL,
             Form3rc.THE_ONE, false, "invoke-virtual/range");
@@ -515,6 +521,10 @@ public final class Dops {
     public static final Dop INVOKE_INTERFACE_RANGE =
         new Dop(DalvOps.INVOKE_INTERFACE_RANGE, DalvOps.INVOKE_INTERFACE,
             Form3rc.THE_ONE, false, "invoke-interface/range");
+
+    public static final Dop INVOKE_POLYMORPHIC_RANGE =
+        new Dop(DalvOps.INVOKE_POLYMORPHIC_RANGE, DalvOps.INVOKE_POLYMORPHIC,
+            Form4rcc.THE_ONE, false, "invoke-polymorphic/range");
 
     public static final Dop NEG_INT =
         new Dop(DalvOps.NEG_INT, DalvOps.NEG_INT,

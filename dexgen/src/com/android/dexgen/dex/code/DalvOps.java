@@ -281,8 +281,8 @@ public final class DalvOps {
     public static final int UNUSED_F7 = 0xf7;
     public static final int UNUSED_F8 = 0xf8;
     public static final int UNUSED_F9 = 0xf9;
-    public static final int UNUSED_FA = 0xfa;
-    public static final int UNUSED_FB = 0xfb;
+    public static final int INVOKE_POLYMORPHIC = 0xfa;
+    public static final int INVOKE_POLYMORPHIC_RANGE = 0xfb;
     public static final int UNUSED_FC = 0xfc;
     public static final int UNUSED_FD = 0xfd;
     public static final int UNUSED_FE = 0xfe;
