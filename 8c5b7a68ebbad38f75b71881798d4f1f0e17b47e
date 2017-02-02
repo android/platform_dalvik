@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "973ca49c_741d69cd",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Done and removed the constructor too.",
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3ad0e6a_30995b68",
         "filename": "dexdump/DexDump.cpp",
         "patchSetId": 5
@@ -30,6 +47,29 @@
       "writtenOn": "2017-02-01T22:27:13Z",
       "side": 1,
       "message": "free(NULL) is a nop, so there\u0027s no need for the if.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 37
+      },
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "116098c8_478186f6",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Done, though moved per Aart\u0027s comment above.",
       "range": {
         "startLine": 93,
         "startChar": 0,
@@ -65,6 +105,29 @@
     },
     {
       "key": {
+        "uuid": "fb0fc6e2_e6b666a0",
+        "filename": "dx/src/com/android/dx/dex/code/RopToDop.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Good question. The list is emitted by opcode-gen and only includes the first opcode in the family so excludes /range variants.",
+      "range": {
+        "startLine": 216,
+        "startChar": 19,
+        "endLine": 216,
+        "endChar": 37
+      },
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f6e71ae_84e338c2",
         "filename": "libdex/DexOpcodes.cpp",
         "patchSetId": 5
@@ -82,6 +145,23 @@
     },
     {
       "key": {
+        "uuid": "2a80359e_1c76948e",
+        "filename": "libdex/DexOpcodes.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Good question. Who is likely to be able to make the call?\n\nWe could fix this up in dexdump in dumpBytecodes by checking for the odex suffix or pre-version 038 in the header and using a side table of the overloaded bytecodes (invoke-custom will have the same issue next week).\n\nUpdating the opcode-gen to deal with the overlap might be painful - we\u0027d likely need to introduce dex version there and emit multiple tables like this one based on version. This seems like a lot of work if this code isn\u0027t intended to live much longer.",
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdb8c067_f4c297e9",
         "filename": "libdex/InstrUtils.h",
         "patchSetId": 5
@@ -93,6 +173,29 @@
       "writtenOn": "2017-02-01T22:27:13Z",
       "side": 1,
       "message": "Ultra-nit: yours is the only comment here ending with .",
+      "range": {
+        "startLine": 83,
+        "startChar": 71,
+        "endLine": 83,
+        "endChar": 72
+      },
+      "revId": "8c5b7a68ebbad38f75b71881798d4f1f0e17b47e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c19ce8b9_ea207e4f",
+        "filename": "libdex/InstrUtils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Done",
       "range": {
         "startLine": 83,
         "startChar": 71,
