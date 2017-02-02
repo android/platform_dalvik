@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "b4618af5_17bc9e2c",
+        "filename": "dexgen/src/com/android/dexgen/dex/code/form/Form45cc.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Changed to 4rcc. This matches the pattern with 35c/3rc. Not super confident about this, the doc comment is not too clear.\n\nWhat\u0027s dafaq?",
+      "range": {
+        "startLine": 99,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 31
+      },
+      "revId": "5dd3859edde6547fdc8a8af0b35f37254436e750",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6017c0a6_3f2ed9e1",
         "filename": "dx/src/com/android/dx/dex/code/form/Form45cc.java",
         "patchSetId": 4
@@ -36,6 +59,29 @@
       "writtenOn": "2017-02-01T16:30:51Z",
       "side": 1,
       "message": "there seems to be a lot of duplication between this and the class with the same name in a different package. is this intentional ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 19,
+        "endLine": 35,
+        "endChar": 45
+      },
+      "revId": "5dd3859edde6547fdc8a8af0b35f37254436e750",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2925cb96_60413acf",
+        "filename": "dx/src/com/android/dx/dex/code/form/Form45cc.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-02T13:23:43Z",
+      "side": 1,
+      "message": "Both versions are based on classes in the respective packages. It looks like dx started from dexgen or vice-versa based on their imports.\n\nI\u0027m not confident their internals are sensible, but also unclear who consumes these exactly:\n\n- Jack has it\u0027s own fork of dx.\n- dx is referenced by external/dexmaker, eclipse DexWrapper, and some tools in cts.\n- dexgen doesn\u0027t appear to be referenced anywhere in the aosp tree outside it\u0027s sources.",
       "range": {
         "startLine": 35,
         "startChar": 19,
