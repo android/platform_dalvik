@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "3369ee8a_5b1fa81f",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-02-06T15:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a949e7f5_577803f9",
+      "revId": "b974a6014016a23375350f2db57fcf8f626efa69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc70aa23_b2ce94b9",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 3
@@ -42,6 +60,24 @@
         "endLine": 1638,
         "endChar": 108
       },
+      "revId": "b974a6014016a23375350f2db57fcf8f626efa69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "37bc2195_2d5cc99b",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1056183
+      },
+      "writtenOn": "2017-02-06T15:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc70aa23_b2ce94b9",
       "revId": "b974a6014016a23375350f2db57fcf8f626efa69",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
