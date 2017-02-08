@@ -22,6 +22,30 @@
       "revId": "bc3de77bc3d0017f5350e679d940dc6e84bc415f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "812cd336_c8e5cbd6",
+        "filename": "dx/etc/mainDexClasses.rules",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2017-02-08T11:51:46Z",
+      "side": 1,
+      "message": "Nick, do you know how those tests are run and if they are required to be public?",
+      "parentUuid": "c7e4282f_71ec1985",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 14
+      },
+      "revId": "bc3de77bc3d0017f5350e679d940dc6e84bc415f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
