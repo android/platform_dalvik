@@ -25,3 +25,7 @@
   -keep public class * extends java.lang.annotation.Annotation {
    *;
   }
+# InstrumentationTestCase must be in main dex or InstrumentationTestRunner / AndroidJUnitRunner
+# won't be able to find them.
+  -keep public class * extends android.test.InstrumentationTestCase {
+  }
