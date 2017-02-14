@@ -69,6 +69,7 @@ format 3rms
 #     vtable-offset
 #     field-offset
 #     method-and-proto-ref
+#     call-site-ref
 #   flags; pipe-combined combo of one or more of:
 #     optimized     -- optimized; not to be included in unoptimized dex files
 #     branch        -- might branch to an address
@@ -343,11 +344,11 @@ op   f9 +invoke-virtual-quick/range 3rms n vtable-offset optimized|continue|thro
 # Invoke-polymorphic
 op   fa invoke-polymorphic          45cc y method-and-proto-ref continue|throw|invoke
 op   fb invoke-polymorphic/range    4rcc y method-and-proto-ref continue|throw|invoke
+op   fc invoke-custom               35c  y call-site-ref continue|throw|invoke
+op   fd invoke-custom/range         3rc  y call-site-ref continue|throw|invoke
 
 # More optimized opcodes (not valid in an unoptimized dex file)
 
-op   fc +iput-object-volatile       22c  n field-ref     optimized|continue|throw
-op   fd +sget-object-volatile       21c  y field-ref     optimized|continue|throw
 op   fe +sput-object-volatile       21c  n field-ref     optimized|continue|throw
 
 # unused: op ff

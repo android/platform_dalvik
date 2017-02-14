@@ -47,7 +47,7 @@ static InstructionWidth gInstructionWidthTable[kNumPackedOpcodes] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 3, 3,
-    3, 1, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 2, 2, 2, 0,
+    3, 1, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 3, 3, 2, 0,
     // END(libdex-widths)
 };
 
@@ -309,8 +309,8 @@ static u1 gOpcodeFlagsTable[kNumPackedOpcodes] = {
     kInstrCanContinue|kInstrCanThrow|kInstrInvoke,
     kInstrCanContinue|kInstrCanThrow|kInstrInvoke,
     kInstrCanContinue|kInstrCanThrow|kInstrInvoke,
-    kInstrCanContinue|kInstrCanThrow,
-    kInstrCanContinue|kInstrCanThrow,
+    kInstrCanContinue|kInstrCanThrow|kInstrInvoke,
+    kInstrCanContinue|kInstrCanThrow|kInstrInvoke,
     kInstrCanContinue|kInstrCanThrow,
     0,
     // END(libdex-flags)
@@ -358,7 +358,7 @@ static u1 gInstructionFormatTable[kNumPackedOpcodes] = {
     kFmt22c,  kFmt22c,  kFmt22c,  kFmt21c,  kFmt21c,  kFmt00x,  kFmt20bc,
     kFmt35mi, kFmt3rmi, kFmt35c,  kFmt10x,  kFmt22cs, kFmt22cs, kFmt22cs,
     kFmt22cs, kFmt22cs, kFmt22cs, kFmt35ms, kFmt3rms, kFmt45cc, kFmt4rcc,
-    kFmt22c,  kFmt21c,  kFmt21c,  kFmt00x,
+    kFmt35c,  kFmt3rc,  kFmt21c,  kFmt00x,
     // END(libdex-formats)
 };
 
@@ -452,7 +452,7 @@ static u1 gInstructionIndexTypeTable[kNumPackedOpcodes] = {
     kIndexFieldOffset,  kIndexFieldOffset,  kIndexFieldOffset,
     kIndexFieldOffset,  kIndexFieldOffset,  kIndexVtableOffset,
     kIndexVtableOffset, kIndexMethodAndProtoRef, kIndexMethodAndProtoRef,
-    kIndexFieldRef,     kIndexFieldRef,     kIndexFieldRef,
+    kCallSiteRef,       kCallSiteRef,       kIndexFieldRef,
     kIndexUnknown,
     // END(libdex-index-types)
 };
