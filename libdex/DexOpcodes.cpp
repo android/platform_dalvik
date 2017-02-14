@@ -282,8 +282,8 @@ static const char* gOpNames[kNumPackedOpcodes] = {
     "+invoke-virtual-quick/range",
     "invoke-polymorphic",
     "invoke-polymorphic/range",
-    "+iput-object-volatile",
-    "+sget-object-volatile",
+    "invoke-custom",
+    "invoke-custom/range",
     "+sput-object-volatile",
     "unused-ff",
     // END(libdex-opcode-names)

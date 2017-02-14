@@ -501,10 +501,6 @@ public final class Dops {
         new Dop(Opcodes.INVOKE_INTERFACE, Opcodes.INVOKE_INTERFACE,
             Opcodes.INVOKE_INTERFACE_RANGE, Form35c.THE_ONE, false);
 
-    public static final Dop INVOKE_POLYMORPHIC =
-        new Dop(Opcodes.INVOKE_POLYMORPHIC, Opcodes.INVOKE_POLYMORPHIC,
-            Opcodes.INVOKE_POLYMORPHIC_RANGE, Form45cc.THE_ONE, false);
-
     public static final Dop INVOKE_VIRTUAL_RANGE =
         new Dop(Opcodes.INVOKE_VIRTUAL_RANGE, Opcodes.INVOKE_VIRTUAL,
             Opcodes.NO_NEXT, Form3rc.THE_ONE, false);
@@ -524,10 +520,6 @@ public final class Dops {
     public static final Dop INVOKE_INTERFACE_RANGE =
         new Dop(Opcodes.INVOKE_INTERFACE_RANGE, Opcodes.INVOKE_INTERFACE,
             Opcodes.NO_NEXT, Form3rc.THE_ONE, false);
-
-    public static final Dop INVOKE_POLYMORPHIC_RANGE =
-        new Dop(Opcodes.INVOKE_POLYMORPHIC_RANGE, Opcodes.INVOKE_POLYMORPHIC,
-            Opcodes.NO_NEXT, Form4rcc.THE_ONE, false);
 
     public static final Dop NEG_INT =
         new Dop(Opcodes.NEG_INT, Opcodes.NEG_INT,
@@ -945,6 +937,22 @@ public final class Dops {
         new Dop(Opcodes.USHR_INT_LIT8, Opcodes.USHR_INT,
             Opcodes.NO_NEXT, Form22b.THE_ONE, true);
 
+    public static final Dop INVOKE_POLYMORPHIC =
+        new Dop(Opcodes.INVOKE_POLYMORPHIC, Opcodes.INVOKE_POLYMORPHIC,
+            Opcodes.INVOKE_POLYMORPHIC_RANGE, Form45cc.THE_ONE, true);
+
+    public static final Dop INVOKE_POLYMORPHIC_RANGE =
+        new Dop(Opcodes.INVOKE_POLYMORPHIC_RANGE, Opcodes.INVOKE_POLYMORPHIC,
+            Opcodes.NO_NEXT, Form4rcc.THE_ONE, true);
+
+    public static final Dop INVOKE_CUSTOM =
+        new Dop(Opcodes.INVOKE_CUSTOM, Opcodes.INVOKE_CUSTOM,
+            Opcodes.INVOKE_CUSTOM_RANGE, Form35c.THE_ONE, true);
+
+    public static final Dop INVOKE_CUSTOM_RANGE =
+        new Dop(Opcodes.INVOKE_CUSTOM_RANGE, Opcodes.INVOKE_CUSTOM,
+            Opcodes.NO_NEXT, Form3rc.THE_ONE, true);
+
     // END(dops)
 
     // Static initialization.
@@ -1174,6 +1182,8 @@ public final class Dops {
         set(USHR_INT_LIT8);
         set(INVOKE_POLYMORPHIC);
         set(INVOKE_POLYMORPHIC_RANGE);
+        set(INVOKE_CUSTOM);
+        set(INVOKE_CUSTOM_RANGE);
         // END(dops-init)
     }
 
