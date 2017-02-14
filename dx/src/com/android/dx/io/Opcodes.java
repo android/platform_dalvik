@@ -261,6 +261,8 @@ public final class Opcodes {
     public static final int USHR_INT_LIT8 = 0xe2;
     public static final int INVOKE_POLYMORPHIC = 0xfa;
     public static final int INVOKE_POLYMORPHIC_RANGE = 0xfb;
+    public static final int INVOKE_CUSTOM = 0xfc;
+    public static final int INVOKE_CUSTOM_RANGE = 0xfd;
     // END(opcodes)
 
     // TODO: Generate these payload opcodes with opcode-gen.

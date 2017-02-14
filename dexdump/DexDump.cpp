@@ -915,6 +915,9 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
             free(protoInfo.parameterTypes);
         }
         break;
+    case kCallSiteRef:
+        outSize = snprintf(buf, bufSize, "call_site@%0*x", width, index);
+        break;
     default:
         outSize = snprintf(buf, bufSize, "<?>");
         break;
@@ -1842,6 +1845,219 @@ void dumpRegisterMaps(DexFile* pDexFile)
     }
 }
 
+static const DexMapItem* findMapItem(const DexFile* pDexFile, u4 type)
+{
+    u4 offset = pDexFile->pHeader->mapOff;
+    const DexMapList* list = (const DexMapList*)(pDexFile->baseAddr + offset);
+    for (u4 i = 0; i < list->size; ++i) {
+        if (list->list[i].type == type) {
+            return &list->list[i];
+        }
+    }
+    return nullptr;
+}
+
+static void dumpMethodHandles(DexFile* pDexFile)
+{
+    const DexMapItem* item = findMapItem(pDexFile, kDexTypeMethodHandleItem);
+    if (item == nullptr) return;
+    const DexMethodHandleItem* method_handles =
+            (const DexMethodHandleItem*)(pDexFile->baseAddr + item->offset);
+    for (u4 i = 0; i < item->size; ++i) {
+        const DexMethodHandleItem& mh = method_handles[i];
+        bool is_invoke = false;
+        const char* type;
+        switch (mh.methodHandleType) {
+            case 0:
+                type = "put-static";
+                break;
+            case 1:
+                type = "get-static";
+                break;
+            case 2:
+                type = "put-instance";
+                break;
+            case 3:
+                type = "get-instance";
+                break;
+            case 4:
+                type = "invoke-static";
+                is_invoke = true;
+                break;
+            case 5:
+                type = "invoke-instance";
+                is_invoke = true;
+                break;
+            case 6:
+                type = "invoke-constructor";
+                is_invoke = true;
+                break;
+        }
+
+        FieldMethodInfo info;
+        memset(&info, 0, sizeof(info));
+        if (is_invoke) {
+            getMethodInfo(pDexFile, mh.fieldOrMethodIdx, &info);
+        } else {
+            getFieldInfo(pDexFile, mh.fieldOrMethodIdx, &info);
+        }
+
+        if (gOptions.outputFormat == OUTPUT_XML) {
+            printf("<method_handle index index=\"%u\"\n", i);
+            printf(" type=\"%s\"\n", type);
+            printf(" target_class=\"%s\"\n", info.classDescriptor);
+            printf(" target_member=\"%s\"\n", info.name);
+            printf(" target_member_type=\"%s\"\n", info.signature);
+            printf("</method_handle>\n");
+        } else {
+            printf("Method Handle #%u:\n", i);
+            printf("  type        : %s\n", type);
+            printf("  target      : %s %s\n", info.classDescriptor, info.name);
+            printf("  target_type : %s\n", info.signature);
+        }
+    }
+}
+
+/* Helper for dumpCallSites(), which reads a 1- to 8- byte signed
+ * little endian value. */
+static u8 readSignedLittleEndian(const u1** pData, u4 size) {
+    const u1* data = *pData;
+    u8 result = 0;
+    u4 i;
+
+    for (i = 0; i < size; i++) {
+        result = (result >> 8) | (((int64_t)*data++) << 56);
+    }
+
+    result >>= (8 - size) * 8;
+    *pData = data;
+    return result;
+}
+
+/* Helper for dumpCallSites(), which reads a 1- to 8- byte unsigned
+ * little endian value. */
+static u8 readUnsignedLittleEndian(const u1** pData, u4 size, bool fillOnRight = false) {
+    const u1* data = *pData;
+    u8 result = 0;
+    u4 i;
+
+    for (i = 0; i < size; i++) {
+        result = (result >> 8) | (((u8)*data++) << 56);
+    }
+
+    u8 oldResult = result;
+    if (!fillOnRight) {
+        result >>= (8u - size) * 8;
+    }
+
+    *pData = data;
+    return result;
+}
+
+static void dumpCallSites(DexFile* pDexFile)
+{
+    const DexMapItem* item = findMapItem(pDexFile, kDexTypeCallSiteIdItem);
+    if (item == nullptr) return;
+    const DexCallSiteId* ids = (const DexCallSiteId*)(pDexFile->baseAddr + item->offset);
+    for (u4 index = 0; index < item->size; ++index) {
+        bool doXml = (gOptions.outputFormat == OUTPUT_XML);
+        printf(doXml ? "<call_site index=\"%u\">\n" : "Call Site #%u\n", index);
+        const u1* data = pDexFile->baseAddr + ids[index].callSiteOff;
+        u4 count = readUnsignedLeb128(&data);
+        for (u4 i = 0; i < count; ++i) {
+            printf(doXml ? "<link_argument index=\"%u\" " : "  link_argument[%u] : ", i);
+            u1 headerByte = *data++;
+            u4 valueType = headerByte & kDexAnnotationValueTypeMask;
+            u4 valueArg = headerByte >> kDexAnnotationValueArgShift;
+            switch (valueType) {
+                case kDexAnnotationByte: {
+                    printf(doXml ? "type=\"byte\" value=\"%d\"/>" : "%d (byte)", (int)*data++);
+                    break;
+                }
+                case kDexAnnotationShort: {
+                    printf(doXml ? "type=\"short\" value=\"%d\"/>" : "%d (short)",
+                           (int)readSignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationChar: {
+                    printf(doXml ? "type=\"short\" value=\"%u\"/>" : "%u (char)",
+                           (u2)readUnsignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationInt: {
+                    printf(doXml ? "type=\"int\" value=\"%d\"/>" : "%d (int)",
+                           (int)readSignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationLong: {
+                    printf(doXml ? "type=\"long\" value=\"%" PRId64 "\"/>" : "%" PRId64 " (long)",
+                           (int64_t)readSignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationFloat: {
+                    u4 rawValue = (u4)(readUnsignedLittleEndian(&data, valueArg + 1, true) >> 32);
+                    printf(doXml ? "type=\"float\" value=\"%g\"/>" : "%g (float)",
+                           *((float*)&rawValue));
+                    break;
+                }
+                case kDexAnnotationDouble: {
+                    u8 rawValue = readUnsignedLittleEndian(&data, valueArg + 1, true);
+                    printf(doXml ? "type=\"double\" value=\"%g\"/>" : "%g (double)",
+                           *((double*)&rawValue));
+                    break;
+                }
+                case kDexAnnotationMethodType: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    ProtoInfo protoInfo;
+                    memset(&protoInfo, 0, sizeof(protoInfo));
+                    getProtoInfo(pDexFile, idx, &protoInfo);
+                    printf(doXml ? "type=\"MethodType\" value=\"(%s)%s\"/>" : "(%s)%s (MethodType)",
+                           protoInfo.parameterTypes, protoInfo.returnType);
+                    free(protoInfo.parameterTypes);
+                    break;
+                }
+                case kDexAnnotationMethodHandle: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    printf(doXml ? "type=\"MethodHandle\" value=\"%u\"/>" : "%u (MethodHandle)",
+                           idx);
+                    break;
+                }
+                case kDexAnnotationString: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    printf(doXml ? "type=\"String\" value=\"%s\"/>" : "%s (String)",
+                           dexStringById(pDexFile, idx));
+                    break;
+                }
+                case kDexAnnotationType: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    printf(doXml ? "type=\"Class\" value=\"%s\"/>" : "%s (Class)",
+                           dexStringByTypeIdx(pDexFile, idx));
+                    break;
+                }
+                case kDexAnnotationNull: {
+                    printf(doXml ? "type=\"null\" value=\"null\"/>" : "null (null)");
+                    break;
+                }
+                case kDexAnnotationBoolean: {
+                    printf(doXml ? "type=\"boolean\" value=\"%s\"/>" : "%s (boolean)",
+                           (valueArg & 1) == 0 ? "false" : "true");
+                    break;
+                }
+                default:
+                    // Other types are not anticipated being reached here.
+                    printf("Unexpected type found, bailing on call site info.\n");
+                    i = count;
+                    break;
+            }
+            printf("\n");
+        }
+
+        if (doXml) {
+            printf("</callsite>\n");
+        }
+    }
+}
+
 /*
  * Dump the requested sections of the file.
  */
@@ -1874,6 +2090,9 @@ void processDexFile(const char* fileName, DexFile* pDexFile)
 
         dumpClass(pDexFile, i, &package);
     }
+
+    dumpMethodHandles(pDexFile);
+    dumpCallSites(pDexFile);
 
     /* free the last one allocated */
     if (package != NULL) {
