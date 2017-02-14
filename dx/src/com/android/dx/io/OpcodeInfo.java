@@ -939,6 +939,14 @@ public final class OpcodeInfo {
         new Info(Opcodes.INVOKE_POLYMORPHIC_RANGE, "invoke-polymorphic/range",
             InstructionCodec.FORMAT_4RCC, IndexType.METHOD_AND_PROTO_REF);
 
+    public static final Info INVOKE_CUSTOM =
+        new Info(Opcodes.INVOKE_CUSTOM, "invoke-custom",
+            InstructionCodec.FORMAT_35C, IndexType.CALL_SITE_REF);
+
+    public static final Info INVOKE_CUSTOM_RANGE =
+        new Info(Opcodes.INVOKE_CUSTOM_RANGE, "invoke-custom/range",
+            InstructionCodec.FORMAT_3RC, IndexType.CALL_SITE_REF);
+
     // END(opcode-info-defs)
 
     // Static initialization.
@@ -1174,6 +1182,8 @@ public final class OpcodeInfo {
         set(USHR_INT_LIT8);
         set(INVOKE_POLYMORPHIC);
         set(INVOKE_POLYMORPHIC_RANGE);
+        set(INVOKE_CUSTOM);
+        set(INVOKE_CUSTOM_RANGE);
         // END(opcode-info-init)
     }
 

@@ -915,6 +915,9 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
             free(protoInfo.parameterTypes);
         }
         break;
+    case kCallSiteRef:
+        outSize = snprintf(buf, bufSize, "call_site%0*x", width, index);
+        break;
     default:
         outSize = snprintf(buf, bufSize, "<?>");
         break;

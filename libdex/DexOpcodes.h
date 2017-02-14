@@ -320,8 +320,8 @@ enum Opcode {
     OP_INVOKE_VIRTUAL_QUICK_RANGE   = 0xf9,
     OP_INVOKE_POLYMORPHIC           = 0xfa,
     OP_INVOKE_POLYMORPHIC_RANGE     = 0xfb,
-    OP_IPUT_OBJECT_VOLATILE         = 0xfc,
-    OP_SGET_OBJECT_VOLATILE         = 0xfd,
+    OP_INVOKE_CUSTOM                = 0xfc,
+    OP_INVOKE_CUSTOM_RANGE          = 0xfd,
     OP_SPUT_OBJECT_VOLATILE         = 0xfe,
     OP_UNUSED_FF                    = 0xff,
     // END(libdex-opcode-enum)
@@ -586,8 +586,8 @@ enum Opcode {
         H(OP_INVOKE_VIRTUAL_QUICK_RANGE),                                     \
         H(OP_INVOKE_POLYMORPHIC),                                             \
         H(OP_INVOKE_POLYMORPHIC_RANGE),                                       \
-        H(OP_IPUT_OBJECT_VOLATILE),                                           \
-        H(OP_SGET_OBJECT_VOLATILE),                                           \
+        H(OP_INVOKE_CUSTOM),                                                  \
+        H(OP_INVOKE_CUSTOM_RANGE),                                            \
         H(OP_SPUT_OBJECT_VOLATILE),                                           \
         H(OP_UNUSED_FF),                                                      \
         /* END(libdex-goto-table) */                                          \
