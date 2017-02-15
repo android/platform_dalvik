@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e8db38d_4c1d7cb5",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-15T15:23:51Z",
+      "side": 1,
+      "message": "TODO(oth) - need to be able to check the number of call sites.",
+      "range": {
+        "startLine": 1051,
+        "startChar": 10,
+        "endLine": 1051,
+        "endChar": 23
+      },
+      "revId": "112222deb6ea351e5d63cffdd699fab3be074bb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "126cad31_fea864c2",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-15T15:23:51Z",
+      "side": 1,
+      "message": "TODO(oth): Need to be able to check the number of method handles.",
+      "range": {
+        "startLine": 1058,
+        "startChar": 19,
+        "endLine": 1058,
+        "endChar": 21
+      },
+      "revId": "112222deb6ea351e5d63cffdd699fab3be074bb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
