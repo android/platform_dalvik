@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8be619fa_f3a6d8fd",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1901,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-15T15:37:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f5f55ca_d24b6eb7",
+      "revId": "112222deb6ea351e5d63cffdd699fab3be074bb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fd8c49c_5d6ffd66",
         "filename": "libdex/DexFile.h",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "bb14fcd6_60c59dde",
+        "filename": "libdex/DexFile.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-15T15:37:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fd8c49c_5d6ffd66",
+      "range": {
+        "startLine": 95,
+        "startChar": 27,
+        "endLine": 95,
+        "endChar": 28
+      },
+      "revId": "112222deb6ea351e5d63cffdd699fab3be074bb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90c8c671_861e9839",
         "filename": "libdex/DexFile.h",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2017-02-15T15:31:46Z",
       "side": 1,
       "message": "grammar",
+      "range": {
+        "startLine": 96,
+        "startChar": 3,
+        "endLine": 96,
+        "endChar": 14
+      },
+      "revId": "112222deb6ea351e5d63cffdd699fab3be074bb6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "918c9ce0_8c16b109",
+        "filename": "libdex/DexFile.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-15T15:37:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90c8c671_861e9839",
       "range": {
         "startLine": 96,
         "startChar": 3,
