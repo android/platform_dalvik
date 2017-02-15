@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22ad9c29_b6f7b7ed",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-02-15T17:59:03Z",
+      "side": 1,
+      "message": "missing space",
+      "range": {
+        "startLine": 1076,
+        "startChar": 31,
+        "endLine": 1076,
+        "endChar": 33
+      },
+      "revId": "b63a6017fac0ec7d88a91a03753a0de03dc759d6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9dc68f1_c9a18f75",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-02-15T17:59:03Z",
+      "side": 1,
+      "message": "Nit: one per line?",
+      "range": {
+        "startLine": 1076,
+        "startChar": 8,
+        "endLine": 1077,
+        "endChar": 63
+      },
+      "revId": "b63a6017fac0ec7d88a91a03753a0de03dc759d6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
