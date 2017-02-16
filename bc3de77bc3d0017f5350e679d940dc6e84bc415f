@@ -46,6 +46,30 @@
       "revId": "bc3de77bc3d0017f5350e679d940dc6e84bc415f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "edd83efa_5b0314e0",
+        "filename": "dx/etc/mainDexClasses.rules",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1052388
+      },
+      "writtenOn": "2017-02-16T21:56:19Z",
+      "side": 1,
+      "message": "We cannot force TestCases to be in the main dex. First off, their parent is junit.framework.TestCase and secondly for JUnit4 tests - there is no common ancestor.\n\nI might be cargo-culting, but I would imagine that the Instrumentation\u0027s keep statement should mirror Application\u0027s... that is, keep all descendants of instrumentation and their onCreate() methods. That gives their on create method a chance to use multidex to patch the class loader so the rest of the code in the secondary dexes can be loaded.\n\nI might be wrong, but the minimal amount of code that needs to run before the secondary dexes are loaded should just be the instrumentation\u0027s subclass.",
+      "parentUuid": "812cd336_c8e5cbd6",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 14
+      },
+      "revId": "bc3de77bc3d0017f5350e679d940dc6e84bc415f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
