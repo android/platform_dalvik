@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58043403_c5e739cc",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-16T13:07:55Z",
+      "side": 1,
+      "message": "nit: const u4 offset ?",
+      "range": {
+        "startLine": 1850,
+        "startChar": 4,
+        "endLine": 1850,
+        "endChar": 6
+      },
+      "revId": "fa5e510d770070f8e7f47d126f5be138aa55cb84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "441d66a5_022c851c",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1979,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-16T13:07:55Z",
+      "side": 1,
+      "message": "nit here and below: leave a space between the cast and the expression",
+      "range": {
+        "startLine": 1979,
+        "startChar": 32,
+        "endLine": 1979,
+        "endChar": 54
+      },
+      "revId": "fa5e510d770070f8e7f47d126f5be138aa55cb84",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
