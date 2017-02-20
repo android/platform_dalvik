@@ -70,6 +70,30 @@
       "revId": "bc3de77bc3d0017f5350e679d940dc6e84bc415f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "363df56d_dc702791",
+        "filename": "dx/etc/mainDexClasses.rules",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2017-02-20T10:03:17Z",
+      "side": 1,
+      "message": "Yes this is just for some JUnit 3 support, I know the tests do not run when in secondary dex file. I think I remember the support delivered in Android opens the classes.dex to scan the classes. But I don\u0027t know much about Android testing that\u0027s why I was asking.\n\nLooking today I realize that:\n- InstrumentationTestRunner is deprecated\n- AndroidJUnitRunner is in a support library so if it doesn\u0027t look into the secondary dex yet (I thought it was but I see that I commented here that it isn\u0027t) maybe it should just be updated to do so instead.\n\u003d\u003e so maybe it\u0027s just better to drop that here.",
+      "parentUuid": "edd83efa_5b0314e0",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 14
+      },
+      "revId": "bc3de77bc3d0017f5350e679d940dc6e84bc415f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
