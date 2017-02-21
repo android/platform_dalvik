@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29b50fa9_1e1503a8",
+        "filename": "dx/src/com/android/dx/dex/DexOptions.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T18:52:55Z",
+      "side": 1,
+      "message": "(optional API_CURRENT is a bit out of date, update it to 25 (Nougat 7.1)?)\n\nWhen they add invoke-custom work later, it can be updated to 26.",
+      "revId": "fbcb2b7ab1e9abf58eddfb1218f7ffa3815482c1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
