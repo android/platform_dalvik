@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e33e3d6_01dc1ebb",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T18:26:28Z",
+      "side": 1,
+      "message": "What is making these? I thought desugared removes all the lambda invoke-dynamics (that should be the main reason to have these CONSTANTs in the pool) or does it not strip the unused constants?",
+      "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
