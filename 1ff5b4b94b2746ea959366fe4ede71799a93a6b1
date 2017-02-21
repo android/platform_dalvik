@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d721d673_fe1cd390",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T19:26:06Z",
+      "side": 1,
+      "message": "This is not semantically identical. (However it doesn\u0027t matter)\n\nFor the curious:\n----------------------\n\nThere is a subtlety to invoke-special in 6.5. If ACC_SUPER is not set on the current class, it will skip the recursive-super lookup. And you can basically call directly into any other method.\n\nFor example\n\n\n   class A inherits B( inherits C) {\n     void foo() {\n         invoke-special C.bar\n         // if ACC_SUPER is set, the class target\n         // is always replaced to be A.super regardless\n         // otherwise we take it as the real target\n     }\n   }\n\n   class B inherits C {\n     void bar() {\n       print(\"B.bar\");\n     }\n\n   class C {\n     void bar() {\n       print(\"C.bar\");\n\nIf A has not set ACC_SUPER, it will skip B#bar and print \"C.bar\" as output.\n\nIf A has set ACC_SUPER, it will go up to super classes recursively and stop at B.bar, printing \"B.bar\" as output.",
+      "revId": "1ff5b4b94b2746ea959366fe4ede71799a93a6b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
