@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "90e1e475_9da9077c",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T21:40:46Z",
+      "side": 1,
+      "message": "(Discussed offline)\n\nShould be fine as-is, if it\u0027s not too much trouble, could we add a comment to RopperMachine.java (case INVOKESPECIAL):\n\n   // TODO: Consider checking that invoke-special target method is private, or constructor since otherwise ART verifier will reject it.",
+      "parentUuid": "252a0042_4b2ee203",
+      "revId": "49880faadccadd1fadff48149f78784c8f4f9530",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a01da3ce_33deea44",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 1
