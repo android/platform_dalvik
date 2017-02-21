@@ -52,6 +52,23 @@
       "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b06b9566_c0ad91e4",
+        "filename": "dx/src/com/android/dx/cf/direct/DirectClassFile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T18:50:39Z",
+      "side": 1,
+      "message": "If you only have this file change, you can probably check in the whole CL. It seems ok.\n\n(Remove the changes from other file)",
+      "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
