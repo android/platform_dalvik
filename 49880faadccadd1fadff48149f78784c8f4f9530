@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "252a0042_4b2ee203",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T19:29:27Z",
+      "side": 1,
+      "message": "The ConcreteMethod#getAccessFlags should have the right flags to check.\n\nProbably has to be done in RopperMachine",
+      "parentUuid": "a29f9287_a9f2eb0f",
+      "revId": "49880faadccadd1fadff48149f78784c8f4f9530",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a01da3ce_33deea44",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 1
