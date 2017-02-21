@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a29f9287_a9f2eb0f",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T18:49:38Z",
+      "side": 1,
+      "message": "This should only be allowed for private methods and for ACC_SUPER (the latter of which you have a separate CL for)\n\nI think doing anything else will be invalid bytecode that the verifier would fail on.\n\n(there is also \u003cinit\u003e but it makes no sense for an interface)",
+      "revId": "49880faadccadd1fadff48149f78784c8f4f9530",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a01da3ce_33deea44",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-21T18:49:38Z",
+      "side": 1,
+      "message": "This seems fine.",
+      "revId": "49880faadccadd1fadff48149f78784c8f4f9530",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
