@@ -16,6 +16,24 @@
       "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d54cab_7cbfcc6a",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-21T18:43:29Z",
+      "side": 1,
+      "message": "I probably did this before desugar was fully integrated.  Retesting with desugar these changes are not necessary, but Orion will need them for his invoke-polymorphic changes.",
+      "parentUuid": "2e33e3d6_01dc1ebb",
+      "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
