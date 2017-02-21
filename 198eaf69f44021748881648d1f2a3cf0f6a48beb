@@ -34,6 +34,24 @@
       "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1679db83_ed737cbb",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-21T18:46:11Z",
+      "side": 1,
+      "message": "He won\u0027t need them for invoke-polymorphic - these will only show up if a bootstrap method exists AND one of the static arguments to these methods is a MethodHandle or a MethodType.\n\nHe will probably need them for his work on invoke-custom, but those changes won\u0027t block the platform bringup (nothing in the platform should use that opcode).",
+      "parentUuid": "d8d54cab_7cbfcc6a",
+      "revId": "198eaf69f44021748881648d1f2a3cf0f6a48beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
