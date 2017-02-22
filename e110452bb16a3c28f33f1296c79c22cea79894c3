@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "271b5e52_35881521",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-22T17:55:36Z",
+      "side": 1,
+      "message": "This pattern is common and used throughout this file, I generally only use fall-through if there is a block between the case statements.",
+      "parentUuid": "70ca574c_ef26679c",
+      "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10ef525f_cd7bf5cc",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-02-22T17:50:16Z",
       "side": 1,
       "message": "line length",
+      "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fe31850_3891d844",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-22T17:55:36Z",
+      "side": 1,
+      "message": "splitting strings like this for line length makes things less readable and less greppable.",
+      "parentUuid": "10ef525f_cd7bf5cc",
       "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
