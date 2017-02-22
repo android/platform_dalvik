@@ -296,6 +296,9 @@ public final class RegOps {
     /** {@code T: Any primitive type; v0..vx: T :: {v0, ..., vx}} */
     public static final int FILL_ARRAY_DATA = 57;
 
+    // TODO(oth)
+    public static final int INVOKE_POLYMORPHIC = 58;
+
     /**
      * This class is uninstantiable.
      */
@@ -364,6 +367,7 @@ public final class RegOps {
             case INVOKE_SUPER: return "invoke-super";
             case INVOKE_DIRECT: return "invoke-direct";
             case INVOKE_INTERFACE: return "invoke-interface";
+            case INVOKE_POLYMORPHIC: return "invoke-polymorphic";
             case MOVE_RESULT: return "move-result";
             case MOVE_RESULT_PSEUDO: return "move-result-pseudo";
             case FILL_ARRAY_DATA: return "fill-array-data";

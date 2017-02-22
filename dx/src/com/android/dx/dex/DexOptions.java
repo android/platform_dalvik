@@ -38,8 +38,8 @@ public class DexOptions {
     */
     public boolean ALIGN_64BIT_REGS_IN_OUTPUT_FINISHER = ALIGN_64BIT_REGS_SUPPORT;
 
-    /** minimum SDK version targeted */
-    public int minSdkVersion = DexFormat.API_NO_EXTENDED_OPCODES;
+    /** minimum SDK version targeted (invoke-polymorphic introduced in DEX version 038 */
+    public int minSdkVersion = DexFormat.API_CURRENT;
 
     /** force generation of jumbo opcodes */
     public boolean forceJumbo = false;

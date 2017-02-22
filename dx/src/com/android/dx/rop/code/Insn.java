@@ -416,6 +416,13 @@ public abstract class Insn implements ToHuman {
          * @param insn {@code non-null;} the instruction to visit
          */
         public void visitFillArrayDataInsn(FillArrayDataInsn insn);
+
+        /**
+         * Visits a {@link InvokePolymorphicInsn}.
+         *
+         * @param insn {@code non-null;} the instruction to visit
+         */
+        public void visitInvokePolymorphicInsn(InvokePolymorphicInsn insn);
     }
 
     /**
@@ -450,6 +457,11 @@ public abstract class Insn implements ToHuman {
 
         /** {@inheritDoc} */
         public void visitFillArrayDataInsn(FillArrayDataInsn insn) {
+            // This space intentionally left blank.
+        }
+
+        /** {@inheritDoc} */
+        public void visitInvokePolymorphicInsn(InvokePolymorphicInsn insn) {
             // This space intentionally left blank.
         }
     }
