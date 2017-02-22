@@ -89,6 +89,11 @@ public final class CstType extends TypedConstant {
     /** {@code non-null;} instance corresponding to the type {@code short[]} */
     public static final CstType SHORT_ARRAY = intern(Type.SHORT_ARRAY);
 
+    /**
+     * {@code non-null;} instance corresponding to the type {@code java.lang.invoke.MethodHandle}
+     */
+    public static final CstType METHOD_HANDLE = intern(Type.METHOD_HANDLE);
+
     /** {@code non-null;} the underlying type */
     private final Type type;
 

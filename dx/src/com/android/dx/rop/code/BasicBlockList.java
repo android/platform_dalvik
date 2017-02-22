@@ -360,6 +360,11 @@ public final class BasicBlockList extends LabeledList {
             visit(insn);
         }
 
+        /** {@inheritDoc} */
+        public void visitInvokePolymorphicInsn(InvokePolymorphicInsn insn) {
+            visit(insn);
+        }
+
         /**
          * Helper for all the {@code visit*} methods.
          *

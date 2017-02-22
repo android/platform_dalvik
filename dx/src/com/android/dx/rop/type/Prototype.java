@@ -61,8 +61,29 @@ public final class Prototype implements Comparable<Prototype> {
             throw new NullPointerException("descriptor == null");
         }
 
-        Prototype result;
-        result = internTable.get(descriptor);
+        Prototype result = internTable.get(descriptor);
+        if (result != null) {
+            return result;
+        }
+
+        result = fromDescriptor(descriptor);
+        return putIntern(result);
+    }
+
+    /**
+     * Returns a prototype for a method descriptor.
+     *
+     * The {@code Prototype} returned will be the interned value if present,
+     * or a new instance otherwise. If a new instance is created, it is not
+     * placed in the intern table.
+     *
+     * @param descriptor {@code non-null;} the descriptor
+     * @return {@code non-null;} the corresponding instance
+     * @throws IllegalArgumentException thrown if the descriptor has
+     * invalid syntax
+     */
+    public static Prototype fromDescriptor(String descriptor) {
+        Prototype result = internTable.get(descriptor);
         if (result != null) {
             return result;
         }
@@ -108,8 +129,7 @@ public final class Prototype implements Comparable<Prototype> {
             parameterTypes.set(i, params[i]);
         }
 
-        result = new Prototype(descriptor, returnType, parameterTypes);
-        return putIntern(result);
+        return new Prototype(descriptor, returnType, parameterTypes);
     }
 
     public static void clearInternTable() {

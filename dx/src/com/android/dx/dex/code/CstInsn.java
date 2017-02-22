@@ -19,6 +19,8 @@ package com.android.dx.dex.code;
 import com.android.dx.rop.code.RegisterSpecList;
 import com.android.dx.rop.code.SourcePosition;
 import com.android.dx.rop.cst.Constant;
+import com.android.dx.rop.cst.CstString;
+import com.android.dx.util.Hex;
 
 /**
  * Instruction which has a single constant argument in addition
@@ -201,5 +203,34 @@ public final class CstInsn extends FixedSizeInsn {
     @Override
     protected String argString() {
         return constant.toHuman();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String cstString() {
+        if (constant instanceof CstString) {
+            return ((CstString) constant).toQuoted();
+        }
+        return constant.toHuman();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String cstComment() {
+        if (!hasIndex()) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder(20);
+        sb.append(getConstant().typeName());
+        sb.append('@');
+
+        if (index < 65536) {
+            sb.append(Hex.u2(index));
+        } else {
+            sb.append(Hex.u4(index));
+        }
+
+        return sb.toString();
     }
 }
