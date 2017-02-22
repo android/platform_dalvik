@@ -325,49 +325,6 @@ public abstract class InsnFormat {
     }
 
     /**
-     * Helper method to return the constant string for a {@link CstInsn}
-     * in human form.
-     *
-     * @param insn {@code non-null;} a constant-bearing instruction
-     * @return {@code non-null;} the human string form of the contained
-     * constant
-     */
-    protected static String cstString(DalvInsn insn) {
-        CstInsn ci = (CstInsn) insn;
-        Constant cst = ci.getConstant();
-
-        return cst instanceof CstString ? ((CstString) cst).toQuoted() : cst.toHuman();
-    }
-
-    /**
-     * Helper method to return an instruction comment for a constant.
-     *
-     * @param insn {@code non-null;} a constant-bearing instruction
-     * @return {@code non-null;} comment string representing the constant
-     */
-    protected static String cstComment(DalvInsn insn) {
-        CstInsn ci = (CstInsn) insn;
-
-        if (! ci.hasIndex()) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder(20);
-        int index = ci.getIndex();
-
-        sb.append(ci.getConstant().typeName());
-        sb.append('@');
-
-        if (index < 65536) {
-            sb.append(Hex.u2(index));
-        } else {
-            sb.append(Hex.u4(index));
-        }
-
-        return sb.toString();
-    }
-
-    /**
      * Helper method to determine if a signed int value fits in a nibble.
      *
      * @param value the value in question

@@ -459,4 +459,30 @@ public abstract class DalvInsn {
      * @return {@code null-ok;} the listing string
      */
     protected abstract String listingString0(boolean noteIndices);
+
+    /**
+     * Helper which returns the string form of the associated constants
+     * for inclusion in a human oriented listing dump.
+     *
+     * This method is only implemented for instructions with one or more
+     * constants.
+     *
+     * @return the constant as a string.
+     */
+    public String cstString() {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    /**
+     * Helper which returns the comment form of the associated constants
+     * for inclusion in a human oriented listing dump.
+     *
+     * This method is only implemented for instructions with one or more
+     * constants.
+     *
+     * @return the constant as a string.
+     */
+    public String cstComment() {
+        throw new UnsupportedOperationException("Not supported.");
+    }
 }
