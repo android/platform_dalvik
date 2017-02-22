@@ -22,6 +22,7 @@ import com.android.dx.rop.code.BasicBlock;
 import com.android.dx.rop.code.BasicBlockList;
 import com.android.dx.rop.code.FillArrayDataInsn;
 import com.android.dx.rop.code.Insn;
+import com.android.dx.rop.code.InvokePolymorphicInsn;
 import com.android.dx.rop.code.LocalVariableInfo;
 import com.android.dx.rop.code.PlainCstInsn;
 import com.android.dx.rop.code.PlainInsn;
@@ -574,6 +575,7 @@ public final class RopTranslator {
         }
 
         /** {@inheritDoc} */
+        @Override
         public void visitPlainCstInsn(PlainCstInsn insn) {
             SourcePosition pos = insn.getPosition();
             Dop opcode = RopToDop.dopFor(insn);
@@ -611,6 +613,7 @@ public final class RopTranslator {
         }
 
         /** {@inheritDoc} */
+        @Override
         public void visitSwitchInsn(SwitchInsn insn) {
             SourcePosition pos = insn.getPosition();
             IntList cases = insn.getCases();
@@ -685,6 +688,31 @@ public final class RopTranslator {
         }
 
         /** {@inheritDoc} */
+        @Override
+        public void visitInvokePolymorphicInsn(InvokePolymorphicInsn insn) {
+            SourcePosition pos = insn.getPosition();
+            Dop opcode = RopToDop.dopFor(insn);
+            Rop rop = insn.getOpcode();
+
+            if (rop.getBranchingness() != Rop.BRANCH_THROW ||
+                !rop.isCallLike()) {
+                throw new RuntimeException("shouldn't happen");
+            }
+
+            addOutput(lastAddress);
+
+            RegisterSpecList regs = insn.getSources();
+            Constant[] constants = new Constant[] {
+                insn.getInvokeMethod(),
+                insn.getCallSiteProto()
+                };
+            DalvInsn di = new MultiCstInsn(opcode, pos, regs, constants);
+
+            addOutput(di);
+        }
+
+        /** {@inheritDoc} */
+        @Override
         public void visitThrowingCstInsn(ThrowingCstInsn insn) {
             SourcePosition pos = insn.getPosition();
             Dop opcode = RopToDop.dopFor(insn);
@@ -738,6 +766,7 @@ public final class RopTranslator {
         }
 
         /** {@inheritDoc} */
+        @Override
         public void visitThrowingInsn(ThrowingInsn insn) {
             SourcePosition pos = insn.getPosition();
             Dop opcode = RopToDop.dopFor(insn);

@@ -23,6 +23,7 @@ import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
 import com.android.dx.rop.cst.CstEnumRef;
 import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Type;
@@ -476,6 +477,8 @@ public final class DexFile {
             return methodIds.get(cst);
         } else if (cst instanceof CstFieldRef) {
             return fieldIds.get(cst);
+        } else if (cst instanceof CstProtoRef) {
+            return protoIds.get(cst);
         } else {
             return null;
         }
