@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70ca574c_ef26679c",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-22T17:50:16Z",
+      "side": 1,
+      "message": "nit: I think to be clear, please add // Fall-through\nto all of this. I was confused by this at first.",
+      "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10ef525f_cd7bf5cc",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-22T17:50:16Z",
+      "side": 1,
+      "message": "line length",
+      "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
