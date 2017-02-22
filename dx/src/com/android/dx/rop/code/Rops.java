@@ -1231,6 +1231,13 @@ public final class Rops {
                 meth = meth.withFirstParameter(definer.getClassType());
                 return opInvokeInterface(meth);
             }
+            case RegOps.INVOKE_POLYMORPHIC: {
+                CstBaseMethodRef cstMeth = (CstMethodRef) cst;
+                Prototype proto = cstMeth.getPrototype();
+                CstType definer = cstMeth.getDefiningClass();
+                Prototype meth = proto.withFirstParameter(definer.getClassType());
+                return opInvokePolymorphic(meth);
+            }
         }
 
         throw new RuntimeException("unknown opcode " + RegOps.opName(opcode));
@@ -2038,6 +2045,20 @@ public final class Rops {
      */
     public static Rop opInvokeInterface(Prototype meth) {
         return new Rop(RegOps.INVOKE_INTERFACE,
+                       meth.getParameterFrameTypes(),
+                       StdTypeList.THROWABLE);
+    }
+
+    /**
+     * Returns the appropriate {@code invoke-polymorphic} rop for the
+     * given type. The result is typically a newly-allocated instance.
+     *
+     * @param meth {@code non-null;} descriptor of the method, including the
+     * {@code this} parameter
+     * @return {@code non-null;} an appropriate instance
+     */
+    public static Rop opInvokePolymorphic(Prototype meth) {
+        return new Rop(RegOps.INVOKE_POLYMORPHIC,
                        meth.getParameterFrameTypes(),
                        StdTypeList.THROWABLE);
     }

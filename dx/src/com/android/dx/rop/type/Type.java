@@ -138,6 +138,9 @@ public final class Type implements TypeBearer, Comparable<Type> {
     /** {@code non-null;} instance representing {@code java.lang.Cloneable} */
     public static final Type CLONEABLE = intern("Ljava/lang/Cloneable;");
 
+    /** {@code non-null;} instance representing {@code java.lang.invoke.MethodHandle} */
+    public static final Type METHOD_HANDLE = intern("Ljava/lang/invoke/MethodHandle;");
+
     /** {@code non-null;} instance representing {@code java.lang.Object} */
     public static final Type OBJECT = intern("Ljava/lang/Object;");
 

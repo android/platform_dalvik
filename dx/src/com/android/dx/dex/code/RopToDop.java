@@ -485,15 +485,16 @@ public final class RopToDop {
          */
 
         switch (rop.getOpcode()) {
-            case RegOps.MOVE_EXCEPTION:   return Dops.MOVE_EXCEPTION;
-            case RegOps.INVOKE_STATIC:    return Dops.INVOKE_STATIC;
-            case RegOps.INVOKE_VIRTUAL:   return Dops.INVOKE_VIRTUAL;
-            case RegOps.INVOKE_SUPER:     return Dops.INVOKE_SUPER;
-            case RegOps.INVOKE_DIRECT:    return Dops.INVOKE_DIRECT;
-            case RegOps.INVOKE_INTERFACE: return Dops.INVOKE_INTERFACE;
-            case RegOps.NEW_ARRAY:        return Dops.NEW_ARRAY;
-            case RegOps.FILLED_NEW_ARRAY: return Dops.FILLED_NEW_ARRAY;
-            case RegOps.FILL_ARRAY_DATA:  return Dops.FILL_ARRAY_DATA;
+            case RegOps.MOVE_EXCEPTION:     return Dops.MOVE_EXCEPTION;
+            case RegOps.INVOKE_STATIC:      return Dops.INVOKE_STATIC;
+            case RegOps.INVOKE_VIRTUAL:     return Dops.INVOKE_VIRTUAL;
+            case RegOps.INVOKE_SUPER:       return Dops.INVOKE_SUPER;
+            case RegOps.INVOKE_DIRECT:      return Dops.INVOKE_DIRECT;
+            case RegOps.INVOKE_INTERFACE:   return Dops.INVOKE_INTERFACE;
+            case RegOps.INVOKE_POLYMORPHIC: return Dops.INVOKE_POLYMORPHIC;
+            case RegOps.NEW_ARRAY:          return Dops.NEW_ARRAY;
+            case RegOps.FILLED_NEW_ARRAY:   return Dops.FILLED_NEW_ARRAY;
+            case RegOps.FILL_ARRAY_DATA:    return Dops.FILL_ARRAY_DATA;
             case RegOps.MOVE_RESULT: {
                 RegisterSpec resultReg = insn.getResult();
 

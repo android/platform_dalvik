@@ -47,7 +47,16 @@ public abstract class CstBaseMethodRef
         super(definingClass, nat);
 
         String descriptor = getNat().getDescriptor().getString();
-        this.prototype = Prototype.intern(descriptor);
+        if (isSignaturePolymorphic()) {
+            // The prototype for signature polymorphic methods is used to
+            // construct call-site information and select the true invocation
+            // target (invoke() or invokeExact(). The prototype is created
+            // without being interned to avoid polluting the DEX file with
+            // unused data.
+            this.prototype = Prototype.fromDescriptor(descriptor);
+        } else {
+            this.prototype = Prototype.intern(descriptor);
+        }
         this.instancePrototype = null;
     }
 
@@ -147,5 +156,18 @@ public abstract class CstBaseMethodRef
      */
     public final boolean isClassInit() {
         return getNat().isClassInit();
+    }
+
+    /**
+     * Get whether this is a reference to a signature polymorphic
+     * method. This means it is defined in {@code java.lang.invoke.MethodHandle} and
+     * is either the {@code invoke} or the {@code invokeExact} method.
+     *
+     * @return {@code true} iff this is a reference to a
+     * signature polymorphic method.
+     */
+    public final boolean isSignaturePolymorphic() {
+        return (getDefiningClass().equals(CstType.METHOD_HANDLE) &&
+                getNat().isSignaturePolymorphic());
     }
 }
