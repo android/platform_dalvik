@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95abe5eb_4f4f27f1",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-22T08:34:37Z",
+      "side": 1,
+      "message": "s/declaring type:/\u003cdeclaring_type\u003e is/",
+      "range": {
+        "startLine": 58,
+        "startChar": 13,
+        "endLine": 58,
+        "endChar": 30
+      },
+      "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef0ff343_000e5a06",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-22T08:34:37Z",
+      "side": 1,
+      "message": "s/member:/\u003cmember\u003e is/",
+      "range": {
+        "startLine": 59,
+        "startChar": 13,
+        "endLine": 59,
+        "endChar": 21
+      },
+      "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "67d3928f_df8d0f01",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-02-22T08:34:37Z",
+      "side": 1,
+      "message": "s/hashcode/hashcode./",
+      "range": {
+        "startLine": 59,
+        "startChar": 50,
+        "endLine": 59,
+        "endChar": 58
+      },
+      "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
