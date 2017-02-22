@@ -51,14 +51,14 @@ public final class Form35c extends InsnFormat {
     @Override
     public String insnArgString(DalvInsn insn) {
         RegisterSpecList regs = explicitize(insn.getRegisters());
-        return regListString(regs) + ", " + cstString(insn);
+        return regListString(regs) + ", " + insn.cstString();
     }
 
     /** {@inheritDoc} */
     @Override
     public String insnCommentString(DalvInsn insn, boolean noteIndices) {
         if (noteIndices) {
-            return cstComment(insn);
+            return insn.cstComment();
         } else {
             return "";
         }

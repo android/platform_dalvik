@@ -52,10 +52,26 @@ public class DexOptions {
     }
 
     /**
-     * Returns whether default and static interface methods are allowed.  This became allowed as of
-     * Nougat (SDK version 24).
+     * Returns whether default and static interface methods are allowed.
+     *
+     * This became allowed as of Nougat (SDK version 24).
+     *
+     * @return true if supported on the currently selected SDK.
      */
     public boolean canUseDefaultInterfaceMethods() {
         return minSdkVersion >= DexFormat.API_DEFAULT_INTERFACE_METHODS;
+    }
+
+    /**
+     * Returns whether invoke-polymorphic can be used. This is emitted for calls
+     * to {@code java.lang.invoke.MethodHandle.invoke()} and
+     * {@code java.lang.invoke.MethodHandle.invokeExact()}.
+     *
+     * This became allowed as of the Android O release (SDK version 26).
+     *
+     * @return true if supported on the currently selected SDK.
+     */
+    public boolean canUseInvokePolymorphic() {
+        return minSdkVersion >= DexFormat.API_INVOKE_POLYMORPHIC;
     }
 }
