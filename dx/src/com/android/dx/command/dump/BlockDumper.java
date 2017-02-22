@@ -28,6 +28,7 @@ import com.android.dx.cf.direct.DirectClassFile;
 import com.android.dx.cf.direct.StdAttributeFactory;
 import com.android.dx.cf.iface.Member;
 import com.android.dx.cf.iface.Method;
+import com.android.dx.dex.DexOptions;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.BasicBlock;
 import com.android.dx.rop.code.BasicBlockList;
@@ -285,7 +286,7 @@ public class BlockDumper
         TranslationAdvice advice = DexTranslationAdvice.THE_ONE;
         BytecodeArray code = meth.getCode();
         ByteArray bytes = code.getBytes();
-        RopMethod rmeth = Ropper.convert(meth, advice, classFile.getMethods());
+        RopMethod rmeth = Ropper.convert(meth, advice, classFile.getMethods(), dexOptions);
         StringBuffer sb = new StringBuffer(2000);
 
         if (optimize) {

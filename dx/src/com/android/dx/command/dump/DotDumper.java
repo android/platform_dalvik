@@ -23,6 +23,7 @@ import com.android.dx.cf.direct.StdAttributeFactory;
 import com.android.dx.cf.iface.Member;
 import com.android.dx.cf.iface.Method;
 import com.android.dx.cf.iface.ParseObserver;
+import com.android.dx.dex.DexOptions;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.BasicBlock;
 import com.android.dx.rop.code.BasicBlockList;
@@ -46,6 +47,7 @@ public class DotDumper implements ParseObserver {
     private final boolean strictParse;
     private final boolean optimize;
     private final Args args;
+    private final DexOptions dexOptions;
 
     static void dump(byte[] bytes, String filePath, Args args) {
         new DotDumper(bytes, filePath, args).run();
@@ -57,6 +59,7 @@ public class DotDumper implements ParseObserver {
         this.strictParse = args.strictParse;
         this.optimize = args.optimize;
         this.args = args;
+        this.dexOptions = new DexOptions();
     }
 
     private void run() {
@@ -115,7 +118,7 @@ public class DotDumper implements ParseObserver {
 
         TranslationAdvice advice = DexTranslationAdvice.THE_ONE;
         RopMethod rmeth =
-            Ropper.convert(meth, advice, classFile.getMethods());
+            Ropper.convert(meth, advice, classFile.getMethods(), dexOptions);
 
         if (optimize) {
             boolean isStatic = AccessFlags.isStatic(meth.getAccessFlags());

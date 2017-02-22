@@ -19,6 +19,7 @@ package com.android.dx.command.dump;
 import com.android.dx.cf.code.ConcreteMethod;
 import com.android.dx.cf.iface.Member;
 import com.android.dx.cf.iface.ParseObserver;
+import com.android.dx.dex.DexOptions;
 import com.android.dx.util.ByteArray;
 import com.android.dx.util.Hex;
 import com.android.dx.util.IndentingWriter;
@@ -68,6 +69,9 @@ public abstract class BaseDumper
     /** commandline parsedArgs */
     protected Args args;
 
+    /** {@code non-null;} options for dex output, always set to the defaults for now */
+    protected final DexOptions dexOptions;
+
     /**
      * Constructs an instance.
      *
@@ -89,6 +93,8 @@ public abstract class BaseDumper
         this.separator = rawBytes ? "|" : "";
         this.at = 0;
         this.args = args;
+
+        this.dexOptions = new DexOptions();
 
         int hexCols = (((width - 5) / 15) + 1) & ~1;
         if (hexCols < 6) {
