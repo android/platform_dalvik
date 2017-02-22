@@ -16,6 +16,7 @@
 
 package com.android.dx.cf.code;
 
+import com.android.dx.dex.DexOptions;
 import com.android.dx.rop.code.LocalItem;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstFieldRef;
@@ -56,13 +57,17 @@ public class Simulator {
     /** {@code non-null;} visitor instance to use */
     private final SimVisitor visitor;
 
+    /** {@code non-null;} options for dex output */
+    private final DexOptions dexOptions;
+
     /**
      * Constructs an instance.
      *
      * @param machine {@code non-null;} machine to use when simulating
      * @param method {@code non-null;} method data to use
+     * @param dexOptions {@code non-null;} options for dex output
      */
-    public Simulator(Machine machine, ConcreteMethod method) {
+    public Simulator(Machine machine, ConcreteMethod method, DexOptions dexOptions) {
         if (machine == null) {
             throw new NullPointerException("machine == null");
         }
@@ -75,6 +80,7 @@ public class Simulator {
         this.code = method.getCode();
         this.localVariables = method.getLocalVariables();
         this.visitor = new SimVisitor();
+        this.dexOptions = dexOptions;
     }
 
     /**

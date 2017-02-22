@@ -1298,6 +1298,9 @@ public class Main {
          */
         public boolean keepClassesInJar = false;
 
+        /** what API level to target */
+        public int minSdkVersion = DexFormat.API_NO_EXTENDED_OPCODES;
+
         /** how much source position info to preserve */
         public int positionInfo = PositionList.LINES;
 
@@ -1556,15 +1559,28 @@ public class Main {
                     maxNumberOfIdxPerDex = Integer.parseInt(parser.getLastValue());
                 } else if(parser.isArg(INPUT_LIST_OPTION + "=")) {
                     File inputListFile = new File(parser.getLastValue());
-                    try{
+                    try {
                         inputList = new ArrayList<String>();
                         readPathsFromFile(inputListFile.getAbsolutePath(), inputList);
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                         context.err.println(
                             "Unable to read input list file: " + inputListFile.getName());
                         // problem reading the file so we should halt execution
                         throw new UsageException();
                     }
+                } else if (parser.isArg("--min-sdk-version=")) {
+                    String arg = parser.getLastValue();
+                    int value;
+                    try {
+                        value = Integer.parseInt(arg);
+                    } catch (NumberFormatException ex) {
+                        value = -1;
+                    }
+                    if (value < 1) {
+                        System.err.println("improper min-sdk-version option: " + arg);
+                        throw new UsageException();
+                    }
+                    minSdkVersion = value;
                 } else {
                     context.err.println("unknown option: " + parser.getCurrent());
                     throw new UsageException();
@@ -1665,6 +1681,7 @@ public class Main {
             }
 
             dexOptions = new DexOptions();
+            dexOptions.minSdkVersion = minSdkVersion;
             dexOptions.forceJumbo = forceJumbo;
         }
     }

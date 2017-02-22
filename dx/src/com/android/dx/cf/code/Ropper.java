@@ -17,6 +17,7 @@
 package com.android.dx.cf.code;
 
 import com.android.dx.cf.iface.MethodList;
+import com.android.dx.dex.DexOptions;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.BasicBlock;
 import com.android.dx.rop.code.BasicBlockList;
@@ -343,9 +344,9 @@ public final class Ropper {
      * @return {@code non-null;} the converted instance
      */
     public static RopMethod convert(ConcreteMethod method,
-            TranslationAdvice advice, MethodList methods) {
+            TranslationAdvice advice, MethodList methods, DexOptions dexOptions) {
         try {
-            Ropper r = new Ropper(method, advice, methods);
+            Ropper r = new Ropper(method, advice, methods, dexOptions);
             r.doit();
             return r.getRopMethod();
         } catch (SimException ex) {
@@ -363,8 +364,10 @@ public final class Ropper {
      * @param advice {@code non-null;} translation advice to use
      * @param methods {@code non-null;} list of methods defined by the class
      *     that defines {@code method}.
+     * @param dexOptions {@code non-null;} options for dex output
      */
-    private Ropper(ConcreteMethod method, TranslationAdvice advice, MethodList methods) {
+    private Ropper(ConcreteMethod method, TranslationAdvice advice, MethodList methods,
+            DexOptions dexOptions) {
         if (method == null) {
             throw new NullPointerException("method == null");
         }
@@ -378,7 +381,7 @@ public final class Ropper {
         this.maxLabel = blocks.getMaxLabel();
         this.maxLocals = method.getMaxLocals();
         this.machine = new RopperMachine(this, method, advice, methods);
-        this.sim = new Simulator(machine, method);
+        this.sim = new Simulator(machine, method, dexOptions);
         this.startFrames = new Frame[maxLabel];
         this.subroutines = new Subroutine[maxLabel];
 
