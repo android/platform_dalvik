@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b5d8babb_5c19fa01",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-22T18:03:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95abe5eb_4f4f27f1",
+      "range": {
+        "startLine": 58,
+        "startChar": 13,
+        "endLine": 58,
+        "endChar": 30
+      },
+      "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef0ff343_000e5a06",
         "filename": "dx/src/com/android/dx/command/Main.java",
         "patchSetId": 1
@@ -64,6 +88,54 @@
         "startChar": 50,
         "endLine": 59,
         "endChar": 58
+      },
+      "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a1e9ccd_e8d17f35",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-22T18:03:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67d3928f_df8d0f01",
+      "range": {
+        "startLine": 59,
+        "startChar": 50,
+        "endLine": 59,
+        "endChar": 58
+      },
+      "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9654c507_9e91ebdd",
+        "filename": "dx/src/com/android/dx/command/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-22T18:03:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef0ff343_000e5a06",
+      "range": {
+        "startLine": 59,
+        "startChar": 13,
+        "endLine": 59,
+        "endChar": 21
       },
       "revId": "2f24d88f8f5e3626e8516df23d0efab318da54b1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
