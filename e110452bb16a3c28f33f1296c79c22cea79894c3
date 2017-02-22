@@ -69,6 +69,24 @@
       "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "554b5947_7d7c147c",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-02-22T18:03:34Z",
+      "side": 1,
+      "message": "You\u0027re right, I checked dx source code and a one other file had 110 line length only as there was a very long string.",
+      "parentUuid": "9fe31850_3891d844",
+      "revId": "e110452bb16a3c28f33f1296c79c22cea79894c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
