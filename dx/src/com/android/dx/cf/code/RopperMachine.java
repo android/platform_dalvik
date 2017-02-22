@@ -21,6 +21,7 @@ import com.android.dx.cf.iface.MethodList;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.FillArrayDataInsn;
 import com.android.dx.rop.code.Insn;
+import com.android.dx.rop.code.InvokePolymorphicInsn;
 import com.android.dx.rop.code.PlainCstInsn;
 import com.android.dx.rop.code.PlainInsn;
 import com.android.dx.rop.code.RegOps;
@@ -606,8 +607,12 @@ import java.util.ArrayList;
             returns = true;
         } else if (cst != null) {
             if (canThrow) {
-                insn =
-                    new ThrowingCstInsn(rop, pos, sources, catches, cst);
+                if (rop.getOpcode() == RegOps.INVOKE_POLYMORPHIC) {
+                    insn = makeInvokePolymorphicInsn(rop, pos, sources, catches, cst);
+                } else {
+                    insn =
+                        new ThrowingCstInsn(rop, pos, sources, catches, cst);
+                }
                 catchesUsed = true;
                 primarySuccessorIndex = catches.size();
             } else {
@@ -949,6 +954,9 @@ import java.util.ArrayList;
                         }
                     }
                 }
+                if (ref.isSignaturePolymorphic()) {
+                    return RegOps.INVOKE_POLYMORPHIC;
+                }
                 return RegOps.INVOKE_VIRTUAL;
             }
             case ByteOps.INVOKESPECIAL: {
@@ -1003,5 +1011,10 @@ import java.util.ArrayList;
         }
 
         throw new RuntimeException("shouldn't happen");
+    }
+
+    private Insn makeInvokePolymorphicInsn(Rop rop, SourcePosition pos, RegisterSpecList sources, TypeList catches, Constant cst) {
+        CstMethodRef cstMethodRef = (CstMethodRef)cst;
+        return new InvokePolymorphicInsn(rop, pos, sources, catches, cstMethodRef);
     }
 }

@@ -333,10 +333,15 @@ public abstract class InsnFormat {
      * constant
      */
     protected static String cstString(DalvInsn insn) {
-        CstInsn ci = (CstInsn) insn;
-        Constant cst = ci.getConstant();
-
-        return cst instanceof CstString ? ((CstString) cst).toQuoted() : cst.toHuman();
+        if (insn instanceof CstInsn) {
+            CstInsn ci = (CstInsn) insn;
+            Constant cst = ci.getConstant();
+            return cst instanceof CstString ? ((CstString) cst).toQuoted() : cst.toHuman();
+        }
+        if (insn instanceof MultiCstInsn) {
+            return "// TODO(oth)";
+        }
+        throw new IllegalArgumentException("insn");
     }
 
     /**
@@ -346,25 +351,31 @@ public abstract class InsnFormat {
      * @return {@code non-null;} comment string representing the constant
      */
     protected static String cstComment(DalvInsn insn) {
-        CstInsn ci = (CstInsn) insn;
+        if (insn instanceof CstInsn) {
+            CstInsn ci = (CstInsn) insn;
 
-        if (! ci.hasIndex()) {
-            return "";
+            if (! ci.hasIndex()) {
+                return "";
+            }
+
+            StringBuilder sb = new StringBuilder(20);
+            int index = ci.getIndex();
+
+            sb.append(ci.getConstant().typeName());
+            sb.append('@');
+
+            if (index < 65536) {
+                sb.append(Hex.u2(index));
+            } else {
+                sb.append(Hex.u4(index));
+            }
+
+            return sb.toString();
         }
-
-        StringBuilder sb = new StringBuilder(20);
-        int index = ci.getIndex();
-
-        sb.append(ci.getConstant().typeName());
-        sb.append('@');
-
-        if (index < 65536) {
-            sb.append(Hex.u2(index));
-        } else {
-            sb.append(Hex.u4(index));
+        if (insn instanceof MultiCstInsn) {
+            return "// TODO(oth)";
         }
-
-        return sb.toString();
+        throw new IllegalArgumentException("insn");
     }
 
     /**

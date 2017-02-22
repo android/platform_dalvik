@@ -16,13 +16,13 @@
 
 package com.android.dx.dex.code.form;
 
-import com.android.dx.dex.code.CstInsn;
 import com.android.dx.dex.code.DalvInsn;
 import com.android.dx.dex.code.InsnFormat;
+import com.android.dx.dex.code.MultiCstInsn;
 import com.android.dx.rop.code.RegisterSpecList;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstMethodRef;
-import com.android.dx.rop.cst.CstType;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.util.AnnotatedOutput;
 
 /**
@@ -67,40 +67,55 @@ public final class Form4rcc extends InsnFormat {
     /** {@inheritDoc} */
     @Override
     public boolean isCompatible(DalvInsn insn) {
-        if (!(insn instanceof CstInsn)) {
+        if (!(insn instanceof MultiCstInsn)) {
             return false;
         }
 
-        CstInsn ci = (CstInsn) insn;
-        int cpi = ci.getIndex();
-        Constant cst = ci.getConstant();
-
-        if (! unsignedFitsInShort(cpi)) {
+        MultiCstInsn mci = (MultiCstInsn) insn;
+        int methodIdx = mci.getIndex(0);
+        int protoIdx = mci.getIndex(1);
+        if (! unsignedFitsInShort(methodIdx) ||
+            ! unsignedFitsInShort(protoIdx)) {
             return false;
         }
 
-        if (!((cst instanceof CstMethodRef) ||
-              (cst instanceof CstType))) {
+        Constant methodRef = mci.getConstant(0);
+        if (! (methodRef instanceof CstMethodRef)) {
             return false;
         }
 
-        RegisterSpecList regs = ci.getRegisters();
+        Constant protoRef = mci.getConstant(1);
+        if (! (protoRef instanceof CstProtoRef)) {
+            return false;
+        }
+
+        RegisterSpecList regs = mci.getRegisters();
         int sz = regs.size();
+        if (sz == 0) {
+            return true;
+        }
 
-        return (regs.size() == 0) ||
-            (isRegListSequential(regs) &&
-             unsignedFitsInShort(regs.get(0).getReg()) &&
-             unsignedFitsInByte(regs.getWordCount()));
+        return (unsignedFitsInByte(regs.getWordCount()) &&
+                unsignedFitsInShort(sz) &&
+                unsignedFitsInShort(regs.get(0).getReg()) &&
+                isRegListSequential(regs));
     }
 
     /** {@inheritDoc} */
     @Override
     public void writeTo(AnnotatedOutput out, DalvInsn insn) {
-        RegisterSpecList regs = insn.getRegisters();
-        int cpi = ((CstInsn) insn).getIndex();
-        int firstReg = (regs.size() == 0) ? 0 : regs.get(0).getReg();
-        int count = regs.getWordCount();
+        MultiCstInsn mci = (MultiCstInsn) insn;
+        short regB = (short) mci.getIndex(0);  // B is the method index
+        short regH = (short) mci.getIndex(1);  // H is the call site proto index
 
-        write(out, opcodeUnit(insn, count), (short) cpi, (short) firstReg);
+        RegisterSpecList regs = insn.getRegisters();
+        short regC = 0;
+        if (regs.size() > 0) {
+            regC = (short) regs.get(0).getReg();
+        }
+        int regA = regs.getWordCount();
+
+        // The output format is: AA|op BBBB CCCC HHHH
+        write(out, opcodeUnit(insn,regA), regB, regC, regH);
     }
 }

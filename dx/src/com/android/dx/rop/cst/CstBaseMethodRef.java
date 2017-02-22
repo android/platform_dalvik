@@ -148,4 +148,17 @@ public abstract class CstBaseMethodRef
     public final boolean isClassInit() {
         return getNat().isClassInit();
     }
+
+    /**
+     * Get whether this is a reference to a signature polymorphic
+     * method. This means it is defined in {@code java.lang.invoke.MethodHandle} and
+     * is either the {@code invoke} or the {@code invokeExact} method.
+     *
+     * @return {@code true} iff this is a reference to a
+     * signature polymorphic method.
+     */
+    public final boolean isSignaturePolymorphic() {
+        return (getDefiningClass().equals(CstType.METHOD_HANDLE) &&
+                getNat().isSignaturePolymorphic());
+    }
 }
