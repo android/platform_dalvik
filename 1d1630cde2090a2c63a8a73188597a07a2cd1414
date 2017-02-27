@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45af44ad_9a3480ec",
+        "filename": "dx/src/com/android/dx/dex/DexOptions.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2017-02-27T16:08:59Z",
+      "side": 1,
+      "message": "Is there a libcore change that goes with this?",
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
