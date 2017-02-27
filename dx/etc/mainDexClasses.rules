@@ -25,3 +25,8 @@
   -keep public class * extends java.lang.annotation.Annotation {
    *;
   }
+# Explicitly keep the MultiDex class and methods to allow calls through reflection.
+  -keep public class android.support.multidex.MultiDex {
+   public *;
+  }
+
