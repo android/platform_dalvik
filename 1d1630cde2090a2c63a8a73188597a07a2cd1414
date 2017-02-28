@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "5c2f4519_6dcc5135",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "wrap this line please",
+      "range": {
+        "startLine": 1018,
+        "startChar": 97,
+        "endLine": 1018,
+        "endChar": 98
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4884e3fb_22b20769",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "missing space",
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "525193e8_514b1133",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "do you want to throw an exception here if this is anything other than ByteOps.INVOKEVIRTUAL ? we shouldn\u0027t ever see a signature polymorphic static / special or interface invoke.",
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45af44ad_9a3480ec",
         "filename": "dx/src/com/android/dx/dex/DexOptions.java",
         "patchSetId": 7
@@ -13,6 +70,397 @@
       "writtenOn": "2017-02-27T16:08:59Z",
       "side": 1,
       "message": "Is there a libcore change that goes with this?",
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9da39ac_0eb732e1",
+        "filename": "dx/src/com/android/dx/dex/code/DalvInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "comment",
+      "range": {
+        "startLine": 483,
+        "startChar": 19,
+        "endLine": 483,
+        "endChar": 27
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96777a9b_d0fffe8f",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "arguments",
+      "range": {
+        "startLine": 25,
+        "startChar": 41,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41b1d0ef_9620cc43",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "delete space",
+      "range": {
+        "startLine": 58,
+        "startChar": 60,
+        "endLine": 58,
+        "endChar": 61
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a25e7fb0_f24b3369",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "delete space",
+      "range": {
+        "startLine": 125,
+        "startChar": 13,
+        "endLine": 125,
+        "endChar": 14
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5a8d627_edd61a72",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "throw IllegalStateException or IllegalArgumentException.",
+      "range": {
+        "startLine": 158,
+        "startChar": 22,
+        "endLine": 158,
+        "endChar": 38
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2c408a7_3fbfa881",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "IllegalStateException ?",
+      "range": {
+        "startLine": 174,
+        "startChar": 12,
+        "endLine": 174,
+        "endChar": 66
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4fea73a4_bc20202e",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "{@code index \u003e\u003d 0;} the..",
+      "range": {
+        "startLine": 199,
+        "startChar": 14,
+        "endLine": 199,
+        "endChar": 33
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c7214d0_cc1f3f57",
+        "filename": "dx/src/com/android/dx/dex/code/MultiCstInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "IllegalStateException ?",
+      "range": {
+        "startLine": 207,
+        "startChar": 22,
+        "endLine": 207,
+        "endChar": 66
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c2bc512_aa1270bb",
+        "filename": "dx/src/com/android/dx/dex/code/OutputFinisher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "i++",
+      "range": {
+        "startLine": 189,
+        "startChar": 58,
+        "endLine": 189,
+        "endChar": 61
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0783a79a_bea8699f",
+        "filename": "dx/src/com/android/dx/dex/code/OutputFinisher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "can move to the previous line.",
+      "range": {
+        "startLine": 361,
+        "startChar": 12,
+        "endLine": 361,
+        "endChar": 54
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d27473a_9172c6ff",
+        "filename": "dx/src/com/android/dx/dex/code/OutputFinisher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "isn\u0027t it an error if index \u003c 0 ?",
+      "range": {
+        "startLine": 371,
+        "startChar": 16,
+        "endLine": 373,
+        "endChar": 17
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ad59fd8_14f7a9f3",
+        "filename": "dx/src/com/android/dx/dex/code/RopTranslator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "better exception message ?",
+      "range": {
+        "startLine": 699,
+        "startChar": 43,
+        "endLine": 699,
+        "endChar": 61
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4d85530_0b6938e5",
+        "filename": "dx/src/com/android/dx/dex/code/form/Form45cc.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "no space",
+      "range": {
+        "startLine": 88,
+        "startChar": 49,
+        "endLine": 88,
+        "endChar": 50
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "947fd97f_36a58149",
+        "filename": "dx/src/com/android/dx/dex/code/form/Form45cc.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "no space",
+      "range": {
+        "startLine": 88,
+        "startChar": 13,
+        "endLine": 88,
+        "endChar": 14
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6775186c_dfa65451",
+        "filename": "dx/src/com/android/dx/dex/code/form/Form45cc.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "no space",
+      "range": {
+        "startLine": 93,
+        "startChar": 13,
+        "endLine": 93,
+        "endChar": 14
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8e184b04_b565b5b0",
+        "filename": "dx/src/com/android/dx/dex/code/form/Form45cc.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "no space",
+      "range": {
+        "startLine": 98,
+        "startChar": 13,
+        "endLine": 98,
+        "endChar": 14
+      },
+      "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8455d7ef_0e8c9596",
+        "filename": "dx/src/com/android/dx/rop/code/InvokePolymorphicInsn.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-02-28T10:26:21Z",
+      "side": 1,
+      "message": "\"Invalid branchingness: \" + opcode.getBranchingNess()",
+      "range": {
+        "startLine": 70,
+        "startChar": 47,
+        "endLine": 70,
+        "endChar": 68
+      },
       "revId": "1d1630cde2090a2c63a8a73188597a07a2cd1414",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
