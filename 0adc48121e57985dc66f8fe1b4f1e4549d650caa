@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9443dcc0_2c918c84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-02-28T09:59:35Z",
+      "side": 1,
+      "message": "nit: it\u0027s a bit hard to see the link between the commit message and the modification to the rules.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "0adc48121e57985dc66f8fe1b4f1e4549d650caa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
