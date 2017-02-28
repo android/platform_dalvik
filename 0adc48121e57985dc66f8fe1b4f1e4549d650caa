@@ -22,6 +22,30 @@
       "revId": "0adc48121e57985dc66f8fe1b4f1e4549d650caa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0361f4f3_c990d645",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2017-02-28T14:42:50Z",
+      "side": 1,
+      "message": "Added more details in the following message.",
+      "parentUuid": "9443dcc0_2c918c84",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "0adc48121e57985dc66f8fe1b4f1e4549d650caa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
