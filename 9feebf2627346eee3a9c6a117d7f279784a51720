@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79f493da_fb964dfe",
+        "filename": "dx/tests/124-multidex-option-no-overflow/expected.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-03-02T14:12:26Z",
+      "side": 1,
+      "message": "I think using \"-Xlint:-options\" would have been much cleaner.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 9
+      },
+      "revId": "9feebf2627346eee3a9c6a117d7f279784a51720",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
