@@ -19,6 +19,8 @@ package com.android.dx.rop.cst;
 import com.android.dx.command.dexer.Main;
 import com.android.dx.rop.type.Type;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -35,64 +37,67 @@ public final class CstType extends TypedConstant {
     private static final ConcurrentMap<Type, CstType> interns =
             new ConcurrentHashMap<>(1_000, 0.75f, Main.CONCURRENCY_LEVEL);
 
+    /** Intern table for base cst types. */
+    private static final Map<Type, CstType> baseCstTypes = new HashMap<>(19);
+
     /** {@code non-null;} instance corresponding to the class {@code Object} */
-    public static final CstType OBJECT = intern(Type.OBJECT);
+    public static final CstType OBJECT = internBase(Type.OBJECT);
 
     /** {@code non-null;} instance corresponding to the class {@code Boolean} */
-    public static final CstType BOOLEAN = intern(Type.BOOLEAN_CLASS);
+    public static final CstType BOOLEAN = internBase(Type.BOOLEAN_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Byte} */
-    public static final CstType BYTE = intern(Type.BYTE_CLASS);
+    public static final CstType BYTE = internBase(Type.BYTE_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Character} */
-    public static final CstType CHARACTER = intern(Type.CHARACTER_CLASS);
+    public static final CstType CHARACTER = internBase(Type.CHARACTER_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Double} */
-    public static final CstType DOUBLE = intern(Type.DOUBLE_CLASS);
+    public static final CstType DOUBLE = internBase(Type.DOUBLE_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Float} */
-    public static final CstType FLOAT = intern(Type.FLOAT_CLASS);
+    public static final CstType FLOAT = internBase(Type.FLOAT_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Long} */
-    public static final CstType LONG = intern(Type.LONG_CLASS);
+    public static final CstType LONG = internBase(Type.LONG_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Integer} */
-    public static final CstType INTEGER = intern(Type.INTEGER_CLASS);
+    public static final CstType INTEGER = internBase(Type.INTEGER_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Short} */
-    public static final CstType SHORT = intern(Type.SHORT_CLASS);
+    public static final CstType SHORT = internBase(Type.SHORT_CLASS);
 
     /** {@code non-null;} instance corresponding to the class {@code Void} */
-    public static final CstType VOID = intern(Type.VOID_CLASS);
+    public static final CstType VOID = internBase(Type.VOID_CLASS);
 
     /** {@code non-null;} instance corresponding to the type {@code boolean[]} */
-    public static final CstType BOOLEAN_ARRAY = intern(Type.BOOLEAN_ARRAY);
+    public static final CstType BOOLEAN_ARRAY = internBase(Type.BOOLEAN_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code byte[]} */
-    public static final CstType BYTE_ARRAY = intern(Type.BYTE_ARRAY);
+    public static final CstType BYTE_ARRAY = internBase(Type.BYTE_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code char[]} */
-    public static final CstType CHAR_ARRAY = intern(Type.CHAR_ARRAY);
+    public static final CstType CHAR_ARRAY = internBase(Type.CHAR_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code double[]} */
-    public static final CstType DOUBLE_ARRAY = intern(Type.DOUBLE_ARRAY);
+    public static final CstType DOUBLE_ARRAY = internBase(Type.DOUBLE_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code float[]} */
-    public static final CstType FLOAT_ARRAY = intern(Type.FLOAT_ARRAY);
+    public static final CstType FLOAT_ARRAY = internBase(Type.FLOAT_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code long[]} */
-    public static final CstType LONG_ARRAY = intern(Type.LONG_ARRAY);
+    public static final CstType LONG_ARRAY = internBase(Type.LONG_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code int[]} */
-    public static final CstType INT_ARRAY = intern(Type.INT_ARRAY);
+    public static final CstType INT_ARRAY = internBase(Type.INT_ARRAY);
 
     /** {@code non-null;} instance corresponding to the type {@code short[]} */
-    public static final CstType SHORT_ARRAY = intern(Type.SHORT_ARRAY);
+    public static final CstType SHORT_ARRAY = internBase(Type.SHORT_ARRAY);
 
     /**
      * {@code non-null;} instance corresponding to the type {@code java.lang.invoke.MethodHandle}
      */
-    public static final CstType METHOD_HANDLE = intern(Type.METHOD_HANDLE);
+    public static final CstType METHOD_HANDLE = internBase(Type.METHOD_HANDLE);
 
     /** {@code non-null;} the underlying type */
     private final Type type;
@@ -135,6 +140,10 @@ public final class CstType extends TypedConstant {
      * @return {@code non-null;} an appropriately-constructed instance
      */
     public static CstType intern(Type type) {
+        if (baseCstTypes.contains(type)) {
+            return baseCstTypes.get(type);
+        }
+
         CstType cst = new CstType(type);
         CstType result = interns.putIfAbsent(type, cst);
         return result != null ? result : cst;
@@ -257,5 +266,11 @@ public final class CstType extends TypedConstant {
 
     public static void clearInternTable() {
         interns.clear();
+    }
+
+    private static CstType internBase(Type type) {
+        CstType cst = new CstType(type);
+        CstType result = baseCstTypes.putIfAbsent(type, cst);
+        return result != null ? result : cst;
     }
 }

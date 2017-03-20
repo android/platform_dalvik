@@ -18,6 +18,8 @@ package com.android.dx.rop.type;
 
 import com.android.dx.command.dexer.Main;
 import com.android.dx.util.Hex;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -34,8 +36,9 @@ public final class Type implements TypeBearer, Comparable<Type> {
      * <p>The initial capacity is based on a medium-size project.
      */
     private static final ConcurrentMap<String, Type> internTable =
-            new ConcurrentHashMap<>(10_000, 0.75f, Main.CONCURRENCY_LEVEL);
+        new ConcurrentHashMap<>(10_000, 0.75f, Main.CONCURRENCY_LEVEL);
 
+    private static final Map<String, Type> baseTypes = new HashMap<>(25);
 
     /** basic type constant for {@code void} */
     public static final int BT_VOID = 0;
@@ -111,14 +114,14 @@ public final class Type implements TypeBearer, Comparable<Type> {
          * Put all the primitive types into the intern table. This needs
          * to happen before the array types below get interned.
          */
-        putIntern(BOOLEAN);
-        putIntern(BYTE);
-        putIntern(CHAR);
-        putIntern(DOUBLE);
-        putIntern(FLOAT);
-        putIntern(INT);
-        putIntern(LONG);
-        putIntern(SHORT);
+        putIntern(BOOLEAN, baseTypes);
+        putIntern(BYTE, baseTypes);
+        putIntern(CHAR, baseTypes);
+        putIntern(DOUBLE, baseTypes);
+        putIntern(FLOAT, baseTypes);
+        putIntern(INT, baseTypes);
+        putIntern(LONG, baseTypes);
+        putIntern(SHORT, baseTypes);
         /*
          * Note: VOID isn't put in the intern table, since it's special and
          * shouldn't be found by a normal call to intern().
@@ -130,91 +133,91 @@ public final class Type implements TypeBearer, Comparable<Type> {
      * {@code java.lang.annotation.Annotation}
      */
     public static final Type ANNOTATION =
-        intern("Ljava/lang/annotation/Annotation;");
+        internBase("Ljava/lang/annotation/Annotation;");
 
     /** {@code non-null;} instance representing {@code java.lang.Class} */
-    public static final Type CLASS = intern("Ljava/lang/Class;");
+    public static final Type CLASS = internBase("Ljava/lang/Class;");
 
     /** {@code non-null;} instance representing {@code java.lang.Cloneable} */
-    public static final Type CLONEABLE = intern("Ljava/lang/Cloneable;");
+    public static final Type CLONEABLE = internBase("Ljava/lang/Cloneable;");
 
     /** {@code non-null;} instance representing {@code java.lang.invoke.MethodHandle} */
-    public static final Type METHOD_HANDLE = intern("Ljava/lang/invoke/MethodHandle;");
+    public static final Type METHOD_HANDLE = internBase("Ljava/lang/invoke/MethodHandle;");
 
     /** {@code non-null;} instance representing {@code java.lang.Object} */
-    public static final Type OBJECT = intern("Ljava/lang/Object;");
+    public static final Type OBJECT = internBase("Ljava/lang/Object;");
 
     /** {@code non-null;} instance representing {@code java.io.Serializable} */
-    public static final Type SERIALIZABLE = intern("Ljava/io/Serializable;");
+    public static final Type SERIALIZABLE = internBase("Ljava/io/Serializable;");
 
     /** {@code non-null;} instance representing {@code java.lang.String} */
-    public static final Type STRING = intern("Ljava/lang/String;");
+    public static final Type STRING = internBase("Ljava/lang/String;");
 
     /** {@code non-null;} instance representing {@code java.lang.Throwable} */
-    public static final Type THROWABLE = intern("Ljava/lang/Throwable;");
+    public static final Type THROWABLE = internBase("Ljava/lang/Throwable;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Boolean}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type BOOLEAN_CLASS = intern("Ljava/lang/Boolean;");
+    public static final Type BOOLEAN_CLASS = internBase("Ljava/lang/Boolean;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Byte}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type BYTE_CLASS = intern("Ljava/lang/Byte;");
+    public static final Type BYTE_CLASS = internBase("Ljava/lang/Byte;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Character}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type CHARACTER_CLASS = intern("Ljava/lang/Character;");
+    public static final Type CHARACTER_CLASS = internBase("Ljava/lang/Character;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Double}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type DOUBLE_CLASS = intern("Ljava/lang/Double;");
+    public static final Type DOUBLE_CLASS = internBase("Ljava/lang/Double;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Float}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type FLOAT_CLASS = intern("Ljava/lang/Float;");
+    public static final Type FLOAT_CLASS = internBase("Ljava/lang/Float;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Integer}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type INTEGER_CLASS = intern("Ljava/lang/Integer;");
+    public static final Type INTEGER_CLASS = internBase("Ljava/lang/Integer;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Long}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type LONG_CLASS = intern("Ljava/lang/Long;");
+    public static final Type LONG_CLASS = internBase("Ljava/lang/Long;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Short}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type SHORT_CLASS = intern("Ljava/lang/Short;");
+    public static final Type SHORT_CLASS = internBase("Ljava/lang/Short;");
 
     /**
      * {@code non-null;} instance representing {@code java.lang.Void}; the
      * suffix on the name helps disambiguate this from the instance
      * representing a primitive type
      */
-    public static final Type VOID_CLASS = intern("Ljava/lang/Void;");
+    public static final Type VOID_CLASS = internBase("Ljava/lang/Void;");
 
     /** {@code non-null;} instance representing {@code boolean[]} */
     public static final Type BOOLEAN_ARRAY = BOOLEAN.getArrayType();
@@ -298,7 +301,19 @@ public final class Type implements TypeBearer, Comparable<Type> {
      * invalid syntax
      */
     public static Type intern(String descriptor) {
-        Type result = internTable.get(descriptor);
+        if (baseTypes.containsKey(descriptor)) {
+            return baseTypes.get(descriptor);
+        }
+
+        return internImpl(descriptor, internTable);
+    }
+
+    private static Type internBase(String descriptor) {
+        return internImpl(descriptor, baseTypes);
+    }
+
+    private static Type internImpl(String descriptor, Map<String, Type> table) {
+        Type result = table.get(descriptor);
 
         if (result != null) {
             return result;
@@ -367,7 +382,7 @@ public final class Type implements TypeBearer, Comparable<Type> {
         }
 
         result = new Type(descriptor, BT_OBJECT);
-        return putIntern(result);
+        return putIntern(result, table);
     }
 
     /**
@@ -789,7 +804,7 @@ public final class Type implements TypeBearer, Comparable<Type> {
      */
     public Type getArrayType() {
         if (arrayType == null) {
-            arrayType = putIntern(new Type('[' + descriptor, BT_OBJECT));
+            arrayType = putIntern(new Type('[' + descriptor, BT_OBJECT), internTable);
         }
 
         return arrayType;
@@ -848,7 +863,7 @@ public final class Type implements TypeBearer, Comparable<Type> {
         String newDesc = 'N' + Hex.u2(newAt) + descriptor;
         Type result = new Type(newDesc, BT_OBJECT, newAt);
         result.initializedType = this;
-        return putIntern(result);
+        return putIntern(result, internTable);
     }
 
     /**
@@ -859,8 +874,8 @@ public final class Type implements TypeBearer, Comparable<Type> {
      * @param type {@code non-null;} instance to make interned
      * @return {@code non-null;} the actual interned object
      */
-    private static Type putIntern(Type type) {
-        Type result = internTable.putIfAbsent(type.getDescriptor(), type);
+    private static Type putIntern(Type type, Map<String, Type> table) {
+        Type result = table.putIfAbsent(type.getDescriptor(), type);
         return result != null ? result : type;
     }
 
