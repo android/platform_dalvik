@@ -22,6 +22,30 @@
       "revId": "13103e769670892ac601e08bca06e1f71c7387ca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff50612a_55e173ff",
+        "filename": "dx/src/com/android/dx/rop/type/Type.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-03-21T12:36:35Z",
+      "side": 1,
+      "message": "I like it slightly better this way because we can have final fields. Also, when we invoke clearInternTable(), we actually want to remove only unused types. Unless you feel that other approach brings more benefits, I would keep it this way.",
+      "parentUuid": "305b44c3_4f650183",
+      "range": {
+        "startLine": 883,
+        "startChar": 0,
+        "endLine": 883,
+        "endChar": 28
+      },
+      "revId": "13103e769670892ac601e08bca06e1f71c7387ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
