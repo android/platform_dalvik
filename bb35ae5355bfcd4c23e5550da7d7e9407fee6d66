@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ff78e8a_76d05fa7",
+        "filename": "dx/junit-tests/com/android/dx/rop/cst/CstTypeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-03-22T07:42:15Z",
+      "side": 1,
+      "message": "Add header file.",
+      "revId": "bb35ae5355bfcd4c23e5550da7d7e9407fee6d66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "47db1fcc_db0ea706",
+        "filename": "dx/junit-tests/com/android/dx/rop/type/TypeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-03-22T07:42:15Z",
+      "side": 1,
+      "message": "Add header file.",
+      "revId": "bb35ae5355bfcd4c23e5550da7d7e9407fee6d66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
