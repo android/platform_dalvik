@@ -166,6 +166,9 @@ public final class DexMerger {
         unionAnnotationSetsAndDirectories();
         mergeClassDefs();
 
+        // computeSizesFromOffsets expects sections sorted by offset, so make it so
+        Arrays.sort(contentsOut.sections);
+
         // write the header
         contentsOut.header.off = 0;
         contentsOut.header.size = 1;
@@ -255,6 +258,11 @@ public final class DexMerger {
                 offsets[i] = readIntoMap(
                         dexSections[i], sections[i], indexMaps[i], indexes[i], values, i);
             }
+            if (values.isEmpty()) {
+                getSection(contentsOut).off = 0;
+                getSection(contentsOut).size = 0;
+                return;
+            }
             getSection(contentsOut).off = out.getPosition();
 
             int outCount = 0;
@@ -298,6 +306,11 @@ public final class DexMerger {
             List<UnsortedValue> all = new ArrayList<UnsortedValue>();
             for (int i = 0; i < dexes.length; i++) {
                 all.addAll(readUnsortedValues(dexes[i], indexMaps[i]));
+            }
+            if (all.isEmpty()) {
+                getSection(contentsOut).off = 0;
+                getSection(contentsOut).size = 0;
+                return;
             }
             Collections.sort(all);
 
