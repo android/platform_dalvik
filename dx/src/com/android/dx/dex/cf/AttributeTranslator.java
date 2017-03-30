@@ -25,6 +25,7 @@ import com.android.dx.cf.attrib.AttRuntimeInvisibleParameterAnnotations;
 import com.android.dx.cf.attrib.AttRuntimeVisibleAnnotations;
 import com.android.dx.cf.attrib.AttRuntimeVisibleParameterAnnotations;
 import com.android.dx.cf.attrib.AttSignature;
+import com.android.dx.cf.attrib.AttSourceDebugExtension;
 import com.android.dx.cf.attrib.InnerClassList;
 import com.android.dx.cf.direct.DirectClassFile;
 import com.android.dx.cf.iface.AttributeList;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
  * into forms suitable for use in creating {@code dex} files.
  */
 /*package*/ class AttributeTranslator {
+
     /**
      * This class is uninstantiable.
      */
@@ -88,9 +90,14 @@ import java.util.ArrayList;
     public static Annotations getAnnotations(AttributeList attribs) {
         Annotations result = getAnnotations0(attribs);
         Annotation signature = getSignature(attribs);
+        Annotation sourceDebugExtension = getSourceDebugExtension(attribs);
 
         if (signature != null) {
             result = Annotations.combine(result, signature);
+        }
+
+        if (sourceDebugExtension != null) {
+            result = Annotations.combine(result, sourceDebugExtension);
         }
 
         return result;
@@ -212,6 +219,18 @@ import java.util.ArrayList;
         }
 
         return AnnotationUtils.makeSignature(signature.getSignature());
+    }
+
+
+    private static Annotation getSourceDebugExtension(AttributeList attribs) {
+        AttSourceDebugExtension extension = (AttSourceDebugExtension)
+            attribs.findFirst(AttSourceDebugExtension.ATTRIBUTE_NAME);
+
+        if (extension == null) {
+            return null;
+        }
+
+        return AnnotationUtils.makeSourceDebugExtension(extension.getSmapString());
     }
 
     /**

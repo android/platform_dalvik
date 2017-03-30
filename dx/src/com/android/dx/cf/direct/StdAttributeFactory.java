@@ -31,6 +31,7 @@ import com.android.dx.cf.attrib.AttRuntimeInvisibleParameterAnnotations;
 import com.android.dx.cf.attrib.AttRuntimeVisibleAnnotations;
 import com.android.dx.cf.attrib.AttRuntimeVisibleParameterAnnotations;
 import com.android.dx.cf.attrib.AttSignature;
+import com.android.dx.cf.attrib.AttSourceDebugExtension;
 import com.android.dx.cf.attrib.AttSourceFile;
 import com.android.dx.cf.attrib.AttSynthetic;
 import com.android.dx.cf.attrib.InnerClassList;
@@ -102,6 +103,9 @@ public class StdAttributeFactory
                 }
                 if (name == AttSignature.ATTRIBUTE_NAME) {
                     return signature(cf, offset, length, observer);
+                }
+                if (name == AttSourceDebugExtension.ATTRIBUTE_NAME) {
+                    return sourceDebugExtension(cf, offset, length, observer);
                 }
                 if (name == AttSourceFile.ATTRIBUTE_NAME) {
                     return sourceFile(cf, offset, length, observer);
@@ -689,6 +693,22 @@ public class StdAttributeFactory
         }
 
         return result;
+    }
+
+    /**
+     * Parses a {@code SourceDebugExtesion} attribute.
+     */
+    private Attribute sourceDebugExtension(DirectClassFile cf, int offset, int length, ParseObserver observer) {
+      ByteArray bytes = cf.getBytes().slice(offset, offset + length);
+      CstString smapString = new CstString(bytes);
+      Attribute result = new AttSourceDebugExtension(smapString);
+
+      if (observer != null) {
+        String decoded = smapString.getString();
+        observer.parsed(bytes, offset, length, "sourceDebugExtension: " + decoded);
+      }
+
+      return result;
     }
 
     /**
