@@ -371,6 +371,21 @@ struct DexCallSiteId {
 };
 
 /*
+ * Enumeration of method handle type codes.
+ */
+enum MethodHandleType {
+    STATIC_PUT = 0x00,
+    STATIC_GET = 0x01,
+    INSTANCE_PUT = 0x02,
+    INSTANCE_GET = 0x03,
+    INVOKE_STATIC = 0x04,
+    INVOKE_INSTANCE = 0x05,
+    INVOKE_CONSTRUCTOR = 0x06,
+    INVOKE_DIRECT = 0x07,
+    INVOKE_INTERFACE = 0x08
+};
+
+/*
  * Direct-mapped "method_handle_item"
  */
 struct DexMethodHandleItem {

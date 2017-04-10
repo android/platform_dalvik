@@ -1068,22 +1068,30 @@ static void* crossVerifyMethodHandleItem(const CheckState* state, void* ptr) {
         ALOGE("Verifying method handle but expecting none");
         return NULL;
     }
-    if (item->methodHandleType <= 3 &&
-        item->fieldOrMethodIdx >= state->pHeader->fieldIdsSize) {
-        // 0-3 are field accessors.
-        ALOGE("Method handle has invalid field id: %u\n", item->fieldOrMethodIdx);
-        return NULL;
-    }
-    if (item->methodHandleType >= 4 &&
-        item->methodHandleType <= 6 &&
-        item->fieldOrMethodIdx >= state->pHeader->methodIdsSize) {
-        // 4-6 are method invocations.
-        ALOGE("Method handle has invalid method id: %u\n", item->fieldOrMethodIdx);
-        return NULL;
-    }
-    if (item->methodHandleType >= 7) {
+    if (item->methodHandleType > (u2) MethodHandleType::INVOKE_INTERFACE) {
         ALOGE("Unknown method handle type: %u", item->methodHandleType);
         return NULL;
+    }
+    switch ((MethodHandleType) item->methodHandleType) {
+        case MethodHandleType::STATIC_PUT:
+        case MethodHandleType::STATIC_GET:
+        case MethodHandleType::INSTANCE_PUT:
+        case MethodHandleType::INSTANCE_GET:
+            if (item->fieldOrMethodIdx >= state->pHeader->fieldIdsSize) {
+                ALOGE("Method handle has invalid field id: %u\n", item->fieldOrMethodIdx);
+                return NULL;
+            }
+            break;
+        case MethodHandleType::INVOKE_STATIC:
+        case MethodHandleType::INVOKE_INSTANCE:
+        case MethodHandleType::INVOKE_CONSTRUCTOR:
+        case MethodHandleType::INVOKE_DIRECT:
+        case MethodHandleType::INVOKE_INTERFACE:
+            if (item->fieldOrMethodIdx >= state->pHeader->methodIdsSize) {
+                ALOGE("Method handle has invalid method id: %u\n", item->fieldOrMethodIdx);
+                return NULL;
+            }
+            break;
     }
     return (void*) (item + 1);
 }
