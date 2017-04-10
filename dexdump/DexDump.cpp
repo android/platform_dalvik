@@ -1865,55 +1865,83 @@ static void dumpMethodHandles(DexFile* pDexFile)
             (const DexMethodHandleItem*)(pDexFile->baseAddr + item->offset);
     for (u4 i = 0; i < item->size; ++i) {
         const DexMethodHandleItem& mh = method_handles[i];
-        bool is_invoke = false;
         const char* type;
-        switch (mh.methodHandleType) {
-            case 0:
+        bool is_invoke;
+        bool is_static;
+        switch ((MethodHandleType) mh.methodHandleType) {
+            case MethodHandleType::STATIC_PUT:
                 type = "put-static";
+                is_invoke = false;
+                is_static = true;
                 break;
-            case 1:
+            case MethodHandleType::STATIC_GET:
                 type = "get-static";
+                is_invoke = false;
+                is_static = true;
                 break;
-            case 2:
+            case MethodHandleType::INSTANCE_PUT:
                 type = "put-instance";
+                is_invoke = false;
+                is_static = false;
                 break;
-            case 3:
+            case MethodHandleType::INSTANCE_GET:
                 type = "get-instance";
+                is_invoke = false;
+                is_static = false;
                 break;
-            case 4:
+            case MethodHandleType::INVOKE_STATIC:
                 type = "invoke-static";
                 is_invoke = true;
+                is_static = true;
                 break;
-            case 5:
+            case MethodHandleType::INVOKE_INSTANCE:
                 type = "invoke-instance";
                 is_invoke = true;
+                is_static = false;
                 break;
-            case 6:
+            case MethodHandleType::INVOKE_CONSTRUCTOR:
                 type = "invoke-constructor";
                 is_invoke = true;
+                is_static = false;
+                break;
+            case MethodHandleType::INVOKE_DIRECT:
+                type = "invoke-direct";
+                is_invoke = true;
+                is_static = false;
+                break;
+            case  MethodHandleType::INVOKE_INTERFACE:
+                type = "invoke-interface";
+                is_invoke = true;
+                is_static = false;
+                break;
+            default:
+                printf("Unknown method handle type 0x%02x, skipped.", mh.methodHandleType);
+                continue;
                 break;
         }
 
         FieldMethodInfo info;
-        memset(&info, 0, sizeof(info));
         if (is_invoke) {
             getMethodInfo(pDexFile, mh.fieldOrMethodIdx, &info);
         } else {
             getFieldInfo(pDexFile, mh.fieldOrMethodIdx, &info);
         }
 
+        const char* instance = is_static ? "" : info.classDescriptor;
+
         if (gOptions.outputFormat == OUTPUT_XML) {
             printf("<method_handle index index=\"%u\"\n", i);
             printf(" type=\"%s\"\n", type);
             printf(" target_class=\"%s\"\n", info.classDescriptor);
             printf(" target_member=\"%s\"\n", info.name);
-            printf(" target_member_type=\"%s\"\n", info.signature);
+            printf(" target_member_type=\"%c%s%s\"\n",
+                   info.signature[0], instance, info.signature + 1);
             printf("</method_handle>\n");
         } else {
             printf("Method Handle #%u:\n", i);
             printf("  type        : %s\n", type);
             printf("  target      : %s %s\n", info.classDescriptor, info.name);
-            printf("  target_type : %s\n", info.signature);
+            printf("  target_type : %c%s%s\n", info.signature[0], instance, info.signature + 1);
         }
     }
 }
