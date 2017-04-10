@@ -1866,7 +1866,8 @@ static void dumpMethodHandles(DexFile* pDexFile)
     for (u4 i = 0; i < item->size; ++i) {
         const DexMethodHandleItem& mh = method_handles[i];
         bool is_invoke = false;
-        const char* type;
+        bool is_instance = false;
+        const char* type = "";
         switch (mh.methodHandleType) {
             case 0:
                 type = "put-static";
@@ -1876,9 +1877,11 @@ static void dumpMethodHandles(DexFile* pDexFile)
                 break;
             case 2:
                 type = "put-instance";
+                is_instance = true;
                 break;
             case 3:
                 type = "get-instance";
+                is_instance = true;
                 break;
             case 4:
                 type = "invoke-static";
@@ -1886,10 +1889,12 @@ static void dumpMethodHandles(DexFile* pDexFile)
                 break;
             case 5:
                 type = "invoke-instance";
+                is_instance = true;
                 is_invoke = true;
                 break;
             case 6:
                 type = "invoke-constructor";
+                is_instance = true;
                 is_invoke = true;
                 break;
         }
@@ -1902,18 +1907,24 @@ static void dumpMethodHandles(DexFile* pDexFile)
             getFieldInfo(pDexFile, mh.fieldOrMethodIdx, &info);
         }
 
+        const char* instance = "";
+        if (is_instance) {
+          instance = info.classDescriptor;
+        }
+
         if (gOptions.outputFormat == OUTPUT_XML) {
             printf("<method_handle index index=\"%u\"\n", i);
             printf(" type=\"%s\"\n", type);
             printf(" target_class=\"%s\"\n", info.classDescriptor);
             printf(" target_member=\"%s\"\n", info.name);
-            printf(" target_member_type=\"%s\"\n", info.signature);
+            printf(" target_member_type=\"%c%s%s\"\n",
+                   info.signature[0], instance, info.signature + 1);
             printf("</method_handle>\n");
         } else {
             printf("Method Handle #%u:\n", i);
             printf("  type        : %s\n", type);
             printf("  target      : %s %s\n", info.classDescriptor, info.name);
-            printf("  target_type : %s\n", info.signature);
+            printf("  target_type : %c%s%s\n", info.signature[0], instance, info.signature + 1);
         }
     }
 }
