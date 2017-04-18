@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9738768_ec867d4e",
+        "filename": "dx/src/com/android/dx/cf/attrib/AttSourceDebugExtension.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-04-18T16:22:51Z",
+      "side": 1,
+      "message": "what\u0027s the 6+ ?",
+      "range": {
+        "startLine": 49,
+        "startChar": 15,
+        "endLine": 49,
+        "endChar": 19
+      },
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad2818c4_893cb3b6",
+        "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-04-18T16:22:51Z",
+      "side": 1,
+      "message": "long line, also pls use 4 col indents.",
+      "range": {
+        "startLine": 701,
+        "startChar": 3,
+        "endLine": 701,
+        "endChar": 11
+      },
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b4c3bcd_071a1cec",
+        "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-04-18T16:22:51Z",
+      "side": 1,
+      "message": "I haven\u0027t looked too closely at what this is supposed to be, but you\u0027re sure that this will be well formed UTF-8 ?",
+      "range": {
+        "startLine": 708,
+        "startChar": 8,
+        "endLine": 708,
+        "endChar": 83
+      },
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61c4dba6_e41bb92a",
+        "filename": "dx/src/com/android/dx/dex/cf/AttributeTranslator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-04-18T16:22:51Z",
+      "side": 1,
+      "message": "unnecessary delta",
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
