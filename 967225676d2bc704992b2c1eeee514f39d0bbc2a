@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5df2e1d4_6bc9692d",
+        "filename": "dx/src/com/android/dx/cf/attrib/AttSourceDebugExtension.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-04-19T10:41:55Z",
+      "side": 1,
+      "message": "The standard attribute preamble. Comment added.",
+      "parentUuid": "b9738768_ec867d4e",
+      "range": {
+        "startLine": 49,
+        "startChar": 15,
+        "endLine": 49,
+        "endChar": 19
+      },
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad2818c4_893cb3b6",
         "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-04-18T16:22:51Z",
       "side": 1,
       "message": "long line, also pls use 4 col indents.",
+      "range": {
+        "startLine": 701,
+        "startChar": 3,
+        "endLine": 701,
+        "endChar": 11
+      },
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cfc873c_b7b09f8f",
+        "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-04-19T10:41:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad2818c4_893cb3b6",
       "range": {
         "startLine": 701,
         "startChar": 3,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fcf69ab6_5ce94ad4",
+        "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-04-19T10:41:55Z",
+      "side": 1,
+      "message": "The SMAP information in the class file is described as UTF-8:\n\n\"The debug_extension array holds a string, which must be in UTF-8 format. There is no terminating zero byte.\"\n[/google/data/rw/users/ot/oth/Documents/dsol_spec.html]\n\nGiven strings in class files are normally MUTF-8, it seems this would be a natural interpretation here rather than UTF-8.\n\nWhen the string is ultimately forwarded to the debugger it is sent with a length argument and without a \\0 terminator.",
+      "parentUuid": "0b4c3bcd_071a1cec",
+      "range": {
+        "startLine": 708,
+        "startChar": 8,
+        "endLine": 708,
+        "endChar": 83
+      },
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61c4dba6_e41bb92a",
         "filename": "dx/src/com/android/dx/dex/cf/AttributeTranslator.java",
         "patchSetId": 4
@@ -82,6 +154,24 @@
       "writtenOn": "2017-04-18T16:22:51Z",
       "side": 1,
       "message": "unnecessary delta",
+      "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "588f998c_4389f703",
+        "filename": "dx/src/com/android/dx/dex/cf/AttributeTranslator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-04-19T10:41:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61c4dba6_e41bb92a",
       "revId": "967225676d2bc704992b2c1eeee514f39d0bbc2a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
