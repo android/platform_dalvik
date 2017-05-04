@@ -19,4 +19,6 @@
 }
 -keep public class java.lang.annotation.Annotation {
 }
+-keep public class * extends android.test.InstrumentationTestCase {
+}
 
