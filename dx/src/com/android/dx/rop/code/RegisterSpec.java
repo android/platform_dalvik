@@ -607,7 +607,9 @@ public final class RegisterSpec
     }
 
     public static void clearInternTable() {
-        theInterns.clear();
+        synchronized (theInterns) {
+            theInterns.clear();
+        }
     }
 
     /**
