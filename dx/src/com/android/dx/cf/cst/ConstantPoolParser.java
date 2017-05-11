@@ -38,8 +38,11 @@ import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstFloat;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstInterfaceMethodRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstLong;
+import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstMethodRef;
+import com.android.dx.rop.cst.CstMethodType;
 import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -217,13 +220,19 @@ public final class ConstantPoolParser {
                         break;
                     }
                     case CONSTANT_MethodHandle: {
-                        throw new ParseException("MethodHandle not supported");
+                        lastCategory = 1;
+                        at += 4;
+                        break;
                     }
                     case CONSTANT_MethodType: {
-                        throw new ParseException("MethodType not supported");
+                        lastCategory = 1;
+                        at += 3;
+                        break;
                     }
                     case CONSTANT_InvokeDynamic: {
-                        throw new ParseException("InvokeDynamic not supported");
+                        lastCategory = 1;
+                        at += 5;
+                        break;
                     }
                     default: {
                         throw new ParseException("unknown tag byte: " + Hex.u1(tag));
@@ -327,13 +336,55 @@ public final class ConstantPoolParser {
                     break;
                 }
                 case CONSTANT_MethodHandle: {
-                    throw new ParseException("MethodHandle not supported");
+                    int kind = bytes.getUnsignedByte(at + 1);
+                    int constantIndex = bytes.getUnsignedShort(at + 2);
+                    Constant ref;
+                    switch (kind) {
+                        case CstMethodHandle.KIND_GETFIELD:
+                        case CstMethodHandle.KIND_GETSTATIC:
+                        case CstMethodHandle.KIND_PUTFIELD:
+                        case CstMethodHandle.KIND_PUTSTATIC:
+                            CstFieldRef field = (CstFieldRef) parse0(constantIndex, wasUtf8);
+                            ref = field;
+                            break;
+                        case CstMethodHandle.KIND_INVOKEVIRTUAL:
+                        case CstMethodHandle.KIND_NEWINVOKESPECIAL:
+                            CstMethodRef method = (CstMethodRef) parse0(constantIndex, wasUtf8);
+                            ref = method;
+                            break;
+                        case CstMethodHandle.KIND_INVOKESTATIC:
+                        case CstMethodHandle.KIND_INVOKESPECIAL:
+                            ref = parse0(constantIndex, wasUtf8);
+                            if (!(ref instanceof CstMethodRef
+                                || ref instanceof CstInterfaceMethodRef)) {
+                              throw new ParseException(
+                                  "Unsupported ref constant type for MethodHandle "
+                                  + ref.getClass());
+                            }
+                            break;
+                        case CstMethodHandle.KIND_INVOKEINTERFACE:
+                            CstInterfaceMethodRef interfaceMethod =
+                                (CstInterfaceMethodRef) parse0(constantIndex, wasUtf8);
+                            ref = interfaceMethod;
+                            break;
+                        default:
+                            throw new ParseException("Unsupported MethodHandle kind: " + kind);
+                    }
+                    cst = CstMethodHandle.make(kind, ref);
+                    break;
                 }
                 case CONSTANT_MethodType: {
-                    throw new ParseException("MethodType not supported");
+                    int descriptorIndex = bytes.getUnsignedShort(at + 1);
+                    CstString descriptor = (CstString) parse0(descriptorIndex, wasUtf8);
+                    cst = CstMethodType.make(descriptor);
+                    break;
                 }
                 case CONSTANT_InvokeDynamic: {
-                    throw new ParseException("InvokeDynamic not supported");
+                    int bootstrapMethodIndex = bytes.getUnsignedShort(at + 1);
+                    int natIndex = bytes.getUnsignedShort(at + 3);
+                    CstNat nat = (CstNat) parse0(natIndex, wasUtf8);
+                    cst = CstInvokeDynamic.make(bootstrapMethodIndex, nat);
+                    break;
                 }
                 default: {
                     throw new ParseException("unknown tag byte: " + Hex.u1(tag));
