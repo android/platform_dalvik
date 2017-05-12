@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ae9333d_04511637",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2017-05-12T08:26:07Z",
+      "side": 1,
+      "message": "Really parsing the entries is not necessary for the MainDexListBuilder since it won\u0027t use those entries. I did it mostly as a way to check they are considered correctly.",
+      "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
