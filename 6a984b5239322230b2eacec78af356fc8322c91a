@@ -79,6 +79,24 @@
       "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e530ece_f013cac7",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1023201
+      },
+      "writtenOn": "2017-05-15T15:04:01Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t get your point there. This is just adding constant pool parsing support. dx is still failing on unsupported opcode. For example, test 132 is verifying that.",
+      "parentUuid": "e1f848a8_10066b9a",
+      "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
