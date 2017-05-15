@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "e2623460_75233caa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-05-15T13:56:18Z",
+      "side": 1,
+      "message": "Could you also add:\nBug: 36641082\nwhich is about adding support for translation of these constructs to DEX.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 13
+      },
+      "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "663d07a3_f83e30e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-05-15T13:56:18Z",
+      "side": 1,
+      "message": "Please make this a command-line or make target so others know what to do.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 9
+      },
+      "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ae9333d_04511637",
         "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
         "patchSetId": 1
@@ -13,6 +59,23 @@
       "writtenOn": "2017-05-12T08:26:07Z",
       "side": 1,
       "message": "Really parsing the entries is not necessary for the MainDexListBuilder since it won\u0027t use those entries. I did it mostly as a way to check they are considered correctly.",
+      "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1f848a8_10066b9a",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-05-15T13:56:18Z",
+      "side": 1,
+      "message": "Can you emit a warning here to make it clear that for now it\u0027s just parsing? Otherwise, it\u0027s silently discarding these constants.",
       "revId": "6a984b5239322230b2eacec78af356fc8322c91a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
