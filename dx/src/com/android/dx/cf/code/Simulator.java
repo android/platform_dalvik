@@ -23,6 +23,7 @@ import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstInterfaceMethodRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
@@ -700,6 +701,18 @@ public class Simulator {
                     boolean staticMethod = (opcode == ByteOps.INVOKESTATIC);
                     Prototype prototype =
                         ((CstMethodRef) cst).getPrototype(staticMethod);
+                    machine.popArgs(frame, prototype);
+                    break;
+                }
+                case ByteOps.INVOKEDYNAMIC: {
+                    if (!dexOptions.canUseInvokeCustom()) {
+                        throw new SimException(
+                            "invalid opcode " + Hex.u1(opcode) +
+                            " (invokedynamic requires --min-sdk-version >= " +
+                            DexFormat.API_INVOKE_POLYMORPHIC + ")");
+                    }
+                    CstInvokeDynamic invokeDynamic = (CstInvokeDynamic) cst;
+                    Prototype prototype = invokeDynamic.getPrototype();
                     machine.popArgs(frame, prototype);
                     break;
                 }
