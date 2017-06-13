@@ -18,6 +18,7 @@ package com.android.dx.rop.code;
 
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
@@ -1238,6 +1239,11 @@ public final class Rops {
                 Prototype meth = proto.withFirstParameter(definer.getClassType());
                 return opInvokePolymorphic(meth);
             }
+            case RegOps.INVOKE_CUSTOM: {
+                CstCallSiteRef cstInvokeDynamicRef = (CstCallSiteRef) cst;
+                Prototype proto = cstInvokeDynamicRef.getPrototype();
+                return opInvokeCustom(proto);
+            }
         }
 
         throw new RuntimeException("unknown opcode " + RegOps.opName(opcode));
@@ -2059,6 +2065,20 @@ public final class Rops {
      */
     public static Rop opInvokePolymorphic(Prototype meth) {
         return new Rop(RegOps.INVOKE_POLYMORPHIC,
+                       meth.getParameterFrameTypes(),
+                       StdTypeList.THROWABLE);
+    }
+
+    /**
+     * Returns the appropriate {@code invoke-dynamic} rop for the
+     * given type. The result is typically a newly-allocated instance.
+     *
+     * @param meth {@code non-null;} descriptor of the method, including the
+     * {@code this} parameter
+     * @return {@code non-null;} an appropriate instance
+     */
+    private static Rop opInvokeCustom(Prototype meth) {
+        return new Rop(RegOps.INVOKE_CUSTOM,
                        meth.getParameterFrameTypes(),
                        StdTypeList.THROWABLE);
     }

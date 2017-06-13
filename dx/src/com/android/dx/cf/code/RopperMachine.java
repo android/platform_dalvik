@@ -35,6 +35,7 @@ import com.android.dx.rop.code.ThrowingCstInsn;
 import com.android.dx.rop.code.ThrowingInsn;
 import com.android.dx.rop.code.TranslationAdvice;
 import com.android.dx.rop.cst.Constant;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstMethodRef;
@@ -498,9 +499,14 @@ import java.util.ArrayList;
              */
             extraBlockCount++;
 
-            moveResult = new PlainInsn(
-                    Rops.opMoveResult(((CstMethodRef) cst).getPrototype()
-                    .getReturnType()), pos, dest, RegisterSpecList.EMPTY);
+            Type returnType;
+            if (cst instanceof CstMethodRef) {
+                returnType = ((CstMethodRef) cst).getPrototype().getReturnType();
+            } else {
+                returnType = ((CstCallSiteRef) cst).getReturnType();
+            }
+            moveResult = new PlainInsn(Rops.opMoveResult(returnType),
+                                       pos, dest, RegisterSpecList.EMPTY);
 
             dest = null;
         } else if (dest != null && rop.canThrow()) {
@@ -984,6 +990,9 @@ import java.util.ArrayList;
             }
             case ByteOps.INVOKEINTERFACE: {
                 return RegOps.INVOKE_INTERFACE;
+            }
+            case ByteOps.INVOKEDYNAMIC: {
+                return RegOps.INVOKE_CUSTOM;
             }
             case ByteOps.NEW: {
                 return RegOps.NEW_INSTANCE;

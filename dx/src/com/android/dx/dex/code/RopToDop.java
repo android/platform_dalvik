@@ -492,6 +492,7 @@ public final class RopToDop {
             case RegOps.INVOKE_DIRECT:      return Dops.INVOKE_DIRECT;
             case RegOps.INVOKE_INTERFACE:   return Dops.INVOKE_INTERFACE;
             case RegOps.INVOKE_POLYMORPHIC: return Dops.INVOKE_POLYMORPHIC;
+            case RegOps.INVOKE_CUSTOM:      return Dops.INVOKE_CUSTOM;
             case RegOps.NEW_ARRAY:          return Dops.NEW_ARRAY;
             case RegOps.FILLED_NEW_ARRAY:   return Dops.FILLED_NEW_ARRAY;
             case RegOps.FILL_ARRAY_DATA:    return Dops.FILL_ARRAY_DATA;

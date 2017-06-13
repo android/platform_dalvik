@@ -16,12 +16,13 @@
 
 package com.android.dx.cf.code;
 
-import com.android.dx.cf.iface.ParseException;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.ConstantPool;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstDouble;
 import com.android.dx.rop.cst.CstFloat;
 import com.android.dx.rop.cst.CstInteger;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstKnownNull;
 import com.android.dx.rop.cst.CstLiteralBits;
 import com.android.dx.rop.cst.CstLong;
@@ -774,7 +775,12 @@ public final class BytecodeArray {
                     return 5;
                 }
                 case ByteOps.INVOKEDYNAMIC: {
-                  throw new ParseException("invokedynamic not supported");
+                    int idx = bytes.getUnsignedShort(offset + 1);
+                    // Skip to must-be-zero bytes at offsets 3 and 4
+                    CstInvokeDynamic cstInvokeDynamic = (CstInvokeDynamic) pool.get(idx);
+                    CstCallSiteRef ref = cstInvokeDynamic.addReference();
+                    visitor.visitConstant(opcode, offset, 5, ref, 0);
+                    return 5;
                 }
                 case ByteOps.NEWARRAY: {
                     return parseNewarray(offset, visitor);
