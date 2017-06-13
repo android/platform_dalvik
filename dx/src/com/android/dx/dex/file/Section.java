@@ -113,7 +113,8 @@ public abstract class Section {
 
     /**
      * Sets the file offset. It is only valid to call this method once
-     * once per instance.
+     * once per instance. The supplied fileOffset will be aligned if the section has
+     * items to output and has an alignment requirement.
      *
      * @param fileOffset {@code >= 0;} the desired offset from the start of the
      * file where this for this instance
@@ -129,8 +130,13 @@ public abstract class Section {
             throw new RuntimeException("fileOffset already set");
         }
 
-        int mask = alignment - 1;
-        fileOffset = (fileOffset + mask) & ~mask;
+        // Sections only need aligning if they are going to output items. The exception is the
+        // map section which is empty when it's file offset is set.
+        boolean alignmentNeeded = !items().isEmpty() || this == this.file.getMap();
+        if (alignmentNeeded) {
+            int mask = alignment - 1;
+            fileOffset = (fileOffset + mask) & ~mask;
+        }
 
         this.fileOffset = fileOffset;
 
@@ -144,13 +150,13 @@ public abstract class Section {
      */
     public final void writeTo(AnnotatedOutput out) {
         throwIfNotPrepared();
+
         align(out);
 
         int cursor = out.getCursor();
-
         if (fileOffset < 0) {
             fileOffset = cursor;
-        } else if (fileOffset != cursor) {
+        } else if (fileOffset != cursor && !items().isEmpty()) {
             throw new RuntimeException("alignment mismatch: for " + this +
                                        ", at " + cursor +
                                        ", but expected " + fileOffset);
@@ -260,7 +266,9 @@ public abstract class Section {
      * @param out {@code non-null;} the output to align
      */
     protected final void align(AnnotatedOutput out) {
-        out.alignTo(alignment);
+        if (items().isEmpty() == false) {
+            out.alignTo(alignment);
+        }
     }
 
     /**
