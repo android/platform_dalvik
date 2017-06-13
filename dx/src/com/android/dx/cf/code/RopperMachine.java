@@ -985,6 +985,9 @@ import java.util.ArrayList;
             case ByteOps.INVOKEINTERFACE: {
                 return RegOps.INVOKE_INTERFACE;
             }
+            case ByteOps.INVOKEDYNAMIC: {
+                return RegOps.INVOKE_CUSTOM;
+            }
             case ByteOps.NEW: {
                 return RegOps.NEW_INSTANCE;
             }
