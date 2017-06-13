@@ -1,0 +1,2114 @@
+Trying SDK version 25 with invoke-custom.
+Uncaught translation error: com.android.dx.cf.code.SimException: invalid opcode ba (invokedynamic requires --min-sdk-version >= 26)
+1 error; aborting
+Trying SDK version 26 with invoke-custom.
+000000: 6465 780a 3033 3800     |magic: "dex\n038\0"
+000008: f901 5139               |checksum
+00000c: c203 a11e d9ef 2fa9 a0c0|signature
+000016: 1c7d cbdf 9181 fc9b 95d7|
+000020: 6c0d 0000               |file_size:       00000d6c
+000024: 7000 0000               |header_size:     00000070
+000028: 7856 3412               |endian_tag:      12345678
+00002c: 0000 0000               |link_size:       0
+000030: 0000 0000               |link_off:        0
+000034: 840c 0000               |map_off:         00000c84
+000038: 4300 0000               |string_ids_size: 00000043
+00003c: 7000 0000               |string_ids_off:  00000070
+000040: 1b00 0000               |type_ids_size:   0000001b
+000044: 7c01 0000               |type_ids_off:    0000017c
+000048: 1400 0000               |proto_ids_size:  00000014
+00004c: e801 0000               |proto_ids_off:   000001e8
+000050: 0100 0000               |field_ids_size:  00000001
+000054: d802 0000               |field_ids_off:   000002d8
+000058: 1e00 0000               |method_ids_size: 0000001e
+00005c: e002 0000               |method_ids_off:  000002e0
+000060: 0200 0000               |class_defs_size: 00000002
+000064: d003 0000               |class_defs_off:  000003d0
+000068: 2c09 0000               |data_size:       0000092c
+00006c: 4004 0000               |data_off:        00000440
+                                |
+                                |string_ids:
+                                |[0] "<init>"
+000070: ba07 0000               |  string_data_off: 000007ba
+                                |[1] "B"
+000074: c207 0000               |  string_data_off: 000007c2
+                                |[2] "C"
+000078: c507 0000               |  string_data_off: 000007c5
+                                |[3] "D"
+00007c: c807 0000               |  string_data_off: 000007c8
+                                |[4] "F"
+000080: cb07 0000               |  string_data_off: 000007cb
+                                |[5] "Hello World!"
+000084: ce07 0000               |  string_data_off: 000007ce
+                                |[6] "I"
+000088: dc07 0000               |  string_data_off: 000007dc
+                                |[7] "InvokeCustom.java"
+00008c: df07 0000               |  string_data_off: 000007df
+                                |[8] "J"
+000090: f207 0000               |  string_data_off: 000007f2
+                                |[9] "L"
+000094: f507 0000               |  string_data_off: 000007f5
+                                |[a] "LL"
+000098: f807 0000               |  string_data_off: 000007f8
+                                |[b] "LLLL"
+00009c: fc07 0000               |  string_data_off: 000007fc
+                                |[c] "LLLLIJFD"
+0000a0: 0208 0000               |  string_data_off: 00000802
+                                |[d] "LLLLL"
+0000a4: 0c08 0000               |  string_data_off: 0000080c
+                                |[e] "Ldalvik/annotation/Throws;"
+0000a8: 1308 0000               |  string_data_off: 00000813
+                                |[f] "Linvokecustom/InvokeCustom;"
+0000ac: 2f08 0000               |  string_data_off: 0000082f
+                                |[10] "Linvokecustom/Super;"
+0000b0: 4c08 0000               |  string_data_off: 0000084c
+                                |[11] "Ljava/io/PrintStream;"
+0000b4: 6208 0000               |  string_data_off: 00000862
+                                |[12] "Ljava/lang/Class;"
+0000b8: 7908 0000               |  string_data_off: 00000879
+                                |[13] "Ljava/lang/IllegalAccessException;"
+0000bc: 8c08 0000               |  string_data_off: 0000088c
+                                |[14] "Ljava/lang/NoSuchMethodException;"
+0000c0: b008 0000               |  string_data_off: 000008b0
+                                |[15] "Ljava/lang/Object;"
+0000c4: d308 0000               |  string_data_off: 000008d3
+                                |[16] "Ljava/lang/String;"
+0000c8: e708 0000               |  string_data_off: 000008e7
+                                |[17] "Ljava/lang/System;"
+0000cc: fb08 0000               |  string_data_off: 000008fb
+                                |[18] "Ljava/lang/Throwable;"
+0000d0: 0f09 0000               |  string_data_off: 0000090f
+                                |[19] "Ljava/lang/invoke/CallSite;"
+0000d4: 2609 0000               |  string_data_off: 00000926
+                                |[1a] "Ljava/lang/invoke/ConstantCallSite;"
+0000d8: 4309 0000               |  string_data_off: 00000943
+                                |[1b] "Ljava/lang/invoke/MethodHandle;"
+0000dc: 6809 0000               |  string_data_off: 00000968
+                                |[1c] "Ljava/lang/invoke/MethodHandles$Lookup;"
+0000e0: 8909 0000               |  string_data_off: 00000989
+                                |[1d] "Ljava/lang/invoke/MethodHandles;"
+0000e4: b209 0000               |  string_data_off: 000009b2
+                                |[1e] "Ljava/lang/invoke/MethodType;"
+0000e8: d409 0000               |  string_data_off: 000009d4
+                                |[1f] "S"
+0000ec: f309 0000               |  string_data_off: 000009f3
+                                |[20] "String"
+0000f0: f609 0000               |  string_data_off: 000009f6
+                                |[21] "V"
+0000f4: fe09 0000               |  string_data_off: 000009fe
+                                |[22] "VC"
+0000f8: 010a 0000               |  string_data_off: 00000a01
+                                |[23] "VD"
+0000fc: 050a 0000               |  string_data_off: 00000a05
+                                |[24] "VF"
+000100: 090a 0000               |  string_data_off: 00000a09
+                                |[25] "VI"
+000104: 0d0a 0000               |  string_data_off: 00000a0d
+                                |[26] "VJ"
+000108: 110a 0000               |  string_data_off: 00000a11
+                                |[27] "VL"
+00010c: 150a 0000               |  string_data_off: 00000a15
+                                |[28] "VZ"
+000110: 190a 0000               |  string_data_off: 00000a19
+                                |[29] "VZBCSIFJDL"
+000114: 1d0a 0000               |  string_data_off: 00000a1d
+                                |[2a] "Z"
+000118: 290a 0000               |  string_data_off: 00000a29
+                                |[2b] "[Ljava/lang/String;"
+00011c: 2c0a 0000               |  string_data_off: 00000a2c
+                                |[2c] "asType"
+000120: 410a 0000               |  string_data_off: 00000a41
+                                |[2d] "bsmCreateCallSite"
+000124: 490a 0000               |  string_data_off: 00000a49
+                                |[2e] "bsmLookupStatic"
+000128: 5c0a 0000               |  string_data_off: 00000a5c
+                                |[2f] "bsmLookupStaticWithExtraArgs"
+00012c: 6d0a 0000               |  string_data_off: 00000a6d
+                                |[30] "findStatic"
+000130: 8b0a 0000               |  string_data_off: 00000a8b
+                                |[31] "lookup"
+000134: 970a 0000               |  string_data_off: 00000a97
+                                |[32] "lookupClass"
+000138: 9f0a 0000               |  string_data_off: 00000a9f
+                                |[33] "main"
+00013c: ac0a 0000               |  string_data_off: 00000aac
+                                |[34] "out"
+000140: b20a 0000               |  string_data_off: 00000ab2
+                                |[35] "println"
+000144: b70a 0000               |  string_data_off: 00000ab7
+                                |[36] "targetMethodTest1"
+000148: c00a 0000               |  string_data_off: 00000ac0
+                                |[37] "targetMethodTest2"
+00014c: d30a 0000               |  string_data_off: 00000ad3
+                                |[38] "targetMethodTest3"
+000150: e60a 0000               |  string_data_off: 00000ae6
+                                |[39] "targetMethodTest4"
+000154: f90a 0000               |  string_data_off: 00000af9
+                                |[3a] "targetMethodTest5"
+000158: 0c0b 0000               |  string_data_off: 00000b0c
+                                |[3b] "targetMethodTest5 from InvokeCustom"
+00015c: 1f0b 0000               |  string_data_off: 00000b1f
+                                |[3c] "targetMethodTest5 from Super"
+000160: 440b 0000               |  string_data_off: 00000b44
+                                |[3d] "test1"
+000164: 620b 0000               |  string_data_off: 00000b62
+                                |[3e] "test2"
+000168: 690b 0000               |  string_data_off: 00000b69
+                                |[3f] "test3"
+00016c: 700b 0000               |  string_data_off: 00000b70
+                                |[40] "test4"
+000170: 770b 0000               |  string_data_off: 00000b77
+                                |[41] "toString"
+000174: 7e0b 0000               |  string_data_off: 00000b7e
+                                |[42] "value"
+000178: 880b 0000               |  string_data_off: 00000b88
+                                |
+                                |type_ids:
+                                |[0] B
+00017c: 0100 0000               |  descriptor_idx: 00000001
+                                |[1] C
+000180: 0200 0000               |  descriptor_idx: 00000002
+                                |[2] D
+000184: 0300 0000               |  descriptor_idx: 00000003
+                                |[3] F
+000188: 0400 0000               |  descriptor_idx: 00000004
+                                |[4] I
+00018c: 0600 0000               |  descriptor_idx: 00000006
+                                |[5] J
+000190: 0800 0000               |  descriptor_idx: 00000008
+                                |[6] Ldalvik/annotation/Throws;
+000194: 0e00 0000               |  descriptor_idx: 0000000e
+                                |[7] Linvokecustom/InvokeCustom;
+000198: 0f00 0000               |  descriptor_idx: 0000000f
+                                |[8] Linvokecustom/Super;
+00019c: 1000 0000               |  descriptor_idx: 00000010
+                                |[9] Ljava/io/PrintStream;
+0001a0: 1100 0000               |  descriptor_idx: 00000011
+                                |[a] Ljava/lang/Class;
+0001a4: 1200 0000               |  descriptor_idx: 00000012
+                                |[b] Ljava/lang/IllegalAccessException;
+0001a8: 1300 0000               |  descriptor_idx: 00000013
+                                |[c] Ljava/lang/NoSuchMethodException;
+0001ac: 1400 0000               |  descriptor_idx: 00000014
+                                |[d] Ljava/lang/Object;
+0001b0: 1500 0000               |  descriptor_idx: 00000015
+                                |[e] Ljava/lang/String;
+0001b4: 1600 0000               |  descriptor_idx: 00000016
+                                |[f] Ljava/lang/System;
+0001b8: 1700 0000               |  descriptor_idx: 00000017
+                                |[10] Ljava/lang/Throwable;
+0001bc: 1800 0000               |  descriptor_idx: 00000018
+                                |[11] Ljava/lang/invoke/CallSite;
+0001c0: 1900 0000               |  descriptor_idx: 00000019
+                                |[12] Ljava/lang/invoke/ConstantCallSite;
+0001c4: 1a00 0000               |  descriptor_idx: 0000001a
+                                |[13] Ljava/lang/invoke/MethodHandle;
+0001c8: 1b00 0000               |  descriptor_idx: 0000001b
+                                |[14] Ljava/lang/invoke/MethodHandles$Lookup;
+0001cc: 1c00 0000               |  descriptor_idx: 0000001c
+                                |[15] Ljava/lang/invoke/MethodHandles;
+0001d0: 1d00 0000               |  descriptor_idx: 0000001d
+                                |[16] Ljava/lang/invoke/MethodType;
+0001d4: 1e00 0000               |  descriptor_idx: 0000001e
+                                |[17] S
+0001d8: 1f00 0000               |  descriptor_idx: 0000001f
+                                |[18] V
+0001dc: 2100 0000               |  descriptor_idx: 00000021
+                                |[19] Z
+0001e0: 2a00 0000               |  descriptor_idx: 0000002a
+                                |[1a] [Ljava/lang/String;
+0001e4: 2b00 0000               |  descriptor_idx: 0000002b
+                                |
+                                |proto_ids:
+                                |[0] java.lang.Class proto()
+0001e8: 0900 0000               |  shorty_idx:      00000009 // "L"
+0001ec: 0a00 0000               |  return_type_idx: 0000000a // java.lang.Class
+0001f0: 0000 0000               |  parameters_off:  00000000
+                                |[1] java.lang.String proto()
+0001f4: 0900 0000               |  shorty_idx:      00000009 // "L"
+0001f8: 0e00 0000               |  return_type_idx: 0000000e // java.lang.String
+0001fc: 0000 0000               |  parameters_off:  00000000
+                                |[2] java.lang.invoke.CallSite proto(java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType)
+000200: 0b00 0000               |  shorty_idx:      0000000b // "LLLL"
+000204: 1100 0000               |  return_type_idx: 00000011 // java.lang.invoke.CallSite
+000208: 1407 0000               |  parameters_off:  00000714
+                                |[3] java.lang.invoke.CallSite proto(java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, int, long, float, double)
+00020c: 0c00 0000               |  shorty_idx:      0000000c // "LLLLIJFD"
+000210: 1100 0000               |  return_type_idx: 00000011 // java.lang.invoke.CallSite
+000214: 2007 0000               |  parameters_off:  00000720
+                                |[4] java.lang.invoke.CallSite proto(java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle)
+000218: 0d00 0000               |  shorty_idx:      0000000d // "LLLLL"
+00021c: 1100 0000               |  return_type_idx: 00000011 // java.lang.invoke.CallSite
+000220: 3407 0000               |  parameters_off:  00000734
+                                |[5] java.lang.invoke.MethodHandle proto(java.lang.Class, java.lang.String, java.lang.invoke.MethodType)
+000224: 0b00 0000               |  shorty_idx:      0000000b // "LLLL"
+000228: 1300 0000               |  return_type_idx: 00000013 // java.lang.invoke.MethodHandle
+00022c: 4007 0000               |  parameters_off:  00000740
+                                |[6] java.lang.invoke.MethodHandle proto(java.lang.invoke.MethodType)
+000230: 0a00 0000               |  shorty_idx:      0000000a // "LL"
+000234: 1300 0000               |  return_type_idx: 00000013 // java.lang.invoke.MethodHandle
+000238: 4c07 0000               |  parameters_off:  0000074c
+                                |[7] java.lang.invoke.MethodHandles$Lookup proto()
+00023c: 0900 0000               |  shorty_idx:      00000009 // "L"
+000240: 1400 0000               |  return_type_idx: 00000014 // java.lang.invoke.MethodHandles$Lookup
+000244: 0000 0000               |  parameters_off:  00000000
+                                |[8] void proto()
+000248: 2100 0000               |  shorty_idx:      00000021 // "V"
+00024c: 1800 0000               |  return_type_idx: 00000018 // void
+000250: 0000 0000               |  parameters_off:  00000000
+                                |[9] void proto(char)
+000254: 2200 0000               |  shorty_idx:      00000022 // "VC"
+000258: 1800 0000               |  return_type_idx: 00000018 // void
+00025c: 5407 0000               |  parameters_off:  00000754
+                                |[a] void proto(double)
+000260: 2300 0000               |  shorty_idx:      00000023 // "VD"
+000264: 1800 0000               |  return_type_idx: 00000018 // void
+000268: 5c07 0000               |  parameters_off:  0000075c
+                                |[b] void proto(float)
+00026c: 2400 0000               |  shorty_idx:      00000024 // "VF"
+000270: 1800 0000               |  return_type_idx: 00000018 // void
+000274: 6407 0000               |  parameters_off:  00000764
+                                |[c] void proto(int)
+000278: 2500 0000               |  shorty_idx:      00000025 // "VI"
+00027c: 1800 0000               |  return_type_idx: 00000018 // void
+000280: 6c07 0000               |  parameters_off:  0000076c
+                                |[d] void proto(long)
+000284: 2600 0000               |  shorty_idx:      00000026 // "VJ"
+000288: 1800 0000               |  return_type_idx: 00000018 // void
+00028c: 7407 0000               |  parameters_off:  00000774
+                                |[e] void proto(invokecustom.InvokeCustom)
+000290: 2700 0000               |  shorty_idx:      00000027 // "VL"
+000294: 1800 0000               |  return_type_idx: 00000018 // void
+000298: 7c07 0000               |  parameters_off:  0000077c
+                                |[f] void proto(java.lang.String)
+00029c: 2700 0000               |  shorty_idx:      00000027 // "VL"
+0002a0: 1800 0000               |  return_type_idx: 00000018 // void
+0002a4: 8407 0000               |  parameters_off:  00000784
+                                |[10] void proto(java.lang.invoke.MethodHandle)
+0002a8: 2700 0000               |  shorty_idx:      00000027 // "VL"
+0002ac: 1800 0000               |  return_type_idx: 00000018 // void
+0002b0: 8c07 0000               |  parameters_off:  0000078c
+                                |[11] void proto(boolean)
+0002b4: 2800 0000               |  shorty_idx:      00000028 // "VZ"
+0002b8: 1800 0000               |  return_type_idx: 00000018 // void
+0002bc: 9407 0000               |  parameters_off:  00000794
+                                |[12] void proto(boolean, byte, char, short, int, float, long, double, java.lang.String)
+0002c0: 2900 0000               |  shorty_idx:      00000029 // "VZBCSIFJDL"
+0002c4: 1800 0000               |  return_type_idx: 00000018 // void
+0002c8: 9c07 0000               |  parameters_off:  0000079c
+                                |[13] void proto(java.lang.String[])
+0002cc: 2700 0000               |  shorty_idx:      00000027 // "VL"
+0002d0: 1800 0000               |  return_type_idx: 00000018 // void
+0002d4: b407 0000               |  parameters_off:  000007b4
+                                |
+                                |field_ids:
+                                |[0] java.lang.System.out:Ljava/io/PrintStream;
+0002d8: 0f00                    |  class_idx: 000f
+0002da: 0900                    |  type_idx:  0009
+0002dc: 3400 0000               |  name_idx:  00000034
+                                |
+                                |method_ids:
+                                |[0] invokecustom.InvokeCustom.<init>:()V
+0002e0: 0700                    |  class_idx: 0007
+0002e2: 0800                    |  proto_idx: 0008
+0002e4: 0000 0000               |  name_idx:  00000000
+                                |[1] invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;
+0002e8: 0700                    |  class_idx: 0007
+0002ea: 0400                    |  proto_idx: 0004
+0002ec: 2d00 0000               |  name_idx:  0000002d
+                                |[2] invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+0002f0: 0700                    |  class_idx: 0007
+0002f2: 0200                    |  proto_idx: 0002
+0002f4: 2e00 0000               |  name_idx:  0000002e
+                                |[3] invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;
+0002f8: 0700                    |  class_idx: 0007
+0002fa: 0300                    |  proto_idx: 0003
+0002fc: 2f00 0000               |  name_idx:  0000002f
+                                |[4] invokecustom.InvokeCustom.main:([Ljava/lang/String;)V
+000300: 0700                    |  class_idx: 0007
+000302: 1300                    |  proto_idx: 0013
+000304: 3300 0000               |  name_idx:  00000033
+                                |[5] invokecustom.InvokeCustom.targetMethodTest1:()V
+000308: 0700                    |  class_idx: 0007
+00030a: 0800                    |  proto_idx: 0008
+00030c: 3600 0000               |  name_idx:  00000036
+                                |[6] invokecustom.InvokeCustom.targetMethodTest2:(ZBCSIFJDLjava/lang/String;)V
+000310: 0700                    |  class_idx: 0007
+000312: 1200                    |  proto_idx: 0012
+000314: 3700 0000               |  name_idx:  00000037
+                                |[7] invokecustom.InvokeCustom.targetMethodTest3:()V
+000318: 0700                    |  class_idx: 0007
+00031a: 0800                    |  proto_idx: 0008
+00031c: 3800 0000               |  name_idx:  00000038
+                                |[8] invokecustom.InvokeCustom.targetMethodTest4:()V
+000320: 0700                    |  class_idx: 0007
+000322: 0800                    |  proto_idx: 0008
+000324: 3900 0000               |  name_idx:  00000039
+                                |[9] invokecustom.InvokeCustom.targetMethodTest5:()V
+000328: 0700                    |  class_idx: 0007
+00032a: 0800                    |  proto_idx: 0008
+00032c: 3a00 0000               |  name_idx:  0000003a
+                                |[a] invokecustom.InvokeCustom.test1:()V
+000330: 0700                    |  class_idx: 0007
+000332: 0800                    |  proto_idx: 0008
+000334: 3d00 0000               |  name_idx:  0000003d
+                                |[b] invokecustom.InvokeCustom.test2:()V
+000338: 0700                    |  class_idx: 0007
+00033a: 0800                    |  proto_idx: 0008
+00033c: 3e00 0000               |  name_idx:  0000003e
+                                |[c] invokecustom.InvokeCustom.test3:()V
+000340: 0700                    |  class_idx: 0007
+000342: 0800                    |  proto_idx: 0008
+000344: 3f00 0000               |  name_idx:  0000003f
+                                |[d] invokecustom.InvokeCustom.test4:()V
+000348: 0700                    |  class_idx: 0007
+00034a: 0800                    |  proto_idx: 0008
+00034c: 4000 0000               |  name_idx:  00000040
+                                |[e] invokecustom.Super.<init>:()V
+000350: 0800                    |  class_idx: 0008
+000352: 0800                    |  proto_idx: 0008
+000354: 0000 0000               |  name_idx:  00000000
+                                |[f] invokecustom.Super.targetMethodTest5:()V
+000358: 0800                    |  class_idx: 0008
+00035a: 0800                    |  proto_idx: 0008
+00035c: 3a00 0000               |  name_idx:  0000003a
+                                |[10] java.io.PrintStream.println:(C)V
+000360: 0900                    |  class_idx: 0009
+000362: 0900                    |  proto_idx: 0009
+000364: 3500 0000               |  name_idx:  00000035
+                                |[11] java.io.PrintStream.println:(D)V
+000368: 0900                    |  class_idx: 0009
+00036a: 0a00                    |  proto_idx: 000a
+00036c: 3500 0000               |  name_idx:  00000035
+                                |[12] java.io.PrintStream.println:(F)V
+000370: 0900                    |  class_idx: 0009
+000372: 0b00                    |  proto_idx: 000b
+000374: 3500 0000               |  name_idx:  00000035
+                                |[13] java.io.PrintStream.println:(I)V
+000378: 0900                    |  class_idx: 0009
+00037a: 0c00                    |  proto_idx: 000c
+00037c: 3500 0000               |  name_idx:  00000035
+                                |[14] java.io.PrintStream.println:(J)V
+000380: 0900                    |  class_idx: 0009
+000382: 0d00                    |  proto_idx: 000d
+000384: 3500 0000               |  name_idx:  00000035
+                                |[15] java.io.PrintStream.println:(Ljava/lang/String;)V
+000388: 0900                    |  class_idx: 0009
+00038a: 0f00                    |  proto_idx: 000f
+00038c: 3500 0000               |  name_idx:  00000035
+                                |[16] java.io.PrintStream.println:(Z)V
+000390: 0900                    |  class_idx: 0009
+000392: 1100                    |  proto_idx: 0011
+000394: 3500 0000               |  name_idx:  00000035
+                                |[17] java.lang.Object.<init>:()V
+000398: 0d00                    |  class_idx: 000d
+00039a: 0800                    |  proto_idx: 0008
+00039c: 0000 0000               |  name_idx:  00000000
+                                |[18] java.lang.invoke.ConstantCallSite.<init>:(Ljava/lang/invoke/MethodHandle;)V
+0003a0: 1200                    |  class_idx: 0012
+0003a2: 1000                    |  proto_idx: 0010
+0003a4: 0000 0000               |  name_idx:  00000000
+                                |[19] java.lang.invoke.MethodHandle.asType:(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+0003a8: 1300                    |  class_idx: 0013
+0003aa: 0600                    |  proto_idx: 0006
+0003ac: 2c00 0000               |  name_idx:  0000002c
+                                |[1a] java.lang.invoke.MethodHandle.toString:()Ljava/lang/String;
+0003b0: 1300                    |  class_idx: 0013
+0003b2: 0100                    |  proto_idx: 0001
+0003b4: 4100 0000               |  name_idx:  00000041
+                                |[1b] java.lang.invoke.MethodHandles$Lookup.findStatic:(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+0003b8: 1400                    |  class_idx: 0014
+0003ba: 0500                    |  proto_idx: 0005
+0003bc: 3000 0000               |  name_idx:  00000030
+                                |[1c] java.lang.invoke.MethodHandles$Lookup.lookupClass:()Ljava/lang/Class;
+0003c0: 1400                    |  class_idx: 0014
+0003c2: 0000                    |  proto_idx: 0000
+0003c4: 3200 0000               |  name_idx:  00000032
+                                |[1d] java.lang.invoke.MethodHandles.lookup:()Ljava/lang/invoke/MethodHandles$Lookup;
+0003c8: 1500                    |  class_idx: 0015
+0003ca: 0700                    |  proto_idx: 0007
+0003cc: 3100 0000               |  name_idx:  00000031
+                                |
+                                |class_defs:
+                                |[0] invokecustom.Super
+0003d0: 0800 0000               |  class_idx:           00000008
+0003d4: 0000 0000               |  access_flags:        0000
+0003d8: 0d00 0000               |  superclass_idx:      0000000d // java.lang.Object
+0003dc: 0000 0000               |  interfaces_off:      00000000
+0003e0: 0700 0000               |  source_file_idx:     00000007 // InvokeCustom.java
+0003e4: 0000 0000               |  annotations_off:     00000000
+0003e8: 380c 0000               |  class_data_off:      00000c38
+0003ec: 0000 0000               |  static_values_off:   00000000
+                                |[1] invokecustom.InvokeCustom
+0003f0: 0700 0000               |  class_idx:           00000007
+0003f4: 0100 0000               |  access_flags:        public
+0003f8: 0800 0000               |  superclass_idx:      00000008 // invokecustom.Super
+0003fc: 0000 0000               |  interfaces_off:      00000000
+000400: 0700 0000               |  source_file_idx:     00000007 // InvokeCustom.java
+000404: ec06 0000               |  annotations_off:     000006ec
+000408: 460c 0000               |  class_data_off:      00000c46
+00040c: 0000 0000               |  static_values_off:   00000000
+                                |
+                                |call_site_ids:
+                                |[0] call site{method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;}}, string{"targetMethodTest5"}, proto{(Linvokecustom/InvokeCustom;)V}, method-handle{invoke-special,method{invokecustom.Super.targetMethodTest5:()V}}}
+000410: 050c 0000               |call_site_off: 00000c05
+                                |[1] call site{method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}, string{"targetMethodTest1"}, proto{()V}}
+000414: 0e0c 0000               |call_site_off: 00000c0e
+                                |[2] call site{method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}, string{"targetMethodTest2"}, proto{(ZBCSIFJDLjava/lang/String;)V}}
+000418: 150c 0000               |call_site_off: 00000c15
+                                |[3] call site{method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;}}, string{"targetMethodTest3"}, proto{()V}, int{0x00000001 / 1}, long{0x00000000075bcd15 / 123456789}, float{0x42f6e979 / 123.456}, double{0x40fe240ca03f7058 / 123456.789123}}
+00041c: 1c0c 0000               |call_site_off: 00000c1c
+                                |
+                                |method_handles:
+000420: 0600                    |kind: 0006
+000422: 0000                    |reserved:0000
+000424: 0100                    |methodId: 1
+000426: 0000                    |reserved:0000
+000428: 0600                    |kind: 0006
+00042a: 0000                    |reserved:0000
+00042c: 0200                    |methodId: 2
+00042e: 0000                    |reserved:0000
+000430: 0600                    |kind: 0006
+000432: 0000                    |reserved:0000
+000434: 0300                    |methodId: 3
+000436: 0000                    |reserved:0000
+000438: 0700                    |kind: 0007
+00043a: 0000                    |reserved:0000
+00043c: 0f00                    |methodId: 15
+00043e: 0000                    |reserved:0000
+                                |
+                                |word_data:
+                                |[440] annotation set
+000440: 0100 0000               |  size: 00000001
+000444: f30b 0000               |  entries[0]: 00000bf3
+                                |    visibility: system
+                                |    type: dalvik.annotation.Throws
+                                |    value: array {java.lang.NoSuchMethodException, java.lang.IllegalAccessException}
+                                |
+                                |[448] annotation set
+000448: 0100 0000               |  size: 00000001
+00044c: fd0b 0000               |  entries[0]: 00000bfd
+                                |    visibility: system
+                                |    type: dalvik.annotation.Throws
+                                |    value: array {java.lang.Throwable}
+                                |
+                                |[450] invokecustom.Super.<init>:()V
+000450: 0100                    |  registers_size: 0001
+000452: 0100                    |  ins_size:       0001
+000454: 0100                    |  outs_size:      0001
+000456: 0000                    |  tries_size:     0000
+000458: 8f0b 0000               |  debug_off:      00000b8f
+00045c: 0400 0000               |  insns_size:     00000004
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+000460: 7010 1700 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0017
+                                |  0003: code-address
+                                |  0003: code-address
+                                |  0003: local-snapshot
+000466: 0e00                    |  0003: return-void
+                                |  0004: code-address
+                                |  debug info
+                                |    line_start: 12
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 12
+                                |    end sequence
+                                |
+                                |[468] invokecustom.Super.targetMethodTest5:()V
+000468: 0300                    |  registers_size: 0003
+00046a: 0100                    |  ins_size:       0001
+00046c: 0200                    |  outs_size:      0002
+00046e: 0000                    |  tries_size:     0000
+000470: 940b 0000               |  debug_off:      00000b94
+000474: 0800 0000               |  insns_size:     00000008
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+000478: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+00047c: 1a01 3c00               |  0002: const-string v1, "targetMethodTest5 from Super" // utf8@003c
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+000480: 6e20 1500 1000          |  0004: invoke-virtual {v0, v1}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0015
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+000486: 0e00                    |  0007: return-void
+                                |  0008: code-address
+                                |  debug info
+                                |    line_start: 14
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 14
+                                |    0007: line 15
+                                |    end sequence
+                                |
+                                |[488] invokecustom.InvokeCustom.<init>:()V
+000488: 0100                    |  registers_size: 0001
+00048a: 0100                    |  ins_size:       0001
+00048c: 0100                    |  outs_size:      0001
+00048e: 0000                    |  tries_size:     0000
+000490: 9a0b 0000               |  debug_off:      00000b9a
+000494: 0400 0000               |  insns_size:     00000004
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+000498: 7010 0e00 0000          |  0000: invoke-direct {v0}, invokecustom.Super.<init>:()V // method@000e
+                                |  0003: code-address
+                                |  0003: code-address
+                                |  0003: local-snapshot
+00049e: 0e00                    |  0003: return-void
+                                |  0004: code-address
+                                |  debug info
+                                |    line_start: 18
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 18
+                                |    end sequence
+                                |
+                                |[4a0] invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;
+0004a0: 0600                    |  registers_size: 0006
+0004a2: 0400                    |  ins_size:       0004
+0004a4: 0200                    |  outs_size:      0002
+0004a6: 0000                    |  tries_size:     0000
+0004a8: 9f0b 0000               |  debug_off:      00000b9f
+0004ac: 0f00 0000               |  insns_size:     0000000f
+                                |  throws java.lang.Throwable
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0004b0: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+0004b4: 6e10 1a00 0500          |  0002: invoke-virtual {v5}, java.lang.invoke.MethodHandle.toString:()Ljava/lang/String; // method@001a
+                                |  0005: code-address
+                                |  0005: code-address
+                                |  0005: local-snapshot
+0004ba: 0c01                    |  0005: move-result-object v1
+                                |  0006: code-address
+                                |  0006: code-address
+                                |  0006: local-snapshot
+                                |  0006: code-address
+0004bc: 6e20 1500 1000          |  0006: invoke-virtual {v0, v1}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0015
+                                |  0009: code-address
+                                |  0009: code-address
+                                |  0009: local-snapshot
+                                |  0009: code-address
+0004c2: 2200 1200               |  0009: new-instance v0, java.lang.invoke.ConstantCallSite // type@0012
+                                |  000b: code-address
+                                |  000b: code-address
+                                |  000b: local-snapshot
+                                |  000b: code-address
+                                |  000b: code-address
+                                |  000b: local-snapshot
+                                |  000b: code-address
+0004c6: 7020 1800 5000          |  000b: invoke-direct {v0, v5}, java.lang.invoke.ConstantCallSite.<init>:(Ljava/lang/invoke/MethodHandle;)V // method@0018
+                                |  000e: code-address
+                                |  000e: code-address
+                                |  000e: local-snapshot
+0004cc: 1100                    |  000e: return-object v0
+                                |  000f: code-address
+                                |  debug info
+                                |    line_start: 71
+                                |    parameters_size: 0004
+                                |    parameter <unnamed> v2
+                                |    parameter <unnamed> v3
+                                |    parameter <unnamed> v4
+                                |    parameter <unnamed> v5
+                                |    0000: prologue end
+                                |    0000: line 71
+                                |    0009: line 72
+                                |    end sequence
+                                |
+0004ce: 0000                    |
+                                |[4d0] invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+0004d0: 0500                    |  registers_size: 0005
+0004d2: 0300                    |  ins_size:       0003
+0004d4: 0400                    |  outs_size:      0004
+0004d6: 0000                    |  tries_size:     0000
+0004d8: a90b 0000               |  debug_off:      00000ba9
+0004dc: 1600 0000               |  insns_size:     00000016
+                                |  throws java.lang.NoSuchMethodException, java.lang.IllegalAccessException
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0004e0: 7100 1d00 0000          |  0000: invoke-static {}, java.lang.invoke.MethodHandles.lookup:()Ljava/lang/invoke/MethodHandles$Lookup; // method@001d
+                                |  0003: code-address
+                                |  0003: code-address
+                                |  0003: local-snapshot
+0004e6: 0c00                    |  0003: move-result-object v0
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+0004e8: 6e10 1c00 0000          |  0004: invoke-virtual {v0}, java.lang.invoke.MethodHandles$Lookup.lookupClass:()Ljava/lang/Class; // method@001c
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+0004ee: 0c01                    |  0007: move-result-object v1
+                                |  0008: code-address
+                                |  0008: code-address
+                                |  0008: local-snapshot
+                                |  0008: code-address
+0004f0: 6e40 1b00 1043          |  0008: invoke-virtual {v0, v1, v3, v4}, java.lang.invoke.MethodHandles$Lookup.findStatic:(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle; // method@001b
+                                |  000b: code-address
+                                |  000b: code-address
+                                |  000b: local-snapshot
+0004f6: 0c00                    |  000b: move-result-object v0
+                                |  000c: code-address
+                                |  000c: code-address
+                                |  000c: local-snapshot
+                                |  000c: code-address
+0004f8: 2201 1200               |  000c: new-instance v1, java.lang.invoke.ConstantCallSite // type@0012
+                                |  000e: code-address
+                                |  000e: code-address
+                                |  000e: local-snapshot
+                                |  000e: code-address
+                                |  000e: code-address
+                                |  000e: local-snapshot
+                                |  000e: code-address
+0004fc: 6e20 1900 4000          |  000e: invoke-virtual {v0, v4}, java.lang.invoke.MethodHandle.asType:(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle; // method@0019
+                                |  0011: code-address
+                                |  0011: code-address
+                                |  0011: local-snapshot
+000502: 0c00                    |  0011: move-result-object v0
+                                |  0012: code-address
+                                |  0012: code-address
+                                |  0012: local-snapshot
+                                |  0012: code-address
+000504: 7020 1800 0100          |  0012: invoke-direct {v1, v0}, java.lang.invoke.ConstantCallSite.<init>:(Ljava/lang/invoke/MethodHandle;)V // method@0018
+                                |  0015: code-address
+                                |  0015: code-address
+                                |  0015: local-snapshot
+00050a: 1101                    |  0015: return-object v1
+                                |  0016: code-address
+                                |  debug info
+                                |    line_start: 42
+                                |    parameters_size: 0003
+                                |    parameter <unnamed> v2
+                                |    parameter <unnamed> v3
+                                |    parameter <unnamed> v4
+                                |    0000: prologue end
+                                |    0000: line 42
+                                |    0004: line 43
+                                |    000c: line 44
+                                |    end sequence
+                                |
+                                |[50c] invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;
+00050c: 0b00                    |  registers_size: 000b
+00050e: 0900                    |  ins_size:       0009
+000510: 0400                    |  outs_size:      0004
+000512: 0000                    |  tries_size:     0000
+000514: b30b 0000               |  debug_off:      00000bb3
+000518: 2a00 0000               |  insns_size:     0000002a
+                                |  throws java.lang.NoSuchMethodException, java.lang.IllegalAccessException
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+00051c: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+000520: 6e20 1300 5000          |  0002: invoke-virtual {v0, v5}, java.io.PrintStream.println:(I)V // method@0013
+                                |  0005: code-address
+                                |  0005: code-address
+                                |  0005: local-snapshot
+                                |  0005: code-address
+000526: 6200 0000               |  0005: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+                                |  0007: code-address
+00052a: 6e30 1400 6007          |  0007: invoke-virtual {v0, v6, v7}, java.io.PrintStream.println:(J)V // method@0014
+                                |  000a: code-address
+                                |  000a: code-address
+                                |  000a: local-snapshot
+                                |  000a: code-address
+000530: 6200 0000               |  000a: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  000c: code-address
+                                |  000c: code-address
+                                |  000c: local-snapshot
+                                |  000c: code-address
+                                |  000c: code-address
+                                |  000c: local-snapshot
+                                |  000c: code-address
+000534: 6e20 1200 8000          |  000c: invoke-virtual {v0, v8}, java.io.PrintStream.println:(F)V // method@0012
+                                |  000f: code-address
+                                |  000f: code-address
+                                |  000f: local-snapshot
+                                |  000f: code-address
+00053a: 6200 0000               |  000f: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0011: code-address
+                                |  0011: code-address
+                                |  0011: local-snapshot
+                                |  0011: code-address
+                                |  0011: code-address
+                                |  0011: local-snapshot
+                                |  0011: code-address
+00053e: 6e30 1100 900a          |  0011: invoke-virtual {v0, v9, v10}, java.io.PrintStream.println:(D)V // method@0011
+                                |  0014: code-address
+                                |  0014: code-address
+                                |  0014: local-snapshot
+                                |  0014: code-address
+000544: 7100 1d00 0000          |  0014: invoke-static {}, java.lang.invoke.MethodHandles.lookup:()Ljava/lang/invoke/MethodHandles$Lookup; // method@001d
+                                |  0017: code-address
+                                |  0017: code-address
+                                |  0017: local-snapshot
+00054a: 0c00                    |  0017: move-result-object v0
+                                |  0018: code-address
+                                |  0018: code-address
+                                |  0018: local-snapshot
+                                |  0018: code-address
+00054c: 6e10 1c00 0000          |  0018: invoke-virtual {v0}, java.lang.invoke.MethodHandles$Lookup.lookupClass:()Ljava/lang/Class; // method@001c
+                                |  001b: code-address
+                                |  001b: code-address
+                                |  001b: local-snapshot
+000552: 0c01                    |  001b: move-result-object v1
+                                |  001c: code-address
+                                |  001c: code-address
+                                |  001c: local-snapshot
+                                |  001c: code-address
+000554: 6e40 1b00 1043          |  001c: invoke-virtual {v0, v1, v3, v4}, java.lang.invoke.MethodHandles$Lookup.findStatic:(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle; // method@001b
+                                |  001f: code-address
+                                |  001f: code-address
+                                |  001f: local-snapshot
+00055a: 0c00                    |  001f: move-result-object v0
+                                |  0020: code-address
+                                |  0020: code-address
+                                |  0020: local-snapshot
+                                |  0020: code-address
+00055c: 2201 1200               |  0020: new-instance v1, java.lang.invoke.ConstantCallSite // type@0012
+                                |  0022: code-address
+                                |  0022: code-address
+                                |  0022: local-snapshot
+                                |  0022: code-address
+                                |  0022: code-address
+                                |  0022: local-snapshot
+                                |  0022: code-address
+000560: 6e20 1900 4000          |  0022: invoke-virtual {v0, v4}, java.lang.invoke.MethodHandle.asType:(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle; // method@0019
+                                |  0025: code-address
+                                |  0025: code-address
+                                |  0025: local-snapshot
+000566: 0c00                    |  0025: move-result-object v0
+                                |  0026: code-address
+                                |  0026: code-address
+                                |  0026: local-snapshot
+                                |  0026: code-address
+000568: 7020 1800 0100          |  0026: invoke-direct {v1, v0}, java.lang.invoke.ConstantCallSite.<init>:(Ljava/lang/invoke/MethodHandle;)V // method@0018
+                                |  0029: code-address
+                                |  0029: code-address
+                                |  0029: local-snapshot
+00056e: 1101                    |  0029: return-object v1
+                                |  002a: code-address
+                                |  debug info
+                                |    line_start: 50
+                                |    parameters_size: 0007
+                                |    parameter <unnamed> v2
+                                |    parameter <unnamed> v3
+                                |    parameter <unnamed> v4
+                                |    parameter <unnamed> v5
+                                |    parameter <unnamed> v6
+                                |    parameter <unnamed> v8
+                                |    parameter <unnamed> v9
+                                |    0000: prologue end
+                                |    0000: line 50
+                                |    0005: line 51
+                                |    000a: line 52
+                                |    000f: line 53
+                                |    0014: line 54
+                                |    0018: line 55
+                                |    0020: line 56
+                                |    end sequence
+                                |
+                                |[570] invokecustom.InvokeCustom.main:([Ljava/lang/String;)V
+000570: 0100                    |  registers_size: 0001
+000572: 0100                    |  ins_size:       0001
+000574: 0000                    |  outs_size:      0000
+000576: 0000                    |  tries_size:     0000
+000578: 0000 0000               |  debug_off:      00000000
+00057c: 0d00 0000               |  insns_size:     0000000d
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+000580: 7100 0a00 0000          |  0000: invoke-static {}, invokecustom.InvokeCustom.test1:()V // method@000a
+                                |  0003: code-address
+                                |  0003: code-address
+                                |  0003: local-snapshot
+                                |  0003: code-address
+000586: 7100 0b00 0000          |  0003: invoke-static {}, invokecustom.InvokeCustom.test2:()V // method@000b
+                                |  0006: code-address
+                                |  0006: code-address
+                                |  0006: local-snapshot
+                                |  0006: code-address
+00058c: 7100 0c00 0000          |  0006: invoke-static {}, invokecustom.InvokeCustom.test3:()V // method@000c
+                                |  0009: code-address
+                                |  0009: code-address
+                                |  0009: local-snapshot
+                                |  0009: code-address
+000592: 7100 0d00 0000          |  0009: invoke-static {}, invokecustom.InvokeCustom.test4:()V // method@000d
+                                |  000c: code-address
+                                |  000c: code-address
+                                |  000c: local-snapshot
+000598: 0e00                    |  000c: return-void
+                                |  000d: code-address
+                                |
+00059a: 0000                    |
+                                |[59c] invokecustom.InvokeCustom.targetMethodTest1:()V
+00059c: 0200                    |  registers_size: 0002
+00059e: 0000                    |  ins_size:       0000
+0005a0: 0200                    |  outs_size:      0002
+0005a2: 0000                    |  tries_size:     0000
+0005a4: c50b 0000               |  debug_off:      00000bc5
+0005a8: 0800 0000               |  insns_size:     00000008
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0005ac: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+0005b0: 1a01 0500               |  0002: const-string v1, "Hello World!" // utf8@0005
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+0005b4: 6e20 1500 1000          |  0004: invoke-virtual {v0, v1}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0015
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+0005ba: 0e00                    |  0007: return-void
+                                |  0008: code-address
+                                |  debug info
+                                |    line_start: 21
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 21
+                                |    0007: line 22
+                                |    end sequence
+                                |
+                                |[5bc] invokecustom.InvokeCustom.targetMethodTest2:(ZBCSIFJDLjava/lang/String;)V
+0005bc: 0d00                    |  registers_size: 000d
+0005be: 0b00                    |  ins_size:       000b
+0005c0: 0300                    |  outs_size:      0003
+0005c2: 0000                    |  tries_size:     0000
+0005c4: cb0b 0000               |  debug_off:      00000bcb
+0005c8: 2e00 0000               |  insns_size:     0000002e
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0005cc: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+0005d0: 6e20 1600 2000          |  0002: invoke-virtual {v0, v2}, java.io.PrintStream.println:(Z)V // method@0016
+                                |  0005: code-address
+                                |  0005: code-address
+                                |  0005: local-snapshot
+                                |  0005: code-address
+0005d6: 6200 0000               |  0005: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+                                |  0007: code-address
+0005da: 6e20 1300 3000          |  0007: invoke-virtual {v0, v3}, java.io.PrintStream.println:(I)V // method@0013
+                                |  000a: code-address
+                                |  000a: code-address
+                                |  000a: local-snapshot
+                                |  000a: code-address
+0005e0: 6200 0000               |  000a: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  000c: code-address
+                                |  000c: code-address
+                                |  000c: local-snapshot
+                                |  000c: code-address
+                                |  000c: code-address
+                                |  000c: local-snapshot
+                                |  000c: code-address
+0005e4: 6e20 1000 4000          |  000c: invoke-virtual {v0, v4}, java.io.PrintStream.println:(C)V // method@0010
+                                |  000f: code-address
+                                |  000f: code-address
+                                |  000f: local-snapshot
+                                |  000f: code-address
+0005ea: 6200 0000               |  000f: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0011: code-address
+                                |  0011: code-address
+                                |  0011: local-snapshot
+                                |  0011: code-address
+                                |  0011: code-address
+                                |  0011: local-snapshot
+                                |  0011: code-address
+0005ee: 6e20 1300 5000          |  0011: invoke-virtual {v0, v5}, java.io.PrintStream.println:(I)V // method@0013
+                                |  0014: code-address
+                                |  0014: code-address
+                                |  0014: local-snapshot
+                                |  0014: code-address
+0005f4: 6200 0000               |  0014: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0016: code-address
+                                |  0016: code-address
+                                |  0016: local-snapshot
+                                |  0016: code-address
+                                |  0016: code-address
+                                |  0016: local-snapshot
+                                |  0016: code-address
+0005f8: 6e20 1300 6000          |  0016: invoke-virtual {v0, v6}, java.io.PrintStream.println:(I)V // method@0013
+                                |  0019: code-address
+                                |  0019: code-address
+                                |  0019: local-snapshot
+                                |  0019: code-address
+0005fe: 6200 0000               |  0019: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  001b: code-address
+                                |  001b: code-address
+                                |  001b: local-snapshot
+                                |  001b: code-address
+                                |  001b: code-address
+                                |  001b: local-snapshot
+                                |  001b: code-address
+000602: 6e20 1200 7000          |  001b: invoke-virtual {v0, v7}, java.io.PrintStream.println:(F)V // method@0012
+                                |  001e: code-address
+                                |  001e: code-address
+                                |  001e: local-snapshot
+                                |  001e: code-address
+000608: 6200 0000               |  001e: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0020: code-address
+                                |  0020: code-address
+                                |  0020: local-snapshot
+                                |  0020: code-address
+                                |  0020: code-address
+                                |  0020: local-snapshot
+                                |  0020: code-address
+00060c: 6e30 1400 8009          |  0020: invoke-virtual {v0, v8, v9}, java.io.PrintStream.println:(J)V // method@0014
+                                |  0023: code-address
+                                |  0023: code-address
+                                |  0023: local-snapshot
+                                |  0023: code-address
+000612: 6200 0000               |  0023: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0025: code-address
+                                |  0025: code-address
+                                |  0025: local-snapshot
+                                |  0025: code-address
+                                |  0025: code-address
+                                |  0025: local-snapshot
+                                |  0025: code-address
+000616: 6e30 1100 a00b          |  0025: invoke-virtual {v0, v10, v11}, java.io.PrintStream.println:(D)V // method@0011
+                                |  0028: code-address
+                                |  0028: code-address
+                                |  0028: local-snapshot
+                                |  0028: code-address
+00061c: 6200 0000               |  0028: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  002a: code-address
+                                |  002a: code-address
+                                |  002a: local-snapshot
+                                |  002a: code-address
+                                |  002a: code-address
+                                |  002a: local-snapshot
+                                |  002a: code-address
+000620: 6e20 1500 c000          |  002a: invoke-virtual {v0, v12}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0015
+                                |  002d: code-address
+                                |  002d: code-address
+                                |  002d: local-snapshot
+000626: 0e00                    |  002d: return-void
+                                |  002e: code-address
+                                |  debug info
+                                |    line_start: 26
+                                |    parameters_size: 0009
+                                |    parameter <unnamed> v2
+                                |    parameter <unnamed> v3
+                                |    parameter <unnamed> v4
+                                |    parameter <unnamed> v5
+                                |    parameter <unnamed> v6
+                                |    parameter <unnamed> v7
+                                |    parameter <unnamed> v8
+                                |    parameter <unnamed> v10
+                                |    parameter <unnamed> v12
+                                |    0000: prologue end
+                                |    0000: line 26
+                                |    0005: line 27
+                                |    000a: line 28
+                                |    000f: line 29
+                                |    0014: line 30
+                                |    0019: line 31
+                                |    001e: line 32
+                                |    0023: line 33
+                                |    0028: line 34
+                                |    002d: line 35
+                                |    end sequence
+                                |
+                                |[628] invokecustom.InvokeCustom.targetMethodTest3:()V
+000628: 0000                    |  registers_size: 0000
+00062a: 0000                    |  ins_size:       0000
+00062c: 0000                    |  outs_size:      0000
+00062e: 0000                    |  tries_size:     0000
+000630: e20b 0000               |  debug_off:      00000be2
+000634: 0100 0000               |  insns_size:     00000001
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+000638: 0e00                    |  0000: return-void
+                                |  0001: code-address
+                                |  debug info
+                                |    line_start: 38
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 38
+                                |    end sequence
+                                |
+00063a: 0000                    |
+                                |[63c] invokecustom.InvokeCustom.targetMethodTest4:()V
+00063c: 0200                    |  registers_size: 0002
+00063e: 0000                    |  ins_size:       0000
+000640: 0200                    |  outs_size:      0002
+000642: 0000                    |  tries_size:     0000
+000644: e70b 0000               |  debug_off:      00000be7
+000648: 0800 0000               |  insns_size:     00000008
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+00064c: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+000650: 1a01 3900               |  0002: const-string v1, "targetMethodTest4" // utf8@0039
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+000654: 6e20 1500 1000          |  0004: invoke-virtual {v0, v1}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0015
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+00065a: 0e00                    |  0007: return-void
+                                |  0008: code-address
+                                |  debug info
+                                |    line_start: 65
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 65
+                                |    0007: line 66
+                                |    end sequence
+                                |
+                                |[65c] invokecustom.InvokeCustom.test1:()V
+00065c: 0000                    |  registers_size: 0000
+00065e: 0000                    |  ins_size:       0000
+000660: 0000                    |  outs_size:      0000
+000662: 0000                    |  tries_size:     0000
+000664: 0000 0000               |  debug_off:      00000000
+000668: 0400 0000               |  insns_size:     00000004
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+00066c: fc00 0100 0000          |  0000: invoke-custom {}, InvokeDynamic(invokecustom.InvokeCustom:0, targetMethodTest1:()V) // InvokeDynamic@0001
+                                |  0003: code-address
+                                |  0003: code-address
+                                |  0003: local-snapshot
+000672: 0e00                    |  0003: return-void
+                                |  0004: code-address
+                                |
+                                |[674] invokecustom.InvokeCustom.test2:()V
+000674: 0100                    |  registers_size: 0001
+000676: 0000                    |  ins_size:       0000
+000678: 0000                    |  outs_size:      0000
+00067a: 0000                    |  tries_size:     0000
+00067c: 0000 0000               |  debug_off:      00000000
+000680: 0600 0000               |  insns_size:     00000006
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+000684: 1a00 2000               |  0000: const-string v0, "String" // utf8@0020
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+000688: fc00 0200 0000          |  0002: invoke-custom {}, InvokeDynamic(invokecustom.InvokeCustom:0, targetMethodTest2:(ZBCSIFJDLjava/lang/String;)V) // InvokeDynamic@0002
+                                |  0005: code-address
+                                |  0005: code-address
+                                |  0005: local-snapshot
+00068e: 0e00                    |  0005: return-void
+                                |  0006: code-address
+                                |
+                                |[690] invokecustom.InvokeCustom.test3:()V
+000690: 0000                    |  registers_size: 0000
+000692: 0000                    |  ins_size:       0000
+000694: 0000                    |  outs_size:      0000
+000696: 0000                    |  tries_size:     0000
+000698: 0000 0000               |  debug_off:      00000000
+00069c: 0400 0000               |  insns_size:     00000004
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0006a0: fc00 0300 0000          |  0000: invoke-custom {}, InvokeDynamic(invokecustom.InvokeCustom:1, targetMethodTest3:()V) // InvokeDynamic@0003
+                                |  0003: code-address
+                                |  0003: code-address
+                                |  0003: local-snapshot
+0006a6: 0e00                    |  0003: return-void
+                                |  0004: code-address
+                                |
+                                |[6a8] invokecustom.InvokeCustom.test4:()V
+0006a8: 0100                    |  registers_size: 0001
+0006aa: 0000                    |  ins_size:       0000
+0006ac: 0100                    |  outs_size:      0001
+0006ae: 0000                    |  tries_size:     0000
+0006b0: 0000 0000               |  debug_off:      00000000
+0006b4: 0900 0000               |  insns_size:     00000009
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0006b8: 2200 0700               |  0000: new-instance v0, invokecustom.InvokeCustom // type@0007
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+0006bc: 7010 0000 0000          |  0002: invoke-direct {v0}, invokecustom.InvokeCustom.<init>:()V // method@0000
+                                |  0005: code-address
+                                |  0005: code-address
+                                |  0005: local-snapshot
+                                |  0005: code-address
+0006c2: fc00 0000 0000          |  0005: invoke-custom {}, InvokeDynamic(invokecustom.InvokeCustom:2, targetMethodTest5:(Linvokecustom/InvokeCustom;)V) // InvokeDynamic@0000
+                                |  0008: code-address
+                                |  0008: code-address
+                                |  0008: local-snapshot
+0006c8: 0e00                    |  0008: return-void
+                                |  0009: code-address
+                                |
+0006ca: 0000                    |
+                                |[6cc] invokecustom.InvokeCustom.targetMethodTest5:()V
+0006cc: 0300                    |  registers_size: 0003
+0006ce: 0100                    |  ins_size:       0001
+0006d0: 0200                    |  outs_size:      0002
+0006d2: 0000                    |  tries_size:     0000
+0006d4: ed0b 0000               |  debug_off:      00000bed
+0006d8: 0800 0000               |  insns_size:     00000008
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+                                |  0000: code-address
+                                |  0000: local-snapshot
+                                |  0000: code-address
+0006dc: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+                                |  0002: code-address
+                                |  0002: local-snapshot
+                                |  0002: code-address
+0006e0: 1a01 3b00               |  0002: const-string v1, "targetMethodTest5 from InvokeCustom" // utf8@003b
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+                                |  0004: code-address
+                                |  0004: local-snapshot
+                                |  0004: code-address
+0006e4: 6e20 1500 1000          |  0004: invoke-virtual {v0, v1}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0015
+                                |  0007: code-address
+                                |  0007: code-address
+                                |  0007: local-snapshot
+0006ea: 0e00                    |  0007: return-void
+                                |  0008: code-address
+                                |  debug info
+                                |    line_start: 61
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 61
+                                |    0007: line 62
+                                |    end sequence
+                                |
+                                |[6ec] annotations directory
+0006ec: 0000 0000               |  class_annotations_off: 00000000
+0006f0: 0000 0000               |  fields_size:           00000000
+0006f4: 0300 0000               |  methods_size:          00000003
+0006f8: 0000 0000               |  parameters_size:       00000000
+                                |  methods:
+                                |    invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;
+0006fc: 0100 0000               |      method_idx:      00000001
+000700: 4804 0000               |      annotations_off: 00000448
+                                |    invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+000704: 0200 0000               |      method_idx:      00000002
+000708: 4004 0000               |      annotations_off: 00000440
+                                |    invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;
+00070c: 0300 0000               |      method_idx:      00000003
+000710: 4004 0000               |      annotations_off: 00000440
+                                |
+                                |[714] type_list
+000714: 0300 0000               |  size: 00000003
+000718: 1400                    |  0014 // java.lang.invoke.MethodHandles$Lookup
+00071a: 0e00                    |  000e // java.lang.String
+00071c: 1600                    |  0016 // java.lang.invoke.MethodType
+                                |
+00071e: 0000                    |
+                                |[720] type_list
+000720: 0700 0000               |  size: 00000007
+000724: 1400                    |  0014 // java.lang.invoke.MethodHandles$Lookup
+000726: 0e00                    |  000e // java.lang.String
+000728: 1600                    |  0016 // java.lang.invoke.MethodType
+00072a: 0400                    |  0004 // int
+00072c: 0500                    |  0005 // long
+00072e: 0300                    |  0003 // float
+000730: 0200                    |  0002 // double
+                                |
+000732: 0000                    |
+                                |[734] type_list
+000734: 0400 0000               |  size: 00000004
+000738: 1400                    |  0014 // java.lang.invoke.MethodHandles$Lookup
+00073a: 0e00                    |  000e // java.lang.String
+00073c: 1600                    |  0016 // java.lang.invoke.MethodType
+00073e: 1300                    |  0013 // java.lang.invoke.MethodHandle
+                                |
+                                |[740] type_list
+000740: 0300 0000               |  size: 00000003
+000744: 0a00                    |  000a // java.lang.Class
+000746: 0e00                    |  000e // java.lang.String
+000748: 1600                    |  0016 // java.lang.invoke.MethodType
+                                |
+00074a: 0000                    |
+                                |[74c] type_list
+00074c: 0100 0000               |  size: 00000001
+000750: 1600                    |  0016 // java.lang.invoke.MethodType
+                                |
+000752: 0000                    |
+                                |[754] type_list
+000754: 0100 0000               |  size: 00000001
+000758: 0100                    |  0001 // char
+                                |
+00075a: 0000                    |
+                                |[75c] type_list
+00075c: 0100 0000               |  size: 00000001
+000760: 0200                    |  0002 // double
+                                |
+000762: 0000                    |
+                                |[764] type_list
+000764: 0100 0000               |  size: 00000001
+000768: 0300                    |  0003 // float
+                                |
+00076a: 0000                    |
+                                |[76c] type_list
+00076c: 0100 0000               |  size: 00000001
+000770: 0400                    |  0004 // int
+                                |
+000772: 0000                    |
+                                |[774] type_list
+000774: 0100 0000               |  size: 00000001
+000778: 0500                    |  0005 // long
+                                |
+00077a: 0000                    |
+                                |[77c] type_list
+00077c: 0100 0000               |  size: 00000001
+000780: 0700                    |  0007 // invokecustom.InvokeCustom
+                                |
+000782: 0000                    |
+                                |[784] type_list
+000784: 0100 0000               |  size: 00000001
+000788: 0e00                    |  000e // java.lang.String
+                                |
+00078a: 0000                    |
+                                |[78c] type_list
+00078c: 0100 0000               |  size: 00000001
+000790: 1300                    |  0013 // java.lang.invoke.MethodHandle
+                                |
+000792: 0000                    |
+                                |[794] type_list
+000794: 0100 0000               |  size: 00000001
+000798: 1900                    |  0019 // boolean
+                                |
+00079a: 0000                    |
+                                |[79c] type_list
+00079c: 0900 0000               |  size: 00000009
+0007a0: 1900                    |  0019 // boolean
+0007a2: 0000                    |  0000 // byte
+0007a4: 0100                    |  0001 // char
+0007a6: 1700                    |  0017 // short
+0007a8: 0400                    |  0004 // int
+0007aa: 0300                    |  0003 // float
+0007ac: 0500                    |  0005 // long
+0007ae: 0200                    |  0002 // double
+0007b0: 0e00                    |  000e // java.lang.String
+                                |
+0007b2: 0000                    |
+                                |[7b4] type_list
+0007b4: 0100 0000               |  size: 00000001
+0007b8: 1a00                    |  001a // java.lang.String[]
+                                |
+                                |string_data:
+0007ba: 06                      |utf16_size: 00000006
+0007bb: 3c69 6e69 743e 00       |"<init>"
+                                |
+0007c2: 01                      |utf16_size: 00000001
+0007c3: 4200                    |"B"
+                                |
+0007c5: 01                      |utf16_size: 00000001
+0007c6: 4300                    |"C"
+                                |
+0007c8: 01                      |utf16_size: 00000001
+0007c9: 4400                    |"D"
+                                |
+0007cb: 01                      |utf16_size: 00000001
+0007cc: 4600                    |"F"
+                                |
+0007ce: 0c                      |utf16_size: 0000000c
+0007cf: 4865 6c6c 6f20 576f 726c|"Hello World!"
+0007d9: 6421 00                 |
+                                |
+0007dc: 01                      |utf16_size: 00000001
+0007dd: 4900                    |"I"
+                                |
+0007df: 11                      |utf16_size: 00000011
+0007e0: 496e 766f 6b65 4375 7374|"InvokeCustom.java"
+0007ea: 6f6d 2e6a 6176 6100     |
+                                |
+0007f2: 01                      |utf16_size: 00000001
+0007f3: 4a00                    |"J"
+                                |
+0007f5: 01                      |utf16_size: 00000001
+0007f6: 4c00                    |"L"
+                                |
+0007f8: 02                      |utf16_size: 00000002
+0007f9: 4c4c 00                 |"LL"
+                                |
+0007fc: 04                      |utf16_size: 00000004
+0007fd: 4c4c 4c4c 00            |"LLLL"
+                                |
+000802: 08                      |utf16_size: 00000008
+000803: 4c4c 4c4c 494a 4644 00  |"LLLLIJFD"
+                                |
+00080c: 05                      |utf16_size: 00000005
+00080d: 4c4c 4c4c 4c00          |"LLLLL"
+                                |
+000813: 1a                      |utf16_size: 0000001a
+000814: 4c64 616c 7669 6b2f 616e|"Ldalvik/annotation/Throws;"
+00081e: 6e6f 7461 7469 6f6e 2f54|
+000828: 6872 6f77 733b 00       |
+                                |
+00082f: 1b                      |utf16_size: 0000001b
+000830: 4c69 6e76 6f6b 6563 7573|"Linvokecustom/InvokeCustom;"
+00083a: 746f 6d2f 496e 766f 6b65|
+000844: 4375 7374 6f6d 3b00     |
+                                |
+00084c: 14                      |utf16_size: 00000014
+00084d: 4c69 6e76 6f6b 6563 7573|"Linvokecustom/Super;"
+000857: 746f 6d2f 5375 7065 723b|
+000861: 00                      |
+                                |
+000862: 15                      |utf16_size: 00000015
+000863: 4c6a 6176 612f 696f 2f50|"Ljava/io/PrintStream;"
+00086d: 7269 6e74 5374 7265 616d|
+000877: 3b00                    |
+                                |
+000879: 11                      |utf16_size: 00000011
+00087a: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Class;"
+000884: 2f43 6c61 7373 3b00     |
+                                |
+00088c: 22                      |utf16_size: 00000022
+00088d: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/IllegalAccessException;"
+000897: 2f49 6c6c 6567 616c 4163|
+0008a1: 6365 7373 4578 6365 7074|
+0008ab: 696f 6e3b 00            |
+                                |
+0008b0: 21                      |utf16_size: 00000021
+0008b1: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/NoSuchMethodException;"
+0008bb: 2f4e 6f53 7563 684d 6574|
+0008c5: 686f 6445 7863 6570 7469|
+0008cf: 6f6e 3b00               |
+                                |
+0008d3: 12                      |utf16_size: 00000012
+0008d4: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Object;"
+0008de: 2f4f 626a 6563 743b 00  |
+                                |
+0008e7: 12                      |utf16_size: 00000012
+0008e8: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/String;"
+0008f2: 2f53 7472 696e 673b 00  |
+                                |
+0008fb: 12                      |utf16_size: 00000012
+0008fc: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/System;"
+000906: 2f53 7973 7465 6d3b 00  |
+                                |
+00090f: 15                      |utf16_size: 00000015
+000910: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Throwable;"
+00091a: 2f54 6872 6f77 6162 6c65|
+000924: 3b00                    |
+                                |
+000926: 1b                      |utf16_size: 0000001b
+000927: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/CallSite;"
+000931: 2f69 6e76 6f6b 652f 4361|
+00093b: 6c6c 5369 7465 3b00     |
+                                |
+000943: 23                      |utf16_size: 00000023
+000944: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/ConstantCallSite;"
+00094e: 2f69 6e76 6f6b 652f 436f|
+000958: 6e73 7461 6e74 4361 6c6c|
+000962: 5369 7465 3b00          |
+                                |
+000968: 1f                      |utf16_size: 0000001f
+000969: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodHandle;"
+000973: 2f69 6e76 6f6b 652f 4d65|
+00097d: 7468 6f64 4861 6e64 6c65|
+000987: 3b00                    |
+                                |
+000989: 27                      |utf16_size: 00000027
+00098a: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodHandles$Lookup;"
+000994: 2f69 6e76 6f6b 652f 4d65|
+00099e: 7468 6f64 4861 6e64 6c65|
+0009a8: 7324 4c6f 6f6b 7570 3b00|
+                                |
+0009b2: 20                      |utf16_size: 00000020
+0009b3: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodHandles;"
+0009bd: 2f69 6e76 6f6b 652f 4d65|
+0009c7: 7468 6f64 4861 6e64 6c65|
+0009d1: 733b 00                 |
+                                |
+0009d4: 1d                      |utf16_size: 0000001d
+0009d5: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodType;"
+0009df: 2f69 6e76 6f6b 652f 4d65|
+0009e9: 7468 6f64 5479 7065 3b00|
+                                |
+0009f3: 01                      |utf16_size: 00000001
+0009f4: 5300                    |"S"
+                                |
+0009f6: 06                      |utf16_size: 00000006
+0009f7: 5374 7269 6e67 00       |"String"
+                                |
+0009fe: 01                      |utf16_size: 00000001
+0009ff: 5600                    |"V"
+                                |
+000a01: 02                      |utf16_size: 00000002
+000a02: 5643 00                 |"VC"
+                                |
+000a05: 02                      |utf16_size: 00000002
+000a06: 5644 00                 |"VD"
+                                |
+000a09: 02                      |utf16_size: 00000002
+000a0a: 5646 00                 |"VF"
+                                |
+000a0d: 02                      |utf16_size: 00000002
+000a0e: 5649 00                 |"VI"
+                                |
+000a11: 02                      |utf16_size: 00000002
+000a12: 564a 00                 |"VJ"
+                                |
+000a15: 02                      |utf16_size: 00000002
+000a16: 564c 00                 |"VL"
+                                |
+000a19: 02                      |utf16_size: 00000002
+000a1a: 565a 00                 |"VZ"
+                                |
+000a1d: 0a                      |utf16_size: 0000000a
+000a1e: 565a 4243 5349 464a 444c|"VZBCSIFJDL"
+000a28: 00                      |
+                                |
+000a29: 01                      |utf16_size: 00000001
+000a2a: 5a00                    |"Z"
+                                |
+000a2c: 13                      |utf16_size: 00000013
+000a2d: 5b4c 6a61 7661 2f6c 616e|"[Ljava/lang/String;"
+000a37: 672f 5374 7269 6e67 3b00|
+                                |
+000a41: 06                      |utf16_size: 00000006
+000a42: 6173 5479 7065 00       |"asType"
+                                |
+000a49: 11                      |utf16_size: 00000011
+000a4a: 6273 6d43 7265 6174 6543|"bsmCreateCallSite"
+000a54: 616c 6c53 6974 6500     |
+                                |
+000a5c: 0f                      |utf16_size: 0000000f
+000a5d: 6273 6d4c 6f6f 6b75 7053|"bsmLookupStatic"
+000a67: 7461 7469 6300          |
+                                |
+000a6d: 1c                      |utf16_size: 0000001c
+000a6e: 6273 6d4c 6f6f 6b75 7053|"bsmLookupStaticWithExtraArgs"
+000a78: 7461 7469 6357 6974 6845|
+000a82: 7874 7261 4172 6773 00  |
+                                |
+000a8b: 0a                      |utf16_size: 0000000a
+000a8c: 6669 6e64 5374 6174 6963|"findStatic"
+000a96: 00                      |
+                                |
+000a97: 06                      |utf16_size: 00000006
+000a98: 6c6f 6f6b 7570 00       |"lookup"
+                                |
+000a9f: 0b                      |utf16_size: 0000000b
+000aa0: 6c6f 6f6b 7570 436c 6173|"lookupClass"
+000aaa: 7300                    |
+                                |
+000aac: 04                      |utf16_size: 00000004
+000aad: 6d61 696e 00            |"main"
+                                |
+000ab2: 03                      |utf16_size: 00000003
+000ab3: 6f75 7400               |"out"
+                                |
+000ab7: 07                      |utf16_size: 00000007
+000ab8: 7072 696e 746c 6e00     |"println"
+                                |
+000ac0: 11                      |utf16_size: 00000011
+000ac1: 7461 7267 6574 4d65 7468|"targetMethodTest1"
+000acb: 6f64 5465 7374 3100     |
+                                |
+000ad3: 11                      |utf16_size: 00000011
+000ad4: 7461 7267 6574 4d65 7468|"targetMethodTest2"
+000ade: 6f64 5465 7374 3200     |
+                                |
+000ae6: 11                      |utf16_size: 00000011
+000ae7: 7461 7267 6574 4d65 7468|"targetMethodTest3"
+000af1: 6f64 5465 7374 3300     |
+                                |
+000af9: 11                      |utf16_size: 00000011
+000afa: 7461 7267 6574 4d65 7468|"targetMethodTest4"
+000b04: 6f64 5465 7374 3400     |
+                                |
+000b0c: 11                      |utf16_size: 00000011
+000b0d: 7461 7267 6574 4d65 7468|"targetMethodTest5"
+000b17: 6f64 5465 7374 3500     |
+                                |
+000b1f: 23                      |utf16_size: 00000023
+000b20: 7461 7267 6574 4d65 7468|"targetMethodTest5 from InvokeCustom"
+000b2a: 6f64 5465 7374 3520 6672|
+000b34: 6f6d 2049 6e76 6f6b 6543|
+000b3e: 7573 746f 6d00          |
+                                |
+000b44: 1c                      |utf16_size: 0000001c
+000b45: 7461 7267 6574 4d65 7468|"targetMethodTest5 from Super"
+000b4f: 6f64 5465 7374 3520 6672|
+000b59: 6f6d 2053 7570 6572 00  |
+                                |
+000b62: 05                      |utf16_size: 00000005
+000b63: 7465 7374 3100          |"test1"
+                                |
+000b69: 05                      |utf16_size: 00000005
+000b6a: 7465 7374 3200          |"test2"
+                                |
+000b70: 05                      |utf16_size: 00000005
+000b71: 7465 7374 3300          |"test3"
+                                |
+000b77: 05                      |utf16_size: 00000005
+000b78: 7465 7374 3400          |"test4"
+                                |
+000b7e: 08                      |utf16_size: 00000008
+000b7f: 746f 5374 7269 6e67 00  |"toString"
+                                |
+000b88: 05                      |utf16_size: 00000005
+000b89: 7661 6c75 6500          |"value"
+                                |
+                                |byte_data:
+                                |[b8f] debug info
+000b8f: 0c                      |line_start: 12
+000b90: 00                      |parameters_size: 0000
+000b91: 07                      |0000: prologue end
+000b92: 0e                      |0000: line 12
+000b93: 00                      |end sequence
+                                |
+                                |[b94] debug info
+000b94: 0e                      |line_start: 14
+000b95: 00                      |parameters_size: 0000
+000b96: 07                      |0000: prologue end
+000b97: 0e                      |0000: line 14
+000b98: 78                      |0007: line 15
+000b99: 00                      |end sequence
+                                |
+                                |[b9a] debug info
+000b9a: 12                      |line_start: 18
+000b9b: 00                      |parameters_size: 0000
+000b9c: 07                      |0000: prologue end
+000b9d: 0e                      |0000: line 18
+000b9e: 00                      |end sequence
+                                |
+                                |[b9f] debug info
+000b9f: 47                      |line_start: 71
+000ba0: 04                      |parameters_size: 0004
+000ba1: 00                      |parameter <unnamed> v2
+000ba2: 00                      |parameter <unnamed> v3
+000ba3: 00                      |parameter <unnamed> v4
+000ba4: 00                      |parameter <unnamed> v5
+000ba5: 07                      |0000: prologue end
+000ba6: 0e                      |0000: line 71
+000ba7: 96                      |0009: line 72
+000ba8: 00                      |end sequence
+                                |
+                                |[ba9] debug info
+000ba9: 2a                      |line_start: 42
+000baa: 03                      |parameters_size: 0003
+000bab: 00                      |parameter <unnamed> v2
+000bac: 00                      |parameter <unnamed> v3
+000bad: 00                      |parameter <unnamed> v4
+000bae: 07                      |0000: prologue end
+000baf: 0e                      |0000: line 42
+000bb0: 4b                      |0004: line 43
+000bb1: 87                      |000c: line 44
+000bb2: 00                      |end sequence
+                                |
+                                |[bb3] debug info
+000bb3: 32                      |line_start: 50
+000bb4: 07                      |parameters_size: 0007
+000bb5: 00                      |parameter <unnamed> v2
+000bb6: 00                      |parameter <unnamed> v3
+000bb7: 00                      |parameter <unnamed> v4
+000bb8: 00                      |parameter <unnamed> v5
+000bb9: 00                      |parameter <unnamed> v6
+000bba: 00                      |parameter <unnamed> v8
+000bbb: 00                      |parameter <unnamed> v9
+000bbc: 07                      |0000: prologue end
+000bbd: 0e                      |0000: line 50
+000bbe: 5a                      |0005: line 51
+000bbf: 5a                      |000a: line 52
+000bc0: 5a                      |000f: line 53
+000bc1: 5a                      |0014: line 54
+000bc2: 4b                      |0018: line 55
+000bc3: 87                      |0020: line 56
+000bc4: 00                      |end sequence
+                                |
+                                |[bc5] debug info
+000bc5: 15                      |line_start: 21
+000bc6: 00                      |parameters_size: 0000
+000bc7: 07                      |0000: prologue end
+000bc8: 0e                      |0000: line 21
+000bc9: 78                      |0007: line 22
+000bca: 00                      |end sequence
+                                |
+                                |[bcb] debug info
+000bcb: 1a                      |line_start: 26
+000bcc: 09                      |parameters_size: 0009
+000bcd: 00                      |parameter <unnamed> v2
+000bce: 00                      |parameter <unnamed> v3
+000bcf: 00                      |parameter <unnamed> v4
+000bd0: 00                      |parameter <unnamed> v5
+000bd1: 00                      |parameter <unnamed> v6
+000bd2: 00                      |parameter <unnamed> v7
+000bd3: 00                      |parameter <unnamed> v8
+000bd4: 00                      |parameter <unnamed> v10
+000bd5: 00                      |parameter <unnamed> v12
+000bd6: 07                      |0000: prologue end
+000bd7: 0e                      |0000: line 26
+000bd8: 5a                      |0005: line 27
+000bd9: 5a                      |000a: line 28
+000bda: 5a                      |000f: line 29
+000bdb: 5a                      |0014: line 30
+000bdc: 5a                      |0019: line 31
+000bdd: 5a                      |001e: line 32
+000bde: 5a                      |0023: line 33
+000bdf: 5a                      |0028: line 34
+000be0: 5a                      |002d: line 35
+000be1: 00                      |end sequence
+                                |
+                                |[be2] debug info
+000be2: 26                      |line_start: 38
+000be3: 00                      |parameters_size: 0000
+000be4: 07                      |0000: prologue end
+000be5: 0e                      |0000: line 38
+000be6: 00                      |end sequence
+                                |
+                                |[be7] debug info
+000be7: 41                      |line_start: 65
+000be8: 00                      |parameters_size: 0000
+000be9: 07                      |0000: prologue end
+000bea: 0e                      |0000: line 65
+000beb: 78                      |0007: line 66
+000bec: 00                      |end sequence
+                                |
+                                |[bed] debug info
+000bed: 3d                      |line_start: 61
+000bee: 00                      |parameters_size: 0000
+000bef: 07                      |0000: prologue end
+000bf0: 0e                      |0000: line 61
+000bf1: 78                      |0007: line 62
+000bf2: 00                      |end sequence
+                                |
+                                |[bf3] annotation
+000bf3: 02                      |  visibility: VISBILITY_SYSTEM
+000bf4: 06                      |  type_idx: 00000006 // dalvik.annotation.Throws
+000bf5: 01                      |  size: 00000001
+                                |  elements[0]:
+000bf6: 42                      |    name_idx: 00000042 // value
+000bf7: 1c02 180c 180b          |    value: array {java.lang.NoSuchMethodException, java.lang.IllegalAccessException}
+                                |
+                                |[bfd] annotation
+000bfd: 02                      |  visibility: VISBILITY_SYSTEM
+000bfe: 06                      |  type_idx: 00000006 // dalvik.annotation.Throws
+000bff: 01                      |  size: 00000001
+                                |  elements[0]:
+000c00: 42                      |    name_idx: 00000042 // value
+000c01: 1c01 1810               |    value: array {java.lang.Throwable}
+                                |
+                                |[c05] call-site
+000c05: 04                      |  size: 00000004
+000c06: 1600                    |  [0] method handle invoke-static,method{invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;}
+000c08: 173a                    |  [1] utf8 targetMethodTest5
+000c0a: 150e                    |  [2] proto (Linvokecustom/InvokeCustom;)V
+000c0c: 1603                    |  [3] method handle invoke-special,method{invokecustom.Super.targetMethodTest5:()V}
+                                |
+                                |[c0e] call-site
+000c0e: 03                      |  size: 00000003
+000c0f: 1601                    |  [0] method handle invoke-static,method{invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}
+000c11: 1736                    |  [1] utf8 targetMethodTest1
+000c13: 1508                    |  [2] proto ()V
+                                |
+                                |[c15] call-site
+000c15: 03                      |  size: 00000003
+000c16: 1601                    |  [0] method handle invoke-static,method{invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}
+000c18: 1737                    |  [1] utf8 targetMethodTest2
+000c1a: 1512                    |  [2] proto (ZBCSIFJDLjava/lang/String;)V
+                                |
+                                |[c1c] call-site
+000c1c: 07                      |  size: 00000007
+000c1d: 1602                    |  [0] method handle invoke-static,method{invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;}
+000c1f: 1738                    |  [1] utf8 targetMethodTest3
+000c21: 1508                    |  [2] proto ()V
+000c23: 0401                    |  [3] int 1
+000c25: 6615 cd5b 07            |  [4] long 123456789
+000c2a: 7079 e9f6 42            |  [5] float 123.456
+000c2f: f158 703f a00c 24fe 40  |  [6] double 123456.789123
+                                |
+                                |[c38] class data for invokecustom.Super
+000c38: 00                      |  static_fields_size:   00000000
+000c39: 00                      |  instance_fields_size: 00000000
+000c3a: 01                      |  direct_methods_size:  00000001
+000c3b: 01                      |  virtual_methods_size: 00000001
+                                |  direct_methods:
+                                |  [0] invokecustom.Super.<init>:()V
+000c3c: 0e                      |    method_idx:   0000000e
+000c3d: 8080 04                 |    access_flags: constructor
+000c40: d008                    |    code_off:     00000450
+                                |  virtual_methods:
+                                |  [0] invokecustom.Super.targetMethodTest5:()V
+000c42: 0f                      |    method_idx:   0000000f
+000c43: 01                      |    access_flags: public
+000c44: e808                    |    code_off:     00000468
+                                |
+                                |[c46] class data for invokecustom.InvokeCustom
+000c46: 00                      |  static_fields_size:   00000000
+000c47: 00                      |  instance_fields_size: 00000000
+000c48: 0d                      |  direct_methods_size:  0000000d
+000c49: 01                      |  virtual_methods_size: 00000001
+                                |  direct_methods:
+                                |  [0] invokecustom.InvokeCustom.<init>:()V
+000c4a: 00                      |    method_idx:   00000000
+000c4b: 8180 04                 |    access_flags: public|constructor
+000c4e: 8809                    |    code_off:     00000488
+                                |  [1] invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;
+000c50: 01                      |    method_idx:   00000001
+000c51: 09                      |    access_flags: public|static
+000c52: a009                    |    code_off:     000004a0
+                                |  [2] invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+000c54: 01                      |    method_idx:   00000002
+000c55: 09                      |    access_flags: public|static
+000c56: d009                    |    code_off:     000004d0
+                                |  [3] invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;
+000c58: 01                      |    method_idx:   00000003
+000c59: 09                      |    access_flags: public|static
+000c5a: 8c0a                    |    code_off:     0000050c
+                                |  [4] invokecustom.InvokeCustom.main:([Ljava/lang/String;)V
+000c5c: 01                      |    method_idx:   00000004
+000c5d: 09                      |    access_flags: public|static
+000c5e: f00a                    |    code_off:     00000570
+                                |  [5] invokecustom.InvokeCustom.targetMethodTest1:()V
+000c60: 01                      |    method_idx:   00000005
+000c61: 0a                      |    access_flags: private|static
+000c62: 9c0b                    |    code_off:     0000059c
+                                |  [6] invokecustom.InvokeCustom.targetMethodTest2:(ZBCSIFJDLjava/lang/String;)V
+000c64: 01                      |    method_idx:   00000006
+000c65: 0a                      |    access_flags: private|static
+000c66: bc0b                    |    code_off:     000005bc
+                                |  [7] invokecustom.InvokeCustom.targetMethodTest3:()V
+000c68: 01                      |    method_idx:   00000007
+000c69: 0a                      |    access_flags: private|static
+000c6a: a80c                    |    code_off:     00000628
+                                |  [8] invokecustom.InvokeCustom.targetMethodTest4:()V
+000c6c: 01                      |    method_idx:   00000008
+000c6d: 0a                      |    access_flags: private|static
+000c6e: bc0c                    |    code_off:     0000063c
+                                |  [9] invokecustom.InvokeCustom.test1:()V
+000c70: 02                      |    method_idx:   0000000a
+000c71: 09                      |    access_flags: public|static
+000c72: dc0c                    |    code_off:     0000065c
+                                |  [a] invokecustom.InvokeCustom.test2:()V
+000c74: 01                      |    method_idx:   0000000b
+000c75: 09                      |    access_flags: public|static
+000c76: f40c                    |    code_off:     00000674
+                                |  [b] invokecustom.InvokeCustom.test3:()V
+000c78: 01                      |    method_idx:   0000000c
+000c79: 09                      |    access_flags: public|static
+000c7a: 900d                    |    code_off:     00000690
+                                |  [c] invokecustom.InvokeCustom.test4:()V
+000c7c: 01                      |    method_idx:   0000000d
+000c7d: 09                      |    access_flags: public|static
+000c7e: a80d                    |    code_off:     000006a8
+                                |  virtual_methods:
+                                |  [0] invokecustom.InvokeCustom.targetMethodTest5:()V
+000c80: 09                      |    method_idx:   00000009
+000c81: 01                      |    access_flags: public
+000c82: cc0d                    |    code_off:     000006cc
+                                |
+                                |map:
+                                |[c84] map list
+000c84: 1300 0000               |  size: 00000013
+                                |[c88] header_item map
+000c88: 0000                    |  type:   0000 // TYPE_HEADER_ITEM
+000c8a: 0000                    |  unused: 0
+000c8c: 0100 0000               |  size:   00000001
+000c90: 0000 0000               |  offset: 00000000
+                                |[c94] string_id_item map
+000c94: 0100                    |  type:   0001 // TYPE_STRING_ID_ITEM
+000c96: 0000                    |  unused: 0
+000c98: 4300 0000               |  size:   00000043
+000c9c: 7000 0000               |  offset: 00000070
+                                |[ca0] type_id_item map
+000ca0: 0200                    |  type:   0002 // TYPE_TYPE_ID_ITEM
+000ca2: 0000                    |  unused: 0
+000ca4: 1b00 0000               |  size:   0000001b
+000ca8: 7c01 0000               |  offset: 0000017c
+                                |[cac] proto_id_item map
+000cac: 0300                    |  type:   0003 // TYPE_PROTO_ID_ITEM
+000cae: 0000                    |  unused: 0
+000cb0: 1400 0000               |  size:   00000014
+000cb4: e801 0000               |  offset: 000001e8
+                                |[cb8] field_id_item map
+000cb8: 0400                    |  type:   0004 // TYPE_FIELD_ID_ITEM
+000cba: 0000                    |  unused: 0
+000cbc: 0100 0000               |  size:   00000001
+000cc0: d802 0000               |  offset: 000002d8
+                                |[cc4] method_id_item map
+000cc4: 0500                    |  type:   0005 // TYPE_METHOD_ID_ITEM
+000cc6: 0000                    |  unused: 0
+000cc8: 1e00 0000               |  size:   0000001e
+000ccc: e002 0000               |  offset: 000002e0
+                                |[cd0] class_def_item map
+000cd0: 0600                    |  type:   0006 // TYPE_CLASS_DEF_ITEM
+000cd2: 0000                    |  unused: 0
+000cd4: 0200 0000               |  size:   00000002
+000cd8: d003 0000               |  offset: 000003d0
+                                |[cdc] call_site_id_item map
+000cdc: 0700                    |  type:   0007 // TYPE_CALL_SITE_ID_ITEM
+000cde: 0000                    |  unused: 0
+000ce0: 0400 0000               |  size:   00000004
+000ce4: 1004 0000               |  offset: 00000410
+                                |[ce8] method_handle_item map
+000ce8: 0800                    |  type:   0008 // TYPE_METHOD_HANDLE_ITEM
+000cea: 0000                    |  unused: 0
+000cec: 0400 0000               |  size:   00000004
+000cf0: 2004 0000               |  offset: 00000420
+                                |[cf4] annotation_set_item map
+000cf4: 0310                    |  type:   1003 // TYPE_ANNOTATION_SET_ITEM
+000cf6: 0000                    |  unused: 0
+000cf8: 0200 0000               |  size:   00000002
+000cfc: 4004 0000               |  offset: 00000440
+                                |[d00] code_item map
+000d00: 0120                    |  type:   2001 // TYPE_CODE_ITEM
+000d02: 0000                    |  unused: 0
+000d04: 1000 0000               |  size:   00000010
+000d08: 5004 0000               |  offset: 00000450
+                                |[d0c] annotations_directory_item map
+000d0c: 0620                    |  type:   2006 // TYPE_ANNOTATIONS_DIRECTORY_ITEM
+000d0e: 0000                    |  unused: 0
+000d10: 0100 0000               |  size:   00000001
+000d14: ec06 0000               |  offset: 000006ec
+                                |[d18] type_list map
+000d18: 0110                    |  type:   1001 // TYPE_TYPE_LIST
+000d1a: 0000                    |  unused: 0
+000d1c: 1000 0000               |  size:   00000010
+000d20: 1407 0000               |  offset: 00000714
+                                |[d24] string_data_item map
+000d24: 0220                    |  type:   2002 // TYPE_STRING_DATA_ITEM
+000d26: 0000                    |  unused: 0
+000d28: 4300 0000               |  size:   00000043
+000d2c: ba07 0000               |  offset: 000007ba
+                                |[d30] debug_info_item map
+000d30: 0320                    |  type:   2003 // TYPE_DEBUG_INFO_ITEM
+000d32: 0000                    |  unused: 0
+000d34: 0b00 0000               |  size:   0000000b
+000d38: 8f0b 0000               |  offset: 00000b8f
+                                |[d3c] annotation_item map
+000d3c: 0420                    |  type:   2004 // TYPE_ANNOTATION_ITEM
+000d3e: 0000                    |  unused: 0
+000d40: 0200 0000               |  size:   00000002
+000d44: f30b 0000               |  offset: 00000bf3
+                                |[d48] encoded_array_item map
+000d48: 0520                    |  type:   2005 // TYPE_ENCODED_ARRAY_ITEM
+000d4a: 0000                    |  unused: 0
+000d4c: 0400 0000               |  size:   00000004
+000d50: 050c 0000               |  offset: 00000c05
+                                |[d54] class_data_item map
+000d54: 0020                    |  type:   2000 // TYPE_CLASS_DATA_ITEM
+000d56: 0000                    |  unused: 0
+000d58: 0200 0000               |  size:   00000002
+000d5c: 380c 0000               |  offset: 00000c38
+                                |[d60] map_list map
+000d60: 0010                    |  type:   1000 // TYPE_MAP_LIST
+000d62: 0000                    |  unused: 0
+000d64: 0100 0000               |  size:   00000001
+000d68: 840c 0000               |  offset: 00000c84
+                                |
+                                |method code index:
+                                |
+                                |[488] invokecustom.InvokeCustom.<init>:()V
+                                |[4a0] invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;
+                                |[4d0] invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+                                |[50c] invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;
+                                |[570] invokecustom.InvokeCustom.main:([Ljava/lang/String;)V
+                                |[59c] invokecustom.InvokeCustom.targetMethodTest1:()V
+                                |[5bc] invokecustom.InvokeCustom.targetMethodTest2:(ZBCSIFJDLjava/lang/String;)V
+                                |[628] invokecustom.InvokeCustom.targetMethodTest3:()V
+                                |[63c] invokecustom.InvokeCustom.targetMethodTest4:()V
+                                |[6cc] invokecustom.InvokeCustom.targetMethodTest5:()V
+                                |[65c] invokecustom.InvokeCustom.test1:()V
+                                |[674] invokecustom.InvokeCustom.test2:()V
+                                |[690] invokecustom.InvokeCustom.test3:()V
+                                |[6a8] invokecustom.InvokeCustom.test4:()V
+                                |[450] invokecustom.Super.<init>:()V
+                                |[468] invokecustom.Super.targetMethodTest5:()V
+                                |
+                                |statistics:
+                                |  annotation: 2 items; 18 bytes total
+                                |    8..10 bytes/item; average 9
+                                |  annotation set: 2 items; 16 bytes total
+                                |    8 bytes/item
+                                |  annotations directory: 1 item; 40 bytes total
+                                |    40 bytes/item
+                                |  call site id: 4 items; 16 bytes total
+                                |    4 bytes/item
+                                |  class data: 2 items; 76 bytes total
+                                |    14..62 bytes/item; average 38
+                                |  class def: 2 items; 64 bytes total
+                                |    32 bytes/item
+                                |  code: 16 items; 668 bytes total
+                                |    20..108 bytes/item; average 41
+                                |  debug info: 11 items; 100 bytes total
+                                |    5..23 bytes/item; average 9
+                                |  encoded array: 4 items; 51 bytes total
+                                |    7..28 bytes/item; average 12
+                                |  field id: 1 item; 8 bytes total
+                                |    8 bytes/item
+                                |  header: 1 item; 112 bytes total
+                                |    112 bytes/item
+                                |  map list: 1 item; 232 bytes total
+                                |    232 bytes/item
+                                |  method handle: 4 items; 32 bytes total
+                                |    8 bytes/item
+                                |  method id: 30 items; 240 bytes total
+                                |    8 bytes/item
+                                |  proto id: 20 items; 240 bytes total
+                                |    12 bytes/item
+                                |  string data: 67 items; 981 bytes total
+                                |    3..41 bytes/item; average 14
+                                |  string id: 67 items; 268 bytes total
+                                |    4 bytes/item
+                                |  type id: 27 items; 108 bytes total
+                                |    4 bytes/item
+                                |  type list: 16 items; 138 bytes total
+                                |    6..22 bytes/item; average 8

@@ -774,7 +774,11 @@ public final class BytecodeArray {
                     return 5;
                 }
                 case ByteOps.INVOKEDYNAMIC: {
-                  throw new ParseException("invokedynamic not supported");
+                  int idx = bytes.getUnsignedShort(offset + 1);
+                  // Skip to must-be-zero bytes at offsets 3 and 4
+                  Constant cst = pool.get(idx);
+                  visitor.visitConstant(opcode, offset, 5, cst, 0);
+                  return 5;
                 }
                 case ByteOps.NEWARRAY: {
                     return parseNewarray(offset, visitor);
