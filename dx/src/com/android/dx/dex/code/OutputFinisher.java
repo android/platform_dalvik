@@ -335,7 +335,6 @@ public final class OutputFinisher {
             DalvCode.AssignIndicesCallback callback) {
         Constant cst = insn.getConstant();
         int index = callback.getIndex(cst);
-
         if (index >= 0) {
             insn.setIndex(index);
         }

@@ -22,6 +22,7 @@ import com.android.dx.dex.code.InsnFormat;
 import com.android.dx.rop.code.RegisterSpec;
 import com.android.dx.rop.code.RegisterSpecList;
 import com.android.dx.rop.cst.Constant;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Type;
@@ -86,7 +87,8 @@ public final class Form35c extends InsnFormat {
 
         Constant cst = ci.getConstant();
         if (!((cst instanceof CstMethodRef) ||
-              (cst instanceof CstType))) {
+              (cst instanceof CstType) ||
+              (cst instanceof CstCallSiteRef))) {
             return false;
         }
 
