@@ -23,7 +23,10 @@ import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstInterfaceMethodRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstMethodRef;
+import com.android.dx.rop.cst.CstMethodType;
+import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
 import com.android.dx.rop.type.Type;
@@ -702,6 +705,11 @@ public class Simulator {
                         ((CstMethodRef) cst).getPrototype(staticMethod);
                     machine.popArgs(frame, prototype);
                     break;
+                }
+                case ByteOps.INVOKEDYNAMIC: {
+                    CstInvokeDynamic invokeDynamic = (CstInvokeDynamic) cst;
+                    Prototype prototype = invokeDynamic.getPrototype();
+                    machine.popArgs(frame, prototype);
                 }
                 case ByteOps.MULTIANEWARRAY: {
                     /*
