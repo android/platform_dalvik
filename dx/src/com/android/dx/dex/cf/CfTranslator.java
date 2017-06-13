@@ -17,6 +17,7 @@
 package com.android.dx.dex.cf;
 
 import com.android.dex.util.ExceptionWithContext;
+import com.android.dx.cf.code.BootstrapMethodsList;
 import com.android.dx.cf.code.ConcreteMethod;
 import com.android.dx.cf.code.Ropper;
 import com.android.dx.cf.direct.DirectClassFile;
@@ -29,11 +30,13 @@ import com.android.dx.dex.DexOptions;
 import com.android.dx.dex.code.DalvCode;
 import com.android.dx.dex.code.PositionList;
 import com.android.dx.dex.code.RopTranslator;
+import com.android.dx.dex.file.CallSiteIdsSection;
 import com.android.dx.dex.file.ClassDefItem;
 import com.android.dx.dex.file.DexFile;
 import com.android.dx.dex.file.EncodedField;
 import com.android.dx.dex.file.EncodedMethod;
 import com.android.dx.dex.file.FieldIdsSection;
+import com.android.dx.dex.file.MethodHandlesSection;
 import com.android.dx.dex.file.MethodIdsSection;
 import com.android.dx.rop.annotation.Annotations;
 import com.android.dx.rop.annotation.AnnotationsList;
@@ -48,11 +51,15 @@ import com.android.dx.rop.cst.ConstantPool;
 import com.android.dx.rop.cst.CstBaseMethodRef;
 import com.android.dx.rop.cst.CstBoolean;
 import com.android.dx.rop.cst.CstByte;
+import com.android.dx.rop.cst.CstCallSite;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstChar;
 import com.android.dx.rop.cst.CstEnumRef;
 import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstInterfaceMethodRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
+import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstShort;
 import com.android.dx.rop.cst.CstString;
@@ -137,6 +144,8 @@ public class CfTranslator {
 
         FieldIdsSection fieldIdsSection = dexFile.getFieldIds();
         MethodIdsSection methodIdsSection = dexFile.getMethodIds();
+        MethodHandlesSection methodHandlesSection = dexFile.getMethodHandles();
+        CallSiteIdsSection callSiteIds = dexFile.getCallSiteIds();
         processFields(cf, out, dexFile);
         processMethods(context, cf, cfOptions, dexOptions, out, dexFile);
 
@@ -154,6 +163,21 @@ public class CfTranslator {
                 fieldIdsSection.intern((CstFieldRef) constant);
             } else if (constant instanceof CstEnumRef) {
                 fieldIdsSection.intern(((CstEnumRef) constant).getFieldRef());
+            } else if (constant instanceof CstMethodHandle) {
+                methodHandlesSection.intern((CstMethodHandle) constant);
+            } else if (constant instanceof CstInvokeDynamic) {
+                CstInvokeDynamic cstInvokeDynamic = (CstInvokeDynamic) constant;
+                int index = cstInvokeDynamic.getBootstrapMethodIndex();
+                BootstrapMethodsList.Item bootstrapMethod = cf.getBootstrapMethods().get(index);
+                CstCallSite callSite =
+                        CstCallSite.make(bootstrapMethod.getBootstrapMethodHandle(),
+                                         cstInvokeDynamic.getNat(),
+                                         bootstrapMethod.getBootstrapMethodArguments());
+                cstInvokeDynamic.setDeclaringClass(cf.getThisClass());
+                cstInvokeDynamic.setCallSite(callSite);
+                for (CstCallSiteRef ref : cstInvokeDynamic.getReferences()) {
+                    callSiteIds.intern(ref);
+                }
             }
         }
 

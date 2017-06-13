@@ -74,4 +74,16 @@ public class DexOptions {
     public boolean canUseInvokePolymorphic() {
         return minSdkVersion >= DexFormat.API_INVOKE_POLYMORPHIC;
     }
+
+    /**
+     * Returns whether invoke-custom can be used.
+     *
+     * This became allowed as of the Android O release (SDK version 26).
+     *
+     * @return true if supported on the currently selected SDK.
+     */
+    public boolean canUseInvokeCustom() {
+        // invoke-custom and invoke-polymorphic are both covered by the same API level.
+        return minSdkVersion >= DexFormat.API_INVOKE_POLYMORPHIC;
+    }
 }

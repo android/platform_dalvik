@@ -24,6 +24,7 @@ import com.android.dx.rop.cst.CstAnnotation;
 import com.android.dx.rop.cst.CstArray;
 import com.android.dx.rop.cst.CstBoolean;
 import com.android.dx.rop.cst.CstByte;
+import com.android.dx.rop.cst.CstCallSite;
 import com.android.dx.rop.cst.CstChar;
 import com.android.dx.rop.cst.CstDouble;
 import com.android.dx.rop.cst.CstEnumRef;
@@ -33,7 +34,9 @@ import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstKnownNull;
 import com.android.dx.rop.cst.CstLiteralBits;
 import com.android.dx.rop.cst.CstLong;
+import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstMethodRef;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstShort;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -66,6 +69,12 @@ public final class ValueEncoder {
 
     /** annotation value type constant: {@code double} */
     private static final int VALUE_DOUBLE = 0x11;
+
+    /** annotation value type constant: {@code method type} */
+    private static final int VALUE_METHOD_TYPE = 0x15;
+
+    /** annotation value type constant: {@code method handle} */
+    private static final int VALUE_METHOD_HANDLE = 0x16;
 
     /** annotation value type constant: {@code string} */
     private static final int VALUE_STRING = 0x17;
@@ -153,6 +162,16 @@ public final class ValueEncoder {
                 EncodedValueCodec.writeRightZeroExtendedValue(out, type, value);
                 break;
             }
+            case VALUE_METHOD_TYPE: {
+                int index = file.getProtoIds().indexOf(((CstProtoRef) cst).getPrototype());
+                EncodedValueCodec.writeUnsignedIntegralValue(out, type, (long) index);
+                break;
+            }
+            case VALUE_METHOD_HANDLE: {
+                int index = file.getMethodHandles().indexOf((CstMethodHandle) cst);
+                EncodedValueCodec.writeUnsignedIntegralValue(out, type, (long) index);
+                break;
+            }
             case VALUE_STRING: {
                 int index = file.getStringIds().indexOf((CstString) cst);
                 EncodedValueCodec.writeUnsignedIntegralValue(out, type, (long) index);
@@ -231,6 +250,10 @@ public final class ValueEncoder {
             return VALUE_FLOAT;
         } else if (cst instanceof CstDouble) {
             return VALUE_DOUBLE;
+        } else if (cst instanceof CstProtoRef) {
+            return VALUE_METHOD_TYPE;
+        } else if (cst instanceof CstMethodHandle) {
+           return VALUE_METHOD_HANDLE;
         } else if (cst instanceof CstString) {
             return VALUE_STRING;
         } else if (cst instanceof CstType) {

@@ -16,7 +16,9 @@
 
 package com.android.dx.cf.direct;
 
+import com.android.dx.cf.attrib.AttBootstrapMethods;
 import com.android.dx.cf.attrib.AttSourceFile;
+import com.android.dx.cf.code.BootstrapMethodsList;
 import com.android.dx.cf.cst.ConstantPoolParser;
 import com.android.dx.cf.iface.Attribute;
 import com.android.dx.cf.iface.AttributeList;
@@ -310,6 +312,18 @@ public class DirectClassFile implements ClassFile {
     public AttributeList getAttributes() {
         parseToEndIfNecessary();
         return attributes;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BootstrapMethodsList getBootstrapMethods() {
+        AttBootstrapMethods bootstrapMethodsAttribute =
+                (AttBootstrapMethods) getAttributes().findFirst(AttBootstrapMethods.ATTRIBUTE_NAME);
+        if (bootstrapMethodsAttribute != null) {
+            return bootstrapMethodsAttribute.getBootstrapMethods();
+        } else {
+            return BootstrapMethodsList.EMPTY;
+        }
     }
 
     /** {@inheritDoc} */
