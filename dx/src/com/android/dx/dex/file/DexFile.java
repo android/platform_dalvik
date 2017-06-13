@@ -23,6 +23,7 @@ import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
 import com.android.dx.rop.cst.CstEnumRef;
 import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -86,6 +87,12 @@ public final class DexFile {
     /** {@code non-null;} class data section */
     private final MixedItemSection classData;
 
+    /** {@code non-null;} call site identifiers section */
+    private final CallSiteIdsSection callSiteIds;
+
+    /** {@code non-null;} method handles section */
+    private final MethodHandlesSection methodHandles;
+
     /** {@code non-null;} byte data section */
     private final MixedItemSection byteData;
 
@@ -123,6 +130,8 @@ public final class DexFile {
         fieldIds = new FieldIdsSection(this);
         methodIds = new MethodIdsSection(this);
         classDefs = new ClassDefsSection(this);
+        callSiteIds = new CallSiteIdsSection(this);
+        methodHandles = new MethodHandlesSection(this);
         map = new MixedItemSection("map", this, 4, SortType.NONE);
 
         /*
@@ -131,8 +140,8 @@ public final class DexFile {
          */
         sections = new Section[] {
             header, stringIds, typeIds, protoIds, fieldIds, methodIds,
-            classDefs, wordData, typeLists, stringData, byteData,
-            classData, map };
+            classDefs, callSiteIds, methodHandles, wordData, typeLists,
+            stringData, byteData, classData, map };
 
         fileSize = -1;
         dumpWidth = 79;
@@ -394,6 +403,32 @@ public final class DexFile {
     }
 
     /**
+     * Gets the method handles section.
+     *
+     * <p>This is public in order to allow
+     * the various {@link Item} instances to add items to the
+     * instance and help early counting of method handles.</p>
+     *
+     * @return {@code non-null;} the method handles section
+     */
+    public MethodHandlesSection getMethodHandles() {
+        return methodHandles;
+    }
+
+    /**
+     * Gets the call site identifiers section.
+     *
+     * <p>This is public in order to allow
+     * the various {@link Item} instances to add items to the
+     * instance and help early counting of call site identifiers.</p>
+     *
+     * @return {@code non-null;} the call site identifiers section
+     */
+    public CallSiteIdsSection getCallSiteIds() {
+        return callSiteIds;
+    }
+
+    /**
      * Gets the byte data section.
      *
      * <p>This is package-scope in order to allow
@@ -479,6 +514,9 @@ public final class DexFile {
             return fieldIds.get(cst);
         } else if (cst instanceof CstProtoRef) {
             return protoIds.get(cst);
+        } else if (cst instanceof CstInvokeDynamic) {
+            CstInvokeDynamic cstInvokeDynamic = (CstInvokeDynamic) cst;
+            return callSiteIds.get(((CstInvokeDynamic) cst).getCallSite());
         } else {
             return null;
         }
@@ -500,6 +538,8 @@ public final class DexFile {
          * added to.
          */
 
+        callSiteIds.prepare();
+        methodHandles.prepare();
         classDefs.prepare();
         classData.prepare();
         wordData.prepare();
