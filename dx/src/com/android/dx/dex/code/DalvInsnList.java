@@ -20,6 +20,7 @@ import com.android.dex.util.ExceptionWithContext;
 import com.android.dx.io.Opcodes;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.FixedSizeList;
@@ -201,6 +202,9 @@ public final class DalvInsnList extends FixedSizeList {
                     boolean isStatic =
                         (insn.getOpcode().getFamily() == Opcodes.INVOKE_STATIC);
                     count = methodRef.getParameterWordCount(isStatic);
+                } else if (cst instanceof CstCallSiteRef) {
+                    CstCallSiteRef invokeDynamicRef = (CstCallSiteRef) cst;
+                    count = invokeDynamicRef.getPrototype().getParameterTypes().getWordCount();
                 }
             } else if (insn instanceof MultiCstInsn) {
                 if (insn.getOpcode().getFamily() != Opcodes.INVOKE_POLYMORPHIC) {
