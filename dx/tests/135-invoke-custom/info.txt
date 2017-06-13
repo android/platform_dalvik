@@ -1,0 +1,2 @@
+This test checks the conversion of invokedynamic in classfiles to
+invoke-custom in DEX files.

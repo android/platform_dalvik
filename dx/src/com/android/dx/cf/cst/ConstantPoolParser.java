@@ -336,24 +336,24 @@ public final class ConstantPoolParser {
                     break;
                 }
                 case CONSTANT_MethodHandle: {
-                    int kind = bytes.getUnsignedByte(at + 1);
-                    int constantIndex = bytes.getUnsignedShort(at + 2);
-                    Constant ref;
+                    final int kind = bytes.getUnsignedByte(at + 1);
+                    final int constantIndex = bytes.getUnsignedShort(at + 2);
+                    final Constant ref;
                     switch (kind) {
-                        case CstMethodHandle.KIND_GETFIELD:
-                        case CstMethodHandle.KIND_GETSTATIC:
-                        case CstMethodHandle.KIND_PUTFIELD:
-                        case CstMethodHandle.KIND_PUTSTATIC:
+                        case MethodHandleKind.REF_getField:
+                        case MethodHandleKind.REF_getStatic:
+                        case MethodHandleKind.REF_putField:
+                        case MethodHandleKind.REF_putStatic:
                             CstFieldRef field = (CstFieldRef) parse0(constantIndex, wasUtf8);
                             ref = field;
                             break;
-                        case CstMethodHandle.KIND_INVOKEVIRTUAL:
-                        case CstMethodHandle.KIND_NEWINVOKESPECIAL:
+                        case MethodHandleKind.REF_invokeVirtual:
+                        case MethodHandleKind.REF_newInvokeSpecial:
                             CstMethodRef method = (CstMethodRef) parse0(constantIndex, wasUtf8);
                             ref = method;
                             break;
-                        case CstMethodHandle.KIND_INVOKESTATIC:
-                        case CstMethodHandle.KIND_INVOKESPECIAL:
+                        case MethodHandleKind.REF_invokeStatic:
+                        case MethodHandleKind.REF_invokeSpecial:
                             ref = parse0(constantIndex, wasUtf8);
                             if (!(ref instanceof CstMethodRef
                                 || ref instanceof CstInterfaceMethodRef)) {
@@ -362,7 +362,7 @@ public final class ConstantPoolParser {
                                   + ref.getClass());
                             }
                             break;
-                        case CstMethodHandle.KIND_INVOKEINTERFACE:
+                        case MethodHandleKind.REF_invokeInterface:
                             CstInterfaceMethodRef interfaceMethod =
                                 (CstInterfaceMethodRef) parse0(constantIndex, wasUtf8);
                             ref = interfaceMethod;
@@ -370,7 +370,9 @@ public final class ConstantPoolParser {
                         default:
                             throw new ParseException("Unsupported MethodHandle kind: " + kind);
                     }
-                    cst = CstMethodHandle.make(kind, ref);
+
+                    final int methodHandleType = getMethodHandleTypeForKind(kind);
+                    cst = CstMethodHandle.make(methodHandleType, ref);
                     break;
                 }
                 case CONSTANT_MethodType: {
@@ -424,5 +426,29 @@ public final class ConstantPoolParser {
             // Translate the exception
             throw new ParseException(ex);
         }
+    }
+
+    private static int getMethodHandleTypeForKind(int kind) {
+        switch (kind) {
+            case MethodHandleKind.REF_getField:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INSTANCE_GET;
+            case MethodHandleKind.REF_getStatic:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_STATIC_GET;
+            case MethodHandleKind.REF_putField:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INSTANCE_PUT;
+            case MethodHandleKind.REF_putStatic:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_STATIC_PUT;
+            case MethodHandleKind.REF_invokeVirtual:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INVOKE_INSTANCE;
+            case MethodHandleKind.REF_invokeStatic:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INVOKE_STATIC;
+            case MethodHandleKind.REF_invokeSpecial:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INVOKE_DIRECT;
+            case MethodHandleKind.REF_newInvokeSpecial:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INVOKE_CONSTRUCTOR;
+            case MethodHandleKind.REF_invokeInterface:
+                return CstMethodHandle.METHOD_HANDLE_TYPE_INVOKE_INTERFACE;
+        }
+        throw new IllegalArgumentException("invalid kind: " + kind);
     }
 }
