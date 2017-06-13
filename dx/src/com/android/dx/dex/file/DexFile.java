@@ -23,6 +23,7 @@ import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
 import com.android.dx.rop.cst.CstEnumRef;
 import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -86,6 +87,12 @@ public final class DexFile {
     /** {@code non-null;} class data section */
     private final MixedItemSection classData;
 
+    /** {@code null-ok;} call site identifiers section, only exists for SDK >= 26 */
+    private final CallSiteIdsSection callSiteIds;
+
+    /** {@code null-ok;} method handles section, only exists for SDK >= 26 */
+    private final MethodHandlesSection methodHandles;
+
     /** {@code non-null;} byte data section */
     private final MixedItemSection byteData;
 
@@ -126,13 +133,31 @@ public final class DexFile {
         map = new MixedItemSection("map", this, 4, SortType.NONE);
 
         /*
-         * This is the list of sections in the order they appear in
+         * Prepare the list of sections in the order they appear in
          * the final output.
          */
-        sections = new Section[] {
-            header, stringIds, typeIds, protoIds, fieldIds, methodIds,
-            classDefs, wordData, typeLists, stringData, byteData,
-            classData, map };
+        if (dexOptions.canUseInvokePolymorphic()) {
+            /*
+             * Method handles and call sites only visible in DEX files
+             * from SDK version 26 onwards. Do not create or add sections unless
+             * version true. This is conditional to avoid churn in the dx tests
+             * that look at annotated output.
+             */
+            callSiteIds = new CallSiteIdsSection(this);
+            methodHandles = new MethodHandlesSection(this);
+
+            sections = new Section[] {
+                header, stringIds, typeIds, protoIds, fieldIds, methodIds, classDefs,
+                callSiteIds, methodHandles,
+                wordData, typeLists, stringData, byteData, classData, map };
+        } else {
+            callSiteIds = null;
+            methodHandles = null;
+
+            sections = new Section[] {
+                header, stringIds, typeIds, protoIds, fieldIds, methodIds, classDefs,
+                wordData, typeLists, stringData, byteData, classData, map };
+        }
 
         fileSize = -1;
         dumpWidth = 79;
@@ -394,6 +419,32 @@ public final class DexFile {
     }
 
     /**
+     * Gets the method handles section.
+     *
+     * <p>This is public in order to allow
+     * the various {@link Item} instances to add items to the
+     * instance and help early counting of method handles.</p>
+     *
+     * @return {@code non-null;} the method handles section
+     */
+    public MethodHandlesSection getMethodHandles() {
+        return methodHandles;
+    }
+
+    /**
+     * Gets the call site identifiers section.
+     *
+     * <p>This is public in order to allow
+     * the various {@link Item} instances to add items to the
+     * instance and help early counting of call site identifiers.</p>
+     *
+     * @return {@code non-null;} the call site identifiers section
+     */
+    public CallSiteIdsSection getCallSiteIds() {
+        return callSiteIds;
+    }
+
+    /**
      * Gets the byte data section.
      *
      * <p>This is package-scope in order to allow
@@ -479,6 +530,9 @@ public final class DexFile {
             return fieldIds.get(cst);
         } else if (cst instanceof CstProtoRef) {
             return protoIds.get(cst);
+        } else if (cst instanceof CstInvokeDynamic) {
+            CstInvokeDynamic cstInvokeDynamic = (CstInvokeDynamic) cst;
+            return callSiteIds.get(((CstInvokeDynamic) cst).getCallSite());
         } else {
             return null;
         }
@@ -499,7 +553,10 @@ public final class DexFile {
          * add items happen before the calls to the sections that get
          * added to.
          */
-
+        if (dexOptions.canUseInvokePolymorphic()) {
+            callSiteIds.prepare();
+            methodHandles.prepare();
+        }
         classDefs.prepare();
         classData.prepare();
         wordData.prepare();
@@ -563,13 +620,13 @@ public final class DexFile {
 
         for (int i = 0; i < count; i++) {
             try {
-                Section one = sections[i];
-                int zeroCount = one.getFileOffset() - out.getCursor();
+                final Section one = sections[i];
+                final int zeroCount = one.getFileOffset() - out.getCursor();
                 if (zeroCount < 0) {
                     throw new ExceptionWithContext("excess write of " +
                             (-zeroCount));
                 }
-                out.writeZeroes(one.getFileOffset() - out.getCursor());
+                out.writeZeroes(zeroCount);
                 one.writeTo(out);
             } catch (RuntimeException ex) {
                 ExceptionWithContext ec;
