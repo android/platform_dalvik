@@ -21,7 +21,7 @@ import com.android.dx.util.FixedSizeList;
 /**
  * Constant type to represent a fixed array of other constants.
  */
-public final class CstArray extends Constant {
+public class CstArray extends Constant {
     /** {@code non-null;} the actual list of contents */
     private final List list;
 
