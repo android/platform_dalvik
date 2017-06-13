@@ -396,6 +396,10 @@ com.android.dx.cf.code.SimException: signature-polymorphic method called without
 000384: 740a 0000               |  class_data_off:      00000a74
 000388: 0000 0000               |  static_values_off:   00000000
                                 |
+                                |call_site_ids:
+                                |
+                                |method_handles:
+                                |
                                 |word_data:
                                 |[38c] annotation set
 00038c: 0100 0000               |  size: 00000001
