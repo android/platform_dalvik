@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7d64101_0e97e7ff",
+        "filename": "dx/src/com/android/dx/cf/code/BytecodeArray.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-06-14T11:33:33Z",
+      "side": 1,
+      "message": "4 char indent please",
+      "range": {
+        "startLine": 777,
+        "startChar": 16,
+        "endLine": 777,
+        "endChar": 18
+      },
+      "revId": "a4bf055f923aa6387e6236aef57b8efe0d8e6426",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
