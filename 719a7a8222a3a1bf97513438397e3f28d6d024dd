@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91094a4d_6f9723fc",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-06-14T07:24:01Z",
+      "side": 1,
+      "message": "It seems cleaner to add a canUseInvokeCustom method ?",
+      "range": {
+        "startLine": 710,
+        "startChar": 36,
+        "endLine": 710,
+        "endChar": 61
+      },
+      "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d34adf79_b3808b30",
+        "filename": "dx/src/com/android/dx/dex/file/DexFile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-06-14T07:24:01Z",
+      "side": 1,
+      "message": "canUseInvokeCustom, these sections are not related to invoke polymorphic.",
+      "range": {
+        "startLine": 139,
+        "startChar": 23,
+        "endLine": 139,
+        "endChar": 46
+      },
+      "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b99545a4_6c629f24",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-06-14T07:24:01Z",
+      "side": 1,
+      "message": "!items().isEmpty() as above ?",
+      "range": {
+        "startLine": 269,
+        "startChar": 12,
+        "endLine": 269,
+        "endChar": 38
+      },
+      "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54f37e78_0f821b06",
+        "filename": "dx/tests/135-invoke-custom/expected.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-06-14T07:24:01Z",
+      "side": 1,
+      "message": "invoke-custom here and below ?",
+      "range": {
+        "startLine": 1,
+        "startChar": 27,
+        "endLine": 1,
+        "endChar": 43
+      },
+      "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
