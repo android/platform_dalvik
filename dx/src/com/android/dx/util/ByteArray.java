@@ -19,6 +19,7 @@ package com.android.dx.util;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * Wrapper for a {@code byte[]}, which provides read-only access and
@@ -95,7 +96,9 @@ public final class ByteArray {
      */
     public ByteArray slice(int start, int end) {
         checkOffsets(start, end);
-        return new ByteArray(bytes, start + this.start, end + this.start);
+        byte[] slicedOut = new byte[end - start];
+        Arrays.copyOfRange(slicedOut, start, end);
+        return new ByteArray(slicedOut);
     }
 
     /**
@@ -282,7 +285,7 @@ public final class ByteArray {
          *
          * @return {@code 0..size();} the cursor
          */
-        public int getCursor();
+        int getCursor();
     }
 
     /**
@@ -301,7 +304,6 @@ public final class ByteArray {
             mark = 0;
         }
 
-        @Override
         public int read() throws IOException {
             if (cursor >= size) {
                 return -1;
