@@ -22,6 +22,7 @@ import com.android.dex.util.ExceptionWithContext;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Implementation of {@link AnnotatedOutput} which stores the written data
@@ -329,9 +330,9 @@ public final class ByteArrayAnnotatedOutput
         }
 
         /*
-         * There is no need to actually write zeroes, since the array is
-         * already preinitialized with zeroes.
+         * We need to write zeroes, since the array might be reused across different dx invocations.
          */
+        Arrays.fill(data, cursor, end, (byte) 0);
 
         cursor = end;
     }
@@ -355,9 +356,9 @@ public final class ByteArrayAnnotatedOutput
         }
 
         /*
-         * There is no need to actually write zeroes, since the array is
-         * already preinitialized with zeroes.
+         * We need to write zeroes, since the array might be reused across different dx invocations.
          */
+        Arrays.fill(data, cursor, end, (byte) 0);
 
         cursor = end;
     }
