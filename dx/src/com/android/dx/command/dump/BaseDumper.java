@@ -130,22 +130,13 @@ public abstract class BaseDumper
     /** {@inheritDoc} */
     @Override
     public void parsed(ByteArray bytes, int offset, int len, String human) {
-        offset = bytes.underlyingOffset(offset, getBytes());
+        offset = bytes.underlyingOffset(offset);
 
         boolean rawBytes = getRawBytes();
 
-        if (offset < at) {
-            println("<dump skipped backwards to " + Hex.u4(offset) + ">");
-            at = offset;
-        } else if (offset > at) {
-            String hex = rawBytes ? hexDump(at, offset - at) : "";
-            print(twoColumns(hex, "<skipped to " + Hex.u4(offset) + ">"));
-            at = offset;
-        }
-
         String hex = rawBytes ? hexDump(offset, len) : "";
         print(twoColumns(hex, human));
-        at += len;
+        at = offset + len;
     }
 
     /** {@inheritDoc} */
@@ -179,7 +170,7 @@ public abstract class BaseDumper
      * @param offset {@code >= 0;} offset into the array
      */
     protected final void setAt(ByteArray arr, int offset) {
-        at = arr.underlyingOffset(offset, bytes);
+        at = arr.underlyingOffset(offset);
     }
 
     /**
