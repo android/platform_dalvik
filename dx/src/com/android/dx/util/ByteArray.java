@@ -95,7 +95,9 @@ public final class ByteArray {
      */
     public ByteArray slice(int start, int end) {
         checkOffsets(start, end);
-        return new ByteArray(bytes, start + this.start, end + this.start);
+        byte[] slicedOut = new byte[end - start];
+        System.arraycopy(bytes, start, slicedOut, 0, end - start);
+        return new ByteArray(slicedOut, 0, slicedOut.length);
     }
 
     /**
@@ -282,7 +284,7 @@ public final class ByteArray {
          *
          * @return {@code 0..size();} the cursor
          */
-        public int getCursor();
+        int getCursor();
     }
 
     /**
@@ -301,7 +303,6 @@ public final class ByteArray {
             mark = 0;
         }
 
-        @Override
         public int read() throws IOException {
             if (cursor >= size) {
                 return -1;
@@ -312,7 +313,6 @@ public final class ByteArray {
             return result;
         }
 
-        @Override
         public int read(byte[] arr, int offset, int length) {
             if ((offset + length) > arr.length) {
                 length = arr.length - offset;
@@ -328,22 +328,18 @@ public final class ByteArray {
             return length;
         }
 
-        @Override
         public int available() {
             return size - cursor;
         }
 
-        @Override
         public void mark(int reserve) {
             mark = cursor;
         }
 
-        @Override
         public void reset() {
             cursor = mark;
         }
 
-        @Override
         public boolean markSupported() {
             return true;
         }
