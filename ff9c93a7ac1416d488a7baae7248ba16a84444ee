@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f16fc57_65135a3f",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-19T14:32:49Z",
+      "side": 1,
+      "message": "It keeps the output the same across dx versions in the common case when there are no method handles or call sites in generated DEX files. Without this we introduce empty bytes for alignment when nothing is output.\n\nIt was noticeable because all the dx tests without this change. The 8-byte alignment for the method handles section invariably introduces a few zero bytes and churns offsets in the output. This might be a concern with code in the store.\n\nDoes this seem reasonable?",
+      "parentUuid": "fd98d65f_55b0053d",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c5018d2_d87ab4e9",
         "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7dec77d0_a3ebafef",
+        "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-19T14:32:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c5018d2_d87ab4e9",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd2a7c30_a35f9397",
         "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
         "patchSetId": 13
@@ -59,6 +107,30 @@
       "writtenOn": "2017-06-19T13:38:19Z",
       "side": 1,
       "message": "private?",
+      "range": {
+        "startLine": 160,
+        "startChar": 25,
+        "endLine": 160,
+        "endChar": 36
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e8345536_44fc7e8e",
+        "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-19T14:32:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd2a7c30_a35f9397",
       "range": {
         "startLine": 160,
         "startChar": 25,
