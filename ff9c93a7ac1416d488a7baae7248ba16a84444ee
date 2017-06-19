@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd98d65f_55b0053d",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "Is all this really needed? I feel like it adds complexity for little benefit.",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c5018d2_d87ab4e9",
+        "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "private?",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd2a7c30_a35f9397",
+        "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "private?",
+      "range": {
+        "startLine": 160,
+        "startChar": 25,
+        "endLine": 160,
+        "endChar": 36
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

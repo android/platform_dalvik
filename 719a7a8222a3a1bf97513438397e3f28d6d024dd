@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "9bdf7541_e36ca069",
+        "filename": "dx/src/com/android/dx/cf/iface/ClassFile.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "{@code non-null;}?",
+      "range": {
+        "startLine": 118,
+        "startChar": 8,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d34adf79_b3808b30",
         "filename": "dx/src/com/android/dx/dex/file/DexFile.java",
         "patchSetId": 5
@@ -89,6 +112,29 @@
         "startChar": 23,
         "endLine": 139,
         "endChar": 46
+      },
+      "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b84c0f1_e4efbbc9",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "its",
+      "range": {
+        "startLine": 134,
+        "startChar": 43,
+        "endLine": 134,
+        "endChar": 47
       },
       "revId": "719a7a8222a3a1bf97513438397e3f28d6d024dd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",

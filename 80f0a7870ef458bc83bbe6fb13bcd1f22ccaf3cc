@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d474d78_57a00e17",
+        "filename": "dx/src/com/android/dx/dex/file/CallSiteIdsSection.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "nit: its",
+      "range": {
+        "startLine": 94,
+        "startChar": 58,
+        "endLine": 94,
+        "endChar": 62
+      },
+      "revId": "80f0a7870ef458bc83bbe6fb13bcd1f22ccaf3cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

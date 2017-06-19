@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7f24ab8_2aff8b45",
+        "filename": "dx/src/com/android/dx/cf/direct/StdAttributeFactory.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-19T13:38:19Z",
+      "side": 1,
+      "message": "nit: Bootstrap",
+      "range": {
+        "startLine": 219,
+        "startChar": 23,
+        "endLine": 219,
+        "endChar": 31
+      },
+      "revId": "4dde9782571caad3e83e503b3ffd89962513e12f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
