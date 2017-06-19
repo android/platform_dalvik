@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e2e8011_23850ca2",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-19T08:56:30Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c56a7ca3_c52b2d73",
+      "range": {
+        "startLine": 347,
+        "startChar": 28,
+        "endLine": 347,
+        "endChar": 45
+      },
+      "revId": "0321982fabedfb5166cc076d8088227191872a97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26187521_364a076b",
         "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-19T07:56:53Z",
       "side": 1,
       "message": "Do you plan to update the android dex specification, if I remember correctly newInvokeSpecial, invokeSpecial and invokeInterface are not defined into the specification ?",
+      "range": {
+        "startLine": 351,
+        "startChar": 29,
+        "endLine": 351,
+        "endChar": 66
+      },
+      "revId": "0321982fabedfb5166cc076d8088227191872a97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5753fd51_a4101e34",
+        "filename": "dx/src/com/android/dx/cf/cst/ConstantPoolParser.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-19T08:56:30Z",
+      "side": 1,
+      "message": "Yes, from MR1 onwards.\n\nWe do not have any patches for ART that support constructors at present: https://b.corp.google.com/issues/62774190",
+      "parentUuid": "26187521_364a076b",
       "range": {
         "startLine": 351,
         "startChar": 29,
