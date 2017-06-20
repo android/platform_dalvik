@@ -22,6 +22,30 @@
       "revId": "b7d748318354aba23ba03f76bdefc31fa6adc885",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0dec8bb_132ae5e2",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T21:29:20Z",
+      "side": 1,
+      "message": "The issue is new here, but it\u0027s not clear the same issue exists as there is no alternative before api level 26. It looks like b/35261456 has a proposed resolution in #11 waiting on a patch (?).\n\nThe big piece missing here is support for merging dex files containing either invoke-custom or invoke-polymorphic. This needs doing, but preferably in a separate CL.",
+      "parentUuid": "266c2f36_b7dd702b",
+      "range": {
+        "startLine": 708,
+        "startChar": 36,
+        "endLine": 708,
+        "endChar": 54
+      },
+      "revId": "b7d748318354aba23ba03f76bdefc31fa6adc885",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
