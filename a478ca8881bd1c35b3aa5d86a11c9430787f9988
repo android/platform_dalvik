@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ce59f5b7_531bf112",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T15:04:44Z",
+      "side": 1,
+      "message": "Added an explicit check for the opcode type for clarity.",
+      "parentUuid": "24dfb13b_16ef2658",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 13
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f31384f8_61de41e2",
         "filename": "dx/src/com/android/dx/dex/file/CallSiteIdItem.java",
         "patchSetId": 19
@@ -36,6 +60,30 @@
       "writtenOn": "2017-06-20T13:37:38Z",
       "side": 1,
       "message": "I assume multi-threading is not an issue for dx (or at least at this stage of dx)?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 9
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab1ea430_87ad7d94",
+        "filename": "dx/src/com/android/dx/dex/file/CallSiteIdItem.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T15:04:44Z",
+      "side": 1,
+      "message": "There are per class file tasks and subsequently per DEX file tasks. This state is all internal to a Dex file.",
+      "parentUuid": "f31384f8_61de41e2",
       "range": {
         "startLine": 64,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "404ecac0_ae80950f",
+        "filename": "dx/src/com/android/dx/dex/file/CallSiteIdsSection.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T15:04:44Z",
+      "side": 1,
+      "message": "Class File reading / parsing / translation operations are dispatched on a thread pool as tasks. Interning happens during class file translation.\n\naddCallSiteItem() happens during DexFile preparation and writing happens as part of the same single threaded task.\n\nComments added for clarity.",
+      "parentUuid": "ebe46307_e54e3549",
+      "range": {
+        "startLine": 75,
+        "startChar": 7,
+        "endLine": 75,
+        "endChar": 14
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6044877a_71950a45",
         "filename": "dx/src/com/android/dx/dex/file/Section.java",
         "patchSetId": 19
@@ -82,6 +154,30 @@
       "writtenOn": "2017-06-20T11:42:17Z",
       "side": 1,
       "message": "Remove?",
+      "range": {
+        "startLine": 116,
+        "startChar": 25,
+        "endLine": 117,
+        "endChar": 56
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b4004ca_7b114f11",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T15:04:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6044877a_71950a45",
       "range": {
         "startLine": 116,
         "startChar": 25,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "e0ea3896_d9e1a3d2",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T15:04:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df441355_1bdf6c34",
+      "range": {
+        "startLine": 154,
+        "startChar": 39,
+        "endLine": 154,
+        "endChar": 61
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b891751_19ac06e8",
         "filename": "dx/src/com/android/dx/dex/file/Section.java",
         "patchSetId": 19
@@ -128,6 +248,30 @@
       "writtenOn": "2017-06-20T11:42:17Z",
       "side": 1,
       "message": "still needed?",
+      "range": {
+        "startLine": 264,
+        "startChar": 7,
+        "endLine": 264,
+        "endChar": 33
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "771ae496_56a3059f",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T15:04:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b891751_19ac06e8",
       "range": {
         "startLine": 264,
         "startChar": 7,
