@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9e21cd86_d813a077",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-06-20T08:58:31Z",
+      "side": 1,
+      "message": "OK, I understand, you can leave it like that if you want. But what would you think of handling the special case of empty sections outside, in DexFile.toDex0? Maybe add a Section.isEmpty() method and conditionalize calls to setFileOffset and writeTo. I\u0027m not sure it works, I haven\u0027t tried to code it, but it may be slightly better since it would prevent to have knowledge of the \"map\" section inside the Section class.",
+      "parentUuid": "1f16fc57_65135a3f",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c5018d2_d87ab4e9",
         "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
         "patchSetId": 13
