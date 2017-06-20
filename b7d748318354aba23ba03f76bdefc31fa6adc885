@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "266c2f36_b7dd702b",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-06-20T15:40:01Z",
+      "side": 1,
+      "message": "How do we want to handle mix-API dex files i.e.\nif (myAPI \u003c 26) doSimple() else useInvokeCustom()?\nThere is a similar discussion happening for static interface methods - http://b/35261456.",
+      "range": {
+        "startLine": 708,
+        "startChar": 36,
+        "endLine": 708,
+        "endChar": 54
+      },
+      "revId": "b7d748318354aba23ba03f76bdefc31fa6adc885",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
