@@ -221,6 +221,10 @@ public final class OutputFinisher {
 
         if (type != Type.KNOWN_NULL) {
             result.add(CstType.intern(type));
+        } else {
+            /* If this a "known null", let's use "Object" because that's going to be the
+             * resulting type in {@link LocalList.MakeState#filterSpec} */
+            result.add(CstType.intern(Type.OBJECT));
         }
 
         if (name != null) {
