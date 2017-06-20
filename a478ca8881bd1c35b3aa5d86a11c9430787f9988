@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "24dfb13b_16ef2658",
+        "filename": "dx/src/com/android/dx/cf/code/RopperMachine.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-06-20T13:37:38Z",
+      "side": 1,
+      "message": "Add a comment?",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 13
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f31384f8_61de41e2",
+        "filename": "dx/src/com/android/dx/dex/file/CallSiteIdItem.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-06-20T13:37:38Z",
+      "side": 1,
+      "message": "I assume multi-threading is not an issue for dx (or at least at this stage of dx)?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 9
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebe46307_e54e3549",
+        "filename": "dx/src/com/android/dx/dex/file/CallSiteIdsSection.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-06-20T13:37:38Z",
+      "side": 1,
+      "message": "Not knowing about dx, but it looks like this naming implicitly means some synchronization needed? Otherwise it looks odd reading this class that \"intern\" is synchronized, but not \"addCallSiteItem\".",
+      "range": {
+        "startLine": 75,
+        "startChar": 7,
+        "endLine": 75,
+        "endChar": 14
+      },
+      "revId": "a478ca8881bd1c35b3aa5d86a11c9430787f9988",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6044877a_71950a45",
         "filename": "dx/src/com/android/dx/dex/file/Section.java",
         "patchSetId": 19
