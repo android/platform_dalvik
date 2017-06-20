@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4528a8eb_6305f96d",
+        "filename": "dx/src/com/android/dx/dex/file/Section.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-20T10:47:25Z",
+      "side": 1,
+      "message": "Hoisted and made check explicit against the method handles and call site ids section. PTAL.",
+      "parentUuid": "9e21cd86_d813a077",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "ff9c93a7ac1416d488a7baae7248ba16a84444ee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c5018d2_d87ab4e9",
         "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
         "patchSetId": 13
