@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aea5fe32_c41cf514",
+        "filename": "dx/tests/136-null-constant-debug-info/info.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2017-06-20T12:33:14Z",
+      "side": 1,
+      "message": "Trailing whitespace",
+      "range": {
+        "startLine": 5,
+        "startChar": 8,
+        "endLine": 5,
+        "endChar": 9
+      },
+      "revId": "55fb59f7fa17980491096b3007b2bc757b232d99",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40c69a57_42c50f8a",
+        "filename": "dx/tests/136-null-constant-debug-info/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1029223
+      },
+      "writtenOn": "2017-06-20T12:33:14Z",
+      "side": 1,
+      "message": "2017",
+      "range": {
+        "startLine": 3,
+        "startChar": 16,
+        "endLine": 3,
+        "endChar": 20
+      },
+      "revId": "55fb59f7fa17980491096b3007b2bc757b232d99",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
