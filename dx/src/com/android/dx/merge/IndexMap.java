@@ -17,12 +17,14 @@
 package com.android.dx.merge;
 
 import com.android.dex.Annotation;
-import com.android.dex.util.ByteOutput;
+import com.android.dex.CallSiteId;
 import com.android.dex.ClassDef;
 import com.android.dex.Dex;
 import com.android.dex.DexException;
 import com.android.dex.EncodedValue;
 import com.android.dex.EncodedValueReader;
+import com.android.dex.MethodHandle;
+import com.android.dex.util.ByteOutput;
 import static com.android.dex.EncodedValueReader.ENCODED_ANNOTATION;
 import static com.android.dex.EncodedValueReader.ENCODED_ARRAY;
 import static com.android.dex.EncodedValueReader.ENCODED_BOOLEAN;
@@ -35,6 +37,8 @@ import static com.android.dex.EncodedValueReader.ENCODED_FLOAT;
 import static com.android.dex.EncodedValueReader.ENCODED_INT;
 import static com.android.dex.EncodedValueReader.ENCODED_LONG;
 import static com.android.dex.EncodedValueReader.ENCODED_METHOD;
+import static com.android.dex.EncodedValueReader.ENCODED_METHOD_HANDLE;
+import static com.android.dex.EncodedValueReader.ENCODED_METHOD_TYPE;
 import static com.android.dex.EncodedValueReader.ENCODED_NULL;
 import static com.android.dex.EncodedValueReader.ENCODED_SHORT;
 import static com.android.dex.EncodedValueReader.ENCODED_STRING;
@@ -61,12 +65,14 @@ public final class IndexMap {
     public final short[] protoIds;
     public final short[] fieldIds;
     public final short[] methodIds;
+    public final int[] callSiteIds;
+    public final HashMap<Integer, Integer> methodHandleIds;
     private final HashMap<Integer, Integer> typeListOffsets;
     private final HashMap<Integer, Integer> annotationOffsets;
     private final HashMap<Integer, Integer> annotationSetOffsets;
     private final HashMap<Integer, Integer> annotationSetRefListOffsets;
     private final HashMap<Integer, Integer> annotationDirectoryOffsets;
-    private final HashMap<Integer, Integer> staticValuesOffsets;
+    private final HashMap<Integer, Integer> encodedArrayValueOffset;
 
     public IndexMap(Dex target, TableOfContents tableOfContents) {
         this.target = target;
@@ -75,12 +81,14 @@ public final class IndexMap {
         this.protoIds = new short[tableOfContents.protoIds.size];
         this.fieldIds = new short[tableOfContents.fieldIds.size];
         this.methodIds = new short[tableOfContents.methodIds.size];
+        this.callSiteIds = new int[tableOfContents.callSiteIds.size];
+        this.methodHandleIds = new HashMap<Integer, Integer>();
         this.typeListOffsets = new HashMap<Integer, Integer>();
         this.annotationOffsets = new HashMap<Integer, Integer>();
         this.annotationSetOffsets = new HashMap<Integer, Integer>();
         this.annotationSetRefListOffsets = new HashMap<Integer, Integer>();
         this.annotationDirectoryOffsets = new HashMap<Integer, Integer>();
-        this.staticValuesOffsets = new HashMap<Integer, Integer>();
+        this.encodedArrayValueOffset = new HashMap<Integer, Integer>();
 
         /*
          * A type list, annotation set, annotation directory, or static value at
@@ -89,7 +97,7 @@ public final class IndexMap {
         this.typeListOffsets.put(0, 0);
         this.annotationSetOffsets.put(0, 0);
         this.annotationDirectoryOffsets.put(0, 0);
-        this.staticValuesOffsets.put(0, 0);
+        this.encodedArrayValueOffset.put(0, 0);
     }
 
     public void putTypeListOffset(int oldOffset, int newOffset) {
@@ -127,11 +135,11 @@ public final class IndexMap {
         annotationDirectoryOffsets.put(oldOffset, newOffset);
     }
 
-    public void putStaticValuesOffset(int oldOffset, int newOffset) {
+    public void putEncodedArrayValueOffset(int oldOffset, int newOffset) {
         if (oldOffset <= 0 || newOffset <= 0) {
             throw new IllegalArgumentException();
         }
-        staticValuesOffsets.put(oldOffset, newOffset);
+        encodedArrayValueOffset.put(oldOffset, newOffset);
     }
 
     public int adjustString(int stringIndex) {
@@ -185,8 +193,16 @@ public final class IndexMap {
         return annotationDirectoryOffsets.get(annotationDirectoryOffset);
     }
 
-    public int adjustStaticValues(int staticValuesOffset) {
-        return staticValuesOffsets.get(staticValuesOffset);
+    public int adjustEncodedArray(int encodedArrayAttribute) {
+        return encodedArrayValueOffset.get(encodedArrayAttribute);
+    }
+
+    public int adjustCallSite(int callSiteIndex) {
+        return callSiteIds[callSiteIndex];
+    }
+
+    public int adjustMethodHandle(int methodHandleIndex) {
+        return methodHandleIds.get(methodHandleIndex);
     }
 
     public MethodId adjust(MethodId methodId) {
@@ -194,6 +210,21 @@ public final class IndexMap {
                 adjustType(methodId.getDeclaringClassIndex()),
                 adjustProto(methodId.getProtoIndex()),
                 adjustString(methodId.getNameIndex()));
+    }
+
+    public CallSiteId adjust(CallSiteId callSiteId) {
+        return new CallSiteId(target, adjustEncodedArray(callSiteId.getCallSiteOffset()));
+    }
+
+    public MethodHandle adjust(MethodHandle methodHandle) {
+        return new MethodHandle(
+                target,
+                methodHandle.getMethodHandleType(),
+                methodHandle.getUnused1(),
+                methodHandle.getMethodHandleType().isField()
+                        ? adjustField(methodHandle.getFieldOrMethodId())
+                        : adjustMethod(methodHandle.getFieldOrMethodId()),
+                methodHandle.getUnused2());
     }
 
     public FieldId adjust(FieldId fieldId) {
@@ -281,6 +312,16 @@ public final class IndexMap {
             case ENCODED_DOUBLE:
                 EncodedValueCodec.writeRightZeroExtendedValue(
                         out, ENCODED_DOUBLE, Double.doubleToLongBits(reader.readDouble()));
+                break;
+            case ENCODED_METHOD_TYPE:
+                EncodedValueCodec.writeUnsignedIntegralValue(
+                        out, ENCODED_METHOD_TYPE, adjustProto(reader.readMethodType()));
+                break;
+            case ENCODED_METHOD_HANDLE:
+                EncodedValueCodec.writeUnsignedIntegralValue(
+                        out,
+                        ENCODED_METHOD_HANDLE,
+                        adjustMethodHandle(reader.readMethodHandle()));
                 break;
             case ENCODED_STRING:
                 EncodedValueCodec.writeUnsignedIntegralValue(
