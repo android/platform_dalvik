@@ -37,6 +37,8 @@ final class InstructionTransformer {
         this.reader.setTypeVisitor(new TypeVisitor());
         this.reader.setFieldVisitor(new FieldVisitor());
         this.reader.setMethodVisitor(new MethodVisitor());
+        this.reader.setMethodAndProtoVisitor(new MethodAndProtoVisitor());
+        this.reader.setCallSiteVisitor(new CallSiteVisitor());
     }
 
     public short[] transform(IndexMap indexMap, short[] encodedInstructions) throws DexException {
@@ -103,6 +105,25 @@ final class InstructionTransformer {
             boolean isJumbo = (one.getOpcode() == Opcodes.CONST_STRING_JUMBO);
             jumboCheck(isJumbo, mappedId);
             mappedInstructions[mappedAt++] = one.withIndex(mappedId);
+        }
+    }
+
+    private class MethodAndProtoVisitor implements CodeReader.Visitor {
+        @Override
+        public void visit(DecodedInstruction[] all, DecodedInstruction one) {
+            int methodId = one.getIndex();
+            int protoId = one.getProtoIndex();
+            mappedInstructions[mappedAt++] =
+                one.withProtoIndex(indexMap.adjustMethod(methodId), indexMap.adjustProto(protoId));
+        }
+    }
+
+    private class CallSiteVisitor implements CodeReader.Visitor {
+        @Override
+        public void visit(DecodedInstruction[] all, DecodedInstruction one) {
+            int callSiteId = one.getIndex();
+            int mappedCallSiteId = indexMap.adjustCallSite(callSiteId);
+            mappedInstructions[mappedAt++] = one.withIndex(mappedCallSiteId);
         }
     }
 

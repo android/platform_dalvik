@@ -475,4 +475,14 @@ public abstract class DecodedInstruction {
      * with the given one.
      */
     public abstract DecodedInstruction withIndex(int newIndex);
+
+    /** Update the instruction with a new 45cc or 4rcc proto index. */
+    public DecodedInstruction withProtoIndex(int newIndex, int newProtoIndex) {
+        throw new IllegalStateException(getClass().toString());
+    }
+
+    /** Returns a 45cc or 4rcc proto index. */
+    public short getProtoIndex() {
+        throw new IllegalStateException(getClass().toString());
+    }
 }
