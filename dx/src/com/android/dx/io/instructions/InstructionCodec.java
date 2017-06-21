@@ -22,6 +22,9 @@ import com.android.dx.io.OpcodeInfo;
 import com.android.dx.io.Opcodes;
 import com.android.dx.util.Hex;
 import java.io.EOFException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 
 /**
  * Representation of an instruction format, which knows how to decode into
@@ -477,6 +480,7 @@ public enum InstructionCodec {
                     in.setBaseAddress(target, baseAddress);
                     break;
                 }
+                default: // fall out
             }
 
             return new OneRegisterDecodedInstruction(
@@ -607,22 +611,83 @@ public enum InstructionCodec {
     FORMAT_45CC() {
         @Override public DecodedInstruction decode(int opcodeUnit,
                 CodeInput in) throws EOFException {
-            return decodeRegisterList(this, opcodeUnit, in);
+            int opcode = byte0(opcodeUnit);
+            if (opcode != Opcodes.INVOKE_POLYMORPHIC) {
+              // 45cc isn't currently used for anything other than invoke-polymorphic.
+              // If that changes, add a more general DecodedInstruction for this format.
+              throw new UnsupportedOperationException(String.valueOf(opcode));
+            }
+            int g = nibble2(opcodeUnit);
+            int registerCount = nibble3(opcodeUnit);
+            int index = in.read();
+            int abcd = in.read();
+            int c = nibble0(abcd);
+            int d = nibble1(abcd);
+            int e = nibble2(abcd);
+            int f = nibble3(abcd);
+            int proto = in.read();
+            IndexType indexType = OpcodeInfo.getIndexType(opcode);
+
+            Deque<Integer> registers = new ArrayDeque<>(registerCount);
+            switch (registerCount) {
+                case 5:
+                    registers.addLast(g);
+                    // fall through
+                case 4:
+                    registers.addLast(f);
+                    // fall through
+                case 3:
+                    registers.addLast(e);
+                    // fall through
+                case 2:
+                    registers.addLast(d);
+                    // fall through
+                case 1:
+                    registers.addLast(c);
+                    break;
+                default:
+                    throw new DexException("bogus registerCount: " + Hex.uNibble(registerCount));
+            }
+            return new InvokePolymorphicDecodedInstruction(
+                    this, opcode, index, indexType, proto, new ArrayList<>(registers));
         }
 
         @Override public void encode(DecodedInstruction insn, CodeOutput out) {
-            encodeRegisterList(insn, out);
+            out.write(codeUnit(insn.getOpcode(),
+                            makeByte(insn.getE(), insn.getRegisterCount())),
+                    insn.getIndexUnit(),
+                    codeUnit(insn.getA(), insn.getB(), insn.getC(), insn.getD()),
+                    insn.getProtoIndex());
+
         }
     },
 
     FORMAT_4RCC() {
         @Override public DecodedInstruction decode(int opcodeUnit,
                 CodeInput in) throws EOFException {
-            return decodeRegisterList(this, opcodeUnit, in);
+            int opcode = byte0(opcodeUnit);
+            if (opcode != Opcodes.INVOKE_POLYMORPHIC_RANGE) {
+              // 4rcc isn't currently used for anything other than invoke-polymorphic.
+              // If that changes, add a more general DecodedInstruction for this format.
+              throw new UnsupportedOperationException(String.valueOf(opcode));
+            }
+            int registerCount = byte1(opcodeUnit);
+            int index = in.read();
+            int a = in.read();
+            int proto = in.read();
+            IndexType indexType = OpcodeInfo.getIndexType(opcode);
+            return new InvokePolymorphicRangeDecodedInstruction(
+                    this, opcode, index, indexType, a, registerCount, proto);
+
         }
 
         @Override public void encode(DecodedInstruction insn, CodeOutput out) {
-            encodeRegisterList(insn, out);
+            out.write(
+                    codeUnit(insn.getOpcode(), insn.getRegisterCount()),
+                    insn.getIndexUnit(),
+                    insn.getAUnit(),
+                    insn.getProtoIndex());
+
         }
     },
 
@@ -742,6 +807,7 @@ public enum InstructionCodec {
                     return new FillArrayDataPayloadDecodedInstruction(
                             this, opcodeUnit, array);
                 }
+                default: // fall out
             }
 
             throw new DexException("bogus element_width: "
@@ -831,6 +897,7 @@ public enum InstructionCodec {
                         format, opcode, index, indexType,
                         0, 0L,
                         a, b, c, d, e);
+            default: // fall out
         }
 
         throw new DexException("bogus registerCount: "

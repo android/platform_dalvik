@@ -18,6 +18,7 @@ package com.android.dex;
 
 import com.android.dex.Code.CatchHandler;
 import com.android.dex.Code.Try;
+import com.android.dex.MethodHandle.MethodHandleType;
 import com.android.dex.util.ByteInput;
 import com.android.dex.util.ByteOutput;
 import com.android.dex.util.FileUtils;
@@ -352,6 +353,7 @@ public final class Dex {
             return readShort() & 0xffff;
         }
 
+        @Override
         public byte readByte() {
             return data.get();
         }
@@ -437,6 +439,19 @@ public final class Dex {
             int returnTypeIndex = readInt();
             int parametersOffset = readInt();
             return new ProtoId(Dex.this, shortyIndex, returnTypeIndex, parametersOffset);
+        }
+
+        public CallSiteId readCallSiteId() {
+            int offset = readInt();
+            return new CallSiteId(Dex.this, offset);
+        }
+
+        public MethodHandle readMethodHandle() {
+            MethodHandleType methodHandleType = MethodHandleType.fromValue(readUnsignedShort());
+            readUnsignedShort(); // unused
+            int fieldOrMethodId = readUnsignedShort();
+            readUnsignedShort(); // unused
+            return new MethodHandle(Dex.this, methodHandleType, fieldOrMethodId);
         }
 
         public ClassDef readClassDef() {
@@ -625,6 +640,7 @@ public final class Dex {
             this.data.put(bytes);
         }
 
+        @Override
         public void writeByte(int b) {
             data.put((byte) b);
         }
@@ -782,6 +798,7 @@ public final class Dex {
     }
 
     private final class ClassDefIterable implements Iterable<ClassDef> {
+        @Override
         public Iterator<ClassDef> iterator() {
             return !tableOfContents.classDefs.exists()
                ? Collections.<ClassDef>emptySet().iterator()
