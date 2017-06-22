@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847f13d2_95b093e2",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T20:36:20Z",
+      "side": 1,
+      "message": "It\u0027d be good to have a mix of the teams touching this code to ensure everyone\u0027s in sync and in agreement\n\nSuggest:\n\nStudio:\ngavra@google.com and/or cmw@google.com\n\nART:\nnarayan@google.com and/or oth@google.com\n\nThanks",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 19
+      },
+      "revId": "e94ba6dc06720a9831c3378bc89ea29aeb7c6922",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
