@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "c3608f82_4ec33029",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79975161_ed9871cb",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "172a4f78_234f94ba",
         "filename": "dx/src/com/android/dex/MethodHandle.java",
         "patchSetId": 1
@@ -53,6 +71,30 @@
       "writtenOn": "2017-06-22T13:50:05Z",
       "side": 1,
       "message": "There are additional definitions not yet in the docs, please include as they are supported by dx compiling invoke-custom.\n\nDIRECT(0x06)\nCONSTRUCTOR(0x07)\nINTERFACE(0x08)\n\nSee defs in CstMethodHandle.",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 38,
+        "endChar": 49
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05277507_b426894c",
+        "filename": "dx/src/com/android/dex/MethodHandle.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "172a4f78_234f94ba",
       "range": {
         "startLine": 38,
         "startChar": 8,
@@ -82,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "9eb9acfb_16e77763",
+        "filename": "dx/src/com/android/dex/MethodHandle.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cfb8e95_8113a039",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03600454_c98f5467",
         "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
         "patchSetId": 1
@@ -93,6 +153,30 @@
       "writtenOn": "2017-06-22T13:50:05Z",
       "side": 1,
       "message": "nit: method, methodIndex.",
+      "range": {
+        "startLine": 622,
+        "startChar": 16,
+        "endLine": 622,
+        "endChar": 21
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25a63da4_7bbc27fc",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03600454_c98f5467",
       "range": {
         "startLine": 622,
         "startChar": 16,
@@ -128,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "34f08cee_f279e8d8",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57a2417c_bd428fe9",
+      "range": {
+        "startLine": 623,
+        "startChar": 16,
+        "endLine": 623,
+        "endChar": 20
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5048465f_bb6fc863",
         "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
         "patchSetId": 1
@@ -139,6 +247,30 @@
       "writtenOn": "2017-06-22T13:50:05Z",
       "side": 1,
       "message": "Less verbose to just use an array for all the registers and then get the ones required with Arrays.copyOfRange().",
+      "range": {
+        "startLine": 631,
+        "startChar": 12,
+        "endLine": 631,
+        "endChar": 36
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3bf4791c_9f583c31",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5048465f_bb6fc863",
       "range": {
         "startLine": 631,
         "startChar": 12,
@@ -174,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "68fec009_d19e6f4d",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec394ce7_dcf06577",
+      "range": {
+        "startLine": 675,
+        "startChar": 16,
+        "endLine": 675,
+        "endChar": 21
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24ba2998_0e296b07",
         "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
         "patchSetId": 1
@@ -185,6 +341,30 @@
       "writtenOn": "2017-06-22T13:50:05Z",
       "side": 1,
       "message": "s/ a / c /\n\nhttps://source.android.com/devices/tech/dalvik/instruction-formats",
+      "range": {
+        "startLine": 676,
+        "startChar": 16,
+        "endLine": 676,
+        "endChar": 17
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26f89581_57ab29ed",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24ba2998_0e296b07",
       "range": {
         "startLine": 676,
         "startChar": 16,
@@ -214,6 +394,24 @@
     },
     {
       "key": {
+        "uuid": "4ebc6bb9_681eebe3",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b04525fc_0c11fcaf",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce93fcfe_0e44d187",
         "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
         "patchSetId": 1
@@ -231,6 +429,24 @@
     },
     {
       "key": {
+        "uuid": "b97ce74f_61cecf64",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce93fcfe_0e44d187",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "047f047c_a2d539cb",
         "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
         "patchSetId": 1
@@ -242,6 +458,30 @@
       "writtenOn": "2017-06-22T13:50:05Z",
       "side": 1,
       "message": "It\u0027d be good to align the register names with the public docs.",
+      "range": {
+        "startLine": 60,
+        "startChar": 14,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "301d3852_94c7d0bd",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done. I wasn\u0027t sure if anything depended on the methods in DecodedInstruction being overridden, but it doesn\u0027t seem to be an issue.",
+      "parentUuid": "047f047c_a2d539cb",
       "range": {
         "startLine": 60,
         "startChar": 14,
@@ -277,6 +517,30 @@
     },
     {
       "key": {
+        "uuid": "80dff41c_321037f5",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Yes, thanks, fixed.",
+      "parentUuid": "439251b9_1c00f9dd",
+      "range": {
+        "startLine": 81,
+        "startChar": 57,
+        "endLine": 81,
+        "endChar": 58
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "863ae219_19f4ab43",
         "filename": "dx/src/com/android/dx/merge/IndexMap.java",
         "patchSetId": 1
@@ -300,6 +564,30 @@
     },
     {
       "key": {
+        "uuid": "cbe1f587_93e03b28",
+        "filename": "dx/src/com/android/dx/merge/IndexMap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "863ae219_19f4ab43",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 36
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5600100_40f54f41",
         "filename": "dx/src/com/android/dx/merge/IndexMap.java",
         "patchSetId": 1
@@ -311,6 +599,30 @@
       "writtenOn": "2017-06-22T13:50:05Z",
       "side": 1,
       "message": "Move this below the com.android.dex class imports.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 39
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "edd356e3_7366dc28",
+        "filename": "dx/src/com/android/dx/merge/IndexMap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1084983
+      },
+      "writtenOn": "2017-06-22T22:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5600100_40f54f41",
       "range": {
         "startLine": 22,
         "startChar": 0,
