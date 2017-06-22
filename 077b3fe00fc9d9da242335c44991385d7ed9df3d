@@ -1,0 +1,325 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aec52ff_8dc79a49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Please add a test that includes invoke-polymorphic and invoke-custom in files to be merged. It\u0027d also be good to check the DEX file invariants are preserved by running it through ART too (not in the test) but before checking in.\n\nThere is a test for invoke-custom as of today in dx/tests/135-invoke-custom that\u0027ll point the way to generating constant method handles and call sites.",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79975161_ed9871cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Bug: 36641082",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "172a4f78_234f94ba",
+        "filename": "dx/src/com/android/dex/MethodHandle.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "There are additional definitions not yet in the docs, please include as they are supported by dx compiling invoke-custom.\n\nDIRECT(0x06)\nCONSTRUCTOR(0x07)\nINTERFACE(0x08)\n\nSee defs in CstMethodHandle.",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 38,
+        "endChar": 49
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cfb8e95_8113a039",
+        "filename": "dx/src/com/android/dex/MethodHandle.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "For future proofing, this constructor would be better if it include the reserved fields and these values were emitted in writeTo().",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03600454_c98f5467",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "nit: method, methodIndex.",
+      "range": {
+        "startLine": 622,
+        "startChar": 16,
+        "endLine": 622,
+        "endChar": 21
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57a2417c_bd428fe9",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "cdef\n\nhttps://source.android.com/devices/tech/dalvik/instruction-formats",
+      "range": {
+        "startLine": 623,
+        "startChar": 16,
+        "endLine": 623,
+        "endChar": 20
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5048465f_bb6fc863",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Less verbose to just use an array for all the registers and then get the ones required with Arrays.copyOfRange().",
+      "range": {
+        "startLine": 631,
+        "startChar": 12,
+        "endLine": 631,
+        "endChar": 36
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec394ce7_dcf06577",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "nit: method, methodIndex.",
+      "range": {
+        "startLine": 675,
+        "startChar": 16,
+        "endLine": 675,
+        "endChar": 21
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "24ba2998_0e296b07",
+        "filename": "dx/src/com/android/dx/io/instructions/InstructionCodec.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "s/ a / c /\n\nhttps://source.android.com/devices/tech/dalvik/instruction-formats",
+      "range": {
+        "startLine": 676,
+        "startChar": 16,
+        "endLine": 676,
+        "endChar": 17
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b04525fc_0c11fcaf",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "methodIndex, method.",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce93fcfe_0e44d187",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Please add a comment explaining why this throw is okay or make the exception message more explicit as to why.",
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "047f047c_a2d539cb",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "It\u0027d be good to align the register names with the public docs.",
+      "range": {
+        "startLine": 60,
+        "startChar": 14,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "439251b9_1c00f9dd",
+        "filename": "dx/src/com/android/dx/io/instructions/InvokePolymorphicDecodedInstruction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Unclear about the fallback return values here. Debugging aid?",
+      "range": {
+        "startLine": 81,
+        "startChar": 57,
+        "endLine": 81,
+        "endChar": 58
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "863ae219_19f4ab43",
+        "filename": "dx/src/com/android/dx/merge/IndexMap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Out of alpha order.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 36
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5600100_40f54f41",
+        "filename": "dx/src/com/android/dx/merge/IndexMap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-22T13:50:05Z",
+      "side": 1,
+      "message": "Move this below the com.android.dex class imports.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 39
+      },
+      "revId": "077b3fe00fc9d9da242335c44991385d7ed9df3d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
