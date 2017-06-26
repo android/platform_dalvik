@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7e88378_5fb7c717",
+        "filename": "dx/tests/137-dexmerger-dex38/build",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-06-26T22:16:36Z",
+      "side": 1,
+      "message": "Is it possible to use a different name than \u0027build\u0027? This causes issues with our bazel build that crawls entire workspace and looks for BUILD files (there is currently no support to exclude some dirs). We run tests on case-insensitive file systems (Mac and Win), and this breaks us. 135-invoke-custom already adds file with the same name, so it would be great to rename that one as well.",
+      "revId": "154c5068864acea0265cd9c2864efa94ff864da8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
