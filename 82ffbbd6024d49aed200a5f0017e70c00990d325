@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44b38a98_4b3917be",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2017-06-27T21:24:24Z",
+      "side": 1,
+      "message": "pardon the very nitpick, but would you mind using the same order in the decl (invoke/instance) and here in the code (instance/invoke); either order is fine, as long as they are all the same",
+      "revId": "82ffbbd6024d49aed200a5f0017e70c00990d325",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
