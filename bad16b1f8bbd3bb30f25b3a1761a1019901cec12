@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1211cf0_f670ae28",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1920,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2017-06-28T21:16:03Z",
+      "side": 1,
+      "message": "dead code: break;",
+      "revId": "bad16b1f8bbd3bb30f25b3a1761a1019901cec12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
