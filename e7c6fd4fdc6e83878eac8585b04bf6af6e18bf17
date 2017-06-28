@@ -16,6 +16,24 @@
       "revId": "e7c6fd4fdc6e83878eac8585b04bf6af6e18bf17",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34d18e9e_991a3a51",
+        "filename": "dx/tests/138-invoke-polymorphic-again/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-28T15:23:39Z",
+      "side": 1,
+      "message": "It turns out that none of the invocations do. The presence of return information for these is determined in RopperMachine.run().",
+      "parentUuid": "9cdca297_339c5775",
+      "revId": "e7c6fd4fdc6e83878eac8585b04bf6af6e18bf17",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
