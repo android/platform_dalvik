@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cdca297_339c5775",
+        "filename": "dx/tests/138-invoke-polymorphic-again/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1021471
+      },
+      "writtenOn": "2017-06-28T13:55:22Z",
+      "side": 1,
+      "message": "If it doesn\u0027t have a return result how does something like this work?",
+      "revId": "e7c6fd4fdc6e83878eac8585b04bf6af6e18bf17",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
