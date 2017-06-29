@@ -21,7 +21,7 @@ import com.android.dx.rop.cst.CstFloat;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstLong;
 import com.android.dx.rop.cst.CstMethodHandle;
-import com.android.dx.rop.cst.CstMethodType;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.util.FixedSizeList;
@@ -65,7 +65,7 @@ public class BootstrapMethodArgumentsList extends FixedSizeList {
             cst instanceof CstFloat ||
             cst instanceof CstDouble ||
             cst instanceof CstMethodHandle ||
-            cst instanceof CstMethodType) {
+            cst instanceof CstProtoRef) {
             set0(n, cst);
         } else {
             Class<?> klass = cst.getClass();

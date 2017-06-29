@@ -42,8 +42,8 @@ import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstLong;
 import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstMethodRef;
-import com.android.dx.rop.cst.CstMethodType;
 import com.android.dx.rop.cst.CstNat;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.cst.StdConstantPool;
@@ -374,7 +374,7 @@ public final class ConstantPoolParser {
                 case CONSTANT_MethodType: {
                     int descriptorIndex = bytes.getUnsignedShort(at + 1);
                     CstString descriptor = (CstString) parse0(descriptorIndex, wasUtf8);
-                    cst = CstMethodType.make(descriptor);
+                    cst = CstProtoRef.make(descriptor);
                     break;
                 }
                 case CONSTANT_InvokeDynamic: {

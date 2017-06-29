@@ -20,13 +20,25 @@ import com.android.dx.rop.type.Prototype;
 /**
  * Prototype reference.
  */
-public class CstProtoRef extends Constant {
+public final class CstProtoRef extends Constant {
 
     /** {@code non-null;} the prototype */
     private final Prototype prototype;
 
     public CstProtoRef(Prototype prototype) {
         this.prototype = prototype;
+    }
+
+    /**
+     * Makes an instance for the given value. This may (but does not
+     * necessarily) return an already-allocated instance.
+     *
+     * @param descriptor the method descriptor
+     * @return {@code non-null;} the appropriate instance
+     */
+    public static CstProtoRef make(CstString descriptor) {
+        Prototype prototype = Prototype.fromDescriptor(descriptor.getString());
+        return new CstProtoRef(prototype);
     }
 
     /** {@inheritDoc} */
