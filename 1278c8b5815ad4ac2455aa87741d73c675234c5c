@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2528f566_798060fe",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2017-06-29T22:38:42Z",
+      "side": 1,
+      "message": "just as a matter of (surrounding) style\n\nif (!c) would be more consistent then if (c \u003d\u003d false)",
+      "revId": "1278c8b5815ad4ac2455aa87741d73c675234c5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b449e94_11890af6",
+        "filename": "dexdump/DexDump.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1074526
+      },
+      "writtenOn": "2017-06-29T22:38:42Z",
+      "side": 1,
+      "message": "same",
+      "revId": "1278c8b5815ad4ac2455aa87741d73c675234c5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
