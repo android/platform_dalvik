@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a371f8d0_5d1821bd",
+        "filename": "dx/tests/139-lambda-metafactory/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-06-29T10:24:04Z",
+      "side": 1,
+      "message": "Missing copyright",
+      "revId": "d440ca9a31aa06a98039f56d8838d6d96a3a3268",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
