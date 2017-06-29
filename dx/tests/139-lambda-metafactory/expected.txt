@@ -1,0 +1,881 @@
+Note: Main.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+000000: 6465 780a 3033 3800     |magic: "dex\n038\0"
+000008: 0b09 8ceb               |checksum
+00000c: 58f3 aefc 1fe5 e7b3 cb99|signature
+000016: 31ee 6fcf 484a 1019 6918|
+000020: 3c07 0000               |file_size:       0000073c
+000024: 7000 0000               |header_size:     00000070
+000028: 7856 3412               |endian_tag:      12345678
+00002c: 0000 0000               |link_size:       0
+000030: 0000 0000               |link_off:        0
+000034: 5406 0000               |map_off:         00000654
+000038: 2c00 0000               |string_ids_size: 0000002c
+00003c: 7000 0000               |string_ids_off:  00000070
+000040: 1100 0000               |type_ids_size:   00000011
+000044: 2001 0000               |type_ids_off:    00000120
+000048: 0900 0000               |proto_ids_size:  00000009
+00004c: 6401 0000               |proto_ids_off:   00000164
+000050: 0200 0000               |field_ids_size:  00000002
+000054: d001 0000               |field_ids_off:   000001d0
+000058: 0b00 0000               |method_ids_size: 0000000b
+00005c: e001 0000               |method_ids_off:  000001e0
+000060: 0300 0000               |class_defs_size: 00000003
+000064: 3802 0000               |class_defs_off:  00000238
+000068: 8c04 0000               |data_size:       0000048c
+00006c: b002 0000               |data_off:        000002b0
+                                |
+                                |string_ids:
+                                |[0] "(TT;)V"
+000070: be03 0000               |  string_data_off: 000003be
+                                |[1] "<T:"
+000074: c603 0000               |  string_data_off: 000003c6
+                                |[2] "<init>"
+000078: cb03 0000               |  string_data_off: 000003cb
+                                |[3] ">"
+00007c: d303 0000               |  string_data_off: 000003d3
+                                |[4] "I"
+000080: d603 0000               |  string_data_off: 000003d6
+                                |[5] "LConsumer;"
+000084: d903 0000               |  string_data_off: 000003d9
+                                |[6] "LFoo;"
+000088: e503 0000               |  string_data_off: 000003e5
+                                |[7] "LI"
+00008c: ec03 0000               |  string_data_off: 000003ec
+                                |[8] "LLI"
+000090: f003 0000               |  string_data_off: 000003f0
+                                |[9] "LLLLLLL"
+000094: f503 0000               |  string_data_off: 000003f5
+                                |[a] "LMain;"
+000098: fe03 0000               |  string_data_off: 000003fe
+                                |[b] "Ldalvik/annotation/Signature;"
+00009c: 0604 0000               |  string_data_off: 00000406
+                                |[c] "Ljava/io/PrintStream;"
+0000a0: 2504 0000               |  string_data_off: 00000425
+                                |[d] "Ljava/lang/Integer;"
+0000a4: 3c04 0000               |  string_data_off: 0000043c
+                                |[e] "Ljava/lang/Object;"
+0000a8: 5104 0000               |  string_data_off: 00000451
+                                |[f] "Ljava/lang/String;"
+0000ac: 6504 0000               |  string_data_off: 00000465
+                                |[10] "Ljava/lang/System;"
+0000b0: 7904 0000               |  string_data_off: 00000479
+                                |[11] "Ljava/lang/invoke/CallSite;"
+0000b4: 8d04 0000               |  string_data_off: 0000048d
+                                |[12] "Ljava/lang/invoke/LambdaMetafactory;"
+0000b8: aa04 0000               |  string_data_off: 000004aa
+                                |[13] "Ljava/lang/invoke/MethodHandle;"
+0000bc: d004 0000               |  string_data_off: 000004d0
+                                |[14] "Ljava/lang/invoke/MethodHandles$Lookup;"
+0000c0: f104 0000               |  string_data_off: 000004f1
+                                |[15] "Ljava/lang/invoke/MethodType;"
+0000c4: 1a05 0000               |  string_data_off: 0000051a
+                                |[16] "Main.java"
+0000c8: 3905 0000               |  string_data_off: 00000539
+                                |[17] "V"
+0000cc: 4405 0000               |  string_data_off: 00000544
+                                |[18] "VI"
+0000d0: 4705 0000               |  string_data_off: 00000547
+                                |[19] "VIL"
+0000d4: 4b05 0000               |  string_data_off: 0000054b
+                                |[1a] "VL"
+0000d8: 5005 0000               |  string_data_off: 00000550
+                                |[1b] "[Ljava/lang/String;"
+0000dc: 5405 0000               |  string_data_off: 00000554
+                                |[1c] "accept"
+0000e0: 6905 0000               |  string_data_off: 00000569
+                                |[1d] "args"
+0000e4: 7105 0000               |  string_data_off: 00000571
+                                |[1e] "bar"
+0000e8: 7705 0000               |  string_data_off: 00000577
+                                |[1f] "consumer"
+0000ec: 7c05 0000               |  string_data_off: 0000057c
+                                |[20] "i"
+0000f0: 8605 0000               |  string_data_off: 00000586
+                                |[21] "intValue"
+0000f4: 8905 0000               |  string_data_off: 00000589
+                                |[22] "j"
+0000f8: 9305 0000               |  string_data_off: 00000593
+                                |[23] "k"
+0000fc: 9605 0000               |  string_data_off: 00000596
+                                |[24] "lambda$bar$0"
+000100: 9905 0000               |  string_data_off: 00000599
+                                |[25] "main"
+000104: a705 0000               |  string_data_off: 000005a7
+                                |[26] "metafactory"
+000108: ad05 0000               |  string_data_off: 000005ad
+                                |[27] "out"
+00010c: ba05 0000               |  string_data_off: 000005ba
+                                |[28] "println"
+000110: bf05 0000               |  string_data_off: 000005bf
+                                |[29] "this"
+000114: c805 0000               |  string_data_off: 000005c8
+                                |[2a] "value"
+000118: ce05 0000               |  string_data_off: 000005ce
+                                |[2b] "valueOf"
+00011c: d505 0000               |  string_data_off: 000005d5
+                                |
+                                |type_ids:
+                                |[0] I
+000120: 0400 0000               |  descriptor_idx: 00000004
+                                |[1] LConsumer;
+000124: 0500 0000               |  descriptor_idx: 00000005
+                                |[2] LFoo;
+000128: 0600 0000               |  descriptor_idx: 00000006
+                                |[3] LMain;
+00012c: 0a00 0000               |  descriptor_idx: 0000000a
+                                |[4] Ldalvik/annotation/Signature;
+000130: 0b00 0000               |  descriptor_idx: 0000000b
+                                |[5] Ljava/io/PrintStream;
+000134: 0c00 0000               |  descriptor_idx: 0000000c
+                                |[6] Ljava/lang/Integer;
+000138: 0d00 0000               |  descriptor_idx: 0000000d
+                                |[7] Ljava/lang/Object;
+00013c: 0e00 0000               |  descriptor_idx: 0000000e
+                                |[8] Ljava/lang/String;
+000140: 0f00 0000               |  descriptor_idx: 0000000f
+                                |[9] Ljava/lang/System;
+000144: 1000 0000               |  descriptor_idx: 00000010
+                                |[a] Ljava/lang/invoke/CallSite;
+000148: 1100 0000               |  descriptor_idx: 00000011
+                                |[b] Ljava/lang/invoke/LambdaMetafactory;
+00014c: 1200 0000               |  descriptor_idx: 00000012
+                                |[c] Ljava/lang/invoke/MethodHandle;
+000150: 1300 0000               |  descriptor_idx: 00000013
+                                |[d] Ljava/lang/invoke/MethodHandles$Lookup;
+000154: 1400 0000               |  descriptor_idx: 00000014
+                                |[e] Ljava/lang/invoke/MethodType;
+000158: 1500 0000               |  descriptor_idx: 00000015
+                                |[f] V
+00015c: 1700 0000               |  descriptor_idx: 00000017
+                                |[10] [Ljava/lang/String;
+000160: 1b00 0000               |  descriptor_idx: 0000001b
+                                |
+                                |proto_ids:
+                                |[0] int proto()
+000164: 0400 0000               |  shorty_idx:      00000004 // "I"
+000168: 0000 0000               |  return_type_idx: 00000000 // int
+00016c: 0000 0000               |  parameters_off:  00000000
+                                |[1] Consumer proto(Foo, int)
+000170: 0800 0000               |  shorty_idx:      00000008 // "LLI"
+000174: 0100 0000               |  return_type_idx: 00000001 // Consumer
+000178: 8803 0000               |  parameters_off:  00000388
+                                |[2] java.lang.Integer proto(int)
+00017c: 0700 0000               |  shorty_idx:      00000007 // "LI"
+000180: 0600 0000               |  return_type_idx: 00000006 // java.lang.Integer
+000184: 9003 0000               |  parameters_off:  00000390
+                                |[3] java.lang.invoke.CallSite proto(java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType)
+000188: 0900 0000               |  shorty_idx:      00000009 // "LLLLLLL"
+00018c: 0a00 0000               |  return_type_idx: 0000000a // java.lang.invoke.CallSite
+000190: 9803 0000               |  parameters_off:  00000398
+                                |[4] void proto()
+000194: 1700 0000               |  shorty_idx:      00000017 // "V"
+000198: 0f00 0000               |  return_type_idx: 0000000f // void
+00019c: 0000 0000               |  parameters_off:  00000000
+                                |[5] void proto(int)
+0001a0: 1800 0000               |  shorty_idx:      00000018 // "VI"
+0001a4: 0f00 0000               |  return_type_idx: 0000000f // void
+0001a8: 9003 0000               |  parameters_off:  00000390
+                                |[6] void proto(int, java.lang.Object)
+0001ac: 1900 0000               |  shorty_idx:      00000019 // "VIL"
+0001b0: 0f00 0000               |  return_type_idx: 0000000f // void
+0001b4: a803 0000               |  parameters_off:  000003a8
+                                |[7] void proto(java.lang.Object)
+0001b8: 1a00 0000               |  shorty_idx:      0000001a // "VL"
+0001bc: 0f00 0000               |  return_type_idx: 0000000f // void
+0001c0: b003 0000               |  parameters_off:  000003b0
+                                |[8] void proto(java.lang.String[])
+0001c4: 1a00 0000               |  shorty_idx:      0000001a // "VL"
+0001c8: 0f00 0000               |  return_type_idx: 0000000f // void
+0001cc: b803 0000               |  parameters_off:  000003b8
+                                |
+                                |field_ids:
+                                |[0] Foo.i:I
+0001d0: 0200                    |  class_idx: 0002
+0001d2: 0000                    |  type_idx:  0000
+0001d4: 2000 0000               |  name_idx:  00000020
+                                |[1] java.lang.System.out:Ljava/io/PrintStream;
+0001d8: 0900                    |  class_idx: 0009
+0001da: 0500                    |  type_idx:  0005
+0001dc: 2700 0000               |  name_idx:  00000027
+                                |
+                                |method_ids:
+                                |[0] Consumer.accept:(Ljava/lang/Object;)V
+0001e0: 0100                    |  class_idx: 0001
+0001e2: 0700                    |  proto_idx: 0007
+0001e4: 1c00 0000               |  name_idx:  0000001c
+                                |[1] Foo.<init>:()V
+0001e8: 0200                    |  class_idx: 0002
+0001ea: 0400                    |  proto_idx: 0004
+0001ec: 0200 0000               |  name_idx:  00000002
+                                |[2] Foo.bar:(I)V
+0001f0: 0200                    |  class_idx: 0002
+0001f2: 0500                    |  proto_idx: 0005
+0001f4: 1e00 0000               |  name_idx:  0000001e
+                                |[3] Foo.lambda$bar$0:(ILjava/lang/Object;)V
+0001f8: 0200                    |  class_idx: 0002
+0001fa: 0600                    |  proto_idx: 0006
+0001fc: 2400 0000               |  name_idx:  00000024
+                                |[4] Main.<init>:()V
+000200: 0300                    |  class_idx: 0003
+000202: 0400                    |  proto_idx: 0004
+000204: 0200 0000               |  name_idx:  00000002
+                                |[5] Main.main:([Ljava/lang/String;)V
+000208: 0300                    |  class_idx: 0003
+00020a: 0800                    |  proto_idx: 0008
+00020c: 2500 0000               |  name_idx:  00000025
+                                |[6] java.io.PrintStream.println:(I)V
+000210: 0500                    |  class_idx: 0005
+000212: 0500                    |  proto_idx: 0005
+000214: 2800 0000               |  name_idx:  00000028
+                                |[7] java.lang.Integer.intValue:()I
+000218: 0600                    |  class_idx: 0006
+00021a: 0000                    |  proto_idx: 0000
+00021c: 2100 0000               |  name_idx:  00000021
+                                |[8] java.lang.Integer.valueOf:(I)Ljava/lang/Integer;
+000220: 0600                    |  class_idx: 0006
+000222: 0200                    |  proto_idx: 0002
+000224: 2b00 0000               |  name_idx:  0000002b
+                                |[9] java.lang.Object.<init>:()V
+000228: 0700                    |  class_idx: 0007
+00022a: 0400                    |  proto_idx: 0004
+00022c: 0200 0000               |  name_idx:  00000002
+                                |[a] java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+000230: 0b00                    |  class_idx: 000b
+000232: 0300                    |  proto_idx: 0003
+000234: 2600 0000               |  name_idx:  00000026
+                                |
+                                |class_defs:
+                                |[0] Consumer
+000238: 0100 0000               |  class_idx:           00000001
+00023c: 0006 0000               |  access_flags:        interface|abstract
+000240: 0700 0000               |  superclass_idx:      00000007 // java.lang.Object
+000244: 0000 0000               |  interfaces_off:      00000000
+000248: 1600 0000               |  source_file_idx:     00000016 // Main.java
+00024c: 7003 0000               |  annotations_off:     00000370
+000250: 2906 0000               |  class_data_off:      00000629
+000254: 0000 0000               |  static_values_off:   00000000
+                                |[1] Foo
+000258: 0200 0000               |  class_idx:           00000002
+00025c: 0000 0000               |  access_flags:        0000
+000260: 0700 0000               |  superclass_idx:      00000007 // java.lang.Object
+000264: 0000 0000               |  interfaces_off:      00000000
+000268: 1600 0000               |  source_file_idx:     00000016 // Main.java
+00026c: 0000 0000               |  annotations_off:     00000000
+000270: 3106 0000               |  class_data_off:      00000631
+000274: 0000 0000               |  static_values_off:   00000000
+                                |[2] Main
+000278: 0300 0000               |  class_idx:           00000003
+00027c: 0000 0000               |  access_flags:        0000
+000280: 0700 0000               |  superclass_idx:      00000007 // java.lang.Object
+000284: 0000 0000               |  interfaces_off:      00000000
+000288: 1600 0000               |  source_file_idx:     00000016 // Main.java
+00028c: 0000 0000               |  annotations_off:     00000000
+000290: 4606 0000               |  class_data_off:      00000646
+000294: 0000 0000               |  static_values_off:   00000000
+                                |
+                                |call_site_ids:
+                                |[0] call site{method-handle{invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}, string{"accept"}, proto{(LFoo;I)LConsumer;}, proto{(Ljava/lang/Object;)V}, method-handle{invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}}, proto{(Ljava/lang/Object;)V}}
+000298: 1c06 0000               |call_site_off: 0000061c
+                                |[1] call site{method-handle{invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}, string{"accept"}, proto{(LFoo;I)LConsumer;}, proto{(Ljava/lang/Object;)V}, method-handle{invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}}, proto{(Ljava/lang/Object;)V}}
+00029c: 1c06 0000               |call_site_off: 0000061c
+                                |
+                                |method_handles:
+0002a0: 0400                    |kind: 0004
+0002a2: 0000                    |reserved:0000
+0002a4: 0a00                    |methodId: 10
+0002a6: 0000                    |reserved:0000
+0002a8: 0700                    |kind: 0007
+0002aa: 0000                    |reserved:0000
+0002ac: 0300                    |methodId: 3
+0002ae: 0000                    |reserved:0000
+                                |
+                                |word_data:
+                                |[2b0] annotation set
+0002b0: 0100 0000               |  size: 00000001
+0002b4: 0606 0000               |  entries[0]: 00000606
+                                |    visibility: system
+                                |    type: dalvik.annotation.Signature
+                                |    value: array {<T:, Ljava/lang/Object;, >, Ljava/lang/Object;}
+                                |
+                                |[2b8] annotation set
+0002b8: 0100 0000               |  size: 00000001
+0002bc: 1406 0000               |  entries[0]: 00000614
+                                |    visibility: system
+                                |    type: dalvik.annotation.Signature
+                                |    value: array {(TT;)V}
+                                |
+                                |[2c0] Foo.<init>:()V
+0002c0: 0100                    |  registers_size: 0001
+0002c2: 0100                    |  ins_size:       0001
+0002c4: 0100                    |  outs_size:      0001
+0002c6: 0000                    |  tries_size:     0000
+0002c8: de05 0000               |  debug_off:      000005de
+0002cc: 0400 0000               |  insns_size:     00000004
+0002d0: 7010 0900 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0009
+0002d6: 0e00                    |  0003: return-void
+                                |  debug info
+                                |    line_start: 5
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 5
+                                |    end sequence
+                                |
+                                |[2d8] Foo.lambda$bar$0:(ILjava/lang/Object;)V
+0002d8: 0600                    |  registers_size: 0006
+0002da: 0300                    |  ins_size:       0003
+0002dc: 0200                    |  outs_size:      0002
+0002de: 0000                    |  tries_size:     0000
+0002e0: e305 0000               |  debug_off:      000005e3
+0002e4: 1000 0000               |  insns_size:     00000010
+0002e8: 6200 0100               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0001
+0002ec: 5231 0000               |  0002: iget v1, v3, Foo.i:I // field@0000
+0002f0: b041                    |  0004: add-int/2addr v1, v4
+0002f2: 1f05 0600               |  0005: check-cast v5, java.lang.Integer // type@0006
+0002f6: 6e10 0700 0500          |  0007: invoke-virtual {v5}, java.lang.Integer.intValue:()I // method@0007
+0002fc: 0a02                    |  000a: move-result v2
+0002fe: b021                    |  000b: add-int/2addr v1, v2
+000300: 6e20 0600 1000          |  000c: invoke-virtual {v0, v1}, java.io.PrintStream.println:(I)V // method@0006
+000306: 0e00                    |  000f: return-void
+                                |  debug info
+                                |    line_start: 8
+                                |    parameters_size: 0002
+                                |    parameter <unnamed> v4
+                                |    parameter k v5
+                                |    0000: prologue end
+                                |    0000: line 8
+                                |    0007: advance pc
+                                |    0007: -local v5 k java.lang.Object
+                                |    end sequence
+                                |
+                                |[308] Foo.bar:(I)V
+000308: 0400                    |  registers_size: 0004
+00030a: 0200                    |  ins_size:       0002
+00030c: 0200                    |  outs_size:      0002
+00030e: 0000                    |  tries_size:     0000
+000310: ee05 0000               |  debug_off:      000005ee
+000314: 0d00 0000               |  insns_size:     0000000d
+000318: fc20 0100 3200          |  0000: invoke-custom {v2, v3}, {invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}, accept, (LFoo;I)LConsumer;, (Ljava/lang/Object;)V, invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}, (Ljava/lang/Object;)V} // CallSiteRef@0001
+00031e: 0c00                    |  0003: move-result-object v0
+000320: 1211                    |  0004: const/4 v1, #int 1 // #1
+000322: 7110 0800 0100          |  0005: invoke-static {v1}, java.lang.Integer.valueOf:(I)Ljava/lang/Integer; // method@0008
+000328: 0c01                    |  0008: move-result-object v1
+00032a: 7220 0000 1000          |  0009: invoke-interface {v0, v1}, Consumer.accept:(Ljava/lang/Object;)V // method@0000
+000330: 0e00                    |  000c: return-void
+                                |  debug info
+                                |    line_start: 8
+                                |    parameters_size: 0001
+                                |    parameter j v3
+                                |    0000: prologue end
+                                |    0000: line 8
+                                |    0004: line 9
+                                |    0004: +local v0 consumer Consumer
+                                |    000c: line 10
+                                |    end sequence
+                                |
+000332: 0000                    |
+                                |[334] Main.<init>:()V
+000334: 0100                    |  registers_size: 0001
+000336: 0100                    |  ins_size:       0001
+000338: 0100                    |  outs_size:      0001
+00033a: 0000                    |  tries_size:     0000
+00033c: fa05 0000               |  debug_off:      000005fa
+000340: 0400 0000               |  insns_size:     00000004
+000344: 7010 0900 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0009
+00034a: 0e00                    |  0003: return-void
+                                |  debug info
+                                |    line_start: 13
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 13
+                                |    end sequence
+                                |
+                                |[34c] Main.main:([Ljava/lang/String;)V
+00034c: 0300                    |  registers_size: 0003
+00034e: 0100                    |  ins_size:       0001
+000350: 0200                    |  outs_size:      0002
+000352: 0000                    |  tries_size:     0000
+000354: ff05 0000               |  debug_off:      000005ff
+000358: 0a00 0000               |  insns_size:     0000000a
+00035c: 2200 0200               |  0000: new-instance v0, Foo // type@0002
+000360: 7010 0100 0000          |  0002: invoke-direct {v0}, Foo.<init>:()V // method@0001
+000366: 1251                    |  0005: const/4 v1, #int 5 // #5
+000368: 6e20 0200 1000          |  0006: invoke-virtual {v0, v1}, Foo.bar:(I)V // method@0002
+00036e: 0e00                    |  0009: return-void
+                                |  debug info
+                                |    line_start: 15
+                                |    parameters_size: 0001
+                                |    parameter args v2
+                                |    0000: prologue end
+                                |    0000: line 15
+                                |    0009: line 16
+                                |    end sequence
+                                |
+                                |[370] annotations directory
+000370: b002 0000               |  class_annotations_off: 000002b0
+000374: 0000 0000               |  fields_size:           00000000
+000378: 0100 0000               |  methods_size:          00000001
+00037c: 0000 0000               |  parameters_size:       00000000
+                                |  methods:
+                                |    Consumer.accept:(Ljava/lang/Object;)V
+000380: 0000 0000               |      method_idx:      00000000
+000384: b802 0000               |      annotations_off: 000002b8
+                                |
+                                |[388] type_list
+000388: 0200 0000               |  size: 00000002
+00038c: 0200                    |  0002 // Foo
+00038e: 0000                    |  0000 // int
+                                |
+                                |[390] type_list
+000390: 0100 0000               |  size: 00000001
+000394: 0000                    |  0000 // int
+                                |
+000396: 0000                    |
+                                |[398] type_list
+000398: 0600 0000               |  size: 00000006
+00039c: 0d00                    |  000d // java.lang.invoke.MethodHandles$Lookup
+00039e: 0800                    |  0008 // java.lang.String
+0003a0: 0e00                    |  000e // java.lang.invoke.MethodType
+0003a2: 0e00                    |  000e // java.lang.invoke.MethodType
+0003a4: 0c00                    |  000c // java.lang.invoke.MethodHandle
+0003a6: 0e00                    |  000e // java.lang.invoke.MethodType
+                                |
+                                |[3a8] type_list
+0003a8: 0200 0000               |  size: 00000002
+0003ac: 0000                    |  0000 // int
+0003ae: 0700                    |  0007 // java.lang.Object
+                                |
+                                |[3b0] type_list
+0003b0: 0100 0000               |  size: 00000001
+0003b4: 0700                    |  0007 // java.lang.Object
+                                |
+0003b6: 0000                    |
+                                |[3b8] type_list
+0003b8: 0100 0000               |  size: 00000001
+0003bc: 1000                    |  0010 // java.lang.String[]
+                                |
+                                |string_data:
+0003be: 06                      |utf16_size: 00000006
+0003bf: 2854 543b 2956 00       |"(TT;)V"
+                                |
+0003c6: 03                      |utf16_size: 00000003
+0003c7: 3c54 3a00               |"<T:"
+                                |
+0003cb: 06                      |utf16_size: 00000006
+0003cc: 3c69 6e69 743e 00       |"<init>"
+                                |
+0003d3: 01                      |utf16_size: 00000001
+0003d4: 3e00                    |">"
+                                |
+0003d6: 01                      |utf16_size: 00000001
+0003d7: 4900                    |"I"
+                                |
+0003d9: 0a                      |utf16_size: 0000000a
+0003da: 4c43 6f6e 7375 6d65 723b|"LConsumer;"
+0003e4: 00                      |
+                                |
+0003e5: 05                      |utf16_size: 00000005
+0003e6: 4c46 6f6f 3b00          |"LFoo;"
+                                |
+0003ec: 02                      |utf16_size: 00000002
+0003ed: 4c49 00                 |"LI"
+                                |
+0003f0: 03                      |utf16_size: 00000003
+0003f1: 4c4c 4900               |"LLI"
+                                |
+0003f5: 07                      |utf16_size: 00000007
+0003f6: 4c4c 4c4c 4c4c 4c00     |"LLLLLLL"
+                                |
+0003fe: 06                      |utf16_size: 00000006
+0003ff: 4c4d 6169 6e3b 00       |"LMain;"
+                                |
+000406: 1d                      |utf16_size: 0000001d
+000407: 4c64 616c 7669 6b2f 616e|"Ldalvik/annotation/Signature;"
+000411: 6e6f 7461 7469 6f6e 2f53|
+00041b: 6967 6e61 7475 7265 3b00|
+                                |
+000425: 15                      |utf16_size: 00000015
+000426: 4c6a 6176 612f 696f 2f50|"Ljava/io/PrintStream;"
+000430: 7269 6e74 5374 7265 616d|
+00043a: 3b00                    |
+                                |
+00043c: 13                      |utf16_size: 00000013
+00043d: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Integer;"
+000447: 2f49 6e74 6567 6572 3b00|
+                                |
+000451: 12                      |utf16_size: 00000012
+000452: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Object;"
+00045c: 2f4f 626a 6563 743b 00  |
+                                |
+000465: 12                      |utf16_size: 00000012
+000466: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/String;"
+000470: 2f53 7472 696e 673b 00  |
+                                |
+000479: 12                      |utf16_size: 00000012
+00047a: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/System;"
+000484: 2f53 7973 7465 6d3b 00  |
+                                |
+00048d: 1b                      |utf16_size: 0000001b
+00048e: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/CallSite;"
+000498: 2f69 6e76 6f6b 652f 4361|
+0004a2: 6c6c 5369 7465 3b00     |
+                                |
+0004aa: 24                      |utf16_size: 00000024
+0004ab: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/LambdaMetafactory;"
+0004b5: 2f69 6e76 6f6b 652f 4c61|
+0004bf: 6d62 6461 4d65 7461 6661|
+0004c9: 6374 6f72 793b 00       |
+                                |
+0004d0: 1f                      |utf16_size: 0000001f
+0004d1: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodHandle;"
+0004db: 2f69 6e76 6f6b 652f 4d65|
+0004e5: 7468 6f64 4861 6e64 6c65|
+0004ef: 3b00                    |
+                                |
+0004f1: 27                      |utf16_size: 00000027
+0004f2: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodHandles$Lookup;"
+0004fc: 2f69 6e76 6f6b 652f 4d65|
+000506: 7468 6f64 4861 6e64 6c65|
+000510: 7324 4c6f 6f6b 7570 3b00|
+                                |
+00051a: 1d                      |utf16_size: 0000001d
+00051b: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/invoke/MethodType;"
+000525: 2f69 6e76 6f6b 652f 4d65|
+00052f: 7468 6f64 5479 7065 3b00|
+                                |
+000539: 09                      |utf16_size: 00000009
+00053a: 4d61 696e 2e6a 6176 6100|"Main.java"
+                                |
+000544: 01                      |utf16_size: 00000001
+000545: 5600                    |"V"
+                                |
+000547: 02                      |utf16_size: 00000002
+000548: 5649 00                 |"VI"
+                                |
+00054b: 03                      |utf16_size: 00000003
+00054c: 5649 4c00               |"VIL"
+                                |
+000550: 02                      |utf16_size: 00000002
+000551: 564c 00                 |"VL"
+                                |
+000554: 13                      |utf16_size: 00000013
+000555: 5b4c 6a61 7661 2f6c 616e|"[Ljava/lang/String;"
+00055f: 672f 5374 7269 6e67 3b00|
+                                |
+000569: 06                      |utf16_size: 00000006
+00056a: 6163 6365 7074 00       |"accept"
+                                |
+000571: 04                      |utf16_size: 00000004
+000572: 6172 6773 00            |"args"
+                                |
+000577: 03                      |utf16_size: 00000003
+000578: 6261 7200               |"bar"
+                                |
+00057c: 08                      |utf16_size: 00000008
+00057d: 636f 6e73 756d 6572 00  |"consumer"
+                                |
+000586: 01                      |utf16_size: 00000001
+000587: 6900                    |"i"
+                                |
+000589: 08                      |utf16_size: 00000008
+00058a: 696e 7456 616c 7565 00  |"intValue"
+                                |
+000593: 01                      |utf16_size: 00000001
+000594: 6a00                    |"j"
+                                |
+000596: 01                      |utf16_size: 00000001
+000597: 6b00                    |"k"
+                                |
+000599: 0c                      |utf16_size: 0000000c
+00059a: 6c61 6d62 6461 2462 6172|"lambda$bar$0"
+0005a4: 2430 00                 |
+                                |
+0005a7: 04                      |utf16_size: 00000004
+0005a8: 6d61 696e 00            |"main"
+                                |
+0005ad: 0b                      |utf16_size: 0000000b
+0005ae: 6d65 7461 6661 6374 6f72|"metafactory"
+0005b8: 7900                    |
+                                |
+0005ba: 03                      |utf16_size: 00000003
+0005bb: 6f75 7400               |"out"
+                                |
+0005bf: 07                      |utf16_size: 00000007
+0005c0: 7072 696e 746c 6e00     |"println"
+                                |
+0005c8: 04                      |utf16_size: 00000004
+0005c9: 7468 6973 00            |"this"
+                                |
+0005ce: 05                      |utf16_size: 00000005
+0005cf: 7661 6c75 6500          |"value"
+                                |
+0005d5: 07                      |utf16_size: 00000007
+0005d6: 7661 6c75 654f 6600     |"valueOf"
+                                |
+                                |byte_data:
+                                |[5de] debug info
+0005de: 05                      |line_start: 5
+0005df: 00                      |parameters_size: 0000
+0005e0: 07                      |0000: prologue end
+0005e1: 0e                      |0000: line 5
+0005e2: 00                      |end sequence
+                                |
+                                |[5e3] debug info
+0005e3: 08                      |line_start: 8
+0005e4: 02                      |parameters_size: 0002
+0005e5: 00                      |parameter <unnamed> v4
+0005e6: 24                      |parameter k v5
+0005e7: 07                      |0000: prologue end
+0005e8: 0e                      |0000: line 8
+0005e9: 0107                    |0007: advance pc
+0005eb: 0505                    |0007: -local v5 k java.lang.Object
+0005ed: 00                      |end sequence
+                                |
+                                |[5ee] debug info
+0005ee: 08                      |line_start: 8
+0005ef: 01                      |parameters_size: 0001
+0005f0: 23                      |parameter j v3
+0005f1: 07                      |0000: prologue end
+0005f2: 0e                      |0000: line 8
+0005f3: 4b                      |0004: line 9
+0005f4: 0300 2002               |0004: +local v0 consumer Consumer
+0005f8: 87                      |000c: line 10
+0005f9: 00                      |end sequence
+                                |
+                                |[5fa] debug info
+0005fa: 0d                      |line_start: 13
+0005fb: 00                      |parameters_size: 0000
+0005fc: 07                      |0000: prologue end
+0005fd: 0e                      |0000: line 13
+0005fe: 00                      |end sequence
+                                |
+                                |[5ff] debug info
+0005ff: 0f                      |line_start: 15
+000600: 01                      |parameters_size: 0001
+000601: 1e                      |parameter args v2
+000602: 07                      |0000: prologue end
+000603: 0e                      |0000: line 15
+000604: 96                      |0009: line 16
+000605: 00                      |end sequence
+                                |
+                                |[606] annotation
+000606: 02                      |  visibility: VISBILITY_SYSTEM
+000607: 04                      |  type_idx: 00000004 // dalvik.annotation.Signature
+000608: 01                      |  size: 00000001
+                                |  elements[0]:
+000609: 2a                      |    name_idx: 0000002a // value
+00060a: 1c04 1701 170e 1703 170e|    value: array {<T:, Ljava/lang/Object;, >, Ljava/lang/Object;}
+                                |
+                                |[614] annotation
+000614: 02                      |  visibility: VISBILITY_SYSTEM
+000615: 04                      |  type_idx: 00000004 // dalvik.annotation.Signature
+000616: 01                      |  size: 00000001
+                                |  elements[0]:
+000617: 2a                      |    name_idx: 0000002a // value
+000618: 1c01 1700               |    value: array {(TT;)V}
+                                |
+                                |[61c] call site
+00061c: 06                      |  size: 00000006
+00061d: 1600                    |  [0] method handle invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}
+00061f: 171c                    |  [1] utf8 accept
+000621: 1501                    |  [2] proto (LFoo;I)LConsumer;
+000623: 1507                    |  [3] proto (Ljava/lang/Object;)V
+000625: 1601                    |  [4] method handle invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}
+000627: 1507                    |  [5] proto (Ljava/lang/Object;)V
+                                |
+                                |[629] class data for Consumer
+000629: 00                      |  static_fields_size:   00000000
+00062a: 00                      |  instance_fields_size: 00000000
+00062b: 00                      |  direct_methods_size:  00000000
+00062c: 01                      |  virtual_methods_size: 00000001
+                                |  virtual_methods:
+                                |  [0] Consumer.accept:(Ljava/lang/Object;)V
+00062d: 00                      |    method_idx:   00000000
+00062e: 8108                    |    access_flags: public|abstract
+000630: 00                      |    code_off:     00000000
+                                |
+                                |[631] class data for Foo
+000631: 00                      |  static_fields_size:   00000000
+000632: 01                      |  instance_fields_size: 00000001
+000633: 02                      |  direct_methods_size:  00000002
+000634: 01                      |  virtual_methods_size: 00000001
+                                |  instance_fields:
+                                |  [0] Foo.i:I
+000635: 00                      |    field_idx:    00000000
+000636: 00                      |    access_flags: 0000
+                                |  direct_methods:
+                                |  [0] Foo.<init>:()V
+000637: 01                      |    method_idx:   00000001
+000638: 8080 04                 |    access_flags: constructor
+00063b: c005                    |    code_off:     000002c0
+                                |  [1] Foo.lambda$bar$0:(ILjava/lang/Object;)V
+00063d: 02                      |    method_idx:   00000003
+00063e: 8220                    |    access_flags: private|synthetic
+000640: d805                    |    code_off:     000002d8
+                                |  virtual_methods:
+                                |  [0] Foo.bar:(I)V
+000642: 02                      |    method_idx:   00000002
+000643: 00                      |    access_flags: 0000
+000644: 8806                    |    code_off:     00000308
+                                |
+                                |[646] class data for Main
+000646: 00                      |  static_fields_size:   00000000
+000647: 00                      |  instance_fields_size: 00000000
+000648: 02                      |  direct_methods_size:  00000002
+000649: 00                      |  virtual_methods_size: 00000000
+                                |  direct_methods:
+                                |  [0] Main.<init>:()V
+00064a: 04                      |    method_idx:   00000004
+00064b: 8080 04                 |    access_flags: constructor
+00064e: b406                    |    code_off:     00000334
+                                |  [1] Main.main:([Ljava/lang/String;)V
+000650: 01                      |    method_idx:   00000005
+000651: 09                      |    access_flags: public|static
+000652: cc06                    |    code_off:     0000034c
+                                |
+                                |map:
+                                |[654] map list
+000654: 1300 0000               |  size: 00000013
+                                |[658] header_item map
+000658: 0000                    |  type:   0000 // TYPE_HEADER_ITEM
+00065a: 0000                    |  unused: 0
+00065c: 0100 0000               |  size:   00000001
+000660: 0000 0000               |  offset: 00000000
+                                |[664] string_id_item map
+000664: 0100                    |  type:   0001 // TYPE_STRING_ID_ITEM
+000666: 0000                    |  unused: 0
+000668: 2c00 0000               |  size:   0000002c
+00066c: 7000 0000               |  offset: 00000070
+                                |[670] type_id_item map
+000670: 0200                    |  type:   0002 // TYPE_TYPE_ID_ITEM
+000672: 0000                    |  unused: 0
+000674: 1100 0000               |  size:   00000011
+000678: 2001 0000               |  offset: 00000120
+                                |[67c] proto_id_item map
+00067c: 0300                    |  type:   0003 // TYPE_PROTO_ID_ITEM
+00067e: 0000                    |  unused: 0
+000680: 0900 0000               |  size:   00000009
+000684: 6401 0000               |  offset: 00000164
+                                |[688] field_id_item map
+000688: 0400                    |  type:   0004 // TYPE_FIELD_ID_ITEM
+00068a: 0000                    |  unused: 0
+00068c: 0200 0000               |  size:   00000002
+000690: d001 0000               |  offset: 000001d0
+                                |[694] method_id_item map
+000694: 0500                    |  type:   0005 // TYPE_METHOD_ID_ITEM
+000696: 0000                    |  unused: 0
+000698: 0b00 0000               |  size:   0000000b
+00069c: e001 0000               |  offset: 000001e0
+                                |[6a0] class_def_item map
+0006a0: 0600                    |  type:   0006 // TYPE_CLASS_DEF_ITEM
+0006a2: 0000                    |  unused: 0
+0006a4: 0300 0000               |  size:   00000003
+0006a8: 3802 0000               |  offset: 00000238
+                                |[6ac] call_site_id_item map
+0006ac: 0700                    |  type:   0007 // TYPE_CALL_SITE_ID_ITEM
+0006ae: 0000                    |  unused: 0
+0006b0: 0200 0000               |  size:   00000002
+0006b4: 9802 0000               |  offset: 00000298
+                                |[6b8] method_handle_item map
+0006b8: 0800                    |  type:   0008 // TYPE_METHOD_HANDLE_ITEM
+0006ba: 0000                    |  unused: 0
+0006bc: 0200 0000               |  size:   00000002
+0006c0: a002 0000               |  offset: 000002a0
+                                |[6c4] annotation_set_item map
+0006c4: 0310                    |  type:   1003 // TYPE_ANNOTATION_SET_ITEM
+0006c6: 0000                    |  unused: 0
+0006c8: 0200 0000               |  size:   00000002
+0006cc: b002 0000               |  offset: 000002b0
+                                |[6d0] code_item map
+0006d0: 0120                    |  type:   2001 // TYPE_CODE_ITEM
+0006d2: 0000                    |  unused: 0
+0006d4: 0500 0000               |  size:   00000005
+0006d8: c002 0000               |  offset: 000002c0
+                                |[6dc] annotations_directory_item map
+0006dc: 0620                    |  type:   2006 // TYPE_ANNOTATIONS_DIRECTORY_ITEM
+0006de: 0000                    |  unused: 0
+0006e0: 0100 0000               |  size:   00000001
+0006e4: 7003 0000               |  offset: 00000370
+                                |[6e8] type_list map
+0006e8: 0110                    |  type:   1001 // TYPE_TYPE_LIST
+0006ea: 0000                    |  unused: 0
+0006ec: 0600 0000               |  size:   00000006
+0006f0: 8803 0000               |  offset: 00000388
+                                |[6f4] string_data_item map
+0006f4: 0220                    |  type:   2002 // TYPE_STRING_DATA_ITEM
+0006f6: 0000                    |  unused: 0
+0006f8: 2c00 0000               |  size:   0000002c
+0006fc: be03 0000               |  offset: 000003be
+                                |[700] debug_info_item map
+000700: 0320                    |  type:   2003 // TYPE_DEBUG_INFO_ITEM
+000702: 0000                    |  unused: 0
+000704: 0500 0000               |  size:   00000005
+000708: de05 0000               |  offset: 000005de
+                                |[70c] annotation_item map
+00070c: 0420                    |  type:   2004 // TYPE_ANNOTATION_ITEM
+00070e: 0000                    |  unused: 0
+000710: 0200 0000               |  size:   00000002
+000714: 0606 0000               |  offset: 00000606
+                                |[718] encoded_array_item map
+000718: 0520                    |  type:   2005 // TYPE_ENCODED_ARRAY_ITEM
+00071a: 0000                    |  unused: 0
+00071c: 0100 0000               |  size:   00000001
+000720: 1c06 0000               |  offset: 0000061c
+                                |[724] class_data_item map
+000724: 0020                    |  type:   2000 // TYPE_CLASS_DATA_ITEM
+000726: 0000                    |  unused: 0
+000728: 0300 0000               |  size:   00000003
+00072c: 2906 0000               |  offset: 00000629
+                                |[730] map_list map
+000730: 0010                    |  type:   1000 // TYPE_MAP_LIST
+000732: 0000                    |  unused: 0
+000734: 0100 0000               |  size:   00000001
+000738: 5406 0000               |  offset: 00000654
+                                |
+                                |method code index:
+                                |
+                                |[2c0] Foo.<init>:()V
+                                |[308] Foo.bar:(I)V
+                                |[2d8] Foo.lambda$bar$0:(ILjava/lang/Object;)V
+                                |[334] Main.<init>:()V
+                                |[34c] Main.main:([Ljava/lang/String;)V
+                                |
+                                |statistics:
+                                |  annotation: 2 items; 22 bytes total
+                                |    8..14 bytes/item; average 11
+                                |  annotation set: 2 items; 16 bytes total
+                                |    8 bytes/item
+                                |  annotations directory: 1 item; 24 bytes total
+                                |    24 bytes/item
+                                |  call site id: 2 items; 8 bytes total
+                                |    4 bytes/item
+                                |  class data: 3 items; 43 bytes total
+                                |    8..21 bytes/item; average 14
+                                |  class def: 3 items; 96 bytes total
+                                |    32 bytes/item
+                                |  code: 5 items; 176 bytes total
+                                |    24..48 bytes/item; average 35
+                                |  debug info: 5 items; 40 bytes total
+                                |    5..12 bytes/item; average 8
+                                |  encoded array: 1 item; 13 bytes total
+                                |    13 bytes/item
+                                |  field id: 2 items; 16 bytes total
+                                |    8 bytes/item
+                                |  header: 1 item; 112 bytes total
+                                |    112 bytes/item
+                                |  map list: 1 item; 232 bytes total
+                                |    232 bytes/item
+                                |  method handle: 2 items; 16 bytes total
+                                |    8 bytes/item
+                                |  method id: 11 items; 88 bytes total
+                                |    8 bytes/item
+                                |  proto id: 9 items; 108 bytes total
+                                |    12 bytes/item
+                                |  string data: 44 items; 544 bytes total
+                                |    3..41 bytes/item; average 12
+                                |  string id: 44 items; 176 bytes total
+                                |    4 bytes/item
+                                |  type id: 17 items; 68 bytes total
+                                |    4 bytes/item
+                                |  type list: 6 items; 50 bytes total
+                                |    6..16 bytes/item; average 8

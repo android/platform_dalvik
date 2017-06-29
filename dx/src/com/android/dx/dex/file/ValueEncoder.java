@@ -250,10 +250,10 @@ public final class ValueEncoder {
             return VALUE_FLOAT;
         } else if (cst instanceof CstDouble) {
             return VALUE_DOUBLE;
-        } else if (cst instanceof CstProtoRef) {
-            return VALUE_METHOD_TYPE;
         } else if (cst instanceof CstMethodHandle) {
            return VALUE_METHOD_HANDLE;
+        } else if (cst instanceof CstProtoRef) {
+            return VALUE_METHOD_TYPE;
         } else if (cst instanceof CstString) {
             return VALUE_STRING;
         } else if (cst instanceof CstType) {
