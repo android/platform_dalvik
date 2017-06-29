@@ -16,6 +16,24 @@
       "revId": "d440ca9a31aa06a98039f56d8838d6d96a3a3268",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6273a26_ff119e89",
+        "filename": "dx/tests/139-lambda-metafactory/Main.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-06-29T10:49:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a371f8d0_5d1821bd",
+      "revId": "d440ca9a31aa06a98039f56d8838d6d96a3a3268",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
