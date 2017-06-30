@@ -16,7 +16,6 @@
 package com.android.dx.dex.file;
 
 import com.android.dx.rop.cst.CstCallSite;
-import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.ByteArrayAnnotatedOutput;
 
@@ -101,8 +100,6 @@ public final class CallSiteItem extends OffsettedItem {
     /** {@inheritDoc} */
     @Override
     public void addContents(DexFile file) {
-        ProtoIdsSection protoIds = file.getProtoIds();
-        CstProtoRef cstProtoRef = (CstProtoRef) this.value.getList().get(2);
-        protoIds.intern(cstProtoRef.getPrototype());
+        ValueEncoder.addContents(file, value);
     }
 }

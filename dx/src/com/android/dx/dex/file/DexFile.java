@@ -21,9 +21,11 @@ import com.android.dx.dex.DexOptions;
 import com.android.dx.dex.file.MixedItemSection.SortType;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
+import com.android.dx.rop.cst.CstCallSite;
 import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstEnumRef;
 import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -493,6 +495,10 @@ public final class DexFile {
      * @param cst {@code non-null;} constant to possibly intern
      */
     /*package*/ void internIfAppropriate(Constant cst) {
+        if (cst == null) {
+            throw new NullPointerException("cst == null");
+        }
+
         if (cst instanceof CstString) {
             stringIds.intern((CstString) cst);
         } else if (cst instanceof CstType) {
@@ -503,8 +509,10 @@ public final class DexFile {
             fieldIds.intern((CstFieldRef) cst);
         } else if (cst instanceof CstEnumRef) {
             fieldIds.intern(((CstEnumRef) cst).getFieldRef());
-        } else if (cst == null) {
-            throw new NullPointerException("cst == null");
+        } else if (cst instanceof CstProtoRef) {
+            protoIds.intern(((CstProtoRef) cst).getPrototype());
+        } else if (cst instanceof CstMethodHandle) {
+            methodHandles.intern((CstMethodHandle) cst);
         }
     }
 
@@ -520,8 +528,6 @@ public final class DexFile {
      * item, or {@code null} if it's not that sort of constant
      */
     /*package*/ IndexedItem findItemOrNull(Constant cst) {
-        IndexedItem item;
-
         if (cst instanceof CstString) {
             return stringIds.get(cst);
         } else if (cst instanceof CstType) {
@@ -530,8 +536,12 @@ public final class DexFile {
             return methodIds.get(cst);
         } else if (cst instanceof CstFieldRef) {
             return fieldIds.get(cst);
+        } else if (cst instanceof CstEnumRef) {
+            return fieldIds.intern(((CstEnumRef) cst).getFieldRef());
         } else if (cst instanceof CstProtoRef) {
             return protoIds.get(cst);
+        } else if (cst instanceof CstMethodHandle) {
+            return methodHandles.get(cst);
         } else if (cst instanceof CstCallSiteRef) {
             return callSiteIds.get(cst);
         } else {
@@ -554,14 +564,19 @@ public final class DexFile {
          * add items happen before the calls to the sections that get
          * added to.
          */
-        if (dexOptions.canUseInvokePolymorphic()) {
-            callSiteIds.prepare();
-            methodHandles.prepare();
-        }
+
         classDefs.prepare();
         classData.prepare();
         wordData.prepare();
+        if (dexOptions.canUseInvokePolymorphic()) {
+            // Prepare call site ids before byteData where the call site items are placed.
+            callSiteIds.prepare();
+        }
         byteData.prepare();
+        if (dexOptions.canUseInvokePolymorphic()) {
+            // Prepare method handles after call site items placed in byteData.
+            methodHandles.prepare();
+        }
         methodIds.prepare();
         fieldIds.prepare();
         protoIds.prepare();
