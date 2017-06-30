@@ -22,6 +22,10 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 abstract class Super {
   public void targetMethodTest4() {
     System.out.println("targetMethodTest4 from Super");
@@ -181,5 +185,12 @@ public class InvokeCustom extends Super implements Runnable {
     final MethodHandles.Lookup lookup = MethodHandles.lookup();
     final MethodHandle targetMH = lookup.findStatic(lookup.lookupClass(), name, type);
     return new ConstantCallSite(targetMH.asType(type));
+  }
+
+  public static void lambdaTest() {
+    List<String> strings = Arrays.asList(new String[] { "Three", "One", "FortyTwo" });
+    String sample = strings.stream().filter(x -> "One".equals(x.trim()))
+        .map(String::trim).findAny().orElse("");
+    strings.stream().forEach(System.out::println);
   }
 }
