@@ -1,9 +1,9 @@
 Note: Main.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 000000: 6465 780a 3033 3800     |magic: "dex\n038\0"
-000008: 0b09 8ceb               |checksum
-00000c: 58f3 aefc 1fe5 e7b3 cb99|signature
-000016: 31ee 6fcf 484a 1019 6918|
+000008: 7e08 861f               |checksum
+00000c: e48a 8e6c 24e0 84f7 c591|signature
+000016: a728 6015 6a2c 6639 54a9|
 000020: 3c07 0000               |file_size:       0000073c
 000024: 7000 0000               |header_size:     00000070
 000028: 7856 3412               |endian_tag:      12345678
@@ -315,10 +315,10 @@ Note: Recompile with -Xlint:unchecked for details.
 0002d0: 7010 0900 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0009
 0002d6: 0e00                    |  0003: return-void
                                 |  debug info
-                                |    line_start: 5
+                                |    line_start: 21
                                 |    parameters_size: 0000
                                 |    0000: prologue end
-                                |    0000: line 5
+                                |    0000: line 21
                                 |    end sequence
                                 |
                                 |[2d8] Foo.lambda$bar$0:(ILjava/lang/Object;)V
@@ -338,12 +338,12 @@ Note: Recompile with -Xlint:unchecked for details.
 000300: 6e20 0600 1000          |  000c: invoke-virtual {v0, v1}, java.io.PrintStream.println:(I)V // method@0006
 000306: 0e00                    |  000f: return-void
                                 |  debug info
-                                |    line_start: 8
+                                |    line_start: 24
                                 |    parameters_size: 0002
                                 |    parameter <unnamed> v4
                                 |    parameter k v5
                                 |    0000: prologue end
-                                |    0000: line 8
+                                |    0000: line 24
                                 |    0007: advance pc
                                 |    0007: -local v5 k java.lang.Object
                                 |    end sequence
@@ -363,14 +363,14 @@ Note: Recompile with -Xlint:unchecked for details.
 00032a: 7220 0000 1000          |  0009: invoke-interface {v0, v1}, Consumer.accept:(Ljava/lang/Object;)V // method@0000
 000330: 0e00                    |  000c: return-void
                                 |  debug info
-                                |    line_start: 8
+                                |    line_start: 24
                                 |    parameters_size: 0001
                                 |    parameter j v3
                                 |    0000: prologue end
-                                |    0000: line 8
-                                |    0004: line 9
+                                |    0000: line 24
+                                |    0004: line 25
                                 |    0004: +local v0 consumer Consumer
-                                |    000c: line 10
+                                |    000c: line 26
                                 |    end sequence
                                 |
 000332: 0000                    |
@@ -384,10 +384,10 @@ Note: Recompile with -Xlint:unchecked for details.
 000344: 7010 0900 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0009
 00034a: 0e00                    |  0003: return-void
                                 |  debug info
-                                |    line_start: 13
+                                |    line_start: 29
                                 |    parameters_size: 0000
                                 |    0000: prologue end
-                                |    0000: line 13
+                                |    0000: line 29
                                 |    end sequence
                                 |
                                 |[34c] Main.main:([Ljava/lang/String;)V
@@ -403,12 +403,12 @@ Note: Recompile with -Xlint:unchecked for details.
 000368: 6e20 0200 1000          |  0006: invoke-virtual {v0, v1}, Foo.bar:(I)V // method@0002
 00036e: 0e00                    |  0009: return-void
                                 |  debug info
-                                |    line_start: 15
+                                |    line_start: 31
                                 |    parameters_size: 0001
                                 |    parameter args v2
                                 |    0000: prologue end
-                                |    0000: line 15
-                                |    0009: line 16
+                                |    0000: line 31
+                                |    0009: line 32
                                 |    end sequence
                                 |
                                 |[370] annotations directory
@@ -614,48 +614,48 @@ Note: Recompile with -Xlint:unchecked for details.
                                 |
                                 |byte_data:
                                 |[5de] debug info
-0005de: 05                      |line_start: 5
+0005de: 15                      |line_start: 21
 0005df: 00                      |parameters_size: 0000
 0005e0: 07                      |0000: prologue end
-0005e1: 0e                      |0000: line 5
+0005e1: 0e                      |0000: line 21
 0005e2: 00                      |end sequence
                                 |
                                 |[5e3] debug info
-0005e3: 08                      |line_start: 8
+0005e3: 18                      |line_start: 24
 0005e4: 02                      |parameters_size: 0002
 0005e5: 00                      |parameter <unnamed> v4
 0005e6: 24                      |parameter k v5
 0005e7: 07                      |0000: prologue end
-0005e8: 0e                      |0000: line 8
+0005e8: 0e                      |0000: line 24
 0005e9: 0107                    |0007: advance pc
 0005eb: 0505                    |0007: -local v5 k java.lang.Object
 0005ed: 00                      |end sequence
                                 |
                                 |[5ee] debug info
-0005ee: 08                      |line_start: 8
+0005ee: 18                      |line_start: 24
 0005ef: 01                      |parameters_size: 0001
 0005f0: 23                      |parameter j v3
 0005f1: 07                      |0000: prologue end
-0005f2: 0e                      |0000: line 8
-0005f3: 4b                      |0004: line 9
+0005f2: 0e                      |0000: line 24
+0005f3: 4b                      |0004: line 25
 0005f4: 0300 2002               |0004: +local v0 consumer Consumer
-0005f8: 87                      |000c: line 10
+0005f8: 87                      |000c: line 26
 0005f9: 00                      |end sequence
                                 |
                                 |[5fa] debug info
-0005fa: 0d                      |line_start: 13
+0005fa: 1d                      |line_start: 29
 0005fb: 00                      |parameters_size: 0000
 0005fc: 07                      |0000: prologue end
-0005fd: 0e                      |0000: line 13
+0005fd: 0e                      |0000: line 29
 0005fe: 00                      |end sequence
                                 |
                                 |[5ff] debug info
-0005ff: 0f                      |line_start: 15
+0005ff: 1f                      |line_start: 31
 000600: 01                      |parameters_size: 0001
 000601: 1e                      |parameter args v2
 000602: 07                      |0000: prologue end
-000603: 0e                      |0000: line 15
-000604: 96                      |0009: line 16
+000603: 0e                      |0000: line 31
+000604: 96                      |0009: line 32
 000605: 00                      |end sequence
                                 |
                                 |[606] annotation

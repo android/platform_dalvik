@@ -34,7 +34,7 @@ progdir=`pwd`
 prog="${progdir}"/`basename "${prog}"`
 
 # Command-line options
-skip_tests="127-merge-stress"
+skip_tests=""
 sequential="no"
 usage="no"
 while [[ "$1" == "-"* ]]; do
@@ -67,7 +67,7 @@ failed=()
 skipped=()
 
 # Tests failing and require attention (e.g. 115-merge)
-known_bad="100-local-mismatch 115-merge 119-merge-conflict 133-source-debug-extension"
+known_bad="100-local-mismatch 115-merge 119-merge-conflict"
 
 function display_results {
   printf    "\n\nTest Results\n"
