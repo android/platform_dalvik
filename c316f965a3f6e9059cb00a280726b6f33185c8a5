@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b158d5a9_f3440bc4",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:32:00Z",
+      "side": 1,
+      "message": "nit \"private static final\"",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 23
+      },
+      "revId": "c316f965a3f6e9059cb00a280726b6f33185c8a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7eafe139_5a1c8328",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:32:00Z",
+      "side": 1,
+      "message": "I\u0027d avoid using this : just use a fixed number so that our tests become a bit more predictable.",
+      "range": {
+        "startLine": 43,
+        "startChar": 35,
+        "endLine": 43,
+        "endChar": 77
+      },
+      "revId": "c316f965a3f6e9059cb00a280726b6f33185c8a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef33373e_0183ef40",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:32:00Z",
+      "side": 1,
+      "message": "move to previous line.",
+      "range": {
+        "startLine": 45,
+        "startChar": 6,
+        "endLine": 45,
+        "endChar": 31
+      },
+      "revId": "c316f965a3f6e9059cb00a280726b6f33185c8a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "892d8c96_398f6cdc",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:32:00Z",
+      "side": 1,
+      "message": "why ?",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "c316f965a3f6e9059cb00a280726b6f33185c8a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0931292_eba2352a",
+        "filename": "dx/tests/127-merge-stress/com/android/dx/merge/MergeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:32:00Z",
+      "side": 1,
+      "message": "What is this supposed to catch ? execute() is not going to throw any exceptions related to the execution of the tasks",
+      "range": {
+        "startLine": 105,
+        "startChar": 13,
+        "endLine": 105,
+        "endChar": 24
+      },
+      "revId": "c316f965a3f6e9059cb00a280726b6f33185c8a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
