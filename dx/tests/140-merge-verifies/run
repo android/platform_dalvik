@@ -1,0 +1,105 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# NB This test is likely to be flakey. It attempts to merge random
+# DEX files from the Android build tree.
+
+# Find dx.jar from dx in the android dev tree
+prog=`which dx`
+progdir=`dirname "${prog}"`
+dxjar=$progdir/../framework/dx.jar
+
+for i in "$dxjar"; do
+    if [ ! -r $i ]; then
+        echo Missing dependency $i. Build dx-tests.
+        exit 1
+    fi
+done
+
+JAVAC=${JAVAC:-javac}
+JAVAC_ARGS="-Xlint:-options -source 1.8 -target 1.8"
+TEST_DIR=$PWD
+TEST_ITERATIONS=20
+
+# Compile class with main method
+echo "Building DEX file for test."
+$JAVAC $JAVAC_ARGS -d . DexVerifierCheckMain.java 1>/dev/null 2>&1 || exit 1
+dx --dex --min-sdk-version=26 --output=classes.dex *.class >/dev/null 2>&1|| exit 1
+(pushd $ANDROID_BUILD_TOP && art -cp "$TEST_DIR/classes.dex" DexVerifierCheckMain) 1>"${TEST_DIR}/art.log" 2>&1
+if [[ $? != 0 ]]; then
+  echo FAILED to run art on unmodified DEX file.
+  cat "${TEST_DIR}/art.log"
+  exit 1
+fi
+
+echo "Assembling list of input files."
+
+# Find all files that could contain dex bytecode.
+candidates=`find "$ANDROID_BUILD_TOP/out" -name '*.dex'`
+validdexes=()
+checksums=()
+for dex in $candidates; do
+  if [[ "$dex" = *"core"* ]]; then
+    # Ignoring core files as hit limits of merging capability.
+    continue
+  fi
+
+  # Filter out jar files and apks that do not unzip or contain a
+  # classes.dex file. DexMerger assumes file contents based on the
+  # file extension. Android build names some DEX files with a .jar
+  # extension and this raises an exception in DexMerger as it fails
+  # to unzip them.
+  if [[ "$dex" == *"jar" || "$dex" == *"apk" ]]; then
+    unzip -l "$dex" 2>&1 | grep -q -m 1 classes.dex
+    if [[ $? != 0 ]]; then
+      continue
+    fi
+  fi
+
+  # Skip duplicate files
+  checksum=`shasum "$dex" | sed -e 's/ .*//' -e 's/^/_/'`
+  if [[ "$checksums[$checksum]" == "$checksum" ]]; then
+    continue
+  fi
+  checksums[$checksum]=$checksum
+
+  dexdump2 -c $dex >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    abs_dex=`readlink -f $dex`
+    validdexes+=("$abs_dex")
+  fi
+done
+
+if [ ${#validdexes[@]} -eq 0 ]; then
+  echo No valid DEX files found.
+  exit 1
+fi
+
+i=0
+while [[ $i -lt $TEST_ITERATIONS ]]; do
+  echo "Running test iteration $i."
+  index0=$(( $RANDOM % ${#validdexes[@]} ))
+  index1=$(( $RANDOM % ${#validdexes[@]} ))
+  MERGED_DEX="${TEST_DIR}/merged.dex"
+  dexmerger merged.dex "${TEST_DIR}/classes.dex" "${validdexes[$index0]}" "${validdexes[$index1]}" >/dev/null
+  (pushd "$ANDROID_BUILD_TOP" && art -verbose:verifier -cp "${MERGED_DEX}" DexVerifierCheckMain) 1>"${TEST_DIR}/art.log" 2>&1
+  if [[ $? != 0 ]]; then
+      echo FAILED with inputs ${TEST_DIR}/classes.dex ${validdexes[$index0]} ${validdexes[$index1]}
+      cat "${TEST_DIR}/art.log"
+      exit 1
+  fi
+  i=$((i + 1))
+done

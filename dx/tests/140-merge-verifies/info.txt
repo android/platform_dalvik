@@ -1,0 +1,1 @@
+This is an integration test that checks that merged DEX files can be loaded by ART.

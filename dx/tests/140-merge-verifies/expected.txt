@@ -1,0 +1,22 @@
+Building DEX file for test.
+Assembling list of input files.
+Running test iteration 0.
+Running test iteration 1.
+Running test iteration 2.
+Running test iteration 3.
+Running test iteration 4.
+Running test iteration 5.
+Running test iteration 6.
+Running test iteration 7.
+Running test iteration 8.
+Running test iteration 9.
+Running test iteration 10.
+Running test iteration 11.
+Running test iteration 12.
+Running test iteration 13.
+Running test iteration 14.
+Running test iteration 15.
+Running test iteration 16.
+Running test iteration 17.
+Running test iteration 18.
+Running test iteration 19.
