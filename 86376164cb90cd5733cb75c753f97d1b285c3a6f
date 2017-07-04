@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51e0979d_fcbbbe52",
+        "filename": "dx/tests/140-merge-verifies/DexVerifierCheckMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:52:28Z",
+      "side": 1,
+      "message": "what is the purpose of this method if it\u0027s \"not used\" ?",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 31,
+        "endChar": 3
+      },
+      "revId": "86376164cb90cd5733cb75c753f97d1b285c3a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0a11376_fe734877",
+        "filename": "dx/tests/140-merge-verifies/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:52:28Z",
+      "side": 1,
+      "message": "it\u0027s easier to spell out the path : out/host/linux-x86/bin/dx - that\u0027s not going to change for a while. Same for the next two lines.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 15
+      },
+      "revId": "86376164cb90cd5733cb75c753f97d1b285c3a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3a5aff_776c454c",
+        "filename": "dx/tests/140-merge-verifies/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:52:28Z",
+      "side": 1,
+      "message": "set -e instead ?",
+      "range": {
+        "startLine": 39,
+        "startChar": 67,
+        "endLine": 39,
+        "endChar": 76
+      },
+      "revId": "86376164cb90cd5733cb75c753f97d1b285c3a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1e40403_382d3e13",
+        "filename": "dx/tests/140-merge-verifies/run",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1014443
+      },
+      "writtenOn": "2017-07-04T10:52:28Z",
+      "side": 1,
+      "message": "i have mixed feelings about this. i don\u0027t think this is a particularly useful test if :\n\n(a) we don\u0027t know what we\u0027re testing \n(b) what we\u0027re testing depends on the state of previous builds.\n\nI\u0027d be much happier if we chose a fixed set of dex files and attempted to merge various combinations of them (or something similar). We could even extend the fuzzing infrastructure to these kinds of merges, but that seems like a larger task.\n\nI\u0027ve +ed nicolas to the change for his opinion.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 56
+      },
+      "revId": "86376164cb90cd5733cb75c753f97d1b285c3a6f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
