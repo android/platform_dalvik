@@ -24,6 +24,7 @@ import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstInterfaceMethodRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
@@ -711,9 +712,12 @@ public class Simulator {
                             " (invokedynamic requires --min-sdk-version >= " +
                             DexFormat.API_INVOKE_POLYMORPHIC + ")");
                     }
-                    CstCallSiteRef invokeDynamicRef = (CstCallSiteRef) cst;
+                    CstInvokeDynamic invokeDynamicRef = (CstInvokeDynamic) cst;
                     Prototype prototype = invokeDynamicRef.getPrototype();
                     machine.popArgs(frame, prototype);
+                    // Change the constant to be associated with instruction to
+                    // a call site reference.
+                    cst = invokeDynamicRef.addReference();
                     break;
                 }
                 case ByteOps.MULTIANEWARRAY: {
