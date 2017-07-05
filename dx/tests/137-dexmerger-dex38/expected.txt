@@ -7105,23 +7105,23 @@ Method handle #1:
   type        : invoke-static
   target      : Linvokecustom/InvokeCustom; bsmLookupStaticWithExtraArgs
   target_type : (Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;
-Call site #0:
+Call site #0: // offset 57124
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest1 (String)
   link_argument[2] : ()V (MethodType)
-Call site #1:
+Call site #1: // offset 57124
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest1 (String)
   link_argument[2] : ()V (MethodType)
-Call site #2:
+Call site #2: // offset 57131
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest2 (String)
   link_argument[2] : (ZBCSIFJDLjava/lang/String;)V (MethodType)
-Call site #3:
+Call site #3: // offset 57131
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest2 (String)
   link_argument[2] : (ZBCSIFJDLjava/lang/String;)V (MethodType)
-Call site #4:
+Call site #4: // offset 57138
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest3 (String)
   link_argument[2] : ()V (MethodType)
@@ -7129,7 +7129,7 @@ Call site #4:
   link_argument[4] : 123456789 (long)
   link_argument[5] : 123.456 (float)
   link_argument[6] : 123457 (double)
-Call site #5:
+Call site #5: // offset 57138
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest3 (String)
   link_argument[2] : ()V (MethodType)
@@ -7137,51 +7137,51 @@ Call site #5:
   link_argument[4] : 123456789 (long)
   link_argument[5] : 123.456 (float)
   link_argument[6] : 123457 (double)
-Call site #6:
+Call site #6: // offset 57166
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest5 (String)
   link_argument[2] : (III)I (MethodType)
-Call site #7:
+Call site #7: // offset 57166
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest5 (String)
   link_argument[2] : (III)I (MethodType)
-Call site #8:
+Call site #8: // offset 57173
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest6 (String)
   link_argument[2] : (JJJ)J (MethodType)
-Call site #9:
+Call site #9: // offset 57173
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest6 (String)
   link_argument[2] : (JJJ)J (MethodType)
-Call site #10:
+Call site #10: // offset 57180
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest7 (String)
   link_argument[2] : (FFD)D (MethodType)
-Call site #11:
+Call site #11: // offset 57180
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest7 (String)
   link_argument[2] : (FFD)D (MethodType)
-Call site #12:
+Call site #12: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #13:
+Call site #13: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #14:
+Call site #14: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #15:
+Call site #15: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #16:
+Call site #16: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #17:
+Call site #17: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
