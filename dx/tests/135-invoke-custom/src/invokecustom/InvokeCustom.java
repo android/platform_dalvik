@@ -161,11 +161,15 @@ public class InvokeCustom extends Super implements Runnable {
     return new ConstantCallSite(mh);
   }
 
+  private void privateMethodTest9() {
+    System.out.println("InvokeCustom.privateMethodTest9()");
+  }
+
   public static CallSite bsmLookupTest9(MethodHandles.Lookup caller, String name, MethodType type,
                                         MethodHandle staticGetter,  MethodHandle staticSetter,
                                         MethodHandle fieldGetter, MethodHandle fieldSetter,
                                         MethodHandle instanceInvoke, MethodHandle constructor,
-                                        MethodHandle interfaceInvoke)
+                                        MethodHandle interfaceInvoke, MethodHandle privateInvoke)
           throws Throwable {
     System.out.println("bsmLookupTest9 [" + staticGetter + ", " + staticSetter + ", " +
                        fieldGetter + ", " + fieldSetter + "]");
@@ -179,8 +183,10 @@ public class InvokeCustom extends Super implements Runnable {
     // Check virtual method.
     instanceInvoke.invokeExact(instance);
 
-    InvokeCustom instance2 = (InvokeCustom) constructor.invokeExact(3);
+    // InvokeCustom instance2 = (InvokeCustom) constructor.invokeExact(3);
+    InvokeCustom instance2 = instance;
     interfaceInvoke.invoke(instance2);
+    privateInvoke.invoke(instance2);
 
     final MethodHandles.Lookup lookup = MethodHandles.lookup();
     final MethodHandle targetMH = lookup.findStatic(lookup.lookupClass(), name, type);
