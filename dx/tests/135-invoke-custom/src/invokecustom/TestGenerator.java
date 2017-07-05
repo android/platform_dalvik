@@ -321,7 +321,7 @@ public class TestGenerator {
                               MethodHandle.class, MethodHandle.class,
                               MethodHandle.class, MethodHandle.class,
                               MethodHandle.class, MethodHandle.class,
-                              MethodHandle.class);
+                              MethodHandle.class, MethodHandle.class);
     String internalName = Type.getInternalName(InvokeCustom.class);
     Handle bootstrap = new Handle(Opcodes.H_INVOKESTATIC, internalName, "bsmLookupTest9",
                                   mt.toMethodDescriptorString(), false);
@@ -335,19 +335,21 @@ public class TestGenerator {
         new Handle(Opcodes.H_PUTFIELD, internalName, "fieldTest9", "F", false);
     Handle instanceInvoke =
         new Handle(Opcodes.H_INVOKEVIRTUAL, internalName, "helperMethodTest9", "()V", false);
-    // H_INVOKESTATIC and H_INVOKESPECIAL are tested elsewhere.
     Handle constructor =
         new Handle(Opcodes.H_NEWINVOKESPECIAL, internalName, "<init>", "(I)V", false);
     Handle interfaceInvoke =
         new Handle(Opcodes.H_INVOKEINTERFACE,
                    Type.getInternalName(Runnable.class),
                    "run", "()V", true);
+    // test4 covers invokespecial for a super method. This covers invokespecial of a private method.
+    Handle privateInvoke =
+        new Handle(Opcodes.H_INVOKESPECIAL, internalName, "privateMethodTest9", "()V", false);
 
     mv.visitInvokeDynamicInsn("targetMethodTest9", "()V", bootstrap,
                               staticSetter, staticGetter,
                               setter, getter,
                               instanceInvoke, constructor,
-                              interfaceInvoke);
+                              interfaceInvoke, privateInvoke);
     mv.visitInsn(Opcodes.RETURN);
     mv.visitMaxs(-1, -1);
   }
