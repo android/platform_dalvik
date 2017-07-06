@@ -16,6 +16,8 @@
 
 package com.android.dx.cf.iface;
 
+import com.android.dx.cf.attrib.AttSynthetic;
+import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -60,7 +62,11 @@ public abstract class StdMember implements Member {
         }
 
         this.definingClass = definingClass;
-        this.accessFlags = accessFlags;
+        if (attributes.findFirst(AttSynthetic.ATTRIBUTE_NAME) != null) {
+            this.accessFlags = accessFlags | AccessFlags.ACC_SYNTHETIC;
+        } else {
+            this.accessFlags = accessFlags;
+        }
         this.nat = nat;
         this.attributes = attributes;
     }
