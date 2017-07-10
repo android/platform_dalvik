@@ -1,9 +1,9 @@
 Note: Main.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 000000: 6465 780a 3033 3800     |magic: "dex\n038\0"
-000008: 7e08 861f               |checksum
-00000c: e48a 8e6c 24e0 84f7 c591|signature
-000016: a728 6015 6a2c 6639 54a9|
+000008: 9607 cfef               |checksum
+00000c: 1d6a 9f47 2cbc a11c 1e0f|signature
+000016: f188 46fc 9b74 db32 2eab|
 000020: 3c07 0000               |file_size:       0000073c
 000024: 7000 0000               |header_size:     00000070
 000028: 7856 3412               |endian_tag:      12345678
@@ -277,8 +277,7 @@ Note: Recompile with -Xlint:unchecked for details.
                                 |call_site_ids:
                                 |[0] call site{method-handle{invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}, string{"accept"}, proto{(LFoo;I)LConsumer;}, proto{(Ljava/lang/Object;)V}, method-handle{invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}}, proto{(Ljava/lang/Object;)V}}
 000298: 1c06 0000               |call_site_off: 0000061c
-                                |[1] call site{method-handle{invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}, string{"accept"}, proto{(LFoo;I)LConsumer;}, proto{(Ljava/lang/Object;)V}, method-handle{invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}}, proto{(Ljava/lang/Object;)V}}
-00029c: 1c06 0000               |call_site_off: 0000061c
+00029c: 0000 0000               |
                                 |
                                 |method_handles:
 0002a0: 0400                    |kind: 0004
@@ -355,7 +354,7 @@ Note: Recompile with -Xlint:unchecked for details.
 00030e: 0000                    |  tries_size:     0000
 000310: ee05 0000               |  debug_off:      000005ee
 000314: 0d00 0000               |  insns_size:     0000000d
-000318: fc20 0100 3200          |  0000: invoke-custom {v2, v3}, {invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}, accept, (LFoo;I)LConsumer;, (Ljava/lang/Object;)V, invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}, (Ljava/lang/Object;)V} // CallSiteRef@0001
+000318: fc20 0000 3200          |  0000: invoke-custom {v2, v3}, {invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}, accept, (LFoo;I)LConsumer;, (Ljava/lang/Object;)V, invoke-direct,method{Foo.lambda$bar$0:(ILjava/lang/Object;)V}, (Ljava/lang/Object;)V} // CallSiteRef@0000
 00031e: 0c00                    |  0003: move-result-object v0
 000320: 1211                    |  0004: const/4 v1, #int 1 // #1
 000322: 7110 0800 0100          |  0005: invoke-static {v1}, java.lang.Integer.valueOf:(I)Ljava/lang/Integer; // method@0008
@@ -774,7 +773,7 @@ Note: Recompile with -Xlint:unchecked for details.
                                 |[6ac] call_site_id_item map
 0006ac: 0700                    |  type:   0007 // TYPE_CALL_SITE_ID_ITEM
 0006ae: 0000                    |  unused: 0
-0006b0: 0200 0000               |  size:   00000002
+0006b0: 0100 0000               |  size:   00000001
 0006b4: 9802 0000               |  offset: 00000298
                                 |[6b8] method_handle_item map
 0006b8: 0800                    |  type:   0008 // TYPE_METHOD_HANDLE_ITEM
@@ -847,7 +846,7 @@ Note: Recompile with -Xlint:unchecked for details.
                                 |    8 bytes/item
                                 |  annotations directory: 1 item; 24 bytes total
                                 |    24 bytes/item
-                                |  call site id: 2 items; 8 bytes total
+                                |  call site id: 1 item; 4 bytes total
                                 |    4 bytes/item
                                 |  class data: 3 items; 43 bytes total
                                 |    8..21 bytes/item; average 14

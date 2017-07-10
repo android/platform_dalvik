@@ -847,7 +847,7 @@ Class #1            -
       outs          : 0
       insns size    : 4 16-bit code units
 004894:                                        |[004894] invokecustom.InvokeCustom1.test1:()V
-0048a4: fc00 0100 0000                         |0000: invoke-custom {}, call_site@0001
+0048a4: fc00 0000 0000                         |0000: invoke-custom {}, call_site@0000
 0048aa: 0e00                                   |0003: return-void
       catches       : (none)
       positions     : 
@@ -1728,7 +1728,7 @@ Class #2            -
 00510e: 1706 15cd 5b07                         |000d: const-wide/32 v6, #float 1.6536e-34 // #075bcd15
 005114: 1808 b6fa f8b0 4819 0c40               |0010: const-wide v8, #double 3.51235 // #400c1948b0f8fab6
 00511e: 1a0a 4300                              |0015: const-string v10, "String" // string@0043
-005122: fd0b 0300 0000                         |0017: invoke-custom/range {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10}, call_site@0003
+005122: fd0b 0100 0000                         |0017: invoke-custom/range {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10}, call_site@0001
 005128: 0e00                                   |001a: return-void
       catches       : (none)
       positions     : 
@@ -2600,7 +2600,7 @@ Class #3            -
       outs          : 0
       insns size    : 4 16-bit code units
 005964:                                        |[005964] invokecustom.InvokeCustom3.test3:()V
-005974: fc00 0500 0000                         |0000: invoke-custom {}, call_site@0005
+005974: fc00 0200 0000                         |0000: invoke-custom {}, call_site@0002
 00597a: 0e00                                   |0003: return-void
       catches       : (none)
       positions     : 
@@ -3475,7 +3475,7 @@ Class #4            -
 0061c4: 1300 e803                              |0000: const/16 v0, #int 1000 // #3e8
 0061c8: 1301 65fc                              |0002: const/16 v1, #int -923 // #fc65
 0061cc: 1302 4d00                              |0004: const/16 v2, #int 77 // #4d
-0061d0: fc30 0700 1002                         |0006: invoke-custom {v0, v1, v2}, call_site@0007
+0061d0: fc30 0300 1002                         |0006: invoke-custom {v0, v1, v2}, call_site@0003
 0061d6: 0a00                                   |0009: move-result v0
 0061d8: 6201 1000                              |000a: sget-object v1, Ljava/lang/System;.out:Ljava/io/PrintStream; // field@0010
 0061dc: 2202 1700                              |000c: new-instance v2, Ljava/lang/StringBuilder; // type@0017
@@ -4362,7 +4362,7 @@ Class #5            -
 006a54: 1800 7777 7777 7707 0000               |0000: const-wide v0, #double 4.05612e-311 // #0000077777777777
 006a5e: 1802 efee eeee eefe ffff               |0005: const-wide v2, #double -nan // #fffffeeeeeeeeeef
 006a68: 1804 6666 6666 6606 0000               |000a: const-wide v4, #double 3.47668e-311 // #0000066666666666
-006a72: fd06 0900 0000                         |000f: invoke-custom/range {v0, v1, v2, v3, v4, v5}, call_site@0009
+006a72: fd06 0400 0000                         |000f: invoke-custom/range {v0, v1, v2, v3, v4, v5}, call_site@0004
 006a78: 0b00                                   |0012: move-result-wide v0
 006a7a: 6202 1000                              |0013: sget-object v2, Ljava/lang/System;.out:Ljava/io/PrintStream; // field@0010
 006a7e: 2203 1700                              |0015: new-instance v3, Ljava/lang/StringBuilder; // type@0017
@@ -5249,7 +5249,7 @@ Class #6            -
 0072f4: 1400 0040 003f                         |0000: const v0, #float 0.500977 // #3f004000
 0072fa: 1401 0040 00bf                         |0003: const v1, #float -0.500977 // #bf004000
 007300: 1802 0000 0000 0410 d0bf               |0006: const-wide v2, #double -0.250978 // #bfd0100400000000
-00730a: fc40 0b00 1032                         |000b: invoke-custom {v0, v1, v2, v3}, call_site@000b
+00730a: fc40 0500 1032                         |000b: invoke-custom {v0, v1, v2, v3}, call_site@0005
 007310: 0b00                                   |000e: move-result-wide v0
 007312: 6202 1000                              |000f: sget-object v2, Ljava/lang/System;.out:Ljava/io/PrintStream; // field@0010
 007316: 2203 1700                              |0011: new-instance v3, Ljava/lang/StringBuilder; // type@0017
@@ -6134,11 +6134,11 @@ Class #7            -
       insns size    : 16 16-bit code units
 007b7c:                                        |[007b7c] invokecustom.InvokeCustom8.test8:()V
 007b8c: 1a00 1400                              |0000: const-string v0, "First invokedynamic invocation" // string@0014
-007b90: fc10 0f00 0000                         |0002: invoke-custom {v0}, call_site@000f
+007b90: fc10 0600 0000                         |0002: invoke-custom {v0}, call_site@0006
 007b96: 1a00 4200                              |0005: const-string v0, "Second invokedynamic invocation" // string@0042
-007b9a: fc10 1000 0000                         |0007: invoke-custom {v0}, call_site@0010
+007b9a: fc10 0700 0000                         |0007: invoke-custom {v0}, call_site@0007
 007ba0: 1a00 0f00                              |000a: const-string v0, "Dupe first invokedynamic invocation" // string@000f
-007ba4: fc10 1100 0000                         |000c: invoke-custom {v0}, call_site@0011
+007ba4: fc10 0800 0000                         |000c: invoke-custom {v0}, call_site@0008
 007baa: 0e00                                   |000f: return-void
       catches       : (none)
       positions     : 
@@ -7109,19 +7109,11 @@ Call site #0: // offset 57124
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest1 (String)
   link_argument[2] : ()V (MethodType)
-Call site #1: // offset 57124
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest1 (String)
-  link_argument[2] : ()V (MethodType)
-Call site #2: // offset 57131
+Call site #1: // offset 57131
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest2 (String)
   link_argument[2] : (ZBCSIFJDLjava/lang/String;)V (MethodType)
-Call site #3: // offset 57131
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest2 (String)
-  link_argument[2] : (ZBCSIFJDLjava/lang/String;)V (MethodType)
-Call site #4: // offset 57138
+Call site #2: // offset 57138
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest3 (String)
   link_argument[2] : ()V (MethodType)
@@ -7129,59 +7121,27 @@ Call site #4: // offset 57138
   link_argument[4] : 123456789 (long)
   link_argument[5] : 123.456 (float)
   link_argument[6] : 123457 (double)
-Call site #5: // offset 57138
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest3 (String)
-  link_argument[2] : ()V (MethodType)
-  link_argument[3] : 1 (int)
-  link_argument[4] : 123456789 (long)
-  link_argument[5] : 123.456 (float)
-  link_argument[6] : 123457 (double)
-Call site #6: // offset 57166
+Call site #3: // offset 57166
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest5 (String)
   link_argument[2] : (III)I (MethodType)
-Call site #7: // offset 57166
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest5 (String)
-  link_argument[2] : (III)I (MethodType)
-Call site #8: // offset 57173
+Call site #4: // offset 57173
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest6 (String)
   link_argument[2] : (JJJ)J (MethodType)
-Call site #9: // offset 57173
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest6 (String)
-  link_argument[2] : (JJJ)J (MethodType)
-Call site #10: // offset 57180
+Call site #5: // offset 57180
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest7 (String)
   link_argument[2] : (FFD)D (MethodType)
-Call site #11: // offset 57180
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest7 (String)
-  link_argument[2] : (FFD)D (MethodType)
-Call site #12: // offset 57187
+Call site #6: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #13: // offset 57187
+Call site #7: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #14: // offset 57187
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest8 (String)
-  link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #15: // offset 57187
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest8 (String)
-  link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #16: // offset 57187
-  link_argument[0] : 0 (MethodHandle)
-  link_argument[1] : targetMethodTest8 (String)
-  link_argument[2] : (Ljava/lang/String;)V (MethodType)
-Call site #17: // offset 57187
+Call site #8: // offset 57187
   link_argument[0] : 0 (MethodHandle)
   link_argument[1] : targetMethodTest8 (String)
   link_argument[2] : (Ljava/lang/String;)V (MethodType)
