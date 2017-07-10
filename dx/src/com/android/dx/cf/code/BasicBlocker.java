@@ -17,7 +17,7 @@
 package com.android.dx.cf.code;
 
 import com.android.dx.rop.cst.Constant;
-import com.android.dx.rop.cst.CstCallSiteRef;
+import com.android.dx.rop.cst.CstInvokeDynamic;
 import com.android.dx.rop.cst.CstMemberRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -201,7 +201,7 @@ public final class BasicBlocker implements BytecodeArray.Visitor {
         visitCommon(offset, length, true);
 
         if ((cst instanceof CstMemberRef) || (cst instanceof CstType) ||
-            (cst instanceof CstString) || (cst instanceof CstCallSiteRef)) {
+            (cst instanceof CstString) || (cst instanceof CstInvokeDynamic)) {
             /*
              * Instructions with these sorts of constants have the
              * possibility of throwing, so this instruction needs to

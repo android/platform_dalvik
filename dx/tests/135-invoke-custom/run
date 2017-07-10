@@ -23,6 +23,9 @@ EXPECTED_STATUS[${UNSUPPORTED_SDK_VERSION}]=1
 # Expect success with supported SDK version
 EXPECTED_STATUS[${SUPPORTED_SDK_VERSION}]=0
 
+DX_OUTPUT=dx.log
+rm -f ${DX_OUTPUT} 2>/dev/null
+
 for SDK_VERSION in ${UNSUPPORTED_SDK_VERSION} ${SUPPORTED_SDK_VERSION}; do
   echo Trying SDK version ${SDK_VERSION} with invoke-custom.
   dx --min-sdk-version=${SDK_VERSION} --dex --output=invokecustom.dex \
@@ -32,4 +35,35 @@ for SDK_VERSION in ${UNSUPPORTED_SDK_VERSION} ${SUPPORTED_SDK_VERSION}; do
     echo Unexpected status ${STATUS} for SDK version ${SDK_VERSION}.
     exit 1
   fi
-done
+done | tee -a ${DX_OUTPUT}
+
+JAVAP_OUTPUT=invokecustom.InvokeCustom.txt
+javap -c -v -cp invokecustom.jar invokecustom.InvokeCustom > ${JAVAP_OUTPUT}
+
+# Check each invokedynamic instruction produced one invoke-custom
+INVOKEDYNAMIC_COUNT=$( grep "invokedynamic #" ${JAVAP_OUTPUT} | wc -l )
+INVOKE_CUSTOM_COUNT=$( grep ": invoke-custom" ${DX_OUTPUT} | wc -l )
+if [ "${INVOKEDYNAMIC_COUNT}" -ne "${INVOKE_CUSTOM_COUNT}" ]; then
+    echo Found ${INVOKEDYNAMIC_COUNT} uses of invokedynamic but ${INVOKE_CUSTOM_COUNT} uses of invoke-custom.
+    exit 1
+fi
+
+# Check there is a 1:1 correspondance between the number of call site ids and invoke-custom bytecodes.
+CALL_SITE_ID_COUNT=$( sed -n -e '/call_site_off:/ p' ${DX_OUTPUT} | wc -l )
+if [ ${CALL_SITE_ID_COUNT} -gt ${INVOKE_CUSTOM_COUNT} ]; then
+    echo Found ${CALL_SITE_ID_COUNT} call sites but ${INVOKE_CUSTOM_COUNT} uses of invoke-custom.
+    exit 1
+fi
+
+# Check number of invokedynamic constants matches the number of unique call sites
+CST_INDY_COUNT=$( sed -n -e 's@.*: invokedynamic #\([0-9]*\),.*@\1@p' ${JAVAP_OUTPUT} | \
+                  sort | \
+                  uniq -c | \
+                  wc -l )
+CALL_SITE_COUNT=$( sed -n -e 's@.*call_site_off: \([0-9a-f]\+\)@\1@p' ${DX_OUTPUT} | \
+                   uniq -c | \
+                   wc -l )
+if [ ${CST_INDY_COUNT} -ne ${CALL_SITE_COUNT} ]; then
+    echo Found ${CST_INDY_COUNT} invokedynamic constants but ${CALL_SITE_COUNT} call sites.
+    exit 1
+fi
