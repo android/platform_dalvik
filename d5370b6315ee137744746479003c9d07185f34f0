@@ -22,6 +22,30 @@
       "revId": "d5370b6315ee137744746479003c9d07185f34f0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95b5a86b_f250f4a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-07-11T08:08:16Z",
+      "side": 1,
+      "message": "I\u0027m easy, but think it\u0027s fine to avoid it entirely.\n\ntl;dr - when dexdump2 works on Windows, dexdump will be retired. I initially rev\u0027ed the CL here to use dexdump2 which is present in the buildbot builds, but the dump output from dx has the info anyway and is slightly easier extracting. There are separate tests for call sites and method handles for dexdump2 in art/ too.",
+      "parentUuid": "ed1065a9_774ee434",
+      "range": {
+        "startLine": 12,
+        "startChar": 44,
+        "endLine": 12,
+        "endChar": 58
+      },
+      "revId": "d5370b6315ee137744746479003c9d07185f34f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
