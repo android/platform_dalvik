@@ -51,6 +51,8 @@
 #include <assert.h>
 #include <inttypes.h>
 
+#include <string>
+
 static const char* gProgName = "dexdump";
 
 enum OutputFormat {
@@ -716,43 +718,18 @@ bool getProtoInfo(DexFile* pDexFile, u4 protoIdx, ProtoInfo* pProtoInfo)
     pProtoInfo->returnType = dexStringByTypeIdx(pDexFile, protoId->returnTypeIdx);
 
     // Build string for parameter types.
-    size_t bufSize = 1;
-    char* buf = (char*)malloc(bufSize);
-    if (buf == NULL) {
-        return false;
-    }
-
-    buf[0] = '\0';
-    size_t bufUsed = 1;
-
+    std::string buf;
     const DexTypeList* paramTypes = dexGetProtoParameters(pDexFile, protoId);
-    if (paramTypes == NULL) {
-        // No parameters.
-        pProtoInfo->parameterTypes = buf;
-        return true;
-    }
-
-    for (u4 i = 0; i < paramTypes->size; ++i) {
-        if (paramTypes->list[i].typeIdx >= pDexFile->pHeader->typeIdsSize) {
-            free(buf);
-            return false;
-        }
-        const char* param = dexStringByTypeIdx(pDexFile, paramTypes->list[i].typeIdx);
-        size_t newUsed = bufUsed + strlen(param);
-        if (newUsed > bufSize) {
-            char* newBuf = (char*)realloc(buf, newUsed);
-            if (newBuf == NULL) {
-                free(buf);
+    if (paramTypes != NULL) {
+        for (u4 i = 0; i < paramTypes->size; ++i) {
+            if (paramTypes->list[i].typeIdx >= pDexFile->pHeader->typeIdsSize) {
                 return false;
             }
-            buf = newBuf;
-            bufSize = newUsed;
+            buf += dexStringByTypeIdx(pDexFile, paramTypes->list[i].typeIdx);
         }
-        strncat(buf + bufUsed - 1, param, bufSize - (bufUsed - 1));
-        bufUsed = newUsed;
     }
 
-    pProtoInfo->parameterTypes = buf;
+    pProtoInfo->parameterTypes = strdup(buf.c_str());
     return true;
 }
 
