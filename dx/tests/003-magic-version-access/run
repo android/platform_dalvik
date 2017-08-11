@@ -48,11 +48,14 @@ check_accepted class-version-50.65535.txt
 check_accepted class-version-51.0.txt
 check_accepted class-version-51.65535.txt
 check_accepted class-version-52.0.txt
+check_accepted class-version-52.1.txt
+check_accepted class-version-52.65535.txt
+check_accepted class-version-53.0.txt
 
 # Too big (throws an exception)
-check_rejected class-version-52.1.txt
-check_rejected class-version-52.65535.txt
-check_rejected class-version-53.0.txt
+check_rejected class-version-53.1.txt
+check_rejected class-version-53.65535.txt
+check_rejected class-version-54.0.txt
 
 # Show that we can dump the access flags even when they
 # don't make any sense.

@@ -567,13 +567,15 @@ public class Main {
                 }
 
                 // remaining files
+                FileNameFilter filter = new RemoveModuleInfoFilter(new NotFilter(mainPassFilter));
                 for (int i = 0; i < fileNames.length; i++) {
-                    processOne(fileNames[i], new NotFilter(mainPassFilter));
+                    processOne(fileNames[i], filter);
                 }
             } else {
                 // without --main-dex-list
+                FileNameFilter filter = new RemoveModuleInfoFilter(ClassPathOpener.acceptAll);
                 for (int i = 0; i < fileNames.length; i++) {
-                    processOne(fileNames[i], ClassPathOpener.acceptAll);
+                    processOne(fileNames[i], filter);
                 }
             }
         } catch (StopProcessing ex) {
@@ -1156,6 +1158,22 @@ public class Main {
         @Override
         public boolean accept(String path) {
             return !filter.accept(path);
+        }
+    }
+
+    /**
+     * Filters "module-info.class" out of the paths accepted by delegate.
+     */
+    private static class RemoveModuleInfoFilter implements FileNameFilter {
+        protected final FileNameFilter delegate;
+
+        public RemoveModuleInfoFilter(FileNameFilter delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public boolean accept(String path) {
+            return delegate.accept(path) && !("module-info.class".equals(path));
         }
     }
 

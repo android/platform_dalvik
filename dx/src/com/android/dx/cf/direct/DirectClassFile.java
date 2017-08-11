@@ -52,9 +52,11 @@ public class DirectClassFile implements ClassFile {
      * See http://en.wikipedia.org/wiki/Java_class_file for an up-to-date
      * list of version numbers. Currently known (taken from that table) are:
      *
-     *     J2SE 7.0 = 51 (0x33 hex),
-     *     J2SE 6.0 = 50 (0x32 hex),
-     *     J2SE 5.0 = 49 (0x31 hex),
+     *     Java SE 9 = 53 (0x35 hex),
+     *     Java SE 8 = 52 (0x34 hex),
+     *     Java SE 7 = 51 (0x33 hex),
+     *     Java SE 6.0 = 50 (0x32 hex),
+     *     Java SE 5.0 = 49 (0x31 hex),
      *     JDK 1.4 = 48 (0x30 hex),
      *     JDK 1.3 = 47 (0x2F hex),
      *     JDK 1.2 = 46 (0x2E hex),
@@ -71,7 +73,7 @@ public class DirectClassFile implements ClassFile {
      *
      * Note: if you change this, please change "java.class.version" in System.java.
      */
-    private static final int CLASS_FILE_MAX_MAJOR_VERSION = 52;
+    private static final int CLASS_FILE_MAX_MAJOR_VERSION = 53;
 
     /** maximum {@code .class} file minor version */
     private static final int CLASS_FILE_MAX_MINOR_VERSION = 0;

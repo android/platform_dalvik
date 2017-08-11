@@ -303,28 +303,91 @@ begin classfile
 magic: cafebabe
 minor_version: 0001
 major_version: 0034
+constant_pool_count: 0005
 
-trouble parsing:
-unsupported class file version 52.1
-...while parsing class-version-52.1.txt
+constant_pool:
+  0001: utf8{"Small"}
+  0002: utf8{"java/lang/Object"}
+  0003: type{Small}
+  0004: type{java.lang.Object}
+end constant_pool
+access_flags: public|final|super|interface|abstract|synthetic|annotation|enum|89ce
+this_class: type{Small}
+super_class: type{java.lang.Object}
+interfaces_count: 0000
+fields_count: 0000
+methods_count: 0000
+attributes_count: 0000
+end classfile
 reading class-version-52.65535.txt...
 begin classfile
 magic: cafebabe
 minor_version: ffff
 major_version: 0034
+constant_pool_count: 0005
 
-trouble parsing:
-unsupported class file version 52.65535
-...while parsing class-version-52.65535.txt
+constant_pool:
+  0001: utf8{"Small"}
+  0002: utf8{"java/lang/Object"}
+  0003: type{Small}
+  0004: type{java.lang.Object}
+end constant_pool
+access_flags: public|final|super|interface|abstract|synthetic|annotation|enum|89ce
+this_class: type{Small}
+super_class: type{java.lang.Object}
+interfaces_count: 0000
+fields_count: 0000
+methods_count: 0000
+attributes_count: 0000
+end classfile
 reading class-version-53.0.txt...
 begin classfile
 magic: cafebabe
 minor_version: 0000
 major_version: 0035
+constant_pool_count: 0005
+
+constant_pool:
+  0001: utf8{"Small"}
+  0002: utf8{"java/lang/Object"}
+  0003: type{Small}
+  0004: type{java.lang.Object}
+end constant_pool
+access_flags: public|final|super|interface|abstract|synthetic|annotation|enum|89ce
+this_class: type{Small}
+super_class: type{java.lang.Object}
+interfaces_count: 0000
+fields_count: 0000
+methods_count: 0000
+attributes_count: 0000
+end classfile
+reading class-version-53.1.txt...
+begin classfile
+magic: cafebabe
+minor_version: 0001
+major_version: 0035
 
 trouble parsing:
-unsupported class file version 53.0
-...while parsing class-version-53.0.txt
+unsupported class file version 53.1
+...while parsing class-version-53.1.txt
+reading class-version-53.65535.txt...
+begin classfile
+magic: cafebabe
+minor_version: ffff
+major_version: 0035
+
+trouble parsing:
+unsupported class file version 53.65535
+...while parsing class-version-53.65535.txt
+reading class-version-54.0.txt...
+begin classfile
+magic: cafebabe
+minor_version: 0000
+major_version: 0036
+
+trouble parsing:
+unsupported class file version 54.0
+...while parsing class-version-54.0.txt
 reading small-class.txt...
 begin classfile
 magic: cafebabe
