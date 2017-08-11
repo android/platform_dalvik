@@ -1,9 +1,9 @@
 Note: Main.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 000000: 6465 780a 3033 3800     |magic: "dex\n038\0"
-000008: 9607 cfef               |checksum
-00000c: 1d6a 9f47 2cbc a11c 1e0f|signature
-000016: f188 46fc 9b74 db32 2eab|
+000008: 590b 1a16               |checksum
+00000c: 8798 f7ff b191 97b1 2e9c|signature
+000016: f739 ab2b 8ae4 9ef9 73a8|
 000020: 3c07 0000               |file_size:       0000073c
 000024: 7000 0000               |header_size:     00000070
 000028: 7856 3412               |endian_tag:      12345678
@@ -339,7 +339,7 @@ Note: Recompile with -Xlint:unchecked for details.
                                 |  debug info
                                 |    line_start: 24
                                 |    parameters_size: 0002
-                                |    parameter <unnamed> v4
+                                |    parameter j v4
                                 |    parameter k v5
                                 |    0000: prologue end
                                 |    0000: line 24
@@ -622,7 +622,7 @@ Note: Recompile with -Xlint:unchecked for details.
                                 |[5e3] debug info
 0005e3: 18                      |line_start: 24
 0005e4: 02                      |parameters_size: 0002
-0005e5: 00                      |parameter <unnamed> v4
+0005e5: 23                      |parameter j v4
 0005e6: 24                      |parameter k v5
 0005e7: 07                      |0000: prologue end
 0005e8: 0e                      |0000: line 24

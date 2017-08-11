@@ -13,7 +13,7 @@ block 0005
   next 0000
 block 0006
   pred 0000
-  Blort.java:4@0004: return-void . <- .
+  Blort.java:2@0004: return-void . <- .
   returns
 block 0007
   @????: goto . <- .
