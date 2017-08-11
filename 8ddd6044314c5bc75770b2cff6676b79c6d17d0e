@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c9aa0d5_960c485c",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-08-11T07:52:19Z",
+      "side": 1,
+      "message": "Can this be hoisted outside the loop? So we just do the allocations once?",
+      "range": {
+        "startLine": 572,
+        "startChar": 27,
+        "endLine": 572,
+        "endChar": 85
+      },
+      "revId": "8ddd6044314c5bc75770b2cff6676b79c6d17d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2377a883_73576364",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-08-11T07:52:19Z",
+      "side": 1,
+      "message": "This also?",
+      "range": {
+        "startLine": 577,
+        "startChar": 45,
+        "endLine": 577,
+        "endChar": 98
+      },
+      "revId": "8ddd6044314c5bc75770b2cff6676b79c6d17d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
