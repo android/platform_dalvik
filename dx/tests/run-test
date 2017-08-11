@@ -33,9 +33,20 @@ cd "${progdir}"
 progdir=`pwd`
 prog="${progdir}"/`basename "${prog}"`
 
-export JAVAC="${progdir}/../../../prebuilt/common/openjdk/bin/javac"
+if [[ -z "${JAVA_HOME}" ]]; then
+    unix=$(uname | tr '[A-Z]' '[a-z]')
+    JAVA_HOME="${progdir}/../../../prebuilts/jdk/jdk8/${unix}-x86"
+fi
+
+if [[ ! -d "${JAVA_HOME}" ]]; then
+    echo "Missing JAVA_HOME directory: $JAVA_HOME" 1>&2
+    exit 1
+fi
+
+export JAVAC="${JAVA_HOME}/bin/javac"
 if [ "!" -e "$JAVAC" ]; then
-    JAVAC="javac"
+    echo "Missing JAVAC executable: ${JAVAC}" 1>&2
+    exit 1
 fi
 
 info="info.txt"
