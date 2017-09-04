@@ -16,7 +16,6 @@
 
 package com.android.dx.rop.type;
 
-import com.android.dx.command.dexer.Main;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -32,7 +31,7 @@ public final class Prototype implements Comparable<Prototype> {
      * <p>The initial capacity is based on a medium-size project.
      */
     private static final ConcurrentMap<String, Prototype> internTable =
-            new ConcurrentHashMap<>(10_000, 0.75f, Main.CONCURRENCY_LEVEL);
+            new ConcurrentHashMap<>(10_000, 0.75f);
 
     /** {@code non-null;} method descriptor */
     private final String descriptor;

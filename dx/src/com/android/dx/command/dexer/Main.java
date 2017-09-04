@@ -84,8 +84,6 @@ import java.util.jar.Manifest;
  */
 public class Main {
 
-    public static final int CONCURRENCY_LEVEL = 4;
-
     /**
      * File extension of a {@code .dex} file.
      */

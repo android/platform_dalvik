@@ -21,7 +21,7 @@ import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.type.Type;
 import com.android.dx.rop.type.TypeBearer;
 import com.android.dx.util.ToHuman;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Combination of a register number and a type, used as the sources and
@@ -33,11 +33,17 @@ public final class RegisterSpec
     public static final String PREFIX = "v";
 
     /** {@code non-null;} intern table for instances */
-    private static final HashMap<Object, RegisterSpec> theInterns =
-        new HashMap<Object, RegisterSpec>(1000);
+    private static final ConcurrentHashMap<Object, RegisterSpec> theInterns =
+        new ConcurrentHashMap<Object, RegisterSpec>(10_000, 0.75f);
 
     /** {@code non-null;} common comparison instance used while interning */
-    private static final ForComparison theInterningItem = new ForComparison();
+    private static final ThreadLocal<ForComparison> theInterningItem =
+            new ThreadLocal<ForComparison>() {
+                @Override
+                protected ForComparison initialValue() {
+                    return new ForComparison();
+                }
+            };
 
     /** {@code >= 0;} register number */
     private final int reg;
@@ -62,18 +68,17 @@ public final class RegisterSpec
      */
     private static RegisterSpec intern(int reg, TypeBearer type,
             LocalItem local) {
-        synchronized (theInterns) {
-            theInterningItem.set(reg, type, local);
-            RegisterSpec found = theInterns.get(theInterningItem);
-
-            if (found != null) {
-                return found;
+        ForComparison interningItem = theInterningItem.get();
+        interningItem.set(reg, type, local);
+        RegisterSpec found = theInterns.get(interningItem);
+        if (found == null) {
+            found = interningItem.toRegisterSpec();
+            RegisterSpec existing = theInterns.putIfAbsent(found, found);
+            if (existing != null) {
+                return existing;
             }
-
-            found = theInterningItem.toRegisterSpec();
-            theInterns.put(found, found);
-            return found;
         }
+        return found;
     }
 
     /**
@@ -164,6 +169,10 @@ public final class RegisterSpec
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
         if (!(other instanceof RegisterSpec)) {
             if (other instanceof ForComparison) {
                 ForComparison fc = (ForComparison) other;
@@ -243,6 +252,8 @@ public final class RegisterSpec
             return -1;
         } else if (this.reg > other.reg) {
             return 1;
+        } else if (this == other) {
+            return 0;
         }
 
         int compare = type.getType().compareTo(other.type.getType());

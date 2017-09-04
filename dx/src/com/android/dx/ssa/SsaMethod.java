@@ -363,23 +363,21 @@ public final class SsaMethod {
      * the control flow graph, marking all blocks it finds as reachable.
      */
     public void computeReachability() {
-        for (SsaBasicBlock block : blocks) {
-            block.setReachable(0);
+        final int size = blocks.size();
+        BitSet reachableUnvisited = new BitSet(size);
+        BitSet reachableVisited = new BitSet(size);
+
+        reachableUnvisited.set(getEntryBlock().getIndex());
+
+        int index;
+        while ((index = reachableUnvisited.nextSetBit(0)) != -1) {
+            reachableVisited.set(index);
+            reachableUnvisited.or(blocks.get(index).getSuccessors());
+            reachableUnvisited.andNot(reachableVisited);
         }
 
-        ArrayList<SsaBasicBlock> blockList = new ArrayList<SsaBasicBlock>();
-        blockList.add(this.getEntryBlock());
-
-        while (!blockList.isEmpty()) {
-            SsaBasicBlock block = blockList.remove(0);
-            if (block.isReachable()) continue;
-
-            block.setReachable(1);
-            BitSet succs = block.getSuccessors();
-            for (int i = succs.nextSetBit(0); i >= 0;
-                     i = succs.nextSetBit(i + 1)) {
-                blockList.add(blocks.get(i));
-            }
+        for (index = 0; index < size; ++index) {
+            blocks.get(index).setReachable(reachableVisited.get(index) ? 1 : 0);
         }
     }
 
