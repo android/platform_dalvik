@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8979b58e_4ac032b9",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-09-11T09:10:32Z",
+      "side": 0,
+      "message": "Please restore those.",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 304,
+        "endChar": 17
+      },
+      "revId": "4fcf2d8f9e5292eac817da9c4b6bfba4083f9ce4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}

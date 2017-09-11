@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c511a8d_2791cec5",
+        "filename": "dx/src/com/android/dx/dex/file/DexFile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-09-11T09:10:32Z",
+      "side": 1,
+      "message": "why not call writeTo(out, null, humanOut, verbose)?",
+      "range": {
+        "startLine": 221,
+        "startChar": 8,
+        "endLine": 230,
+        "endChar": 9
+      },
+      "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
