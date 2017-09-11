@@ -22,6 +22,52 @@
       "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cda2e18e_9d5e1e92",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-11T13:08:00Z",
+      "side": 1,
+      "message": "Alternatively, Arrays.copyOfRange(bytes, start, end).",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 66
+      },
+      "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "977789a3_65600d81",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-11T13:08:00Z",
+      "side": 1,
+      "message": "ByteArray(slicedOut)",
+      "range": {
+        "startLine": 100,
+        "startChar": 19,
+        "endLine": 100,
+        "endChar": 60
+      },
+      "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
