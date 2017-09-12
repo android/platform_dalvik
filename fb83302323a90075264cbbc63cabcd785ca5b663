@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48d81dfa_2d3a1abe",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-12T08:05:58Z",
+      "side": 1,
+      "message": "It\u0027d be good to mention that the new ByteArray has a copy of the data rather than the same underlying data. Perhaps better to leave slice() as-is and rename this method cloneSlice() or somesuch?",
+      "range": {
+        "startLine": 90,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 63
+      },
+      "revId": "fb83302323a90075264cbbc63cabcd785ca5b663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d6c79a_9d2e0c6a",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-12T08:05:58Z",
+      "side": 1,
+      "message": "slicedOut should be assigned the return result from Arrays.copyOfRange(bytes, start, end).\n\nThe earlier version was biased by this.start, should this be too?",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 40
+      },
+      "revId": "fb83302323a90075264cbbc63cabcd785ca5b663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
