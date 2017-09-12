@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "02a64605_962a0d3b",
+        "filename": "dx/src/com/android/dx/dex/file/DexFile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1041553
+      },
+      "writtenOn": "2017-09-12T00:10:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c511a8d_2791cec5",
+      "range": {
+        "startLine": 221,
+        "startChar": 8,
+        "endLine": 230,
+        "endChar": 9
+      },
+      "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cda2e18e_9d5e1e92",
         "filename": "dx/src/com/android/dx/util/ByteArray.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bd20ed63_4c10daef",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1041553
+      },
+      "writtenOn": "2017-09-12T00:10:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cda2e18e_9d5e1e92",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 66
+      },
+      "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "977789a3_65600d81",
         "filename": "dx/src/com/android/dx/util/ByteArray.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2017-09-11T13:08:00Z",
       "side": 1,
       "message": "ByteArray(slicedOut)",
+      "range": {
+        "startLine": 100,
+        "startChar": 19,
+        "endLine": 100,
+        "endChar": 60
+      },
+      "revId": "1bb3dbc1466a360eb856887ae2bae20fe361338c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a71b858_ada368a1",
+        "filename": "dx/src/com/android/dx/util/ByteArray.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1041553
+      },
+      "writtenOn": "2017-09-12T00:10:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "977789a3_65600d81",
       "range": {
         "startLine": 100,
         "startChar": 19,
