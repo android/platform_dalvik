@@ -105,16 +105,11 @@ public final class ByteArray {
      * offset into this instance.
      *
      * @param offset offset into this instance
-     * @param bytes {@code non-null;} (alleged) underlying array
      * @return corresponding offset into {@code bytes}
      * @throws IllegalArgumentException thrown if {@code bytes} is
      * not the underlying array of this instance
      */
-    public int underlyingOffset(int offset, byte[] bytes) {
-        if (bytes != this.bytes) {
-            throw new IllegalArgumentException("wrong bytes");
-        }
-
+    public int underlyingOffset(int offset) {
         return start + offset;
     }
 

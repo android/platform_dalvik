@@ -172,7 +172,6 @@ public class SsaDumper extends BlockDumper {
         }
 
         suppressDump = false;
-        setAt(bytes, 0);
         parsed(bytes, 0, bytes.size(), sb.toString());
         suppressDump = true;
     }

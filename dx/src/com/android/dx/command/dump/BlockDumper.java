@@ -159,9 +159,6 @@ public class BlockDumper
             return;
         }
 
-        // Reset the dump cursor to the start of the method.
-        setAt(bytes, offset);
-
         suppressDump = false;
 
         if (first) {
@@ -212,9 +209,6 @@ public class BlockDumper
         ByteBlockList list = BasicBlocker.identifyBlocks(meth);
         int sz = list.size();
         CodeObserver codeObserver = new CodeObserver(bytes, BlockDumper.this);
-
-        // Reset the dump cursor to the start of the bytecode.
-        setAt(bytes, 0);
 
         suppressDump = false;
 
@@ -344,7 +338,6 @@ public class BlockDumper
         }
 
         suppressDump = false;
-        setAt(bytes, 0);
         parsed(bytes, 0, bytes.size(), sb.toString());
         suppressDump = true;
     }

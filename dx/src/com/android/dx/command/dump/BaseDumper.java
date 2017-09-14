@@ -63,8 +63,8 @@ public abstract class BaseDumper
     /** {@code non-null;} the current column separator string */
     private String separator;
 
-    /** the offset of the next byte to dump */
-    private int at;
+    /** the number of read bytes */
+    private int readBytes;
 
     /** commandline parsedArgs */
     protected Args args;
@@ -91,7 +91,7 @@ public abstract class BaseDumper
         this.strictParse = args.strictParse;
         this.indent = 0;
         this.separator = rawBytes ? "|" : "";
-        this.at = 0;
+        this.readBytes = 0;
         this.args = args;
 
         this.dexOptions = new DexOptions();
@@ -130,22 +130,13 @@ public abstract class BaseDumper
     /** {@inheritDoc} */
     @Override
     public void parsed(ByteArray bytes, int offset, int len, String human) {
-        offset = bytes.underlyingOffset(offset, getBytes());
+        offset = bytes.underlyingOffset(offset);
 
         boolean rawBytes = getRawBytes();
 
-        if (offset < at) {
-            println("<dump skipped backwards to " + Hex.u4(offset) + ">");
-            at = offset;
-        } else if (offset > at) {
-            String hex = rawBytes ? hexDump(at, offset - at) : "";
-            print(twoColumns(hex, "<skipped to " + Hex.u4(offset) + ">"));
-            at = offset;
-        }
-
         String hex = rawBytes ? hexDump(offset, len) : "";
         print(twoColumns(hex, human));
-        at += len;
+        readBytes += len;
     }
 
     /** {@inheritDoc} */
@@ -163,23 +154,12 @@ public abstract class BaseDumper
     }
 
     /**
-     * Gets the current dump cursor (that is, the offset of the expected
-     * next byte to dump).
+     * Gets the current number of read bytes.
      *
      * @return {@code >= 0;} the dump cursor
      */
-    protected final int getAt() {
-        return at;
-    }
-
-    /**
-     * Sets the dump cursor to the indicated offset in the given array.
-     *
-     * @param arr {@code non-null;} array in question
-     * @param offset {@code >= 0;} offset into the array
-     */
-    protected final void setAt(ByteArray arr, int offset) {
-        at = arr.underlyingOffset(offset, bytes);
+    protected final int getReadBytes() {
+        return readBytes;
     }
 
     /**
