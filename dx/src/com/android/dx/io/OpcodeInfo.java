@@ -931,6 +931,14 @@ public final class OpcodeInfo {
         new Info(Opcodes.USHR_INT_LIT8, "ushr-int/lit8",
             InstructionCodec.FORMAT_22B, IndexType.NONE);
 
+    public static final Info CONST_METHOD_HANDLE =
+        new Info(Opcodes.CONST_METHOD_HANDLE, "const-method-handle",
+            InstructionCodec.FORMAT_21C, IndexType.METHOD_HANDLE_REF);
+
+    public static final Info CONST_METHOD_TYPE =
+        new Info(Opcodes.CONST_METHOD_TYPE, "const-method-type",
+            InstructionCodec.FORMAT_21C, IndexType.PROTO_REF);
+
     public static final Info INVOKE_POLYMORPHIC =
         new Info(Opcodes.INVOKE_POLYMORPHIC, "invoke-polymorphic",
             InstructionCodec.FORMAT_45CC, IndexType.METHOD_AND_PROTO_REF);
@@ -1180,6 +1188,8 @@ public final class OpcodeInfo {
         set(SHL_INT_LIT8);
         set(SHR_INT_LIT8);
         set(USHR_INT_LIT8);
+        set(CONST_METHOD_HANDLE);
+        set(CONST_METHOD_TYPE);
         set(INVOKE_POLYMORPHIC);
         set(INVOKE_POLYMORPHIC_RANGE);
         set(INVOKE_CUSTOM);
