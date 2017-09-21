@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3100b84_f6dfa552",
+        "filename": "dx/src/com/android/dx/rop/type/Type.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-21T15:54:59Z",
+      "side": 1,
+      "message": "VarHandle.",
+      "range": {
+        "startLine": 125,
+        "startChar": 71,
+        "endLine": 125,
+        "endChar": 84
+      },
+      "revId": "5bc23028f19ef0e79ba6f856f18e458a0c937a99",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
