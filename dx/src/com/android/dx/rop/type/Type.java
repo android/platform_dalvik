@@ -122,6 +122,9 @@ public final class Type implements TypeBearer, Comparable<Type> {
     /** {@code non-null;} instance representing {@code java.lang.invoke.MethodHandle} */
     public static final Type METHOD_HANDLE = new Type("Ljava/lang/invoke/MethodHandle;", BT_OBJECT);
 
+    /** {@code non-null;} instance representing {@code java.lang.invoke.MethodHandle} */
+    public static final Type VAR_HANDLE = new Type("Ljava/lang/invoke/VarHandle;", BT_OBJECT);
+
     /** {@code non-null;} instance representing {@code java.lang.Object} */
     public static final Type OBJECT = new Type("Ljava/lang/Object;", BT_OBJECT);
 
@@ -251,6 +254,7 @@ public final class Type implements TypeBearer, Comparable<Type> {
         putIntern(CLASS);
         putIntern(CLONEABLE);
         putIntern(METHOD_HANDLE);
+        putIntern(VAR_HANDLE);
         putIntern(OBJECT);
         putIntern(SERIALIZABLE);
         putIntern(STRING);

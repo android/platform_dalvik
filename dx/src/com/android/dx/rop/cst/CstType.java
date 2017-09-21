@@ -92,6 +92,11 @@ public final class CstType extends TypedConstant {
      */
     public static final CstType METHOD_HANDLE = new CstType(Type.METHOD_HANDLE);
 
+    /**
+     * {@code non-null;} instance corresponding to the type {@code java.lang.invoke.VarHandle}
+     */
+    public static final CstType VAR_HANDLE = new CstType(Type.VAR_HANDLE);
+
     static {
         initInterns();
     }

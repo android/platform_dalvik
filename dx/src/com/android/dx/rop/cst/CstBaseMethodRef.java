@@ -168,7 +168,49 @@ public abstract class CstBaseMethodRef
      * signature polymorphic method.
      */
     public final boolean isSignaturePolymorphic() {
-        return (getDefiningClass().equals(CstType.METHOD_HANDLE) &&
-                getNat().isSignaturePolymorphic());
+        CstType definingClass = getDefiningClass();
+        if (definingClass.equals(CstType.METHOD_HANDLE)) {
+            switch (getNat().getName().getString()) {
+                case "invoke":
+                case "invokeExact":
+                    return true;
+            }
+        } else if (definingClass.equals(CstType.VAR_HANDLE)) {
+            switch (getNat().getName().getString()) {
+                case "compareAndExchange":
+                case "compareAndExchangeAcquire":
+                case "compareAndExchangeRelease":
+                case "compareAndSet":
+                case "get":
+                case "getAcquire":
+                case "getAndAdd":
+                case "getAndAddAcquire":
+                case "getAndAddRelease":
+                case "getAndBitwiseAnd":
+                case "getAndBitwiseAndAcquire":
+                case "getAndBitwiseAndRelease":
+                case "getAndBitwiseOr":
+                case "getAndBitwiseOrAcquire":
+                case "getAndBitwiseOrRelease":
+                case "getAndBitwiseXor":
+                case "getAndBitwiseXorAcquire":
+                case "getAndBitwiseXorRelease":
+                case "getAndSet":
+                case "getAndSetAcquire":
+                case "getAndSetRelease":
+                case "getOpaque":
+                case "getVolatile":
+                case "set":
+                case "setOpaque":
+                case "setRelease":
+                case "setVolatile":
+                case "weakCompareAndSet":
+                case "weakCompareAndSetAcquire":
+                case "weakCompareAndSetPlain":
+                case "weakCompareAndSetRelease":
+                    return true;
+            }
+        }
+        return false;
     }
 }

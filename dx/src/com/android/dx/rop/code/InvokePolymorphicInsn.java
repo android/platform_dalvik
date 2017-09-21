@@ -163,7 +163,7 @@ public class InvokePolymorphicInsn extends Insn {
     private static CstMethodRef makeInvokeMethod(final CstMethodRef callSiteMethod) {
         // The name is either invoke or invokeExact. The INVOKE_DESCRIPTOR is fixed.
         CstNat cstNat = new CstNat(callSiteMethod.getNat().getName(), INVOKE_DESCRIPTOR);
-        return new CstMethodRef(CstType.METHOD_HANDLE, cstNat);
+        return new CstMethodRef(callSiteMethod.getDefiningClass(), cstNat);
     }
 
     private static CstProtoRef makeCallSiteProto(final CstMethodRef callSiteMethod) {
