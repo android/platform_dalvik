@@ -45,44 +45,20 @@ public class DexOptions {
 
     /**
      * Gets the dex file magic number corresponding to this instance.
+     * @return string representing the dex file magic number
      */
     public String getMagic() {
         return DexFormat.apiToMagic(minSdkVersion);
     }
 
     /**
-     * Returns whether default and static interface methods are allowed.
-     *
-     * This became allowed as of Nougat (SDK version 24).
-     *
-     * @return true if supported on the currently selected SDK.
+     * Checks whether an API feature is supported.
+     * @param apiLevel the API level to test
+     * @return returns true if the current API level is at least sdkVersion
      */
-    public boolean canUseDefaultInterfaceMethods() {
-        return minSdkVersion >= DexFormat.API_DEFAULT_INTERFACE_METHODS;
-    }
-
-    /**
-     * Returns whether invoke-polymorphic can be used. This is emitted for calls
-     * to {@code java.lang.invoke.MethodHandle.invoke()} and
-     * {@code java.lang.invoke.MethodHandle.invokeExact()}.
-     *
-     * This became allowed as of the Android O release (SDK version 26).
-     *
-     * @return true if supported on the currently selected SDK.
-     */
-    public boolean canUseInvokePolymorphic() {
-        return minSdkVersion >= DexFormat.API_INVOKE_POLYMORPHIC;
-    }
-
-    /**
-     * Returns whether invoke-custom can be used.
-     *
-     * This became allowed as of the Android O release (SDK version 26).
-     *
-     * @return true if supported on the currently selected SDK.
-     */
-    public boolean canUseInvokeCustom() {
-        // invoke-custom and invoke-polymorphic are both covered by the same API level.
-        return minSdkVersion >= DexFormat.API_INVOKE_POLYMORPHIC;
+    public boolean apiIsSupported(int apiLevel) {
+        // TODO: the naming here is awkward. Tooling may rely on the minSdkVersion,
+        // but it is referred to as API in DexFormat. Currently indistinguishable.
+        return minSdkVersion >= apiLevel;
     }
 }
