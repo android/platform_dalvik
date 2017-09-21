@@ -122,6 +122,9 @@ public final class Type implements TypeBearer, Comparable<Type> {
     /** {@code non-null;} instance representing {@code java.lang.invoke.MethodHandle} */
     public static final Type METHOD_HANDLE = new Type("Ljava/lang/invoke/MethodHandle;", BT_OBJECT);
 
+    /** {@code non-null;} instance representing {@code java.lang.invoke.MethodType} */
+    public static final Type METHOD_TYPE = new Type("Ljava/lang/invoke/MethodType;", BT_OBJECT);
+
     /** {@code non-null;} instance representing {@code java.lang.Object} */
     public static final Type OBJECT = new Type("Ljava/lang/Object;", BT_OBJECT);
 

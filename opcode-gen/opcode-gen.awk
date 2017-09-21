@@ -486,6 +486,8 @@ function initIndexTypes() {
     indexTypeValues["field-offset"]         = "kIndexFieldOffset";
     indexTypeValues["method-and-proto-ref"] = "kIndexMethodAndProtoRef";
     indexTypeValues["call-site-ref"]        = "kCallSiteRef";
+    indexTypeValues["method-handle-ref"]    = "kMethodHandleRef";
+    indexTypeValues["proto-ref"]            = "kProtoRef";
 }
 
 # Initialize the flags data.

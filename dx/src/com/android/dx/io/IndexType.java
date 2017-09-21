@@ -54,5 +54,11 @@ public enum IndexType {
     VTABLE_OFFSET,
 
     /** direct field offset (for static linked field accesses) */
-    FIELD_OFFSET;
+    FIELD_OFFSET,
+
+    /** method handle reference index (for loading constant method handles) */
+    METHOD_HANDLE_REF,
+
+    /** proto reference index (for loading constant proto ref) */
+    PROTO_REF;
 }

@@ -97,6 +97,11 @@ typedef int64_t             s8;
  */
 #define DEX_MAGIC_VERS_38  "038\0"
 
+/* The version for android P, encoded in 4 bytes of ASCII. This differentiates dex files that may
+ * contain const-method-handle and const-proto.
+ */
+#define DEX_MAGIC_VERS_39  "039\0"
+
 /* current version, encoded in 4 bytes of ASCII */
 #define DEX_MAGIC_VERS  "036\0"
 
