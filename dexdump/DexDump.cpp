@@ -916,8 +916,26 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
             free(protoInfo.parameterTypes);
         }
         break;
-    case kCallSiteRef:
+    case kIndexCallSiteRef:
         outSize = snprintf(buf, bufSize, "call_site@%0*x", width, index);
+        break;
+    case kIndexMethodHandleRef:
+        outSize = snprintf(buf, bufSize, "methodhandle@%0*x", width, index);
+        break;
+    case kIndexProtoRef:
+        {
+            ProtoInfo protoInfo;
+            if (getProtoInfo(pDexFile, index, &protoInfo)) {
+                outSize = snprintf(buf, bufSize, "(%s)%s // proto@%0*x",
+                                   protoInfo.parameterTypes, protoInfo.returnType,
+                                   width, index);
+
+            } else {
+                outSize = snprintf(buf, bufSize, "<proto?> // proto@%0*x",
+                                   width, secondaryIndex);
+            }
+            free(protoInfo.parameterTypes);
+        }
         break;
     default:
         outSize = snprintf(buf, bufSize, "<?>");

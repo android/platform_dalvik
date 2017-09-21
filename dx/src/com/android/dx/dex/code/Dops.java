@@ -953,6 +953,14 @@ public final class Dops {
         new Dop(Opcodes.INVOKE_CUSTOM_RANGE, Opcodes.INVOKE_CUSTOM,
             Opcodes.NO_NEXT, Form3rc.THE_ONE, false);
 
+    public static final Dop CONST_METHOD_HANDLE =
+        new Dop(Opcodes.CONST_METHOD_HANDLE, Opcodes.CONST_METHOD_HANDLE,
+            Opcodes.NO_NEXT, Form21c.THE_ONE, true);
+
+    public static final Dop CONST_METHOD_TYPE =
+        new Dop(Opcodes.CONST_METHOD_TYPE, Opcodes.CONST_METHOD_TYPE,
+            Opcodes.NO_NEXT, Form21c.THE_ONE, true);
+
     // END(dops)
 
     // Static initialization.
@@ -1184,6 +1192,8 @@ public final class Dops {
         set(INVOKE_POLYMORPHIC_RANGE);
         set(INVOKE_CUSTOM);
         set(INVOKE_CUSTOM_RANGE);
+        set(CONST_METHOD_HANDLE);
+        set(CONST_METHOD_TYPE);
         // END(dops-init)
     }
 

@@ -311,19 +311,19 @@ enum Opcode {
     OP_INVOKE_OBJECT_INIT_RANGE     = 0xf0,
     OP_RETURN_VOID_BARRIER          = 0xf1,
     OP_IGET_QUICK                   = 0xf2,
-    OP_IGET_WIDE_QUICK              = 0xf3,
-    OP_IGET_OBJECT_QUICK            = 0xf4,
-    OP_IPUT_QUICK                   = 0xf5,
-    OP_IPUT_WIDE_QUICK              = 0xf6,
-    OP_IPUT_OBJECT_QUICK            = 0xf7,
-    OP_INVOKE_VIRTUAL_QUICK         = 0xf8,
-    OP_INVOKE_VIRTUAL_QUICK_RANGE   = 0xf9,
+    OP_UNUSED_F3                    = 0xf3,
+    OP_UNUSED_F4                    = 0xf4,
+    OP_UNUSED_F5                    = 0xf5,
+    OP_UNUSED_F6                    = 0xf6,
+    OP_UNUSED_F7                    = 0xf7,
+    OP_UNUSED_F8                    = 0xf8,
+    OP_UNUSED_F9                    = 0xf9,
     OP_INVOKE_POLYMORPHIC           = 0xfa,
     OP_INVOKE_POLYMORPHIC_RANGE     = 0xfb,
     OP_INVOKE_CUSTOM                = 0xfc,
     OP_INVOKE_CUSTOM_RANGE          = 0xfd,
-    OP_SPUT_OBJECT_VOLATILE         = 0xfe,
-    OP_UNUSED_FF                    = 0xff,
+    OP_CONST_METHOD_HANDLE          = 0xfe,
+    OP_CONST_METHOD_TYPE            = 0xff,
     // END(libdex-opcode-enum)
 };
 
@@ -577,19 +577,19 @@ enum Opcode {
         H(OP_INVOKE_OBJECT_INIT_RANGE),                                       \
         H(OP_RETURN_VOID_BARRIER),                                            \
         H(OP_IGET_QUICK),                                                     \
-        H(OP_IGET_WIDE_QUICK),                                                \
-        H(OP_IGET_OBJECT_QUICK),                                              \
-        H(OP_IPUT_QUICK),                                                     \
-        H(OP_IPUT_WIDE_QUICK),                                                \
-        H(OP_IPUT_OBJECT_QUICK),                                              \
-        H(OP_INVOKE_VIRTUAL_QUICK),                                           \
-        H(OP_INVOKE_VIRTUAL_QUICK_RANGE),                                     \
+        H(OP_UNUSED_F3),                                                      \
+        H(OP_UNUSED_F4),                                                      \
+        H(OP_UNUSED_F5),                                                      \
+        H(OP_UNUSED_F6),                                                      \
+        H(OP_UNUSED_F7),                                                      \
+        H(OP_UNUSED_F8),                                                      \
+        H(OP_UNUSED_F9),                                                      \
         H(OP_INVOKE_POLYMORPHIC),                                             \
         H(OP_INVOKE_POLYMORPHIC_RANGE),                                       \
         H(OP_INVOKE_CUSTOM),                                                  \
         H(OP_INVOKE_CUSTOM_RANGE),                                            \
-        H(OP_SPUT_OBJECT_VOLATILE),                                           \
-        H(OP_UNUSED_FF),                                                      \
+        H(OP_CONST_METHOD_HANDLE),                                            \
+        H(OP_CONST_METHOD_TYPE),                                              \
         /* END(libdex-goto-table) */                                          \
     };
 

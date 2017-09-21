@@ -263,6 +263,8 @@ public final class Opcodes {
     public static final int INVOKE_POLYMORPHIC_RANGE = 0xfb;
     public static final int INVOKE_CUSTOM = 0xfc;
     public static final int INVOKE_CUSTOM_RANGE = 0xfd;
+    public static final int CONST_METHOD_HANDLE = 0xfe;
+    public static final int CONST_METHOD_TYPE = 0xff;
     // END(opcodes)
 
     // TODO: Generate these payload opcodes with opcode-gen.

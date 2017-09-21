@@ -70,6 +70,8 @@ format 3rms
 #     field-offset
 #     method-and-proto-ref
 #     call-site-ref
+#     method-handle-ref
+#     proto-ref
 #   flags; pipe-combined combo of one or more of:
 #     optimized     -- optimized; not to be included in unoptimized dex files
 #     branch        -- might branch to an address
@@ -333,22 +335,20 @@ op   ef +execute-inline/range       3rmi n inline-method optimized|continue|thro
 op   f0 +invoke-object-init/range   35c  n method-ref    optimized|continue|throw|invoke
 op   f1 +return-void-barrier        10x  n none          optimized|return
 op   f2 +iget-quick                 22cs y field-offset  optimized|continue|throw
-op   f3 +iget-wide-quick            22cs y field-offset  optimized|continue|throw
-op   f4 +iget-object-quick          22cs y field-offset  optimized|continue|throw
-op   f5 +iput-quick                 22cs n field-offset  optimized|continue|throw
-op   f6 +iput-wide-quick            22cs n field-offset  optimized|continue|throw
-op   f7 +iput-object-quick          22cs n field-offset  optimized|continue|throw
-op   f8 +invoke-virtual-quick       35ms n vtable-offset optimized|continue|throw|invoke
-op   f9 +invoke-virtual-quick/range 3rms n vtable-offset optimized|continue|throw|invoke
+
+# unused: op f3..f9
+
+#
+# Bytecodes relating to method handles API.
+#
 
 # Invoke-polymorphic
-op   fa invoke-polymorphic          45cc y method-and-proto-ref continue|throw|invoke
-op   fb invoke-polymorphic/range    4rcc y method-and-proto-ref continue|throw|invoke
-op   fc invoke-custom               35c  y call-site-ref continue|throw|invoke
-op   fd invoke-custom/range         3rc  y call-site-ref continue|throw|invoke
+op   fa invoke-polymorphic          45cc n method-and-proto-ref continue|throw|invoke
+op   fb invoke-polymorphic/range    4rcc n method-and-proto-ref continue|throw|invoke
+op   fc invoke-custom               35c  n call-site-ref continue|throw|invoke
+op   fd invoke-custom/range         3rc  n call-site-ref continue|throw|invoke
 
-# More optimized opcodes (not valid in an unoptimized dex file)
+# Constant loading for method handles and method types. NB these may throw OOME
+op   fe const-method-handle         21c y method-handle-ref continue|throw
+op   ff const-method-type           21c y proto-ref         continue|throw
 
-op   fe +sput-object-volatile       21c  n field-ref     optimized|continue|throw
-
-# unused: op ff
