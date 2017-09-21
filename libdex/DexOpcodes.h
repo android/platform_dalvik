@@ -316,8 +316,8 @@ enum Opcode {
     OP_IPUT_QUICK                   = 0xf5,
     OP_IPUT_WIDE_QUICK              = 0xf6,
     OP_IPUT_OBJECT_QUICK            = 0xf7,
-    OP_INVOKE_VIRTUAL_QUICK         = 0xf8,
-    OP_INVOKE_VIRTUAL_QUICK_RANGE   = 0xf9,
+    OP_CONST_METHOD_HANDLE          = 0xf8,
+    OP_CONST_METHOD_TYPE            = 0xf9,
     OP_INVOKE_POLYMORPHIC           = 0xfa,
     OP_INVOKE_POLYMORPHIC_RANGE     = 0xfb,
     OP_INVOKE_CUSTOM                = 0xfc,
@@ -582,8 +582,8 @@ enum Opcode {
         H(OP_IPUT_QUICK),                                                     \
         H(OP_IPUT_WIDE_QUICK),                                                \
         H(OP_IPUT_OBJECT_QUICK),                                              \
-        H(OP_INVOKE_VIRTUAL_QUICK),                                           \
-        H(OP_INVOKE_VIRTUAL_QUICK_RANGE),                                     \
+        H(OP_CONST_METHOD_HANDLE),                                            \
+        H(OP_CONST_METHOD_TYPE),                                              \
         H(OP_INVOKE_POLYMORPHIC),                                             \
         H(OP_INVOKE_POLYMORPHIC_RANGE),                                       \
         H(OP_INVOKE_CUSTOM),                                                  \

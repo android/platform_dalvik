@@ -16,6 +16,7 @@
 
 package com.android.dx.dex.file;
 
+import com.android.dex.DexFormat;
 import com.android.dex.util.ExceptionWithContext;
 import com.android.dx.dex.DexOptions;
 import com.android.dx.dex.file.MixedItemSection.SortType;
@@ -140,7 +141,7 @@ public final class DexFile {
          * Prepare the list of sections in the order they appear in
          * the final output.
          */
-        if (dexOptions.canUseInvokeCustom()) {
+        if (dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
             /*
              * Method handles and call sites only visible in DEX files
              * from SDK version 26 onwards. Do not create or add sections unless
@@ -618,12 +619,12 @@ public final class DexFile {
         classDefs.prepare();
         classData.prepare();
         wordData.prepare();
-        if (dexOptions.canUseInvokePolymorphic()) {
+        if (dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
             // Prepare call site ids before byteData where the call site items are placed.
             callSiteIds.prepare();
         }
         byteData.prepare();
-        if (dexOptions.canUseInvokePolymorphic()) {
+        if (dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
             // Prepare method handles after call site items placed in byteData.
             methodHandles.prepare();
         }
