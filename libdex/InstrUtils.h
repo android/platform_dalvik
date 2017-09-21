@@ -81,7 +81,9 @@ enum InstructionIndexType {
     kIndexVtableOffset,      // vtable offset (for static linked methods)
     kIndexFieldOffset,       // field offset (for static linked fields)
     kIndexMethodAndProtoRef, // method index and proto index
-    kCallSiteRef             // call site index
+    kCallSiteRef,            // call site index
+    kMethodHandleRef,        // constant method handle reference index
+    kProtoRef,               // constant prototype reference index
 };
 
 /*

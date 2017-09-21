@@ -16,10 +16,12 @@
 
 package com.android.dx.rop.cst;
 
+import com.android.dx.rop.type.Type;
+
 /**
  * Constants of type {@code MethodHandle}.
  */
-public final class CstMethodHandle extends Constant {
+public final class CstMethodHandle extends TypedConstant {
 
     public static final int METHOD_HANDLE_TYPE_STATIC_PUT = 0;
     public static final int METHOD_HANDLE_TYPE_STATIC_GET = 1;
@@ -92,7 +94,7 @@ public final class CstMethodHandle extends Constant {
      *
      * @return the type
      */
-    public int getType() {
+    public int getMethodHandleType() {
         return type;
     }
 
@@ -171,10 +173,10 @@ public final class CstMethodHandle extends Constant {
     @Override
     protected int compareTo0(Constant other) {
         CstMethodHandle otherHandle = (CstMethodHandle) other;
-        if (getType() == otherHandle.getType()) {
+        if (getMethodHandleType() == otherHandle.getMethodHandleType()) {
             return getRef().compareTo(otherHandle.getRef());
         } else {
-            return Integer.compare(getType(), otherHandle.getType());
+            return Integer.compare(getMethodHandleType(), otherHandle.getMethodHandleType());
         }
     }
 
@@ -194,5 +196,10 @@ public final class CstMethodHandle extends Constant {
     @Override
     public String toHuman() {
         return getTypeName(type)+ "," + ref.toString();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.METHOD_HANDLE;
     }
 }

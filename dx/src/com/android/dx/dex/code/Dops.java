@@ -937,6 +937,14 @@ public final class Dops {
         new Dop(Opcodes.USHR_INT_LIT8, Opcodes.USHR_INT,
             Opcodes.NO_NEXT, Form22b.THE_ONE, true);
 
+    public static final Dop CONST_METHOD_HANDLE =
+        new Dop(Opcodes.CONST_METHOD_HANDLE, Opcodes.CONST_METHOD_HANDLE,
+            Opcodes.NO_NEXT, Form21c.THE_ONE, true);
+
+    public static final Dop CONST_METHOD_TYPE =
+        new Dop(Opcodes.CONST_METHOD_TYPE, Opcodes.CONST_METHOD_TYPE,
+            Opcodes.NO_NEXT, Form21c.THE_ONE, true);
+
     public static final Dop INVOKE_POLYMORPHIC =
         new Dop(Opcodes.INVOKE_POLYMORPHIC, Opcodes.INVOKE_POLYMORPHIC,
             Opcodes.INVOKE_POLYMORPHIC_RANGE, Form45cc.THE_ONE, false);
@@ -1180,6 +1188,8 @@ public final class Dops {
         set(SHL_INT_LIT8);
         set(SHR_INT_LIT8);
         set(USHR_INT_LIT8);
+        set(CONST_METHOD_HANDLE);
+        set(CONST_METHOD_TYPE);
         set(INVOKE_POLYMORPHIC);
         set(INVOKE_POLYMORPHIC_RANGE);
         set(INVOKE_CUSTOM);

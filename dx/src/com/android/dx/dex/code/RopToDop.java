@@ -24,6 +24,8 @@ import com.android.dx.rop.code.Rops;
 import com.android.dx.rop.code.ThrowingCstInsn;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstMethodHandle;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Type;
@@ -213,6 +215,8 @@ public final class RopToDop {
     //     Opcodes.SHL_INT_LIT8
     //     Opcodes.SHR_INT_LIT8
     //     Opcodes.USHR_INT_LIT8
+    //     Opcodes.CONST_METHOD_HANDLE
+    //     Opcodes.CONST_METHOD_TYPE
     //     Opcodes.INVOKE_POLYMORPHIC
     //     Opcodes.INVOKE_CUSTOM
     // END(first-opcodes)
@@ -580,8 +584,13 @@ public final class RopToDop {
                     return Dops.CONST_CLASS;
                 } else if (cst instanceof CstString) {
                     return Dops.CONST_STRING;
+                } else if (cst instanceof CstMethodHandle) {
+                    return Dops.CONST_METHOD_HANDLE;
+                } else if (cst instanceof CstProtoRef) {
+                    return Dops.CONST_METHOD_TYPE;
+                } else {
+                    throw new RuntimeException("Unexpected constant type");
                 }
-                break;
             }
         }
 

@@ -24,7 +24,9 @@ import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstInterfaceMethodRef;
 import com.android.dx.rop.cst.CstInvokeDynamic;
+import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstMethodRef;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
 import com.android.dx.rop.type.Type;
@@ -670,7 +672,7 @@ public class Simulator {
                      */
                     if (cst instanceof CstInterfaceMethodRef) {
                         if (opcode != ByteOps.INVOKEINTERFACE) {
-                            if (!dexOptions.canUseDefaultInterfaceMethods()) {
+                            if (!dexOptions.apiIsSupported(DexFormat.API_DEFAULT_INTERFACE_METHODS)) {
                                 throw new SimException(
                                     "default or static interface method used without " +
                                     "--min-sdk-version >= " + DexFormat.API_DEFAULT_INTERFACE_METHODS);
@@ -685,7 +687,7 @@ public class Simulator {
                     if (cst instanceof CstMethodRef) {
                         CstMethodRef methodRef = (CstMethodRef) cst;
                         if (methodRef.isSignaturePolymorphic()) {
-                            if (!dexOptions.canUseInvokePolymorphic()) {
+                            if (!dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
                                 throw new SimException(
                                     "signature-polymorphic method called without " +
                                     "--min-sdk-version >= " + DexFormat.API_INVOKE_POLYMORPHIC);
@@ -709,7 +711,7 @@ public class Simulator {
                     break;
                 }
                 case ByteOps.INVOKEDYNAMIC: {
-                    if (!dexOptions.canUseInvokeCustom()) {
+                    if (!dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
                         throw new SimException(
                             "invalid opcode " + Hex.u1(opcode) +
                             " (invokedynamic requires --min-sdk-version >= " +
@@ -736,6 +738,19 @@ public class Simulator {
                     Prototype prototype =
                         Prototype.internInts(Type.VOID, value);
                     machine.popArgs(frame, prototype);
+                    break;
+                }
+                case ByteOps.LDC:
+                case ByteOps.LDC_W: {
+                    if ((cst instanceof CstMethodHandle || cst instanceof CstProtoRef)) {
+                        if (!dexOptions.apiIsSupported(DexFormat.API_CONST_METHOD_HANDLE)) {
+                            throw new SimException(
+                                "invalid constant type " + cst.typeName() +
+                                " requires --min-sdk-version >= " +
+                                DexFormat.API_CONST_METHOD_HANDLE + ")");
+                        }
+                    }
+                    machine.clearArgs();
                     break;
                 }
                 default: {

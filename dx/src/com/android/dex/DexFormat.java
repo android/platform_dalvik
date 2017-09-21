@@ -23,7 +23,10 @@ package com.android.dex;
 public final class DexFormat {
     private DexFormat() {}
 
-    /** API level to target in order to generate invoke-polymorphic */
+    /** API level to target in order to generate const-method-handle and const-method-type */
+    public static final int API_CONST_METHOD_HANDLE = 27;
+
+    /** API level to target in order to generate invoke-polymorphic and invoke-custom */
     public static final int API_INVOKE_POLYMORPHIC = 26;
 
     /** API level to target in order to pass through default and static interface methods */
@@ -37,6 +40,9 @@ public final class DexFormat {
      * format
      */
     public static final int API_CURRENT = API_INVOKE_POLYMORPHIC;
+
+    /** dex file version number for API level 27 and earlier */
+    public static final String VERSION_FOR_API_27 = "039";
 
     /** dex file version number for API level 26 and earlier */
     public static final String VERSION_FOR_API_26 = "038";
@@ -109,6 +115,8 @@ public final class DexFormat {
             return API_DEFAULT_INTERFACE_METHODS;
         } else if (version.equals(VERSION_FOR_API_26)) {
             return API_INVOKE_POLYMORPHIC;
+        } else if (version.equals(VERSION_FOR_API_27)) {
+            return API_CONST_METHOD_HANDLE;
         } else if (version.equals(VERSION_CURRENT)) {
             return API_CURRENT;
         }
