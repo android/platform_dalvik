@@ -45,6 +45,7 @@ cc_binary {
             ],
         },
         windows: {
+            host_ldlibs: ["-lws2_32"],
             enabled: true,
         },
     },
