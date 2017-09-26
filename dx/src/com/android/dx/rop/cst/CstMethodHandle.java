@@ -159,7 +159,7 @@ public final class CstMethodHandle extends TypedConstant {
      * @param type the method handle type
      * @return the string representation of the type
      */
-    private static String getTypeName(final int type) {
+    public static String getMethodHandleTypeName(final int type) {
         return TYPE_NAMES[type];
     }
 
@@ -195,7 +195,7 @@ public final class CstMethodHandle extends TypedConstant {
     /** {@inheritDoc} */
     @Override
     public String toHuman() {
-        return getTypeName(type)+ "," + ref.toString();
+        return getMethodHandleTypeName(type)+ "," + ref.toString();
     }
 
     @Override
