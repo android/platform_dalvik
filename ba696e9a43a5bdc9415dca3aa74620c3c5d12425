@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "654c7bac_4d0dfc60",
+        "filename": "dx/src/com/android/dx/dex/file/MethodHandleItem.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-26T10:38:09Z",
+      "side": 1,
+      "message": "Thanks, good comment. Addressed in a follow on CL here:\n\nhttps://android-review.googlesource.com/c/platform/dalvik/+/494380",
+      "parentUuid": "95868093_ab41ea41",
+      "range": {
+        "startLine": 70,
+        "startChar": 59,
+        "endLine": 70,
+        "endChar": 78
+      },
+      "revId": "ba696e9a43a5bdc9415dca3aa74620c3c5d12425",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a85fd03d_8a74a436",
         "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-25T18:29:58Z",
       "side": 1,
       "message": "Consider renaming this to getMethodHandleTypeName for consistency, since there is now a \"getType\" and \"getMethodHandleType\"",
+      "range": {
+        "startLine": 162,
+        "startChar": 26,
+        "endLine": 162,
+        "endChar": 37
+      },
+      "revId": "ba696e9a43a5bdc9415dca3aa74620c3c5d12425",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52bd6823_dcf4bc6e",
+        "filename": "dx/src/com/android/dx/rop/cst/CstMethodHandle.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-26T10:38:09Z",
+      "side": 1,
+      "message": "Tackled in follow-on CL:\nhttps://android-review.googlesource.com/c/platform/dalvik/+/494380",
+      "parentUuid": "a85fd03d_8a74a436",
       "range": {
         "startLine": 162,
         "startChar": 26,
