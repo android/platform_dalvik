@@ -687,10 +687,10 @@ public class Simulator {
                     if (cst instanceof CstMethodRef) {
                         CstMethodRef methodRef = (CstMethodRef) cst;
                         if (methodRef.isSignaturePolymorphic()) {
-                            if (!dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
+                            if (!dexOptions.apiIsSupported(DexFormat.API_METHOD_HANDLES)) {
                                 throw new SimException(
                                     "signature-polymorphic method called without " +
-                                    "--min-sdk-version >= " + DexFormat.API_INVOKE_POLYMORPHIC);
+                                    "--min-sdk-version >= " + DexFormat.API_METHOD_HANDLES);
                             }
                             if (opcode != ByteOps.INVOKEVIRTUAL) {
                                 throw new SimException(
@@ -711,11 +711,11 @@ public class Simulator {
                     break;
                 }
                 case ByteOps.INVOKEDYNAMIC: {
-                    if (!dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
+                    if (!dexOptions.apiIsSupported(DexFormat.API_METHOD_HANDLES)) {
                         throw new SimException(
                             "invalid opcode " + Hex.u1(opcode) +
                             " (invokedynamic requires --min-sdk-version >= " +
-                            DexFormat.API_INVOKE_POLYMORPHIC + ")");
+                            DexFormat.API_METHOD_HANDLES + ")");
                     }
                     CstInvokeDynamic invokeDynamicRef = (CstInvokeDynamic) cst;
                     Prototype prototype = invokeDynamicRef.getPrototype();

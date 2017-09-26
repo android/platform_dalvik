@@ -66,17 +66,21 @@ public final class MethodHandleItem extends IndexedItem {
     @Override
     public void writeTo(DexFile file, AnnotatedOutput out) {
         int targetIndex = getTargetIndex(file);
+        int mhType = methodHandle.getMethodHandleType();
         if (out.annotates()) {
-            out.annotate(2, "kind: " + Hex.u2(methodHandle.getMethodHandleType()));
-            out.annotate(2, "reserved:" + Hex.u2(0));
+            out.annotate(0, indexString() + ' ' + methodHandle.toString());
+            String typeComment = " // " + CstMethodHandle.getMethodHandleTypeName(mhType);
+            out.annotate(2, "type:     " + Hex.u2(mhType) + typeComment);
+            out.annotate(2, "reserved: " + Hex.u2(0));
+            String targetComment = " // " +  methodHandle.getRef().toString();
             if (methodHandle.isAccessor()) {
-                out.annotate(2, "fieldId: " + targetIndex);
+                out.annotate(2, "fieldId:  " + Hex.u2(targetIndex) + targetComment);
             } else {
-                out.annotate(2, "methodId: " + targetIndex);
+                out.annotate(2, "methodId: " + Hex.u2(targetIndex) + targetComment);
             }
-            out.annotate(2, "reserved:" + Hex.u2(0));
+            out.annotate(2, "reserved: " + Hex.u2(0));
         }
-        out.writeShort(methodHandle.getMethodHandleType());
+        out.writeShort(mhType);
         out.writeShort(0);
         out.writeShort(getTargetIndex(file));
         out.writeShort(0);

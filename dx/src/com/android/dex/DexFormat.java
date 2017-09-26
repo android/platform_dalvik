@@ -27,7 +27,7 @@ public final class DexFormat {
     public static final int API_CONST_METHOD_HANDLE = 27;
 
     /** API level to target in order to generate invoke-polymorphic and invoke-custom */
-    public static final int API_INVOKE_POLYMORPHIC = 26;
+    public static final int API_METHOD_HANDLES = 26;
 
     /** API level to target in order to pass through default and static interface methods */
     public static final int API_DEFAULT_INTERFACE_METHODS = 24;
@@ -117,7 +117,7 @@ public final class DexFormat {
         } else if (version.equals(VERSION_FOR_API_24)) {
             return API_DEFAULT_INTERFACE_METHODS;
         } else if (version.equals(VERSION_FOR_API_26)) {
-            return API_INVOKE_POLYMORPHIC;
+            return API_METHOD_HANDLES;
         } else if (version.equals(VERSION_FOR_API_27)) {
             return API_CONST_METHOD_HANDLE;
         } else if (version.equals(VERSION_CURRENT)) {
@@ -140,7 +140,7 @@ public final class DexFormat {
             version = VERSION_CURRENT;
         } else if (targetApiLevel >= API_CONST_METHOD_HANDLE) {
             version = VERSION_FOR_API_27;
-        } else if (targetApiLevel >= API_INVOKE_POLYMORPHIC) {
+        } else if (targetApiLevel >= API_METHOD_HANDLES) {
             version = VERSION_FOR_API_26;
         } else if (targetApiLevel >= API_DEFAULT_INTERFACE_METHODS) {
             version = VERSION_FOR_API_24;

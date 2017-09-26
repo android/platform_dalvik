@@ -141,7 +141,7 @@ public final class DexFile {
          * Prepare the list of sections in the order they appear in
          * the final output.
          */
-        if (dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
+        if (dexOptions.apiIsSupported(DexFormat.API_METHOD_HANDLES)) {
             /*
              * Method handles and call sites only visible in DEX files
              * from SDK version 26 onwards. Do not create or add sections unless
@@ -619,12 +619,12 @@ public final class DexFile {
         classDefs.prepare();
         classData.prepare();
         wordData.prepare();
-        if (dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
+        if (dexOptions.apiIsSupported(DexFormat.API_METHOD_HANDLES)) {
             // Prepare call site ids before byteData where the call site items are placed.
             callSiteIds.prepare();
         }
         byteData.prepare();
-        if (dexOptions.apiIsSupported(DexFormat.API_INVOKE_POLYMORPHIC)) {
+        if (dexOptions.apiIsSupported(DexFormat.API_METHOD_HANDLES)) {
             // Prepare method handles after call site items placed in byteData.
             methodHandles.prepare();
         }
