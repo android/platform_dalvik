@@ -1032,74 +1032,91 @@ Trying SDK version 26 with invoke-custom.
 00090c: fd21 0000               |call_site_off: 000021fd
                                 |
                                 |method_handles:
-000910: 0000                    |kind: 0000
-000912: 0000                    |reserved:0000
-000914: 0100                    |fieldId: 1
-000916: 0000                    |reserved:0000
-000918: 0100                    |kind: 0001
-00091a: 0000                    |reserved:0000
-00091c: 0100                    |fieldId: 1
-00091e: 0000                    |reserved:0000
-000920: 0200                    |kind: 0002
-000922: 0000                    |reserved:0000
-000924: 0000                    |fieldId: 0
-000926: 0000                    |reserved:0000
-000928: 0300                    |kind: 0003
-00092a: 0000                    |reserved:0000
-00092c: 0000                    |fieldId: 0
-00092e: 0000                    |reserved:0000
-000930: 0400                    |kind: 0004
-000932: 0000                    |reserved:0000
-000934: 0300                    |methodId: 3
-000936: 0000                    |reserved:0000
-000938: 0400                    |kind: 0004
-00093a: 0000                    |reserved:0000
-00093c: 0400                    |methodId: 4
-00093e: 0000                    |reserved:0000
-000940: 0400                    |kind: 0004
-000942: 0000                    |reserved:0000
-000944: 0500                    |methodId: 5
-000946: 0000                    |reserved:0000
-000948: 0400                    |kind: 0004
-00094a: 0000                    |reserved:0000
-00094c: 0600                    |methodId: 6
-00094e: 0000                    |reserved:0000
-000950: 0400                    |kind: 0004
-000952: 0000                    |reserved:0000
-000954: 0a00                    |methodId: 10
-000956: 0000                    |reserved:0000
-000958: 0400                    |kind: 0004
-00095a: 0000                    |reserved:0000
-00095c: 3a00                    |methodId: 58
-00095e: 0000                    |reserved:0000
-000960: 0500                    |kind: 0005
-000962: 0000                    |reserved:0000
-000964: 0900                    |methodId: 9
-000966: 0000                    |reserved:0000
-000968: 0500                    |kind: 0005
-00096a: 0000                    |reserved:0000
-00096c: 2a00                    |methodId: 42
-00096e: 0000                    |reserved:0000
-000970: 0500                    |kind: 0005
-000972: 0000                    |reserved:0000
-000974: 3000                    |methodId: 48
-000976: 0000                    |reserved:0000
-000978: 0600                    |kind: 0006
-00097a: 0000                    |reserved:0000
-00097c: 0200                    |methodId: 2
-00097e: 0000                    |reserved:0000
-000980: 0700                    |kind: 0007
-000982: 0000                    |reserved:0000
-000984: 0d00                    |methodId: 13
-000986: 0000                    |reserved:0000
-000988: 0700                    |kind: 0007
-00098a: 0000                    |reserved:0000
-00098c: 2300                    |methodId: 35
-00098e: 0000                    |reserved:0000
-000990: 0800                    |kind: 0008
-000992: 0000                    |reserved:0000
-000994: 2e00                    |methodId: 46
-000996: 0000                    |reserved:0000
+                                |[0] method-handle{static-put,field{invokecustom.InvokeCustom.staticFieldTest9:I}}
+000910: 0000                    |type:     0000 // static-put
+000912: 0000                    |reserved: 0000
+000914: 0100                    |fieldId:  0001 // field{invokecustom.InvokeCustom.staticFieldTest9:I}
+000916: 0000                    |reserved: 0000
+                                |[1] method-handle{static-get,field{invokecustom.InvokeCustom.staticFieldTest9:I}}
+000918: 0100                    |type:     0001 // static-get
+00091a: 0000                    |reserved: 0000
+00091c: 0100                    |fieldId:  0001 // field{invokecustom.InvokeCustom.staticFieldTest9:I}
+00091e: 0000                    |reserved: 0000
+                                |[2] method-handle{instance-put,field{invokecustom.InvokeCustom.fieldTest9:F}}
+000920: 0200                    |type:     0002 // instance-put
+000922: 0000                    |reserved: 0000
+000924: 0000                    |fieldId:  0000 // field{invokecustom.InvokeCustom.fieldTest9:F}
+000926: 0000                    |reserved: 0000
+                                |[3] method-handle{instance-get,field{invokecustom.InvokeCustom.fieldTest9:F}}
+000928: 0300                    |type:     0003 // instance-get
+00092a: 0000                    |reserved: 0000
+00092c: 0000                    |fieldId:  0000 // field{invokecustom.InvokeCustom.fieldTest9:F}
+00092e: 0000                    |reserved: 0000
+                                |[4] method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;}}
+000930: 0400                    |type:     0004 // invoke-static
+000932: 0000                    |reserved: 0000
+000934: 0300                    |methodId: 0003 // method{invokecustom.InvokeCustom.bsmCreateCallSite:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;}
+000936: 0000                    |reserved: 0000
+                                |[5] method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}
+000938: 0400                    |type:     0004 // invoke-static
+00093a: 0000                    |reserved: 0000
+00093c: 0400                    |methodId: 0004 // method{invokecustom.InvokeCustom.bsmLookupStatic:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}
+00093e: 0000                    |reserved: 0000
+                                |[6] method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;}}
+000940: 0400                    |type:     0004 // invoke-static
+000942: 0000                    |reserved: 0000
+000944: 0500                    |methodId: 0005 // method{invokecustom.InvokeCustom.bsmLookupStaticWithExtraArgs:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;IJFD)Ljava/lang/invoke/CallSite;}
+000946: 0000                    |reserved: 0000
+                                |[7] method-handle{invoke-static,method{invokecustom.InvokeCustom.bsmLookupTest9:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;}}
+000948: 0400                    |type:     0004 // invoke-static
+00094a: 0000                    |reserved: 0000
+00094c: 0600                    |methodId: 0006 // method{invokecustom.InvokeCustom.bsmLookupTest9:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)Ljava/lang/invoke/CallSite;}
+00094e: 0000                    |reserved: 0000
+                                |[8] method-handle{invoke-static,method{invokecustom.InvokeCustom.lambda$lambdaTest$0:(Ljava/lang/String;)Z}}
+000950: 0400                    |type:     0004 // invoke-static
+000952: 0000                    |reserved: 0000
+000954: 0a00                    |methodId: 000a // method{invokecustom.InvokeCustom.lambda$lambdaTest$0:(Ljava/lang/String;)Z}
+000956: 0000                    |reserved: 0000
+                                |[9] method-handle{invoke-static,method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}}
+000958: 0400                    |type:     0004 // invoke-static
+00095a: 0000                    |reserved: 0000
+00095c: 3a00                    |methodId: 003a // method{java.lang.invoke.LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;}
+00095e: 0000                    |reserved: 0000
+                                |[a] method-handle{invoke-instance,method{invokecustom.InvokeCustom.helperMethodTest9:()V}}
+000960: 0500                    |type:     0005 // invoke-instance
+000962: 0000                    |reserved: 0000
+000964: 0900                    |methodId: 0009 // method{invokecustom.InvokeCustom.helperMethodTest9:()V}
+000966: 0000                    |reserved: 0000
+                                |[b] method-handle{invoke-instance,method{java.io.PrintStream.println:(Ljava/lang/String;)V}}
+000968: 0500                    |type:     0005 // invoke-instance
+00096a: 0000                    |reserved: 0000
+00096c: 2a00                    |methodId: 002a // method{java.io.PrintStream.println:(Ljava/lang/String;)V}
+00096e: 0000                    |reserved: 0000
+                                |[c] method-handle{invoke-instance,method{java.lang.String.trim:()Ljava/lang/String;}}
+000970: 0500                    |type:     0005 // invoke-instance
+000972: 0000                    |reserved: 0000
+000974: 3000                    |methodId: 0030 // method{java.lang.String.trim:()Ljava/lang/String;}
+000976: 0000                    |reserved: 0000
+                                |[d] method-handle{invoke-constructor,method{invokecustom.InvokeCustom.<init>:(I)V}}
+000978: 0600                    |type:     0006 // invoke-constructor
+00097a: 0000                    |reserved: 0000
+00097c: 0200                    |methodId: 0002 // method{invokecustom.InvokeCustom.<init>:(I)V}
+00097e: 0000                    |reserved: 0000
+                                |[e] method-handle{invoke-direct,method{invokecustom.InvokeCustom.privateMethodTest9:()V}}
+000980: 0700                    |type:     0007 // invoke-direct
+000982: 0000                    |reserved: 0000
+000984: 0d00                    |methodId: 000d // method{invokecustom.InvokeCustom.privateMethodTest9:()V}
+000986: 0000                    |reserved: 0000
+                                |[f] method-handle{invoke-direct,method{invokecustom.Super.targetMethodTest4:()V}}
+000988: 0700                    |type:     0007 // invoke-direct
+00098a: 0000                    |reserved: 0000
+00098c: 2300                    |methodId: 0023 // method{invokecustom.Super.targetMethodTest4:()V}
+00098e: 0000                    |reserved: 0000
+                                |[10] method-handle{invoke-interface,ifaceMethod{java.lang.Runnable.run:()V}}
+000990: 0800                    |type:     0008 // invoke-interface
+000992: 0000                    |reserved: 0000
+000994: 2e00                    |methodId: 002e // ifaceMethod{java.lang.Runnable.run:()V}
+000996: 0000                    |reserved: 0000
                                 |
                                 |word_data:
                                 |[998] annotation set
