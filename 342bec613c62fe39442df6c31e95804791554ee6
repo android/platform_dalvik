@@ -46,6 +46,30 @@
       "revId": "342bec613c62fe39442df6c31e95804791554ee6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c72fa86_dfb0c838",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-09-27T12:45:36Z",
+      "side": 1,
+      "message": "sgtm",
+      "parentUuid": "7a0ec084_ab15cc0d",
+      "range": {
+        "startLine": 29,
+        "startChar": 40,
+        "endLine": 29,
+        "endChar": 86
+      },
+      "revId": "342bec613c62fe39442df6c31e95804791554ee6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
