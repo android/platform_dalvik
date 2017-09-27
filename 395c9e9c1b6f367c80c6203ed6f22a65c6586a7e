@@ -22,6 +22,30 @@
       "revId": "395c9e9c1b6f367c80c6203ed6f22a65c6586a7e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8209beb_c3b8e785",
+        "filename": "libdex/DexOpcodes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-09-27T12:44:22Z",
+      "side": 0,
+      "message": "These have been stale for a while. In the more recent PS, bytecodes.txt has been updated to reflect this and all the generated data like this enum have been updated.\n\nThe bytecodes for const-method-handle and const-method-type have also been moved to provide fewer, larger unused blocks. They are now 0xfe and 0xff.",
+      "parentUuid": "388c2090_5949e3ca",
+      "range": {
+        "startLine": 319,
+        "startChar": 0,
+        "endLine": 320,
+        "endChar": 43
+      },
+      "revId": "395c9e9c1b6f367c80c6203ed6f22a65c6586a7e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
