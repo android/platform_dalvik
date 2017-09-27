@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "388c2090_5949e3ca",
+        "filename": "libdex/DexOpcodes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-09-27T10:05:18Z",
+      "side": 0,
+      "message": "Confused: how can ART differentiate the two now?",
+      "range": {
+        "startLine": 319,
+        "startChar": 0,
+        "endLine": 320,
+        "endChar": 43
+      },
+      "revId": "395c9e9c1b6f367c80c6203ed6f22a65c6586a7e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
