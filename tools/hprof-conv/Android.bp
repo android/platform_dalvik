@@ -15,6 +15,7 @@
 cc_binary_host {
     name: "hprof-conv",
     srcs: ["HprofConv.c"],
+    cflags: ["-Wall", "-Werror"],
     target: {
         windows: {
             enabled: true,
