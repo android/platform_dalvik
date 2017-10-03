@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c809da7b_02cdd387",
+        "filename": "dexdump/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1052399
+      },
+      "writtenOn": "2017-10-03T23:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79c73747_439e0124",
+      "revId": "eda29740e8fdc0b8922874084b5c775b86237667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db1b83ff_09c58c39",
         "filename": "libdex/Android.bp",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-10-03T00:03:05Z",
       "side": 1,
       "message": "-Wno-conversion-null\n-Wno-unused-function\n-Wno-unused-variable",
+      "revId": "eda29740e8fdc0b8922874084b5c775b86237667",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d77fc85_52b786be",
+        "filename": "libdex/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1052399
+      },
+      "writtenOn": "2017-10-03T23:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db1b83ff_09c58c39",
       "revId": "eda29740e8fdc0b8922874084b5c775b86237667",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
