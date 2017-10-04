@@ -24,7 +24,7 @@ public final class DexFormat {
     private DexFormat() {}
 
     /** API level to target in order to generate const-method-handle and const-method-type */
-    public static final int API_CONST_METHOD_HANDLE = 27;
+    public static final int API_CONST_METHOD_HANDLE = 28;
 
     /** API level to target in order to generate invoke-polymorphic and invoke-custom */
     public static final int API_METHOD_HANDLES = 26;

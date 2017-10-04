@@ -14,11 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-UNSUPPORTED_SDK_VERSION=26
-SUPPORTED_SDK_VERSION=27
+UNSUPPORTED_SDK_VERSION_0=26
+UNSUPPORTED_SDK_VERSION_1=27
+SUPPORTED_SDK_VERSION=28
 
 # Expect failure with unsupported SDK version
-EXPECTED_STATUS[${UNSUPPORTED_SDK_VERSION}]=1
+EXPECTED_STATUS[${UNSUPPORTED_SDK_VERSION_0}]=1
+EXPECTED_STATUS[${UNSUPPORTED_SDK_VERSION_1}]=1
 
 # Expect success with supported SDK version
 EXPECTED_STATUS[${SUPPORTED_SDK_VERSION}]=0
@@ -26,7 +28,7 @@ EXPECTED_STATUS[${SUPPORTED_SDK_VERSION}]=0
 DX_OUTPUT=dx.log
 rm -f ${DX_OUTPUT} 2>/dev/null
 
-for SDK_VERSION in ${UNSUPPORTED_SDK_VERSION} ${SUPPORTED_SDK_VERSION}; do
+for SDK_VERSION in ${!EXPECTED_STATUS[:]}; do
   echo Trying SDK version ${SDK_VERSION} with const-method-handle.
   dx --min-sdk-version=${SDK_VERSION} --dex --output=constmethodhandle.dex \
      --verbose-dump --dump-to=- --dump-width=1000 constmethodhandle.jar 2>&1
