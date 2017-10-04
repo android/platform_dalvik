@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "842593a1_df3cbc18",
+        "filename": "dx/tests/142-const-method-handle/expected.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-10-04T09:17:22Z",
+      "side": 1,
+      "message": "What it means ?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 70
+      },
+      "revId": "db828a04845aec793e2a52c52817b3fefcad7ecc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
