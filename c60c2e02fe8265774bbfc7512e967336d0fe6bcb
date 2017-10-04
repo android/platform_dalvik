@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "372e7af6_1f54dba4",
+        "filename": "dexdump/Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-04T08:42:13Z",
+      "side": 1,
+      "message": "There is 1 unused function and 1 unused variable. Let\u0027s fix that and not have the -Wno-unused-{function,variable}.",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 31
+      },
+      "revId": "c60c2e02fe8265774bbfc7512e967336d0fe6bcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9baba2d7_3e499e37",
+        "filename": "libdex/Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-04T08:42:13Z",
+      "side": 1,
+      "message": "-Wno-conversion-null seems necessary for safe-iop\n\nCan we address the warnings for the others?",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 31
+      },
+      "revId": "c60c2e02fe8265774bbfc7512e967336d0fe6bcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
