@@ -22,6 +22,30 @@
       "revId": "db828a04845aec793e2a52c52817b3fefcad7ecc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c02ab504_163592b9",
+        "filename": "dx/tests/142-const-method-handle/expected.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-04T10:04:00Z",
+      "side": 1,
+      "message": "Good catch. Fixed.\n\nThe redirection around the syntax error in the for loop caused the exit code to be zero so \"run-test --update 142\" didn\u0027t catch the error.",
+      "parentUuid": "842593a1_df3cbc18",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 70
+      },
+      "revId": "db828a04845aec793e2a52c52817b3fefcad7ecc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
