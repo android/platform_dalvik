@@ -80,6 +80,17 @@ public class Simulator {
             throw new NullPointerException("method == null");
         }
 
+        if (method.isInterfaceMethod()) {
+            if (!dexOptions.apiIsSupported(DexFormat.API_DEFINE_DEFAULT_INTERFACE_METHODS)) {
+                throw new SimException(
+                    "default or static interface method (" +
+                        method.getDefiningClass().toHuman() + "." +
+                        method.getNat().toHuman() +
+                    ") defined without --min-sdk-version >= " +
+                    DexFormat.API_DEFINE_DEFAULT_INTERFACE_METHODS);
+            }
+        }
+
         this.machine = machine;
         this.code = method.getCode();
         this.localVariables = method.getLocalVariables();
@@ -671,12 +682,10 @@ public class Simulator {
                      * method ref if necessary.
                      */
                     if (cst instanceof CstInterfaceMethodRef) {
-                        if (opcode != ByteOps.INVOKEINTERFACE) {
-                            if (!dexOptions.apiIsSupported(DexFormat.API_DEFAULT_INTERFACE_METHODS)) {
-                                throw new SimException(
-                                    "default or static interface method used without " +
-                                    "--min-sdk-version >= " + DexFormat.API_DEFAULT_INTERFACE_METHODS);
-                            }
+                        if (!dexOptions.apiIsSupported(DexFormat.API_INVOKE_DEFAULT_INTERFACE_METHODS)) {
+                            throw new SimException(
+                                    "invoking default or static interface method without " +
+                                    "--min-sdk-version >= " + DexFormat.API_INVOKE_DEFAULT_INTERFACE_METHODS);
                         }
                         cst = ((CstInterfaceMethodRef) cst).toMethodRef();
                     }

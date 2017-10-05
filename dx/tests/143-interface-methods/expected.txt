@@ -1,0 +1,29 @@
+--------------------- Testing 19 ------------------------
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (DefaultDefinition.countIt:(Ljava/lang/String;)I) defined without --min-sdk-version >= 24
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: invoking default or static interface method without --min-sdk-version >= 20
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (StaticDefinition.printIt:(Ljava/lang/String;)V) defined without --min-sdk-version >= 24
+1 error; aborting
+--------------------- Testing 20 ------------------------
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (DefaultDefinition.countIt:(Ljava/lang/String;)I) defined without --min-sdk-version >= 24
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (StaticDefinition.printIt:(Ljava/lang/String;)V) defined without --min-sdk-version >= 24
+1 error; aborting
+--------------------- Testing 21 ------------------------
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (DefaultDefinition.countIt:(Ljava/lang/String;)I) defined without --min-sdk-version >= 24
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (StaticDefinition.printIt:(Ljava/lang/String;)V) defined without --min-sdk-version >= 24
+1 error; aborting
+--------------------- Testing 22 ------------------------
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (DefaultDefinition.countIt:(Ljava/lang/String;)I) defined without --min-sdk-version >= 24
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (StaticDefinition.printIt:(Ljava/lang/String;)V) defined without --min-sdk-version >= 24
+1 error; aborting
+--------------------- Testing 23 ------------------------
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (DefaultDefinition.countIt:(Ljava/lang/String;)I) defined without --min-sdk-version >= 24
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface method (StaticDefinition.printIt:(Ljava/lang/String;)V) defined without --min-sdk-version >= 24
+1 error; aborting
+--------------------- Testing 24 ------------------------
+--------------------- Testing 25 ------------------------
