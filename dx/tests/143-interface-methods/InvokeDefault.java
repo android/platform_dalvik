@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package com.android.dx;
-
-/**
- * Version number for dx.
- */
-public class Version {
-    /** {@code non-null;} version string */
-    public static final String VERSION = "1.15";
+public class InvokeDefault implements DefaultDefinition {
+    public void foo() {
+        DefaultDefinition.super.countIt("123");
+    }
 }

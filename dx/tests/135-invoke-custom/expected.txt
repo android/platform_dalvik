@@ -1,5 +1,5 @@
 Trying SDK version 25 with invoke-custom.
-Uncaught translation error: com.android.dx.cf.code.SimException: signature-polymorphic method called without --min-sdk-version >= 26
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in invokecustom.InvokeCustom.checkStaticFieldTest9:(Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodHandle;)V: invoking a signature-polymorphic requires --min-sdk-version >= 26 (currently 25)
 1 error; aborting
 Trying SDK version 26 with invoke-custom.
 000000: 6465 780a 3033 3800     |magic: "dex\n038\0"

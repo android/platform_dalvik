@@ -29,8 +29,15 @@ public final class DexFormat {
     /** API level to target in order to generate invoke-polymorphic and invoke-custom */
     public static final int API_METHOD_HANDLES = 26;
 
-    /** API level to target in order to pass through default and static interface methods */
-    public static final int API_DEFAULT_INTERFACE_METHODS = 24;
+    /** API level to target in order to define default and static interface methods */
+    public static final int API_DEFINE_INTERFACE_METHODS = 24;
+
+    /** API level to target in order to invoke default and static interface methods */
+    public static final int API_INVOKE_INTERFACE_METHODS = 24;
+
+    /** API level at which the invocation of static interface methods is permitted by dx.
+     * This value has been determined experimentally by testing on different VM versions. */
+    public static final int API_INVOKE_STATIC_INTERFACE_METHODS = 21;
 
     /** API level to target in order to suppress extended opcode usage */
     public static final int API_NO_EXTENDED_OPCODES = 13;
@@ -40,6 +47,7 @@ public final class DexFormat {
      * format
      */
     public static final int API_CURRENT = API_CONST_METHOD_HANDLE;
+
 
     /** dex file version number for API level 28 and earlier */
     public static final String VERSION_FOR_API_28 = "039";
@@ -115,7 +123,7 @@ public final class DexFormat {
         if (version.equals(VERSION_FOR_API_13)) {
             return API_NO_EXTENDED_OPCODES;
         } else if (version.equals(VERSION_FOR_API_24)) {
-            return API_DEFAULT_INTERFACE_METHODS;
+            return API_DEFINE_INTERFACE_METHODS;
         } else if (version.equals(VERSION_FOR_API_26)) {
             return API_METHOD_HANDLES;
         } else if (version.equals(VERSION_FOR_API_28)) {
@@ -142,7 +150,7 @@ public final class DexFormat {
             version = VERSION_FOR_API_28;
         } else if (targetApiLevel >= API_METHOD_HANDLES) {
             version = VERSION_FOR_API_26;
-        } else if (targetApiLevel >= API_DEFAULT_INTERFACE_METHODS) {
+        } else if (targetApiLevel >= API_DEFINE_INTERFACE_METHODS) {
             version = VERSION_FOR_API_24;
         } else {
             version = VERSION_FOR_API_13;

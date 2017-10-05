@@ -1,0 +1,99 @@
+--------------------- Testing 19 ------------------------
+InvokeDefault.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (blocked at current API level 19)
+1 error; aborting
+DefaultDefinition.class
+InvokeStatic.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (blocked at current API level 19)
+1 error; aborting
+StaticDefinition.class
+--------------------- Testing 20 ------------------------
+InvokeDefault.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (blocked at current API level 20)
+1 error; aborting
+DefaultDefinition.class
+InvokeStatic.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (blocked at current API level 20)
+1 error; aborting
+StaticDefinition.class
+--------------------- Testing 21 ------------------------
+InvokeDefault.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (blocked at current API level 21)
+1 error; aborting
+DefaultDefinition.class
+InvokeStatic.class
+WARNING in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (experimental at current API level 21)
+StaticDefinition.class
+--------------------- Testing 22 ------------------------
+InvokeDefault.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (blocked at current API level 22)
+1 error; aborting
+DefaultDefinition.class
+InvokeStatic.class
+WARNING in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (experimental at current API level 22)
+StaticDefinition.class
+--------------------- Testing 23 ------------------------
+InvokeDefault.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (blocked at current API level 23)
+1 error; aborting
+DefaultDefinition.class
+InvokeStatic.class
+WARNING in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (experimental at current API level 23)
+StaticDefinition.class
+--------------------- Testing 24 ------------------------
+InvokeDefault.class
+DefaultDefinition.class
+InvokeStatic.class
+StaticDefinition.class
+--------------------- Testing 25 ------------------------
+InvokeDefault.class
+DefaultDefinition.class
+InvokeStatic.class
+StaticDefinition.class
+--------------------- Testing 19 ------------------------
+InvokeDefault.class
+WARNING in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (experimental at current API level 19)
+DefaultDefinition.class
+InvokeStatic.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (blocked at current API level 19)
+1 error; aborting
+StaticDefinition.class
+--------------------- Testing 20 ------------------------
+InvokeDefault.class
+WARNING in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (experimental at current API level 20)
+DefaultDefinition.class
+InvokeStatic.class
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (blocked at current API level 20)
+1 error; aborting
+StaticDefinition.class
+--------------------- Testing 21 ------------------------
+InvokeDefault.class
+WARNING in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (experimental at current API level 21)
+DefaultDefinition.class
+InvokeStatic.class
+WARNING in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (experimental at current API level 21)
+StaticDefinition.class
+--------------------- Testing 22 ------------------------
+InvokeDefault.class
+WARNING in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (experimental at current API level 22)
+DefaultDefinition.class
+InvokeStatic.class
+WARNING in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (experimental at current API level 22)
+StaticDefinition.class
+--------------------- Testing 23 ------------------------
+InvokeDefault.class
+WARNING in InvokeDefault.foo:()V: invoking a default interface method DefaultDefinition.countIt:(Ljava/lang/String;)I strictly requires --min-sdk-version >= 24 (experimental at current API level 23)
+DefaultDefinition.class
+InvokeStatic.class
+WARNING in InvokeStatic.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V strictly requires --min-sdk-version >= 24 (experimental at current API level 23)
+StaticDefinition.class
+--------------------- Testing 24 ------------------------
+InvokeDefault.class
+DefaultDefinition.class
+InvokeStatic.class
+StaticDefinition.class
+--------------------- Testing 25 ------------------------
+InvokeDefault.class
+DefaultDefinition.class
+InvokeStatic.class
+StaticDefinition.class

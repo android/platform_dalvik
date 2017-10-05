@@ -1,5 +1,5 @@
 Trying SDK version 20 with invoke-polymorphic.
-com.android.dx.cf.code.SimException: signature-polymorphic method called without --min-sdk-version >= 26
+com.android.dx.cf.code.SimException: ERROR in VarHandleDexTest.main:([Ljava/lang/String;)V: invoking a signature-polymorphic requires --min-sdk-version >= 26 (currently 20)
 java.lang.invoke.VarHandle proto(java.lang.Class)
 java.lang.invoke.VarHandle proto(java.lang.Class, java.lang.String, java.lang.Class)
 java.lang.invoke.VarHandle.compareAndExchange:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
