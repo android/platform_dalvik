@@ -18,17 +18,33 @@ package com.android.dx.dex;
 
 import com.android.dex.DexFormat;
 import com.android.dx.dex.code.DalvInsnList;
+import java.io.PrintStream;
 
 /**
  * Container for options used to control details of dex file generation.
  */
-public class DexOptions {
+public final class DexOptions {
+
+
 
     /**
      * Enable alignment support of 64-bit registers on Dalvik even registers. This is a temporary
      * configuration flag allowing to quickly go back on the default behavior to face up to problem.
      */
     public static final boolean ALIGN_64BIT_REGS_SUPPORT = true;
+
+    /**
+     * Enable user override of threshold for invoke instructions that target a default
+     * or static interface method.
+     */
+    public static int USER_THRESHOLD_FOR_INVOKE_DEFAULT_INTERFACE_METHODS
+        = DexFormat.API_INVOKE_DEFAULT_INTERFACE_METHODS;
+
+    /**
+     * This limit is lower than API_LEVEL for the invocation of static interface methods.
+     * Historically, it works by coincidence at API level 21 and above.
+     */
+    public static final int HARD_THRESHOLD_FOR_INVOKE_STATIC_INTERFACE_METHOD = 21;
 
    /**
     * Does final processing of 64-bit alignment into output finisher to gets output as
@@ -42,6 +58,17 @@ public class DexOptions {
 
     /** force generation of jumbo opcodes */
     public boolean forceJumbo = false;
+
+    /** output stream for reporting warnings */
+    public final PrintStream err;
+
+    public DexOptions() {
+        err = System.err;
+    }
+
+    public DexOptions(PrintStream stream) {
+        err = stream;
+    }
 
     /**
      * Gets the dex file magic number corresponding to this instance.
