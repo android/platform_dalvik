@@ -32,6 +32,7 @@ public class Main {
         "  [--num-threads=<n>] [--incremental] [--force-jumbo] [--no-warning]\n" +
         "  [--multi-dex [--main-dex-list=<file> [--minimal-main-dex]]\n" +
         "  [--input-list=<file>] [--min-sdk-version=<n>]\n" +
+        "  [--allow-all-interface-method-invokes]\n" +
         "  [<file>.class | <file>.{zip,jar,apk} | <directory>] ...\n" +
         "    Convert a set of classfiles into a dex file, optionally embedded in a\n" +
         "    jar/zip. Output name must end with one of: .dex .jar .zip .apk or be a\n" +
