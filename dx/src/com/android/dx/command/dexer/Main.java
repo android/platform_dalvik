@@ -1596,6 +1596,19 @@ public class Main {
                         throw new UsageException();
                     }
                     minSdkVersion = value;
+                } else if (parser.isArg("--invoke-default-interface-methods-api-level=")) {
+                    String arg = parser.getLastValue();
+                    int value;
+                    try {
+                        value = Integer.parseInt(arg);
+                    } catch (NumberFormatException ex) {
+                        value = -1;
+                    }
+                    if (value < 1) {
+                        System.err.println("improper invoke-default-interface-methods-api-level option: " + arg);
+                        throw new UsageException();
+                    }
+                    DexOptions.USER_THRESHOLD_FOR_INVOKE_DEFAULT_INTERFACE_METHODS = value;
                 } else {
                     context.err.println("unknown option: " + parser.getCurrent());
                     throw new UsageException();
@@ -1695,7 +1708,7 @@ public class Main {
                 cfOptions.warn = context.noop;
             }
 
-            dexOptions = new DexOptions();
+            dexOptions = new DexOptions(context.err);
             dexOptions.minSdkVersion = minSdkVersion;
             dexOptions.forceJumbo = forceJumbo;
         }
