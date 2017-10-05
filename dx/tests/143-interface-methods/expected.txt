@@ -1,0 +1,19 @@
+--------------------- Testing 19 ------------------------
+WARNING in DefaultDefinition.countIt:(Ljava/lang/String;)I: defining a default interface method requires --min-sdk-version >= 24 (currently 19) for interface methods: DefaultDefinition.countIt:(Ljava/lang/String;)I
+Uncaught translation error: com.android.dx.cf.code.SimException: ERROR in Invocation.main:([Ljava/lang/String;)V: invoking a static interface method StaticDefinition.printIt:(Ljava/lang/String;)V requires --min-sdk-version >= 20 (currently 19)
+1 error; aborting
+WARNING in StaticDefinition.printIt:(Ljava/lang/String;)V: defining a default interface method requires --min-sdk-version >= 24 (currently 19) for interface methods: StaticDefinition.printIt:(Ljava/lang/String;)V
+--------------------- Testing 20 ------------------------
+WARNING in DefaultDefinition.countIt:(Ljava/lang/String;)I: defining a default interface method requires --min-sdk-version >= 24 (currently 20) for interface methods: DefaultDefinition.countIt:(Ljava/lang/String;)I
+WARNING in StaticDefinition.printIt:(Ljava/lang/String;)V: defining a default interface method requires --min-sdk-version >= 24 (currently 20) for interface methods: StaticDefinition.printIt:(Ljava/lang/String;)V
+--------------------- Testing 21 ------------------------
+WARNING in DefaultDefinition.countIt:(Ljava/lang/String;)I: defining a default interface method requires --min-sdk-version >= 24 (currently 21) for interface methods: DefaultDefinition.countIt:(Ljava/lang/String;)I
+WARNING in StaticDefinition.printIt:(Ljava/lang/String;)V: defining a default interface method requires --min-sdk-version >= 24 (currently 21) for interface methods: StaticDefinition.printIt:(Ljava/lang/String;)V
+--------------------- Testing 22 ------------------------
+WARNING in DefaultDefinition.countIt:(Ljava/lang/String;)I: defining a default interface method requires --min-sdk-version >= 24 (currently 22) for interface methods: DefaultDefinition.countIt:(Ljava/lang/String;)I
+WARNING in StaticDefinition.printIt:(Ljava/lang/String;)V: defining a default interface method requires --min-sdk-version >= 24 (currently 22) for interface methods: StaticDefinition.printIt:(Ljava/lang/String;)V
+--------------------- Testing 23 ------------------------
+WARNING in DefaultDefinition.countIt:(Ljava/lang/String;)I: defining a default interface method requires --min-sdk-version >= 24 (currently 23) for interface methods: DefaultDefinition.countIt:(Ljava/lang/String;)I
+WARNING in StaticDefinition.printIt:(Ljava/lang/String;)V: defining a default interface method requires --min-sdk-version >= 24 (currently 23) for interface methods: StaticDefinition.printIt:(Ljava/lang/String;)V
+--------------------- Testing 24 ------------------------
+--------------------- Testing 25 ------------------------
