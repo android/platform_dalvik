@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Copyright (C) 2017 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+JAVAC_SOURCE=1.8
+JAVAC_TARGET=1.8
+
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} DefaultDefinition.java Invocation.java StaticDefinition.java
+
+GOOD_API_LEVEL=24
+BAD_API_LEVEL=23
+
+# At API level 24 all class files should be convertible to dex.
+echo === API LEVEL $GOOD_API_LEVEL ===
+for c in DefaultDefinition.class Invocation.class StaticDefinition.class; do
+  dx --dex --dump-width=500 --dump-to=- --min-sdk-version=$GOOD_API_LEVEL $c
+  if [[ $? != 0 ]]; then
+    echo FAIL: Unexpected failure converting $c
+    exit 1
+  fi
+done
+
+# At API level 23 and below, only Invocation.class should be convertible.
+echo === API LEVEL $BAD_API_LEVEL ===
+dx --dex --dump-width=500 --dump-to=- --min-sdk-version=$BAD_API_LEVEL Invocation.class
+if [[ $? != 0 ]]; then
+  echo Unexpected failure to dex Invocation.class at API level $BAD_API_LEVEL
+  exit 1
+fi
+
+for c in DefaultDefinition.class StaticDefinition.class; do
+  dx --dex --dump-width=500 --dump-to=- --min-sdk-version=$BAD_API_LEVEL $c
+  if [[ $? == 0 ]]; then
+    echo FAIL: unexpected success converting $c
+    exit 1
+  fi
+done

@@ -1,0 +1,1284 @@
+=== API LEVEL 24 ===
+000000: 6465 780a 3033 3700     |magic: "dex\n037\0"
+000008: 853f ad90               |checksum
+00000c: b368 eecd a620 b323 59e9|signature
+000016: 9ed0 ff79 4b68 271e 1f5f|
+000020: 1c02 0000               |file_size:       0000021c
+000024: 7000 0000               |header_size:     00000070
+000028: 7856 3412               |endian_tag:      12345678
+00002c: 0000 0000               |link_size:       0
+000030: 0000 0000               |link_off:        0
+000034: 8801 0000               |map_off:         00000188
+000038: 0800 0000               |string_ids_size: 00000008
+00003c: 7000 0000               |string_ids_off:  00000070
+000040: 0400 0000               |type_ids_size:   00000004
+000044: 9000 0000               |type_ids_off:    00000090
+000048: 0200 0000               |proto_ids_size:  00000002
+00004c: a000 0000               |proto_ids_off:   000000a0
+000050: 0000 0000               |field_ids_size:  00000000
+000054: 0000 0000               |field_ids_off:   00000000
+000058: 0200 0000               |method_ids_size: 00000002
+00005c: b800 0000               |method_ids_off:  000000b8
+000060: 0100 0000               |class_defs_size: 00000001
+000064: c800 0000               |class_defs_off:  000000c8
+000068: 3401 0000               |data_size:       00000134
+00006c: e800 0000               |data_off:        000000e8
+                                |
+                                |string_ids:
+                                |[0] "DefaultDefinition.java"
+000070: 0a01 0000               |  string_data_off: 0000010a
+                                |[1] "I"
+000074: 2201 0000               |  string_data_off: 00000122
+                                |[2] "IL"
+000078: 2501 0000               |  string_data_off: 00000125
+                                |[3] "LDefaultDefinition;"
+00007c: 2901 0000               |  string_data_off: 00000129
+                                |[4] "Ljava/lang/Object;"
+000080: 3e01 0000               |  string_data_off: 0000013e
+                                |[5] "Ljava/lang/String;"
+000084: 5201 0000               |  string_data_off: 00000152
+                                |[6] "countIt"
+000088: 6601 0000               |  string_data_off: 00000166
+                                |[7] "length"
+00008c: 6f01 0000               |  string_data_off: 0000016f
+                                |
+                                |type_ids:
+                                |[0] I
+000090: 0100 0000               |  descriptor_idx: 00000001
+                                |[1] LDefaultDefinition;
+000094: 0300 0000               |  descriptor_idx: 00000003
+                                |[2] Ljava/lang/Object;
+000098: 0400 0000               |  descriptor_idx: 00000004
+                                |[3] Ljava/lang/String;
+00009c: 0500 0000               |  descriptor_idx: 00000005
+                                |
+                                |proto_ids:
+                                |[0] int proto()
+0000a0: 0100 0000               |  shorty_idx:      00000001 // "I"
+0000a4: 0000 0000               |  return_type_idx: 00000000 // int
+0000a8: 0000 0000               |  parameters_off:  00000000
+                                |[1] int proto(java.lang.String)
+0000ac: 0200 0000               |  shorty_idx:      00000002 // "IL"
+0000b0: 0000 0000               |  return_type_idx: 00000000 // int
+0000b4: 0401 0000               |  parameters_off:  00000104
+                                |
+                                |field_ids:
+                                |
+                                |method_ids:
+                                |[0] DefaultDefinition.countIt:(Ljava/lang/String;)I
+0000b8: 0100                    |  class_idx: 0001
+0000ba: 0100                    |  proto_idx: 0001
+0000bc: 0600 0000               |  name_idx:  00000006
+                                |[1] java.lang.String.length:()I
+0000c0: 0300                    |  class_idx: 0003
+0000c2: 0000                    |  proto_idx: 0000
+0000c4: 0700 0000               |  name_idx:  00000007
+                                |
+                                |class_defs:
+                                |[0] DefaultDefinition
+0000c8: 0100 0000               |  class_idx:           00000001
+0000cc: 0106 0000               |  access_flags:        public|interface|abstract
+0000d0: 0200 0000               |  superclass_idx:      00000002 // java.lang.Object
+0000d4: 0000 0000               |  interfaces_off:      00000000
+0000d8: 0000 0000               |  source_file_idx:     00000000 // DefaultDefinition.java
+0000dc: 0000 0000               |  annotations_off:     00000000
+0000e0: 7d01 0000               |  class_data_off:      0000017d
+0000e4: 0000 0000               |  static_values_off:   00000000
+                                |
+                                |word_data:
+                                |[e8] DefaultDefinition.countIt:(Ljava/lang/String;)I
+0000e8: 0300                    |  registers_size: 0003
+0000ea: 0200                    |  ins_size:       0002
+0000ec: 0100                    |  outs_size:      0001
+0000ee: 0000                    |  tries_size:     0000
+0000f0: 7701 0000               |  debug_off:      00000177
+0000f4: 0500 0000               |  insns_size:     00000005
+0000f8: 6e10 0100 0200          |  0000: invoke-virtual {v2}, java.lang.String.length:()I // method@0001
+0000fe: 0a00                    |  0003: move-result v0
+000100: 0f00                    |  0004: return v0
+                                |  debug info
+                                |    line_start: 19
+                                |    parameters_size: 0001
+                                |    parameter <unnamed> v2
+                                |    0000: prologue end
+                                |    0000: line 19
+                                |    end sequence
+000102: 0000                    |
+                                |
+                                |[104] type_list
+000104: 0100 0000               |  size: 00000001
+000108: 0300                    |  0003 // java.lang.String
+                                |
+                                |string_data:
+00010a: 16                      |utf16_size: 00000016
+00010b: 4465 6661 756c 7444 6566|"DefaultDefinition.java"
+000115: 696e 6974 696f 6e2e 6a61|
+00011f: 7661 00                 |
+                                |
+000122: 01                      |utf16_size: 00000001
+000123: 4900                    |"I"
+                                |
+000125: 02                      |utf16_size: 00000002
+000126: 494c 00                 |"IL"
+                                |
+000129: 13                      |utf16_size: 00000013
+00012a: 4c44 6566 6175 6c74 4465|"LDefaultDefinition;"
+000134: 6669 6e69 7469 6f6e 3b00|
+                                |
+00013e: 12                      |utf16_size: 00000012
+00013f: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Object;"
+000149: 2f4f 626a 6563 743b 00  |
+                                |
+000152: 12                      |utf16_size: 00000012
+000153: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/String;"
+00015d: 2f53 7472 696e 673b 00  |
+                                |
+000166: 07                      |utf16_size: 00000007
+000167: 636f 756e 7449 7400     |"countIt"
+                                |
+00016f: 06                      |utf16_size: 00000006
+000170: 6c65 6e67 7468 00       |"length"
+                                |
+                                |byte_data:
+                                |[177] debug info
+000177: 13                      |line_start: 19
+000178: 01                      |parameters_size: 0001
+000179: 00                      |parameter <unnamed> v2
+00017a: 07                      |0000: prologue end
+00017b: 0e                      |0000: line 19
+00017c: 00                      |end sequence
+                                |
+                                |[17d] class data for DefaultDefinition
+00017d: 00                      |  static_fields_size:   00000000
+00017e: 00                      |  instance_fields_size: 00000000
+00017f: 00                      |  direct_methods_size:  00000000
+000180: 01                      |  virtual_methods_size: 00000001
+                                |  virtual_methods:
+                                |  [0] DefaultDefinition.countIt:(Ljava/lang/String;)I
+000181: 00                      |    method_idx:   00000000
+000182: 01                      |    access_flags: public
+000183: e801                    |    code_off:     000000e8
+000185: 0000 00                 |
+                                |
+                                |map:
+                                |[188] map list
+000188: 0c00 0000               |  size: 0000000c
+                                |[18c] header_item map
+00018c: 0000                    |  type:   0000 // TYPE_HEADER_ITEM
+00018e: 0000                    |  unused: 0
+000190: 0100 0000               |  size:   00000001
+000194: 0000 0000               |  offset: 00000000
+                                |[198] string_id_item map
+000198: 0100                    |  type:   0001 // TYPE_STRING_ID_ITEM
+00019a: 0000                    |  unused: 0
+00019c: 0800 0000               |  size:   00000008
+0001a0: 7000 0000               |  offset: 00000070
+                                |[1a4] type_id_item map
+0001a4: 0200                    |  type:   0002 // TYPE_TYPE_ID_ITEM
+0001a6: 0000                    |  unused: 0
+0001a8: 0400 0000               |  size:   00000004
+0001ac: 9000 0000               |  offset: 00000090
+                                |[1b0] proto_id_item map
+0001b0: 0300                    |  type:   0003 // TYPE_PROTO_ID_ITEM
+0001b2: 0000                    |  unused: 0
+0001b4: 0200 0000               |  size:   00000002
+0001b8: a000 0000               |  offset: 000000a0
+                                |[1bc] method_id_item map
+0001bc: 0500                    |  type:   0005 // TYPE_METHOD_ID_ITEM
+0001be: 0000                    |  unused: 0
+0001c0: 0200 0000               |  size:   00000002
+0001c4: b800 0000               |  offset: 000000b8
+                                |[1c8] class_def_item map
+0001c8: 0600                    |  type:   0006 // TYPE_CLASS_DEF_ITEM
+0001ca: 0000                    |  unused: 0
+0001cc: 0100 0000               |  size:   00000001
+0001d0: c800 0000               |  offset: 000000c8
+                                |[1d4] code_item map
+0001d4: 0120                    |  type:   2001 // TYPE_CODE_ITEM
+0001d6: 0000                    |  unused: 0
+0001d8: 0100 0000               |  size:   00000001
+0001dc: e800 0000               |  offset: 000000e8
+                                |[1e0] type_list map
+0001e0: 0110                    |  type:   1001 // TYPE_TYPE_LIST
+0001e2: 0000                    |  unused: 0
+0001e4: 0100 0000               |  size:   00000001
+0001e8: 0401 0000               |  offset: 00000104
+                                |[1ec] string_data_item map
+0001ec: 0220                    |  type:   2002 // TYPE_STRING_DATA_ITEM
+0001ee: 0000                    |  unused: 0
+0001f0: 0800 0000               |  size:   00000008
+0001f4: 0a01 0000               |  offset: 0000010a
+                                |[1f8] debug_info_item map
+0001f8: 0320                    |  type:   2003 // TYPE_DEBUG_INFO_ITEM
+0001fa: 0000                    |  unused: 0
+0001fc: 0100 0000               |  size:   00000001
+000200: 7701 0000               |  offset: 00000177
+                                |[204] class_data_item map
+000204: 0020                    |  type:   2000 // TYPE_CLASS_DATA_ITEM
+000206: 0000                    |  unused: 0
+000208: 0100 0000               |  size:   00000001
+00020c: 7d01 0000               |  offset: 0000017d
+                                |[210] map_list map
+000210: 0010                    |  type:   1000 // TYPE_MAP_LIST
+000212: 0000                    |  unused: 0
+000214: 0100 0000               |  size:   00000001
+000218: 8801 0000               |  offset: 00000188
+                                |
+                                |method code index:
+                                |
+                                |[e8] DefaultDefinition.countIt:(Ljava/lang/String;)I
+                                |
+                                |statistics:
+                                |  class data: 1 item; 8 bytes total
+                                |    8 bytes/item
+                                |  class def: 1 item; 32 bytes total
+                                |    32 bytes/item
+                                |  code: 1 item; 28 bytes total
+                                |    28 bytes/item
+                                |  debug info: 1 item; 6 bytes total
+                                |    6 bytes/item
+                                |  header: 1 item; 112 bytes total
+                                |    112 bytes/item
+                                |  map list: 1 item; 148 bytes total
+                                |    148 bytes/item
+                                |  method id: 2 items; 16 bytes total
+                                |    8 bytes/item
+                                |  proto id: 2 items; 24 bytes total
+                                |    12 bytes/item
+                                |  string data: 8 items; 109 bytes total
+                                |    3..24 bytes/item; average 13
+                                |  string id: 8 items; 32 bytes total
+                                |    4 bytes/item
+                                |  type id: 4 items; 16 bytes total
+                                |    4 bytes/item
+                                |  type list: 1 item; 6 bytes total
+                                |    6 bytes/item
+000000: 6465 780a 3033 3700     |magic: "dex\n037\0"
+000008: 3d62 a6da               |checksum
+00000c: 15d3 147a d5cb b9b4 97e9|signature
+000016: 1a93 de25 776a 1412 faf3|
+000020: 0803 0000               |file_size:       00000308
+000024: 7000 0000               |header_size:     00000070
+000028: 7856 3412               |endian_tag:      12345678
+00002c: 0000 0000               |link_size:       0
+000030: 0000 0000               |link_off:        0
+000034: 7402 0000               |map_off:         00000274
+000038: 1000 0000               |string_ids_size: 00000010
+00003c: 7000 0000               |string_ids_off:  00000070
+000040: 0800 0000               |type_ids_size:   00000008
+000044: b000 0000               |type_ids_off:    000000b0
+000048: 0400 0000               |proto_ids_size:  00000004
+00004c: d000 0000               |proto_ids_off:   000000d0
+000050: 0000 0000               |field_ids_size:  00000000
+000054: 0000 0000               |field_ids_off:   00000000
+000058: 0500 0000               |method_ids_size: 00000005
+00005c: 0001 0000               |method_ids_off:  00000100
+000060: 0100 0000               |class_defs_size: 00000001
+000064: 2801 0000               |class_defs_off:  00000128
+000068: c001 0000               |data_size:       000001c0
+00006c: 4801 0000               |data_off:        00000148
+                                |
+                                |string_ids:
+                                |[0] "123"
+000070: 9e01 0000               |  string_data_off: 0000019e
+                                |[1] "<init>"
+000074: a301 0000               |  string_data_off: 000001a3
+                                |[2] "I"
+000078: ab01 0000               |  string_data_off: 000001ab
+                                |[3] "IL"
+00007c: ae01 0000               |  string_data_off: 000001ae
+                                |[4] "Invocation.java"
+000080: b201 0000               |  string_data_off: 000001b2
+                                |[5] "LDefaultDefinition;"
+000084: c301 0000               |  string_data_off: 000001c3
+                                |[6] "LInvocation;"
+000088: d801 0000               |  string_data_off: 000001d8
+                                |[7] "LStaticDefinition;"
+00008c: e601 0000               |  string_data_off: 000001e6
+                                |[8] "Ljava/lang/Object;"
+000090: fa01 0000               |  string_data_off: 000001fa
+                                |[9] "Ljava/lang/String;"
+000094: 0e02 0000               |  string_data_off: 0000020e
+                                |[a] "V"
+000098: 2202 0000               |  string_data_off: 00000222
+                                |[b] "VL"
+00009c: 2502 0000               |  string_data_off: 00000225
+                                |[c] "[Ljava/lang/String;"
+0000a0: 2902 0000               |  string_data_off: 00000229
+                                |[d] "countIt"
+0000a4: 3e02 0000               |  string_data_off: 0000023e
+                                |[e] "main"
+0000a8: 4702 0000               |  string_data_off: 00000247
+                                |[f] "printIt"
+0000ac: 4d02 0000               |  string_data_off: 0000024d
+                                |
+                                |type_ids:
+                                |[0] I
+0000b0: 0200 0000               |  descriptor_idx: 00000002
+                                |[1] LDefaultDefinition;
+0000b4: 0500 0000               |  descriptor_idx: 00000005
+                                |[2] LInvocation;
+0000b8: 0600 0000               |  descriptor_idx: 00000006
+                                |[3] LStaticDefinition;
+0000bc: 0700 0000               |  descriptor_idx: 00000007
+                                |[4] Ljava/lang/Object;
+0000c0: 0800 0000               |  descriptor_idx: 00000008
+                                |[5] Ljava/lang/String;
+0000c4: 0900 0000               |  descriptor_idx: 00000009
+                                |[6] V
+0000c8: 0a00 0000               |  descriptor_idx: 0000000a
+                                |[7] [Ljava/lang/String;
+0000cc: 0c00 0000               |  descriptor_idx: 0000000c
+                                |
+                                |proto_ids:
+                                |[0] int proto(java.lang.String)
+0000d0: 0300 0000               |  shorty_idx:      00000003 // "IL"
+0000d4: 0000 0000               |  return_type_idx: 00000000 // int
+0000d8: 9001 0000               |  parameters_off:  00000190
+                                |[1] void proto()
+0000dc: 0a00 0000               |  shorty_idx:      0000000a // "V"
+0000e0: 0600 0000               |  return_type_idx: 00000006 // void
+0000e4: 0000 0000               |  parameters_off:  00000000
+                                |[2] void proto(java.lang.String)
+0000e8: 0b00 0000               |  shorty_idx:      0000000b // "VL"
+0000ec: 0600 0000               |  return_type_idx: 00000006 // void
+0000f0: 9001 0000               |  parameters_off:  00000190
+                                |[3] void proto(java.lang.String[])
+0000f4: 0b00 0000               |  shorty_idx:      0000000b // "VL"
+0000f8: 0600 0000               |  return_type_idx: 00000006 // void
+0000fc: 9801 0000               |  parameters_off:  00000198
+                                |
+                                |field_ids:
+                                |
+                                |method_ids:
+                                |[0] DefaultDefinition.countIt:(Ljava/lang/String;)I
+000100: 0100                    |  class_idx: 0001
+000102: 0000                    |  proto_idx: 0000
+000104: 0d00 0000               |  name_idx:  0000000d
+                                |[1] Invocation.<init>:()V
+000108: 0200                    |  class_idx: 0002
+00010a: 0100                    |  proto_idx: 0001
+00010c: 0100 0000               |  name_idx:  00000001
+                                |[2] Invocation.main:([Ljava/lang/String;)V
+000110: 0200                    |  class_idx: 0002
+000112: 0300                    |  proto_idx: 0003
+000114: 0e00 0000               |  name_idx:  0000000e
+                                |[3] StaticDefinition.printIt:(Ljava/lang/String;)V
+000118: 0300                    |  class_idx: 0003
+00011a: 0200                    |  proto_idx: 0002
+00011c: 0f00 0000               |  name_idx:  0000000f
+                                |[4] java.lang.Object.<init>:()V
+000120: 0400                    |  class_idx: 0004
+000122: 0100                    |  proto_idx: 0001
+000124: 0100 0000               |  name_idx:  00000001
+                                |
+                                |class_defs:
+                                |[0] Invocation
+000128: 0200 0000               |  class_idx:           00000002
+00012c: 0100 0000               |  access_flags:        public
+000130: 0400 0000               |  superclass_idx:      00000004 // java.lang.Object
+000134: 0000 0000               |  interfaces_off:      00000000
+000138: 0400 0000               |  source_file_idx:     00000004 // Invocation.java
+00013c: 0000 0000               |  annotations_off:     00000000
+000140: 6502 0000               |  class_data_off:      00000265
+000144: 0000 0000               |  static_values_off:   00000000
+                                |
+                                |word_data:
+                                |[148] Invocation.<init>:()V
+000148: 0100                    |  registers_size: 0001
+00014a: 0100                    |  ins_size:       0001
+00014c: 0100                    |  outs_size:      0001
+00014e: 0000                    |  tries_size:     0000
+000150: 5602 0000               |  debug_off:      00000256
+000154: 0400 0000               |  insns_size:     00000004
+000158: 7010 0400 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0004
+00015e: 0e00                    |  0003: return-void
+                                |  debug info
+                                |    line_start: 17
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 17
+                                |    end sequence
+                                |
+                                |[160] Invocation.main:([Ljava/lang/String;)V
+000160: 0300                    |  registers_size: 0003
+000162: 0100                    |  ins_size:       0001
+000164: 0200                    |  outs_size:      0002
+000166: 0000                    |  tries_size:     0000
+000168: 5b02 0000               |  debug_off:      0000025b
+00016c: 1000 0000               |  insns_size:     00000010
+000170: 2120                    |  0000: array-length v0, v2
+000172: 3d00 0800               |  0001: if-lez v0, 0009 // +0008
+000176: 1200                    |  0003: const/4 v0, #int 0 // #0
+000178: 4600 0200               |  0004: aget-object v0, v2, v0
+00017c: 7110 0300 0000          |  0006: invoke-static {v0}, StaticDefinition.printIt:(Ljava/lang/String;)V // method@0003
+000182: 1200                    |  0009: const/4 v0, #null // #0
+000184: 1a01 0000               |  000a: const-string v1, "123" // utf8@0000
+000188: 7220 0000 1000          |  000c: invoke-interface {v0, v1}, DefaultDefinition.countIt:(Ljava/lang/String;)I // method@0000
+00018e: 0e00                    |  000f: return-void
+                                |  debug info
+                                |    line_start: 19
+                                |    parameters_size: 0001
+                                |    parameter <unnamed> v2
+                                |    0000: prologue end
+                                |    0000: line 19
+                                |    0003: line 20
+                                |    0009: line 23
+                                |    000a: line 24
+                                |    000f: line 25
+                                |    end sequence
+                                |
+                                |[190] type_list
+000190: 0100 0000               |  size: 00000001
+000194: 0500                    |  0005 // java.lang.String
+                                |
+000196: 0000                    |
+                                |[198] type_list
+000198: 0100 0000               |  size: 00000001
+00019c: 0700                    |  0007 // java.lang.String[]
+                                |
+                                |string_data:
+00019e: 03                      |utf16_size: 00000003
+00019f: 3132 3300               |"123"
+                                |
+0001a3: 06                      |utf16_size: 00000006
+0001a4: 3c69 6e69 743e 00       |"<init>"
+                                |
+0001ab: 01                      |utf16_size: 00000001
+0001ac: 4900                    |"I"
+                                |
+0001ae: 02                      |utf16_size: 00000002
+0001af: 494c 00                 |"IL"
+                                |
+0001b2: 0f                      |utf16_size: 0000000f
+0001b3: 496e 766f 6361 7469 6f6e|"Invocation.java"
+0001bd: 2e6a 6176 6100          |
+                                |
+0001c3: 13                      |utf16_size: 00000013
+0001c4: 4c44 6566 6175 6c74 4465|"LDefaultDefinition;"
+0001ce: 6669 6e69 7469 6f6e 3b00|
+                                |
+0001d8: 0c                      |utf16_size: 0000000c
+0001d9: 4c49 6e76 6f63 6174 696f|"LInvocation;"
+0001e3: 6e3b 00                 |
+                                |
+0001e6: 12                      |utf16_size: 00000012
+0001e7: 4c53 7461 7469 6344 6566|"LStaticDefinition;"
+0001f1: 696e 6974 696f 6e3b 00  |
+                                |
+0001fa: 12                      |utf16_size: 00000012
+0001fb: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Object;"
+000205: 2f4f 626a 6563 743b 00  |
+                                |
+00020e: 12                      |utf16_size: 00000012
+00020f: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/String;"
+000219: 2f53 7472 696e 673b 00  |
+                                |
+000222: 01                      |utf16_size: 00000001
+000223: 5600                    |"V"
+                                |
+000225: 02                      |utf16_size: 00000002
+000226: 564c 00                 |"VL"
+                                |
+000229: 13                      |utf16_size: 00000013
+00022a: 5b4c 6a61 7661 2f6c 616e|"[Ljava/lang/String;"
+000234: 672f 5374 7269 6e67 3b00|
+                                |
+00023e: 07                      |utf16_size: 00000007
+00023f: 636f 756e 7449 7400     |"countIt"
+                                |
+000247: 04                      |utf16_size: 00000004
+000248: 6d61 696e 00            |"main"
+                                |
+00024d: 07                      |utf16_size: 00000007
+00024e: 7072 696e 7449 7400     |"printIt"
+                                |
+                                |byte_data:
+                                |[256] debug info
+000256: 11                      |line_start: 17
+000257: 00                      |parameters_size: 0000
+000258: 07                      |0000: prologue end
+000259: 0e                      |0000: line 17
+00025a: 00                      |end sequence
+                                |
+                                |[25b] debug info
+00025b: 13                      |line_start: 19
+00025c: 01                      |parameters_size: 0001
+00025d: 00                      |parameter <unnamed> v2
+00025e: 07                      |0000: prologue end
+00025f: 0e                      |0000: line 19
+000260: 3c                      |0003: line 20
+000261: 6b                      |0009: line 23
+000262: 1e                      |000a: line 24
+000263: 5a                      |000f: line 25
+000264: 00                      |end sequence
+                                |
+                                |[265] class data for Invocation
+000265: 00                      |  static_fields_size:   00000000
+000266: 00                      |  instance_fields_size: 00000000
+000267: 02                      |  direct_methods_size:  00000002
+000268: 00                      |  virtual_methods_size: 00000000
+                                |  direct_methods:
+                                |  [0] Invocation.<init>:()V
+000269: 01                      |    method_idx:   00000001
+00026a: 8180 04                 |    access_flags: public|constructor
+00026d: c802                    |    code_off:     00000148
+                                |  [1] Invocation.main:([Ljava/lang/String;)V
+00026f: 01                      |    method_idx:   00000002
+000270: 09                      |    access_flags: public|static
+000271: e002                    |    code_off:     00000160
+000273: 00                      |
+                                |
+                                |map:
+                                |[274] map list
+000274: 0c00 0000               |  size: 0000000c
+                                |[278] header_item map
+000278: 0000                    |  type:   0000 // TYPE_HEADER_ITEM
+00027a: 0000                    |  unused: 0
+00027c: 0100 0000               |  size:   00000001
+000280: 0000 0000               |  offset: 00000000
+                                |[284] string_id_item map
+000284: 0100                    |  type:   0001 // TYPE_STRING_ID_ITEM
+000286: 0000                    |  unused: 0
+000288: 1000 0000               |  size:   00000010
+00028c: 7000 0000               |  offset: 00000070
+                                |[290] type_id_item map
+000290: 0200                    |  type:   0002 // TYPE_TYPE_ID_ITEM
+000292: 0000                    |  unused: 0
+000294: 0800 0000               |  size:   00000008
+000298: b000 0000               |  offset: 000000b0
+                                |[29c] proto_id_item map
+00029c: 0300                    |  type:   0003 // TYPE_PROTO_ID_ITEM
+00029e: 0000                    |  unused: 0
+0002a0: 0400 0000               |  size:   00000004
+0002a4: d000 0000               |  offset: 000000d0
+                                |[2a8] method_id_item map
+0002a8: 0500                    |  type:   0005 // TYPE_METHOD_ID_ITEM
+0002aa: 0000                    |  unused: 0
+0002ac: 0500 0000               |  size:   00000005
+0002b0: 0001 0000               |  offset: 00000100
+                                |[2b4] class_def_item map
+0002b4: 0600                    |  type:   0006 // TYPE_CLASS_DEF_ITEM
+0002b6: 0000                    |  unused: 0
+0002b8: 0100 0000               |  size:   00000001
+0002bc: 2801 0000               |  offset: 00000128
+                                |[2c0] code_item map
+0002c0: 0120                    |  type:   2001 // TYPE_CODE_ITEM
+0002c2: 0000                    |  unused: 0
+0002c4: 0200 0000               |  size:   00000002
+0002c8: 4801 0000               |  offset: 00000148
+                                |[2cc] type_list map
+0002cc: 0110                    |  type:   1001 // TYPE_TYPE_LIST
+0002ce: 0000                    |  unused: 0
+0002d0: 0200 0000               |  size:   00000002
+0002d4: 9001 0000               |  offset: 00000190
+                                |[2d8] string_data_item map
+0002d8: 0220                    |  type:   2002 // TYPE_STRING_DATA_ITEM
+0002da: 0000                    |  unused: 0
+0002dc: 1000 0000               |  size:   00000010
+0002e0: 9e01 0000               |  offset: 0000019e
+                                |[2e4] debug_info_item map
+0002e4: 0320                    |  type:   2003 // TYPE_DEBUG_INFO_ITEM
+0002e6: 0000                    |  unused: 0
+0002e8: 0200 0000               |  size:   00000002
+0002ec: 5602 0000               |  offset: 00000256
+                                |[2f0] class_data_item map
+0002f0: 0020                    |  type:   2000 // TYPE_CLASS_DATA_ITEM
+0002f2: 0000                    |  unused: 0
+0002f4: 0100 0000               |  size:   00000001
+0002f8: 6502 0000               |  offset: 00000265
+                                |[2fc] map_list map
+0002fc: 0010                    |  type:   1000 // TYPE_MAP_LIST
+0002fe: 0000                    |  unused: 0
+000300: 0100 0000               |  size:   00000001
+000304: 7402 0000               |  offset: 00000274
+                                |
+                                |method code index:
+                                |
+                                |[148] Invocation.<init>:()V
+                                |[160] Invocation.main:([Ljava/lang/String;)V
+                                |
+                                |statistics:
+                                |  class data: 1 item; 14 bytes total
+                                |    14 bytes/item
+                                |  class def: 1 item; 32 bytes total
+                                |    32 bytes/item
+                                |  code: 2 items; 72 bytes total
+                                |    24..48 bytes/item; average 36
+                                |  debug info: 2 items; 15 bytes total
+                                |    5..10 bytes/item; average 7
+                                |  header: 1 item; 112 bytes total
+                                |    112 bytes/item
+                                |  map list: 1 item; 148 bytes total
+                                |    148 bytes/item
+                                |  method id: 5 items; 40 bytes total
+                                |    8 bytes/item
+                                |  proto id: 4 items; 48 bytes total
+                                |    12 bytes/item
+                                |  string data: 16 items; 184 bytes total
+                                |    3..21 bytes/item; average 11
+                                |  string id: 16 items; 64 bytes total
+                                |    4 bytes/item
+                                |  type id: 8 items; 32 bytes total
+                                |    4 bytes/item
+                                |  type list: 2 items; 12 bytes total
+                                |    6 bytes/item
+000000: 6465 780a 3033 3700     |magic: "dex\n037\0"
+000008: 4f56 8434               |checksum
+00000c: 60b6 5e06 79bc 3295 96a9|signature
+000016: b76f 040a 11ba 0be1 853c|
+000020: 6802 0000               |file_size:       00000268
+000024: 7000 0000               |header_size:     00000070
+000028: 7856 3412               |endian_tag:      12345678
+00002c: 0000 0000               |link_size:       0
+000030: 0000 0000               |link_off:        0
+000034: c801 0000               |map_off:         000001c8
+000038: 0b00 0000               |string_ids_size: 0000000b
+00003c: 7000 0000               |string_ids_off:  00000070
+000040: 0600 0000               |type_ids_size:   00000006
+000044: 9c00 0000               |type_ids_off:    0000009c
+000048: 0100 0000               |proto_ids_size:  00000001
+00004c: b400 0000               |proto_ids_off:   000000b4
+000050: 0100 0000               |field_ids_size:  00000001
+000054: c000 0000               |field_ids_off:   000000c0
+000058: 0200 0000               |method_ids_size: 00000002
+00005c: c800 0000               |method_ids_off:  000000c8
+000060: 0100 0000               |class_defs_size: 00000001
+000064: d800 0000               |class_defs_off:  000000d8
+000068: 7001 0000               |data_size:       00000170
+00006c: f800 0000               |data_off:        000000f8
+                                |
+                                |string_ids:
+                                |[0] "LStaticDefinition;"
+000070: 1a01 0000               |  string_data_off: 0000011a
+                                |[1] "Ljava/io/PrintStream;"
+000074: 2e01 0000               |  string_data_off: 0000012e
+                                |[2] "Ljava/lang/Object;"
+000078: 4501 0000               |  string_data_off: 00000145
+                                |[3] "Ljava/lang/String;"
+00007c: 5901 0000               |  string_data_off: 00000159
+                                |[4] "Ljava/lang/System;"
+000080: 6d01 0000               |  string_data_off: 0000016d
+                                |[5] "StaticDefinition.java"
+000084: 8101 0000               |  string_data_off: 00000181
+                                |[6] "V"
+000088: 9801 0000               |  string_data_off: 00000198
+                                |[7] "VL"
+00008c: 9b01 0000               |  string_data_off: 0000019b
+                                |[8] "out"
+000090: 9f01 0000               |  string_data_off: 0000019f
+                                |[9] "printIt"
+000094: a401 0000               |  string_data_off: 000001a4
+                                |[a] "println"
+000098: ad01 0000               |  string_data_off: 000001ad
+                                |
+                                |type_ids:
+                                |[0] LStaticDefinition;
+00009c: 0000 0000               |  descriptor_idx: 00000000
+                                |[1] Ljava/io/PrintStream;
+0000a0: 0100 0000               |  descriptor_idx: 00000001
+                                |[2] Ljava/lang/Object;
+0000a4: 0200 0000               |  descriptor_idx: 00000002
+                                |[3] Ljava/lang/String;
+0000a8: 0300 0000               |  descriptor_idx: 00000003
+                                |[4] Ljava/lang/System;
+0000ac: 0400 0000               |  descriptor_idx: 00000004
+                                |[5] V
+0000b0: 0600 0000               |  descriptor_idx: 00000006
+                                |
+                                |proto_ids:
+                                |[0] void proto(java.lang.String)
+0000b4: 0700 0000               |  shorty_idx:      00000007 // "VL"
+0000b8: 0500 0000               |  return_type_idx: 00000005 // void
+0000bc: 1401 0000               |  parameters_off:  00000114
+                                |
+                                |field_ids:
+                                |[0] java.lang.System.out:Ljava/io/PrintStream;
+0000c0: 0400                    |  class_idx: 0004
+0000c2: 0100                    |  type_idx:  0001
+0000c4: 0800 0000               |  name_idx:  00000008
+                                |
+                                |method_ids:
+                                |[0] StaticDefinition.printIt:(Ljava/lang/String;)V
+0000c8: 0000                    |  class_idx: 0000
+0000ca: 0000                    |  proto_idx: 0000
+0000cc: 0900 0000               |  name_idx:  00000009
+                                |[1] java.io.PrintStream.println:(Ljava/lang/String;)V
+0000d0: 0100                    |  class_idx: 0001
+0000d2: 0000                    |  proto_idx: 0000
+0000d4: 0a00 0000               |  name_idx:  0000000a
+                                |
+                                |class_defs:
+                                |[0] StaticDefinition
+0000d8: 0000 0000               |  class_idx:           00000000
+0000dc: 0106 0000               |  access_flags:        public|interface|abstract
+0000e0: 0200 0000               |  superclass_idx:      00000002 // java.lang.Object
+0000e4: 0000 0000               |  interfaces_off:      00000000
+0000e8: 0500 0000               |  source_file_idx:     00000005 // StaticDefinition.java
+0000ec: 0000 0000               |  annotations_off:     00000000
+0000f0: bd01 0000               |  class_data_off:      000001bd
+0000f4: 0000 0000               |  static_values_off:   00000000
+                                |
+                                |word_data:
+                                |[f8] StaticDefinition.printIt:(Ljava/lang/String;)V
+0000f8: 0200                    |  registers_size: 0002
+0000fa: 0100                    |  ins_size:       0001
+0000fc: 0200                    |  outs_size:      0002
+0000fe: 0000                    |  tries_size:     0000
+000100: b601 0000               |  debug_off:      000001b6
+000104: 0600 0000               |  insns_size:     00000006
+000108: 6200 0000               |  0000: sget-object v0, java.lang.System.out:Ljava/io/PrintStream; // field@0000
+00010c: 6e20 0100 1000          |  0002: invoke-virtual {v0, v1}, java.io.PrintStream.println:(Ljava/lang/String;)V // method@0001
+000112: 0e00                    |  0005: return-void
+                                |  debug info
+                                |    line_start: 19
+                                |    parameters_size: 0001
+                                |    parameter <unnamed> v1
+                                |    0000: prologue end
+                                |    0000: line 19
+                                |    0005: line 20
+                                |    end sequence
+                                |
+                                |[114] type_list
+000114: 0100 0000               |  size: 00000001
+000118: 0300                    |  0003 // java.lang.String
+                                |
+                                |string_data:
+00011a: 12                      |utf16_size: 00000012
+00011b: 4c53 7461 7469 6344 6566|"LStaticDefinition;"
+000125: 696e 6974 696f 6e3b 00  |
+                                |
+00012e: 15                      |utf16_size: 00000015
+00012f: 4c6a 6176 612f 696f 2f50|"Ljava/io/PrintStream;"
+000139: 7269 6e74 5374 7265 616d|
+000143: 3b00                    |
+                                |
+000145: 12                      |utf16_size: 00000012
+000146: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Object;"
+000150: 2f4f 626a 6563 743b 00  |
+                                |
+000159: 12                      |utf16_size: 00000012
+00015a: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/String;"
+000164: 2f53 7472 696e 673b 00  |
+                                |
+00016d: 12                      |utf16_size: 00000012
+00016e: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/System;"
+000178: 2f53 7973 7465 6d3b 00  |
+                                |
+000181: 15                      |utf16_size: 00000015
+000182: 5374 6174 6963 4465 6669|"StaticDefinition.java"
+00018c: 6e69 7469 6f6e 2e6a 6176|
+000196: 6100                    |
+                                |
+000198: 01                      |utf16_size: 00000001
+000199: 5600                    |"V"
+                                |
+00019b: 02                      |utf16_size: 00000002
+00019c: 564c 00                 |"VL"
+                                |
+00019f: 03                      |utf16_size: 00000003
+0001a0: 6f75 7400               |"out"
+                                |
+0001a4: 07                      |utf16_size: 00000007
+0001a5: 7072 696e 7449 7400     |"printIt"
+                                |
+0001ad: 07                      |utf16_size: 00000007
+0001ae: 7072 696e 746c 6e00     |"println"
+                                |
+                                |byte_data:
+                                |[1b6] debug info
+0001b6: 13                      |line_start: 19
+0001b7: 01                      |parameters_size: 0001
+0001b8: 00                      |parameter <unnamed> v1
+0001b9: 07                      |0000: prologue end
+0001ba: 0e                      |0000: line 19
+0001bb: 5a                      |0005: line 20
+0001bc: 00                      |end sequence
+                                |
+                                |[1bd] class data for StaticDefinition
+0001bd: 00                      |  static_fields_size:   00000000
+0001be: 00                      |  instance_fields_size: 00000000
+0001bf: 01                      |  direct_methods_size:  00000001
+0001c0: 00                      |  virtual_methods_size: 00000000
+                                |  direct_methods:
+                                |  [0] StaticDefinition.printIt:(Ljava/lang/String;)V
+0001c1: 00                      |    method_idx:   00000000
+0001c2: 09                      |    access_flags: public|static
+0001c3: f801                    |    code_off:     000000f8
+0001c5: 0000 00                 |
+                                |
+                                |map:
+                                |[1c8] map list
+0001c8: 0d00 0000               |  size: 0000000d
+                                |[1cc] header_item map
+0001cc: 0000                    |  type:   0000 // TYPE_HEADER_ITEM
+0001ce: 0000                    |  unused: 0
+0001d0: 0100 0000               |  size:   00000001
+0001d4: 0000 0000               |  offset: 00000000
+                                |[1d8] string_id_item map
+0001d8: 0100                    |  type:   0001 // TYPE_STRING_ID_ITEM
+0001da: 0000                    |  unused: 0
+0001dc: 0b00 0000               |  size:   0000000b
+0001e0: 7000 0000               |  offset: 00000070
+                                |[1e4] type_id_item map
+0001e4: 0200                    |  type:   0002 // TYPE_TYPE_ID_ITEM
+0001e6: 0000                    |  unused: 0
+0001e8: 0600 0000               |  size:   00000006
+0001ec: 9c00 0000               |  offset: 0000009c
+                                |[1f0] proto_id_item map
+0001f0: 0300                    |  type:   0003 // TYPE_PROTO_ID_ITEM
+0001f2: 0000                    |  unused: 0
+0001f4: 0100 0000               |  size:   00000001
+0001f8: b400 0000               |  offset: 000000b4
+                                |[1fc] field_id_item map
+0001fc: 0400                    |  type:   0004 // TYPE_FIELD_ID_ITEM
+0001fe: 0000                    |  unused: 0
+000200: 0100 0000               |  size:   00000001
+000204: c000 0000               |  offset: 000000c0
+                                |[208] method_id_item map
+000208: 0500                    |  type:   0005 // TYPE_METHOD_ID_ITEM
+00020a: 0000                    |  unused: 0
+00020c: 0200 0000               |  size:   00000002
+000210: c800 0000               |  offset: 000000c8
+                                |[214] class_def_item map
+000214: 0600                    |  type:   0006 // TYPE_CLASS_DEF_ITEM
+000216: 0000                    |  unused: 0
+000218: 0100 0000               |  size:   00000001
+00021c: d800 0000               |  offset: 000000d8
+                                |[220] code_item map
+000220: 0120                    |  type:   2001 // TYPE_CODE_ITEM
+000222: 0000                    |  unused: 0
+000224: 0100 0000               |  size:   00000001
+000228: f800 0000               |  offset: 000000f8
+                                |[22c] type_list map
+00022c: 0110                    |  type:   1001 // TYPE_TYPE_LIST
+00022e: 0000                    |  unused: 0
+000230: 0100 0000               |  size:   00000001
+000234: 1401 0000               |  offset: 00000114
+                                |[238] string_data_item map
+000238: 0220                    |  type:   2002 // TYPE_STRING_DATA_ITEM
+00023a: 0000                    |  unused: 0
+00023c: 0b00 0000               |  size:   0000000b
+000240: 1a01 0000               |  offset: 0000011a
+                                |[244] debug_info_item map
+000244: 0320                    |  type:   2003 // TYPE_DEBUG_INFO_ITEM
+000246: 0000                    |  unused: 0
+000248: 0100 0000               |  size:   00000001
+00024c: b601 0000               |  offset: 000001b6
+                                |[250] class_data_item map
+000250: 0020                    |  type:   2000 // TYPE_CLASS_DATA_ITEM
+000252: 0000                    |  unused: 0
+000254: 0100 0000               |  size:   00000001
+000258: bd01 0000               |  offset: 000001bd
+                                |[25c] map_list map
+00025c: 0010                    |  type:   1000 // TYPE_MAP_LIST
+00025e: 0000                    |  unused: 0
+000260: 0100 0000               |  size:   00000001
+000264: c801 0000               |  offset: 000001c8
+                                |
+                                |method code index:
+                                |
+                                |[f8] StaticDefinition.printIt:(Ljava/lang/String;)V
+                                |
+                                |statistics:
+                                |  class data: 1 item; 8 bytes total
+                                |    8 bytes/item
+                                |  class def: 1 item; 32 bytes total
+                                |    32 bytes/item
+                                |  code: 1 item; 28 bytes total
+                                |    28 bytes/item
+                                |  debug info: 1 item; 7 bytes total
+                                |    7 bytes/item
+                                |  field id: 1 item; 8 bytes total
+                                |    8 bytes/item
+                                |  header: 1 item; 112 bytes total
+                                |    112 bytes/item
+                                |  map list: 1 item; 160 bytes total
+                                |    160 bytes/item
+                                |  method id: 2 items; 16 bytes total
+                                |    8 bytes/item
+                                |  proto id: 1 item; 12 bytes total
+                                |    12 bytes/item
+                                |  string data: 11 items; 156 bytes total
+                                |    3..23 bytes/item; average 14
+                                |  string id: 11 items; 44 bytes total
+                                |    4 bytes/item
+                                |  type id: 6 items; 24 bytes total
+                                |    4 bytes/item
+                                |  type list: 1 item; 6 bytes total
+                                |    6 bytes/item
+=== API LEVEL 23 ===
+000000: 6465 780a 3033 3500     |magic: "dex\n035\0"
+000008: 3d62 a6da               |checksum
+00000c: 15d3 147a d5cb b9b4 97e9|signature
+000016: 1a93 de25 776a 1412 faf3|
+000020: 0803 0000               |file_size:       00000308
+000024: 7000 0000               |header_size:     00000070
+000028: 7856 3412               |endian_tag:      12345678
+00002c: 0000 0000               |link_size:       0
+000030: 0000 0000               |link_off:        0
+000034: 7402 0000               |map_off:         00000274
+000038: 1000 0000               |string_ids_size: 00000010
+00003c: 7000 0000               |string_ids_off:  00000070
+000040: 0800 0000               |type_ids_size:   00000008
+000044: b000 0000               |type_ids_off:    000000b0
+000048: 0400 0000               |proto_ids_size:  00000004
+00004c: d000 0000               |proto_ids_off:   000000d0
+000050: 0000 0000               |field_ids_size:  00000000
+000054: 0000 0000               |field_ids_off:   00000000
+000058: 0500 0000               |method_ids_size: 00000005
+00005c: 0001 0000               |method_ids_off:  00000100
+000060: 0100 0000               |class_defs_size: 00000001
+000064: 2801 0000               |class_defs_off:  00000128
+000068: c001 0000               |data_size:       000001c0
+00006c: 4801 0000               |data_off:        00000148
+                                |
+                                |string_ids:
+                                |[0] "123"
+000070: 9e01 0000               |  string_data_off: 0000019e
+                                |[1] "<init>"
+000074: a301 0000               |  string_data_off: 000001a3
+                                |[2] "I"
+000078: ab01 0000               |  string_data_off: 000001ab
+                                |[3] "IL"
+00007c: ae01 0000               |  string_data_off: 000001ae
+                                |[4] "Invocation.java"
+000080: b201 0000               |  string_data_off: 000001b2
+                                |[5] "LDefaultDefinition;"
+000084: c301 0000               |  string_data_off: 000001c3
+                                |[6] "LInvocation;"
+000088: d801 0000               |  string_data_off: 000001d8
+                                |[7] "LStaticDefinition;"
+00008c: e601 0000               |  string_data_off: 000001e6
+                                |[8] "Ljava/lang/Object;"
+000090: fa01 0000               |  string_data_off: 000001fa
+                                |[9] "Ljava/lang/String;"
+000094: 0e02 0000               |  string_data_off: 0000020e
+                                |[a] "V"
+000098: 2202 0000               |  string_data_off: 00000222
+                                |[b] "VL"
+00009c: 2502 0000               |  string_data_off: 00000225
+                                |[c] "[Ljava/lang/String;"
+0000a0: 2902 0000               |  string_data_off: 00000229
+                                |[d] "countIt"
+0000a4: 3e02 0000               |  string_data_off: 0000023e
+                                |[e] "main"
+0000a8: 4702 0000               |  string_data_off: 00000247
+                                |[f] "printIt"
+0000ac: 4d02 0000               |  string_data_off: 0000024d
+                                |
+                                |type_ids:
+                                |[0] I
+0000b0: 0200 0000               |  descriptor_idx: 00000002
+                                |[1] LDefaultDefinition;
+0000b4: 0500 0000               |  descriptor_idx: 00000005
+                                |[2] LInvocation;
+0000b8: 0600 0000               |  descriptor_idx: 00000006
+                                |[3] LStaticDefinition;
+0000bc: 0700 0000               |  descriptor_idx: 00000007
+                                |[4] Ljava/lang/Object;
+0000c0: 0800 0000               |  descriptor_idx: 00000008
+                                |[5] Ljava/lang/String;
+0000c4: 0900 0000               |  descriptor_idx: 00000009
+                                |[6] V
+0000c8: 0a00 0000               |  descriptor_idx: 0000000a
+                                |[7] [Ljava/lang/String;
+0000cc: 0c00 0000               |  descriptor_idx: 0000000c
+                                |
+                                |proto_ids:
+                                |[0] int proto(java.lang.String)
+0000d0: 0300 0000               |  shorty_idx:      00000003 // "IL"
+0000d4: 0000 0000               |  return_type_idx: 00000000 // int
+0000d8: 9001 0000               |  parameters_off:  00000190
+                                |[1] void proto()
+0000dc: 0a00 0000               |  shorty_idx:      0000000a // "V"
+0000e0: 0600 0000               |  return_type_idx: 00000006 // void
+0000e4: 0000 0000               |  parameters_off:  00000000
+                                |[2] void proto(java.lang.String)
+0000e8: 0b00 0000               |  shorty_idx:      0000000b // "VL"
+0000ec: 0600 0000               |  return_type_idx: 00000006 // void
+0000f0: 9001 0000               |  parameters_off:  00000190
+                                |[3] void proto(java.lang.String[])
+0000f4: 0b00 0000               |  shorty_idx:      0000000b // "VL"
+0000f8: 0600 0000               |  return_type_idx: 00000006 // void
+0000fc: 9801 0000               |  parameters_off:  00000198
+                                |
+                                |field_ids:
+                                |
+                                |method_ids:
+                                |[0] DefaultDefinition.countIt:(Ljava/lang/String;)I
+000100: 0100                    |  class_idx: 0001
+000102: 0000                    |  proto_idx: 0000
+000104: 0d00 0000               |  name_idx:  0000000d
+                                |[1] Invocation.<init>:()V
+000108: 0200                    |  class_idx: 0002
+00010a: 0100                    |  proto_idx: 0001
+00010c: 0100 0000               |  name_idx:  00000001
+                                |[2] Invocation.main:([Ljava/lang/String;)V
+000110: 0200                    |  class_idx: 0002
+000112: 0300                    |  proto_idx: 0003
+000114: 0e00 0000               |  name_idx:  0000000e
+                                |[3] StaticDefinition.printIt:(Ljava/lang/String;)V
+000118: 0300                    |  class_idx: 0003
+00011a: 0200                    |  proto_idx: 0002
+00011c: 0f00 0000               |  name_idx:  0000000f
+                                |[4] java.lang.Object.<init>:()V
+000120: 0400                    |  class_idx: 0004
+000122: 0100                    |  proto_idx: 0001
+000124: 0100 0000               |  name_idx:  00000001
+                                |
+                                |class_defs:
+                                |[0] Invocation
+000128: 0200 0000               |  class_idx:           00000002
+00012c: 0100 0000               |  access_flags:        public
+000130: 0400 0000               |  superclass_idx:      00000004 // java.lang.Object
+000134: 0000 0000               |  interfaces_off:      00000000
+000138: 0400 0000               |  source_file_idx:     00000004 // Invocation.java
+00013c: 0000 0000               |  annotations_off:     00000000
+000140: 6502 0000               |  class_data_off:      00000265
+000144: 0000 0000               |  static_values_off:   00000000
+                                |
+                                |word_data:
+                                |[148] Invocation.<init>:()V
+000148: 0100                    |  registers_size: 0001
+00014a: 0100                    |  ins_size:       0001
+00014c: 0100                    |  outs_size:      0001
+00014e: 0000                    |  tries_size:     0000
+000150: 5602 0000               |  debug_off:      00000256
+000154: 0400 0000               |  insns_size:     00000004
+000158: 7010 0400 0000          |  0000: invoke-direct {v0}, java.lang.Object.<init>:()V // method@0004
+00015e: 0e00                    |  0003: return-void
+                                |  debug info
+                                |    line_start: 17
+                                |    parameters_size: 0000
+                                |    0000: prologue end
+                                |    0000: line 17
+                                |    end sequence
+                                |
+                                |[160] Invocation.main:([Ljava/lang/String;)V
+000160: 0300                    |  registers_size: 0003
+000162: 0100                    |  ins_size:       0001
+000164: 0200                    |  outs_size:      0002
+000166: 0000                    |  tries_size:     0000
+000168: 5b02 0000               |  debug_off:      0000025b
+00016c: 1000 0000               |  insns_size:     00000010
+000170: 2120                    |  0000: array-length v0, v2
+000172: 3d00 0800               |  0001: if-lez v0, 0009 // +0008
+000176: 1200                    |  0003: const/4 v0, #int 0 // #0
+000178: 4600 0200               |  0004: aget-object v0, v2, v0
+00017c: 7110 0300 0000          |  0006: invoke-static {v0}, StaticDefinition.printIt:(Ljava/lang/String;)V // method@0003
+000182: 1200                    |  0009: const/4 v0, #null // #0
+000184: 1a01 0000               |  000a: const-string v1, "123" // utf8@0000
+000188: 7220 0000 1000          |  000c: invoke-interface {v0, v1}, DefaultDefinition.countIt:(Ljava/lang/String;)I // method@0000
+00018e: 0e00                    |  000f: return-void
+                                |  debug info
+                                |    line_start: 19
+                                |    parameters_size: 0001
+                                |    parameter <unnamed> v2
+                                |    0000: prologue end
+                                |    0000: line 19
+                                |    0003: line 20
+                                |    0009: line 23
+                                |    000a: line 24
+                                |    000f: line 25
+                                |    end sequence
+                                |
+                                |[190] type_list
+000190: 0100 0000               |  size: 00000001
+000194: 0500                    |  0005 // java.lang.String
+                                |
+000196: 0000                    |
+                                |[198] type_list
+000198: 0100 0000               |  size: 00000001
+00019c: 0700                    |  0007 // java.lang.String[]
+                                |
+                                |string_data:
+00019e: 03                      |utf16_size: 00000003
+00019f: 3132 3300               |"123"
+                                |
+0001a3: 06                      |utf16_size: 00000006
+0001a4: 3c69 6e69 743e 00       |"<init>"
+                                |
+0001ab: 01                      |utf16_size: 00000001
+0001ac: 4900                    |"I"
+                                |
+0001ae: 02                      |utf16_size: 00000002
+0001af: 494c 00                 |"IL"
+                                |
+0001b2: 0f                      |utf16_size: 0000000f
+0001b3: 496e 766f 6361 7469 6f6e|"Invocation.java"
+0001bd: 2e6a 6176 6100          |
+                                |
+0001c3: 13                      |utf16_size: 00000013
+0001c4: 4c44 6566 6175 6c74 4465|"LDefaultDefinition;"
+0001ce: 6669 6e69 7469 6f6e 3b00|
+                                |
+0001d8: 0c                      |utf16_size: 0000000c
+0001d9: 4c49 6e76 6f63 6174 696f|"LInvocation;"
+0001e3: 6e3b 00                 |
+                                |
+0001e6: 12                      |utf16_size: 00000012
+0001e7: 4c53 7461 7469 6344 6566|"LStaticDefinition;"
+0001f1: 696e 6974 696f 6e3b 00  |
+                                |
+0001fa: 12                      |utf16_size: 00000012
+0001fb: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/Object;"
+000205: 2f4f 626a 6563 743b 00  |
+                                |
+00020e: 12                      |utf16_size: 00000012
+00020f: 4c6a 6176 612f 6c61 6e67|"Ljava/lang/String;"
+000219: 2f53 7472 696e 673b 00  |
+                                |
+000222: 01                      |utf16_size: 00000001
+000223: 5600                    |"V"
+                                |
+000225: 02                      |utf16_size: 00000002
+000226: 564c 00                 |"VL"
+                                |
+000229: 13                      |utf16_size: 00000013
+00022a: 5b4c 6a61 7661 2f6c 616e|"[Ljava/lang/String;"
+000234: 672f 5374 7269 6e67 3b00|
+                                |
+00023e: 07                      |utf16_size: 00000007
+00023f: 636f 756e 7449 7400     |"countIt"
+                                |
+000247: 04                      |utf16_size: 00000004
+000248: 6d61 696e 00            |"main"
+                                |
+00024d: 07                      |utf16_size: 00000007
+00024e: 7072 696e 7449 7400     |"printIt"
+                                |
+                                |byte_data:
+                                |[256] debug info
+000256: 11                      |line_start: 17
+000257: 00                      |parameters_size: 0000
+000258: 07                      |0000: prologue end
+000259: 0e                      |0000: line 17
+00025a: 00                      |end sequence
+                                |
+                                |[25b] debug info
+00025b: 13                      |line_start: 19
+00025c: 01                      |parameters_size: 0001
+00025d: 00                      |parameter <unnamed> v2
+00025e: 07                      |0000: prologue end
+00025f: 0e                      |0000: line 19
+000260: 3c                      |0003: line 20
+000261: 6b                      |0009: line 23
+000262: 1e                      |000a: line 24
+000263: 5a                      |000f: line 25
+000264: 00                      |end sequence
+                                |
+                                |[265] class data for Invocation
+000265: 00                      |  static_fields_size:   00000000
+000266: 00                      |  instance_fields_size: 00000000
+000267: 02                      |  direct_methods_size:  00000002
+000268: 00                      |  virtual_methods_size: 00000000
+                                |  direct_methods:
+                                |  [0] Invocation.<init>:()V
+000269: 01                      |    method_idx:   00000001
+00026a: 8180 04                 |    access_flags: public|constructor
+00026d: c802                    |    code_off:     00000148
+                                |  [1] Invocation.main:([Ljava/lang/String;)V
+00026f: 01                      |    method_idx:   00000002
+000270: 09                      |    access_flags: public|static
+000271: e002                    |    code_off:     00000160
+000273: 00                      |
+                                |
+                                |map:
+                                |[274] map list
+000274: 0c00 0000               |  size: 0000000c
+                                |[278] header_item map
+000278: 0000                    |  type:   0000 // TYPE_HEADER_ITEM
+00027a: 0000                    |  unused: 0
+00027c: 0100 0000               |  size:   00000001
+000280: 0000 0000               |  offset: 00000000
+                                |[284] string_id_item map
+000284: 0100                    |  type:   0001 // TYPE_STRING_ID_ITEM
+000286: 0000                    |  unused: 0
+000288: 1000 0000               |  size:   00000010
+00028c: 7000 0000               |  offset: 00000070
+                                |[290] type_id_item map
+000290: 0200                    |  type:   0002 // TYPE_TYPE_ID_ITEM
+000292: 0000                    |  unused: 0
+000294: 0800 0000               |  size:   00000008
+000298: b000 0000               |  offset: 000000b0
+                                |[29c] proto_id_item map
+00029c: 0300                    |  type:   0003 // TYPE_PROTO_ID_ITEM
+00029e: 0000                    |  unused: 0
+0002a0: 0400 0000               |  size:   00000004
+0002a4: d000 0000               |  offset: 000000d0
+                                |[2a8] method_id_item map
+0002a8: 0500                    |  type:   0005 // TYPE_METHOD_ID_ITEM
+0002aa: 0000                    |  unused: 0
+0002ac: 0500 0000               |  size:   00000005
+0002b0: 0001 0000               |  offset: 00000100
+                                |[2b4] class_def_item map
+0002b4: 0600                    |  type:   0006 // TYPE_CLASS_DEF_ITEM
+0002b6: 0000                    |  unused: 0
+0002b8: 0100 0000               |  size:   00000001
+0002bc: 2801 0000               |  offset: 00000128
+                                |[2c0] code_item map
+0002c0: 0120                    |  type:   2001 // TYPE_CODE_ITEM
+0002c2: 0000                    |  unused: 0
+0002c4: 0200 0000               |  size:   00000002
+0002c8: 4801 0000               |  offset: 00000148
+                                |[2cc] type_list map
+0002cc: 0110                    |  type:   1001 // TYPE_TYPE_LIST
+0002ce: 0000                    |  unused: 0
+0002d0: 0200 0000               |  size:   00000002
+0002d4: 9001 0000               |  offset: 00000190
+                                |[2d8] string_data_item map
+0002d8: 0220                    |  type:   2002 // TYPE_STRING_DATA_ITEM
+0002da: 0000                    |  unused: 0
+0002dc: 1000 0000               |  size:   00000010
+0002e0: 9e01 0000               |  offset: 0000019e
+                                |[2e4] debug_info_item map
+0002e4: 0320                    |  type:   2003 // TYPE_DEBUG_INFO_ITEM
+0002e6: 0000                    |  unused: 0
+0002e8: 0200 0000               |  size:   00000002
+0002ec: 5602 0000               |  offset: 00000256
+                                |[2f0] class_data_item map
+0002f0: 0020                    |  type:   2000 // TYPE_CLASS_DATA_ITEM
+0002f2: 0000                    |  unused: 0
+0002f4: 0100 0000               |  size:   00000001
+0002f8: 6502 0000               |  offset: 00000265
+                                |[2fc] map_list map
+0002fc: 0010                    |  type:   1000 // TYPE_MAP_LIST
+0002fe: 0000                    |  unused: 0
+000300: 0100 0000               |  size:   00000001
+000304: 7402 0000               |  offset: 00000274
+                                |
+                                |method code index:
+                                |
+                                |[148] Invocation.<init>:()V
+                                |[160] Invocation.main:([Ljava/lang/String;)V
+                                |
+                                |statistics:
+                                |  class data: 1 item; 14 bytes total
+                                |    14 bytes/item
+                                |  class def: 1 item; 32 bytes total
+                                |    32 bytes/item
+                                |  code: 2 items; 72 bytes total
+                                |    24..48 bytes/item; average 36
+                                |  debug info: 2 items; 15 bytes total
+                                |    5..10 bytes/item; average 7
+                                |  header: 1 item; 112 bytes total
+                                |    112 bytes/item
+                                |  map list: 1 item; 148 bytes total
+                                |    148 bytes/item
+                                |  method id: 5 items; 40 bytes total
+                                |    8 bytes/item
+                                |  proto id: 4 items; 48 bytes total
+                                |    12 bytes/item
+                                |  string data: 16 items; 184 bytes total
+                                |    3..21 bytes/item; average 11
+                                |  string id: 16 items; 64 bytes total
+                                |    4 bytes/item
+                                |  type id: 8 items; 32 bytes total
+                                |    4 bytes/item
+                                |  type list: 2 items; 12 bytes total
+                                |    6 bytes/item
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface defined without --min-sdk-version >= 24
+1 error; aborting
+Uncaught translation error: com.android.dx.cf.code.SimException: default or static interface defined without --min-sdk-version >= 24
+1 error; aborting
