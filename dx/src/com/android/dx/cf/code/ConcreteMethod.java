@@ -23,6 +23,7 @@ import com.android.dx.cf.attrib.AttLocalVariableTypeTable;
 import com.android.dx.cf.iface.AttributeList;
 import com.android.dx.cf.iface.ClassFile;
 import com.android.dx.cf.iface.Method;
+import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.SourcePosition;
 import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
@@ -39,11 +40,8 @@ public final class ConcreteMethod implements Method {
     /** {@code non-null;} method being wrapped */
     private final Method method;
 
-    /**
-     * {@code null-ok;} the class's {@code SourceFile} attribute value,
-     * if any
-     */
-    private final CstString sourceFile;
+    /** {@code non-null;} the {@code ClassFile} the method belongs to. */
+    private final ClassFile classFile;
 
     /** {@code non-null;} the code attribute */
     private final AttCode attCode;
@@ -58,20 +56,16 @@ public final class ConcreteMethod implements Method {
      * Constructs an instance.
      *
      * @param method {@code non-null;} the method to be based on
-     * @param cf {@code non-null;} the class file that contains this method
+     * @param classFile {@code non-null;} the class file that contains this method
      * @param keepLines whether to keep the line number information
      * (if any)
      * @param keepLocals whether to keep the local variable
      * information (if any)
      */
-    public ConcreteMethod(Method method, ClassFile cf, boolean keepLines, boolean keepLocals) {
-        this(method, cf.getSourceFile(), keepLines, keepLocals);
-    }
-
-    public ConcreteMethod(Method method, CstString sourceFile,
+    public ConcreteMethod(Method method, ClassFile classFile,
             boolean keepLines, boolean keepLocals) {
         this.method = method;
-        this.sourceFile = sourceFile;
+        this.classFile = classFile;
 
         AttributeList attribs = method.getAttributes();
         this.attCode = (AttCode) attribs.findFirst(AttCode.ATTRIBUTE_NAME);
@@ -109,6 +103,7 @@ public final class ConcreteMethod implements Method {
                              AttLocalVariableTable.ATTRIBUTE_NAME);
                  lvt != null;
                  lvt = (AttLocalVariableTable) codeAttribs.findNext(lvt)) {
+
                 lvl = LocalVariableList.concat(lvl, lvt.getLocalVariables());
             }
 
@@ -122,10 +117,36 @@ public final class ConcreteMethod implements Method {
             }
 
             if (typeList.size() != 0) {
+
                 lvl = LocalVariableList.mergeDescriptorsAndSignatures(lvl, typeList);
             }
         }
         this.localVariables = lvl;
+    }
+
+
+    /**
+     * Gets the source file associated with the method if known.
+     * @return {null-ok;} the source file defining the method if known, null otherwise.
+     */
+    public CstString getSourceFile() {
+        return classFile.getSourceFile();
+    }
+
+    /**
+     * Tests whether the method is being defined on an interface.
+     * @return true if the method is being defined on an interface.
+     */
+    public final boolean isDefaultOrStaticInterfaceMethod() {
+        return (classFile.getAccessFlags() & AccessFlags.ACC_INTERFACE) != 0;
+    }
+
+    /**
+     * Tests whether the method is being defined is declared as static.
+     * @return true if the method is being defined is declared as static.
+     */
+    public final boolean isStaticMethod() {
+        return (getAccessFlags() & AccessFlags.ACC_STATIC) != 0;
     }
 
     /** {@inheritDoc} */
@@ -232,7 +253,7 @@ public final class ConcreteMethod implements Method {
      * @return {@code non-null;} an appropriate instance
      */
     public SourcePosition makeSourcePosistion(int offset) {
-        return new SourcePosition(sourceFile, offset,
+        return new SourcePosition(getSourceFile(), offset,
                                   lineNumbers.pcToLine(offset));
     }
 }

@@ -1329,6 +1329,9 @@ public class Main {
          *  to allow merges between dex files with many strings. */
         public boolean forceJumbo = false;
 
+        /** whether default and static interface methods can be invoked at any API level. */
+        public boolean allowAllInterfaceMethodInvokes = false;
+
         /** {@code non-null} after {@link #parse}; file name arguments */
         public String[] fileNames;
 
@@ -1596,6 +1599,8 @@ public class Main {
                         throw new UsageException();
                     }
                     minSdkVersion = value;
+                } else if (parser.isArg("--allow-all-interface-method-invokes")) {
+                    allowAllInterfaceMethodInvokes = true;
                 } else {
                     context.err.println("unknown option: " + parser.getCurrent());
                     throw new UsageException();
@@ -1695,9 +1700,10 @@ public class Main {
                 cfOptions.warn = context.noop;
             }
 
-            dexOptions = new DexOptions();
+            dexOptions = new DexOptions(context.err);
             dexOptions.minSdkVersion = minSdkVersion;
             dexOptions.forceJumbo = forceJumbo;
+            dexOptions.allowAllInterfaceMethodInvokes = allowAllInterfaceMethodInvokes;
         }
     }
 
