@@ -18,11 +18,12 @@ package com.android.dx.dex;
 
 import com.android.dex.DexFormat;
 import com.android.dx.dex.code.DalvInsnList;
+import java.io.PrintStream;
 
 /**
  * Container for options used to control details of dex file generation.
  */
-public class DexOptions {
+public final class DexOptions {
 
     /**
      * Enable alignment support of 64-bit registers on Dalvik even registers. This is a temporary
@@ -42,6 +43,20 @@ public class DexOptions {
 
     /** force generation of jumbo opcodes */
     public boolean forceJumbo = false;
+
+    /** Enable user override for default and static interface method invocation. */
+    public boolean allowAllInterfaceMethodInvokes = false;
+
+    /** output stream for reporting warnings */
+    public final PrintStream err;
+
+    public DexOptions() {
+        err = System.err;
+    }
+
+    public DexOptions(PrintStream stream) {
+        err = stream;
+    }
 
     /**
      * Gets the dex file magic number corresponding to this instance.
