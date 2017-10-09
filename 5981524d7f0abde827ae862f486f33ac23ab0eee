@@ -22,6 +22,30 @@
       "revId": "5981524d7f0abde827ae862f486f33ac23ab0eee",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d07c86a0_38647bb3",
+        "filename": "dx/tests/143-interface-methods/expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-09T09:18:44Z",
+      "side": 1,
+      "message": "Good question. In this case, yes. It is expected.\n\nThe test is walking over different API versions. The policy in the code here bans invocation of {default,static} interface methods before API level 20 and definition of {default,static} interface methods before API level 24.\n\nThis is completely ad hoc and is not sound. It exists as a stopgap to support Android\u0027s documented (but flawed) method of guarding up version API level code.",
+      "parentUuid": "35f4ef42_6991de68",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 189
+      },
+      "revId": "5981524d7f0abde827ae862f486f33ac23ab0eee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
