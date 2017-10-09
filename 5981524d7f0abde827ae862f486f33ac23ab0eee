@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35f4ef42_6991de68",
+        "filename": "dx/tests/143-interface-methods/expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019039
+      },
+      "writtenOn": "2017-10-09T09:06:20Z",
+      "side": 1,
+      "message": "is it expected ?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 189
+      },
+      "revId": "5981524d7f0abde827ae862f486f33ac23ab0eee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
