@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "78e8d9ec_91796cdd",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-16T18:31:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fc904e2_48767b01",
+      "range": {
+        "startLine": 867,
+        "startChar": 14,
+        "endLine": 867,
+        "endChar": 44
+      },
+      "revId": "f3598e5dc2c021173d4a0abf36da3caa08a93dee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "345c918f_1fa06c43",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e75d840d_ca524e7d",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-16T18:31:04Z",
+      "side": 1,
+      "message": "We had this earlier today. I got our wires crossed. Revised. PTAL.\n\n[ The naming of the flag isn\u0027t great as there\u0027s no limit for default methods and 21 for static methods. Not sure what would be better. ]",
+      "parentUuid": "345c918f_1fa06c43",
+      "range": {
+        "startLine": 869,
+        "startChar": 12,
+        "endLine": 869,
+        "endChar": 53
+      },
+      "revId": "f3598e5dc2c021173d4a0abf36da3caa08a93dee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ec87c01_25184c4e",
         "filename": "dx/src/com/android/dx/command/dexer/Main.java",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2017-10-16T12:42:24Z",
       "side": 1,
       "message": "If I didn\u0027t have access to this code review, where would I go to understand why this flag exists? Here, or the code that uses it? \n\nI think we\u0027re closest in the Simulator. I want to make sure we document the reason why the flag exists somewhere in the code as well as what it does.",
+      "range": {
+        "startLine": 1332,
+        "startChar": 83,
+        "endLine": 1332,
+        "endChar": 88
+      },
+      "revId": "f3598e5dc2c021173d4a0abf36da3caa08a93dee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d0dd4dc_190a8e92",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-16T18:31:04Z",
+      "side": 1,
+      "message": "The tool that exposes this functionality needs to document it.\n\nThere is a bigger comment in the simulator, but it\u0027ll be read by few and likely not hold for the next generation of dexing tools.",
+      "parentUuid": "0ec87c01_25184c4e",
       "range": {
         "startLine": 1332,
         "startChar": 83,
