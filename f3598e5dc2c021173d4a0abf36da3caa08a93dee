@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0fc904e2_48767b01",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-16T12:42:24Z",
+      "side": 1,
+      "message": "\"--allow-all-interface-method-invokes\"",
+      "range": {
+        "startLine": 867,
+        "startChar": 14,
+        "endLine": 867,
+        "endChar": 44
+      },
+      "revId": "f3598e5dc2c021173d4a0abf36da3caa08a93dee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "345c918f_1fa06c43",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 8
@@ -22,6 +45,29 @@
       "revId": "f3598e5dc2c021173d4a0abf36da3caa08a93dee",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec87c01_25184c4e",
+        "filename": "dx/src/com/android/dx/command/dexer/Main.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-16T12:42:24Z",
+      "side": 1,
+      "message": "If I didn\u0027t have access to this code review, where would I go to understand why this flag exists? Here, or the code that uses it? \n\nI think we\u0027re closest in the Simulator. I want to make sure we document the reason why the flag exists somewhere in the code as well as what it does.",
+      "range": {
+        "startLine": 1332,
+        "startChar": 83,
+        "endLine": 1332,
+        "endChar": 88
+      },
+      "revId": "f3598e5dc2c021173d4a0abf36da3caa08a93dee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

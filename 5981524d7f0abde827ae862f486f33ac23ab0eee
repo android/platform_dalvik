@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8dcceafc_e0e5c492",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-16T12:42:24Z",
+      "side": 1,
+      "message": "Comments in the bug.",
+      "range": {
+        "startLine": 36,
+        "startChar": 28,
+        "endLine": 36,
+        "endChar": 64
+      },
+      "revId": "5981524d7f0abde827ae862f486f33ac23ab0eee",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35f4ef42_6991de68",
         "filename": "dx/tests/143-interface-methods/expected.txt",
         "patchSetId": 2

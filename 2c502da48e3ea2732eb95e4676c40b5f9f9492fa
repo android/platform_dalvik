@@ -49,6 +49,52 @@
     },
     {
       "key": {
+        "uuid": "a3d73840_0abf9fa7",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-16T12:42:24Z",
+      "side": 1,
+      "message": "AIUI: comment is not strictly true",
+      "range": {
+        "startLine": 35,
+        "startChar": 40,
+        "endLine": 35,
+        "endChar": 46
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3880d3d9_33584de6",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-16T12:42:24Z",
+      "side": 1,
+      "message": "Unrelated to this change?",
+      "range": {
+        "startLine": 48,
+        "startChar": 31,
+        "endLine": 48,
+        "endChar": 49
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c04e344d_b21ca356",
         "filename": "dx/src/com/android/dx/cf/code/ConcreteMethod.java",
         "patchSetId": 3
@@ -211,6 +257,29 @@
       "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be68588_27e27797",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-16T12:42:24Z",
+      "side": 1,
+      "message": "This would be invokesuper or invokevirtual, right? Probably worth spelling it out in the comments.\n\nAlso, we don\u0027t really expect invokevirtual here but we turn a blind eye. Am I remembering correctly?",
+      "range": {
+        "startLine": 880,
+        "startChar": 49,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
