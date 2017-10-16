@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6404cc2e_e0e523d8",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-10-16T09:06:12Z",
+      "side": 1,
+      "message": "Rename to API_DEFINE_INTERFACE_METHODS?",
+      "range": {
+        "startLine": 33,
+        "startChar": 28,
+        "endLine": 33,
+        "endChar": 64
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c04e344d_b21ca356",
+        "filename": "dx/src/com/android/dx/cf/code/ConcreteMethod.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-10-16T09:06:12Z",
+      "side": 1,
+      "message": "To make sure method is defined, this should be (same below):\n\n \n classFile.getAccessFlags() \u0026 AccessFlags.ACC_INTERFACE \u0026 ~AccessFlags.ACC_ABSTRACT",
+      "range": {
+        "startLine": 147,
+        "startChar": 16,
+        "endLine": 147,
+        "endChar": 70
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01217a07_58cb68d6",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-10-16T09:06:12Z",
+      "side": 1,
+      "message": "nit: Missing closed parenthesis in the comment.",
+      "range": {
+        "startLine": 97,
+        "startChar": 51,
+        "endLine": 97,
+        "endChar": 52
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d3b429a_25bb313a",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-10-16T09:06:12Z",
+      "side": 1,
+      "message": "Maybe make it different from the error message? E.g.\n\n \"You are using an experimental feature. Invoking a static interface method %s.%s is fully supported with --min-sdk-version \u003e\u003d %d (currently %d)\"\n\nThe same for the default method.",
+      "range": {
+        "startLine": 866,
+        "startChar": 20,
+        "endLine": 866,
+        "endChar": 110
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
