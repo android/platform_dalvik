@@ -163,6 +163,30 @@
       "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1150b1b_8ca1c478",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-10-16T12:00:37Z",
+      "side": 1,
+      "message": "Sorry, I missed this comment. Revised the message, depersonalised.",
+      "parentUuid": "1d3b429a_25bb313a",
+      "range": {
+        "startLine": 866,
+        "startChar": 20,
+        "endLine": 866,
+        "endChar": 110
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
