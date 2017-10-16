@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "4307db86_3ceb0a63",
+        "filename": "dx/src/com/android/dx/cf/code/ConcreteMethod.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-10-16T12:30:03Z",
+      "side": 1,
+      "message": "Sorry, I\u0027ve missed that. Thanks for the explanation.",
+      "parentUuid": "44631546_a53e42e5",
+      "range": {
+        "startLine": 147,
+        "startChar": 16,
+        "endLine": 147,
+        "endChar": 70
+      },
+      "revId": "2c502da48e3ea2732eb95e4676c40b5f9f9492fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01217a07_58cb68d6",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 3
