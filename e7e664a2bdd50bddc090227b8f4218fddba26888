@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eff64e14_e4e4077e",
+        "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-10-17T10:15:28Z",
+      "side": 1,
+      "message": "This should be \u0026\u003d, right?",
+      "range": {
+        "startLine": 891,
+        "startChar": 21,
+        "endLine": 891,
+        "endChar": 22
+      },
+      "revId": "e7e664a2bdd50bddc090227b8f4218fddba26888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
