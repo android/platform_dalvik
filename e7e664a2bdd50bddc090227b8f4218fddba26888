@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2ab9dcab_394e1175",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2017-10-17T13:19:50Z",
+      "side": 1,
+      "message": "Nit: Weird NL",
+      "revId": "e7e664a2bdd50bddc090227b8f4218fddba26888",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eff64e14_e4e4077e",
         "filename": "dx/src/com/android/dx/cf/code/Simulator.java",
         "patchSetId": 10
