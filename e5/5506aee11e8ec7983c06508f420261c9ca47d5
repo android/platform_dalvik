@@ -1,0 +1,10 @@
+Code-Review+2: Nicolas Geoffray <ngeoffray@google.com>
+Code-Review+2: Orion Hodson <oth@google.com>
+Verified+1: Orion Hodson <oth@google.com>
+Autosubmit+1: Orion Hodson <oth@google.com>
+Presubmit-Ready+1: Orion Hodson <oth@google.com>
+Submitted-by: Orion Hodson <oth@google.com>
+Submitted-at: Mon, 30 Oct 2017 17:09:11 +0000
+Reviewed-on: https://android-review.googlesource.com/523475
+Project: platform/dalvik
+Branch: refs/heads/master
