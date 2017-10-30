@@ -34,7 +34,7 @@ progdir=`pwd`
 prog="${progdir}"/`basename "${prog}"`
 
 # Command-line options
-skip_tests=""
+skip_tests="127-merge-stress"
 sequential="no"
 usage="no"
 while [[ "$1" == "-"* ]]; do
