@@ -1,0 +1,6 @@
+Trying SDK version 26 with const-method-handle.
+Trying SDK version 27 with const-method-handle.
+Trying SDK version 28 with const-method-handle.
+"dex\n039\0"
+const-method-handle v0, invoke-instance,method{java.lang.Object.getClass:()Ljava/lang/Class;}
+const-method-type v0, (CSIJFDLjava/lang/Object;)Z

@@ -14,26 +14,62 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NB This test is likely to be flakey. It attempts to merge random
+# DEX files from the Android build tree.
+
 # Find dx.jar from dx in the android dev tree
 prog=`which dx`
 progdir=`dirname "${prog}"`
 dxjar=$progdir/../framework/dx.jar
 
-# Find dex files in the tree
-dexes=`find $ANDROID_BUILD_TOP/out -name '*.dex' -printf '%p '`
-dexesinjars=`find $ANDROID_BUILD_TOP/libcore $ANDROID_BUILD_TOP/out -name '*.jar' -exec sh -c 'unzip -l "{}" 2>/dev/null | grep -q classes.dex ' \; -printf '%p '`
-dexesinapks=`find $ANDROID_BUILD_TOP/libcore $ANDROID_BUILD_TOP/out -name '*.apk' -exec sh -c 'unzip -l "{}" 2>/dev/null | grep -q classes.dex ' \; -printf '%p '`
-
-# Select only the valid dex files
-validdexes=""
-for dex in $dexes $dexesinjars $dexesinapks; do
-  dexdump -c $dex &> /dev/null
-  if [ $? -eq 0 ]; then
-    validdexes="$validdexes $dex"
-  fi
+for i in "$dxjar"; do
+    if [ ! -r $i ]; then
+        echo Missing dependency $i. Build dx-tests.
+        exit 1
+    fi
 done
 
 # Compile and run java merging test
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -cp $dxjar -d . com/android/dx/merge/MergeTest.java
-java -cp .:$dxjar com.android.dx.merge.MergeTest $validdexes >/dev/null
+$JAVAC -Xlint:-options -source 1.7 -target 1.7 -cp $dxjar -d . com/android/dx/merge/MergeTest.java || exit 1
 
+# Find all files that could contain dex bytecode.
+candidates=`find "$ANDROID_BUILD_TOP/out" -name '*.dex' -o -name '*.jar' -o -name '*.apk'`
+validdexes=()
+checksums=()
+for dex in $candidates; do
+  if [[ "$dex" = *"core"* ]]; then
+    # Ignoring core files as hit limits of merging capability.
+    continue
+  fi
+
+  # Filter out jar files and apks that do not unzip or contain a
+  # classes.dex file. DexMerger assumes file contents based on the
+  # file extension. Android build names some DEX files with a .jar
+  # extension and this raises an exception in DexMerger as it fails
+  # to unzip them.
+  if [[ "$dex" == *"jar" || "$dex" == *"apk" ]]; then
+    unzip -l "$dex" 2>&1 | grep -q -m 1 classes.dex
+    if [[ $? != 0 ]]; then
+      continue
+    fi
+  fi
+
+  # Skip duplicate files
+  checksum=`shasum "$dex" | sed -e 's/ .*//' -e 's/^/_/'`
+  if [[ "$checksums[$checksum]" == "$checksum" ]]; then
+    continue
+  fi
+  checksums[$checksum]=$checksum
+
+  dexdump2 -c $dex >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    validdexes+=("$dex")
+  fi
+done
+
+if [ ${#validdexes[@]} -eq 0 ]; then
+  echo No valid DEX files found.
+  exit 1
+fi
+
+java -cp .:$dxjar -ea -esa com.android.dx.merge.MergeTest "${validdexes[@]}" > /dev/null

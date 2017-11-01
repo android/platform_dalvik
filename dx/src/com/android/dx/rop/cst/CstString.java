@@ -241,6 +241,7 @@ public final class CstString extends TypedConstant {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         int len = string.length();
         StringBuilder sb = new StringBuilder(len * 3 / 2);
@@ -369,6 +370,7 @@ public final class CstString extends TypedConstant {
         return string.length();
     }
 
+    @Override
     public Type getType() {
         return Type.STRING;
     }

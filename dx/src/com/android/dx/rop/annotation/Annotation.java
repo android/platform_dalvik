@@ -79,6 +79,7 @@ public final class Annotation extends MutabilityControl
     }
 
     /** {@inheritDoc} */
+    @Override
     public int hashCode() {
         int hash = type.hashCode();
         hash = (hash * 31) + elements.hashCode();
@@ -87,6 +88,7 @@ public final class Annotation extends MutabilityControl
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(Annotation other) {
         int result = type.compareTo(other.type);
 
@@ -129,6 +131,7 @@ public final class Annotation extends MutabilityControl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         StringBuilder sb = new StringBuilder();
 

@@ -42,21 +42,21 @@ regs: 000b; ins: 0004; outs: 0000
   000f: move v0, v4
   0010: goto 000c // -0004
 Blort.testInstance4:(J)J:
-regs: 000b; ins: 0003; outs: 0000
-  0000: move-object v0, v8
-  0001: move-wide v1, v9
-  0002: move-object v7, v8
-  0003: monitor-enter v7
-  0004: move-wide v3, v1
-  0005: const-wide/16 v5, #long 1 // #0001
-  0007: cmp-long v3, v3, v5
-  0009: if-nez v3, 0010 // +0007
-  000b: const-wide/16 v3, #long 1 // #0001
-  000d: move-wide v0, v3
-  000e: monitor-exit v7
-  000f: return-wide v0
-  0010: const-wide/16 v3, #long 2 // #0002
-  0012: move-wide v0, v3
+regs: 000c; ins: 0003; outs: 0000
+  0000: move-object v1, v9
+  0001: move-wide v2, v10
+  0002: move-object v8, v9
+  0003: monitor-enter v8
+  0004: move-wide v4, v2
+  0005: const-wide/16 v6, #long 1 // #0001
+  0007: cmp-long v4, v4, v6
+  0009: if-nez v4, 0010 // +0007
+  000b: const-wide/16 v4, #long 1 // #0001
+  000d: move-wide v1, v4
+  000e: monitor-exit v8
+  000f: return-wide v1
+  0010: const-wide/16 v4, #long 2 // #0002
+  0012: move-wide v1, v4
   0013: goto 000e // -0005
 Blort.testInstance5:()V:
 regs: 0004; ins: 0001; outs: 0001
@@ -115,8 +115,8 @@ regs: 0009; ins: 0003; outs: 0000
   000f: move v0, v3
   0010: goto 000c // -0004
 Blort.testStatic4:(J)J:
-regs: 0009; ins: 0002; outs: 0000
-  0000: move-wide v0, v7
+regs: 000a; ins: 0002; outs: 0000
+  0000: move-wide v0, v8
   0001: const-class v6, Blort
   0003: monitor-enter v6
   0004: move-wide v2, v0

@@ -26,58 +26,6 @@
 #include <string.h>
 
 /*
- * Decode the arguments in a method signature, which looks something
- * like "(ID[Ljava/lang/String;)V".
- *
- * Returns the type signature letter for the next argument, or ')' if
- * there are no more args.  Advances "pSig" to point to the character
- * after the one returned.
- */
-static char decodeSignature(const char** pSig)
-{
-    const char* sig = *pSig;
-
-    if (*sig == '(')
-        sig++;
-
-    if (*sig == 'L') {
-        /* object ref */
-        while (*++sig != ';')
-            ;
-        *pSig = sig+1;
-        return 'L';
-    }
-    if (*sig == '[') {
-        /* array; advance past array type */
-        while (*++sig == '[')
-            ;
-        if (*sig == 'L') {
-            while (*++sig != ';')
-                ;
-        }
-        *pSig = sig+1;
-        return '[';
-    }
-    if (*sig == '\0')
-        return *sig;        /* don't advance further */
-
-    *pSig = sig+1;
-    return *sig;
-}
-
-/*
- * returns the length of a type string, given the start of the
- * type string. Used for the case where the debug info format
- * references types that are inside a method type signature.
- */
-static int typeLength(const char *type) {
-    // Assumes any leading '(' has already been gobbled
-    const char *end = type;
-    decodeSignature(&end);
-    return end - type;
-}
-
-/*
  * Reads a string index as encoded for the debug info format,
  * returning a string pointer or NULL as appropriate.
  */
@@ -150,7 +98,6 @@ static void dexDecodeDebugInfo0(
             LocalInfo* localInReg)
 {
     DexProto proto = { pDexFile, protoIdx };
-    u4 insnsSize = pCode->insnsSize;
     u4 line = readUnsignedLeb128(&stream);
     u4 parametersSize = readUnsignedLeb128(&stream);
     u2 argReg = pCode->registersSize - pCode->insSize;

@@ -31,7 +31,6 @@
 #include "DexFile.h"
 
 static const char* kCacheDirectoryName = "dalvik-cache";
-static const char* kClassesDex = "classes.dex";
 
 #if defined(__aarch64__)
 static const char* kInstructionSet = "arm64";
@@ -170,7 +169,6 @@ int dexOptCreateEmptyHeader(int fd)
     optHdr.dexOffset = sizeof(optHdr);
     actual = write(fd, &optHdr, sizeof(optHdr));
     if (actual != sizeof(optHdr)) {
-        int err = errno ? errno : -1;
         ALOGE("opt header write failed: %s", strerror(errno));
         return errno;
     }

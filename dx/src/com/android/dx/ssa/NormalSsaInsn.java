@@ -116,6 +116,7 @@ public final class NormalSsaInsn extends SsaInsn implements Cloneable {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return toRopInsn().toHuman();
     }

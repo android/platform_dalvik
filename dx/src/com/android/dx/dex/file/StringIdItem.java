@@ -64,6 +64,7 @@ public final class StringIdItem
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(Object other) {
         StringIdItem otherString = (StringIdItem) other;
         return value.compareTo(otherString.value);

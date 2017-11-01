@@ -70,7 +70,7 @@ public final class SourcePosition {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(50);
+        StringBuilder sb = new StringBuilder(50);
 
         if (sourceFile != null) {
             sb.append(sourceFile.toHuman());

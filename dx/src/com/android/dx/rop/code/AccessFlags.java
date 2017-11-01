@@ -327,7 +327,7 @@ public final class AccessFlags {
      * @return {@code non-null;} human-oriented string
      */
     private static String humanHelper(int flags, int mask, int what) {
-        StringBuffer sb = new StringBuffer(80);
+        StringBuilder sb = new StringBuilder(80);
         int extra = flags & ~mask;
 
         flags &= mask;

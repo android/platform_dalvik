@@ -17,6 +17,7 @@
 package com.android.dx.cf.direct;
 
 import com.android.dx.cf.attrib.AttAnnotationDefault;
+import com.android.dx.cf.attrib.AttBootstrapMethods;
 import com.android.dx.cf.attrib.AttCode;
 import com.android.dx.cf.attrib.AttConstantValue;
 import com.android.dx.cf.attrib.AttDeprecated;
@@ -31,9 +32,12 @@ import com.android.dx.cf.attrib.AttRuntimeInvisibleParameterAnnotations;
 import com.android.dx.cf.attrib.AttRuntimeVisibleAnnotations;
 import com.android.dx.cf.attrib.AttRuntimeVisibleParameterAnnotations;
 import com.android.dx.cf.attrib.AttSignature;
+import com.android.dx.cf.attrib.AttSourceDebugExtension;
 import com.android.dx.cf.attrib.AttSourceFile;
 import com.android.dx.cf.attrib.AttSynthetic;
 import com.android.dx.cf.attrib.InnerClassList;
+import com.android.dx.cf.code.BootstrapMethodArgumentsList;
+import com.android.dx.cf.code.BootstrapMethodsList;
 import com.android.dx.cf.code.ByteCatchList;
 import com.android.dx.cf.code.BytecodeArray;
 import com.android.dx.cf.code.LineNumberList;
@@ -48,6 +52,7 @@ import com.android.dx.rop.annotation.AnnotationsList;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.ConstantPool;
+import com.android.dx.rop.cst.CstMethodHandle;
 import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -80,6 +85,9 @@ public class StdAttributeFactory
             int offset, int length, ParseObserver observer) {
         switch (context) {
             case CTX_CLASS: {
+                if (name == AttBootstrapMethods.ATTRIBUTE_NAME) {
+                    return bootstrapMethods(cf, offset, length, observer);
+                }
                 if (name == AttDeprecated.ATTRIBUTE_NAME) {
                     return deprecated(cf, offset, length, observer);
                 }
@@ -102,6 +110,9 @@ public class StdAttributeFactory
                 }
                 if (name == AttSignature.ATTRIBUTE_NAME) {
                     return signature(cf, offset, length, observer);
+                }
+                if (name == AttSourceDebugExtension.ATTRIBUTE_NAME) {
+                    return sourceDebugExtension(cf, offset, length, observer);
                 }
                 if (name == AttSourceFile.ATTRIBUTE_NAME) {
                     return sourceFile(cf, offset, length, observer);
@@ -202,6 +213,31 @@ public class StdAttributeFactory
         Constant cst = ap.parseValueAttribute();
 
         return new AttAnnotationDefault(cst, length);
+    }
+
+    /**
+     * Parses a {@code BootstrapMethods} attribute.
+     */
+    private Attribute bootstrapMethods(DirectClassFile cf, int offset, int length,
+            ParseObserver observer) {
+        if (length < 2) {
+            return throwSeverelyTruncated();
+        }
+
+        ByteArray bytes = cf.getBytes();
+        int numMethods = bytes.getUnsignedShort(offset);
+        if (observer != null) {
+            observer.parsed(bytes, offset, 2,
+                            "num_boostrap_methods: " + Hex.u2(numMethods));
+        }
+
+        offset += 2;
+        length -= 2;
+
+        BootstrapMethodsList methods = parseBootstrapMethods(bytes, cf.getConstantPool(),
+                                                             cf.getThisClass(), numMethods,
+                                                             offset, length, observer);
+        return new AttBootstrapMethods(methods);
     }
 
     /**
@@ -692,6 +728,23 @@ public class StdAttributeFactory
     }
 
     /**
+     * Parses a {@code SourceDebugExtesion} attribute.
+     */
+    private Attribute sourceDebugExtension(DirectClassFile cf, int offset, int length,
+                                           ParseObserver observer) {
+        ByteArray bytes = cf.getBytes().slice(offset, offset + length);
+        CstString smapString = new CstString(bytes);
+        Attribute result = new AttSourceDebugExtension(smapString);
+
+        if (observer != null) {
+            String decoded = smapString.getString();
+            observer.parsed(bytes, offset, length, "sourceDebugExtension: " + decoded);
+        }
+
+        return result;
+    }
+
+    /**
      * Parses a {@code SourceFile} attribute.
      */
     private Attribute sourceFile(DirectClassFile cf, int offset, int length,
@@ -758,5 +811,51 @@ public class StdAttributeFactory
     private static Attribute throwBadLength(int expected) {
         throw new ParseException("bad attribute length; expected length " +
                                  Hex.u4(expected));
+    }
+
+    private BootstrapMethodsList parseBootstrapMethods(ByteArray bytes, ConstantPool constantPool,
+            CstType declaringClass, int numMethods, int offset, int length, ParseObserver observer)
+        throws ParseException {
+        BootstrapMethodsList methods = new BootstrapMethodsList(numMethods);
+        for (int methodIndex = 0; methodIndex < numMethods; ++methodIndex) {
+            if (length < 4) {
+                throwTruncated();
+            }
+
+            int methodRef = bytes.getUnsignedShort(offset);
+            int numArguments = bytes.getUnsignedShort(offset + 2);
+
+            if (observer != null) {
+                observer.parsed(bytes, offset, 2, "bootstrap_method_ref: " + Hex.u2(methodRef));
+                observer.parsed(bytes, offset + 2, 2,
+                                "num_bootstrap_arguments: " + Hex.u2(numArguments));
+            }
+
+            offset += 4;
+            length -= 4;
+            if (length < numArguments * 2) {
+                throwTruncated();
+            }
+
+            BootstrapMethodArgumentsList arguments = new BootstrapMethodArgumentsList(numArguments);
+            for (int argIndex = 0; argIndex < numArguments; ++argIndex, offset += 2, length -= 2) {
+                int argumentRef = bytes.getUnsignedShort(offset);
+                if (observer != null) {
+                    observer.parsed(bytes, offset, 2,
+                                    "bootstrap_arguments[" + argIndex + "]" + Hex.u2(argumentRef));
+                }
+                arguments.set(argIndex, constantPool.get(argumentRef));
+            }
+            arguments.setImmutable();
+            Constant cstMethodRef = constantPool.get(methodRef);
+            methods.set(methodIndex, declaringClass, (CstMethodHandle) cstMethodRef, arguments);
+        }
+        methods.setImmutable();
+
+        if (length != 0) {
+            throwBadLength(length);
+        }
+
+        return methods;
     }
 }

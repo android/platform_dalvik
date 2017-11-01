@@ -44,27 +44,32 @@ public final class ThreeRegisterDecodedInstruction extends DecodedInstruction {
         this.c = c;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public int getRegisterCount() {
         return 3;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public int getA() {
         return a;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public int getB() {
         return b;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public int getC() {
         return c;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public DecodedInstruction withIndex(int newIndex) {
         return new ThreeRegisterDecodedInstruction(
                 getFormat(), getOpcode(), newIndex, getIndexType(),

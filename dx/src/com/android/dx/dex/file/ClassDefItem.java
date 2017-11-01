@@ -31,7 +31,6 @@ import com.android.dx.rop.type.TypeList;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.Hex;
 import com.android.dx.util.Writers;
-
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;

@@ -1,0 +1,2 @@
+This test checks the conversion of signature-polymorphic methods
+in the java.lang.invoke.VarHandle class.

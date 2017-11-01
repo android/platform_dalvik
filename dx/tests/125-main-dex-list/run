@@ -14,15 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-${JAVAC} `find com -name "*.java"`
+JAVAC_SOURCE=1.6
+JAVAC_TARGET=1.6
+
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} `find com -name "*.java"`
 dx --dex --output=test.jar com/android/dx/multidex/*
 
 mkdir classes
-${JAVAC} -d classes `find testdata -name '*.java'`
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find testdata -name '*.java'`
 
 mkdir out
 dx -JXmx1024m --dex --no-optimize --multi-dex --main-dex-list=main.list --minimal-main-dex --output=out classes
-
 
 art -classpath test.jar com.android.dx.multidex.MainDexListTest > unit-out.txt 2>&1
 

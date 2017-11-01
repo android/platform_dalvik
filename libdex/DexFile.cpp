@@ -40,7 +40,6 @@
  * touch every page.  In the "optimized" world, it doesn't work at all,
  * because we rewrite the contents.
  */
-static const bool kVerifyChecksum = false;
 static const bool kVerifySignature = false;
 
 /* (documented in header) */
@@ -179,8 +178,6 @@ static void classLookupAdd(DexFile* pDexFile, DexClassLookup* pLookup,
 {
     const char* classDescriptor =
         (const char*) (pDexFile->baseAddr + stringOff);
-    const DexClassDef* pClassDef =
-        (const DexClassDef*) (pDexFile->baseAddr + classDefOff);
     u4 hash = classDescriptorHash(classDescriptor);
     int mask = pLookup->numEntries-1;
     int idx = hash & mask;

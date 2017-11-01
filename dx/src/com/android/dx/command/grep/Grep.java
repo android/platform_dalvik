@@ -46,6 +46,7 @@ public final class Grep {
         stringIds = getStringIds(dex, pattern);
 
         codeReader.setStringVisitor(new CodeReader.Visitor() {
+            @Override
             public void visit(DecodedInstruction[] all, DecodedInstruction one) {
                 encounterString(one.getIndex());
             }

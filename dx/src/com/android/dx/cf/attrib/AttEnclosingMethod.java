@@ -52,6 +52,7 @@ public final class AttEnclosingMethod extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         return 10;
     }

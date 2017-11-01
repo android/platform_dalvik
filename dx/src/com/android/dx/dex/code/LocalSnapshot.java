@@ -80,7 +80,7 @@ public final class LocalSnapshot extends ZeroSizeInsn {
     protected String listingString0(boolean noteIndices) {
         int sz = locals.size();
         int max = locals.getMaxSize();
-        StringBuffer sb = new StringBuffer(100 + sz * 40);
+        StringBuilder sb = new StringBuilder(100 + sz * 40);
 
         sb.append("local-snapshot");
 

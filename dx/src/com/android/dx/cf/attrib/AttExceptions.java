@@ -51,6 +51,7 @@ public final class AttExceptions extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         return 8 + exceptions.size() * 2;
     }

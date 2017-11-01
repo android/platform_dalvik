@@ -44,6 +44,7 @@ public final class AttSourceFile extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         return 8;
     }

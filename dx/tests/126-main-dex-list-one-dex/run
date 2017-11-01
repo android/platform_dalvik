@@ -17,8 +17,11 @@
 # Find dx.jar from dx in the android dev tree
 prog=`which dx`
 
+JAVAC_SOURCE=1.6
+JAVAC_TARGET=1.6
+
 mkdir classes
-${JAVAC} -d classes `find testdata -name '*.java'`
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find testdata -name '*.java'`
 
 mkdir out
 dx -JXmx1024m --dex --no-optimize --multi-dex --main-dex-list=main.list --output=out classes

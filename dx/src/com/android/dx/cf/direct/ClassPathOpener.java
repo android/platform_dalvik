@@ -17,7 +17,6 @@
 package com.android.dx.cf.direct;
 
 import com.android.dex.util.FileUtils;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -219,6 +218,7 @@ public class ClassPathOpener {
 
         if (sort) {
             Arrays.sort(files, new Comparator<File>() {
+                @Override
                 public int compare(File a, File b) {
                     return compareClassNames(a.getName(), b.getName());
                 }
@@ -248,6 +248,7 @@ public class ClassPathOpener {
 
         if (sort) {
             Collections.sort(entriesList, new Comparator<ZipEntry>() {
+               @Override
                public int compare (ZipEntry a, ZipEntry b) {
                    return compareClassNames(a.getName(), b.getName());
                }

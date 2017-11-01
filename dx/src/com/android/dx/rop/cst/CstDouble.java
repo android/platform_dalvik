@@ -64,6 +64,7 @@ public final class CstDouble
     }
 
     /** {@inheritDoc} */
+    @Override
     public Type getType() {
         return Type.DOUBLE;
     }
@@ -75,6 +76,7 @@ public final class CstDouble
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return Double.toString(Double.longBitsToDouble(getLongBits()));
     }

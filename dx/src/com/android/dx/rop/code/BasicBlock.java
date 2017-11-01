@@ -139,6 +139,7 @@ public final class BasicBlock implements LabeledItem {
      *
      * @return {@code >= 0;} the label
      */
+    @Override
     public int getLabel() {
         return label;
     }
@@ -264,6 +265,7 @@ public final class BasicBlock implements LabeledItem {
                               successors, primarySuccessor);
     }
 
+    @Override
     public String toString() {
         return '{' + Hex.u2(label) + '}';
     }

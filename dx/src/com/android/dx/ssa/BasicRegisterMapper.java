@@ -25,7 +25,7 @@ import com.android.dx.util.IntList;
  */
 public class BasicRegisterMapper extends RegisterMapper {
     /** indexed by old register, containing new name */
-    private IntList oldToNew;
+    private final IntList oldToNew;
 
     /** running count of used registers in new namespace */
     private int runningCountNewRegisters;

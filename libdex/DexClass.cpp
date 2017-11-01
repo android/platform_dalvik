@@ -27,7 +27,6 @@
  * of uleb128 values. */
 static bool verifyUlebs(const u1* pData, const u1* pLimit, u4 count) {
     bool okay = true;
-    u4 i;
 
     while (okay && (count-- != 0)) {
         readAndVerifyUnsignedLeb128(&pData, pLimit, &okay);

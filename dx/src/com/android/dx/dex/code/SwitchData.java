@@ -161,7 +161,7 @@ public final class SwitchData extends VariableSizeInsn {
     /** {@inheritDoc} */
     @Override
     protected String argString() {
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
 
         int sz = targets.length;
         for (int i = 0; i < sz; i++) {
@@ -178,7 +178,7 @@ public final class SwitchData extends VariableSizeInsn {
     @Override
     protected String listingString0(boolean noteIndices) {
         int baseAddress = user.getAddress();
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
         int sz = targets.length;
 
         sb.append(packed ? "packed" : "sparse");

@@ -73,6 +73,7 @@ public final class CstBoolean
     }
 
     /** {@inheritDoc} */
+    @Override
     public Type getType() {
         return Type.BOOLEAN;
     }
@@ -84,6 +85,7 @@ public final class CstBoolean
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return getValue() ? "true" : "false";
     }

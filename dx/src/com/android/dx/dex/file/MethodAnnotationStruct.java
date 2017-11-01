@@ -54,11 +54,13 @@ public final class MethodAnnotationStruct
     }
 
     /** {@inheritDoc} */
+    @Override
     public int hashCode() {
         return method.hashCode();
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean equals(Object other) {
         if (! (other instanceof MethodAnnotationStruct)) {
             return false;
@@ -68,6 +70,7 @@ public final class MethodAnnotationStruct
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(MethodAnnotationStruct other) {
         return method.compareTo(other.method);
     }
@@ -98,6 +101,7 @@ public final class MethodAnnotationStruct
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return method.toHuman() + ": " + annotations;
     }

@@ -20,6 +20,13 @@ progdir=`dirname "${prog}"`
 dxjar=$progdir/../framework/dx.jar
 junitjar=$progdir/../framework/junit-host.jar
 
+for i in "$dxjar" "$junitjar"; do
+    if [ ! -r $i ]; then
+        echo Missing dependency $i. Build dx-tests.
+        exit 1
+    fi
+done
+
 javac -cp $dxjar:$junitjar `find . -name "*.java"`
 java -classpath $dxjar:$junitjar:. junit.textui.TestRunner com.android.dx.util.Mutf8Test > unit-out.txt 2>&1
 

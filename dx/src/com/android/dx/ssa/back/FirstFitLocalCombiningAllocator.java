@@ -698,16 +698,19 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
     private void analyzeInstructions() {
         ssaMeth.forEachInsn(new SsaInsn.Visitor() {
             /** {@inheritDoc} */
+            @Override
             public void visitMoveInsn(NormalSsaInsn insn) {
                 processInsn(insn);
             }
 
             /** {@inheritDoc} */
+            @Override
             public void visitPhiInsn(PhiInsn insn) {
                 processInsn(insn);
             }
 
             /** {@inheritDoc} */
+            @Override
             public void visitNonMoveInsn(NormalSsaInsn insn) {
                 processInsn(insn);
             }

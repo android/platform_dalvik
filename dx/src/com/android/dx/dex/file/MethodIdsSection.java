@@ -20,7 +20,6 @@ import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.Hex;
-
 import java.util.Collection;
 import java.util.TreeMap;
 

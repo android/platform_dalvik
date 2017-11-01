@@ -61,6 +61,8 @@ enum InstructionFormat {
     kFmt51l,        // op vAA, #+BBBBBBBBBBBBBBBB
     kFmt35mi,       // [opt] inline invoke
     kFmt3rmi,       // [opt] inline invoke/range
+    kFmt45cc,       // op {vC, vD, vE, vF, vG}, meth@BBBB, proto@HHHH
+    kFmt4rcc,       // op {VCCCC .. v(CCCC+AA-1)}, meth@BBBB, proto@HHHH
 };
 
 /*
@@ -69,15 +71,19 @@ enum InstructionFormat {
  */
 enum InstructionIndexType {
     kIndexUnknown = 0,
-    kIndexNone,         // has no index
-    kIndexVaries,       // "It depends." Used for throw-verification-error
-    kIndexTypeRef,      // type reference index
-    kIndexStringRef,    // string reference index
-    kIndexMethodRef,    // method reference index
-    kIndexFieldRef,     // field reference index
-    kIndexInlineMethod, // inline method index (for inline linked methods)
-    kIndexVtableOffset, // vtable offset (for static linked methods)
-    kIndexFieldOffset   // field offset (for static linked fields)
+    kIndexNone,              // has no index
+    kIndexVaries,            // "It depends." Used for throw-verification-error
+    kIndexTypeRef,           // type reference index
+    kIndexStringRef,         // string reference index
+    kIndexMethodRef,         // method reference index
+    kIndexFieldRef,          // field reference index
+    kIndexInlineMethod,      // inline method index (for inline linked methods)
+    kIndexVtableOffset,      // vtable offset (for static linked methods)
+    kIndexFieldOffset,       // field offset (for static linked fields)
+    kIndexMethodAndProtoRef, // method index and proto index
+    kIndexCallSiteRef,       // call site index
+    kIndexMethodHandleRef,   // constant method handle reference index
+    kIndexProtoRef,          // constant prototype reference index
 };
 
 /*

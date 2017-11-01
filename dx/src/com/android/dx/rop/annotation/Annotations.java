@@ -105,6 +105,7 @@ public final class Annotations extends MutabilityControl
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(Annotations other) {
         Iterator<Annotation> thisIter = annotations.values().iterator();
         Iterator<Annotation> otherIter = other.annotations.values().iterator();
@@ -129,6 +130,7 @@ public final class Annotations extends MutabilityControl
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;

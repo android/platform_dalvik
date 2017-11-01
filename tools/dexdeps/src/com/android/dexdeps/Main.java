@@ -25,10 +25,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
-    private static final String CLASSES_DEX = "classes.dex";
-
     private String[] mInputFileNames;
     private String mOutputFormat = "xml";
 
@@ -55,20 +56,20 @@ public class Main {
             boolean first = true;
 
             for (String fileName : mInputFileNames) {
-                RandomAccessFile raf = openInputFile(fileName);
-                DexData dexData = new DexData(raf);
-                dexData.load();
-
                 if (first) {
                     first = false;
                     Output.generateFirstHeader(fileName, mOutputFormat);
                 } else {
                     Output.generateHeader(fileName, mOutputFormat);
                 }
-
-                Output.generate(dexData, mOutputFormat, mJustClasses);
+                List<RandomAccessFile> rafs = openInputFiles(fileName);
+                for (RandomAccessFile raf : rafs) {
+                    DexData dexData = new DexData(raf);
+                    dexData.load();
+                    Output.generate(dexData, mOutputFormat, mJustClasses);
+                    raf.close();
+                }
                 Output.generateFooter(mOutputFormat);
-                raf.close();
             }
         } catch (UsageException ue) {
             usage();
@@ -91,34 +92,33 @@ public class Main {
      *
      * @param fileName the name of the file to open
      */
-    RandomAccessFile openInputFile(String fileName) throws IOException {
-        RandomAccessFile raf;
+    List<RandomAccessFile> openInputFiles(String fileName) throws IOException {
+        List<RandomAccessFile> rafs = openInputFileAsZip(fileName);
 
-        raf = openInputFileAsZip(fileName);
-        if (raf == null) {
+        if (rafs == null) {
             File inputFile = new File(fileName);
-            raf = new RandomAccessFile(inputFile, "r");
+            RandomAccessFile raf = new RandomAccessFile(inputFile, "r");
+            rafs = Collections.singletonList(raf);
         }
 
-        return raf;
+        return rafs;
     }
 
     /**
-     * Tries to open an input file as a Zip archive (jar/apk) with a
-     * "classes.dex" inside.
+     * Tries to open an input file as a Zip archive (jar/apk) with dex files inside.
      *
      * @param fileName the name of the file to open
-     * @return a RandomAccessFile for classes.dex, or null if the input file
-     *         is not a zip archive
+     * @return a list of RandomAccessFile for classes.dex,
+     *         classes2.dex, etc., or null if the input file is not a
+     *         zip archive
      * @throws IOException if the file isn't found, or it's a zip and
-     *         classes.dex isn't found inside
+     *         no classes.dex isn't found inside
      */
-    RandomAccessFile openInputFileAsZip(String fileName) throws IOException {
-        ZipFile zipFile;
-
+    List<RandomAccessFile> openInputFileAsZip(String fileName) throws IOException {
         /*
          * Try it as a zip file.
          */
+        ZipFile zipFile;
         try {
             zipFile = new ZipFile(fileName);
         } catch (FileNotFoundException fnfe) {
@@ -131,17 +131,37 @@ public class Main {
             return null;
         }
 
+        List<RandomAccessFile> result = new ArrayList<RandomAccessFile>();
+        try {
+            int classesDexNumber = 1;
+            while (true) {
+                result.add(openClassesDexZipFileEntry(zipFile, classesDexNumber));
+                classesDexNumber++;
+            }
+        } catch (IOException ioe) {
+            // We didn't find any of the expected dex files in the zip.
+            if (result.isEmpty()) {
+                throw ioe;
+            }
+            return result;
+        }
+    }
+
+    RandomAccessFile openClassesDexZipFileEntry(ZipFile zipFile, int classesDexNumber)
+            throws IOException {
         /*
          * We know it's a zip; see if there's anything useful inside.  A
          * failure here results in some type of IOException (of which
          * ZipException is a subclass).
          */
-        ZipEntry entry = zipFile.getEntry(CLASSES_DEX);
+        String zipEntryName = ("classes" +
+                               (classesDexNumber == 1 ? "" : classesDexNumber) +
+                               ".dex");
+        ZipEntry entry = zipFile.getEntry(zipEntryName);
         if (entry == null) {
-            System.err.println("Unable to find '" + CLASSES_DEX +
-                "' in '" + fileName + "'");
             zipFile.close();
-            throw new ZipException();
+            throw new ZipException("Unable to find '" + zipEntryName +
+                "' in '" + zipFile.getName() + "'");
         }
 
         InputStream zis = zipFile.getInputStream(entry);

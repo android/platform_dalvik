@@ -44,7 +44,7 @@ public final class PlainInsn
         switch (opcode.getBranchingness()) {
             case Rop.BRANCH_SWITCH:
             case Rop.BRANCH_THROW: {
-                throw new IllegalArgumentException("bogus branchingness");
+                throw new IllegalArgumentException("opcode with invalid branchingness: " + opcode.getBranchingness());
             }
         }
 

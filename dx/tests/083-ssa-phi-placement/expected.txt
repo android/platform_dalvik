@@ -1,8 +1,8 @@
 reading Blort.class...
 method <init> ()V
-first 000c
+first 0007
 block 0000
-  pred 000a
+  pred 0005
   live in:{}
   Blort.java:17@0000: move-object v1:NffffLBlort; <- v0:NffffLBlort;
   Blort.java:17@0001: Rop{invoke-direct . <- Ljava/lang/Object; call throws <an
@@ -13,31 +13,31 @@ block 0004
   pred 0000
   live in:{}
   Blort.java:17@0004: goto . <- .
-  next 000b
+  next 0006
   live out:{}
-block 000a
-  pred 000c
+block 0005
+  pred 0007
   live in:{}
   Blort.java:17@0000: move-param-object(0) v0:NffffLBlort; <- .
   Blort.java:17@0000: goto . <- .
   next 0000
   live out:{}
-block 000b
+block 0006
   pred 0004
   live in:{}
   Blort.java:17@0004: return-void . <- .
   returns
   live out:{}
-block 000c
+block 0007
   live in:{}
   @????: goto . <- .
-  next 000a
+  next 0005
   live out:{}
 
 method phiTest ()I
-first 0048
+first 0025
 block 0000
-  pred 0046
+  pred 0023
   live in:{}
   Blort.java:21@0000: const-int(1) v4:I=1 <- .
   Blort.java:21@0001: move-int v1:I=1 <- v4:I=1
@@ -46,10 +46,10 @@ block 0000
   Blort.java:23@0004: const-int(0) v4:I=0 <- .
   Blort.java:23@0005: move-int v3:I=0 <- v4:I=0
   Blort.java:23@0005: goto . <- .
-  next 0049
+  next 0026
   live out:{}
 block 0006
-  pred 0049
+  pred 0026
   live in:{}
   Blort.java:25@0006: move-int v4:I <- v3:I
   Blort.java:25@0007: const-int(100) v5:I=100 <- .
@@ -73,7 +73,7 @@ block 0012
   Blort.java:27@0013: move-int v2:I <- v4:I
   Blort.java:28@0014: add-const-int(1) v3:I <- v3:I
   Blort.java:28@0017: goto . <- .
-  next 0049
+  next 0026
   live out:{}
 block 001a
   pred 000c
@@ -82,7 +82,7 @@ block 001a
   Blort.java:30@001b: move-int v2:I <- v4:I
   Blort.java:31@001c: add-const-int(2) v3:I <- v3:I
   Blort.java:31@001f: goto . <- .
-  next 0049
+  next 0026
   live out:{}
 block 0022
   pred 0006
@@ -90,27 +90,27 @@ block 0022
   Blort.java:35@0022: move-int v4:I <- v2:I
   Blort.java:35@0023: move-int v0:I <- v4:I
   Blort.java:35@0023: goto . <- .
-  next 0047
+  next 0024
   live out:{}
-block 0046
-  pred 0048
+block 0023
+  pred 0025
   live in:{}
   Blort.java:21@0000: move-param-object(0) v0:LBlort; <- .
   Blort.java:21@0000: goto . <- .
   next 0000
   live out:{}
-block 0047
+block 0024
   pred 0022
   live in:{}
   Blort.java:35@0023: return-int . <- v0:I
   returns
   live out:{}
-block 0048
+block 0025
   live in:{}
   @????: goto . <- .
-  next 0046
+  next 0023
   live out:{}
-block 0049
+block 0026
   pred 0000
   pred 0012
   pred 001a
@@ -124,43 +124,43 @@ block 0049
   live out:{}
 
 method noVars ()V
-first 0004
+first 0003
 block 0000
-  pred 0002
+  pred 0001
   live in:{}
   Blort.java:42@0000: goto . <- .
-  next 0003
+  next 0002
   live out:{}
-block 0002
-  pred 0004
+block 0001
+  pred 0003
   live in:{}
   Blort.java:42@0000: goto . <- .
   next 0000
   live out:{}
-block 0003
+block 0002
   pred 0000
   live in:{}
   Blort.java:42@0000: return-void . <- .
   returns
   live out:{}
-block 0004
+block 0003
   live in:{}
   @????: goto . <- .
-  next 0002
+  next 0001
   live out:{}
 
 method getOption (I)Ljava/lang/Object;
-first 0098
+first 0052
 block 0000
-  pred 008c
+  pred 0046
   live in:{}
   Blort.java:51@0000: move-object v3:LBlort; <- v0:LBlort;
   Blort.java:51@0001: get-field-object(Blort.fd:Ljava/lang/Object; catch) . <- 
   v3:LBlort;
-  next 0093
+  next 004d
   live out:{}
 block 0004
-  pred 0093
+  pred 004d
   live in:{}
   Blort.java:51@0004: if-nez-object . <- v3:Ljava/lang/Object;
   next 0007 *
@@ -170,10 +170,10 @@ block 0007
   pred 0004
   live in:{}
   Blort.java:52@0007: new-instance(java.lang.RuntimeException catch) . <- .
-  next 0094
+  next 004e
   live out:{}
 block 000a
-  pred 0094
+  pred 004e
   live in:{}
   Blort.java:52@000a: move-object v6:N0007Ljava/lang/RuntimeException; <- v3:N0
   007Ljava/lang/RuntimeException;
@@ -182,10 +182,10 @@ block 000a
   Blort.java:52@000a: move-object v4:N0007Ljava/lang/RuntimeException; <- v6:N0
   007Ljava/lang/RuntimeException;
   Blort.java:52@000b: const-object("socket not created" catch) . <- .
-  next 0095
+  next 004f
   live out:{}
 block 000d
-  pred 0095
+  pred 004f
   live in:{}
   Blort.java:52@000d: Rop{invoke-direct . <- Ljava/lang/RuntimeException; Ljava
   /lang/String; call throws <any>}(java.lang.RuntimeException.<init>:(Ljava/lan
@@ -214,10 +214,10 @@ block 0030
   pred 0011
   live in:{}
   Blort.java:60@0030: new-instance(java.lang.Integer catch) . <- .
-  next 0096
+  next 0050
   live out:{}
 block 0033
-  pred 0096
+  pred 0050
   live in:{}
   Blort.java:60@0033: move-object v6:N0030Ljava/lang/Integer; <- v3:N0030Ljava/
   lang/Integer;
@@ -237,7 +237,7 @@ block 0038
   Blort.java:60@0038: move-object v0:Ljava/lang/Integer; <- v3:Ljava/lang/Integ
   er;
   Blort.java:60@0038: goto . <- .
-  next 008d
+  next 0047
   live out:{}
 block 0039
   pred 0011
@@ -268,25 +268,25 @@ block 0042
   @????: phi v3:V <- .
   Blort.java:63@0042: Rop{invoke-static . <- I call throws <any>}(java.lang.Boo
   lean.valueOf:(Z)Ljava/lang/Boolean; catch) . <- v3:I
-  next 0097
+  next 0051
   live out:{}
 block 0045
-  pred 0097
+  pred 0051
   live in:{}
   Blort.java:63@0045: move-object v0:Ljava/lang/Boolean; <- v3:Ljava/lang/Boole
   an;
   Blort.java:63@0045: goto . <- .
-  next 008d
+  next 0047
   live out:{}
-block 008c
-  pred 0098
+block 0046
+  pred 0052
   live in:{}
   Blort.java:51@0000: move-param-object(0) v0:LBlort; <- .
   Blort.java:51@0000: move-param-int(1) v1:I <- .
   Blort.java:51@0000: goto . <- .
   next 0000
   live out:{}
-block 008d
+block 0047
   pred 0038
   pred 0045
   live in:{}
@@ -298,7 +298,7 @@ block 008d
   Blort.java:63@0045: return-object . <- v0:Ljava/lang/Object;
   returns
   live out:{}
-block 0093
+block 004d
   pred 0000
   live in:{}
   Blort.java:51@0001: Rop{move-result-pseudo Ljava/lang/Object; <- . flows} v3:
@@ -306,7 +306,7 @@ block 0093
   Blort.java:51@0001: goto . <- .
   next 0004
   live out:{}
-block 0094
+block 004e
   pred 0007
   live in:{}
   Blort.java:52@0007: Rop{move-result-pseudo N0007Ljava/lang/RuntimeException; 
@@ -314,7 +314,7 @@ block 0094
   Blort.java:52@0007: goto . <- .
   next 000a
   live out:{}
-block 0095
+block 004f
   pred 000a
   live in:{}
   Blort.java:52@000b: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v5:
@@ -322,7 +322,7 @@ block 0095
   Blort.java:52@000b: goto . <- .
   next 000d
   live out:{}
-block 0096
+block 0050
   pred 0030
   live in:{}
   Blort.java:60@0030: Rop{move-result-pseudo N0030Ljava/lang/Integer; <- . flow
@@ -330,7 +330,7 @@ block 0096
   Blort.java:60@0030: goto . <- .
   next 0033
   live out:{}
-block 0097
+block 0051
   pred 0042
   live in:{}
   Blort.java:63@0042: Rop{move-result Ljava/lang/Boolean; <- . flows} v3:Ljava/
@@ -338,8 +338,8 @@ block 0097
   Blort.java:63@0042: goto . <- .
   next 0045
   live out:{}
-block 0098
+block 0052
   live in:{}
   @????: goto . <- .
-  next 008c
+  next 0046
   live out:{}

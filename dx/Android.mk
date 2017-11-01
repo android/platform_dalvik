@@ -9,24 +9,6 @@ LOCAL_PATH := $(call my-dir)
 # This tool is prebuilt if we're doing an app-only build.
 ifeq ($(TARGET_BUILD_APPS)$(filter true,$(TARGET_BUILD_PDK)),)
 
-# the dx script
-# ============================================================
-include $(CLEAR_VARS)
-LOCAL_IS_HOST_MODULE := true
-LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := dx
-
-include $(BUILD_SYSTEM)/base_rules.mk
-
-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
-$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/dx | $(ACP)
-	@echo "Copy: $(PRIVATE_MODULE) ($@)"
-	$(copy-file-to-new-target)
-	$(hide) chmod 755 $@
-
-INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
-
 # the mainDexClasses rules
 # ============================================================
 include $(CLEAR_VARS)
@@ -45,6 +27,25 @@ $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/mainDexClasses.rules | $(ACP)
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
 installed_mainDexClasses.rules := $(LOCAL_INSTALLED_MODULE)
+
+# the mainDexClassesNoAapt rules
+# ============================================================
+include $(CLEAR_VARS)
+LOCAL_IS_HOST_MODULE := true
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := mainDexClassesNoAapt.rules
+
+include $(BUILD_SYSTEM)/base_rules.mk
+
+$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/dx$(COMMON_JAVA_PACKAGE_SUFFIX)
+$(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/mainDexClassesNoAapt.rules | $(ACP)
+	@echo "Copy: $(PRIVATE_MODULE) ($@)"
+	$(copy-file-to-new-target)
+
+INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
+
+installed_mainDexClassesNoAapt.rules := $(LOCAL_INSTALLED_MODULE)
 
 # the shrinkedAndroid jar is a library used by the mainDexClasses script
 # ============================================================
@@ -85,7 +86,8 @@ $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/mainDexClasses | $(ACP)
 	$(copy-file-to-new-target)
 	$(hide) chmod 755 $@
 
-$(LOCAL_INSTALLED_MODULE): | $(installed_shrinkedAndroid) $(installed_mainDexClasses.rules)
+$(LOCAL_INSTALLED_MODULE): | $(installed_shrinkedAndroid) $(installed_mainDexClasses.rules) \
+                             $(installed_mainDexClassesNoAapt.rules)
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
 
 endif # No TARGET_BUILD_APPS or TARGET_BUILD_PDK

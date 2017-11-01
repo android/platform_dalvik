@@ -76,6 +76,7 @@ public final class FindUsages {
         }
 
         codeReader.setFieldVisitor(new CodeReader.Visitor() {
+            @Override
             public void visit(DecodedInstruction[] all,
                     DecodedInstruction one) {
                 int fieldId = one.getIndex();
@@ -87,6 +88,7 @@ public final class FindUsages {
         });
 
         codeReader.setMethodVisitor(new CodeReader.Visitor() {
+            @Override
             public void visit(DecodedInstruction[] all, DecodedInstruction one) {
                 int methodId = one.getIndex();
                 if (methodIds.contains(methodId)) {

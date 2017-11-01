@@ -42,7 +42,7 @@ public final class PlainCstInsn
         super(opcode, position, result, sources, cst);
 
         if (opcode.getBranchingness() != Rop.BRANCH_NONE) {
-            throw new IllegalArgumentException("bogus branchingness");
+            throw new IllegalArgumentException("opcode with invalid branchingness: " + opcode.getBranchingness());
         }
     }
 

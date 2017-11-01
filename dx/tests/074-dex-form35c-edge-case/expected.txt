@@ -1,33 +1,33 @@
 Blort.test:()V:
-regs: 0012; ins: 0001; outs: 0003
-  0000: move-object/from16 v0, v17
-  0002: const/4 v14, #int 0 // #0
-  0003: move v1, v14
-  0004: const/4 v14, #int 0 // #0
-  0005: move v2, v14
-  0006: const/4 v14, #int 0 // #0
-  0007: move v3, v14
-  0008: const/4 v14, #int 0 // #0
-  0009: move v4, v14
-  000a: const/4 v14, #int 0 // #0
-  000b: move v5, v14
-  000c: const/4 v14, #int 0 // #0
-  000d: move v6, v14
-  000e: const/4 v14, #int 0 // #0
-  000f: move v7, v14
-  0010: const/4 v14, #int 0 // #0
-  0011: move v8, v14
-  0012: const/4 v14, #int 0 // #0
-  0013: move v9, v14
-  0014: const/4 v14, #int 0 // #0
-  0015: move v10, v14
-  0016: const/4 v14, #int 0 // #0
-  0017: move v11, v14
-  0018: const/4 v14, #int 0 // #0
-  0019: move v12, v14
-  001a: const/4 v14, #int 0 // #0
-  001b: move v13, v14
-  001c: move-object v14, v0
-  001d: const-wide/16 v15, #long 0 // #0000
-  001f: invoke-virtual/range {v14..v16}, Blort.blort:(J)V
+regs: 0013; ins: 0001; outs: 0003
+  0000: move-object/from16 v1, v18
+  0002: const/4 v15, #int 0 // #0
+  0003: move v2, v15
+  0004: const/4 v15, #int 0 // #0
+  0005: move v3, v15
+  0006: const/4 v15, #int 0 // #0
+  0007: move v4, v15
+  0008: const/4 v15, #int 0 // #0
+  0009: move v5, v15
+  000a: const/4 v15, #int 0 // #0
+  000b: move v6, v15
+  000c: const/4 v15, #int 0 // #0
+  000d: move v7, v15
+  000e: const/4 v15, #int 0 // #0
+  000f: move v8, v15
+  0010: const/4 v15, #int 0 // #0
+  0011: move v9, v15
+  0012: const/4 v15, #int 0 // #0
+  0013: move v10, v15
+  0014: const/4 v15, #int 0 // #0
+  0015: move v11, v15
+  0016: const/4 v15, #int 0 // #0
+  0017: move v12, v15
+  0018: const/4 v15, #int 0 // #0
+  0019: move v13, v15
+  001a: const/4 v15, #int 0 // #0
+  001b: move v14, v15
+  001c: move-object v15, v1
+  001d: const-wide/16 v16, #long 0 // #0000
+  001f: invoke-virtual/range {v15..v17}, Blort.blort:(J)V
   0022: return-void

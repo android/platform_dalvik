@@ -100,7 +100,7 @@ public final class RegisterSpecSet
     @Override
     public String toString() {
         int len = specs.length;
-        StringBuffer sb = new StringBuffer(len * 25);
+        StringBuilder sb = new StringBuilder(len * 25);
 
         sb.append('{');
 

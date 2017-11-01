@@ -1,28 +1,28 @@
 reading Blort.class...
 method <init> ()V
-first 000c
+first 0007
 block 0000
-  pred 000a
+  pred 0005
   Blort.java:2@0001: Rop{invoke-direct . <- Ljava/lang/Object; call throws <any
   >}(java.lang.Object.<init>:()V catch) . <- v0:NffffLBlort;
-  next 000b
-block 000a
-  pred 000c
+  next 0006
+block 0005
+  pred 0007
   Blort.java:2@0000: move-param-object(0) v0:"this"NffffLBlort; <- .
   Blort.java:2@0000: goto . <- .
   next 0000
-block 000b
+block 0006
   pred 0000
-  Blort.java:4@0004: return-void . <- .
+  Blort.java:2@0004: return-void . <- .
   returns
-block 000c
+block 0007
   @????: goto . <- .
-  next 000a
+  next 0005
 
 method testNumeric ()V
-first 005e
+first 0030
 block 0000
-  pred 005c
+  pred 002e
   Blort.java:10@0000: const-int(10) v0:I=10 <- .
   @????: mark-local-int . <- v0:"foo"I
   Blort.java:12@0003: const-int(0) v1:I=0 <- .
@@ -54,7 +54,7 @@ block 001a
   pred 0020
   Blort.java:16@001d: if-ge-int . <- v1:I v3:I=10
   next 0020 *
-  next 005d
+  next 002f
 block 0020
   pred 001a
   Blort.java:17@0024: add-const-int(10) v2:I <- v1:I
@@ -63,28 +63,28 @@ block 0020
   Blort.java:16@0027: add-const-int(1) v1:"i"I <- v1:I
   Blort.java:16@002a: goto . <- .
   next 001a
-block 005c
-  pred 005e
+block 002e
+  pred 0030
   Blort.java:10@0000: move-param-object(0) v4:"this"LBlort; <- .
   Blort.java:10@0000: goto . <- .
   next 0000
-block 005d
+block 002f
   pred 001a
   Blort.java:19@002d: return-void . <- .
   returns
-block 005e
+block 0030
   @????: const-int(10) v3:I=10 <- .
   @????: goto . <- .
-  next 005c
+  next 002e
 
 method testStrings ()V
-first 0078
+first 0046
 block 0000
-  pred 0064
+  pred 0032
   Blort.java:22@0000: new-instance(java.lang.StringBuilder catch) . <- .
-  next 006b
+  next 0039
 block 0003
-  pred 006b
+  pred 0039
   Blort.java:22@0004: Rop{invoke-direct . <- Ljava/lang/StringBuilder; call thr
   ows <any>}(java.lang.StringBuilder.<init>:()V catch) . <- v0:N0000Ljava/lang/
   StringBuilder;
@@ -93,9 +93,9 @@ block 0007
   pred 0003
   @????: mark-local-object . <- v0:"sb"Ljava/lang/StringBuilder;
   Blort.java:24@0009: const-object("foo" catch) . <- .
-  next 006c
+  next 003a
 block 000b
-  pred 006c
+  pred 003a
   Blort.java:24@000b: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v1:Lj
@@ -104,9 +104,9 @@ block 000b
 block 000e
   pred 000b
   Blort.java:25@0010: const-object("foo" catch) . <- .
-  next 006e
+  next 003c
 block 0012
-  pred 006e
+  pred 003c
   Blort.java:25@0012: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v1:Lj
@@ -115,9 +115,9 @@ block 0012
 block 0015
   pred 0012
   Blort.java:26@0017: const-object("foo" catch) . <- .
-  next 0070
+  next 003e
 block 0019
-  pred 0070
+  pred 003e
   Blort.java:26@0019: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v1:Lj
@@ -126,9 +126,9 @@ block 0019
 block 001c
   pred 0019
   Blort.java:27@001e: const-object("foo" catch) . <- .
-  next 0072
+  next 0040
 block 0020
-  pred 0072
+  pred 0040
   Blort.java:27@0020: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v1:Lj
@@ -137,9 +137,9 @@ block 0020
 block 0023
   pred 0020
   Blort.java:28@0025: const-object("foo" catch) . <- .
-  next 0074
+  next 0042
 block 0027
-  pred 0074
+  pred 0042
   Blort.java:28@0027: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v1:Lj
@@ -148,77 +148,77 @@ block 0027
 block 002a
   pred 0027
   Blort.java:29@002c: const-object("foo" catch) . <- .
-  next 0076
+  next 0044
 block 002e
-  pred 0076
+  pred 0044
   Blort.java:29@002e: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v1:Lj
   ava/lang/String;="foo"
-  next 0065
-block 0064
-  pred 0078
+  next 0033
+block 0032
+  pred 0046
   Blort.java:22@0000: move-param-object(0) v2:"this"LBlort; <- .
   Blort.java:22@0000: goto . <- .
   next 0000
-block 0065
+block 0033
   pred 002e
   Blort.java:30@0032: return-void . <- .
   returns
-block 006b
+block 0039
   pred 0000
   Blort.java:22@0000: Rop{move-result-pseudo N0000Ljava/lang/StringBuilder; <- 
   . flows} v0:N0000Ljava/lang/StringBuilder; <- .
   Blort.java:22@0000: goto . <- .
   next 0003
-block 006c
+block 003a
   pred 0007
   Blort.java:24@0009: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v1:
   Ljava/lang/String;="foo" <- .
   Blort.java:24@0009: goto . <- .
   next 000b
-block 006e
+block 003c
   pred 000e
   Blort.java:25@0010: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v1:
   Ljava/lang/String;="foo" <- .
   Blort.java:25@0010: goto . <- .
   next 0012
-block 0070
+block 003e
   pred 0015
   Blort.java:26@0017: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v1:
   Ljava/lang/String;="foo" <- .
   Blort.java:26@0017: goto . <- .
   next 0019
-block 0072
+block 0040
   pred 001c
   Blort.java:27@001e: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v1:
   Ljava/lang/String;="foo" <- .
   Blort.java:27@001e: goto . <- .
   next 0020
-block 0074
+block 0042
   pred 0023
   Blort.java:28@0025: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v1:
   Ljava/lang/String;="foo" <- .
   Blort.java:28@0025: goto . <- .
   next 0027
-block 0076
+block 0044
   pred 002a
   Blort.java:29@002c: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v1:
   Ljava/lang/String;="foo" <- .
   Blort.java:29@002c: goto . <- .
   next 002e
-block 0078
+block 0046
   @????: goto . <- .
-  next 0064
+  next 0032
 
 method testCaughtStrings ()V
-first 0094
+first 0056
 block 0000
-  pred 007e
+  pred 0040
   Blort.java:33@0000: new-instance(java.lang.StringBuilder catch) . <- .
-  next 0085
+  next 0047
 block 0003
-  pred 0085
+  pred 0047
   Blort.java:33@0004: Rop{invoke-direct . <- Ljava/lang/StringBuilder; call thr
   ows <any>}(java.lang.StringBuilder.<init>:()V catch) . <- v0:N0000Ljava/lang/
   StringBuilder;
@@ -227,9 +227,9 @@ block 0007
   pred 0003
   @????: mark-local-object . <- v0:"sb"Ljava/lang/StringBuilder;
   Blort.java:35@0009: const-object("foo" catch) . <- .
-  next 0086
+  next 0048
 block 000b
-  pred 0086
+  pred 0048
   Blort.java:35@000b: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v2:Lj
@@ -238,9 +238,9 @@ block 000b
 block 000e
   pred 000b
   Blort.java:36@0010: const-object("foo" catch) . <- .
-  next 0088
+  next 004a
 block 0012
-  pred 0088
+  pred 004a
   Blort.java:36@0012: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v2:Lj
@@ -249,9 +249,9 @@ block 0012
 block 0015
   pred 0012
   Blort.java:37@0017: const-object("foo" catch) . <- .
-  next 008a
+  next 004c
 block 0019
-  pred 008a
+  pred 004c
   Blort.java:37@0019: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch) . <- v0:Ljava/lang/StringBuilder; v2:Lj
@@ -260,126 +260,126 @@ block 0019
 block 001d
   pred 0019
   Blort.java:39@001e: const-object("foo" catch java.lang.Throwable) . <- .
-  next 0095
-  next 008c *
+  next 0057
+  next 004e *
 block 0020
-  pred 008c
+  pred 004e
   Blort.java:39@0020: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch java.lang.Throwable) . <- v0:Ljava/lang/
   StringBuilder; v2:Ljava/lang/String;="foo"
-  next 0095
+  next 0057
   next 0023 *
 block 0023
   pred 0020
   Blort.java:40@0025: const-object("foo" catch java.lang.Throwable) . <- .
-  next 0095
-  next 008e *
+  next 0057
+  next 0050 *
 block 0027
-  pred 008e
+  pred 0050
   Blort.java:40@0027: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch java.lang.Throwable) . <- v0:Ljava/lang/
   StringBuilder; v2:Ljava/lang/String;="foo"
-  next 0095
+  next 0057
   next 002a *
 block 002a
   pred 0027
   Blort.java:41@002c: const-object("foo" catch java.lang.Throwable) . <- .
-  next 0095
-  next 0090 *
+  next 0057
+  next 0052 *
 block 002e
-  pred 0090
+  pred 0052
   Blort.java:41@002e: Rop{invoke-virtual . <- Ljava/lang/StringBuilder; Ljava/l
   ang/String; call throws <any>}(java.lang.StringBuilder.append:(Ljava/lang/Str
   ing;)Ljava/lang/StringBuilder; catch java.lang.Throwable) . <- v0:Ljava/lang/
   StringBuilder; v2:Ljava/lang/String;="foo"
-  next 0095
-  next 007f *
+  next 0057
+  next 0041 *
 block 0035
-  pred 0095
+  pred 0057
   @????: mark-local-object . <- v1:"tr"Ljava/lang/Throwable;
   Blort.java:43@0036: get-static-object(java.lang.System.out:Ljava/io/PrintStre
   am; catch) . <- .
-  next 0092
+  next 0054
 block 0039
-  pred 0092
+  pred 0054
   Blort.java:43@0039: const-object("foo" catch) . <- .
-  next 0093
+  next 0055
 block 003b
-  pred 0093
+  pred 0055
   Blort.java:43@003b: Rop{invoke-virtual . <- Ljava/io/PrintStream; Ljava/lang/
   String; call throws <any>}(java.io.PrintStream.println:(Ljava/lang/String;)V 
   catch) . <- v2:Ljava/io/PrintStream; v3:Ljava/lang/String;="foo"
-  next 007f
-block 007e
-  pred 0094
+  next 0041
+block 0040
+  pred 0056
   Blort.java:33@0000: move-param-object(0) v4:"this"LBlort; <- .
   Blort.java:33@0000: goto . <- .
   next 0000
-block 007f
+block 0041
   pred 002e
   pred 003b
   Blort.java:45@003e: return-void . <- .
   returns
-block 0085
+block 0047
   pred 0000
   Blort.java:33@0000: Rop{move-result-pseudo N0000Ljava/lang/StringBuilder; <- 
   . flows} v0:N0000Ljava/lang/StringBuilder; <- .
   Blort.java:33@0000: goto . <- .
   next 0003
-block 0086
+block 0048
   pred 0007
   Blort.java:35@0009: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v2:
   Ljava/lang/String;="foo" <- .
   Blort.java:35@0009: goto . <- .
   next 000b
-block 0088
+block 004a
   pred 000e
   Blort.java:36@0010: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v2:
   Ljava/lang/String;="foo" <- .
   Blort.java:36@0010: goto . <- .
   next 0012
-block 008a
+block 004c
   pred 0015
   Blort.java:37@0017: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v2:
   Ljava/lang/String;="foo" <- .
   Blort.java:37@0017: goto . <- .
   next 0019
-block 008c
+block 004e
   pred 001d
   Blort.java:39@001e: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v2:
   Ljava/lang/String;="foo" <- .
   Blort.java:39@001e: goto . <- .
   next 0020
-block 008e
+block 0050
   pred 0023
   Blort.java:40@0025: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v2:
   Ljava/lang/String;="foo" <- .
   Blort.java:40@0025: goto . <- .
   next 0027
-block 0090
+block 0052
   pred 002a
   Blort.java:41@002c: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v2:
   Ljava/lang/String;="foo" <- .
   Blort.java:41@002c: goto . <- .
   next 002e
-block 0092
+block 0054
   pred 0035
   Blort.java:43@0036: Rop{move-result-pseudo Ljava/io/PrintStream; <- . flows} 
   v2:Ljava/io/PrintStream; <- .
   Blort.java:43@0036: goto . <- .
   next 0039
-block 0093
+block 0055
   pred 0039
   Blort.java:43@0039: Rop{move-result-pseudo Ljava/lang/String; <- . flows} v3:
   Ljava/lang/String;="foo" <- .
   Blort.java:43@0039: goto . <- .
   next 003b
-block 0094
+block 0056
   @????: goto . <- .
-  next 007e
-block 0095
+  next 0040
+block 0057
   pred 001d
   pred 0020
   pred 0023
@@ -392,9 +392,9 @@ block 0095
   next 0035
 
 method testLocalVars ()V
-first 0004
+first 0003
 block 0000
-  pred 0002
+  pred 0001
   Blort.java:49@0000: const-int(10) v3:I=10 <- .
   @????: mark-local-int . <- v3:"i"I
   Blort.java:50@0003: const-int(10) v4:I=10 <- .
@@ -410,24 +410,24 @@ block 0000
   Blort.java:56@0018: mul-const-int(10) v3:I=100 <- v3:I
   @????: mark-local-int . <- v3:"i"I=100
   Blort.java:57@001a: goto . <- .
-  next 0003
-block 0002
-  pred 0004
+  next 0002
+block 0001
+  pred 0003
   Blort.java:49@0000: move-param-object(0) v6:"this"LBlort; <- .
   Blort.java:49@0000: goto . <- .
   next 0000
-block 0003
+block 0002
   pred 0000
   Blort.java:57@001a: return-void . <- .
   returns
-block 0004
+block 0003
   @????: goto . <- .
-  next 0002
+  next 0001
 
 method testNull (Ljava/lang/Object;)V
-first 0021
+first 0015
 block 0000
-  pred 0018
+  pred 000c
   Blort.java:60@0002: Rop{invoke-virtual . <- Ljava/lang/Object; Ljava/lang/Obj
   ect; call throws <any>}(java.lang.Object.equals:(Ljava/lang/Object;)Z catch) 
   . <- v2:Ljava/lang/Object; v0:<null>=null
@@ -437,18 +437,18 @@ block 0005
   Blort.java:61@0008: Rop{invoke-virtual . <- Ljava/lang/Object; Ljava/lang/Obj
   ect; call throws <any>}(java.lang.Object.equals:(Ljava/lang/Object;)Z catch) 
   . <- v2:Ljava/lang/Object; v0:<null>=null
-  next 0019
-block 0018
-  pred 0021
+  next 000d
+block 000c
+  pred 0015
   Blort.java:60@0000: move-param-object(0) v1:"this"LBlort; <- .
   Blort.java:60@0000: move-param-object(1) v2:"a"Ljava/lang/Object; <- .
   Blort.java:60@0000: goto . <- .
   next 0000
-block 0019
+block 000d
   pred 0005
   Blort.java:63@000c: return-void . <- .
   returns
-block 0021
+block 0015
   @????: const-object-nothrow(null) v0:<null>=null <- .
   @????: goto . <- .
-  next 0018
+  next 000c

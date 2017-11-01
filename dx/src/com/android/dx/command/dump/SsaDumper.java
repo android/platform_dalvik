@@ -90,7 +90,7 @@ public class SsaDumper extends BlockDumper {
         ConcreteMethod meth =
             new ConcreteMethod((Method) member, classFile, true, true);
         TranslationAdvice advice = DexTranslationAdvice.THE_ONE;
-        RopMethod rmeth = Ropper.convert(meth, advice, classFile.getMethods());
+        RopMethod rmeth = Ropper.convert(meth, advice, classFile.getMethods(), dexOptions);
         SsaMethod ssaMeth = null;
         boolean isStatic = AccessFlags.isStatic(meth.getAccessFlags());
         int paramWidth = computeParamWidth(meth, isStatic);
@@ -113,7 +113,7 @@ public class SsaDumper extends BlockDumper {
                     rmeth, paramWidth, isStatic,true, advice);
         }
 
-        StringBuffer sb = new StringBuffer(2000);
+        StringBuilder sb = new StringBuilder(2000);
 
         sb.append("first ");
         sb.append(Hex.u2(
@@ -172,7 +172,6 @@ public class SsaDumper extends BlockDumper {
         }
 
         suppressDump = false;
-        setAt(bytes, 0);
         parsed(bytes, 0, bytes.size(), sb.toString());
         suppressDump = true;
     }

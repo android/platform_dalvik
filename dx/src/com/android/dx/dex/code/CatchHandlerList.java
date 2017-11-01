@@ -50,6 +50,7 @@ public final class CatchHandlerList extends FixedSizeList
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return toHuman("", "");
     }
@@ -133,6 +134,7 @@ public final class CatchHandlerList extends FixedSizeList
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(CatchHandlerList other) {
         if (this == other) {
             // Easy out.
@@ -207,6 +209,7 @@ public final class CatchHandlerList extends FixedSizeList
         }
 
         /** {@inheritDoc} */
+        @Override
         public int compareTo(Entry other) {
             if (handler < other.handler) {
                 return -1;

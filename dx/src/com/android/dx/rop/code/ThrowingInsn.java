@@ -38,7 +38,7 @@ public final class ThrowingInsn
      * @return {@code non-null;} the string form
      */
     public static String toCatchString(TypeList catches) {
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
 
         sb.append("catch");
 
@@ -65,7 +65,7 @@ public final class ThrowingInsn
         super(opcode, position, null, sources);
 
         if (opcode.getBranchingness() != Rop.BRANCH_THROW) {
-            throw new IllegalArgumentException("bogus branchingness");
+            throw new IllegalArgumentException("opcode with invalid branchingness: " + opcode.getBranchingness());
         }
 
         if (catches == null) {

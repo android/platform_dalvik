@@ -192,10 +192,10 @@ regs: 0003; ins: 0000; outs: 0001
   0003: invoke-static {v0}, Blort.consume1:(I)V
   0006: return-void
 Blort.test_pop2_form2:()V:
-regs: 0003; ins: 0000; outs: 0001
-  0000: const/4 v0, #int 0 // #0
-  0001: const-wide/16 v1, #long 0 // #0000
-  0003: invoke-static {v0}, Blort.consume1:(I)V
+regs: 0004; ins: 0000; outs: 0001
+  0000: const/4 v1, #int 0 // #0
+  0001: const-wide/16 v2, #long 0 // #0000
+  0003: invoke-static {v1}, Blort.consume1:(I)V
   0006: return-void
 Blort.test_swap:()V:
 regs: 0004; ins: 0000; outs: 0001

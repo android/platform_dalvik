@@ -20,6 +20,8 @@ import com.android.dex.util.ExceptionWithContext;
 import com.android.dx.io.Opcodes;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstBaseMethodRef;
+import com.android.dx.rop.cst.CstCallSiteRef;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.FixedSizeList;
 import com.android.dx.util.IndentingWriter;
@@ -69,6 +71,8 @@ public final class DalvInsnList extends FixedSizeList {
      * Constructs an instance. All indices initially contain {@code null}.
      *
      * @param size the size of the list
+     * @param regCount count, in register-units, of the number of registers
+     * this code block requires.
      */
     public DalvInsnList(int size, int regCount) {
         super(size);
@@ -189,21 +193,35 @@ public final class DalvInsnList extends FixedSizeList {
 
         for (int i = 0; i < sz; i++) {
             DalvInsn insn = (DalvInsn) get0(i);
+            int count = 0;
 
-            if (!(insn instanceof CstInsn)) {
+            if (insn instanceof CstInsn) {
+                Constant cst = ((CstInsn) insn).getConstant();
+                if (cst instanceof CstBaseMethodRef) {
+                    CstBaseMethodRef methodRef = (CstBaseMethodRef) cst;
+                    boolean isStatic =
+                        (insn.getOpcode().getFamily() == Opcodes.INVOKE_STATIC);
+                    count = methodRef.getParameterWordCount(isStatic);
+                } else if (cst instanceof CstCallSiteRef) {
+                    CstCallSiteRef invokeDynamicRef = (CstCallSiteRef) cst;
+                    count = invokeDynamicRef.getPrototype().getParameterTypes().getWordCount();
+                }
+            } else if (insn instanceof MultiCstInsn) {
+                if (insn.getOpcode().getFamily() != Opcodes.INVOKE_POLYMORPHIC) {
+                    throw new RuntimeException("Expecting invoke-polymorphic");
+                }
+                MultiCstInsn mci = (MultiCstInsn) insn;
+                // Invoke-polymorphic has two constants: [0] method-ref and
+                // [1] call site prototype. The number of arguments is based
+                // on the call site prototype since these are the arguments
+                // presented. The method-ref is always MethodHandle.invoke(Object[])
+                // or MethodHandle.invokeExact(Object[]).
+                CstProtoRef proto = (CstProtoRef) mci.getConstant(1);
+                count = proto.getPrototype().getParameterTypes().getWordCount();
+                count = count + 1; // And one for receiver (method handle).
+            } else {
                 continue;
             }
-
-            Constant cst = ((CstInsn) insn).getConstant();
-
-            if (!(cst instanceof CstBaseMethodRef)) {
-                continue;
-            }
-
-            boolean isStatic =
-                (insn.getOpcode().getFamily() == Opcodes.INVOKE_STATIC);
-            int count =
-                ((CstBaseMethodRef) cst).getParameterWordCount(isStatic);
 
             if (count > result) {
                 result = count;

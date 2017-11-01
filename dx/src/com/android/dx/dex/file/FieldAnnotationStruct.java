@@ -54,11 +54,13 @@ public final class FieldAnnotationStruct
     }
 
     /** {@inheritDoc} */
+    @Override
     public int hashCode() {
         return field.hashCode();
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean equals(Object other) {
         if (! (other instanceof FieldAnnotationStruct)) {
             return false;
@@ -68,6 +70,7 @@ public final class FieldAnnotationStruct
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(FieldAnnotationStruct other) {
         return field.compareTo(other.field);
     }
@@ -98,6 +101,7 @@ public final class FieldAnnotationStruct
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return field.toHuman() + ": " + annotations;
     }

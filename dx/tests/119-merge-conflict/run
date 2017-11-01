@@ -21,6 +21,13 @@ dxjar=$progdir/../framework/dx.jar
 junitjar=$progdir/../framework/junit-host.jar
 junitdex=$progdir/../framework/junit-hostdex.jar
 
+for i in "$dxjar" "$junitjar" "$junitdex"; do
+    if [ ! -r $i ]; then
+        echo Missing dependency $i. Build dx-tests.
+        exit 1
+    fi
+done
+
 javac -cp $dxjar:$junitjar `find . -name "*.java"`
 dx --dex --output=test.jar com/android/dx/merge/* $dxjar
 

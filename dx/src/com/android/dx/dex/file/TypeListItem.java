@@ -62,6 +62,7 @@ public final class TypeListItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addContents(DexFile file) {
         TypeIdsSection typeIds = file.getTypeIds();
         int sz = list.size();

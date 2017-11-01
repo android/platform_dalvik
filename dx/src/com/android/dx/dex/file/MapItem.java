@@ -180,7 +180,7 @@ public final class MapItem extends OffsettedItem {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
 
         sb.append(getClass().getName());
         sb.append('{');

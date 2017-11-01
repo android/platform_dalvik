@@ -16,11 +16,8 @@
 
 package com.android.dx.dex.file;
 
-import com.android.dex.DexException;
 import com.android.dex.DexFormat;
 import com.android.dex.DexIndexOverflowException;
-import com.android.dx.command.dexer.Main;
-
 import java.util.Formatter;
 import java.util.Map;
 import java.util.TreeMap;
@@ -72,8 +69,9 @@ public abstract class MemberIdsSection extends UniformItemSection {
         Formatter formatter = new Formatter();
         try {
             String memberType = this instanceof MethodIdsSection ? "method" : "field";
-            formatter.format("Too many %s references: %d; max is %d.%n" +
-                    Main.getTooManyIdsErrorMessage() + "%n" +
+            formatter.format("Too many %1$s references to fit in one dex file: %2$d; max is %3$d.%n" +
+                            "You may try using multi-dex. If multi-dex is enabled then the list of " +
+                            "classes for the main dex list is too large.%n" +
                     "References by package:",
                     memberType, items().size(), DexFormat.MAX_MEMBER_IDX + 1);
             for (Map.Entry<String, AtomicInteger> entry : membersByPackage.entrySet()) {

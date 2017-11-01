@@ -1,0 +1,3 @@
+Tests that interface method invocation is permitted below API level
+24, and interface method declaration is only permitted at level 24
+upwards.

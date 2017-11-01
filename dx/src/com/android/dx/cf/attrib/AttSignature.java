@@ -44,6 +44,7 @@ public final class AttSignature extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         return 8;
     }

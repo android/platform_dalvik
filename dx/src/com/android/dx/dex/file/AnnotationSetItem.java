@@ -113,6 +113,7 @@ public final class AnnotationSetItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addContents(DexFile file) {
         MixedItemSection byteData = file.getByteData();
         int size = items.length;

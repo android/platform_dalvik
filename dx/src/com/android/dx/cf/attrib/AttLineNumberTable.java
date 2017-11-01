@@ -50,6 +50,7 @@ public final class AttLineNumberTable extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         return 8 + 4 * lineNumbers.size();
     }

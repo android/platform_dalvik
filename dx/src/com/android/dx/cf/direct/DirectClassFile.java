@@ -16,7 +16,9 @@
 
 package com.android.dx.cf.direct;
 
+import com.android.dx.cf.attrib.AttBootstrapMethods;
 import com.android.dx.cf.attrib.AttSourceFile;
+import com.android.dx.cf.code.BootstrapMethodsList;
 import com.android.dx.cf.cst.ConstantPoolParser;
 import com.android.dx.cf.iface.Attribute;
 import com.android.dx.cf.iface.AttributeList;
@@ -50,9 +52,11 @@ public class DirectClassFile implements ClassFile {
      * See http://en.wikipedia.org/wiki/Java_class_file for an up-to-date
      * list of version numbers. Currently known (taken from that table) are:
      *
-     *     J2SE 7.0 = 51 (0x33 hex),
-     *     J2SE 6.0 = 50 (0x32 hex),
-     *     J2SE 5.0 = 49 (0x31 hex),
+     *     Java SE 9 = 53 (0x35 hex),
+     *     Java SE 8 = 52 (0x34 hex),
+     *     Java SE 7 = 51 (0x33 hex),
+     *     Java SE 6.0 = 50 (0x32 hex),
+     *     Java SE 5.0 = 49 (0x31 hex),
      *     JDK 1.4 = 48 (0x30 hex),
      *     JDK 1.3 = 47 (0x2F hex),
      *     JDK 1.2 = 46 (0x2E hex),
@@ -69,7 +73,7 @@ public class DirectClassFile implements ClassFile {
      *
      * Note: if you change this, please change "java.class.version" in System.java.
      */
-    private static final int CLASS_FILE_MAX_MAJOR_VERSION = 51;
+    private static final int CLASS_FILE_MAX_MAJOR_VERSION = 53;
 
     /** maximum {@code .class} file minor version */
     private static final int CLASS_FILE_MAX_MINOR_VERSION = 0;
@@ -247,72 +251,96 @@ public class DirectClassFile implements ClassFile {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getMagic() {
         parseToInterfacesIfNecessary();
         return getMagic0();
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getMinorVersion() {
         parseToInterfacesIfNecessary();
         return getMinorVersion0();
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getMajorVersion() {
         parseToInterfacesIfNecessary();
         return getMajorVersion0();
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getAccessFlags() {
         parseToInterfacesIfNecessary();
         return accessFlags;
     }
 
     /** {@inheritDoc} */
+    @Override
     public CstType getThisClass() {
         parseToInterfacesIfNecessary();
         return thisClass;
     }
 
     /** {@inheritDoc} */
+    @Override
     public CstType getSuperclass() {
         parseToInterfacesIfNecessary();
         return superClass;
     }
 
     /** {@inheritDoc} */
+    @Override
     public ConstantPool getConstantPool() {
         parseToInterfacesIfNecessary();
         return pool;
     }
 
     /** {@inheritDoc} */
+    @Override
     public TypeList getInterfaces() {
         parseToInterfacesIfNecessary();
         return interfaces;
     }
 
     /** {@inheritDoc} */
+    @Override
     public FieldList getFields() {
         parseToEndIfNecessary();
         return fields;
     }
 
     /** {@inheritDoc} */
+    @Override
     public MethodList getMethods() {
         parseToEndIfNecessary();
         return methods;
     }
 
     /** {@inheritDoc} */
+    @Override
     public AttributeList getAttributes() {
         parseToEndIfNecessary();
         return attributes;
     }
 
     /** {@inheritDoc} */
+    @Override
+    public BootstrapMethodsList getBootstrapMethods() {
+        AttBootstrapMethods bootstrapMethodsAttribute =
+                (AttBootstrapMethods) getAttributes().findFirst(AttBootstrapMethods.ATTRIBUTE_NAME);
+        if (bootstrapMethodsAttribute != null) {
+            return bootstrapMethodsAttribute.getBootstrapMethods();
+        } else {
+            return BootstrapMethodsList.EMPTY;
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public CstString getSourceFile() {
         AttributeList attribs = getAttributes();
         Attribute attSf = attribs.findFirst(AttSourceFile.ATTRIBUTE_NAME);
@@ -626,28 +654,33 @@ public class DirectClassFile implements ClassFile {
         }
 
         /** {@inheritDoc} */
+        @Override
         public boolean isMutable() {
             return false;
         }
 
         /** {@inheritDoc} */
+        @Override
         public int size() {
             return size;
         }
 
         /** {@inheritDoc} */
+        @Override
         public int getWordCount() {
             // It is the same as size because all elements are classes.
             return size;
         }
 
         /** {@inheritDoc} */
+        @Override
         public Type getType(int n) {
             int idx = bytes.getUnsignedShort(n * 2);
             return ((CstType) pool.get(idx)).getClassType();
         }
 
         /** {@inheritDoc} */
+        @Override
         public TypeList withAddedType(Type type) {
             throw new UnsupportedOperationException("unsupported");
         }

@@ -45,7 +45,7 @@ public final class ThrowingCstInsn
         super(opcode, position, null, sources, cst);
 
         if (opcode.getBranchingness() != Rop.BRANCH_THROW) {
-            throw new IllegalArgumentException("bogus branchingness");
+            throw new IllegalArgumentException("opcode with invalid branchingness: " + opcode.getBranchingness());
         }
 
         if (catches == null) {

@@ -1,0 +1,9 @@
+This is a non-regression test that reproduces a case where a local variable
+would have the java.lang.Object type because of a null constant.
+The type of the local variable would be transformed from "KNOWN_NULL" to
+"java.lang.Object", but "java.lang.Object" wouldn't be added to the types of
+the dex.
+So in the rare case where java.lang.Object wouldn't be referenced anywhere else
+in the compilation unit it would fail with "java.lang.IllegalArgumentException:
+not found: Ljava/lang/Object;"
+

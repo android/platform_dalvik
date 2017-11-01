@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import java.util.BitSet;
 
 /**
- * Calculates the dominance-frontiers of a methot's basic blocks.
+ * Calculates the dominance-frontiers of a method's basic blocks.
  * Algorithm from "A Simple, Fast Dominance Algorithm" by Cooper,
  * Harvey, and Kennedy; transliterated to Java.
  */
 public class DomFront {
     /** local debug flag */
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     /** {@code non-null;} method being processed */
     private final SsaMethod meth;

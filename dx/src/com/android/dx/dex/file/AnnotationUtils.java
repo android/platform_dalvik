@@ -16,9 +16,8 @@
 
 package com.android.dx.dex.file;
 
-import static com.android.dx.rop.annotation.AnnotationVisibility.SYSTEM;
-
 import com.android.dx.rop.annotation.Annotation;
+import static com.android.dx.rop.annotation.AnnotationVisibility.SYSTEM;
 import com.android.dx.rop.annotation.NameValuePair;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstAnnotation;
@@ -30,7 +29,6 @@ import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Type;
 import com.android.dx.rop.type.TypeList;
-
 import java.util.ArrayList;
 
 /**
@@ -61,6 +59,10 @@ public final class AnnotationUtils {
     /** {@code non-null;} type for {@code Signature} annotations */
     private static final CstType SIGNATURE_TYPE =
         CstType.intern(Type.intern("Ldalvik/annotation/Signature;"));
+
+        /** {@code non-null;} type for {@code SourceDebugExtension} annotations */
+    private static final CstType SOURCE_DEBUG_EXTENSION_TYPE =
+        CstType.intern(Type.intern("Ldalvik/annotation/SourceDebugExtension;"));
 
     /** {@code non-null;} type for {@code Throws} annotations */
     private static final CstType THROWS_TYPE =
@@ -215,6 +217,20 @@ public final class AnnotationUtils {
         list.setImmutable();
 
         result.put(new NameValuePair(VALUE_STRING, new CstArray(list)));
+        result.setImmutable();
+        return result;
+    }
+
+    /**
+     * Constructs a standard {@code SourceDebugExtension} annotation.
+     *
+     * @param smapString {@code non-null;} the SMAP string associated with
+     * @return {@code non-null;} the annotation
+     */
+    public static Annotation makeSourceDebugExtension(CstString smapString) {
+        Annotation result = new Annotation(SOURCE_DEBUG_EXTENSION_TYPE, SYSTEM);
+
+        result.put(new NameValuePair(VALUE_STRING, smapString));
         result.setImmutable();
         return result;
     }

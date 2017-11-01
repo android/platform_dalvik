@@ -23,6 +23,7 @@ if exist    "%~dp0..\..\tools\lib\find_java.bat" call    "%~dp0..\..\tools\lib\f
 if not defined java_exe goto :EOF
 
 set baserules="%~dp0\mainDexClasses.rules"
+set extrarules="%~dp0\mainDexClassesNoAapt.rules"
 
 REM Locate dx.jar in the directory where dx.bat was found.
 set jarfile=dx.jar
@@ -86,6 +87,14 @@ if [%1]==[] goto endArgs
         goto firstArg
 
 :notDisable
+
+    if %1 NEQ --aapt-rules goto notAapt
+        set "extrarules=%2"
+        shift
+        shift
+        goto firstArg
+
+:notAapt
     if defined params goto usage
     set params=%1
     shift
@@ -101,13 +110,13 @@ echo "" > "%tmpJar%"
 set "exitStatus=0"
 
 
-call "%proguard%" -injars %params% -dontwarn -forceprocessing  -outjars "%tmpJar%" -libraryjars "%shrinkedAndroidJar%" -dontoptimize -dontobfuscate -dontpreverify -include "%baserules%" 1>nul
+call "%proguard%" -injars %params% -dontwarn -forceprocessing  -outjars "%tmpJar%" -libraryjars "%shrinkedAndroidJar%" -dontoptimize -dontobfuscate -dontpreverify -include "%baserules%" -include "%extrarules%" 1>nul
 
 if DEFINED output goto redirect
-call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder "%disableKeepAnnotated%" "%tmpJar%" "%params%"
+call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder %disableKeepAnnotated% "%tmpJar%" "%params%"
 goto afterClassReferenceListBuilder
 :redirect
-call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder "%disableKeepAnnotated%" "%tmpJar%" "%params%" 1>"%output%"
+call "%java_exe%" -Djava.ext.dirs="%frameworkdir%" com.android.multidex.MainDexListBuilder %disableKeepAnnotated% "%tmpJar%" "%params%" 1>"%output%"
 :afterClassReferenceListBuilder
 
 del %tmpJar%

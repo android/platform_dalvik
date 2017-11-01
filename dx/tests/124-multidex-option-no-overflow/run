@@ -17,6 +17,9 @@
 # Stop if something fails.
 set -e
 
+JAVAC_SOURCE=1.6
+JAVAC_TARGET=1.6
+
 # Write out files with many static fields, instance fields, and methods but
 # not exceeding the dex format's limits.
 mkdir src
@@ -44,7 +47,7 @@ function writeFileMethod(name) {
 }'
 
 mkdir classes
-${JAVAC} -d classes `find src -name '*.java'`
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'`
 mkdir out
 dx -JXmx1024m --dex --no-optimize --multi-dex --output=out classes
 ls -1F out

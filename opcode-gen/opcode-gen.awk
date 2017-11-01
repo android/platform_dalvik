@@ -474,16 +474,20 @@ function parseHex(hex, result, chars, count, c, i) {
 
 # Initialize the indexTypes data.
 function initIndexTypes() {
-    indexTypeValues["unknown"]       = "kIndexUnknown";
-    indexTypeValues["none"]          = "kIndexNone";
-    indexTypeValues["varies"]        = "kIndexVaries";
-    indexTypeValues["type-ref"]      = "kIndexTypeRef";
-    indexTypeValues["string-ref"]    = "kIndexStringRef";
-    indexTypeValues["method-ref"]    = "kIndexMethodRef";
-    indexTypeValues["field-ref"]     = "kIndexFieldRef";
-    indexTypeValues["inline-method"] = "kIndexInlineMethod";
-    indexTypeValues["vtable-offset"] = "kIndexVtableOffset";
-    indexTypeValues["field-offset"]  = "kIndexFieldOffset";
+    indexTypeValues["unknown"]              = "kIndexUnknown";
+    indexTypeValues["none"]                 = "kIndexNone";
+    indexTypeValues["varies"]               = "kIndexVaries";
+    indexTypeValues["type-ref"]             = "kIndexTypeRef";
+    indexTypeValues["string-ref"]           = "kIndexStringRef";
+    indexTypeValues["method-ref"]           = "kIndexMethodRef";
+    indexTypeValues["field-ref"]            = "kIndexFieldRef";
+    indexTypeValues["inline-method"]        = "kIndexInlineMethod";
+    indexTypeValues["vtable-offset"]        = "kIndexVtableOffset";
+    indexTypeValues["field-offset"]         = "kIndexFieldOffset";
+    indexTypeValues["method-and-proto-ref"] = "kIndexMethodAndProtoRef";
+    indexTypeValues["call-site-ref"]        = "kIndexCallSiteRef";
+    indexTypeValues["method-handle-ref"]    = "kIndexMethodHandleRef";
+    indexTypeValues["proto-ref"]            = "kIndexProtoRef";
 }
 
 # Initialize the flags data.

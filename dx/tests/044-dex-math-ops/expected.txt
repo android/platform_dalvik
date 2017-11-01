@@ -1,8 +1,8 @@
 Blort.blort:(DD)V:
-regs: 000f; ins: 0005; outs: 0000
-  0000: move-object v0, v10
-  0001: move-wide v1, v11
-  0002: move-wide v3, v13
+regs: 0010; ins: 0005; outs: 0000
+  0000: move-object v0, v11
+  0001: move-wide v1, v12
+  0002: move-wide v3, v14
   0003: move-object v5, v0
   0004: move-wide v6, v1
   0005: neg-double v6, v6
@@ -139,10 +139,10 @@ regs: 0009; ins: 0003; outs: 0000
   004f: iput v4, v3, Blort.i:I
   0051: return-void
 Blort.blort:(JJ)V:
-regs: 000f; ins: 0005; outs: 0000
-  0000: move-object v0, v10
-  0001: move-wide v1, v11
-  0002: move-wide v3, v13
+regs: 0010; ins: 0005; outs: 0000
+  0000: move-object v0, v11
+  0001: move-wide v1, v12
+  0002: move-wide v3, v14
   0003: move-object v5, v0
   0004: move-wide v6, v1
   0005: neg-long v6, v6

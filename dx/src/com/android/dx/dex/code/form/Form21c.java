@@ -23,6 +23,8 @@ import com.android.dx.rop.code.RegisterSpec;
 import com.android.dx.rop.code.RegisterSpecList;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstFieldRef;
+import com.android.dx.rop.cst.CstMethodHandle;
+import com.android.dx.rop.cst.CstProtoRef;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.util.AnnotatedOutput;
@@ -48,14 +50,14 @@ public final class Form21c extends InsnFormat {
     @Override
     public String insnArgString(DalvInsn insn) {
         RegisterSpecList regs = insn.getRegisters();
-        return regs.get(0).regString() + ", " + cstString(insn);
+        return regs.get(0).regString() + ", " + insn.cstString();
     }
 
     /** {@inheritDoc} */
     @Override
     public String insnCommentString(DalvInsn insn, boolean noteIndices) {
         if (noteIndices) {
-            return cstComment(insn);
+            return insn.cstComment();
         } else {
             return "";
         }
@@ -110,9 +112,11 @@ public final class Form21c extends InsnFormat {
             return false;
         }
 
-        return (cst instanceof CstType) ||
-            (cst instanceof CstFieldRef) ||
-            (cst instanceof CstString);
+        return cst instanceof CstType ||
+            cst instanceof CstFieldRef ||
+            cst instanceof CstString ||
+            cst instanceof CstMethodHandle ||
+            cst instanceof CstProtoRef;
     }
 
     /** {@inheritDoc} */

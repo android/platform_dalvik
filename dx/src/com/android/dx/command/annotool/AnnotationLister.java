@@ -62,6 +62,7 @@ class AnnotationLister {
 
             opener = new ClassPathOpener(path, true,
                     new ClassPathOpener.Consumer() {
+                @Override
                 public boolean processFileBytes(String name, long lastModified, byte[] bytes) {
                     if (!name.endsWith(".class")) {
                         return true;
@@ -118,10 +119,12 @@ class AnnotationLister {
                     return true;
                 }
 
+                @Override
                 public void onException(Exception ex) {
                     throw new RuntimeException(ex);
                 }
 
+                @Override
                 public void onProcessArchiveStart(File file) {
 
                 }

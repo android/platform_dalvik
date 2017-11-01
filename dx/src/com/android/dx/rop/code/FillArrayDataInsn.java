@@ -54,7 +54,7 @@ public final class FillArrayDataInsn
         super(opcode, position, null, sources);
 
         if (opcode.getBranchingness() != Rop.BRANCH_NONE) {
-            throw new IllegalArgumentException("bogus branchingness");
+            throw new IllegalArgumentException("opcode with invalid branchingness: " + opcode.getBranchingness());
         }
 
         this.initValues = initValues;

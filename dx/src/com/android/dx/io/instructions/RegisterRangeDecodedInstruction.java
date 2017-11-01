@@ -41,17 +41,20 @@ public final class RegisterRangeDecodedInstruction extends DecodedInstruction {
         this.registerCount = registerCount;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public int getRegisterCount() {
         return registerCount;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public int getA() {
         return a;
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
+    @Override
     public DecodedInstruction withIndex(int newIndex) {
         return new RegisterRangeDecodedInstruction(
                 getFormat(), getOpcode(), newIndex, getIndexType(),

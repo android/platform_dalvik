@@ -26,7 +26,6 @@ import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
 import com.android.dx.rop.type.StdTypeList;
 import com.android.dx.rop.type.TypeList;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;

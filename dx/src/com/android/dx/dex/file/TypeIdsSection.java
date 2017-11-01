@@ -16,16 +16,13 @@
 
 package com.android.dx.dex.file;
 
-import com.android.dex.DexException;
 import com.android.dex.DexFormat;
 import com.android.dex.DexIndexOverflowException;
-import com.android.dx.command.dexer.Main;
 import com.android.dx.rop.cst.Constant;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Type;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.Hex;
-
 import java.util.Collection;
 import java.util.TreeMap;
 
@@ -86,9 +83,11 @@ public final class TypeIdsSection extends UniformItemSection {
         int offset = (sz == 0) ? 0 : getFileOffset();
 
         if (sz > DexFormat.MAX_TYPE_IDX + 1) {
-            throw new DexIndexOverflowException("Too many type references: " + sz +
-                    "; max is " + (DexFormat.MAX_TYPE_IDX + 1) + ".\n" +
-                    Main.getTooManyIdsErrorMessage());
+            throw new DexIndexOverflowException(
+                    String.format("Too many type identifiers to fit in one dex file: %1$d; max is %2$d.%n"
+                                    + "You may try using multi-dex. If multi-dex is enabled then the list of "
+                                    + "classes for the main dex list is too large.",
+                            items().size(), DexFormat.MAX_MEMBER_IDX + 1));
         }
 
         if (out.annotates()) {

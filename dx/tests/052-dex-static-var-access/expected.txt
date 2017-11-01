@@ -28,32 +28,32 @@ regs: 0004; ins: 0000; outs: 0000
   0024: move-object v0, v1
   0025: goto 0022 // -0003
 Blort.test2:(ZILjava/lang/Object;)V:
-regs: 0008; ins: 0003; outs: 0000
-  0000: move v0, v5
-  0001: move v1, v6
-  0002: move-object v2, v7
-  0003: move v3, v0
-  0004: sput-boolean v3, Blort.staticBoolean:Z
-  0006: move v3, v1
-  0007: int-to-byte v3, v3
-  0008: sput-byte v3, Blort.staticByte:B
-  000a: move v3, v1
-  000b: int-to-char v3, v3
-  000c: sput-char v3, Blort.staticChar:C
-  000e: move v3, v1
-  000f: int-to-short v3, v3
-  0010: sput-short v3, Blort.staticShort:S
-  0012: move v3, v1
-  0013: sput v3, Blort.staticInt:I
-  0015: move v3, v1
-  0016: int-to-long v3, v3
-  0017: sput-wide v3, Blort.staticLong:J
-  0019: move v3, v1
-  001a: int-to-float v3, v3
-  001b: sput v3, Blort.staticFloat:F
-  001d: move v3, v1
-  001e: int-to-double v3, v3
-  001f: sput-wide v3, Blort.staticDouble:D
-  0021: move-object v3, v2
-  0022: sput-object v3, Blort.staticObject:Ljava/lang/Object;
+regs: 0009; ins: 0003; outs: 0000
+  0000: move v1, v6
+  0001: move v2, v7
+  0002: move-object v3, v8
+  0003: move v4, v1
+  0004: sput-boolean v4, Blort.staticBoolean:Z
+  0006: move v4, v2
+  0007: int-to-byte v4, v4
+  0008: sput-byte v4, Blort.staticByte:B
+  000a: move v4, v2
+  000b: int-to-char v4, v4
+  000c: sput-char v4, Blort.staticChar:C
+  000e: move v4, v2
+  000f: int-to-short v4, v4
+  0010: sput-short v4, Blort.staticShort:S
+  0012: move v4, v2
+  0013: sput v4, Blort.staticInt:I
+  0015: move v4, v2
+  0016: int-to-long v4, v4
+  0017: sput-wide v4, Blort.staticLong:J
+  0019: move v4, v2
+  001a: int-to-float v4, v4
+  001b: sput v4, Blort.staticFloat:F
+  001d: move v4, v2
+  001e: int-to-double v4, v4
+  001f: sput-wide v4, Blort.staticDouble:D
+  0021: move-object v4, v3
+  0022: sput-object v4, Blort.staticObject:Ljava/lang/Object;
   0024: return-void

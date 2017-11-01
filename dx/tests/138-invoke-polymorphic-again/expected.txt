@@ -1,0 +1,88 @@
+Main.$opt$BasicTest:()V:
+regs: 0012; ins: 0000; outs: 0010
+  0000: const/4 v1, #null // #0
+  0001: const/16 v2, #int 42 // #002a
+  0003: const/16 v3, #int -42 // #ffd6
+  0005: invoke-static {v2, v3}, Main.assertEquals:(II)V
+  0008: const/4 v2, #int 0 // #0
+  0009: const/4 v3, #int 1 // #1
+  000a: const/4 v4, #int 2 // #2
+  000b: const/4 v5, #int 3 // #3
+  000c: const/4 v6, #int 4 // #4
+  000d: const/4 v7, #int 5 // #5
+  000e: const/4 v8, #int 6 // #6
+  000f: const/4 v9, #int 7 // #7
+  0010: const/16 v10, #int 8 // #0008
+  0012: const/16 v11, #int 9 // #0009
+  0014: const/16 v12, #int 10 // #000a
+  0016: const/16 v13, #int 11 // #000b
+  0018: const/16 v14, #int 12 // #000c
+  001a: const/16 v15, #int 13 // #000d
+  001c: const/16 v16, #int 14 // #000e
+  001e: invoke-virtual/range {v1..v16}, Main.foof:(IIIIIIIIIIIIIII)I
+  0021: const/16 v17, #null // #0000
+  0023: const-string v2, "bad"
+  0025: move-object/from16 v0, v17
+  0027: invoke-polymorphic {v0, v2}, java.lang.invoke.MethodHandle.invokeExact:([Ljava/lang/Object;)Ljava/lang/Object;, (Ljava/lang/String;)V
+  002b: return-void
+  debug info
+    line_start: 34
+    parameters_size: 0000
+    0000: prologue end
+    0000: line 34
+    0001: line 36
+    0001: +local v1 m Main
+    0008: line 37
+    0021: advance pc
+    0021: line 41
+    0023: line 42
+    0023: +local v17 mh0 java.lang.invoke.MethodHandle
+    002b: line 43
+    end sequence
+  source file: "Main.java"
+  method annotations:
+    system-annotation dalvik.annotation.Throws {value: {java.lang.Throwable}}
+Main.$opt$BasicTest2:()I:
+regs: 0012; ins: 0000; outs: 0010
+  0000: const/4 v1, #null // #0
+  0001: const/16 v2, #int 42 // #002a
+  0003: const/16 v3, #int -42 // #ffd6
+  0005: invoke-static {v2, v3}, Main.assertEquals:(II)V
+  0008: const/4 v2, #int 0 // #0
+  0009: const/4 v3, #int 1 // #1
+  000a: const/4 v4, #int 2 // #2
+  000b: const/4 v5, #int 3 // #3
+  000c: const/4 v6, #int 4 // #4
+  000d: const/4 v7, #int 5 // #5
+  000e: const/4 v8, #int 6 // #6
+  000f: const/4 v9, #int 7 // #7
+  0010: const/16 v10, #int 8 // #0008
+  0012: const/16 v11, #int 9 // #0009
+  0014: const/16 v12, #int 10 // #000a
+  0016: const/16 v13, #int 11 // #000b
+  0018: const/16 v14, #int 12 // #000c
+  001a: const/16 v15, #int 13 // #000d
+  001c: const/16 v16, #int 14 // #000e
+  001e: invoke-virtual/range {v1..v16}, Main.foof:(IIIIIIIIIIIIIII)I
+  0021: const/16 v17, #null // #0000
+  0023: const-string v2, "bad"
+  0025: move-object/from16 v0, v17
+  0027: invoke-polymorphic {v0, v2}, java.lang.invoke.MethodHandle.invokeExact:([Ljava/lang/Object;)Ljava/lang/Object;, (Ljava/lang/String;)I
+  002b: move-result v2
+  002c: return v2
+  debug info
+    line_start: 46
+    parameters_size: 0000
+    0000: prologue end
+    0000: line 46
+    0001: line 48
+    0001: +local v1 m Main
+    0008: line 49
+    0021: advance pc
+    0021: line 53
+    0023: line 54
+    0023: +local v17 mh0 java.lang.invoke.MethodHandle
+    end sequence
+  source file: "Main.java"
+  method annotations:
+    system-annotation dalvik.annotation.Throws {value: {java.lang.Throwable}}

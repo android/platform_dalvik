@@ -82,14 +82,17 @@ public class LiteralOpUpgrader {
         final TranslationAdvice advice = Optimizer.getAdvice();
 
         ssaMeth.forEachInsn(new SsaInsn.Visitor() {
+            @Override
             public void visitMoveInsn(NormalSsaInsn insn) {
                 // do nothing
             }
 
+            @Override
             public void visitPhiInsn(PhiInsn insn) {
                 // do nothing
             }
 
+            @Override
             public void visitNonMoveInsn(NormalSsaInsn insn) {
 
                 Insn originalRopInsn = insn.getOriginalRopInsn();

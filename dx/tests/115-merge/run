@@ -21,7 +21,19 @@ dxjar=$progdir/../framework/dx.jar
 junitjar=$progdir/../framework/junit-host.jar
 junitdex=$progdir/../framework/junit-hostdex.jar
 
-javac -cp $dxjar:$junitjar `find . -name "*.java"`
+for i in "$dxjar" "$junitjar" "$junitdex"; do
+    if [ ! -r $i ]; then
+        echo Missing dependency $i. Build dx-tests.
+        exit 1
+    fi
+done
+
+javac -source 1.7 -target 1.7 -cp $dxjar:$junitjar `find . -name "*.java"`
+if [ $? != 0 ]; then
+    echo Failed java compilation.
+    exit 1
+fi
+
 dx --dex --output=test.jar com/android/dx/merge/* $dxjar
 
 # Build a resource .jar containing the .dex files to merge

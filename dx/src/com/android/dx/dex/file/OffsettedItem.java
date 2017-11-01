@@ -111,6 +111,7 @@ public abstract class OffsettedItem extends Item
      * classes don't match then the objects are not equal), with
      * {@link #compareTo0} deciding same-class comparisons.
      */
+    @Override
     public final int compareTo(OffsettedItem other) {
         if (this == other) {
             return 0;

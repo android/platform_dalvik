@@ -54,6 +54,7 @@ public final class AnnotationSetRefItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addContents(DexFile file) {
         MixedItemSection wordData = file.getWordData();
 

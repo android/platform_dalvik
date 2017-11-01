@@ -30,7 +30,7 @@
 #include <limits.h>
 #include <errno.h>
 
-#include <JNIHelp.h>        // TEMP_FAILURE_RETRY may or may not be in unistd
+#include <nativehelper/JNIHelp.h>        // TEMP_FAILURE_RETRY may or may not be in unistd
 
 
 /*
@@ -263,7 +263,6 @@ int sysChangeMapAccess(void* addr, size_t length, int wantReadWrite,
     //ALOGI("%p/%zd --> %p/%zd", addr, length, alignAddr, alignLength);
     int prot = wantReadWrite ? (PROT_READ|PROT_WRITE) : (PROT_READ);
     if (mprotect(alignAddr, alignLength, prot) != 0) {
-        int err = errno;
         ALOGV("mprotect (%p,%zd,%d) failed: %s",
             alignAddr, alignLength, prot, strerror(errno));
         return (errno != 0) ? errno : -1;

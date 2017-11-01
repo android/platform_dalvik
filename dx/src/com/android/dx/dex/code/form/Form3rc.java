@@ -21,6 +21,7 @@ import com.android.dx.dex.code.DalvInsn;
 import com.android.dx.dex.code.InsnFormat;
 import com.android.dx.rop.code.RegisterSpecList;
 import com.android.dx.rop.cst.Constant;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.util.AnnotatedOutput;
@@ -45,14 +46,14 @@ public final class Form3rc extends InsnFormat {
     @Override
     public String insnArgString(DalvInsn insn) {
         return regRangeString(insn.getRegisters()) + ", " +
-            cstString(insn);
+            insn.cstString();
     }
 
     /** {@inheritDoc} */
     @Override
     public String insnCommentString(DalvInsn insn, boolean noteIndices) {
         if (noteIndices) {
-            return cstComment(insn);
+            return insn.cstComment();
         } else {
             return "";
         }
@@ -80,7 +81,8 @@ public final class Form3rc extends InsnFormat {
         }
 
         if (!((cst instanceof CstMethodRef) ||
-              (cst instanceof CstType))) {
+              (cst instanceof CstType) ||
+              (cst instanceof CstCallSiteRef))) {
             return false;
         }
 

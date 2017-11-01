@@ -27,6 +27,7 @@ import java.util.Comparator;
  */
 final class SortableType {
     public static final Comparator<SortableType> NULLS_LAST_ORDER = new Comparator<SortableType>() {
+        @Override
         public int compare(SortableType a, SortableType b) {
             if (a == b) {
                 return 0;
@@ -46,7 +47,7 @@ final class SortableType {
 
     private final Dex dex;
     private final IndexMap indexMap;
-    private ClassDef classDef;
+    private final ClassDef classDef;
     private int depth = -1;
 
     public SortableType(Dex dex, IndexMap indexMap, ClassDef classDef) {

@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Copyright (C) 2017 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+SDK_VERSION=26
+
+JAVAC_FLAGS="-g -Xlint:-options -source 1.8 -target 1.8 -implicit:none"
+$JAVAC $JAVAC_FLAGS -d . Main.java
+dx --debug --dex --min-sdk-version=${SDK_VERSION} --output="classes.dex" \
+   --dump-method=Main.\$opt\$BasicTest* --dump-width=1000 --dump-to=- Main.class 2>&1

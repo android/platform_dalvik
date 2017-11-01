@@ -52,6 +52,7 @@ public final class MixedItemSection extends Section {
     /** {@code non-null;} sorter which sorts instances by type */
     private static final Comparator<OffsettedItem> TYPE_SORTER =
         new Comparator<OffsettedItem>() {
+        @Override
         public int compare(OffsettedItem item1, OffsettedItem item2) {
             ItemType type1 = item1.itemType();
             ItemType type2 = item2.itemType();

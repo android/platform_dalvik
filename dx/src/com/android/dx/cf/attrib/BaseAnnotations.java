@@ -56,6 +56,7 @@ public abstract class BaseAnnotations extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public final int byteLength() {
         // Add six for the standard attribute header.
         return byteLength + 6;

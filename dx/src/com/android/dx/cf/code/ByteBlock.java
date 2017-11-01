@@ -102,6 +102,7 @@ public final class ByteBlock implements LabeledItem {
      *
      * @return {@code >= 0;} the label
      */
+    @Override
     public int getLabel() {
         return label;
     }

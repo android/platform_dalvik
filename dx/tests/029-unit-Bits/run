@@ -20,6 +20,13 @@ dxjar=$progdir/../framework/dx.jar
 dxtestsjar=$progdir/../framework/dx-tests.jar
 junitjar=$progdir/../framework/junit-host.jar
 
+for i in "$dxtestsjar" "$dxjar" "$junitjar"; do
+    if [ ! -r $i ]; then
+        echo Missing dependency $i. Build dx-tests.
+        exit 1
+    fi
+done
+
 java -cp $dxtestsjar:$dxjar:$junitjar junit.textui.TestRunner com.android.dx.util.BitsTest > unit-out.txt 2>&1
 
 if [ "$?" = "0" ]; then

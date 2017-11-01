@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 class FolderPathElement implements ClassPathElement {
 
-    private File baseFolder;
+    private final File baseFolder;
 
     public FolderPathElement(File baseFolder) {
         this.baseFolder = baseFolder;

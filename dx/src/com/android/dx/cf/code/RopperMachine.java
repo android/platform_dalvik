@@ -21,6 +21,7 @@ import com.android.dx.cf.iface.MethodList;
 import com.android.dx.rop.code.AccessFlags;
 import com.android.dx.rop.code.FillArrayDataInsn;
 import com.android.dx.rop.code.Insn;
+import com.android.dx.rop.code.InvokePolymorphicInsn;
 import com.android.dx.rop.code.PlainCstInsn;
 import com.android.dx.rop.code.PlainInsn;
 import com.android.dx.rop.code.RegOps;
@@ -34,6 +35,7 @@ import com.android.dx.rop.code.ThrowingCstInsn;
 import com.android.dx.rop.code.ThrowingInsn;
 import com.android.dx.rop.code.TranslationAdvice;
 import com.android.dx.rop.cst.Constant;
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstInteger;
 import com.android.dx.rop.cst.CstMethodRef;
@@ -497,9 +499,14 @@ import java.util.ArrayList;
              */
             extraBlockCount++;
 
-            moveResult = new PlainInsn(
-                    Rops.opMoveResult(((CstMethodRef) cst).getPrototype()
-                    .getReturnType()), pos, dest, RegisterSpecList.EMPTY);
+            Type returnType;
+            if (rop.getOpcode() == RegOps.INVOKE_CUSTOM) {
+                returnType = ((CstCallSiteRef) cst).getReturnType();
+            } else {
+                returnType = ((CstMethodRef) cst).getPrototype().getReturnType();
+            }
+            moveResult = new PlainInsn(Rops.opMoveResult(returnType),
+                                       pos, dest, RegisterSpecList.EMPTY);
 
             dest = null;
         } else if (dest != null && rop.canThrow()) {
@@ -606,8 +613,11 @@ import java.util.ArrayList;
             returns = true;
         } else if (cst != null) {
             if (canThrow) {
-                insn =
-                    new ThrowingCstInsn(rop, pos, sources, catches, cst);
+                if (rop.getOpcode() == RegOps.INVOKE_POLYMORPHIC) {
+                    insn = makeInvokePolymorphicInsn(rop, pos, sources, catches, cst);
+                } else {
+                    insn = new ThrowingCstInsn(rop, pos, sources, catches, cst);
+                }
                 catchesUsed = true;
                 primarySuccessorIndex = catches.size();
             } else {
@@ -762,7 +772,7 @@ import java.util.ArrayList;
     /**
      * Gets the register opcode for the given Java opcode.
      *
-     * @param jop {@code >= 0;} the Java opcode
+     * @param jop {@code jop >= 0;} the Java opcode
      * @param cst {@code null-ok;} the constant argument, if any
      * @return {@code >= 0;} the corresponding register opcode
      */
@@ -949,6 +959,12 @@ import java.util.ArrayList;
                         }
                     }
                 }
+                // If the method reference is a signature polymorphic method
+                // substitute invoke-polymorphic for invoke-virtual. This only
+                // affects MethodHandle.invoke and MethodHandle.invokeExact.
+                if (ref.isSignaturePolymorphic()) {
+                    return RegOps.INVOKE_POLYMORPHIC;
+                }
                 return RegOps.INVOKE_VIRTUAL;
             }
             case ByteOps.INVOKESPECIAL: {
@@ -958,10 +974,13 @@ import java.util.ArrayList;
                  * on "invokespecial" as well as section 4.8.2 (7th
                  * bullet point) for the gory details.
                  */
+                /* TODO: Consider checking that invoke-special target
+                 * method is private, or constructor since otherwise ART
+                 * verifier will reject it.
+                 */
                 CstMethodRef ref = (CstMethodRef) cst;
                 if (ref.isInstanceInit() ||
-                    (ref.getDefiningClass().equals(method.getDefiningClass())) ||
-                    !method.getAccSuper()) {
+                    (ref.getDefiningClass().equals(method.getDefiningClass()))) {
                     return RegOps.INVOKE_DIRECT;
                 }
                 return RegOps.INVOKE_SUPER;
@@ -971,6 +990,9 @@ import java.util.ArrayList;
             }
             case ByteOps.INVOKEINTERFACE: {
                 return RegOps.INVOKE_INTERFACE;
+            }
+            case ByteOps.INVOKEDYNAMIC: {
+                return RegOps.INVOKE_CUSTOM;
             }
             case ByteOps.NEW: {
                 return RegOps.NEW_INSTANCE;
@@ -1000,5 +1022,11 @@ import java.util.ArrayList;
         }
 
         throw new RuntimeException("shouldn't happen");
+    }
+
+    private Insn makeInvokePolymorphicInsn(Rop rop, SourcePosition pos, RegisterSpecList sources,
+        TypeList catches, Constant cst) {
+        CstMethodRef cstMethodRef = (CstMethodRef) cst;
+        return new InvokePolymorphicInsn(rop, pos, sources, catches, cstMethodRef);
     }
 }

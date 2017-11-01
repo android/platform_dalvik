@@ -81,6 +81,13 @@ struct FieldMethodInfo {
     const char* signature;
 };
 
+
+/* basic info about a prototype */
+struct ProtoInfo {
+    char* parameterTypes;  // dynamically allocated with malloc
+    const char* returnType;
+};
+
 /*
  * Get 2 little-endian bytes.
  */
@@ -691,6 +698,64 @@ bool getFieldInfo(DexFile* pDexFile, u4 fieldIdx, FieldMethodInfo* pFieldInfo)
     return true;
 }
 
+/*
+ * Get information about a ProtoId.
+ */
+bool getProtoInfo(DexFile* pDexFile, u4 protoIdx, ProtoInfo* pProtoInfo)
+{
+    if (protoIdx >= pDexFile->pHeader->protoIdsSize) {
+        return false;
+    }
+
+    const DexProtoId* protoId = dexGetProtoId(pDexFile, protoIdx);
+
+    // Get string for return type.
+    if (protoId->returnTypeIdx >= pDexFile->pHeader->typeIdsSize) {
+        return false;
+    }
+    pProtoInfo->returnType = dexStringByTypeIdx(pDexFile, protoId->returnTypeIdx);
+
+    // Build string for parameter types.
+    size_t bufSize = 1;
+    char* buf = (char*)malloc(bufSize);
+    if (buf == NULL) {
+        return false;
+    }
+
+    buf[0] = '\0';
+    size_t bufUsed = 1;
+
+    const DexTypeList* paramTypes = dexGetProtoParameters(pDexFile, protoId);
+    if (paramTypes == NULL) {
+        // No parameters.
+        pProtoInfo->parameterTypes = buf;
+        return true;
+    }
+
+    for (u4 i = 0; i < paramTypes->size; ++i) {
+        if (paramTypes->list[i].typeIdx >= pDexFile->pHeader->typeIdsSize) {
+            free(buf);
+            return false;
+        }
+        const char* param = dexStringByTypeIdx(pDexFile, paramTypes->list[i].typeIdx);
+        size_t paramLen = strlen(param);
+        size_t newUsed = bufUsed + paramLen;
+        if (newUsed > bufSize) {
+            char* newBuf = (char*)realloc(buf, newUsed);
+            if (newBuf == NULL) {
+                free(buf);
+                return false;
+            }
+            buf = newBuf;
+            bufSize = newUsed;
+        }
+        memcpy(buf + bufUsed - 1, param, paramLen + 1);
+        bufUsed = newUsed;
+    }
+
+    pProtoInfo->parameterTypes = buf;
+    return true;
+}
 
 /*
  * Look up a class' descriptor.
@@ -718,6 +783,7 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
 
     int outSize;
     u4 index;
+    u4 secondaryIndex = 0;
     u4 width;
 
     /* TODO: Make the index *always* be in field B, to simplify this code. */
@@ -740,6 +806,12 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
     case kFmt22c:
     case kFmt22cs:
         index = pDecInsn->vC;
+        width = 4;
+        break;
+    case kFmt45cc:
+    case kFmt4rcc:
+        index = pDecInsn->vB;  // method index
+        secondaryIndex = pDecInsn->arg[4];  // proto index
         width = 4;
         break;
     default:
@@ -825,6 +897,45 @@ static char* indexString(DexFile* pDexFile, const DecodedInstruction* pDecInsn, 
         break;
     case kIndexFieldOffset:
         outSize = snprintf(buf, bufSize, "[obj+%0*x]", width, index);
+        break;
+    case kIndexMethodAndProtoRef:
+        {
+            FieldMethodInfo methInfo;
+            ProtoInfo protoInfo;
+            protoInfo.parameterTypes = NULL;
+            if (getMethodInfo(pDexFile, index, &methInfo) &&
+                getProtoInfo(pDexFile, secondaryIndex, &protoInfo)) {
+                outSize = snprintf(buf, bufSize, "%s.%s:%s, (%s)%s // method@%0*x, proto@%0*x",
+                                   methInfo.classDescriptor, methInfo.name, methInfo.signature,
+                                   protoInfo.parameterTypes, protoInfo.returnType,
+                                   width, index, width, secondaryIndex);
+            } else {
+                outSize = snprintf(buf, bufSize, "<method?>, <proto?> // method@%0*x, proto@%0*x",
+                                   width, index, width, secondaryIndex);
+            }
+            free(protoInfo.parameterTypes);
+        }
+        break;
+    case kIndexCallSiteRef:
+        outSize = snprintf(buf, bufSize, "call_site@%0*x", width, index);
+        break;
+    case kIndexMethodHandleRef:
+        outSize = snprintf(buf, bufSize, "methodhandle@%0*x", width, index);
+        break;
+    case kIndexProtoRef:
+        {
+            ProtoInfo protoInfo;
+            if (getProtoInfo(pDexFile, index, &protoInfo)) {
+                outSize = snprintf(buf, bufSize, "(%s)%s // proto@%0*x",
+                                   protoInfo.parameterTypes, protoInfo.returnType,
+                                   width, index);
+
+            } else {
+                outSize = snprintf(buf, bufSize, "<proto?> // proto@%0*x",
+                                   width, secondaryIndex);
+            }
+            free(protoInfo.parameterTypes);
+        }
         break;
     default:
         outSize = snprintf(buf, bufSize, "<?>");
@@ -1041,6 +1152,26 @@ void dumpInstruction(DexFile* pDexFile, const DexCode* pCode, int insnIdx,
         }
         break;
     case kFmt00x:        // unknown op or breakpoint
+        break;
+    case kFmt45cc:
+        {
+            fputs("  {", stdout);
+            printf("v%d", pDecInsn->vC);
+            for (int i = 0; i < (int) pDecInsn->vA - 1; ++i) {
+                printf(", v%d", pDecInsn->arg[i]);
+            }
+            printf("}, %s", indexBuf);
+        }
+        break;
+    case kFmt4rcc:
+        {
+            fputs("  {", stdout);
+            printf("v%d", pDecInsn->vC);
+            for (int i = 1; i < (int) pDecInsn->vA; ++i) {
+                printf(", v%d", pDecInsn->vC + i);
+            }
+            printf("}, %s", indexBuf);
+        }
         break;
     default:
         printf(" ???");
@@ -1533,15 +1664,6 @@ bail:
 
 
 /*
- * Advance "ptr" to ensure 32-bit alignment.
- */
-static inline const u1* align32(const u1* ptr)
-{
-    return (u1*) (((uintptr_t) ptr + 3) & ~0x03);
-}
-
-
-/*
  * Dump a map in the "differential" format.
  *
  * TODO: show a hex dump of the compressed data.  (We can show the
@@ -1733,6 +1855,252 @@ void dumpRegisterMaps(DexFile* pDexFile)
     }
 }
 
+static const DexMapItem* findMapItem(const DexFile* pDexFile, u4 type)
+{
+    const u4 offset = pDexFile->pHeader->mapOff;
+    const DexMapList* list = (const DexMapList*)(pDexFile->baseAddr + offset);
+    for (u4 i = 0; i < list->size; ++i) {
+        if (list->list[i].type == type) {
+            return &list->list[i];
+        }
+    }
+    return nullptr;
+}
+
+static void dumpMethodHandles(DexFile* pDexFile)
+{
+    const DexMapItem* item = findMapItem(pDexFile, kDexTypeMethodHandleItem);
+    if (item == nullptr) return;
+    const DexMethodHandleItem* method_handles =
+            (const DexMethodHandleItem*)(pDexFile->baseAddr + item->offset);
+    for (u4 i = 0; i < item->size; ++i) {
+        const DexMethodHandleItem& mh = method_handles[i];
+        const char* type;
+        bool is_invoke;
+        bool is_static;
+        switch ((MethodHandleType) mh.methodHandleType) {
+            case MethodHandleType::STATIC_PUT:
+                type = "put-static";
+                is_invoke = false;
+                is_static = true;
+                break;
+            case MethodHandleType::STATIC_GET:
+                type = "get-static";
+                is_invoke = false;
+                is_static = true;
+                break;
+            case MethodHandleType::INSTANCE_PUT:
+                type = "put-instance";
+                is_invoke = false;
+                is_static = false;
+                break;
+            case MethodHandleType::INSTANCE_GET:
+                type = "get-instance";
+                is_invoke = false;
+                is_static = false;
+                break;
+            case MethodHandleType::INVOKE_STATIC:
+                type = "invoke-static";
+                is_invoke = true;
+                is_static = true;
+                break;
+            case MethodHandleType::INVOKE_INSTANCE:
+                type = "invoke-instance";
+                is_invoke = true;
+                is_static = false;
+                break;
+            case MethodHandleType::INVOKE_CONSTRUCTOR:
+                type = "invoke-constructor";
+                is_invoke = true;
+                is_static = false;
+                break;
+            case MethodHandleType::INVOKE_DIRECT:
+                type = "invoke-direct";
+                is_invoke = true;
+                is_static = false;
+                break;
+            case  MethodHandleType::INVOKE_INTERFACE:
+                type = "invoke-interface";
+                is_invoke = true;
+                is_static = false;
+                break;
+            default:
+                printf("Unknown method handle type 0x%02x, skipped.", mh.methodHandleType);
+                continue;
+        }
+
+        FieldMethodInfo info;
+        if (is_invoke) {
+            if (!getMethodInfo(pDexFile, mh.fieldOrMethodIdx, &info)) {
+                printf("Unknown method handle target method@%04x, skipped.", mh.fieldOrMethodIdx);
+                continue;
+            }
+        } else {
+            if (!getFieldInfo(pDexFile, mh.fieldOrMethodIdx, &info)) {
+                printf("Unknown method handle target field@%04x, skipped.", mh.fieldOrMethodIdx);
+                continue;
+            }
+        }
+
+        const char* instance = is_static ? "" : info.classDescriptor;
+
+        if (gOptions.outputFormat == OUTPUT_XML) {
+            printf("<method_handle index index=\"%u\"\n", i);
+            printf(" type=\"%s\"\n", type);
+            printf(" target_class=\"%s\"\n", info.classDescriptor);
+            printf(" target_member=\"%s\"\n", info.name);
+            printf(" target_member_type=\"%c%s%s\"\n",
+                   info.signature[0], instance, info.signature + 1);
+            printf("</method_handle>\n");
+        } else {
+            printf("Method Handle #%u:\n", i);
+            printf("  type        : %s\n", type);
+            printf("  target      : %s %s\n", info.classDescriptor, info.name);
+            printf("  target_type : %c%s%s\n", info.signature[0], instance, info.signature + 1);
+        }
+    }
+}
+
+/* Helper for dumpCallSites(), which reads a 1- to 8- byte signed
+ * little endian value. */
+static u8 readSignedLittleEndian(const u1** pData, u4 size) {
+    const u1* data = *pData;
+    u8 result = 0;
+    u4 i;
+
+    for (i = 0; i < size; i++) {
+        result = (result >> 8) | (((int64_t)*data++) << 56);
+    }
+
+    result >>= (8 - size) * 8;
+    *pData = data;
+    return result;
+}
+
+/* Helper for dumpCallSites(), which reads a 1- to 8- byte unsigned
+ * little endian value. */
+static u8 readUnsignedLittleEndian(const u1** pData, u4 size, bool fillOnRight = false) {
+    const u1* data = *pData;
+    u8 result = 0;
+    u4 i;
+
+    for (i = 0; i < size; i++) {
+        result = (result >> 8) | (((u8)*data++) << 56);
+    }
+
+    if (!fillOnRight) {
+        result >>= (8u - size) * 8;
+    }
+
+    *pData = data;
+    return result;
+}
+
+static void dumpCallSites(DexFile* pDexFile)
+{
+    const DexMapItem* item = findMapItem(pDexFile, kDexTypeCallSiteIdItem);
+    if (item == nullptr) return;
+    const DexCallSiteId* ids = (const DexCallSiteId*)(pDexFile->baseAddr + item->offset);
+    for (u4 index = 0; index < item->size; ++index) {
+        bool doXml = (gOptions.outputFormat == OUTPUT_XML);
+        printf(doXml ? "<call_site index=\"%u\" offset=\"%u\">\n" : "Call Site #%u // offset %u\n",
+               index, ids[index].callSiteOff);
+        const u1* data = pDexFile->baseAddr + ids[index].callSiteOff;
+        u4 count = readUnsignedLeb128(&data);
+        for (u4 i = 0; i < count; ++i) {
+            printf(doXml ? "<link_argument index=\"%u\" " : "  link_argument[%u] : ", i);
+            u1 headerByte = *data++;
+            u4 valueType = headerByte & kDexAnnotationValueTypeMask;
+            u4 valueArg = headerByte >> kDexAnnotationValueArgShift;
+            switch (valueType) {
+                case kDexAnnotationByte: {
+                    printf(doXml ? "type=\"byte\" value=\"%d\"/>" : "%d (byte)", (int)*data++);
+                    break;
+                }
+                case kDexAnnotationShort: {
+                    printf(doXml ? "type=\"short\" value=\"%d\"/>" : "%d (short)",
+                           (int) readSignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationChar: {
+                    printf(doXml ? "type=\"short\" value=\"%u\"/>" : "%u (char)",
+                           (u2) readUnsignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationInt: {
+                    printf(doXml ? "type=\"int\" value=\"%d\"/>" : "%d (int)",
+                           (int) readSignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationLong: {
+                    printf(doXml ? "type=\"long\" value=\"%" PRId64 "\"/>" : "%" PRId64 " (long)",
+                           (int64_t) readSignedLittleEndian(&data, valueArg + 1));
+                    break;
+                }
+                case kDexAnnotationFloat: {
+                    u4 rawValue = (u4) (readUnsignedLittleEndian(&data, valueArg + 1, true) >> 32);
+                    printf(doXml ? "type=\"float\" value=\"%g\"/>" : "%g (float)",
+                           *((float*) &rawValue));
+                    break;
+                }
+                case kDexAnnotationDouble: {
+                    u8 rawValue = readUnsignedLittleEndian(&data, valueArg + 1, true);
+                    printf(doXml ? "type=\"double\" value=\"%g\"/>" : "%g (double)",
+                           *((double*) &rawValue));
+                    break;
+                }
+                case kDexAnnotationMethodType: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    ProtoInfo protoInfo;
+                    memset(&protoInfo, 0, sizeof(protoInfo));
+                    getProtoInfo(pDexFile, idx, &protoInfo);
+                    printf(doXml ? "type=\"MethodType\" value=\"(%s)%s\"/>" : "(%s)%s (MethodType)",
+                           protoInfo.parameterTypes, protoInfo.returnType);
+                    free(protoInfo.parameterTypes);
+                    break;
+                }
+                case kDexAnnotationMethodHandle: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    printf(doXml ? "type=\"MethodHandle\" value=\"%u\"/>" : "%u (MethodHandle)",
+                           idx);
+                    break;
+                }
+                case kDexAnnotationString: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    printf(doXml ? "type=\"String\" value=\"%s\"/>" : "%s (String)",
+                           dexStringById(pDexFile, idx));
+                    break;
+                }
+                case kDexAnnotationType: {
+                    u4 idx = (u4) readUnsignedLittleEndian(&data, valueArg + 1);
+                    printf(doXml ? "type=\"Class\" value=\"%s\"/>" : "%s (Class)",
+                           dexStringByTypeIdx(pDexFile, idx));
+                    break;
+                }
+                case kDexAnnotationNull: {
+                    printf(doXml ? "type=\"null\" value=\"null\"/>" : "null (null)");
+                    break;
+                }
+                case kDexAnnotationBoolean: {
+                    printf(doXml ? "type=\"boolean\" value=\"%s\"/>" : "%s (boolean)",
+                           (valueArg & 1) == 0 ? "false" : "true");
+                    break;
+                }
+                default:
+                    // Other types are not anticipated being reached here.
+                    printf("Unexpected type found, bailing on call site info.\n");
+                    i = count;
+                    break;
+            }
+            printf("\n");
+        }
+
+        if (doXml) {
+            printf("</callsite>\n");
+        }
+    }
+}
+
 /*
  * Dump the requested sections of the file.
  */
@@ -1765,6 +2133,9 @@ void processDexFile(const char* fileName, DexFile* pDexFile)
 
         dumpClass(pDexFile, i, &package);
     }
+
+    dumpMethodHandles(pDexFile);
+    dumpCallSites(pDexFile);
 
     /* free the last one allocated */
     if (package != NULL) {

@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+JAVAC_SOURCE=1.8
+JAVAC_TARGET=1.8
+
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} Test.java
+dx --dex --output=classes.dex *.class
+
+# Run the test with art. The original bug leading to this test
+# (b/63722269) would fail verification on art due to dx generating
+# bytecode that corrupted a register pair holding a long in
+# Test;.testMethod.
+art -classpath classes.dex Test 1>art.out.log 2>art.err.log
+if [[ $? != 0 ]]; then
+  # Only print stderr output from art if art fails to run test as
+  # stderr output is non-deterministic (timestamps, source line info).
+  cat art.err.log
+fi
+
+# Wrapper script will compare output from test execution with
+# expected.txt.
+cat art.out.log

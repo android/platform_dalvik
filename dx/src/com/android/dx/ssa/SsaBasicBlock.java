@@ -48,7 +48,7 @@ public final class SsaBasicBlock {
         new LabelComparator();
 
     /** {@code non-null;} insn list associated with this instance */
-    private ArrayList<SsaInsn> insns;
+    private final ArrayList<SsaInsn> insns;
 
     /** {@code non-null;} predecessor set (by block list index) */
     private BitSet predecessors;
@@ -69,13 +69,13 @@ public final class SsaBasicBlock {
     private int primarySuccessor = -1;
 
     /** label of block in rop form */
-    private int ropLabel;
+    private final int ropLabel;
 
     /** {@code non-null;} method we belong to */
-    private SsaMethod parent;
+    private final SsaMethod parent;
 
     /** our index into parent.getBlock() */
-    private int index;
+    private final int index;
 
     /** list of dom children */
     private final ArrayList<SsaBasicBlock> domChildren;
@@ -91,12 +91,6 @@ public final class SsaBasicBlock {
      * phi-removal process. Retained for subsequent move scheduling.
      */
     private int movesFromPhisAtBeginning = 0;
-
-    /**
-     * contains last computed value of reachability of this block, or -1
-     * if reachability hasn't been calculated yet
-     */
-    private int reachable = -1;
 
     /**
      * {@code null-ok;} indexed by reg: the regs that are live-in at
@@ -843,28 +837,6 @@ public final class SsaBasicBlock {
     }
 
     /**
-     * Returns true if this block was last calculated to be reachable.
-     * Recalculates reachability if value has never been computed.
-     *
-     * @return {@code true} if reachable
-     */
-    public boolean isReachable() {
-        if (reachable == -1) {
-            parent.computeReachability();
-        }
-        return (reachable == 1);
-    }
-
-    /**
-     * Sets reachability of block to specified value
-     *
-     * @param reach new value of reachability for block
-     */
-    public void setReachable(int reach) {
-        reachable = reach;
-    }
-
-    /**
      * Sorts move instructions added via {@code addMoveToEnd} during
      * phi removal so that results don't overwrite sources that are used.
      * For use after all phis have been removed and all calls to
@@ -1015,6 +987,7 @@ public final class SsaBasicBlock {
     public static final class LabelComparator
             implements Comparator<SsaBasicBlock> {
         /** {@inheritDoc} */
+        @Override
         public int compare(SsaBasicBlock b1, SsaBasicBlock b2) {
             int label1 = b1.ropLabel;
             int label2 = b2.ropLabel;

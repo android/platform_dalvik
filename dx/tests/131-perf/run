@@ -17,9 +17,12 @@
 # Stop if something fails.
 set -e
 
+JAVAC_SOURCE=1.6
+JAVAC_TARGET=1.6
+
 # Write out classes
 
-${JAVAC} ClassGen.java
+${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} ClassGen.java
 
 mkdir src
 mkdir classes
@@ -60,29 +63,24 @@ METHODS=6
 
 first=1;
 while [ $TEST_SIZE -le $LIMIT ]; do
+  echo $TEST_SIZE / $LIMIT
   rm -rf out
   mkdir out
 
   sleep 2
-  java -classpath . ClassGen $first $TEST_SIZE $FIELDS $METHODS
+  java -classpath . ClassGen $first $TEST_SIZE $FIELDS $METHODS || exit 1
   first=`expr $TEST_SIZE + 1`
 
-  ${JAVAC} -d classes `find src -name '*.java'`
+  ${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'` || exit 1
   (cd classes; jar cf ../x.jar `find . -name '*.class'`)
   sleep 3
 
   start=`date +'%s%N'`
-  $TASKSET dx -JXmx$MEM -JXms$MEM $GC --dex $EXTRA --no-optimize $MULTIDEX $THREADS --output=out x.jar
+  $TASKSET dx -JXmx$MEM -JXms$MEM $GC --dex $EXTRA --no-optimize $MULTIDEX $THREADS --output=out x.jar || exit 1
   end=`date +'%s%N'`
   nsec=`expr $end - $start`
   msec=`expr $nsec / 1000000`
-  echo "Classes/msec $TEST_SIZE $msec"
-
   TEST_SIZE=`expr $TEST_SIZE + $STEP`
 done
 
-if [ "$?" = "1" ]; then
-    echo "Yay!"
-else
-    cat unit-out.txt
-fi
+echo Yay!

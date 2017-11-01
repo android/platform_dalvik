@@ -74,6 +74,7 @@ public final class RawAttribute extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         return data.size() + 6;
     }

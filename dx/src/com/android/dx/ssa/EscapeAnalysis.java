@@ -97,11 +97,11 @@ public class EscapeAnalysis {
     }
 
     /** method we're processing */
-    private SsaMethod ssaMeth;
+    private final SsaMethod ssaMeth;
     /** ssaMeth.getRegCount() */
-    private int regCount;
+    private final int regCount;
     /** Lattice values for each object register group */
-    private ArrayList<EscapeSet> latticeValues;
+    private final ArrayList<EscapeSet> latticeValues;
 
     /**
      * Constructs an instance.
@@ -689,17 +689,21 @@ public class EscapeAnalysis {
      */
     private void run() {
         ssaMeth.forEachBlockDepthFirstDom(new SsaBasicBlock.Visitor() {
+            @Override
             public void visitBlock (SsaBasicBlock block,
                     SsaBasicBlock unused) {
                 block.forEachInsn(new SsaInsn.Visitor() {
+                    @Override
                     public void visitMoveInsn(NormalSsaInsn insn) {
                         // do nothing
                     }
 
+                    @Override
                     public void visitPhiInsn(PhiInsn insn) {
                         // do nothing
                     }
 
+                    @Override
                     public void visitNonMoveInsn(NormalSsaInsn insn) {
                         processInsn(insn);
                     }

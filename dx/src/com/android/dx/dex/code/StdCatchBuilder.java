@@ -71,11 +71,13 @@ public final class StdCatchBuilder implements CatchBuilder {
     }
 
     /** {@inheritDoc} */
+    @Override
     public CatchTable build() {
         return build(method, order, addresses);
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasAnyCatches() {
         BasicBlockList blocks = method.getBlocks();
         int size = blocks.size();
@@ -92,6 +94,7 @@ public final class StdCatchBuilder implements CatchBuilder {
     }
 
     /** {@inheritDoc} */
+    @Override
     public HashSet<Type> getCatchTypes() {
         HashSet<Type> result = new HashSet<Type>(20);
         BasicBlockList blocks = method.getBlocks();
@@ -262,7 +265,7 @@ public final class StdCatchBuilder implements CatchBuilder {
     }
 
     /**
-     * Makes a {@link CatchTable#Entry} for the given block range and
+     * Makes a {@link CatchTable.Entry} for the given block range and
      * handlers.
      *
      * @param start {@code non-null;} the start block for the range (inclusive)

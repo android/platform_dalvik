@@ -16,10 +16,10 @@
 
 package com.android.dx.dex.file;
 
+import com.android.dex.Leb128;
 import com.android.dex.util.ByteArrayByteInput;
 import com.android.dex.util.ByteInput;
 import com.android.dex.util.ExceptionWithContext;
-import com.android.dex.Leb128;
 import com.android.dx.dex.code.DalvCode;
 import com.android.dx.dex.code.DalvInsnList;
 import com.android.dx.dex.code.LocalList;
@@ -182,6 +182,7 @@ public class DebugInfoDecoder {
             this.signatureIndex = signatureIndex;
         }
 
+        @Override
         public String toString() {
             return String.format("[%x %s v%d %04x %04x %04x]",
                     address, isStart ? "start" : "end", reg,

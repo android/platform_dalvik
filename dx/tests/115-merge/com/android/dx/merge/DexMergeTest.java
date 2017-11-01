@@ -17,6 +17,7 @@
 package com.android.dx.merge;
 
 import com.android.dex.Dex;
+import com.android.dx.command.dexer.DxContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -141,11 +142,13 @@ public final class DexMergeTest extends TestCase {
 
         Dex dexA = resourceToDexBuffer("/testdata/Basic.dex");
         Dex dexB = resourceToDexBuffer("/testdata/TryCatchFinally.dex");
-        Dex merged = new DexMerger(new Dex[]{dexA, dexB}, CollisionPolicy.KEEP_FIRST).merge();
+        Dex merged = new DexMerger(new Dex[]{dexA, dexB}, CollisionPolicy.KEEP_FIRST,
+                                   new DxContext()).merge();
 
         int maxLength = 0;
         for (int i = 0; i < steps; i++) {
-            DexMerger dexMerger = new DexMerger(new Dex[]{dexA, merged}, CollisionPolicy.KEEP_FIRST);
+            DexMerger dexMerger = new DexMerger(new Dex[]{dexA, merged},
+                                                CollisionPolicy.KEEP_FIRST, new DxContext());
             dexMerger.setCompactWasteThreshold(compactWasteThreshold);
             merged = dexMerger.merge();
             maxLength = Math.max(maxLength, merged.getLength());
@@ -158,7 +161,8 @@ public final class DexMergeTest extends TestCase {
     public ClassLoader mergeAndLoad(String dexAResource, String dexBResource) throws Exception {
         Dex dexA = resourceToDexBuffer(dexAResource);
         Dex dexB = resourceToDexBuffer(dexBResource);
-        Dex merged = new DexMerger(new Dex[]{dexA, dexB}, CollisionPolicy.KEEP_FIRST).merge();
+        Dex merged = new DexMerger(new Dex[]{dexA, dexB}, CollisionPolicy.KEEP_FIRST,
+                                   new DxContext()).merge();
         File mergedDex = File.createTempFile("DexMergeTest", ".classes.dex");
         merged.writeTo(mergedDex);
         File mergedJar = dexToJar(mergedDex);

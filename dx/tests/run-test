@@ -33,9 +33,20 @@ cd "${progdir}"
 progdir=`pwd`
 prog="${progdir}"/`basename "${prog}"`
 
-export JAVAC="${progdir}/../../../prebuilt/common/openjdk/bin/javac"
+if [[ -z "${JAVA_HOME}" ]]; then
+    unix=$(uname | tr '[A-Z]' '[a-z]')
+    JAVA_HOME="${progdir}/../../../prebuilts/jdk/jdk8/${unix}-x86"
+fi
+
+if [[ ! -d "${JAVA_HOME}" ]]; then
+    echo "Missing JAVA_HOME directory: $JAVA_HOME" 1>&2
+    exit 1
+fi
+
+export JAVAC="${JAVA_HOME}/bin/javac"
 if [ "!" -e "$JAVAC" ]; then
-    JAVAC="javac"
+    echo "Missing JAVAC executable: ${JAVAC}" 1>&2
+    exit 1
 fi
 
 info="info.txt"
@@ -44,35 +55,41 @@ expected="expected.txt"
 output="out.txt"
 
 dev_mode="no"
-if [ "x$1" = "x--dev" ]; then
-    dev_mode="yes"
-    shift
-fi
-
 update_mode="no"
-if [ "x$1" = "x--update" ]; then
-    update_mode="yes"
-    shift
+tmpdir=/tmp/test-$$
+usage="no"
+
+while [[ "x$1" = "x-"* ]]; do
+    case $1 in
+         --dev) dev_mode="yes" ;;
+         --output_dir)
+             tmpdir=$2
+             shift ;;
+         --update) update_mode="yes" ;;
+         --help) usage="yes" ;;
+         *) usage="yes" ;;
+     esac
+     shift
+done
+
+if [ "x$1" = "x" ]; then
+    testdir=`basename "$oldwd"`
+else
+    testdir="$1"
 fi
 
-usage="no"
-if [ "x$1" = "x--help" ]; then
-    usage="yes"
-else
-    if [ "x$1" = "x" ]; then
-        testdir=`basename "$oldwd"`
-    else
-        testdir="$1"
+if [ '!' -d "$testdir" ]; then
+    td2=`echo ${testdir}-*`
+    if [ '!' -d "$td2" ]; then
+        echo "${testdir}: no such test directory" 1>&2
+        usage="yes"
     fi
+    testdir="$td2"
+fi
 
-    if [ '!' -d "$testdir" ]; then
-        td2=`echo ${testdir}-*`
-        if [ '!' -d "$td2" ]; then
-            echo "${testdir}: no such test directory" 1>&2
-            usage="yes"
-        fi
-        testdir="$td2"
-    fi
+if [ "$update_mode" = "yes" -a "$dev_mode" = "yes" ] ; then
+    echo Error: --dev is incompatible with --update. 1>&2
+    usage="yes"
 fi
 
 if [ "$usage" = "yes" ]; then
@@ -84,40 +101,49 @@ if [ "$usage" = "yes" ]; then
         echo "  $prog --dev testname     Development mode (dump to stdout)."
         echo "  $prog --update testname  Update mode (replace expected.txt)."
         echo "  Omitting the test name uses the current directory as the test."
+        echo "options:"
+        echo "        --output_dir <dir> Use <dir> for the test outputs."
     ) 1>&2
     exit 1
 fi
 
-td_info="$testdir"/"$info"
-td_run="$testdir"/"$run"
-td_expected="$testdir"/"$expected"
+td_info="${testdir}/${info}"
+td_run="${testdir}/${run}"
+td_expected="${testdir}/${expected}"
 
-tmpdir=/tmp/test-$$
-
-if [ '!' '(' -r "$td_info" -a -r "$td_run" -a -r "$td_expected" ')' ]; then
-    echo "${testdir}: missing files" 1>&2
-    exit 1
-fi
+for td_file in "$td_info" "$td_run" "$td_expected"; do
+    if [[ ! -r "$td_file" ]]; then
+        echo "${testdir}: missing file $td_file" 1>&2
+        exit 1
+    fi
+done
 
 # copy the test to a temp dir and run it
-
-echo "${testdir}: running..." 1>&2
-
-rm -rf "$tmpdir"
-cp -Rp "$testdir" "$tmpdir"
+if [ -d "$tmpdir" ]; then
+    rm -rf "$tmpdir" || exit 1
+fi
+output_parent=`dirname ${tmpdir}`
+mkdir -p "${output_parent}" || exit 1
+cp -Rp "$testdir" "$tmpdir" || exit 1
 cd "$tmpdir"
 chmod 755 "$run"
 
-#PATH="${progdir}/../build/bin:${PATH}"
-
+echo "${testdir}: running..." 1>&2
 good="no"
 if [ "$dev_mode" = "yes" ]; then
     "./$run" 2>&1
     echo "exit status: $?" 1>&2
     good="yes"
 elif [ "$update_mode" = "yes" ]; then
-    "./$run" >"${progdir}/$td_expected" 2>&1
-    good="yes"
+    "./$run" >"$output" 2>&1
+    if [[ $? == 0 ]]; then
+        good="yes"
+        mv "$output" "${progdir}/${td_expected}"
+    else
+        echo "Test failed during update."
+        good="no"
+    fi
+
 else
     "./$run" >"$output" 2>&1
     cmp -s "$expected" "$output"

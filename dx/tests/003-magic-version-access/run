@@ -19,31 +19,44 @@
 # trace, which is unpredictable and doesn't work well with
 # expected.txt vs. out.txt comparisons.
 
+function check_rejected {
+  dx --dump --width=100 --strict $1
+}
+
+function check_accepted {
+  dx --debug --dump --width=100 $1
+}
+
 # Bad magic (throws an expection)
-dx         --dump --strict class-bad-magic.txt
+check_rejected class-bad-magic.txt
 
 # Too small (throws an exception)
-dx         --dump --strict class-version-44.0.txt
-dx         --dump --strict class-version-44.65535.txt
+check_rejected class-version-44.0.txt
+check_rejected class-version-44.65535.txt
 
 # Just right
-dx --debug --dump --width=100 class-version-45.0.txt
-dx --debug --dump --width=100 class-version-45.65535.txt
-dx --debug --dump --width=100 class-version-48.0.txt
-dx --debug --dump --width=100 class-version-48.65535.txt
-dx --debug --dump --width=100 class-version-49.0.txt
-dx --debug --dump --width=100 class-version-49.1.txt
-dx --debug --dump --width=100 class-version-49.65535.txt
-dx --debug --dump --width=100 class-version-50.0.txt
-dx --debug --dump --width=100 class-version-50.1.txt
-dx --debug --dump --width=100 class-version-50.65535.txt
-dx --debug --dump --width=100 class-version-51.0.txt
+check_accepted class-version-45.0.txt
+check_accepted class-version-45.65535.txt
+check_accepted class-version-48.0.txt
+check_accepted class-version-48.65535.txt
+check_accepted class-version-49.0.txt
+check_accepted class-version-49.1.txt
+check_accepted class-version-49.65535.txt
+check_accepted class-version-50.0.txt
+check_accepted class-version-50.1.txt
+check_accepted class-version-50.65535.txt
+check_accepted class-version-51.0.txt
+check_accepted class-version-51.65535.txt
+check_accepted class-version-52.0.txt
+check_accepted class-version-52.1.txt
+check_accepted class-version-52.65535.txt
+check_accepted class-version-53.0.txt
 
 # Too big (throws an exception)
-dx         --dump --strict class-version-51.1.txt
-dx         --dump --strict class-version-51.65535.txt
-dx         --dump --strict class-version-52.0.txt
+check_rejected class-version-53.1.txt
+check_rejected class-version-53.65535.txt
+check_rejected class-version-54.0.txt
 
 # Show that we can dump the access flags even when they
 # don't make any sense.
-dx --debug --dump --width=100 small-class.txt
+check_accepted small-class.txt

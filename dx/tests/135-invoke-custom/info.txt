@@ -1,0 +1,6 @@
+This test checks the conversion of invokedynamic in classfiles to
+invoke-custom in DEX files.
+
+When modifying this test please ensure that the following produce the same output:
+$ art -cp invokecustom.dex invokecustom.InvokeCustom
+$ java -cp invokecustom.jar invokecustom.InvokeCustom

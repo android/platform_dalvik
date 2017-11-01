@@ -69,6 +69,7 @@ public final class EncodedMethod extends EncodedMember
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean equals(Object other) {
         if (! (other instanceof EncodedMethod)) {
             return false;
@@ -85,6 +86,7 @@ public final class EncodedMethod extends EncodedMember
      * case that two different items with the same method constant
      * ever appear in the same list (or same file, even).</p>
      */
+    @Override
     public int compareTo(EncodedMethod other) {
         return method.compareTo(other.method);
     }
@@ -92,7 +94,7 @@ public final class EncodedMethod extends EncodedMember
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
 
         sb.append(getClass().getName());
         sb.append('{');
@@ -124,6 +126,7 @@ public final class EncodedMethod extends EncodedMember
     }
 
     /** {@inheritDoc} */
+    @Override
     public final String toHuman() {
         return method.toHuman();
     }

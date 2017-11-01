@@ -22,7 +22,6 @@ import com.android.dx.rop.cst.CstFieldRef;
 import com.android.dx.rop.cst.CstMethodRef;
 import com.android.dx.util.AnnotatedOutput;
 import com.android.dx.util.Hex;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -241,6 +240,7 @@ public final class AnnotationsDirectoryItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addContents(DexFile file) {
         MixedItemSection wordData = file.getWordData();
 

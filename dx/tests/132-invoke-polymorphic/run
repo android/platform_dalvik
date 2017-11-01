@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Copyright (C) 2017 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+UNSUPPORTED_SDK_VERSION=20
+SUPPORTED_SDK_VERSION=26
+
+$JAVAC -source 1.7 -target 1.7 -g -d . TestInvokePolymorphic.java
+
+echo Trying SDK version $UNSUPPORTED_SDK_VERSION with invoke-polymorphic.
+dx --min-sdk-version=$UNSUPPORTED_SDK_VERSION --debug --dex --dump-to=- --dump-width=1000 TestInvokePolymorphic.class 2>&1 | grep "SimException"
+if [ $? != 0 ] ; then
+    echo Unexpected success with SDK version $UNSUPPORTED_SDK_VERSION
+    exit 1
+fi
+
+dx --min-sdk-version=$SUPPORTED_SDK_VERSION --debug --dex --dump-to=- --dump-width=1000 TestInvokePolymorphic.class

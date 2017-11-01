@@ -16,6 +16,7 @@
 
 package com.android.dx.cf.iface;
 
+import com.android.dx.cf.code.BootstrapMethodsList;
 import com.android.dx.rop.cst.ConstantPool;
 import com.android.dx.rop.cst.CstString;
 import com.android.dx.rop.cst.CstType;
@@ -110,7 +111,14 @@ public interface ClassFile extends HasAttribute {
      *
      * @return {@code non-null;} the list of attributes
      */
+    @Override
     public AttributeList getAttributes();
+
+    /**
+     * Gets the bootstrap method {@code attributes}.
+     * @return {@code non-null;} the list of bootstrap methods
+     */
+    public BootstrapMethodsList getBootstrapMethods();
 
     /**
      * Gets the name out of the {@code SourceFile} attribute of this

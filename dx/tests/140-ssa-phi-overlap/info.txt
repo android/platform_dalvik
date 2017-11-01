@@ -1,0 +1,4 @@
+This test comes from jfuzz (b/63722269). The SSA optimizer was failing
+to identify interference between source and result registers for phi
+functions in the same basic block and generate a dex file with
+conflicting moves which was rejected by ART.

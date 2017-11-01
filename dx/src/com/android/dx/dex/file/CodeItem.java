@@ -104,6 +104,7 @@ public final class CodeItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addContents(DexFile file) {
         MixedItemSection byteData = file.getByteData();
         TypeIdsSection typeIds = file.getTypeIds();
@@ -189,6 +190,7 @@ public final class CodeItem extends OffsettedItem {
          * constants need to be assigned indices.
          */
         code.assignIndices(new DalvCode.AssignIndicesCallback() {
+                @Override
                 public int getIndex(Constant cst) {
                     IndexedItem item = file.findItemOrNull(cst);
                     if (item == null) {

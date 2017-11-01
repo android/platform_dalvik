@@ -1,0 +1,364 @@
+Trying SDK version 20 with invoke-polymorphic.
+com.android.dx.cf.code.SimException: ERROR in VarHandleDexTest.main:([Ljava/lang/String;)V: invoking a signature-polymorphic requires --min-sdk-version >= 26 (currently 20)
+java.lang.invoke.VarHandle proto(java.lang.Class)
+java.lang.invoke.VarHandle proto(java.lang.Class, java.lang.String, java.lang.Class)
+java.lang.invoke.VarHandle.compareAndExchange:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.compareAndExchange:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.compareAndExchange:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.compareAndExchange:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.compareAndExchangeAcquire:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.compareAndExchangeRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.compareAndExchangeRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.compareAndExchangeRelease:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.compareAndExchangeRelease:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.compareAndSet:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+java.lang.invoke.VarHandle.compareAndSet:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+java.lang.invoke.VarHandle.get:(LVarHandleDexTest;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.get:([Ljava/lang/String;I)Ljava/lang/String;
+java.lang.invoke.VarHandle.get:(LVarHandleDexTest;)V
+java.lang.invoke.VarHandle.get:([Ljava/lang/String;I)V
+java.lang.invoke.VarHandle.get:(LVarHandleDexTest;)Z
+java.lang.invoke.VarHandle.getAcquire:(LVarHandleDexTest;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/String;I)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAcquire:(LVarHandleDexTest;)V
+java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/String;I)V
+java.lang.invoke.VarHandle.getAcquire:(LVarHandleDexTest;)Z
+java.lang.invoke.VarHandle.getAndAdd:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndAdd:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndAdd:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndAdd:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndAddAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndAddAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndAddAcquire:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndAddAcquire:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndAddRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndAddRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndAddRelease:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndAddRelease:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseAnd:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseAnd:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseAnd:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseAnd:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseAndRelease:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseOr:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseOr:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseOr:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseOr:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseOrRelease:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseXor:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseXor:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseXor:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseXor:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:(LVarHandleDexTest;ZZ)V
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+java.lang.invoke.VarHandle.getAndBitwiseXorRelease:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.getAndSet:(LVarHandleDexTest;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndSet:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndSet:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.getAndSet:(LVarHandleDexTest;Z)Z
+java.lang.invoke.VarHandle.getAndSetAcquire:(LVarHandleDexTest;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndSetAcquire:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndSetAcquire:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.getAndSetAcquire:(LVarHandleDexTest;Z)Z
+java.lang.invoke.VarHandle.getAndSetRelease:(LVarHandleDexTest;Ljava/lang/Float;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+java.lang.invoke.VarHandle.getAndSetRelease:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.getAndSetRelease:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.getAndSetRelease:(LVarHandleDexTest;Z)Z
+java.lang.invoke.VarHandle.getOpaque:(LVarHandleDexTest;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/String;I)Ljava/lang/String;
+java.lang.invoke.VarHandle.getOpaque:(LVarHandleDexTest;)V
+java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/String;I)V
+java.lang.invoke.VarHandle.getOpaque:(LVarHandleDexTest;)Z
+java.lang.invoke.VarHandle.getVolatile:(LVarHandleDexTest;)Ljava/lang/Float;
+java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/String;I)Ljava/lang/String;
+java.lang.invoke.VarHandle.getVolatile:(LVarHandleDexTest;)V
+java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/String;I)V
+java.lang.invoke.VarHandle.getVolatile:(LVarHandleDexTest;)Z
+java.lang.invoke.VarHandle.set:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.set:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.set:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.set:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.setOpaque:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.setOpaque:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.setOpaque:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.setOpaque:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.setRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.setRelease:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.setRelease:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.setRelease:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.setVolatile:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.setVolatile:(LVarHandleDexTest;Ljava/lang/Float;)V
+java.lang.invoke.VarHandle.setVolatile:(LVarHandleDexTest;Z)V
+java.lang.invoke.VarHandle.setVolatile:([Ljava/lang/String;ILjava/lang/String;)V
+java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.weakCompareAndSet:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+java.lang.invoke.VarHandle.weakCompareAndSet:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.weakCompareAndSetAcquire:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+java.lang.invoke.VarHandle.weakCompareAndSetAcquire:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.weakCompareAndSetPlain:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+java.lang.invoke.VarHandle.weakCompareAndSetPlain:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;
+java.lang.invoke.VarHandle.weakCompareAndSetRelease:(LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+java.lang.invoke.VarHandle.weakCompareAndSetRelease:(LVarHandleDexTest;ZZ)Z
+java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)Z
+invoke-polymorphic {v1, v0, v5, v6}, java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;ZZ)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)Z
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)Z
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)Z
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Z
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Z
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Z
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Z
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.set:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.setOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.setRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0, v6}, java.lang.invoke.VarHandle.setVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Z)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Z
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)Ljava/lang/Float;
+invoke-polymorphic {v1, v0}, java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.set:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.setOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.setRelease:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v2}, java.lang.invoke.VarHandle.setVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, (LVarHandleDexTest;Ljava/lang/Float;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndExchange:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndExchangeRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.compareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetPlain:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.weakCompareAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndAddAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndAdd:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndAddRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAnd:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseAndRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOr:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseOrRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXor:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v3, v2}, java.lang.invoke.VarHandle.getAndBitwiseXorRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.getAndSetAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.getAndSet:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.getAndSetRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.get:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)V
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.getAcquire:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)V
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.getOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)V
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)Ljava/lang/String;
+invoke-polymorphic {v1, v0, v7}, java.lang.invoke.VarHandle.getVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;I)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.set:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.setOpaque:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.setRelease:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V
+invoke-polymorphic {v1, v0, v7, v2}, java.lang.invoke.VarHandle.setVolatile:([Ljava/lang/Object;)Ljava/lang/Object;, ([Ljava/lang/String;ILjava/lang/String;)V

@@ -88,6 +88,7 @@ public class LocalItem implements Comparable<LocalItem> {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(LocalItem local) {
         int ret;
 

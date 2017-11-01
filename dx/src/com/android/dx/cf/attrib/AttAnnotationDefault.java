@@ -51,6 +51,7 @@ public final class AttAnnotationDefault extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int byteLength() {
         // Add six for the standard attribute header.
         return byteLength + 6;

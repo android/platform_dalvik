@@ -54,6 +54,7 @@ public final class DexTranslationAdvice
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasConstantOperation(Rop opcode,
             RegisterSpec sourceA, RegisterSpec sourceB) {
         if (sourceA.getType() != Type.INT) {
@@ -99,6 +100,7 @@ public final class DexTranslationAdvice
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean requiresSourcesInOrder(Rop opcode,
             RegisterSpecList sources) {
 
@@ -124,6 +126,7 @@ public final class DexTranslationAdvice
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getMaxOptimalRegisterCount() {
         return 16;
     }

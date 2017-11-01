@@ -61,6 +61,7 @@ public final class CstLong
     }
 
     /** {@inheritDoc} */
+    @Override
     public Type getType() {
         return Type.LONG;
     }
@@ -72,6 +73,7 @@ public final class CstLong
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toHuman() {
         return Long.toString(getLongBits());
     }

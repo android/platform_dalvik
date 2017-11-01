@@ -16,6 +16,7 @@
 
 package com.android.dx.cf.code;
 
+import com.android.dx.rop.cst.CstCallSiteRef;
 import com.android.dx.rop.cst.CstType;
 import com.android.dx.rop.type.Prototype;
 import com.android.dx.rop.type.Type;
@@ -38,6 +39,7 @@ public class ValueAwareMachine extends BaseMachine {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void run(Frame frame, int offset, int opcode) {
         switch (opcode) {
             case ByteOps.NOP:
@@ -160,6 +162,15 @@ public class ValueAwareMachine extends BaseMachine {
                     frame.makeInitialized(thisType);
                 }
                 Type type = ((TypeBearer) getAuxCst()).getType();
+                if (type == Type.VOID) {
+                    clearResult();
+                } else {
+                    setResult(type);
+                }
+                break;
+            }
+            case ByteOps.INVOKEDYNAMIC: {
+                Type type = ((CstCallSiteRef) getAuxCst()).getReturnType();
                 if (type == Type.VOID) {
                     clearResult();
                 } else {

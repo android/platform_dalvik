@@ -45,6 +45,7 @@ public abstract class Constant
      *
      * This compares in class-major and value-minor order.
      */
+    @Override
     public final int compareTo(Constant other) {
         Class clazz = getClass();
         Class otherClazz = other.getClass();
