@@ -22,6 +22,30 @@
       "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68f145fa_193371f8",
+        "filename": "dx/src/com/android/dx/ssa/SsaBasicBlock.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-04T16:32:03Z",
+      "side": 1,
+      "message": "Done, thanks!",
+      "parentUuid": "35e7e5d9_50dcd881",
+      "range": {
+        "startLine": 571,
+        "startChar": 11,
+        "endLine": 571,
+        "endChar": 18
+      },
+      "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
