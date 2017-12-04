@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31f70f55_a34dfea0",
+        "filename": "dx/src/com/android/dx/ssa/SsaConverter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-12-04T16:05:51Z",
+      "side": 1,
+      "message": "Mention that this is a critical edge?",
+      "range": {
+        "startLine": 261,
+        "startChar": 12,
+        "endLine": 261,
+        "endChar": 92
+      },
+      "revId": "e9571e4b313d95353b66aee16ded766a8c18ecf4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "004889b5_1efc2af6",
+        "filename": "dx/src/com/android/dx/ssa/SsaConverter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2017-12-04T16:05:51Z",
+      "side": 1,
+      "message": "ditto?",
+      "revId": "e9571e4b313d95353b66aee16ded766a8c18ecf4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
