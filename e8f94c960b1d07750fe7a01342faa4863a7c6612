@@ -46,6 +46,29 @@
       "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cfe831ee_62f16753",
+        "filename": "dx/src/com/android/dx/ssa/SsaBasicBlock.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1106303
+      },
+      "writtenOn": "2017-12-04T16:37:52Z",
+      "side": 1,
+      "message": "Probably a trivial question, is this equivalent to\n\n  successors.cardinality() \u003e 1\n\n?",
+      "range": {
+        "startLine": 573,
+        "startChar": 12,
+        "endLine": 573,
+        "endChar": 41
+      },
+      "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
