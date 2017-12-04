@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba7e2182_b7aa41cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-12-04T16:12:41Z",
+      "side": 1,
+      "message": "Not really open-source friendly.  Could you provide a more explanatory first line message?",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "e9571e4b313d95353b66aee16ded766a8c18ecf4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31f70f55_a34dfea0",
         "filename": "dx/src/com/android/dx/ssa/SsaConverter.java",
         "patchSetId": 4
