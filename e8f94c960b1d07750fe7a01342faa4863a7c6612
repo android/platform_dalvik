@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35e7e5d9_50dcd881",
+        "filename": "dx/src/com/android/dx/ssa/SsaBasicBlock.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-12-04T16:23:21Z",
+      "side": 1,
+      "message": "nit: the word \"affects\"is there twice (sorry I should have seen it before ;) )",
+      "range": {
+        "startLine": 571,
+        "startChar": 11,
+        "endLine": 571,
+        "endChar": 18
+      },
+      "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
