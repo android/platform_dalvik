@@ -69,6 +69,30 @@
       "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e510b77a_350a80fe",
+        "filename": "dx/src/com/android/dx/ssa/SsaBasicBlock.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-04T16:51:42Z",
+      "side": 1,
+      "message": "Done. The cardinality of the block can\u0027t be zero because moves are inserted into predecessor blocks (so not called for an exit block where successors would be zero).",
+      "parentUuid": "cfe831ee_62f16753",
+      "range": {
+        "startLine": 573,
+        "startChar": 12,
+        "endLine": 573,
+        "endChar": 41
+      },
+      "revId": "e8f94c960b1d07750fe7a01342faa4863a7c6612",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
