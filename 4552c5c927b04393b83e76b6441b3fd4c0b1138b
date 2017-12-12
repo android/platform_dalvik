@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39abe63b_04ecddb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-12T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "539fd515_49b61ef2",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 29
+      },
+      "revId": "4552c5c927b04393b83e76b6441b3fd4c0b1138b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84c797c9_3acf4db7",
         "filename": "dx/src/com/android/dx/io/Opcodes.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-12T13:06:30Z",
       "side": 1,
       "message": "Dalvik",
+      "range": {
+        "startLine": 22,
+        "startChar": 81,
+        "endLine": 22,
+        "endChar": 87
+      },
+      "revId": "4552c5c927b04393b83e76b6441b3fd4c0b1138b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b285db9_e3256215",
+        "filename": "dx/src/com/android/dx/io/Opcodes.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-12T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84c797c9_3acf4db7",
       "range": {
         "startLine": 22,
         "startChar": 81,
