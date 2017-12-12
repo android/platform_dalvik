@@ -15,7 +15,8 @@
  */
 
 public interface StaticDefinition {
-    public static void printIt(String s) {
+  long createsClinit = System.currentTimeMillis();
+  public static void printIt(String s) {
         System.out.println(s);
     }
 }

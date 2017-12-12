@@ -17,8 +17,9 @@
 package com.android.dx.io;
 
 /**
- * All the Dalvik opcode value constants. See the related spec
- * document for the meaning and instruction format of each opcode.
+ * All the Dalvik opcode value constants.
+ *
+ * @see <a href="https://source.android.com/devices/tech/dalvik/dalvik-bytecode">Dalvik bytecode</a>
  */
 public final class Opcodes {
     /**

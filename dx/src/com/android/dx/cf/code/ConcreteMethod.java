@@ -138,7 +138,8 @@ public final class ConcreteMethod implements Method {
      * @return true if the method is being defined on an interface.
      */
     public final boolean isDefaultOrStaticInterfaceMethod() {
-        return (classFile.getAccessFlags() & AccessFlags.ACC_INTERFACE) != 0;
+        return (classFile.getAccessFlags() & AccessFlags.ACC_INTERFACE) != 0
+            && !getNat().isClassInit();
     }
 
     /**

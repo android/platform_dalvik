@@ -566,6 +566,13 @@ public final class SsaBasicBlock {
      * @param source move source
      */
     public void addMoveToEnd(RegisterSpec result, RegisterSpec source) {
+        /*
+         * Check that there are no other successors otherwise we may
+         * insert a move that affects those (b/69128828).
+         */
+        if (successors.cardinality() > 1) {
+            throw new IllegalStateException("Inserting a move to a block with multiple successors");
+        }
 
         if (result.getReg() == source.getReg()) {
             // Sometimes we end up with no-op moves. Ignore them here.
