@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UTFDataFormatException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.security.MessageDigest;
@@ -150,7 +151,7 @@ public final class Dex {
     public void writeTo(OutputStream out) throws IOException {
         byte[] buffer = new byte[8192];
         ByteBuffer data = this.data.duplicate(); // positioned ByteBuffers aren't thread safe
-        data.clear();
+        ((Buffer) data).clear();
         while (data.hasRemaining()) {
             int count = Math.min(buffer.length, data.remaining());
             data.get(buffer, 0, count);
@@ -175,8 +176,8 @@ public final class Dex {
         }
         ByteBuffer sectionData = data.duplicate();
         sectionData.order(ByteOrder.LITTLE_ENDIAN); // necessary?
-        sectionData.position(position);
-        sectionData.limit(data.capacity());
+        ((Buffer) sectionData).position(position);
+        ((Buffer) sectionData).limit(data.capacity());
         return new Section("section", sectionData);
     }
 
@@ -187,8 +188,8 @@ public final class Dex {
         int limit = nextSectionStart + maxByteCount;
         ByteBuffer sectionData = data.duplicate();
         sectionData.order(ByteOrder.LITTLE_ENDIAN); // necessary?
-        sectionData.position(nextSectionStart);
-        sectionData.limit(limit);
+        ((Buffer) sectionData).position(nextSectionStart);
+        ((Buffer) sectionData).limit(limit);
         Section result = new Section(name, sectionData);
         nextSectionStart = limit;
         return result;
@@ -208,7 +209,7 @@ public final class Dex {
     public byte[] getBytes() {
         ByteBuffer data = this.data.duplicate(); // positioned ByteBuffers aren't thread safe
         byte[] result = new byte[data.capacity()];
-        data.position(0);
+        ((Buffer) data).position(0);
         data.get(result);
         return result;
     }
@@ -278,8 +279,8 @@ public final class Dex {
         }
         byte[] buffer = new byte[8192];
         ByteBuffer data = this.data.duplicate(); // positioned ByteBuffers aren't thread safe
-        data.limit(data.capacity());
-        data.position(SIGNATURE_OFFSET + SIGNATURE_SIZE);
+        ((Buffer) data).limit(data.capacity());
+        ((Buffer) data).position(SIGNATURE_OFFSET + SIGNATURE_SIZE);
         while (data.hasRemaining()) {
             int count = Math.min(buffer.length, data.remaining());
             data.get(buffer, 0, count);
@@ -295,8 +296,8 @@ public final class Dex {
         Adler32 adler32 = new Adler32();
         byte[] buffer = new byte[8192];
         ByteBuffer data = this.data.duplicate(); // positioned ByteBuffers aren't thread safe
-        data.limit(data.capacity());
-        data.position(CHECKSUM_OFFSET + CHECKSUM_SIZE);
+        ((Buffer) data).limit(data.capacity());
+        ((Buffer) data).position(CHECKSUM_OFFSET + CHECKSUM_SIZE);
         while (data.hasRemaining()) {
             int count = Math.min(buffer.length, data.remaining());
             data.get(buffer, 0, count);
