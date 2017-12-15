@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11409a2f_3cc2869b",
+        "filename": "dx/src/com/android/dex/Dex.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-15T10:58:15Z",
+      "side": 1,
+      "message": "These all need a comment to explain the odd casts.\n\nIt might be preferable to introduce some helper methods that have the comment and shift the awkwardness.",
+      "revId": "1975f4d783aedca4bd8059f9b66dbb65e731688f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
