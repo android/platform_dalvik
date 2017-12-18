@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "cf0ab360_0ad43009",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-18T18:39:19Z",
+      "side": 1,
+      "message": "It looks like this CL is just moving the creation of the .class files (via jasmin or $JAVAC) from \"run\" to \"build\", and is also adding prebuilt .class files.\n\nAren\u0027t those prebuilt .class files going to be overwritten and ignored by jasmin / $JAVAC at \"build\" time? I can\u0027t find where the existing .class files are treated as \"golden input\" or wh the jasmin / $JAVAC invocations are still present in the \"build\" files. Are those \"build\" steps not run by the test runner script the way they are for the tests below art/test? \n\nWhat am I missing / misunderstanding?",
+      "range": {
+        "startLine": 10,
+        "startChar": 17,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6557de19_23dbdd97",
         "filename": "dx/tests/030-minimal-jasmin/build",
         "patchSetId": 4
