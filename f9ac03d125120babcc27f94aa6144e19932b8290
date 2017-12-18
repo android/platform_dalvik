@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b0f4836_16b67790",
+        "filename": "dx/tests/030-minimal-jasmin/build",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-18T16:57:15Z",
+      "side": 1,
+      "message": "For new build files these should all be updated to 2017.",
+      "range": {
+        "startLine": 3,
+        "startChar": 16,
+        "endLine": 3,
+        "endChar": 20
+      },
+      "revId": "f9ac03d125120babcc27f94aa6144e19932b8290",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
