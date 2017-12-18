@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "afa5dd54_2e91191d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-18T20:53:35Z",
+      "side": 1,
+      "message": "The second-to-last sentence was indeed my misunderstanding. Those \"build\" files were run by you when creating the CL, as opposed to each time a test is run.",
+      "parentUuid": "cf0ab360_0ad43009",
+      "range": {
+        "startLine": 10,
+        "startChar": 17,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6557de19_23dbdd97",
         "filename": "dx/tests/030-minimal-jasmin/build",
         "patchSetId": 4
@@ -39,6 +63,24 @@
       "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df026e9_abd6af82",
+        "filename": "dx/tests/030-minimal-jasmin/build",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-18T20:53:35Z",
+      "side": 1,
+      "message": "Seems like I had misunderstood the dalvik/dx/tests scripts: The \"build\" files don\u0027t seem to be run by run-all-tests, so the .class files don\u0027t get overwritten.\n\nThis is different from art/test/run-test, which runs the build script (defaults to art/test/etc/default-build, but can be overrridden by a \"build\" file being in the test directory).\n\nNow that I understand this, I don\u0027t know why we\u0027d bundle the class in .class file format when it\u0027s already there as a .j file (which doesn\u0027t rely on javac), but I don\u0027t feel strongly either way.",
+      "parentUuid": "6557de19_23dbdd97",
+      "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

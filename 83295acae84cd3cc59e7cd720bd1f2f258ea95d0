@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0adc1e84_62b257b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-18T20:53:35Z",
+      "side": 1,
+      "message": "Also,\n\n1.) run-all-tests doesn\u0027t build the required targets, and\n2.) one needs to re-run lunch to set the PATH\n\nSo the correct command line is something like:\n\nexport EXPERIMENTAL_USE_OPENJDK9\u003d1.8 ; lunch ${TARGET_PRODUCT}-${TARGET_BUILD_VARIANT}; make dx-tests vogar ; dalvik/dx/tests/run-all-tests\n\nexport EXPERIMENTAL_USE_OPENJDK9\u003dfalse ; lunch ${TARGET_PRODUCT}-${TARGET_BUILD_VARIANT}; make dx-tests vogar ; dalvik/dx/tests/run-all-tests",
+      "parentUuid": "d99b31ed_decde579",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 59
+      },
+      "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ee3e865_6f37073c",
         "filename": "dx/tests/057-dex-call-virtual/build",
         "patchSetId": 3
