@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -d . *.java
-
 dx --debug --dex --output=blort.dex java/blort/Blort.class >/dev/null 2>&1
 echo "exit code: $?"
 if [ -r blort.dex ]; then
