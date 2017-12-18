@@ -17,8 +17,6 @@
 UNSUPPORTED_SDK_VERSION=20
 SUPPORTED_SDK_VERSION=26
 
-$JAVAC -source 1.7 -target 1.7 -g -d . TestInvokePolymorphic.java
-
 echo Trying SDK version $UNSUPPORTED_SDK_VERSION with invoke-polymorphic.
 dx --min-sdk-version=$UNSUPPORTED_SDK_VERSION --debug --dex --dump-to=- --dump-width=1000 TestInvokePolymorphic.class 2>&1 | grep "SimException"
 if [ $? != 0 ] ; then

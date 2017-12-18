@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -d . *.java
 dx --output=foo.dex --dex *.class
 
 echo "StreamTokenizer.nval"

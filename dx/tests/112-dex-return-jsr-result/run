@@ -18,7 +18,6 @@
 # is to check to see that there are two invoke-static instructions, each
 # followed directly by a move-result-object.
 
-jasmin -d . blort.j
 dx --debug --dex --dump-to=- --dump-method=blort.zorch --dump-width=200 \
     blort.class | awk '
 
