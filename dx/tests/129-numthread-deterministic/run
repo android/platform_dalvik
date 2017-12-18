@@ -17,9 +17,6 @@
 # Stop if something fails.
 set -e
 
-JAVAC_SOURCE=1.6
-JAVAC_TARGET=1.6
-
 # Write out classes
 mkdir src
 awk '
@@ -42,16 +39,17 @@ function writeClass(name) {
 
 
 mkdir classes
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'`
+${JAVAC} -d classes `find src -name '*.java'`
+
 mkdir out
 dx -JXmx4g -JXms4g --dex --no-optimize --output=out classes
+
 mkdir out-multi
 dx -JXmx4g -JXms4g --dex --no-optimize --num-threads=4 --output=out-multi classes
-diff -r out out-multi > unit-out.txt
 
+diff -r out out-multi > unit-out.txt
 if [ "$?" = "0" ]; then
     echo "Yay!"
 else
     cat unit-out.txt
 fi
-

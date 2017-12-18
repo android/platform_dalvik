@@ -27,7 +27,6 @@ for i in "$dxjar" "$junitjar"; do
     fi
 done
 
-javac -cp $dxjar:$junitjar `find . -name "*.java"`
 java -classpath $dxjar:$junitjar:. junit.textui.TestRunner com.android.dx.util.Mutf8Test > unit-out.txt 2>&1
 
 if [ "$?" = "0" ]; then

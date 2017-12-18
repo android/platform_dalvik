@@ -16,7 +16,5 @@
 
 SDK_VERSION=26
 
-JAVAC_FLAGS="-g -Xlint:-options -source 1.8 -target 1.8 -implicit:none"
-$JAVAC $JAVAC_FLAGS -d . Main.java
 dx --debug --dex --min-sdk-version=${SDK_VERSION} --output="classes.dex" \
    --dump-method=Main.\$opt\$BasicTest* --dump-width=1000 --dump-to=- Main.class 2>&1
