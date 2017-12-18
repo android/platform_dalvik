@@ -17,38 +17,6 @@
 # Stop if something fails.
 set -e
 
-JAVAC_SOURCE=1.6
-JAVAC_TARGET=1.6
-
-# Write out files with many static fields, instance fields, and methods but
-# not exceeding the dex format's limits.
-mkdir src
-awk '
-BEGIN {
-    writeFileField("FillerStatic", "static public int staticInt");
-    writeFileField("FillerField", "public int fieldInt");
-    writeFileMethod("FillerMethod");
-}
-function writeFileField(name, type) {
-    fileName = "src/" name ".java";
-    printf("public class %s {\n", name) > fileName;
-    for (i = 1; i <= 21000; i++) {
-        printf("    %s%d;\n", type, i) > fileName;
-    }
-    printf("}\n") > fileName;
-}
-function writeFileMethod(name) {
-    fileName = "src/" name ".java";
-    printf("public class %s {\n", name) > fileName;
-    for (i = 1; i <= 32000; i++) {
-      printf("    public void meth%d() { }\n", i) > fileName;
-    }
-    printf("}\n") > fileName;
-}'
-
-mkdir classes
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'`
 mkdir out
 dx -JXmx1024m --dex --no-optimize --multi-dex --output=out classes
 ls -1F out
-

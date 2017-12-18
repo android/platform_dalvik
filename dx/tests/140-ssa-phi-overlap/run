@@ -14,10 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-JAVAC_SOURCE=1.8
-JAVAC_TARGET=1.8
-
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} Test.java
 dx --dex --output=classes.dex *.class
 
 # Run the test with art. The original bug leading to this test
