@@ -23,11 +23,6 @@ if [ ! -r "$dxjar" ]; then
     exit 1
 fi
 
-JAVAC_SOURCE=1.8
-JAVAC_TARGET=1.8
-
-mkdir classes
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find lambda -name '*.java'`
 mkdir -p traceOut/lambda
 cp classes/lambda/A.class traceOut/lambda/
 

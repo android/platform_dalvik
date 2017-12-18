@@ -1,4 +1,3 @@
-Generated: ./blort.class
 reading blort.class...
 method <init> ()V
 block 0000: 0000..0004

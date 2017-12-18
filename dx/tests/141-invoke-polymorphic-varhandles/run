@@ -17,9 +17,6 @@
 UNSUPPORTED_SDK_VERSION=20
 SUPPORTED_SDK_VERSION=27
 
-# Compilation requires Java 9 compiler.
-# $JAVAC javac --release 9 -d . VarHandleDexTest.java
-
 echo Trying SDK version $UNSUPPORTED_SDK_VERSION with invoke-polymorphic.
 dx --min-sdk-version=$UNSUPPORTED_SDK_VERSION --debug --dex --dump-to=- --dump-width=1000 VarHandleDexTest.class 2>&1 | grep "SimException"
 if [ $? != 0 ] ; then

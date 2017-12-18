@@ -29,9 +29,6 @@ for i in "$dxjar"; do
     fi
 done
 
-# Compile and run java merging test
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -cp $dxjar -d . com/android/dx/merge/MergeTest.java || exit 1
-
 # Find all files that could contain dex bytecode.
 candidates=`find "$ANDROID_BUILD_TOP/out" -name '*.dex' -o -name '*.jar' -o -name '*.apk'`
 validdexes=()
