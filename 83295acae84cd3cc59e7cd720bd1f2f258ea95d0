@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d99b31ed_decde579",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-18T18:24:52Z",
+      "side": 1,
+      "message": "Sorry, one of my commit messages was misleading. For this to work as intended, you have to say:\n\nexport EXPERIMENTAL_USE_OPENJDK9\u003d1.8 ; dx/tests/run-all-tests\nexport EXPERIMENTAL_USE_OPENJDK9\u003dfalse ; dx/tests/run-all-tests\n\nAlso, \"true\" won\u0027t work, you want to check \"1.8\". The semantics are:\n\n EXPERIMENTAL_USE_OPENJDK9\u003dfalse  use OpenJDK 8\n EXPERIMENTAL_USE_OPENJDK9\u003d1.8    use OpenJDK 9, but -target 1.8\n EXPERIMENTAL_USE_OPENJDK9\u003dtrue   use OpenJDK 9, targeting 9",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 59
+      },
+      "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ee3e865_6f37073c",
         "filename": "dx/tests/057-dex-call-virtual/build",
         "patchSetId": 3

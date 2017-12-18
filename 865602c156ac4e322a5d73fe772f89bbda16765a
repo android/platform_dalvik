@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6557de19_23dbdd97",
+        "filename": "dx/tests/030-minimal-jasmin/build",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-18T18:24:52Z",
+      "side": 1,
+      "message": "Here and elsewhere: Since blort.class is still created from blort.j after this CL, why is this CL adding a bundled blort.class? Is blort.class needed?\n\n(It makes sense to run jasmin during build as opposed to run, although that seems orthogonal to the purpose of this CL).",
+      "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
