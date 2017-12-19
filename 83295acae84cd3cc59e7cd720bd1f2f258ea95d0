@@ -117,6 +117,30 @@
       "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97d763ad_2f9f16b8",
+        "filename": "dx/tests/057-dex-call-virtual/build",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1015613
+      },
+      "writtenOn": "2017-12-19T15:32:52Z",
+      "side": 1,
+      "message": "There is the same issue for tests 56 to 67, and 70. Sorry, I should have mentioned it yesterday, but I wasn\u0027t sure if it was on purpose.",
+      "parentUuid": "5a9fe1a0_19ce86e7",
+      "range": {
+        "startLine": 17,
+        "startChar": 52,
+        "endLine": 17,
+        "endChar": 57
+      },
+      "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
