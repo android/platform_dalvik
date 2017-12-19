@@ -141,6 +141,30 @@
       "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c3c0ad2_1ed46f7b",
+        "filename": "dx/tests/057-dex-call-virtual/build",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-19T16:45:35Z",
+      "side": 1,
+      "message": "Sorry, it\u0027s a bit of mess here. PS6 uses *.java in all the build files and has also re-run them all and run the tests with the Java9/1.8 and Java8 compilers.\n\nPS6 has also gone back on test 124 since that seems to be compiler independent and otherwise adds a lot of generated code.",
+      "parentUuid": "97d763ad_2f9f16b8",
+      "range": {
+        "startLine": 17,
+        "startChar": 52,
+        "endLine": 17,
+        "endChar": 57
+      },
+      "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
