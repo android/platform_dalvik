@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "026f6966_5ad31f5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-19T09:27:37Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "afa5dd54_2e91191d",
+      "range": {
+        "startLine": 10,
+        "startChar": 17,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6557de19_23dbdd97",
         "filename": "dx/tests/030-minimal-jasmin/build",
         "patchSetId": 4
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "Seems like I had misunderstood the dalvik/dx/tests scripts: The \"build\" files don\u0027t seem to be run by run-all-tests, so the .class files don\u0027t get overwritten.\n\nThis is different from art/test/run-test, which runs the build script (defaults to art/test/etc/default-build, but can be overrridden by a \"build\" file being in the test directory).\n\nNow that I understand this, I don\u0027t know why we\u0027d bundle the class in .class file format when it\u0027s already there as a .j file (which doesn\u0027t rely on javac), but I don\u0027t feel strongly either way.",
       "parentUuid": "6557de19_23dbdd97",
+      "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ae3f928_816fa61d",
+        "filename": "dx/tests/030-minimal-jasmin/build",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-19T09:27:37Z",
+      "side": 1,
+      "message": "This change is trying to move to using golden reference files for dx inputs. It attempts to be consistent in this end. The CL is pre-building as much as possible. The sequential time for running the tests is decreased by 33%. The repo space overhead is not really a concern for the majority of tests here. For the ones that generate masses of class files, these are not checked in. With the exception of the four awkward tests, it\u0027s consistent in the approach.\n\nThese tests pre-date the ART tests and did not resemble those tests before this CL and are not intended to now. The DX tests are barely sufficient as a whole, but better than no tests. The goal is to keep them running rather than aspiring to new perfection for a tool that is on life support.",
+      "parentUuid": "3df026e9_abd6af82",
       "revId": "865602c156ac4e322a5d73fe772f89bbda16765a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false

@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "89c52bb6_68a70b21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-19T09:27:37Z",
+      "side": 1,
+      "message": "\"true\" was a typo, fixed.\n\nThe Android project doesn\u0027t generally have this level of detail in the test description, but okay.",
+      "parentUuid": "0adc1e84_62b257b8",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 59
+      },
+      "revId": "83295acae84cd3cc59e7cd720bd1f2f258ea95d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ee3e865_6f37073c",
         "filename": "dx/tests/057-dex-call-virtual/build",
         "patchSetId": 3
