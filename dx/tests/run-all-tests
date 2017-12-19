@@ -105,9 +105,9 @@ function list_files {
 }
 
 function update_result {
-  test_name=$1
-  output=$2
-  result=$3
+  readonly test_name=$1
+  readonly output=$2
+  readonly result=$3
 
   if [[ "$known_bad" == *"$test_name"* ]]; then
     expectFail=1
@@ -134,33 +134,53 @@ function update_result {
   fi
 }
 
+function run_one_test_with_flock {
+  readonly output_dir=$1
+  readonly test_name=$2
+  readonly lock_file=$3
+  readonly lock_fd=200
+
+  # Create file descriptor for the lock file
+  eval "exec ${lock_fd}>${lock_file}"
+
+  # Wait for the lock
+  flock ${lock_fd}
+
+  # Having acquired the lock, run the test
+  ./run-test --output_dir "${output_dir}" "${test_name}"
+}
+
 function run_tests {
+  readonly test_root=$(mktemp -d)
+  trap "rm -rf ${test_root}" EXIT
   if [[ "$sequential" = "yes" ]]; then
     for test_name in *; do
       if [[ "$skip_tests" = *"$test_name"* ]]; then
-          skipped+=(${test_name})
-          continue
+        skipped+=(${test_name})
+        continue
       fi
       if [ -d "$test_name" -a -r "$test_name" ]; then
-        output=/tmp/$$/$test_name
-        ./run-test --output_dir "$output" "$test_name"
-        update_result $test_name $output $?
+        output="${test_root}/${test_name}"
+        ./run-test --output_dir "${output}" "${test_name}"
+        update_result "${test_name}" "${output}" $?
       fi
     done
   else
-    i=0
+    readonly num_workers=4
+    local i=0
     for test_name in *; do
       if [[ "$skip_tests" = *"$test_name"* ]]; then
-          skipped+=(${test_name})
-          continue
+        skipped+=(${test_name})
+        continue
       fi
-      if [ -d "$test_name" -a -r "$test_name" ]; then
-          output=/tmp/$$/$test_name
-          ./run-test --output_dir "$output" "$test_name" &
-          test_pids[i]=$!
-          test_names[test_pids[i]]="$test_name"
-          test_outputs[test_pids[i]]="output"
-          let i+=1
+      local lock_file=${test_root}/lock.$((i % num_workers))
+      if [ -d "${test_name}" -a -r "${test_name}" ]; then
+        output="${test_root}/${test_name}"
+        run_one_test_with_flock "$output" "$test_name" "$lock_file" &
+        test_pids[i]=$!
+        test_names[test_pids[i]]="$test_name"
+        test_outputs[test_pids[i]]="output"
+        let i+=1
       fi
     done
 
@@ -174,6 +194,9 @@ function run_tests {
 function handle_interrupt {
   trap INT
   display_results
+  if [ ! -z "${test_pids}" ]; then
+    killall ${test_pids}
+  fi
 }
 
 trap handle_interrupt INT
