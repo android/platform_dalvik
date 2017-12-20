@@ -16,6 +16,24 @@
       "revId": "cd5b1fdc0f93230d57cd16aac091b56f07838aa8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff076c68_4e855298",
+        "filename": "dx/tests/095-dex-const-string-jumbo/build",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-20T08:13:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62fbc075_210ce936",
+      "revId": "cd5b1fdc0f93230d57cd16aac091b56f07838aa8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
