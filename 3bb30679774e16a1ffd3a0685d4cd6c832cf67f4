@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "796f2216_2d387e1d",
+        "filename": "dx/tests/run-all-tests",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-20T16:58:23Z",
+      "side": 1,
+      "message": "stupid question, what does this do/how does this work?\n\n$ help exec\nexec: exec [-cl] [-a name] [command [arguments ...]] [redirection ...]\n    Replace the shell with the given command.\n\n\nbut ${lock_fd} is \"200\" which is not a command (based on the name, it seems to be a hard coded file descriptor #?), and flock expects a filename.",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 37
+      },
+      "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
