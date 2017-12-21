@@ -70,6 +70,30 @@
       "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4d76923_dc9a3a0b",
+        "filename": "dx/tests/run-all-tests",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-21T15:49:51Z",
+      "side": 1,
+      "message": "The \"flock \u003clock_file\u003e cmd\" would likely work fine here as there is only a single command that requires the lock:\n\n flock ${lock_file} ${SHELL} ./run-test ...\n\nIt is now changed to use this briefer form. This is less general and removes the ability to stick additional code in there under the lock (which there was when first writing this).\n\nIn the old scheme, the fd value of 200 is arbitrary. This function is called in a newly spawned sub-shell. If the file descriptor 200 was in use, it is now closed and re-opened to correspond to the lock file. We know (sort of) that this value is \"safe\" because we do not use it and it\u0027s not one of the shell\u0027s well known descriptors. It is also local to the sub-shell instance.",
+      "parentUuid": "8c44aa91_e7846102",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 37
+      },
+      "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
