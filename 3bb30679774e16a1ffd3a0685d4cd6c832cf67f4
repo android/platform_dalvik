@@ -46,6 +46,30 @@
       "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c44aa91_e7846102",
+        "filename": "dx/tests/run-all-tests",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-21T14:53:21Z",
+      "side": 1,
+      "message": "I think the issue is/was that I wasn\u0027t familiar with syntax of the form\n\n\"exec 200\u003elock.0\"\n\nbecause 200 looked like a command to me (seems like this is interpreted as a fd instead, probably similar to the \"2\u003e\u00261\" syntax in bash which I never properly understood but just looked up and understand better now). This wasn\u0027t obvious to me, but is probably obvious to people with more bash skill.\n\nSo the \"flock 200\" below will wait on the fd that is tied to lock_file; I don\u0027t understand why \"flock ${lock_file}\" wouldn\u0027t work, but as long as it empirically works, that\u0027s fine because I don\u0027t want to waste your time.",
+      "parentUuid": "63998c38_2a0ddf75",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 37
+      },
+      "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
