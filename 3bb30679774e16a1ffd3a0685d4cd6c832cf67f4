@@ -22,6 +22,30 @@
       "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63998c38_2a0ddf75",
+        "filename": "dx/tests/run-all-tests",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2017-12-21T08:36:10Z",
+      "side": 1,
+      "message": "This may be a $10 solution to a $0.01 problem.\n\nThe output of \u0027help exec\u0027 continues to say:\n\n Execute COMMAND, replacing this shell with the specified program.\n ARGUMENTS become the arguments to COMMAND.  If COMMAND is not specified,\n any redirections take effect in the current shell.\n\nIt\u0027s the behaviour in the last sentence that this is using.\n\nThis line in the script is creating a file descriptor that corresponds to a file, the value is arbitrary. The use of eval prevents the potential confusion that 200 is a command which generates an error.\n\nThe man page for flock(1) documents it having a form accepting a file descriptor. Not sure if there are earlier versions that didn\u0027t support this and it\u0027s a goobuntu vs gLinux man page issue.\n\nFWIW, I tried to implement a work distributor :- one process hands tests to execute one at a time, and worker processes pick up test names and execute them. It seemed too hard to do well is a shell script (or at least, my implmentation was gnarly and not reliable).",
+      "parentUuid": "796f2216_2d387e1d",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 37
+      },
+      "revId": "3bb30679774e16a1ffd3a0685d4cd6c832cf67f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
