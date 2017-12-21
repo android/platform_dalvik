@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b4b9b21_29aeed55",
+        "filename": "dx/tests/run-all-tests",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-12-21T18:36:37Z",
+      "side": 1,
+      "message": "FYI I couldn\u0027t figure out why \"${SHELL}\" is necessary here, and the script seems to run fine (and in the same time) for me when I drop this, but it also doesn\u0027t harm.",
+      "range": {
+        "startLine": 144,
+        "startChar": 23,
+        "endLine": 144,
+        "endChar": 33
+      },
+      "revId": "c0f949b24cd5af03ed46bbdc12a5702eedff042d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
