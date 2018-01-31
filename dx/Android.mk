@@ -61,7 +61,7 @@ include $(BUILD_SYSTEM)/base_rules.mk
 
 $(LOCAL_BUILT_MODULE): PRIVATE_PROGUARD_FLAGS:= \
   -include $(addprefix $(LOCAL_PATH)/, shrinkedAndroid.proguard.flags)
-$(LOCAL_BUILT_MODULE): $(call java-lib-files,android_stubs_current) \
+$(LOCAL_BUILT_MODULE): $(call java-lib-files,sdk_v20) \
                        $(addprefix $(LOCAL_PATH)/, shrinkedAndroid.proguard.flags)| $(PROGUARD)
 	@echo Proguard: $@
 	$(hide) $(PROGUARD) -injars "$<(**/*.class)" -outjars $@ $(PRIVATE_PROGUARD_FLAGS)
