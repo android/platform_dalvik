@@ -14,11 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-jasmin -d . blort1.j >/dev/null
-jasmin -d . blort2.j >/dev/null
-jasmin -d . blort3.j >/dev/null
-jasmin -d . blort4.j >/dev/null
-
 echo "TEST 1"
 dx --dex Blort1.class 2>&1 | grep mismatch
 
