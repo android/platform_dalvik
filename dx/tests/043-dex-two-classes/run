@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -d . Blort.java Zorch.java
 dx --debug --verbose --dex --output=blort.dex *.class
 if [ -r blort.dex ]; then
     echo Good!
