@@ -1,4 +1,3 @@
-Generated: ./blort.class
 reading blort.class...
 method test_jsr ()Ljava/lang/Object;
 first 002f

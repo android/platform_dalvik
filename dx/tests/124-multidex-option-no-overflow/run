@@ -47,7 +47,7 @@ function writeFileMethod(name) {
 }'
 
 mkdir classes
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'`
+${JAVAC} -Xlint:-options -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'`
 mkdir out
 dx -JXmx1024m --dex --no-optimize --multi-dex --output=out classes
 ls -1F out
