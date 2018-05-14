@@ -1,5 +1,3 @@
-warning: [options] bootstrap class path not set in conjunction with -source 1.7
-1 warning
 Trying SDK version 20 with invoke-polymorphic.
 com.android.dx.cf.code.SimException: ERROR in TestInvokePolymorphic.testInvokeVoidReturnNoArgs:(Ljava/lang/invoke/MethodHandle;)V: invoking a signature-polymorphic requires --min-sdk-version >= 26 (currently 20)
 000000: 6465 780a 3033 3800     |magic: "dex\n038\0"

@@ -705,7 +705,7 @@ public final class RopTranslator {
 
             RegisterSpecList regs = insn.getSources();
             Constant[] constants = new Constant[] {
-                insn.getInvokeMethod(),
+                insn.getPolymorphicMethod(),
                 insn.getCallSiteProto()
                 };
             DalvInsn di = new MultiCstInsn(opcode, pos, regs, constants);

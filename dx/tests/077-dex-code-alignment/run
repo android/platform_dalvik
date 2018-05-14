@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -d . Blort.java
-
 # The awk script below attempts to filter out everything but the
 # essentials: That methods justReturn1() and justReturn2() contain
 # a single "return-void" code unit, and that there is an empty (0x0000)
