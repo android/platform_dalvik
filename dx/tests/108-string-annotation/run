@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -d . Blort.java Fizmo.java Frotz.java
 dx --debug --dex --no-optimize --positions=none --no-locals \
     --dump-to=- *.class | cut -f 2 -d '|' | awk '
 

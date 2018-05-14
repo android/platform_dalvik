@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -g -d . Blort.java
 dx --debug --dex --positions=none --no-locals --dump-to=- --dump-width=200 \
     *.class | grep '^[0-9a-f].*value.*Exception' \
     | sed -e 's/^[^{]*{//g' -e 's/}//g'

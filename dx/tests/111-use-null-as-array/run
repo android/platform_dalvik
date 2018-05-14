@@ -14,11 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -g -d . Blort.java
 dx --debug --dex --positions=none --no-locals \
     --dump-to=- --dump-method="Blort.test*" Blort.class
 
-bash multidimensional.sh > multidimensional.j
-jasmin -d . multidimensional.j >/dev/null
 dx --debug --dex --positions=none --no-locals \
     --dump-to=- --dump-method="multidimensional.*" multidimensional.class

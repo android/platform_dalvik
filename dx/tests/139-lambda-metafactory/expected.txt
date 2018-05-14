@@ -1,5 +1,3 @@
-Note: Main.java uses unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
 000000: 6465 780a 3033 3800     |magic: "dex\n038\0"
 000008: 590b 1a16               |checksum
 00000c: 8798 f7ff b191 97b1 2e9c|signature
