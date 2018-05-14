@@ -36,12 +36,12 @@
 #ifndef LOG_TAG
 # define LOG_TAG "libdex"
 #endif
+#include <log/log.h>
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <assert.h>
-#include "cutils/log.h"
 
 /*
  * If "very verbose" logging is enabled, make it equivalent to ALOGV.

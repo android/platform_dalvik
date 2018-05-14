@@ -17,12 +17,13 @@
 # Stop if something fails.
 set -e
 
-JAVAC_SOURCE=1.6
-JAVAC_TARGET=1.6
+JAVAC_SOURCE=1.7
+JAVAC_TARGET=1.8
+JAVAC_OPTIONS="-Xlint:-options -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET}"
 
 # Write out classes
 
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} ClassGen.java
+${JAVAC} ${JAVAC_OPTIONS} ClassGen.java
 
 mkdir src
 mkdir classes
@@ -60,7 +61,6 @@ FIELDS=4
 # Number of methods per class
 METHODS=6
 
-
 first=1;
 while [ $TEST_SIZE -le $LIMIT ]; do
   echo $TEST_SIZE / $LIMIT
@@ -71,7 +71,7 @@ while [ $TEST_SIZE -le $LIMIT ]; do
   java -classpath . ClassGen $first $TEST_SIZE $FIELDS $METHODS || exit 1
   first=`expr $TEST_SIZE + 1`
 
-  ${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} -d classes `find src -name '*.java'` || exit 1
+  ${JAVAC} ${JAVAC_OPTIONS} -d classes `find src -name '*.java'` || exit 1
   (cd classes; jar cf ../x.jar `find . -name '*.class'`)
   sleep 3
 

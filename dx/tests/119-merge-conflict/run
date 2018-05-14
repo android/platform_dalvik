@@ -28,7 +28,6 @@ for i in "$dxjar" "$junitjar" "$junitdex"; do
     fi
 done
 
-javac -cp $dxjar:$junitjar `find . -name "*.java"`
 dx --dex --output=test.jar com/android/dx/merge/* $dxjar
 
 # Build a resource .jar containing the .dex files to merge
@@ -44,5 +43,3 @@ if [ "$?" = "0" ]; then
 else
     cat unit-out.txt
 fi
-
-
