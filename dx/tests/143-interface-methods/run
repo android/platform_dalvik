@@ -17,6 +17,11 @@
 JAVAC_SOURCE=1.8
 JAVAC_TARGET=1.8
 
+JAVAC_FLAGS="-source ${JAVAC_SOURCE} -target ${JAVAC_TARGET}"
+
+# Suppress warning over bootclass path from Java 9 compiler (if used).
+JAVAC_FLAGS="${JAVAC_FLAGS} -Xlint:-options"
+
 # Check interface method defintions cause warnings and {default,static}
 # interface method invocations fail hard.
 declare -A SUPPORT_THRESHOLD
@@ -28,7 +33,7 @@ SUPPORT_THRESHOLD["StaticDefinition.class"]=0
 CLASS_FILES=${!SUPPORT_THRESHOLD[@]}
 SOURCE_FILES=${CLASS_FILES//class/java}
 
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} ${SOURCE_FILES}
+${JAVAC} ${JAVAC_FLAGS} ${SOURCE_FILES}
 
 for API_LEVEL in 19 20 21 22 23 24 25; do
   echo --------------------- Testing $API_LEVEL ------------------------
@@ -62,7 +67,7 @@ SUPPORT_THRESHOLD["StaticDefinition.class"]=0
 CLASS_FILES=${!SUPPORT_THRESHOLD[@]}
 SOURCE_FILES=${CLASS_FILES//class/java}
 
-${JAVAC} -source ${JAVAC_SOURCE} -target ${JAVAC_TARGET} ${SOURCE_FILES}
+${JAVAC} ${JAVAC_FLAGS} ${SOURCE_FILES}
 
 for API_LEVEL in 19 20 21 22 23 24 25; do
   echo --------------------- Testing $API_LEVEL ------------------------

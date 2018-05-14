@@ -55,7 +55,7 @@ public final class MethodHandlesSection extends UniformItemSection {
         return methodHandles.values();
     }
 
-    public void intern(CstMethodHandle methodHandle) {
+    public synchronized void intern(CstMethodHandle methodHandle) {
         if (methodHandle == null) {
             throw new NullPointerException("methodHandle == null");
         }

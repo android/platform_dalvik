@@ -1,6 +1,2 @@
-warning: [options] bootstrap class path not set in conjunction with -source 1.6
-1 warning
 1000 / 1000
-warning: [options] bootstrap class path not set in conjunction with -source 1.6
-1 warning
 Yay!
