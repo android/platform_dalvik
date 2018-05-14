@@ -22,6 +22,7 @@
 
 import java.util.Arrays;
 
+@SuppressWarnings("deprecation")
 public class Test {
 
   private interface X {

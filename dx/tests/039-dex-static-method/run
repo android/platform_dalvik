@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-jasmin -d . blort.j >/dev/null
 dx --debug --dex --output=blort.dex blort.class
 if [ -r blort.dex ]; then
     echo Good!

@@ -17,7 +17,6 @@
 dx --debug --dex --dump-to=- --no-files
 echo ""
 
-jasmin -d . blort.j >/dev/null
 dx --verbose --debug --dex --output=blort.dex blort.class
 if [ -r blort.dex ]; then
     echo Good!
