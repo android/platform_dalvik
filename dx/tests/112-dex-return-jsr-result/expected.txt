@@ -1,2 +1,1 @@
-Generated: ./blort.class
 total invokes: 2
