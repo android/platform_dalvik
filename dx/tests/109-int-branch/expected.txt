@@ -1,4 +1,3 @@
-Generated: ./blort.class
 blort.test1:(ZBCSI[I)V:
 regs: 000f; ins: 0006; outs: 0000
   0000: move v0, v9

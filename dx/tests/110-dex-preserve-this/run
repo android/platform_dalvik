@@ -14,9 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$JAVAC -Xlint:-options -source 1.7 -target 1.7 -g -d . Blort.java
 dx --debug --dex --positions=none \
-    --dump-to=dump.txt --dump-method="Blort.test" *.class
+    --dump-to=dump.txt --dump-method="Blort.test" Blort.class
 
 cat dump.txt | awk '
 BEGIN {
