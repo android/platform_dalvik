@@ -16,7 +16,6 @@
 
 function oneop()
 {
-    jasmin -d . op_"$1".j
     dx --debug --dex op_"$1".class >/dev/null 2>&1
     if [ "$?" = "0" ]; then
         dx --debug --dex --dump-method="op_$1.test*" op_"$1".class

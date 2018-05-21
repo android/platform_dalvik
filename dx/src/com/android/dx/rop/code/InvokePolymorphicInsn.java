@@ -28,8 +28,17 @@ import com.android.dx.rop.type.TypeList;
  * multiple constants.
  */
 public class InvokePolymorphicInsn extends Insn {
-    private static final CstString INVOKE_DESCRIPTOR =
+    /** Default descriptor for signature polymorphic methods. */
+    private static final CstString DEFAULT_DESCRIPTOR =
             new CstString("([Ljava/lang/Object;)Ljava/lang/Object;");
+
+    /** Descriptor for VarHandle set methods. */
+    private static final CstString VARHANDLE_SET_DESCRIPTOR =
+            new CstString("([Ljava/lang/Object;)V");
+
+    /** Descriptor for VarHandle compare-and-set methods. */
+    private static final CstString VARHANDLE_COMPARE_AND_SET_DESCRIPTOR =
+            new CstString("([Ljava/lang/Object;)Z");
 
     /** {@code non-null;} list of exceptions caught */
     private final TypeList catches;
@@ -42,10 +51,9 @@ public class InvokePolymorphicInsn extends Insn {
     private final CstMethodRef callSiteMethod;
 
     /**
-     * {@code non-null;} method to invoke, either {@code java.lang.invoke.MethodHandle.invoke} or
-     * {@code java.lang.invoke.MethodHandle.invokeExact}.
+     * {@code non-null;} signature polymorphic method.
      */
-    private final CstMethodRef invokeMethod;
+    private final CstMethodRef polymorphicMethod;
 
     /**
      * {@code non-null;} the call site prototype.
@@ -82,7 +90,7 @@ public class InvokePolymorphicInsn extends Insn {
         }
 
         this.callSiteMethod = callSiteMethod;
-        this.invokeMethod = makeInvokeMethod(callSiteMethod);
+        this.polymorphicMethod = makePolymorphicMethod(callSiteMethod);
         this.callSiteProto = makeCallSiteProto(callSiteMethod);
     }
 
@@ -137,8 +145,8 @@ public class InvokePolymorphicInsn extends Insn {
      *
      * @return {@code non-null;} method reference to be invoked
      */
-    public CstMethodRef getInvokeMethod() {
-        return invokeMethod;
+    public CstMethodRef getPolymorphicMethod() {
+        return polymorphicMethod;
     }
 
     /**
@@ -155,15 +163,74 @@ public class InvokePolymorphicInsn extends Insn {
     /** {@inheritDoc} */
     @Override
     public String getInlineString() {
-        return getInvokeMethod().toString() + " " +
+        return getPolymorphicMethod().toString() + " " +
             getCallSiteProto().toString() + " " +
             ThrowingInsn.toCatchString(catches);
     }
 
-    private static CstMethodRef makeInvokeMethod(final CstMethodRef callSiteMethod) {
-        // The name is either invoke or invokeExact. The INVOKE_DESCRIPTOR is fixed.
-        CstNat cstNat = new CstNat(callSiteMethod.getNat().getName(), INVOKE_DESCRIPTOR);
-        return new CstMethodRef(callSiteMethod.getDefiningClass(), cstNat);
+    private static CstMethodRef makePolymorphicMethod(final CstMethodRef callSiteMethod) {
+        CstType definingClass= callSiteMethod.getDefiningClass();
+        CstString cstMethodName = callSiteMethod.getNat().getName();
+        String methodName = callSiteMethod.getNat().getName().getString();
+
+        if (definingClass.equals(CstType.METHOD_HANDLE)) {
+            if (methodName.equals("invoke") || methodName.equals("invokeExact")) {
+                CstNat cstNat = new CstNat(cstMethodName, DEFAULT_DESCRIPTOR);
+                return new CstMethodRef(definingClass, cstNat);
+            }
+        }
+
+        if (definingClass.equals(CstType.VAR_HANDLE)) {
+            switch (methodName) {
+                case "compareAndExchange":
+                case "compareAndExchangeAcquire":
+                case "compareAndExchangeRelease":
+                case "get":
+                case "getAcquire":
+                case "getAndAdd":
+                case "getAndAddAcquire":
+                case "getAndAddRelease":
+                case "getAndBitwiseAnd":
+                case "getAndBitwiseAndAcquire":
+                case "getAndBitwiseAndRelease":
+                case "getAndBitwiseOr":
+                case "getAndBitwiseOrAcquire":
+                case "getAndBitwiseOrRelease":
+                case "getAndBitwiseXor":
+                case "getAndBitwiseXorAcquire":
+                case "getAndBitwiseXorRelease":
+                case "getAndSet":
+                case "getAndSetAcquire":
+                case "getAndSetRelease":
+                case "getOpaque":
+                case "getVolatile":
+                {
+                    CstNat cstNat = new CstNat(cstMethodName, DEFAULT_DESCRIPTOR);
+                    return new CstMethodRef(definingClass, cstNat);
+                }
+                case "set":
+                case "setOpaque":
+                case "setRelease":
+                case "setVolatile":
+                {
+                    CstNat cstNat = new CstNat(cstMethodName, VARHANDLE_SET_DESCRIPTOR);
+                    return new CstMethodRef(definingClass, cstNat);
+                }
+                case "compareAndSet":
+                case "weakCompareAndSet":
+                case "weakCompareAndSetAcquire":
+                case "weakCompareAndSetPlain":
+                case "weakCompareAndSetRelease":
+                {
+                    CstNat cstNat = new CstNat(cstMethodName, VARHANDLE_COMPARE_AND_SET_DESCRIPTOR);
+                    return new CstMethodRef(definingClass, cstNat);
+                }
+                default:
+                    break;
+            }
+        }
+        throw new IllegalArgumentException("Unknown signature polymorphic method: " +
+                                           callSiteMethod.toHuman());
     }
 
     private static CstProtoRef makeCallSiteProto(final CstMethodRef callSiteMethod) {
