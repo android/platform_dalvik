@@ -35,11 +35,3 @@ $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/dexdeps | $(ACP)
 	$(hide) chmod 755 $@
 
 INTERNAL_DALVIK_MODULES += $(LOCAL_INSTALLED_MODULE)
-
-# the other stuff
-# ============================================================
-subdirs := $(addprefix $(LOCAL_PATH)/,$(addsuffix /Android.mk, \
-		src \
-	))
-
-include $(subdirs)
