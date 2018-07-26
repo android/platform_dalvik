@@ -22,6 +22,30 @@
       "revId": "f41d73b3828cd26a33e686ea322c13ba5c7332bb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c081c10_0102f83a",
+        "filename": "tools/dexdeps/Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1136354
+      },
+      "writtenOn": "2018-07-26T17:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccc32032_8eca3349",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 21
+      },
+      "revId": "f41d73b3828cd26a33e686ea322c13ba5c7332bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
