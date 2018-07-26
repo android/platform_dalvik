@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccc32032_8eca3349",
+        "filename": "tools/dexdeps/Android.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2018-07-26T17:28:37Z",
+      "side": 1,
+      "message": "switch the java_library_host to a java_binary, and either use `wrapper: \"etc/dexdeps\"`, or use the auto-generated one.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 21
+      },
+      "revId": "f41d73b3828cd26a33e686ea322c13ba5c7332bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
