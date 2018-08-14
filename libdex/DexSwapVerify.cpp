@@ -617,7 +617,7 @@ static bool shortyDescMatch(char shorty, const char* descriptor, bool
                 ALOGE("Invalid use of void");
                 return false;
             }
-            // Fall through.
+            FALLTHROUGH_INTENDED;
         }
         case 'B':
         case 'C':

@@ -619,10 +619,11 @@ void dexDecodeInstruction(const u2* insns, DecodedInstruction* pDec)
                  * instruction, but it's labeled G in the spec.
                  */
                 pDec->arg[4] = INST_A(inst);
+                FALLTHROUGH_INTENDED;
             }
-            case 4: pDec->arg[3] = (regList >> 12) & 0x0f;
-            case 3: pDec->arg[2] = (regList >> 8) & 0x0f;
-            case 2: pDec->arg[1] = (regList >> 4) & 0x0f;
+            case 4: pDec->arg[3] = (regList >> 12) & 0x0f; FALLTHROUGH_INTENDED;
+            case 3: pDec->arg[2] = (regList >> 8) & 0x0f; FALLTHROUGH_INTENDED;
+            case 2: pDec->arg[1] = (regList >> 4) & 0x0f; FALLTHROUGH_INTENDED;
             case 1: pDec->vC = pDec->arg[0] = regList & 0x0f; break;
             case 0: break; // Valid, but no need to do anything.
             default:

@@ -46,6 +46,7 @@ cc_library_static {
     cflags: [
         "-Wall",
         "-Werror",
+        "-Wimplicit-fallthrough",
     ],
     target: {
         android: {
