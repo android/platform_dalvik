@@ -22,6 +22,30 @@
       "revId": "eb58278e1f8b9b105ec840a8532d56951f756eda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "688ee042_f4392f45",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2018-08-28T22:32:44Z",
+      "side": 1,
+      "message": "ignorance, mainly :-)",
+      "parentUuid": "d19a0495_f454ea38",
+      "range": {
+        "startLine": 143,
+        "startChar": 12,
+        "endLine": 143,
+        "endChar": 34
+      },
+      "revId": "eb58278e1f8b9b105ec840a8532d56951f756eda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
