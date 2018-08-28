@@ -70,6 +70,30 @@
       "revId": "eb58278e1f8b9b105ec840a8532d56951f756eda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b289cff2_4613117a",
+        "filename": "libdex/DexSwapVerify.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1058860
+      },
+      "writtenOn": "2018-08-28T22:58:44Z",
+      "side": 1,
+      "message": "Yea, this is unsupported by Clang.  I don\u0027t see any bug tracking this - so nothing seems in the pipeline either.",
+      "parentUuid": "08cef804_cc5646a0",
+      "range": {
+        "startLine": 143,
+        "startChar": 12,
+        "endLine": 143,
+        "endChar": 34
+      },
+      "revId": "eb58278e1f8b9b105ec840a8532d56951f756eda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
