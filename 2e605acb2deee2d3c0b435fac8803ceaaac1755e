@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26e7b139_53a409a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2018-09-05T08:33:07Z",
+      "side": 1,
+      "message": "Clarify the change applies to libdex in title.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "2e605acb2deee2d3c0b435fac8803ceaaac1755e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8b9a760_3e0b351d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2018-09-05T08:33:07Z",
+      "side": 1,
+      "message": "This code is used by dexdump that runs on host rather than device. Please update comment here.\n\nJFYI, possibly everything under /dalvik should be considered deprecated and pending deletion.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 9
+      },
+      "revId": "2e605acb2deee2d3c0b435fac8803ceaaac1755e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
