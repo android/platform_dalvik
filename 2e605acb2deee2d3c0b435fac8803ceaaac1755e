@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "80138596_88901c91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1096946
+      },
+      "writtenOn": "2018-09-05T14:23:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26e7b139_53a409a8",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "2e605acb2deee2d3c0b435fac8803ceaaac1755e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8b9a760_3e0b351d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "2e605acb2deee2d3c0b435fac8803ceaaac1755e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fe9290_9ee7b1a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1096946
+      },
+      "writtenOn": "2018-09-05T14:23:30Z",
+      "side": 1,
+      "message": "Done\n\n\u003e JFYI, possibly everything under /dalvik should be considered deprecated and pending deletion\n\nWoo! Ack. I was just churning through a spreadsheet, and it\u0027s still in-tree, so... :)",
+      "parentUuid": "e8b9a760_3e0b351d",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 9
+      },
+      "revId": "2e605acb2deee2d3c0b435fac8803ceaaac1755e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
