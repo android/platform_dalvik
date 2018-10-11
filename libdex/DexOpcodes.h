@@ -609,11 +609,7 @@ DEX_INLINE Opcode dexOpcodeFromCodeUnit(u2 codeUnit) {
      * that data tables get generated in a consistent way.
      */
     int lowByte = codeUnit & 0xff;
-    if (lowByte != 0xff) {
-        return (Opcode) lowByte;
-    } else {
-        return (Opcode) ((codeUnit >> 8) | 0x100);
-    }
+    return (Opcode) lowByte;
 }
 
 /*
