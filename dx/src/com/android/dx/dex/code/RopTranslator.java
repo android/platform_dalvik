@@ -762,7 +762,27 @@ public final class RopTranslator {
                      */
                     di = new CstInsn(opcode, pos, regs, cst);
                 }
-
+                // (b/120985556) update the following code
+                // move-object vX, vY
+                // instance-of vY, vX, LMyClass;
+                // into
+                // move-object vX, vY
+                // nop
+                // instance-of vY, vX, LMyClass;
+                DalvInsn previousDi = getPrevNonSpecialInsn();
+                if (opcode.getOpcode() == Opcodes.INSTANCE_OF && previousDi != null) {
+                    int prevOpcode = previousDi.getOpcode().getOpcode();
+                    if (prevOpcode == Opcodes.MOVE_OBJECT
+                        || prevOpcode == Opcodes.MOVE_OBJECT_FROM16
+                        || prevOpcode == Opcodes.MOVE_OBJECT_16) {
+                        if (di.getRegisters().size() > 0 && previousDi.getRegisters().size() > 1
+                            && (di.getRegisters().get(0).getReg()
+                                    == previousDi.getRegisters().get(1).getReg())) {
+                            DalvInsn nopDi = new SimpleInsn(Dops.NOP, pos, RegisterSpecList.EMPTY);
+                            addOutput(nopDi);
+                        }
+                    }
+                }
                 addOutput(di);
             }
         }
@@ -828,6 +848,16 @@ public final class RopTranslator {
          */
         protected void addOutput(DalvInsn insn) {
             output.add(insn);
+        }
+
+        protected DalvInsn getPrevNonSpecialInsn() {
+            for (int i = output.size() - 1; i >= 0; --i) {
+                DalvInsn insn = output.get(i);
+                if (insn.getOpcode().getOpcode() != Opcodes.SPECIAL_FORMAT) {
+                    return insn;
+                }
+            }
+            return null;
         }
 
         /**
