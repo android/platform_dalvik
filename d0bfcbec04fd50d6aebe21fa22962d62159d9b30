@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7d1ea8b_c3b854d2",
+        "filename": "dexgen/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1344584
+      },
+      "writtenOn": "2019-01-08T17:52:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58dc1290_838d9b09",
+      "range": {
+        "startLine": 1,
+        "startChar": 20,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "d0bfcbec04fd50d6aebe21fa22962d62159d9b30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3953e7b_fdba1730",
         "filename": "dx/junit-tests/Android.bp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "30b160a2_8849c39a",
+        "filename": "dx/junit-tests/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1344584
+      },
+      "writtenOn": "2019-01-08T17:52:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3953e7b_fdba1730",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "d0bfcbec04fd50d6aebe21fa22962d62159d9b30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a65c1ef2_a765ea88",
         "filename": "dx/junit-tests/Android.bp",
         "patchSetId": 1
@@ -59,6 +107,24 @@
       "writtenOn": "2019-01-08T10:46:01Z",
       "side": 1,
       "message": "Rest of header?",
+      "revId": "d0bfcbec04fd50d6aebe21fa22962d62159d9b30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc9b8a7a_43a9c5d2",
+        "filename": "dx/junit-tests/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1344584
+      },
+      "writtenOn": "2019-01-08T17:52:12Z",
+      "side": 1,
+      "message": "The original Android.mk file doesn\u0027t have it. Please let me know it it\u0027s needed.",
+      "parentUuid": "a65c1ef2_a765ea88",
       "revId": "d0bfcbec04fd50d6aebe21fa22962d62159d9b30",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
