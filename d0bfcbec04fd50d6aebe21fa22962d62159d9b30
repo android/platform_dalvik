@@ -128,6 +128,24 @@
       "revId": "d0bfcbec04fd50d6aebe21fa22962d62159d9b30",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41ffccc4_7e8d3807",
+        "filename": "dx/junit-tests/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-01-09T12:52:02Z",
+      "side": 1,
+      "message": "Per your guidance, okay to leave.",
+      "parentUuid": "bc9b8a7a_43a9c5d2",
+      "revId": "d0bfcbec04fd50d6aebe21fa22962d62159d9b30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
