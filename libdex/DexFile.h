@@ -33,6 +33,12 @@
 #ifndef LIBDEX_DEXFILE_H_
 #define LIBDEX_DEXFILE_H_
 
+/*
+ * Annotation to tell clang that we intend to fall through from one case to
+ * another in a switch. Sourced from android-base/macros.h.
+ */
+#define FALLTHROUGH_INTENDED [[clang::fallthrough]]
+
 #ifndef LOG_TAG
 # define LOG_TAG "libdex"
 #endif

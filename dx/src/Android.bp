@@ -12,12 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-droiddoc_host {
-    name: "dx-docs",
+droidstubs_host {
+    name: "dx-doc-stubs",
     srcs: [
         "com/**/*.java",
     ],
-    args: "-hidden",
+    args: "--hidden",
+    create_doc_stubs: true,
+    product_variables: {
+        pdk: {
+            enabled: false,
+        },
+        unbundled_build: {
+            enabled: false,
+        },
+    },
+}
+
+droiddoc_host {
+    name: "dx-docs",
+    srcs: [
+        ":dx-doc-stubs",
+    ],
     custom_template: "droiddoc-templates-sdk",
     create_stubs: false,
     product_variables: {

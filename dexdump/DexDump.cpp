@@ -128,8 +128,7 @@ static const char* primitiveTypeLabel(char typeChar)
 /*
  * Converts a type descriptor to human-readable "dotted" form.  For
  * example, "Ljava/lang/String;" becomes "java.lang.String", and
- * "[I" becomes "int[]".  Also converts '$' to '.', which means this
- * form can't be converted back to a descriptor.
+ * "[I" becomes "int[]".
  */
 static char* descriptorToDot(const char* str)
 {
@@ -166,7 +165,7 @@ static char* descriptorToDot(const char* str)
     int i;
     for (i = 0; i < targetLen; i++) {
         char ch = str[offset + i];
-        newStr[i] = (ch == '/' || ch == '$') ? '.' : ch;
+        newStr[i] = (ch == '/') ? '.' : ch;
     }
 
     /* add the appropriate number of brackets for arrays */
@@ -181,16 +180,14 @@ static char* descriptorToDot(const char* str)
 }
 
 /*
- * Converts the class name portion of a type descriptor to human-readable
- * "dotted" form.
+ * Retrieves the class name portion of a type descriptor.
  *
  * Returns a newly-allocated string.
  */
-static char* descriptorClassToDot(const char* str)
+static char* descriptorClassToName(const char* str)
 {
     const char* lastSlash;
     char* newStr;
-    char* cp;
 
     /* reduce to just the class name, trimming trailing ';' */
     lastSlash = strrchr(str, '/');
@@ -201,10 +198,6 @@ static char* descriptorClassToDot(const char* str)
 
     newStr = strdup(lastSlash);
     newStr[strlen(lastSlash)-1] = '\0';
-    for (cp = newStr; *cp != '\0'; cp++) {
-        if (*cp == '$')
-            *cp = '.';
-    }
 
     return newStr;
 }
@@ -1325,7 +1318,7 @@ void dumpMethod(DexFile* pDexFile, const DexMethod* pDexMethod, int i)
         if (constructor) {
             char* tmp;
 
-            tmp = descriptorClassToDot(backDescriptor);
+            tmp = descriptorClassToName(backDescriptor);
             printf("<constructor name=\"%s\"\n", tmp);
             free(tmp);
 
@@ -1590,7 +1583,7 @@ void dumpClass(DexFile* pDexFile, int idx, char** pLastPackage)
     } else {
         char* tmp;
 
-        tmp = descriptorClassToDot(classDescriptor);
+        tmp = descriptorClassToName(classDescriptor);
         printf("<class name=\"%s\"\n", tmp);
         free(tmp);
 

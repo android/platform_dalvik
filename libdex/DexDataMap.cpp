@@ -19,7 +19,6 @@
  */
 
 #include "DexDataMap.h"
-#include <safe_iop.h>
 #include <stdlib.h>
 
 /*
@@ -27,18 +26,15 @@
  */
 DexDataMap* dexDataMapAlloc(u4 maxCount) {
     /*
-     * Allocate a single chunk for the DexDataMap per se as well as the
+     * Allocate a single chunk for the DexDataMap itself as well as the
      * two arrays.
      */
     size_t size = 0;
     DexDataMap* map = NULL;
 
-    /*
-     * Avoiding pulling in safe_iop for safe_iopf.
-     */
     const u4 sizeOfItems = (u4) (sizeof(u4) + sizeof(u2));
-    if (!safe_mul(&size, maxCount, sizeOfItems) ||
-        !safe_add(&size, size, sizeof(DexDataMap))) {
+    if (__builtin_mul_overflow(maxCount, sizeOfItems, &size) ||
+        __builtin_add_overflow(size, sizeof(DexDataMap), &size)) {
       return NULL;
     }
 

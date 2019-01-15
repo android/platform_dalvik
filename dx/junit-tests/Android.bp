@@ -1,0 +1,10 @@
+// Copyright 2011 The Android Open Source Project
+
+java_test_host {
+    name: "dx-tests",
+    srcs: ["**/*.java"],
+    libs: [
+        "dx",
+        "junit-host",
+    ],
+}

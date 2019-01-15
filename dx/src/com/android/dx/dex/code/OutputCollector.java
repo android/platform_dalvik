@@ -65,6 +65,18 @@ public final class OutputCollector {
         finisher.add(insn);
     }
 
+    public DalvInsn get(int at) {
+        if (at >= finisher.size() || at < 0) {
+            return null;
+        } else {
+            return finisher.get(at);
+        }
+    }
+
+    public int size() {
+        return finisher.size();
+    }
+
     /**
      * Reverses a branch which is buried a given number of instructions
      * backward in the output. It is illegal to call this unless the

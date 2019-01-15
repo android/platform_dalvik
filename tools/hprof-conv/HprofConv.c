@@ -764,9 +764,9 @@ usage:
     res = 2;
 
 finish:
-    if (in != stdin)
+    if (in != stdin && in != NULL)
         fclose(in);
-    if (out != stdout)
+    if (out != stdout && out != NULL)
         fclose(out);
     return res;
 }

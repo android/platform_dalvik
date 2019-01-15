@@ -38,7 +38,6 @@ cc_library_static {
     include_dirs: [
         "dalvik",
         "external/zlib",
-        "external/safe-iop/include",
     ],
     static_libs: ["liblog"],
     whole_static_libs: ["libziparchive"],
@@ -46,6 +45,7 @@ cc_library_static {
     cflags: [
         "-Wall",
         "-Werror",
+        "-Wimplicit-fallthrough",
     ],
     target: {
         android: {
