@@ -30,8 +30,20 @@
 #include <limits.h>
 #include <errno.h>
 
-#include <nativehelper/JNIHelp.h>        // TEMP_FAILURE_RETRY may or may not be in unistd
-
+/*
+ * TEMP_FAILURE_RETRY is defined by some, but not all, versions of
+ * <unistd.h>. (Alas, it is not as standard as we'd hoped!) So, if it's
+ * not already defined, then define it here.
+ */
+#ifndef TEMP_FAILURE_RETRY
+/* Used to retry syscalls that can return EINTR. */
+#define TEMP_FAILURE_RETRY(exp) ({         \
+    typeof (exp) _rc;                      \
+    do {                                   \
+        _rc = (exp);                       \
+    } while (_rc == -1 && errno == EINTR); \
+    _rc; })
+#endif
 
 /*
  * Create an anonymous shared memory segment large enough to hold "length"
