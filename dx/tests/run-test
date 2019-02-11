@@ -54,6 +54,7 @@ run="run"
 expected="expected.txt"
 output="out.txt"
 
+clean_on_exit="yes"
 dev_mode="no"
 update_mode="no"
 tmpdir=/tmp/test-$$
@@ -61,7 +62,8 @@ usage="no"
 
 while [[ "x$1" = "x-"* ]]; do
     case $1 in
-         --dev) dev_mode="yes" ;;
+        --dev) dev_mode="yes" ;;
+        --no-clean) clean_on_exit="no" ;;
          --output_dir)
              tmpdir=$2
              shift ;;
@@ -156,7 +158,11 @@ fi
 
 if [ "$good" = "yes" ]; then
     cd "$oldwd"
-    rm -rf "$tmpdir"
+    if [ "$clean_on_exit" = "yes" ]; then
+        rm -rf "$tmpdir"
+    else
+        echo "Test artifacts left in $tmpdir"
+    fi
     exit 0
 fi
 
