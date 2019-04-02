@@ -48,12 +48,6 @@ cc_library_static {
         "-Wimplicit-fallthrough",
     ],
     target: {
-        android: {
-            shared_libs: ["libutils"],
-        },
-        host: {
-            static_libs: ["libutils"],
-        },
         windows: {
             enabled: true,
             cflags: ["-Wno-unused-parameter"],

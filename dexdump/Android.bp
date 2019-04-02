@@ -36,14 +36,12 @@ cc_binary {
             shared_libs: [
                 "libz",
                 "liblog",
-                "libutils",
             ],
         },
         host: {
             static_libs: [
                 "libdex",
                 "libbase",
-                "libutils",
                 "liblog",
                 "libz",
             ],
