@@ -58,7 +58,7 @@ for dex in $candidates; do
   fi
   checksums[$checksum]=$checksum
 
-  dexdump2 -c $dex >/dev/null 2>&1
+  dexdump -c $dex >/dev/null 2>&1
   if [ $? -eq 0 ]; then
     validdexes+=("$dex")
   fi
