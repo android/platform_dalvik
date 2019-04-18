@@ -1,4 +1,5 @@
 subdirs = [
     "dx",
+    "libdex",
     "tools/hprof-conv",
 ]
