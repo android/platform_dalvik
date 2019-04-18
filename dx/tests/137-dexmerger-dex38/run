@@ -23,4 +23,4 @@ jar xf invokecustom.jar
 )
 java -cp $(dirname $(which dx))/../framework/dx.jar com.android.dx.merge.DexMerger \
   out.dex invokecustom/*.dex >& /dev/null
-dexdump -d out.dex
+dexdump2 -d out.dex
