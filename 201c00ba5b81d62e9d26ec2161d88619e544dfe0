@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3052e34a_e96ec5fe",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1060667
+      },
+      "writtenOn": "2019-07-15T14:18:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0eaa75cf_e5bf1b42",
+      "range": {
+        "startLine": 41,
+        "startChar": 22,
+        "endLine": 41,
+        "endChar": 31
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d5761be_dbb48251",
         "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09c4d00f_07c30b78",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1060667
+      },
+      "writtenOn": "2019-07-15T14:18:34Z",
+      "side": 1,
+      "message": "Yup, it\u0027s intended and turns out to be the biggest win.\n\nReading the max length at once and finding 0 in it is almost always faster than reading byte by byte until finding 0.",
+      "parentUuid": "9d5761be_dbb48251",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 513,
+        "endChar": 5
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
