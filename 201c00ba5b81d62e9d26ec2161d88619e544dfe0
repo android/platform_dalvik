@@ -117,6 +117,30 @@
       "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c58790a4_d1815c40",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1060667
+      },
+      "writtenOn": "2019-07-15T15:30:56Z",
+      "side": 1,
+      "message": "Yeah, the original author seems to have meant to make this sequential reads friendly, but the whole logic ended up being a 100% random access based solution. I thought about optimizing even further by making it sequential or loading everything in memory first, but given the already huge gain, I concluded it was an overkill. Thanks for finding and reviewing this cl before even asking! :)",
+      "parentUuid": "c2b42644_092aaece",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 513,
+        "endChar": 5
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
