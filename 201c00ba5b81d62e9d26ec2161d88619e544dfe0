@@ -141,6 +141,30 @@
       "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de9201af_74e3768a",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1060667
+      },
+      "writtenOn": "2019-07-15T15:39:22Z",
+      "side": 1,
+      "message": "On a second thought, adding a note about the behavior looks like a good thing to do, considering other readSOMETHING methods are sequential reads friendly. Done. (Also made it the last one of them to emphasize this is slightly different from others.)",
+      "parentUuid": "c58790a4_d1815c40",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 513,
+        "endChar": 5
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
