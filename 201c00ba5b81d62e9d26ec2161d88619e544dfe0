@@ -93,6 +93,30 @@
       "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2b42644_092aaece",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-07-15T14:59:11Z",
+      "side": 1,
+      "message": "Thanks. I just flagged this because the file pointer state differs between the two, but given there\u0027s seek()\u0027s all around it looks okay.",
+      "parentUuid": "09c4d00f_07c30b78",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 513,
+        "endChar": 5
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
