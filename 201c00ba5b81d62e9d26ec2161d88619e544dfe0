@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0eaa75cf_e5bf1b42",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-07-15T08:53:34Z",
+      "side": 1,
+      "message": "mByteOrder",
+      "range": {
+        "startLine": 41,
+        "startChar": 22,
+        "endLine": 41,
+        "endChar": 31
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d5761be_dbb48251",
+        "filename": "tools/dexdeps/src/com/android/dexdeps/DexData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-07-15T08:53:34Z",
+      "side": 1,
+      "message": "Different to the code it replaces? Now always reads the worst case number of bytes.",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 513,
+        "endChar": 5
+      },
+      "revId": "201c00ba5b81d62e9d26ec2161d88619e544dfe0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
