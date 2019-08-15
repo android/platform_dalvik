@@ -18,6 +18,8 @@ package com.android.dexdeps;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -35,7 +37,7 @@ public class DexData {
     private ClassDefItem[] mClassDefs;
 
     private byte tmpBuf[] = new byte[4];
-    private boolean isBigEndian = false;
+    private ByteOrder mByteOrder = ByteOrder.LITTLE_ENDIAN;
 
     /**
      * Constructs a new DexData for this file.
@@ -99,7 +101,7 @@ public class DexData {
             /* do nothing */
         } else if (mHeaderItem.endianTag == HeaderItem.REVERSE_ENDIAN_CONSTANT){
             /* file is big-endian (!), reverse future reads */
-            isBigEndian = true;
+            mByteOrder = ByteOrder.BIG_ENDIAN;
         } else {
             System.err.println("Endian constant has unexpected value " +
                 Integer.toHexString(mHeaderItem.endianTag));
@@ -107,26 +109,27 @@ public class DexData {
         }
 
         seek(8+4+20);  // magic, checksum, signature
-        mHeaderItem.fileSize = readInt();
-        mHeaderItem.headerSize = readInt();
-        /*mHeaderItem.endianTag =*/ readInt();
-        /*mHeaderItem.linkSize =*/ readInt();
-        /*mHeaderItem.linkOff =*/ readInt();
-        /*mHeaderItem.mapOff =*/ readInt();
-        mHeaderItem.stringIdsSize = readInt();
-        mHeaderItem.stringIdsOff = readInt();
-        mHeaderItem.typeIdsSize = readInt();
-        mHeaderItem.typeIdsOff = readInt();
-        mHeaderItem.protoIdsSize = readInt();
-        mHeaderItem.protoIdsOff = readInt();
-        mHeaderItem.fieldIdsSize = readInt();
-        mHeaderItem.fieldIdsOff = readInt();
-        mHeaderItem.methodIdsSize = readInt();
-        mHeaderItem.methodIdsOff = readInt();
-        mHeaderItem.classDefsSize = readInt();
-        mHeaderItem.classDefsOff = readInt();
-        /*mHeaderItem.dataSize =*/ readInt();
-        /*mHeaderItem.dataOff =*/ readInt();
+        ByteBuffer buffer = readByteBuffer(Integer.BYTES * 20);
+        mHeaderItem.fileSize = buffer.getInt();
+        mHeaderItem.headerSize = buffer.getInt();
+        /*mHeaderItem.endianTag =*/ buffer.getInt();
+        /*mHeaderItem.linkSize =*/ buffer.getInt();
+        /*mHeaderItem.linkOff =*/ buffer.getInt();
+        /*mHeaderItem.mapOff =*/ buffer.getInt();
+        mHeaderItem.stringIdsSize = buffer.getInt();
+        mHeaderItem.stringIdsOff = buffer.getInt();
+        mHeaderItem.typeIdsSize = buffer.getInt();
+        mHeaderItem.typeIdsOff = buffer.getInt();
+        mHeaderItem.protoIdsSize = buffer.getInt();
+        mHeaderItem.protoIdsOff = buffer.getInt();
+        mHeaderItem.fieldIdsSize = buffer.getInt();
+        mHeaderItem.fieldIdsOff = buffer.getInt();
+        mHeaderItem.methodIdsSize = buffer.getInt();
+        mHeaderItem.methodIdsOff = buffer.getInt();
+        mHeaderItem.classDefsSize = buffer.getInt();
+        mHeaderItem.classDefsOff = buffer.getInt();
+        /*mHeaderItem.dataSize =*/ buffer.getInt();
+        /*mHeaderItem.dataOff =*/ buffer.getInt();
     }
 
     /**
@@ -143,9 +146,7 @@ public class DexData {
         //System.out.println("reading " + count + " strings");
 
         seek(mHeaderItem.stringIdsOff);
-        for (int i = 0; i < count; i++) {
-            stringOffsets[i] = readInt();
-        }
+        readByteBuffer(Integer.BYTES * count).asIntBuffer().get(stringOffsets);
 
         mStrings = new String[count];
 
@@ -166,9 +167,10 @@ public class DexData {
 
         //System.out.println("reading " + count + " typeIds");
         seek(mHeaderItem.typeIdsOff);
+        ByteBuffer buffer = readByteBuffer(Integer.BYTES * count);
         for (int i = 0; i < count; i++) {
             mTypeIds[i] = new TypeIdItem();
-            mTypeIds[i].descriptorIdx = readInt();
+            mTypeIds[i].descriptorIdx = buffer.getInt();
 
             //System.out.println(i + ": " + mTypeIds[i].descriptorIdx +
             //    " " + mStrings[mTypeIds[i].descriptorIdx]);
@@ -184,15 +186,16 @@ public class DexData {
 
         //System.out.println("reading " + count + " protoIds");
         seek(mHeaderItem.protoIdsOff);
+        ByteBuffer buffer = readByteBuffer(Integer.BYTES * 3 * count);
 
         /*
          * Read the proto ID items.
          */
         for (int i = 0; i < count; i++) {
             mProtoIds[i] = new ProtoIdItem();
-            mProtoIds[i].shortyIdx = readInt();
-            mProtoIds[i].returnTypeIdx = readInt();
-            mProtoIds[i].parametersOff = readInt();
+            mProtoIds[i].shortyIdx = buffer.getInt();
+            mProtoIds[i].returnTypeIdx = buffer.getInt();
+            mProtoIds[i].parametersOff = buffer.getInt();
 
             //System.out.println(i + ": " + mProtoIds[i].shortyIdx +
             //    " " + mStrings[mProtoIds[i].shortyIdx]);
@@ -212,10 +215,11 @@ public class DexData {
             } else {
                 seek(offset);
                 int size = readInt();       // #of entries in list
+                buffer = readByteBuffer(Short.BYTES * size);
                 protoId.types = new int[size];
 
                 for (int j = 0; j < size; j++) {
-                    protoId.types[j] = readShort() & 0xffff;
+                    protoId.types[j] = buffer.getShort() & 0xffff;
                 }
             }
         }
@@ -230,11 +234,12 @@ public class DexData {
 
         //System.out.println("reading " + count + " fieldIds");
         seek(mHeaderItem.fieldIdsOff);
+        ByteBuffer buffer = readByteBuffer((Integer.BYTES + Short.BYTES * 2) * count);
         for (int i = 0; i < count; i++) {
             mFieldIds[i] = new FieldIdItem();
-            mFieldIds[i].classIdx = readShort() & 0xffff;
-            mFieldIds[i].typeIdx = readShort() & 0xffff;
-            mFieldIds[i].nameIdx = readInt();
+            mFieldIds[i].classIdx = buffer.getShort() & 0xffff;
+            mFieldIds[i].typeIdx = buffer.getShort() & 0xffff;
+            mFieldIds[i].nameIdx = buffer.getInt();
 
             //System.out.println(i + ": " + mFieldIds[i].nameIdx +
             //    " " + mStrings[mFieldIds[i].nameIdx]);
@@ -250,11 +255,12 @@ public class DexData {
 
         //System.out.println("reading " + count + " methodIds");
         seek(mHeaderItem.methodIdsOff);
+        ByteBuffer buffer = readByteBuffer((Integer.BYTES + Short.BYTES * 2) * count);
         for (int i = 0; i < count; i++) {
             mMethodIds[i] = new MethodIdItem();
-            mMethodIds[i].classIdx = readShort() & 0xffff;
-            mMethodIds[i].protoIdx = readShort() & 0xffff;
-            mMethodIds[i].nameIdx = readInt();
+            mMethodIds[i].classIdx = buffer.getShort() & 0xffff;
+            mMethodIds[i].protoIdx = buffer.getShort() & 0xffff;
+            mMethodIds[i].nameIdx = buffer.getInt();
 
             //System.out.println(i + ": " + mMethodIds[i].nameIdx +
             //    " " + mStrings[mMethodIds[i].nameIdx]);
@@ -270,17 +276,18 @@ public class DexData {
 
         //System.out.println("reading " + count + " classDefs");
         seek(mHeaderItem.classDefsOff);
+        ByteBuffer buffer = readByteBuffer(Integer.BYTES * 8 * count);
         for (int i = 0; i < count; i++) {
             mClassDefs[i] = new ClassDefItem();
-            mClassDefs[i].classIdx = readInt();
+            mClassDefs[i].classIdx = buffer.getInt();
 
-            /* access_flags = */ readInt();
-            /* superclass_idx = */ readInt();
-            /* interfaces_off = */ readInt();
-            /* source_file_idx = */ readInt();
-            /* annotations_off = */ readInt();
-            /* class_data_off = */ readInt();
-            /* static_values_off = */ readInt();
+            /* access_flags = */ buffer.getInt();
+            /* superclass_idx = */ buffer.getInt();
+            /* interfaces_off = */ buffer.getInt();
+            /* source_file_idx = */ buffer.getInt();
+            /* annotations_off = */ buffer.getInt();
+            /* class_data_off = */ buffer.getInt();
+            /* static_values_off = */ buffer.getInt();
 
             //System.out.println(i + ": " + mClassDefs[i].classIdx + " " +
             //    mStrings[mTypeIds[mClassDefs[i].classIdx].descriptorIdx]);
@@ -452,24 +459,12 @@ public class DexData {
     }
 
     /**
-     * Reads a signed 16-bit integer, byte-swapping if necessary.
-     */
-    short readShort() throws IOException {
-        mDexFile.readFully(tmpBuf, 0, 2);
-        if (isBigEndian) {
-            return (short) ((tmpBuf[1] & 0xff) | ((tmpBuf[0] & 0xff) << 8));
-        } else {
-            return (short) ((tmpBuf[0] & 0xff) | ((tmpBuf[1] & 0xff) << 8));
-        }
-    }
-
-    /**
      * Reads a signed 32-bit integer, byte-swapping if necessary.
      */
     int readInt() throws IOException {
         mDexFile.readFully(tmpBuf, 0, 4);
 
-        if (isBigEndian) {
+        if (mByteOrder == ByteOrder.BIG_ENDIAN) {
             return (tmpBuf[3] & 0xff) | ((tmpBuf[2] & 0xff) << 8) |
                    ((tmpBuf[1] & 0xff) << 16) | ((tmpBuf[0] & 0xff) << 24);
         } else {
@@ -497,28 +492,37 @@ public class DexData {
     }
 
     /**
+     * Reads bytes and transforms them into a ByteBuffer with the desired byte order set, from which
+     * primitive values can be read.
+     */
+    ByteBuffer readByteBuffer(int size) throws IOException {
+        byte bytes[] = new byte[size];
+        mDexFile.read(bytes);
+        return ByteBuffer.wrap(bytes).order(mByteOrder);
+    }
+
+    /**
      * Reads a UTF-8 string.
      *
-     * We don't know how long the UTF-8 string is, so we have to read one
-     * byte at a time.  We could make an educated guess based on the
-     * utf16_size and seek back if we get it wrong, but seeking backward
-     * may cause the underlying implementation to reload I/O buffers.
+     * We don't know how long the UTF-8 string is, so we try to read the worst case amount of bytes.
+     *
+     * Note that the dex file pointer will likely be at a wrong location after this operation, which
+     * means it can't be used in the middle of sequential reads.
      */
     String readString() throws IOException {
         int utf16len = readUnsignedLeb128();
         byte inBuf[] = new byte[utf16len * 3];      // worst case
-        int idx;
 
-        for (idx = 0; idx < inBuf.length; idx++) {
-            byte val = readByte();
-            if (val == 0)
+        int bytesRead = mDexFile.read(inBuf);
+        for (int i = 0; i < bytesRead; i++) {
+            if (inBuf[i] == 0) {
+                bytesRead = i;
                 break;
-            inBuf[idx] = val;
+            }
         }
 
-        return new String(inBuf, 0, idx, "UTF-8");
+        return new String(inBuf, 0, bytesRead, "UTF-8");
     }
-
 
     /*
      * =======================================================================
