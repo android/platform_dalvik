@@ -23,6 +23,9 @@ package com.android.dex;
 public final class DexFormat {
     private DexFormat() {}
 
+    /** API level to target in order to allow spaces in SimpleName */
+    public static final int API_SPACES_IN_SIMPLE_NAME = 29;
+
     /** API level to target in order to generate const-method-handle and const-method-type */
     public static final int API_CONST_METHOD_HANDLE = 28;
 
@@ -46,7 +49,10 @@ public final class DexFormat {
      * API level to target in order to produce the most modern file
      * format
      */
-    public static final int API_CURRENT = API_CONST_METHOD_HANDLE;
+    public static final int API_CURRENT = API_SPACES_IN_SIMPLE_NAME;
+
+    /** dex file version number for API level 29 and earlier */
+    public static final String VERSION_FOR_API_29 = "040";
 
     /** dex file version number for API level 28 and earlier */
     public static final String VERSION_FOR_API_28 = "039";
@@ -67,7 +73,7 @@ public final class DexFormat {
      * completed and is not considered a valid dex file format.
      * </p>
      */
-    public static final String VERSION_CURRENT = VERSION_FOR_API_28;
+    public static final String VERSION_CURRENT = VERSION_FOR_API_29;
 
     /**
      * file name of the primary {@code .dex} file inside an
@@ -127,6 +133,8 @@ public final class DexFormat {
             return API_METHOD_HANDLES;
         } else if (version.equals(VERSION_FOR_API_28)) {
             return API_CONST_METHOD_HANDLE;
+        } else if (version.equals(VERSION_FOR_API_29)) {
+            return API_SPACES_IN_SIMPLE_NAME;
         } else if (version.equals(VERSION_CURRENT)) {
             return API_CURRENT;
         }
@@ -145,6 +153,8 @@ public final class DexFormat {
 
         if (targetApiLevel >= API_CURRENT) {
             version = VERSION_CURRENT;
+        } else if (targetApiLevel >= API_SPACES_IN_SIMPLE_NAME) {
+            version = VERSION_FOR_API_29;
         } else if (targetApiLevel >= API_CONST_METHOD_HANDLE) {
             version = VERSION_FOR_API_28;
         } else if (targetApiLevel >= API_METHOD_HANDLES) {
