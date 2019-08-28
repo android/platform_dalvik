@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a254297_deb23842",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-08-28T15:58:47Z",
+      "side": 1,
+      "message": "Suggest deleting this comment and suppressing 127 in the run-all-tests script and creating a P3 assigned to me to follow up bug to consider fixing. \"Consider\" because there is a plan to completely retire dx.\n\nAdd a second Bug: entry here pointing to the new bug.",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 16,
+        "endChar": 47
+      },
+      "revId": "6d2d964393a19933cdbf59e690c79c914353ba64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "135df2c6_a7ebf237",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-08-28T15:58:47Z",
+      "side": 1,
+      "message": "API level 29 corresponds to Android \"10\" (\"Q\").\n\nConvention in Android for a future SDK level is to use 10000. That\u0027s probably best here, \"10\" \u003d\u003d API Level 29 and a possible interim release of \"10\" might (or might not) be API Level 30. This feature is likely headed for the next major Android release after the \"10\" release(s).",
+      "range": {
+        "startLine": 27,
+        "startChar": 55,
+        "endLine": 27,
+        "endChar": 58
+      },
+      "revId": "6d2d964393a19933cdbf59e690c79c914353ba64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
