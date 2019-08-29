@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddc2524f_eef4f6b7",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2019-08-29T13:04:06Z",
+      "side": 1,
+      "message": "Suggest keeping this at 28 so using 040 format is opt-in.",
+      "range": {
+        "startLine": 76,
+        "startChar": 65,
+        "endLine": 76,
+        "endChar": 70
+      },
+      "revId": "183929e37ac61a593f8e0e580644561fc75e0c09",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
