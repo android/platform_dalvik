@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "436b9716_a6a4344c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1550939
+      },
+      "writtenOn": "2019-08-29T09:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a254297_deb23842",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 16,
+        "endChar": 47
+      },
+      "revId": "6d2d964393a19933cdbf59e690c79c914353ba64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "135df2c6_a7ebf237",
         "filename": "dx/src/com/android/dex/DexFormat.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "6d2d964393a19933cdbf59e690c79c914353ba64",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe676748_267df81c",
+        "filename": "dx/src/com/android/dex/DexFormat.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1550939
+      },
+      "writtenOn": "2019-08-29T09:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "135df2c6_a7ebf237",
+      "range": {
+        "startLine": 27,
+        "startChar": 55,
+        "endLine": 27,
+        "endChar": 58
+      },
+      "revId": "6d2d964393a19933cdbf59e690c79c914353ba64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
