@@ -1,3 +1,0 @@
-This test checks the conversion of signature-polymorphic methods
-invoked with invoke-virtual/invoke-virtual-range are converted to
-invoke-polymorphic/invoke-polymorphic-range.

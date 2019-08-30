@@ -1,7 +1,0 @@
-This tests the proper register preparation for invoke-polymorphic
-instructions. The test was written as the invoke-polymorphic bytecodes
-were mis-annotated in dx as having a return result. This led to a path
-that did not emit the necessary move instructions and the generated
-DEX file was rejected by ART. The issue was only visible when dx
-optimization was enabled, but the problem lay in the OutputFinisher
-register selection.

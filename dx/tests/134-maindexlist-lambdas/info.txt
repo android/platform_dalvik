@@ -1,2 +1,0 @@
-This test that MainDexListBuilder can run on class files with InvokeDynamic,
-MethodType and MethodHandle entries in the constant pool.

@@ -1,2 +1,0 @@
-This test checks the conversion of ldc with a MethodHandle operand
-and a MethodType operand.
