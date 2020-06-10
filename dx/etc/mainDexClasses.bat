@@ -16,12 +16,34 @@ REM limitations under the License.
 REM don't modify the caller's environment
 setlocal
 
-rem Check we have a valid Java.exe in the path.
-set java_exe=
-if exist    "%~dp0..\tools\lib\find_java.bat"    call    "%~dp0..\tools\lib\find_java.bat"
-if exist    "%~dp0..\..\tools\lib\find_java.bat" call    "%~dp0..\..\tools\lib\find_java.bat"
-if not defined java_exe goto :EOF
+@rem Find java.exe
+if defined JAVA_HOME goto findJavaFromJavaHome
 
+set JAVA_EXE=java.exe
+%JAVA_EXE% -version >NUL 2>&1
+if "%ERRORLEVEL%" == "0" goto init
+
+echo.
+echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
+exit /b 1
+
+:findJavaFromJavaHome
+set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+
+if exist "%JAVA_EXE%" goto init
+
+echo.
+echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
+exit /b 1
+
+:init
 set baserules="%~dp0\mainDexClasses.rules"
 set extrarules="%~dp0\mainDexClassesNoAapt.rules"
 
