@@ -14,13 +14,6 @@
 
 LOCAL_PATH := $(call my-dir)
 
-subdirs := $(addprefix $(LOCAL_PATH)/,$(addsuffix /Android.mk, \
-		dx \
-	))
-
-include $(subdirs)
-
-
 .PHONY: dex dex-debug
 ifeq ($(DONT_INSTALL_DEX_FILES),true)
 dex:
