@@ -33,6 +33,23 @@
       "revId": "d84dc256cfe5ac5f35fd2bbcda4b684de24d08d2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5313960_55bd2a5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2020-07-29T13:58:06Z",
+      "side": 1,
+      "message": "Thanks both! Sorry for the noise, perhaps I can self +2 if there is other owner approval. Weird.\n\n",
+      "revId": "d84dc256cfe5ac5f35fd2bbcda4b684de24d08d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
