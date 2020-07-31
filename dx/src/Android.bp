@@ -35,7 +35,6 @@ droiddoc_host {
         ":dx-doc-stubs",
     ],
     custom_template: "droiddoc-templates-sdk",
-    create_stubs: false,
     product_variables: {
         pdk: {
             enabled: false,
