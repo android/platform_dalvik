@@ -26,5 +26,4 @@ droiddoc {
         ":dexdeps-doc-stubs",
     ],
     custom_template: "droiddoc-templates-sdk",
-    create_stubs: false,
 }

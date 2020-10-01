@@ -162,7 +162,7 @@ public final class DalvInsnList extends FixedSizeList {
             }
         }
 
-        // Sanity check of the amount written.
+        // Check the amount written.
         int written = (out.getCursor() - startCursor) / 2;
         if (written != codeSize()) {
             throw new RuntimeException("write length mismatch; expected " +

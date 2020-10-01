@@ -1591,7 +1591,7 @@ public final class Ropper {
                  * should be subroutineSuccessor
                  */
 
-                // Sanity check
+                // Check we have the expected subroutine.
                 if (subroutine.startBlock != subroutineStart) {
                     throw new RuntimeException (
                             "ret instruction returns to label "
