@@ -1,5 +1,9 @@
 // Copyright 2011 The Android Open Source Project
 
+package {
+    default_applicable_licenses: ["dalvik_dx_license"],
+}
+
 java_test_host {
     name: "dx-tests",
     srcs: ["**/*.java"],

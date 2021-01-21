@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+package {
+    default_applicable_licenses: ["dalvik_dx_license"],
+}
+
 droidstubs_host {
     name: "dx-doc-stubs",
     srcs: [

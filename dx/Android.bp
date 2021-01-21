@@ -7,6 +7,17 @@
 
 // dx java library
 // ============================================================
+package {
+    default_applicable_licenses: ["dalvik_dx_license"],
+}
+
+license {
+    name: "dalvik_dx_license",
+    visibility: [":__subpackages__"],
+    license_kinds: ["SPDX-license-identifier-Apache-2.0"],
+    license_text: ["NOTICE"],
+}
+
 java_binary_host {
     name: "dx",
     wrapper: "etc/dx",
