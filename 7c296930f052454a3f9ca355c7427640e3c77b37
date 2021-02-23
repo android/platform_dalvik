@@ -16,6 +16,24 @@
       "message": "Thanks Julien. \n\nJFYI, we have http://b/73711890 to remove dx after \"P\", but the coupling of dx code to other tests has prevented this in the past.",
       "revId": "7c296930f052454a3f9ca355c7427640e3c77b37",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d1fc821_1b68665c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121894
+      },
+      "writtenOn": "2021-02-23T15:38:28Z",
+      "side": 1,
+      "message": "ack. let me mark the unit tests target as visibility:private to ensure it doesn\u0027t create more headache for you (transitive dep).\n\nlet\u0027s see if that pass TH",
+      "parentUuid": "bdbdcf36_53062d89",
+      "revId": "7c296930f052454a3f9ca355c7427640e3c77b37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
