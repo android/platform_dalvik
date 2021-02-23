@@ -12,8 +12,13 @@ package {
 java_test_host {
     name: "dx-tests",
     srcs: ["**/*.java"],
-    libs: [
+    static_libs: [
         "dx",
+    ],
+    libs: [
         "junit-host",
     ],
+    test_options: {
+        unit_test: true,
+    },
 }
