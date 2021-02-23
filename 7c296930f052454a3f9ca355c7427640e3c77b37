@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdbdcf36_53062d89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2021-02-23T14:51:44Z",
+      "side": 1,
+      "message": "Thanks Julien. \n\nJFYI, we have http://b/73711890 to remove dx after \"P\", but the coupling of dx code to other tests has prevented this in the past.",
+      "revId": "7c296930f052454a3f9ca355c7427640e3c77b37",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
