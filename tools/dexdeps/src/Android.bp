@@ -34,5 +34,8 @@ droiddoc {
     srcs: [
         ":dexdeps-doc-stubs",
     ],
+    libs: [
+        "stub-annotations",
+    ],
     custom_template: "droiddoc-templates-sdk",
 }
