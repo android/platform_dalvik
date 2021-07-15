@@ -1,7 +1,0 @@
-This test checks that SourceDebugExtension information propagates from
-the class file to the DEX file emitted by dx. It extracts SMAP information
-from the class file and DEX file and checks the strings match.
-
-NB dalvik/dexdump does not have support for DEX annotations so the test
-just checks that the SMAP string appears in the DEX file and assumes
-it is packaged within an annotation.

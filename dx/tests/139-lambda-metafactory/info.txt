@@ -1,1 +1,0 @@
-Tests lambda metafactory constructs are convertible to DEX (b/63112734).

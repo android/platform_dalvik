@@ -16,6 +16,5 @@ license {
 }
 
 subdirs = [
-    "dx",
     "tools/hprof-conv",
 ]
